@@ -98,7 +98,7 @@ export default class ParallelPort extends Component {
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
-            /*
+            /**
              * If the ParallelPort wants to bind to a control (eg, "print") in a DIFFERENT component (eg, "Panel"),
              * then it specifies the name of that control with the 'binding' property.  The ParallelPort constructor
              * will then call bindExternalControl(), which looks up the control, and then passes it to our own
@@ -384,7 +384,7 @@ export default class ParallelPort extends Component {
                 this.controlBuffer.value = this.controlBuffer.value.slice(0, -1);
             }
             else {
-                /*
+                /**
                  * If we assume that the printer being used was the original IBM 80 CPS Matrix Printer,
                  * characters 0x80-0x9F mirror control codes 0x00-0x1F, and characters 0xA0-0xDF are various
                  * block shapes, sort of in the spirit of the line-drawing characters 0xC0-0xDF defined by
@@ -444,7 +444,7 @@ export default class ParallelPort extends Component {
     }
 }
 
-/*
+/**
  * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -462,7 +462,7 @@ ParallelPort.DATA = {           // (read/write)
     REG:        0
 };
 
-/*
+/**
  * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -486,7 +486,7 @@ ParallelPort.STATUS = {         // (read)
     NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
 };
 
-/*
+/**
  * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -508,7 +508,7 @@ ParallelPort.CONTROL = {        // (read/write)
     ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
 };
 
-/*
+/**
  * Port input notification table
  */
 ParallelPort.aPortInput = {
@@ -517,7 +517,7 @@ ParallelPort.aPortInput = {
     0x2: ParallelPort.prototype.inControl
 };
 
-/*
+/**
  * Port output notification table
  */
 ParallelPort.aPortOutput = {
@@ -525,7 +525,7 @@ ParallelPort.aPortOutput = {
     0x2: ParallelPort.prototype.outControl
 };
 
-/*
+/**
  * Initialize every ParallelPort module on the page.
  */
 WebLib.onInit(ParallelPort.init);

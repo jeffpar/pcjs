@@ -9,7 +9,7 @@
 
 import MESSAGE from "../../../modules/v2/message.js";
 
-/*
+/**
  * PCx86 machine message flags.
  *
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags

@@ -48,7 +48,7 @@ export default class ROMx86 extends Component {
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
         this.sizeROM = +parmsROM['size'];       // we allow numbers or strings (JSON strings permit hex)
 
-        /*
+        /**
          * The new 'alias' property can now be EITHER a single physical address (like 'addr') OR an array of
          * physical addresses; eg:
          *
@@ -68,7 +68,7 @@ export default class ROMx86 extends Component {
             }
         }
 
-        /*
+        /**
          * The 'notify' property can now (as of v1.18.2) contain an array of parameters that the notified
          * component (typically Video) may use as it sees fit.  For example, the Video component is generally
          * interested in knowing the offsets of specific font tables within the ROM, which used to be hard-coded
@@ -94,7 +94,7 @@ export default class ROMx86 extends Component {
         if (this.sFileURL) {
             let sFileName = StrLib.getBaseName(this.sFileURL);
             if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", this.sFileURL);
-            /*
+            /**
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
@@ -146,7 +146,7 @@ export default class ROMx86 extends Component {
             if (this.dbg) {
                 this.dbg.addSymbols(this.id, 0, this.addrROM >>> 4, 0, this.addrROM, this.sizeROM, this.aSymbols);
             }
-            /*
+            /**
              * Our only role in the handling of symbols is to hand them off to the Debugger at our
              * first opportunity. Now that we've done that, our copy of the symbols, if any, are toast.
              */
@@ -190,17 +190,17 @@ export default class ROMx86 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sROMData);
 
-        /*
+        /**
          * Check for JSON formats first.
          */
         if (sROMData.charAt(0) == "[" || sROMData.charAt(0) == "{") {
             try {
-                /*
+                /**
                  * The most likely source of any exception will be here: parsing the JSON-encoded ROM data.
                  */
                 let rom = eval("(" + sROMData + ")");
 
-                /*
+                /**
                  * PCjs v2 ROM images contain, at a minimum, a 'width' value and a 'values' array, along with
                  * other optional properties, like default load address ('addr'), endianness ('littleEndian'), etc.
                  *
@@ -220,7 +220,7 @@ export default class ROMx86 extends Component {
                         width = 32;
                     }
                 }
-                /*
+                /**
                  * Convert all values to bytes, so that subsequent code has a simple and consistent data format: abROM.
                  */
                 if (width) {
@@ -266,7 +266,7 @@ export default class ROMx86 extends Component {
             }
         }
         else {
-            /*
+            /**
              * Parse the ROM data manually; we assume it's in "simplified" hex form (a series of hex byte-values
              * separated by whitespace).
              */
@@ -296,14 +296,14 @@ export default class ROMx86 extends Component {
                 this.setReady();
             }
             else if (this.abROM && this.bus) {
-                /*
+                /**
                  * If no explicit size was specified, then use whatever the actual size is.
                  */
                 if (!this.sizeROM) {
                     this.sizeROM = this.abROM.length;
                 }
                 if (this.abROM.length != this.sizeROM) {
-                    /*
+                    /**
                      * Note that setError() sets the component's fError flag, which in turn prevents setReady() from
                      * marking the component ready.  TODO: Revisit this decision.  On the one hand, it sounds like a
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
@@ -322,7 +322,7 @@ export default class ROMx86 extends Component {
                     for (let i = 0; i < aliases.length; i++) {
                         this.cloneROM(aliases[i]);
                     }
-                    /*
+                    /**
                      * If there's a component we should notify, notify it now, and give it the internal byte array, so that
                      * it doesn't have to ask the CPU for the data.  Currently, the only component that uses this notification
                      * option is the Video component, and only when the associated ROM contains font data that it needs.
@@ -335,7 +335,7 @@ export default class ROMx86 extends Component {
                             this.printf(MESSAGE.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
-                    /*
+                    /**
                      * We used to hang onto the original ROM data so that we could restore any bytes the CPU overwrote,
                      * using memory write-notification handlers, but with the introduction of read-only memory blocks, that's
                      * no longer necessary.
@@ -373,7 +373,7 @@ export default class ROMx86 extends Component {
             }
             return true;
         }
-        /*
+        /**
          * We don't need to report an error here, because addMemory() already takes care of that.
          */
         return false;
@@ -418,7 +418,7 @@ export default class ROMx86 extends Component {
     }
 }
 
-/*
+/**
  * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
  * found in the original IBM PC ROM BIOS listing.
  */
@@ -441,7 +441,7 @@ ROMx86.BIOS = {
     MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
     COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
     COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
-    /*
+    /**
      * KEYBOARD DATA AREAS
      */
     KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
@@ -468,7 +468,7 @@ ROMx86.BIOS = {
     BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
     KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
     KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
-    /*
+    /**
      * DISKETTE DATA AREAS
      */
     SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
@@ -496,7 +496,7 @@ ROMx86.BIOS = {
         BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
     },
     NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
-    /*
+    /**
      * VIDEO DISPLAY DATA AREA
      */
     CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
@@ -509,7 +509,7 @@ ROMx86.BIOS = {
     ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
     CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
     CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
-    /*
+    /**
      * CASSETTE DATA AREA
      */
     EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
@@ -518,47 +518,47 @@ ROMx86.BIOS = {
     IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
     IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
     INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
-    /*
+    /**
      * TIMER DATA AREA
      */
     TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
     TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
     TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
-    /*
+    /**
      * SYSTEM DATA AREA
      */
     BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
-    /*
+    /**
      * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
      */
     RESET_FLAG: {
         ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
         WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
     },
-    /*
+    /**
      * FIXED DISK DATA AREAS
      */
     DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
     HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
     CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
     PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
-    /*
+    /**
      * TIME-OUT VARIABLES
      */
     PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
     RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
-    /*
+    /**
      * ADDITIONAL KEYBOARD DATA AREA
      */
     BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
     BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
-    /*
+    /**
      * EGA/PGA DISPLAY WORK AREA
      */
     ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
     POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
     INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
-    /*
+    /**
      * INFO BITS:
      *
      *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
@@ -572,7 +572,7 @@ ROMx86.BIOS = {
      *      0x01: SET C_TYPE EMULATE ACTIVE (0)
      */
     INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
-    /*
+    /**
      *     40:88  byte  PCjr: third keyboard status byte
      *                  EGA feature bit switches, emulated on VGA
      *
@@ -604,7 +604,7 @@ ROMx86.BIOS = {
      *             1       0    200 line mode
      *             1       1    reserved
      */
-    /*
+    /**
      * ADDITIONAL MEDIA DATA
      */
     LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
@@ -614,7 +614,7 @@ ROMx86.BIOS = {
     HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
     DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
     DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
-    /*
+    /**
      * ADDITIONAL KEYBOARD FLAGS
      */
     KB_FLAG_3: {
@@ -640,7 +640,7 @@ ROMx86.BIOS = {
         KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
         KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
     },
-    /*
+    /**
      * REAL TIME CLOCK DATA AREA
      */
     USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
@@ -648,21 +648,21 @@ ROMx86.BIOS = {
     RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
     RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
     RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
-    /*
+    /**
      * AREA FOR NETWORK ADAPTER
      */
     NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
-    /*
+    /**
      * EGA/PGA PALETTE POINTER
      */
     SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
-    /*
+    /**
      * DATA AREA - PRINT SCREEN
      */
     STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
 };
 
-/*
+/**
  * NOTE: There's currently no need for this component to have a reset() function, since
  * once the ROM data is loaded, it can't be changed, so there's nothing to reinitialize.
  *
@@ -675,7 +675,7 @@ ROMx86.BIOS = {
  * via bus.addMemory().
  */
 
-/*
+/**
  * Initialize all the ROM modules on the page.
  */
 WebLib.onInit(ROMx86.init);

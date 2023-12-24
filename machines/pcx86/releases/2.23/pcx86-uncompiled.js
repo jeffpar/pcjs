@@ -5,7 +5,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.xx";              // this @define is overridden with the version in machines.json
+const APPVERSION = "2.23";              // this @define is overridden with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
@@ -5943,7 +5943,7 @@ var SYMBOLS = DEBUGGER;
  */
 const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
 
-/*
+/**
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override BACKTRACK with a "backtrack=false" embedded in
  * the URL; note that the Closure Compiler won't let us alter the BACKTRACK variable, because it's defined as a @define, which
  * implies @const as well, so we must resort to modifying it indirectly, using the global window object.
@@ -5965,7 +5965,7 @@ if (DEBUG) {
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/message.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * PCx86 machine message flags.
  *
  * NOTE: Because this machine defines more than 32 message categories, some of these message flags
@@ -7038,7 +7038,7 @@ class CharSet {
     }
 }
 
-/*
+/**
  * Table to convert CP437 characters to Unicode.
  *
  * Refer to: https://en.wikipedia.org/wiki/Code_page_437
@@ -7101,7 +7101,7 @@ CharSet.CP437 = [
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/driveinfo.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * Starting with the IBM PC XT, the ROM defined a "Fixed Disk Parameter Table" (FD_TBL) that contained 16 bytes
  * at the following offsets for each of 4 drive types (see IBM 5160 Tech Ref, April 1983, p. A-94):
  *
@@ -7183,7 +7183,7 @@ CharSet.CP437 = [
  * understanding of Kb and Mb; I never use KiB or MiB.
  */
 
-/*
+/**
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
  * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
  * inside both DRIVE_CTRLS and DRIVE_TYPES.
@@ -7191,7 +7191,7 @@ CharSet.CP437 = [
 const DRIVE_CTRLS = ["XT", "AT", "COMPAQ"];
 
 const DRIVE_TYPES = [
-    /*
+    /**
      * DRIVE_TYPES[0] is for the IBM PC XT (XTC) controller.
      */
     {
@@ -7200,7 +7200,7 @@ const DRIVE_TYPES = [
          2: [ 306,  6],         // 15Mb (15.24Mb: 306*6*17*512 or 15,980,544 bytes)
          3: [ 306,  4]          // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
-    /*
+    /**
      * DRIVE_TYPES[1] is for the IBM PC AT (ATC) controller.
      */
     {
@@ -7219,7 +7219,7 @@ const DRIVE_TYPES = [
         12: [ 855,  7],         //  52,093,440  49.68
         13: [ 306,  8],         //  21,307,392  20.32
         14: [ 733,  7],         //  44,660,224  42.59
-        /*
+        /**
          * Since the remaining drive types are > 15, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [ 612,  4],         //  21,307,392  20.32
@@ -7231,7 +7231,7 @@ const DRIVE_TYPES = [
         22: [ 733,  5],         //  31,900,160  30.42
         23: [ 306,  4]          //  10,653,696  10.16
     },
-    /*
+    /**
      * DRIVE_TYPES[2] is for the COMPAQ DeskPro (ATC) controller.
      *
      * NOTE: According to COMPAQ, drive type 25 (0x19) must be used with their 130Mb drive when using MS-DOS 3.1
@@ -7254,7 +7254,7 @@ const DRIVE_TYPES = [
         12: [ 925,  9],         //  925   9  17  512    72,460,800   69.10
         13: [ 612,  8],         //  612   8  17  512    42,614,784   40.64
         14: [ 980,  4],         //  980   4  17  512    34,119,680   32.54
-        /*
+        /**
          * Since the remaining drive types are > 15, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [ 612,  4],         //  612   4  17  512    21,307,392   20.32  (same as IBM)
@@ -11008,7 +11008,7 @@ class Panel extends Component {
             this.canvas = /** @type {HTMLCanvasElement} */ (control);
             this.context = /** @type {CanvasRenderingContext2D} */ (this.canvas.getContext("2d"));
 
-            /*
+            /**
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
             if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
@@ -11118,7 +11118,7 @@ class Panel extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) Panel.init();
-        /*
+        /**
          * TODO: Investigate what changed since the "visual" portion of the Panel module was originally written,
          * because now, when updateAnimation() is first called, the machine's memory map hasn't been initialized yet,
          * so no regions are displayed, and since no other code was setting fRedraw, no regions were ever displayed.
@@ -11149,7 +11149,7 @@ class Panel extends Component {
      */
     clickMouse(event, fDown)
     {
-        /*
+        /**
          * event.button is 0 for the LEFT button and 2 for the RIGHT button
          */
         if (!event.button) {
@@ -11188,7 +11188,7 @@ class Panel extends Component {
      */
     updateMouse(event, fDown)
     {
-        /*
+        /**
          * Due to the responsive nature of our pages, the displayed size of the canvas may be smaller than the
          * allocated size, and the coordinates we receive from mouse events are based on the currently displayed size.
          */
@@ -11216,7 +11216,7 @@ class Panel extends Component {
         if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
 
         if (x >= 0 && x < Panel.LIVECANVAS.CX && y >= 0 && y < Panel.LIVECANVAS.CY) {
-            /*
+            /**
              * Convert the mouse position into the corresponding memory address, assuming it's over the live memory area
              */
             let addr = this.findAddress(x, y);
@@ -11252,7 +11252,7 @@ class Panel extends Component {
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
-                    /*
+                    /**
                      * If you want memory to be arranged "vertically" instead of "horizontally", do this:
                      *
                      *      if (x > 0) addr += rect.cy * (x - 1) * this.ratioMemoryToPixels;
@@ -11292,16 +11292,16 @@ class Panel extends Component {
             if (this.fVisual) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "begin scanMemory()\n");
                 this.busInfo = this.bus.scanMemory(this.busInfo);
-                /*
+                /**
                  * Calculate the pixel-to-memory-address ratio
                  */
                 this.ratioMemoryToPixels = (this.busInfo.cBlocks * this.bus.nBlockSize) / (Panel.LIVEMEM.CX * Panel.LIVEMEM.CY);
-                /*
+                /**
                  * Update the BusInfo object with region information (cRegions and aRegions); return true if region
                  * information has changed since the last call.
                  */
                 if (this.findRegions()) {
-                    /*
+                    /**
                      * For each region, I choose a slice of the LiveMem canvas and record the corresponding rectangle
                      * within an aRects array (parallel to the aRegions array) in the BusInfo object.
                      *
@@ -11309,7 +11309,8 @@ class Panel extends Component {
                      * subDivide() makes a simple horizontal or vertical slicing decision based on the ratio of region blocks
                      * to remaining blocks.
                      */
-                    let i, rect;
+                    let i;
+                    let rect;
                     let rectAvail = new Rectangle(0, 0, this.canvasLiveMem.width, this.canvasLiveMem.height);
                     this.busInfo.aRects = [];
                     let cBlocksRemaining = this.busInfo.cBlocks;
@@ -11321,13 +11322,13 @@ class Panel extends Component {
                         cBlocksRemaining -= cBlocksRegion;
                     }
 
-                    /*
+                    /**
                      * Assert that not only did all the specified regions account for all the specified blocks, but also that
                      * the series of subDivide() calls exhausted the original rectangle to one of either zero width or zero height.
                      */
 
 
-                    /*
+                    /**
                      * Now draw all the rectangles produced by the series of subDivide() calls.
                      */
                     for (i = 0; i < this.busInfo.aRects.length; i++) {
@@ -11739,7 +11740,7 @@ class Panel extends Component {
             if (fReady) panel.setReady();
         }
         if (!fReady) {
-            /*
+            /**
              * If no panel was created for this invocation, then there must be a machine without
              * a panel; find it and give it a panel now.  Panels used to be optional, but now they
              * provide services to other components, so every machine gets one now, even if there
@@ -11773,7 +11774,7 @@ Panel.STATE = {
     SEEK:   Panel.COLOR.BLUE
 };
 
-/*
+/**
  * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
  * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
  * stretch the live images to fit.
@@ -11803,7 +11804,7 @@ Panel.LIVEDUMP = {
     CY: (Panel.LIVECANVAS.CY >> 1)
 };
 
-/*
+/**
  * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
  */
 Panel.REGION = {
@@ -11814,7 +11815,7 @@ Panel.REGION = {
 
 Panel.UPDATES_PER_SECOND = 10;
 
-/*
+/**
  * Initialize every Panel module on the page.
  */
 WebLib.onInit(Panel.init);
@@ -11866,7 +11867,7 @@ class Controller {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Busx86 extends Component {
-    /*
+    /**
      * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
      * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
      * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
@@ -11924,7 +11925,7 @@ class Busx86 extends Component {
         REM_MEM_BADRANGE:   5
     };
 
-    /*
+    /**
      * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
      */
     static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
@@ -11967,7 +11968,7 @@ class Busx86 extends Component {
 
         this.nBusWidth = +parmsBus['busWidth'] || 20;
 
-        /*
+        /**
          * Compute all Bus memory block parameters, based on the width of the bus.
          *
          * Regarding blockTotal, we want to avoid using block overflow expressions like:
@@ -12022,7 +12023,7 @@ class Busx86 extends Component {
         this.nBlockMask = this.nBlockTotal - 1;
 
 
-        /*
+        /**
          * Lists of I/O notification functions: aPortInputNotify and aPortOutputNotify are arrays, indexed by
          * port, of sub-arrays which contain:
          *
@@ -12048,14 +12049,14 @@ class Busx86 extends Component {
         this.aPortOutputNotify = [];
         this.fPortInputBreakAll = this.fPortOutputBreakAll = false;
 
-        /*
+        /**
          * By default, all I/O ports are 1 byte wide; ports that are wider must add themselves to one or both of
          * these lists, using addPortInputWidth() and/or addPortOutputWidth().
          */
         this.aPortInputWidth = [];
         this.aPortOutputWidth = [];
 
-        /*
+        /**
          * Allocate empty Memory blocks to span the entire physical address space.
          */
         this.initMemory();
@@ -12169,7 +12170,7 @@ class Busx86 extends Component {
 
             if (block && block.size) {
                 if (block.type == type && block.controller == controller) {
-                    /*
+                    /**
                      * Where there is already a similar block with a non-zero size, we allow the allocation only if:
                      *
                      *   1) addrNext + sizeLeft <= block.addr (the request precedes the used portion of the current block), or
@@ -12201,7 +12202,7 @@ class Busx86 extends Component {
             sizeLeft -= sizeBlock;
         }
         if (sizeLeft <= 0) {
-            /*
+            /**
              * If all addMemory() calls happened ONLY during device initialization, the following code would not
              * be necessary; unfortunately, the Video component can add and remove physical memory blocks during video
              * mode changes, so we have to kick out any PAGED blocks that could have references to those physical memory
@@ -12401,7 +12402,7 @@ class Busx86 extends Component {
                 addr = iBlock * this.nBlockSize;
                 size -= this.nBlockSize;
             }
-            /*
+            /**
              * If all removeMemory() calls happened ONLY during device initialization, the following code would not
              * be necessary; unfortunately, the Video component can add and remove physical memory blocks during video
              * mode changes, so we have to kick out any PAGED blocks that could have references to those physical memory
@@ -12550,7 +12551,7 @@ class Busx86 extends Component {
         if (off < this.nBlockLimit - 2) {
             return this.aMemBlocks[iBlock].readLong(off, addr);
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
          * long in the current block and the first long in the next block and masking/combining the results),
          * which may have also created some undesirable side-effects for custom memory controllers.
@@ -12659,7 +12660,7 @@ class Busx86 extends Component {
             this.aMemBlocks[iBlock].writeLong(off, l);
             return;
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading and rewriting
          * the last long in the current block, and then reading and rewriting the first long in the next
          * block), which may have also created some undesirable side-effects for custom memory controllers.
@@ -12696,7 +12697,7 @@ class Busx86 extends Component {
         if (BACKTRACK && obj) {
             let cbtObjects = this.abtObjects.length;
             if (!bto) {
-                /*
+                /**
                  * Try the most recently created bto, on the off-chance it's what the caller needs
                  */
                 if (this.ibtLastAlloc >= 0) bto = this.abtObjects[this.ibtLastAlloc];
@@ -12717,7 +12718,7 @@ class Busx86 extends Component {
                             break;
                         }
                     }
-                    /*
+                    /**
                      * There's no longer any guarantee that simply because cbtDeletions was non-zero that there WILL
                      * be an available (existing) slot, because cbtDeletions also counts weak references that may still
                      * be weak.
@@ -12725,7 +12726,7 @@ class Busx86 extends Component {
                      *
                      */
                 }
-                /*
+                /**
                  *  I hit the following error after running in a machine with lots of disk activity:
                  *
                  *      Error: assertion failure in deskpro386.bus
@@ -12828,7 +12829,7 @@ class Busx86 extends Component {
                     }
                     else if (btoPrev.refs <= 0) {
                         this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
-                        /*
+                        /**
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
                          *
@@ -12838,7 +12839,7 @@ class Busx86 extends Component {
                          * after which we can re-use the slot if all its weak references are now gone.
                          */
                         if (!this.isBackTrackWeak(btiPrev)) this.abtObjects[slotPrev-1] = null;
-                        /*
+                        /**
                          * TODO: Consider what the appropriate trigger should be for resetting ibtLastDelete to zero;
                          * if we don't OCCASIONALLY set it to zero, we may never clear out obsolete weak references,
                          * whereas if we ALWAYS set it to zero, we may be forcing addBackTrackObject() to scan the entire
@@ -13002,7 +13003,7 @@ class Busx86 extends Component {
      */
     saveMemory(fAll = true)
     {
-        /*
+        /**
          * A quick-and-dirty work-around for 32-bit bus machines, to ensure that all blocks in the 2nd Mb are
          * mapped in before we save.  We do this by forcing A20 on, and then turning it off again before we leave.
          */
@@ -13049,7 +13050,7 @@ class Busx86 extends Component {
         let i, scale = 1;
         for (i = 0; i < a.length - 1; i += 2) {
             let iBlock = a[i] * scale, adw = a[i+1];
-            /*
+            /**
              * One wrinkle here is dealing with blocks that were saved when the machine was using an
              * older (larger) block size (eg, 16K or 32K), because now I ALWAYS use a block size of 4K.
              *
@@ -13073,7 +13074,7 @@ class Busx86 extends Component {
                     let adwBlock = nBlocks > 1? adw.splice(0, this.nBlockLen) : adw;
                     let block = this.aMemBlocks[iBlock];
                     if (!block || !block.restore(adwBlock)) {
-                        /*
+                        /**
                          * Either the block to restore hasn't been allocated, indicating a change in the machine
                          * configuration since it was last saved (the most likely explanation) or there's some internal
                          * inconsistency (eg, the block size is wrong).
@@ -13189,7 +13190,7 @@ class Busx86 extends Component {
             let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
             let dataPort = maskPort;
 
-            /*
+            /**
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
              * to a 32-bit port).  We probably should pass the size through to the aNotify[0] handler,
              * and let it decide what to do, but I don't feel like changing all the I/O handlers right now.
@@ -13328,7 +13329,7 @@ class Busx86 extends Component {
             let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
             let dataPort = (data >>>= shift) & maskPort;
 
-            /*
+            /**
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
              * to a 32-bit port).  We probably should pass the size through to the aNotify[0] handler,
              * and let it decide what to do, but I don't feel like changing all the I/O handlers right now.
@@ -13540,6 +13541,60 @@ var littleEndian = (TYPEDARRAYS? (function() {
  */
 class Memoryx86 {
     /**
+     * Basic memory types
+     *
+     * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
+     * 'little endian") storage.  ROM is equally conventional, except that the fReadOnly property is set,
+     * disabling writes.  VIDEO is treated exactly like RAM, unless a controller is provided.  Both RAM and
+     * VIDEO memory are always considered writable, and even ROM can be written using the Bus setByteDirect()
+     * interface (which in turn uses the Memory writeByteDirect() interface), allowing the ROM component to
+     * initialize its own memory.  The CTRL type is used to identify memory-mapped devices that do not need
+     * any default storage and always provide their own controller.
+     *
+     * UNPAGED and PAGED blocks are created by the CPU when paging is enabled; the role of an UNPAGED block
+     * is simply to perform page translation and replace itself with a PAGED block, which redirects read/write
+     * requests to the physical page located during translation.  UNPAGED and PAGED blocks are considered
+     * "logical" blocks that don't contain any storage of their own; all other block types represent "physical"
+     * memory (or a memory-mapped device).
+     *
+     * Unallocated regions of the address space contain a special memory block of type NONE that contains
+     * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
+     * exactly the same manner, without resorting to any range or processor checks.
+     *
+     * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
+     * but with the introduction of protected mode memory segmentation (and later paging), where logical and
+     * physical addresses were no longer the same, that is no longer true.  For coherency, all Debugger memory
+     * accesses now go through Segx86 and CPUx86 memory interfaces, so that the user sees the same segment
+     * and page translation that the CPU sees.  However, the Debugger uses a special probeAddr() interface to
+     * read memory, along with a special "fSuppress" flag to mapPageBlock(), to prevent its memory accesses
+     * from triggering segment and/or page faults when invalid or not-present segments or pages are accessed.
+     *
+     * These types are not mutually exclusive.  For example, VIDEO memory could be allocated as RAM, with or
+     * without a custom controller (the original Monochrome and CGA video cards used read/write storage that
+     * was indistinguishable from RAM), and CTRL memory could be allocated as an empty block of any type, with
+     * a custom controller.  A few types are required for certain features (eg, ROM is required if you want
+     * read-only memory), but the larger purpose of these types is to help document the caller's intent and to
+     * provide the Control Panel with the ability to highlight memory regions accordingly.
+     */
+    static TYPE = {
+        NONE:       0,
+        RAM:        1,
+        ROM:        2,
+        VIDEO:      3,
+        CTRL:       4,
+        UNPAGED:    5,
+        PAGED:      6,
+        COLORS:     ["black", "blue", "green", "cyan"],
+        NAMES:      ["NONE",  "RAM",  "ROM",   "VIDEO", "H/W", "UNPAGED", "PAGED"]
+    };
+
+    static FLAGS = {
+        CLEAN:      0x0,
+        DIRTY:      0x1,
+        MODIFIED:   0x2
+    };
+
+    /**
      * Memory(addr, used, size, type, controller)
      *
      * The Bus component allocates Memory objects so that each has a memory buffer with a
@@ -13595,7 +13650,7 @@ class Memoryx86 {
         this.cpu = cpu;             // if a CPU reference is provided, then this must be an UNPAGED Memory block allocation
         this.copyBreakpoints();     // initialize the block's Debugger info (eg, breakpoint totals); the caller will reinitialize
 
-        /*
+        /**
          * Dirty block tracking is now controller-specific.  As noted in the paged block handlers (eg, writeBytePLE),
          * the original purposes were to allow saveMemory() to save only dirty blocks and to enable the Video component
          * to quickly detect changes to the video buffer.  But saveMemory() has since been changed to save (and compress)
@@ -13621,7 +13676,7 @@ class Memoryx86 {
             }
         }
 
-        /*
+        /**
          * For empty memory blocks, all we need to do is ensure all access functions
          * are mapped to "none" handlers (or "unpaged" handlers if paging is enabled).
          */
@@ -13630,7 +13685,7 @@ class Memoryx86 {
             return;
         }
 
-        /*
+        /**
          * When a controller is specified, the controller must provide a buffer,
          * via getMemoryBuffer(), and memory access functions, via getMemoryAccess().
          */
@@ -13643,7 +13698,7 @@ class Memoryx86 {
             return;
         }
 
-        /*
+        /**
          * This is the normal case: allocate a buffer that provides 8 bits of data per address;
          * no controller is required because our default memory access functions (see afnMemory)
          * know how to deal with this simple 1-1 mapping of addresses to bytes and words.
@@ -13654,7 +13709,7 @@ class Memoryx86 {
         if (TYPEDARRAYS) {
             this.buffer = new ArrayBuffer(size);
             this.dv = new DataView(this.buffer, 0, size);
-            /*
+            /**
              * If littleEndian is true, we can use ab[], aw[] and adw[] directly; well, we can use them
              * whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback to
              * dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -13667,7 +13722,7 @@ class Memoryx86 {
             if (BYTEARRAYS) {
                 this.ab = new Array(size);
             } else {
-                /*
+                /**
                  * NOTE: This is the default mode of operation (!TYPEDARRAYS && !BYTEARRAYS), because it
                  * seems to provide the best performance; and although in theory, that performance might
                  * come at twice the overhead of TYPEDARRAYS, it's increasingly likely that the JavaScript
@@ -13735,7 +13790,7 @@ class Memoryx86 {
      */
     clone(mem, type, dbg)
     {
-        /*
+        /**
          * Original memory block IDs are even; cloned memory block IDs are odd;
          * the original ID of the current block is lost, but that's OK, since it was presumably
          * produced merely to become a clone.
@@ -13792,7 +13847,7 @@ class Memoryx86 {
             }
         }
         else if (TYPEDARRAYS) {
-            /*
+            /**
              * It might be tempting to just return a copy of Int32Array(this.buffer, 0, this.size >> 2),
              * but we can't be sure of the "endianness" of an Int32Array -- which would be OK if the array
              * was always saved/restored on the same machine, but there's no guarantee of that, either.
@@ -13826,16 +13881,17 @@ class Memoryx86 {
      */
     restore(adw)
     {
-        /*
+        /**
          * If this block has its own controller, then that controller is responsible for performing the
          * restore, since we don't know the underlying memory format.  However, we no longer blow off these
          * restore calls, because old machine states may still try to restore video memory blocks for MDA
          * and CGA video buffers (and in those cases, the memory formats should be compatible).
          */
-        let i, off;
+        let i;
+        let off;
         if (this.controller) {
             if (this.adw) {
-                /*
+                /**
                  * If the controller memory buffer appears to be for either an MDA using 2048 16-bit values
                  * or a CGA using 8192 16-bit values, then split up the saved 32-bit values accordingly.
                  * Otherwise, do a 1-for-1 restore and hope for the best.
@@ -13998,7 +14054,7 @@ class Memoryx86 {
      */
     getPageBlock(addr, fWrite)
     {
-        /*
+        /**
          * Even when mapPageBlock() fails (ie, when the page is not present or has insufficient privileges), it
          * will trigger a fault (since we don't set fSuppress), but it will still return a block (ie, an empty block).
          */
@@ -14022,7 +14078,7 @@ class Memoryx86 {
         this.iPDE = offPDE >> 2;    // convert offPDE into iPDE (an adw index)
         this.blockPTE = blockPTE;
         this.iPTE = offPTE >> 2;    // convert offPTE into iPTE (an adw index)
-        /*
+        /**
          * This is an optimization for "normal" pages, installing paged memory handlers that mimic
          * normal memory but also know how to update page tables.  If any of the criteria are not met
          * for these special handlers, we fall back to the slower default "paged" memory handlers.
@@ -14684,7 +14740,7 @@ class Memoryx86 {
     {
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
          * we redirect the default read handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -14720,7 +14776,7 @@ class Memoryx86 {
      */
     readShortLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -14737,13 +14793,13 @@ class Memoryx86 {
      */
     readShortPLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
          * we redirect the default read handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -14779,7 +14835,7 @@ class Memoryx86 {
      */
     readLongLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -14796,13 +14852,13 @@ class Memoryx86 {
      */
     readLongPLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page, we redirect the default
          * read handler to a faster handler.  However, if operating systems clear the PDE/PTE bits without reloading
          * CR3, they won't get set again.
@@ -14855,7 +14911,7 @@ class Memoryx86 {
         this.ab[off] = b;
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page, we redirect the default
          * write handler to a faster handler.  However, if operating systems clear the PDE/PTE bits without reloading
          * CR3, they won't get set again.
@@ -14864,7 +14920,7 @@ class Memoryx86 {
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
         this.writeByte = this.writeByteLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's consider
          * the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by the Video component,
          * and video memory should never contain page directories or page tables, so no worries there.  Second, we have
@@ -14898,7 +14954,7 @@ class Memoryx86 {
      */
     writeShortLE(off, w, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -14921,7 +14977,7 @@ class Memoryx86 {
      */
     writeShortPLE(off, w, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -14933,7 +14989,7 @@ class Memoryx86 {
         }
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page,
          * we redirect the default write handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -14943,7 +14999,7 @@ class Memoryx86 {
          * for the corresponding pages.
          */
         this.writeShort = this.writeShortLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
          * the Video component, and video memory should never contain page directories or page tables, so no
@@ -14977,7 +15033,7 @@ class Memoryx86 {
      */
     writeLongLE(off, l, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -15002,7 +15058,7 @@ class Memoryx86 {
      */
     writeLongPLE(off, l, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -15016,7 +15072,7 @@ class Memoryx86 {
         }
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page,
          * we redirect the default write handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -15026,7 +15082,7 @@ class Memoryx86 {
          * for the corresponding pages.
          */
         this.writeLong = this.writeLongLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
          * the Video component, and video memory should never contain page directories or page tables, so no
@@ -15127,67 +15183,12 @@ class Memoryx86 {
     }
 }
 
-/*
- * Basic memory types
- *
- * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
- * 'little endian") storage.  ROM is equally conventional, except that the fReadOnly property is set,
- * disabling writes.  VIDEO is treated exactly like RAM, unless a controller is provided.  Both RAM and
- * VIDEO memory are always considered writable, and even ROM can be written using the Bus setByteDirect()
- * interface (which in turn uses the Memory writeByteDirect() interface), allowing the ROM component to
- * initialize its own memory.  The CTRL type is used to identify memory-mapped devices that do not need
- * any default storage and always provide their own controller.
- *
- * UNPAGED and PAGED blocks are created by the CPU when paging is enabled; the role of an UNPAGED block
- * is simply to perform page translation and replace itself with a PAGED block, which redirects read/write
- * requests to the physical page located during translation.  UNPAGED and PAGED blocks are considered
- * "logical" blocks that don't contain any storage of their own; all other block types represent "physical"
- * memory (or a memory-mapped device).
- *
- * Unallocated regions of the address space contain a special memory block of type NONE that contains
- * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
- * exactly the same manner, without resorting to any range or processor checks.
- *
- * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
- * but with the introduction of protected mode memory segmentation (and later paging), where logical and
- * physical addresses were no longer the same, that is no longer true.  For coherency, all Debugger memory
- * accesses now go through Segx86 and CPUx86 memory interfaces, so that the user sees the same segment
- * and page translation that the CPU sees.  However, the Debugger uses a special probeAddr() interface to
- * read memory, along with a special "fSuppress" flag to mapPageBlock(), to prevent its memory accesses
- * from triggering segment and/or page faults when invalid or not-present segments or pages are accessed.
- *
- * These types are not mutually exclusive.  For example, VIDEO memory could be allocated as RAM, with or
- * without a custom controller (the original Monochrome and CGA video cards used read/write storage that
- * was indistinguishable from RAM), and CTRL memory could be allocated as an empty block of any type, with
- * a custom controller.  A few types are required for certain features (eg, ROM is required if you want
- * read-only memory), but the larger purpose of these types is to help document the caller's intent and to
- * provide the Control Panel with the ability to highlight memory regions accordingly.
- */
-Memoryx86.TYPE = {
-    NONE:       0,
-    RAM:        1,
-    ROM:        2,
-    VIDEO:      3,
-    CTRL:       4,
-    UNPAGED:    5,
-    PAGED:      6,
-    COLORS:     ["black", "blue", "green", "cyan"],
-    NAMES:      ["NONE",  "RAM",  "ROM",   "VIDEO", "H/W", "UNPAGED", "PAGED"]
-};
-
-Memoryx86.FLAGS = {
-    CLEAN:      0x0,
-    DIRTY:      0x1,
-    MODIFIED:   0x2
-};
-
-/*
+/**
  * Last used block ID (used for debugging only)
  */
 Memoryx86.idBlock = 0;
 
-
-/*
+/**
  * This is the effective definition of afnNone, but we need not fully define it, because setAccess() uses these
  * defaults when any of the 6 handlers (ie, 2 byte handlers, 2 short handlers, and 2 long handlers) are undefined.
  *
@@ -15323,7 +15324,7 @@ class CPU extends Component {
         this.nBaseCyclesPerSecond = nCycles;
         this.msPerYield = Math.round(1000 / CPU.YIELDS_PER_SECOND);
 
-        /*
+        /**
          * nTargetMultiplier replaces the old "speed" variable (0, 1, 2) and eliminates the need for
          * the constants (SPEED_SLOW, SPEED_FAST and SPEED_MAX).  The UI simply doubles the target multiplier
          * until we've exceeded the host's speed limit (ie, the current value is unable to reach the target),
@@ -15333,18 +15334,18 @@ class CPU extends Component {
         this.mhzBase = Math.round(this.nBaseCyclesPerSecond / 10000) / 100;
         this.mhzCurrent = this.mhzTarget = this.mhzBase * this.nTargetMultiplier;
 
-        /*
+        /**
          * We add a number of flags to those initialized by Component.
          */
         this.flags.starting = this.flags.running = this.flags.yield = false;
         this.flags.autoStart = parmsCPU['autoStart'];
 
-        /*
+        /**
          * TODO: Add some UI for displayLiveRegs (either an XML property, or a UI checkbox, or both)
          */
         this.flags.displayLiveRegs = false;
 
-        /*
+        /**
          * Get checksum parameters, if any. runCPU() behavior is not affected until fChecksum
          * is true, which won't happen until resetChecksum() is called with nCyclesChecksumInterval
          * ("csInterval") set to a positive value.
@@ -15359,7 +15360,7 @@ class CPU extends Component {
         this.nCyclesChecksumInterval = parmsCPU["csInterval"];
         this.nCyclesChecksumStop = parmsCPU["csStop"];
 
-        /*
+        /**
          * Array of countdown timers managed by addTimer() and setTimer().
          *
          * See also: getMSCycles(), getBurstCycles(), saveTimers(), restoreTimers(), and updateTimers()
@@ -15433,7 +15434,7 @@ class CPU extends Component {
         this.fpuActive = null;
         this.fpu = cmp.getMachineComponent("FPU", false);
 
-        /*
+        /**
          * Attach the ChipSet component to the CPU so that it can obtain the IDT vector number
          * of pending hardware interrupts in response to the ChipSet's updateINTR() notifications.
          *
@@ -15441,7 +15442,7 @@ class CPU extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        /*
+        /**
          * We've already saved the parmsCPU 'autoStart' setting, but there may be a machine (or URL) override.
          */
         this.flags.autoStart = cmp.getMachineBoolean('autoStart', this.flags.autoStart);
@@ -15513,7 +15514,7 @@ class CPU extends Component {
                 if (!this.restore(data)) return false;
                 this.resetChecksum();
             }
-            /*
+            /**
              * Give the Debugger a chance to do/print something once we've powered up
              */
             if (DEBUGGER && this.dbg) {
@@ -15522,7 +15523,7 @@ class CPU extends Component {
                 this.printf(MESSAGE.NONE, "No debugger detected\n");
             }
         }
-        /*
+        /**
          * The Computer component (which is responsible for all powerDown and powerUp notifications)
          * is now responsible for managing a component's fPowered flag, not us.
          *
@@ -15542,7 +15543,7 @@ class CPU extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * The Computer component (which is responsible for all powerDown and powerUp notifications)
          * is now responsible for managing a component's fPowered flag, not us.
          *
@@ -15564,7 +15565,7 @@ class CPU extends Component {
         if (this.flags.running) {
             return true;
         }
-        /*
+        /**
          * Start running automatically on power-up, assuming there's no Debugger.
          */
         if (this.flags.autoStart || this.flags.autoStart == null && !this.dbg) {
@@ -15631,7 +15632,7 @@ class CPU extends Component {
         if (this.flags.checksum) {
             this.nChecksum = 0;
             this.nCyclesChecksumNext = this.nCyclesChecksumStart - this.nTotalCycles;
-            /*
+            /**
              *  this.nCyclesChecksumNext = this.nCyclesChecksumStart + this.nCyclesChecksumInterval -
              *      (this.nTotalCycles % this.nCyclesChecksumInterval);
              */
@@ -15654,7 +15655,7 @@ class CPU extends Component {
     updateChecksum(nCycles)
     {
         if (this.flags.checksum) {
-            /*
+            /**
              * Get a 32-bit summation of the current CPU state and add it to our running 32-bit checksum
              */
             let fDisplay = false;
@@ -15714,7 +15715,7 @@ class CPU extends Component {
             } else {
                 sVal = "--------".substr(0, cch);
             }
-            /*
+            /**
              * TODO: Determine if this test actually avoids any redrawing when a register hasn't changed, and/or if
              * we should maintain our own (numeric) cache of displayed register values (to avoid creating these temporary
              * string values that will have to garbage-collected), and/or if this is actually slower, and/or if I'm being
@@ -15742,7 +15743,7 @@ class CPU extends Component {
         switch (sBinding) {
         case "power":
         case "reset":
-            /*
+            /**
              * The "power" and "reset" buttons are functions of the entire computer, not just the CPU,
              * but it's not always convenient to stick a power button in the Computer component definition,
              * so we record those bindings here and pass them on to the Computer component in initBus().
@@ -15756,7 +15757,7 @@ class CPU extends Component {
             control.onclick = function onClickRun() {
                 let fRunning = cpu.flags.running;
                 if (!cpu.cmp || !cpu.cmp.checkPower()) return;
-                /*
+                /**
                  * We snapped the CPU's running flag before calling checkPower() because there are rare (REPOWER)
                  * situations where checkPower() will have started the CPU as well.  So toggle the CPU state ONLY
                  * if the running flag remains unchanged.
@@ -15806,7 +15807,7 @@ class CPU extends Component {
         if (this.flags.running) {
             let delta = this.nStepCycles - nCycles;
             if (delta > 0) {
-                /*
+                /**
                  * NOTE: If the delta is negative, we would actually be increasing nStepCycles and nBurstCycles.
                  * Which used to be OK, but now that we have CPU timers that calculate and rely upon maximum bursts,
                  * this can no longer be allowed.  TODO: Determine if there are any, um, negative side-effects on
@@ -15880,7 +15881,7 @@ class CPU extends Component {
     {
         let nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
         if (fScaled && this.nTargetMultiplier > 1 && this.mhzCurrent > this.mhzBase) {
-            /*
+            /**
              * We could scale the current cycle count by the current speed (this.mhzCurrent); eg:
              *
              *      nCycles = Math.round(nCycles / (this.mhzCurrent / this.mhzBase));
@@ -15994,7 +15995,7 @@ class CPU extends Component {
     {
         let fSuccess = true;
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If we haven't reached 90% (0.9) of the current target speed, revert to the default multiplier.
              */
             if (this.mhzCurrent > 0 && this.mhzCurrent < this.mhzTarget * 0.9) {
@@ -16057,7 +16058,7 @@ class CPU extends Component {
             this.msStartRun = this.msStartThisRun;
         }
 
-        /*
+        /**
          * Try to detect situations where the browser may have throttled us, such as when the user switches
          * to a different tab; in those situations, Chrome and Safari may restrict setTimeout() callbacks
          * to roughly one per second.
@@ -16086,7 +16087,7 @@ class CPU extends Component {
             msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
                 this.msStartRun += msDelta;
-                /*
+                /**
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
                  * in case, I make absolutely sure it cannot happen, since doing so could result in negative
                  * speed calculations.
@@ -16116,7 +16117,7 @@ class CPU extends Component {
 
         let msYield = this.msPerYield;
         if (this.nCyclesThisRun) {
-            /*
+            /**
              * Normally, we would assume we executed a full quota of work over msPerYield, but since the CPU
              * now has the option of calling yieldCPU(), that might not be true.  If nCyclesThisRun is correct, then
              * the ratio of nCyclesThisRun/nCyclesPerYield should represent the percentage of work we performed,
@@ -16128,7 +16129,7 @@ class CPU extends Component {
         let msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
         let msRemainsThisRun = msYield - msElapsedThisRun;
 
-        /*
+        /**
          * We could pass only "this run" results to calcSpeed():
          *
          *      nCycles = this.nCyclesThisRun;
@@ -16146,7 +16147,7 @@ class CPU extends Component {
         this.calcSpeed(nCycles, msElapsed);
 
         if (msRemainsThisRun < 0) {
-            /*
+            /**
              * Try "throwing out" the effects of large anomalies, by moving the overall run start time up;
              * ordinarily, this should only happen when the someone is using an external Debugger or some other
              * tool or feature that is interfering with our overall execution.
@@ -16154,7 +16155,7 @@ class CPU extends Component {
             if (msRemainsThisRun < -1000) {
                 this.msStartRun -= msRemainsThisRun;
             }
-            /*
+            /**
              * If the last burst took MORE time than we allotted (ie, it's taking more than 1 second to simulate
              * nBaseCyclesPerSecond), all we can do is yield for as little time as possible (ie, 0ms) and hope
              * that the simulation is at least usable.
@@ -16166,7 +16167,7 @@ class CPU extends Component {
         }
 
         if (DEBUG) {
-            /*
+            /**
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
@@ -16299,7 +16300,7 @@ class CPU extends Component {
             let timer = this.findTimer(state[0]);
             if (timer) {
                 timer[1] = state[1];
-                /*
+                /**
                  * When restoring from a new state (ie, when state[3] is true), the theory was we could use
                  * state[2] as-is, but in reality, overriding a component's timeout value is problematic, especially
                  * if a component wants to start using a new value (ie, we don't want an old value trumping it).
@@ -16320,7 +16321,7 @@ class CPU extends Component {
         let aTimerStates = [];
         for (let iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
             let timer = this.aTimers[iTimer];
-            /*
+            /**
              * We now push a 4th element (true) to indicate that this is a new timer state, where timer[2] is
              * a tri-state value (positive for milliseconds, negative for cycles, zero for none); previously, it
              * was negative (-1) for none or else some number of milliseconds.
@@ -16358,7 +16359,7 @@ class CPU extends Component {
             let timer = this.aTimers[iTimer];
             if (fReset || timer[1] < 0) {
                 nCycles = ms > 0? this.getMSCycles(ms) : -ms;
-                /*
+                /**
                  * If the CPU is currently executing a burst of cycles, the number of cycles it has executed in
                  * that burst so far must NOT be charged against the cycle timeout we're about to set.  The simplest
                  * way to resolve that is to immediately call endBurst() and bias the cycle timeout by the number
@@ -16466,7 +16467,7 @@ class CPU extends Component {
         let msRunStart = 0, msRunStop = 0, nRunCycles = 0;
         if (DEBUG) msRunStart = Component.getTime();
 
-        /*
+        /**
          *  calcStartTime() initializes the cycle counter and timestamp for this runCPU() invocation.
          */
         this.calcStartTime();
@@ -16474,7 +16475,7 @@ class CPU extends Component {
         try {
             this.flags.yield = false;
             do {
-                /*
+                /**
                  * getBurstCycles() tells us how many cycles to execute as a burst.  The answer will always
                  * be less than getCurrentCyclesPerSecond(), because at the very least, our own timer fires more than
                  * once per second.
@@ -16486,7 +16487,7 @@ class CPU extends Component {
                     nCycles = this.chipset.getTimerCycleLimit(0, nCycles);
                     nCycles = this.chipset.getRTCCycleLimit(nCycles);
                 }
-                /*
+                /**
                  * Execute the burst.
                  */
                 try {
@@ -16495,7 +16496,7 @@ class CPU extends Component {
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
                     if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
-                    /*
+                    /**
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
                      * of fnGRPUndefined()), the browser may hang because we're failing to yield often enough.
@@ -16505,7 +16506,7 @@ class CPU extends Component {
                      */
                 }
 
-                /*
+                /**
                  * Terminate the burst, returning the number of cycles that stepCPU() actually ran.  If this
                  * returns zero, then presumably someone already called endBurst(), such as stopCPU(), and already
                  * took care of all the timers.
@@ -16561,7 +16562,7 @@ class CPU extends Component {
             clearTimeout(this.idRunTimeout);
             this.idRunTimeout = 0;
         }
-        /*
+        /**
          *  setSpeed() without a speed parameter leaves the selected speed in place, but also resets the
          *  cycle counter and timestamp for the current series of runCPU() calls, and calculates the maximum number
          *  of cycles for each burst based on the last known effective CPU speed.
@@ -16679,7 +16680,7 @@ class CPU extends Component {
     yieldCPU()
     {
         this.flags.yield = true;
-        /*
+        /**
          * The Debugger calls yieldCPU() after every message() to ensure browser responsiveness, but it looks
          * odd for those messages to show CPU state changes but for the CPU's own status display to not (ditto
          * for the Video display), so I've added this call to try to keep things looking synchronized.
@@ -16758,7 +16759,7 @@ class CPUx86 extends CPU {
 
         this.model = model;
 
-        /*
+        /**
          * We take the 'stepping' value, convert it to a hex value, and then add that to the model to provide
          * a single value that's unique for any given CPU stepping.  If no stepping is provided, then stepping
          * is equal to model.
@@ -16766,12 +16767,12 @@ class CPUx86 extends CPU {
         let stepping = parmsCPU['stepping'];
         this.stepping = model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
-        /*
+        /**
          * Initialize processor operation to match the requested model
          */
         this.initProcessor();
 
-        /*
+        /**
          * List of software interrupt notification functions: aIntNotify is an array, indexed by
          * interrupt number, where each element contains:
          *
@@ -16796,25 +16797,25 @@ class CPUx86 extends CPU {
         this.aIntNotify = [];
         this.aIntReturn = [];
 
-        /*
+        /**
          * Since aReturnNotify is a "sparse array", this global count gives the CPU a quick way of knowing whether
          * or not RETF or IRET instructions need to bother calling checkIntReturn().
          */
         this.cIntReturn = 0;
 
-        /*
+        /**
          * A variety of stepCPU() state variables that don't strictly need to be initialized before the first
          * stepCPU() call, but it's good form to do so.
          */
         this.resetCycles();
         this.flags.complete = this.flags.debugCheck = false;
 
-        /*
+        /**
          * If there are no live registers to display, then updateStatus() can skip a bit....
          */
         this.cLiveRegs = 0;
 
-        /*
+        /**
          * We're just declaring aMemBlocks and associated Bus parameters here; they'll be initialized by initMemory()
          * when the Bus is initialized.
          */
@@ -16827,7 +16828,7 @@ class CPUx86 extends CPU {
             this.adwPrefetch = null;
         }
 
-        /*
+        /**
          * This initial resetRegs() call is important to create all the registers (eg, the Segx86 registers),
          * so that if/when we call restore(), it will have something to fill in.
          */
@@ -16869,7 +16870,7 @@ class CPUx86 extends CPU {
      */
     initMemory(aMemBlocks, nBlockShift)
     {
-        /*
+        /**
          * aBusBlocks preserves the Bus block array for the life of the machine, whereas aMemBlocks
          * will be altered if/when the CPU enables paging.  PAGEBLOCKS must be true when using Memory
          * blocks to simulate paging, ensuring that physical blocks and pages have the same size (4Kb).
@@ -16933,7 +16934,7 @@ class CPUx86 extends CPU {
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
-                /*
+                /**
                  * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
                  * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
                  */
@@ -16963,7 +16964,7 @@ class CPUx86 extends CPU {
             let iBlock = addr >>> this.nBlockShift;
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
             aBlocks[iBlock].removeBreakpoint(addr & this.nBlockLimit, fWrite);
-            /*
+            /**
              * When a physical memory breakpoint is removed, a fresh setPhysBlock() call is RECOMMENDED for any
              * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
              */
@@ -17032,7 +17033,7 @@ class CPUx86 extends CPU {
         let iBlock;
         if (this.aMemBlocks === this.aBusBlocks) {
             this.aMemBlocks = new Array(this.nBlockTotal);
-            /*
+            /**
              * TODO: Currently we allocate only one UNPAGED block for the entire linear address space;
              * only when a block is touched and becomes PAGED do we allocate a dedicated Memory block
              * for that slot.  One potential downside to using a single UNPAGED block, however, is that
@@ -17057,7 +17058,7 @@ class CPUx86 extends CPU {
             for (iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
                 this.aMemBlocks[iBlock] = this.blockUnpaged;
             }
-            /*
+            /**
              * We also use a special "empty" Memory block that mapPageBlock() can pass back to callers
              * whenever a valid block cannot be found for an UNPAGED block.  Under normal conditions,
              * an invalid block will trigger a fault, so memEmpty will never actually be returned, but
@@ -17065,13 +17066,13 @@ class CPUx86 extends CPU {
              */
             this.memEmpty = new Memoryx86();
 
-            /*
+            /**
              * Initialize our PAGEBLOCKS cache (see acquirePageBlock() and releasePageBlock()).
              */
             this.aCacheBlocks = new Array(CPUx86.PAGEBLOCKS_CACHE);
             this.iCacheBlocks = 0;
         } else {
-            /*
+            /**
              * Our equivalent of a TLB flush.  NOTE: We do not attempt to simulate an actual TLB; our
              * aMemBlocks array will "cache" as many pages (ie, allow as many PAGED block) as there are
              * entries in the array.  I'm assuming we won't run into any system software that relies on
@@ -17114,7 +17115,7 @@ class CPUx86 extends CPU {
         let block;
         if (this.iCacheBlocks > 0) {
             block = this.aCacheBlocks[--this.iCacheBlocks];
-            /*
+            /**
              * Paged memory blocks are all very generic and contain no memory of their own, so the fact
              * that we're not calling the Memory constructor to reinitialize it is OK.  setPhysBlock() is
              * what's critical, and the caller will take care of that.  However, to avoid any confusion,
@@ -17181,7 +17182,7 @@ class CPUx86 extends CPU {
         let offPDE = (addr & X86.LADDR.PDE.MASK) >>> X86.LADDR.PDE.SHIFT;
         let addrPDE = this.regCR3 + offPDE;
 
-        /*
+        /**
          * bus.getLong(addrPDE) would be simpler, but setPhysBlock() needs to know blockPDE and offPDE, too.
          * TODO: Since we're immediately shifting addrPDE by nBlockShift, then we could also skip adding offPDE.
          */
@@ -17201,7 +17202,7 @@ class CPUx86 extends CPU {
         let offPTE = (addr & X86.LADDR.PTE.MASK) >>> X86.LADDR.PTE.SHIFT;
         let addrPTE = (pde & X86.PTE.FRAME) + offPTE;
 
-        /*
+        /**
          * bus.getLong(addrPTE) would be simpler, but setPhysBlock() needs to know blockPTE and offPTE, too.
          * TODO: Since we're immediately shifting addrPDE by nBlockShift, then we could also skip adding offPTE.
          */
@@ -17219,7 +17220,7 @@ class CPUx86 extends CPU {
         }
 
         let addrPhys = (pte & X86.PTE.FRAME) + (addr & X86.LADDR.OFFSET);
-        /*
+        /**
          * TODO: Since we're immediately shifting addrPhys by nBlockShift, we could also skip adding the addr's offset.
          */
         let blockPhys = this.aBusBlocks[(addrPhys & this.nBusMask) >>> this.nBlockShift];
@@ -17228,7 +17229,7 @@ class CPUx86 extends CPU {
         let iBlock = addr >>> this.nBlockShift;
         let block = this.aMemBlocks[iBlock];
 
-        /*
+        /**
          * So we have the block containing the physical memory corresponding to the given linear address.
          *
          * Now we can create a new PAGED Memory block and record the physical block info using setPhysBlock().
@@ -17463,7 +17464,7 @@ class CPUx86 extends CPU {
         this.aOpGrp6  = X86.aOpGrp6Real;        // setProtMode() will ensure that aOpGrp6 is switched
 
         if (this.model >= X86.MODEL_80186) {
-            /*
+            /**
              * I don't go out of my way to make 80186/80188 cycle times accurate, since I'm not aware of any
              * IBM PC models that used those processors; beyond the 8086, my next priorities are the 80286 and
              * 80386, but I might revisit the 80186 someday.
@@ -17534,7 +17535,7 @@ class CPUx86 extends CPU {
                             this.aOps0F[0xA7] = X86.opIBTS;
                         }
                     } else {
-                        /*
+                        /**
                          * Let's make any "undefined" 80286 0x0F opcode handler "invalid" instead IFF the opcode
                          * is defined on the 80386.  Whereas if someone is using an opcode that isn't defined on ANY
                          * of these processors, then I want to know about it; ie, leave it set to opUndefined().
@@ -17728,7 +17729,7 @@ class CPUx86 extends CPU {
         this.regESI = 0;
         this.regEDI = 0;
 
-        /*
+        /**
          * The following are internal "registers" used to capture intermediate values inside selected helper
          * functions and use them if they've been modified (or are known to change); for example, the MUL and DIV
          * instructions perform calculations that must be propagated to specific registers (eg, AX and/or DX), which
@@ -17740,20 +17741,20 @@ class CPUx86 extends CPU {
         this.r64Rem = [0, 0];
         this.regXX = 0;             // for internal use only (eg, assists with ModRM helper functions)
 
-        /*
+        /**
          * This internal "register" is set in selected opcode handlers to record the original opcode; ordinarily,
          * we dispatch on the opcode but never save it, because it's rarely needed.
          */
         this.bOpcode = 0;
 
-        /*
+        /**
          * Another internal "register" we occasionally need is an interim copy of bModRM, set inside selected opcode
          * handlers so that the helper function can have access to the instruction's bModRM without resorting to a
          * closure (which, in the Chrome V8 engine, for example, may cause constant recompilation).
          */
         this.bModRM = 0;
 
-        /*
+        /**
          * NOTE: Even though the 8086 doesn't have CR0 (aka MSW) and IDTR, we initialize them for ALL CPUs, so
          * that functions like X86.helpINT() can use the same code for both.  The 8086/8088 have no direct way
          * of accessing or changing them, so this is an implementation detail those processors are unaware of.
@@ -17763,7 +17764,7 @@ class CPUx86 extends CPU {
         this.addrIDTLimit = 0x03FF;
         this.regPS = this.nIOPL = 0;// these should be set before the first setPS() call
 
-        /*
+        /**
          * Define all the result registers that can be used to "cache" arithmetic and logical flags.
          *
          * In addition, setPS() will initialize resultType, which keeps track of which flags are cached,
@@ -17771,7 +17772,7 @@ class CPUx86 extends CPU {
          */
         this.resultDst = this.resultSrc = this.resultArith = this.resultLogic = 0;
 
-        /*
+        /**
          * nFault is set by helpFault() and reset (to -1) by resetRegs() and opIRET().  Its initial purpose was to
          * help helpFault() determine when a nested fault should be converted into either a double-fault (DF_FAULT)
          * or a triple-fault (ie, a processor reset).
@@ -17787,7 +17788,7 @@ class CPUx86 extends CPU {
          */
         this.nFault = -1;
 
-        /*
+        /**
          * These are used to snapshot regLIP and regLSP, to help make instructions restartable;
          * currently opLIP is updated prior to every instruction, but opLSP is updated only for instructions
          * that modify the stack pointer (eg, RETF) and should otherwise remain set to X86.ADDR_INVALID.
@@ -17801,7 +17802,7 @@ class CPUx86 extends CPU {
         this.opCS = this.opSS = -1;
         this.opLIP = this.opLSP = X86.ADDR_INVALID;
 
-        /*
+        /**
          * Segment registers used to be defined as separate selector and base variables (eg, regCS and regCS0),
          * but now they are defined as Segx86 objects.
          */
@@ -17813,7 +17814,7 @@ class CPUx86 extends CPU {
         this.setSS(0);
 
         if (I386 && this.model >= X86.MODEL_80386) {
-            /*
+            /**
              * As explained above, EAX depends upon the results of the CPU's power-up self-test; however, the only
              * documented value is zero, which indicates that the 80386 passed.  Additionally, DH is set to the CPU
              * identifier (3) and DL is set to the revision level (stepping).
@@ -17845,7 +17846,7 @@ class CPUx86 extends CPU {
             this.regTR  = [null,null,null,null,null,null,0,0];  // Test Registers TR0-TR7 (TR0-TR5 are undefined)
             this.segFS = new Segx86(this, Segx86.ID.DATA,  "FS");
             this.segGS = new Segx86(this, Segx86.ID.DATA,  "GS");
-            /*
+            /**
              * Synchronize the fact that paging is initially disabled with our PAGEBLOCKS functions
              */
             this.disablePageBlocks();
@@ -17853,7 +17854,7 @@ class CPUx86 extends CPU {
 
         this.segNULL = new Segx86(this, Segx86.ID.NULL,  "NULL");
 
-        /*
+        /**
          * The next few initializations mirror what we must do prior to each instruction (ie, inside the stepCPU() function);
          * note that opPrefixes, along with segData and segStack, are reset only after we've executed a non-prefix instruction.
          */
@@ -17864,7 +17865,7 @@ class CPUx86 extends CPU {
 
         this.segEA = this.segNULL;
 
-        /*
+        /**
          * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
          * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
          * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
@@ -17874,7 +17875,7 @@ class CPUx86 extends CPU {
         this.intFlags = X86.INTFLAG.NONE;
 
         if (BACKTRACK) {
-            /*
+            /**
              * Initialize the backtrack indexes for all registers to zero.  And while, yes, it IS possible
              * for raw data to flow through segment registers as well, it's not common enough in real-mode
              * (and too difficult in protected-mode) to merit the overhead.  Ditto for SP, which can't really
@@ -17909,14 +17910,14 @@ class CPUx86 extends CPU {
             };
         }
 
-        /*
+        /**
          * Set the initial CS:IP appropriate for the processor; this should be done before the first setPS() call,
          * in part so that CPL will be set properly.
          */
         if (this.model < X86.MODEL_80286) {
             this.setCSIP(0, 0xffff);
         } else {
-            /*
+            /**
              * Assorted 80286-specific registers.  The GDTR and IDTR registers are stored as the following pieces:
              *
              *      GDTR:   addrGDT (24 bits) and addrGDTLimit (24 bits)
@@ -17942,13 +17943,13 @@ class CPUx86 extends CPU {
             this.setCSBase(0xffff0000|0);                   // on an 80286 or 80386, all CS base address bits above bit 15 must be set
         }
 
-        /*
+        /**
          * This resets the Processor Status flags (regPS), along with all the internal "result registers";
          * we've taken care to ensure that both CPL and IOPL are initialized before this first setPS() call.
          */
         this.setPS(0);
 
-        /*
+        /**
          * Now that all the segment registers have been created, it's safe to set the current addressing mode.
          */
         this.setProtMode();
@@ -18100,7 +18101,7 @@ class CPUx86 extends CPU {
      */
     resetSizes()
     {
-        /*
+        /**
          * The following contain the (default) ADDRESS size (2 for 16 bits, 4 for 32 bits), and the corresponding
          * masks for isolating the (src) bits of an address and clearing the (dst) bits of an address.  Like the
          * OPERAND size properties, these are reset to their segCS counterparts at the start of every new instruction.
@@ -18109,7 +18110,7 @@ class CPUx86 extends CPU {
             this.sizeAddr = this.segCS.sizeAddr;
             this.maskAddr = this.segCS.maskAddr;
 
-            /*
+            /**
              * It's also worth noting that instructions that implicitly use the stack also rely on STACK size,
              * which is based on the BIG bit of the last descriptor loaded into SS; use the following segSS properties:
              *
@@ -18122,7 +18123,7 @@ class CPUx86 extends CPU {
             this.updateAddrSize();
         }
 
-        /*
+        /**
          * The following contain the (default) OPERAND size (2 for 16 bits, 4 for 32 bits), and the corresponding masks
          * for isolating the (src) bits of an OPERAND and clearing the (dst) bits of an OPERAND.  These are reset to
          * their segCS counterparts at the start of every new instruction, but are also set here for documentation purposes.
@@ -18191,7 +18192,7 @@ class CPUx86 extends CPU {
                 }
             }
         }
-        /*
+        /**
          * The enabling of INT messages is one of the criteria that's also included in the Debugger's checksEnabled()
          * function, and therefore included in debugCheck, so for maximum speed, we check debugCheck first.
          *
@@ -18278,7 +18279,7 @@ class CPUx86 extends CPU {
      */
     checkDebugRegisters(fEnable)
     {
-        /*
+        /**
          * We use a constant mask for the enable bits (X86.DR7.L0 | X86.DR7.G0) and shift our copy of regDR7
          * right 2 bits after each Debug register check.
          *
@@ -18290,12 +18291,12 @@ class CPUx86 extends CPU {
 
         for (let i = 0; i < 4; i++) {
             if (regDR7 & (X86.DR7.L0 | X86.DR7.G0)) {
-                /*
+                /**
                  * We look only to the low bit of the RW field to determine if we should be watching for a write.
                  * FYI, if the low bit is clear but the high bit is set, that's "undefined"; we treat it as a read.
                  */
                 let fWrite = !!(bitsDR7 & 0x1);
-                /*
+                /**
                  * The address in regDR[i] should already be masked with ~0x1 for 2-byte accesses (LEN == 0x1) or
                  * with ~0x3 for 4-byte accesses (LEN == 0x3), but if the client forgets, the hardware supposedly
                  * enforces it, so that's what we do here, too.
@@ -18333,7 +18334,7 @@ class CPUx86 extends CPU {
      */
     checkMemoryException(addr, nb, fWrite)
     {
-        /*
+        /**
          * NOTE: We're preventing redundant X86.EXCEPTION.DB_EXC exceptions for a single instruction by checking
          * X86.OPFLAG.DBEXC.  I decided not to rely on the generic X86.OPFLAG.FAULT, because if an instruction
          * first triggers a DIFFERENT exception which then triggers a DEBUG exception (eg, because a Debug register
@@ -18342,7 +18343,7 @@ class CPUx86 extends CPU {
          */
         if (!(this.opFlags & X86.OPFLAG.DBEXC) && (this.regDR[7] & X86.DR7.ENABLE)) {
             nb--;
-            /*
+            /**
              * We use a constant mask for the enable bits (X86.DR7.L0 | X86.DR7.G0) and shift our copy of regDR7
              * right 2 bits after each Debug register check.
              *
@@ -18357,16 +18358,16 @@ class CPUx86 extends CPU {
 
             for (let i = 0; i < 4; i++) {
                 if ((regDR7 & (X86.DR7.L0 | X86.DR7.G0)) && (bitsDR7 & bitsRWMask) == bitsRWRequired) {
-                    /*
+                    /**
                      * NOTE: We reduced nb from 1-4 to 0-3 above, so we don't need to add 1 to len either.
                      */
                     let len = (bitsDR7 >> 2);
-                    /*
+                    /**
                      * Time to determine if addr through addr + nb overlaps regDR[i] through regDR[i] + len.
                      */
                     if (addr + nb >= this.regDR[i] && addr <= this.regDR[i] + len) {
                         this.regDR[6] |= (1 << i);
-                        /*
+                        /**
                          * Data access breakpoints are not faults; they must generate a trap at the end of the
                          * instruction, so we use the X86.INTFLAG.TRAP flag to generate the X86.EXCEPTION.DB_EXC trap.
                          *
@@ -18439,7 +18440,7 @@ class CPUx86 extends CPU {
             this.segFS.updateMode(false, fProt, fV86);
             this.segGS.updateMode(false, fProt, fV86);
         }
-        /*
+        /**
          * This function used to be called only when I386 is true, but it's probably best if we ALWAYS call it, even
          * for 16-bit-only CPUs like the 8086 and 80286; this allows us to write opcode logic by either checking I386
          * and using appropriate hard-coded sizes, or NOT checking I386 and simply using the "soft-coded" sizes in
@@ -18574,20 +18575,20 @@ class CPUx86 extends CPU {
         this.restoreProtMode(a[5]);
         this.setPS(a[6]);
 
-        /*
+        /**
          * The introduction of protected-mode requires us to restore memory contents sooner than we used to
          * (ie, before we load any segment registers).
          */
         let fRestored = false;
 
         if (this.bus.restoreMemory(data[4])) {
-            /*
+            /**
              * It's important to call setCSIP(), both to ensure that the CPU's linear IP register (regLIP) is updated
              * properly AND to ensure the CPU's default ADDRESS and OPERAND sizes are set properly.
              */
             this.setCSIP(a[0], this.segCS.sel);
 
-            /*
+            /**
              * It's also important to call setSP(), so that the linear SP register (regLSP) will be updated properly;
              * we also need to call setSS(), to ensure that the lower and upper stack limits are properly initialized.
              */
@@ -18613,7 +18614,7 @@ class CPUx86 extends CPU {
         a = data[3];
         this.nTotalCycles = a[1];   // a[0] was previously nBurstDivisor (no longer used)
         this.setSpeed(a[2]);        // old states didn't contain a value from getSpeed(), but setSpeed() checks
-        /*
+        /**
          * autoStart is normally either true, false, or null (the latter depends on the presence of a debugger),
          * but there are special circumstances where it can be a number (ie, zero) if someone has decided that the
          * machine should NOT be auto-started regardless.
@@ -18624,7 +18625,7 @@ class CPUx86 extends CPU {
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
-        /*
+        /**
          * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
          * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
          * this callback.
@@ -18653,7 +18654,7 @@ class CPUx86 extends CPU {
         case "NULL":
             return this.segNULL;
         default:
-            /*
+            /**
              * HACK: We return a fake segment register object in which only the base linear address is valid,
              * because that's all the caller provided (ie, we must be restoring from an older state).
              */
@@ -18745,7 +18746,7 @@ class CPUx86 extends CPU {
         let regESP = this.getSP();
         let regLSP = this.segSS.load(sel);
         if (regLSP !== X86.ADDR_INVALID) {
-            /*
+            /**
              * The safest way to update regLSP after a potential change to segSS.base is to call setSP() with the
              * original stack pointer retrieved above via getSP().  When I tried to be clever and do this instead:
              *
@@ -18755,7 +18756,7 @@ class CPUx86 extends CPU {
              */
             this.setSP(regESP);
 
-            /*
+            /**
              * The desire to use a linear stack pointer (regLSP) for internal stack operations has some pitfalls;
              * one involves these upper and lower limit calculations.  Example: Xenix 386 creates a (non-expand-down)
              * 32-bit data segment for all of DS, ES, and SS, which uses a limit of "-1"; ie:
@@ -18899,7 +18900,7 @@ class CPUx86 extends CPU {
         this.regLIP = addr;
         this.regLIPMax = (this.segCS.base >>> 0) + (this.segCS.limit >>> 0) + 1;
 
-        /*
+        /**
          * TODO: Verify the proper source for CPL.  Should it come from segCS.cpl or segCS.dpl?
          * Note that LOADALL386 wants it to come from segSS.dpl.
          */
@@ -18909,7 +18910,7 @@ class CPUx86 extends CPU {
             this.resetSizes();
         }
 
-        /*
+        /**
          * Here, we need to additionally test whether the prefetch buffer (adwPrefetch) has been allocated yet,
          * because when resetRegs() is first called, the Bus hasn't been initialized yet, so there's nothing to fetch.
          *
@@ -18938,7 +18939,7 @@ class CPUx86 extends CPU {
      */
     setCSIP(off, sel, fCall)
     {
-        /*
+        /**
          * Setting IP needs to occur AFTER loadCode(), because it may differ from the given IP if sel refers to a gate.
          */
         let base = this.segCS.loadCode(off, sel, fCall);
@@ -18986,7 +18987,7 @@ class CPUx86 extends CPU {
     {
         let newLIP = (this.regLIP >>> 0) + inc;
         if (newLIP > this.regLIPMax) {
-            /*
+            /**
              * There's no such thing as a GP fault on the 8086/8088, and I'm now assuming that,
              * on newer processors, all attempts to fetch opcodes beyond the limit trigger a fault.
              */
@@ -19010,7 +19011,7 @@ class CPUx86 extends CPU {
         if (PREFETCH) {
             this.cbPrefetch += this.regLIP - this.opLIP;
             this.regLIP = this.opLIP;
-            /*
+            /**
              * If the reset produces a prefetch total greater than the allocated amount, then we must have
              * refilled the queue somewhere in the middle of the rewound instruction, so we need to refill the
              * queue all over again; otherwise, the next repetition may fetch future data instead of past data.
@@ -19035,7 +19036,7 @@ class CPUx86 extends CPU {
     rewindIP(fCheckSeg = false)
     {
         if (fCheckSeg && (this.opPrefixes & X86.OPFLAG.SEG)) {
-            /*
+            /**
              * This instruction has both REP and SEG overrides, so if we IRET'ed to it with interrupts enabled,
              * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
              * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
@@ -19151,7 +19152,7 @@ class CPUx86 extends CPU {
         this.resultLogic = value;
         if (carry) this.setCF(); else this.clearCF();
         if (overflow) this.setOF(); else this.clearOF();
-        /*
+        /**
          * Limited testing on actual hardware (the Intel Core i5 in my Mac Mini) as well as test
          * results from another user (https://github.com/jeffpar/pcjs/issues/81) suggest that AF is
          * cleared by logic ops (at least AND/OR/TEST/XOR; see https://sandpile.org/x86/flags.htm).
@@ -19622,13 +19623,13 @@ class CPUx86 extends CPU {
      */
     setMSW(w)
     {
-        /*
+        /**
          * This instruction is always allowed to set MSW.PE, but it cannot clear MSW.PE once set;
          * therefore, we always OR the previous value of MSW.PE into the new value before loading.
          */
         w |= (this.regCR0 & X86.CR0.MSW.PE) | X86.CR0.MSW.ON;
         this.regCR0 = (this.regCR0 & ~X86.CR0.MSW.MASK) | (w & X86.CR0.MSW.MASK);
-        /*
+        /**
          * Since the 80286 cannot return to real-mode via this instruction, the only transition we
          * must worry about is to protected-mode.  And there's no harm calling setProtMode() if the
          * CPU is already in protected-mode; we could certainly optimize out the call in that case,
@@ -19646,7 +19647,7 @@ class CPUx86 extends CPU {
      */
     setPS(regPS, cpl)
     {
-        /*
+        /**
          * OS/2 1.0 discriminates between an 80286 and an 80386 based on whether an IRET in real-mode that
          * pops 0xF000 into the flags is able to set *any* of flag bits 12-15: if it can, then OS/2 declares
          * the CPU an 80386.
@@ -19658,13 +19659,13 @@ class CPUx86 extends CPU {
          */
         if (!(this.regCR0 & X86.CR0.MSW.PE)) regPS &= ~this.PS_CLEAR_RM;
 
-        /*
+        /**
          * There are some cases (eg, an IRET returning to a less privileged code segment) where the CPL
          * we compare against should come from the outgoing code segment, so if the caller provided it, use it.
          */
         if (cpl === undefined) cpl = this.nCPL;
 
-        /*
+        /**
          * Since PS.IOPL and PS.IF are part of PS_DIRECT, we need to take care of any 80286-specific behaviors
          * before setting the PS_DIRECT bits from the incoming regPS bits.
          *
@@ -19829,7 +19830,7 @@ class CPUx86 extends CPU {
             }
         }
 
-        /*
+        /**
          * Since the Bus component initializes all unused portions of physical address space with an empty
          * block, we have also written mapPageBlock() to return an empty block (memEmpty) whenever there is
          * no valid mapping.  So if we ever end up here, this may represent a hole that needs plugging.
@@ -19870,7 +19871,7 @@ class CPUx86 extends CPU {
     {
         let off = addr & this.nBlockLimit;
         let iBlock = (addr & this.nMemMask) >>> this.nBlockShift;
-        /*
+        /**
          * On the 8088, it takes 4 cycles to read the additional byte REGARDLESS whether the address is odd or even.
          * TODO: For the 8086, the penalty is actually "(addr & 0x1) << 2" (4 additional cycles only when the address is odd).
          */
@@ -19913,7 +19914,7 @@ class CPUx86 extends CPU {
         if (off < this.nBlockLimit - 2) {
             return this.aMemBlocks[iBlock].readLong(off, addr);
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
          * long in the current block and the first long in the next block and masking/combining the results),
          * which may have also created some undesirable side-effects for custom memory controllers.
@@ -19964,7 +19965,7 @@ class CPUx86 extends CPU {
     {
         let off = addr & this.nBlockLimit;
         let iBlock = (addr & this.nMemMask) >>> this.nBlockShift;
-        /*
+        /**
          * On the 8088, it takes 4 cycles to write the additional byte REGARDLESS whether the address is odd or even.
          * TODO: For the 8086, the penalty is actually "(addr & 0x1) << 2" (4 additional cycles only when the address is odd).
          */
@@ -20009,7 +20010,7 @@ class CPUx86 extends CPU {
             this.aMemBlocks[iBlock].writeLong(off, l, addr);
             return;
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading and rewriting
          * the last long in the current block, and then reading and rewriting the first long in the next
          * block), which may have also created some undesirable side-effects for custom memory controllers.
@@ -20087,7 +20088,7 @@ class CPUx86 extends CPU {
         this.regEA = seg.checkRead(this.offEA, (I386? this.sizeData : 2));
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20118,7 +20119,7 @@ class CPUx86 extends CPU {
         this.regEA = this.segEA.checkRead(this.offEA, 2);
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20150,7 +20151,7 @@ class CPUx86 extends CPU {
         this.regEA = this.segEA.checkRead(this.offEA, 2);
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20279,7 +20280,7 @@ class CPUx86 extends CPU {
         }
         let addr = this.segEA.checkWrite(this.offEA, 2);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -20323,7 +20324,7 @@ class CPUx86 extends CPU {
         }
         let addr = this.segEA.checkWrite(this.offEA, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -20366,7 +20367,7 @@ class CPUx86 extends CPU {
         let w;
         let addr = seg.checkRead(off, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20408,7 +20409,7 @@ class CPUx86 extends CPU {
     {
         let addr = seg.checkWrite(off, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -20547,7 +20548,7 @@ class CPUx86 extends CPU {
         let newLIP = this.checkIP(1);
         let b = (PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP));
         if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
-        /*
+        /**
          * With the following cycle penalty (which really only affects 8086/8088 CPUs), PC Tools 4.30
          * correctly reports an IBM PC-relative speed of 100% (assuming you're using a 4.77Mhz configuration).
          *
@@ -20576,7 +20577,7 @@ class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getShort(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(2), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20606,7 +20607,7 @@ class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getAddr(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20636,7 +20637,7 @@ class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getWord(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -20691,7 +20692,7 @@ class CPUx86 extends CPU {
 
         let delta = this.regLSPLimit - (this.regLSP >>> 0);
         if (delta < 0) {
-            /*
+            /**
              * There's no such thing as an SS fault on the 8086/8088, and in fact, we have to support the
              * operation even when the address straddles the wrap boundary; other emulators tend to barf on
              * a wrap, usually because they're running in V86 mode instead of real mode.
@@ -20703,7 +20704,7 @@ class CPUx86 extends CPU {
                 }
             }
             else {
-                /*
+                /**
                  * I'm assuming that, on newer processors, when the stack segment limit is set to the maximum,
                  * it's OK for the stack to wrap, unless the new address is straddling the wrap boundary (ie, when
                  * delta is < -1).
@@ -20765,7 +20766,7 @@ class CPUx86 extends CPU {
 
         let delta = (regLSP >>> 0) - this.regLSPLimitLow;
         if (delta < 0) {
-            /*
+            /**
              * There's no such thing as an SS fault on the 8086/8088, and in fact, we have to support the
              * operation even when the address straddles the wrap boundary (ie, when delta is -1); other
              * emulators tend to barf on a wrap, usually because they're running in V86 mode instead of real mode.
@@ -20779,7 +20780,7 @@ class CPUx86 extends CPU {
                 }
 
             }
-            /*
+            /**
              * I'm assuming that, on newer processors, when the stack segment limit is set to the maximum,
              * it's OK for the stack to wrap, unless the new address is straddling the wrap boundary (ie, when
              * delta is < 0 and > -width).
@@ -20812,7 +20813,7 @@ class CPUx86 extends CPU {
             break;
         }
 
-        /*
+        /**
          * We update this.regLSP at the end to make life simpler for opcode handlers that perform only one
          * pushWord() operation, relieving them from having to snapshot this.regLSP into this.opLSP needlessly.
          */
@@ -20874,7 +20875,7 @@ class CPUx86 extends CPU {
         // DEBUG:
 
         if (!(this.opFlags & X86.OPFLAG.NOINTR)) {
-            /*
+            /**
              * As discussed above, the 8086/8088 give hardware interrupts higher priority than the TRAP interrupt,
              * whereas the 80286 and up give TRAPs higher priority.
              */
@@ -20906,7 +20907,7 @@ class CPUx86 extends CPU {
                 iPriority = 1 - iPriority;
             }
         }
-        /*
+        /**
          * As long as the ChipSet component isn't calling setDMA(), we don't need to test INTFLAG.DMA...
          *
         if (this.intFlags & X86.INTFLAG.DMA) {
@@ -21087,7 +21088,7 @@ class CPUx86 extends CPU {
      */
     stepCPU(nMinCycles)
     {
-        /*
+        /**
          * The Debugger uses fComplete to determine if the instruction completed (true) or was interrupted
          * by a breakpoint or some other exceptional condition (false).  NOTE: this does NOT include JavaScript
          * exceptions, which stepCPU() expects the caller to catch using its own exception handler.
@@ -21099,12 +21100,12 @@ class CPUx86 extends CPU {
          */
         this.flags.complete = true;
 
-        /*
+        /**
          * debugCheck is true if we need to "check" every instruction with the Debugger.
          */
-        this.setDebugCheck(DEBUGGER && this.dbg && this.dbg.checksEnabled());
+        this.setDebugCheck(DEBUGGER && this.dbg != undefined && this.dbg.checksEnabled());
 
-        /*
+        /**
          * nDebugState is checked only when debugCheck is true, and its sole purpose is to tell the first call
          * to checkInstruction() that it can skip breakpoint checks, and that will be true ONLY when fStarting is
          * true OR nMinCycles is zero (the latter means the Debugger is single-stepping).
@@ -21115,20 +21116,20 @@ class CPUx86 extends CPU {
         let nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
         this.flags.starting = false;
 
-        /*
+        /**
          * We move the minimum cycle count to nStepCycles (the number of cycles left to step), so that other
          * functions have the ability to force that number to zero (eg, stopCPU()), and thus we don't have to check
          * any other criteria to determine whether we should continue stepping or not.
          */
         this.nBurstCycles = this.nStepCycles = nMinCycles;
 
-        /*
+        /**
          * NOTE: Even though runCPU() calls updateAllTimers(), we need an additional call here if we're being
          * called from the Debugger, so that single-stepping will update timers as well.  TODO: What about RTC?
          */
         if (this.chipset && !nMinCycles) this.chipset.updateAllTimers();
 
-        /*
+        /**
          * Let's also suppress h/w interrupts whenever the Debugger is single-stepping an instruction; I'm loathe
          * to allow Debugger interactions to affect the behavior of the virtual machine in ANY way, but I'm making
          * this small concession to avoid the occasional and sometimes unexpected Debugger command that ends up
@@ -21148,7 +21149,7 @@ class CPUx86 extends CPU {
             if (opPrefixes) {
                 this.opPrefixes |= opPrefixes;
             } else {
-                /*
+                /**
                  * opLIP is used, among other things, to help string instructions rewind to the first prefix
                  * byte whenever the instruction needs to be repeated.  Repeating string instructions in this
                  * manner (essentially restarting them) is a bit heavy-handed, but ultimately it's more compatible,
@@ -21184,7 +21185,7 @@ class CPUx86 extends CPU {
                         }
                     }
                     if (this.intFlags & X86.INTFLAG.HALT) {
-                        /*
+                        /**
                          * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction, because the
                          * entire machine relies on the steady advance of the overall cycle count, to ensure that timer
                          * updates, video updates, etc, all continue to occur at the expected rates.
@@ -21221,7 +21222,7 @@ class CPUx86 extends CPU {
 
             this.opFlags = 0;
 
-            /*
+            /**
             if (DEBUG || PREFETCH) {
                 this.nBusCycles = 0;
                 this.nSnapCycles = this.nStepCycles;
@@ -21230,7 +21231,7 @@ class CPUx86 extends CPU {
 
             this.aOps[this.getIPByte()].call(this);
 
-            /*
+            /**
             if (PREFETCH) {
                 let nSpareCycles = (this.nSnapCycles - this.nStepCycles) - this.nBusCycles;
                 if (nSpareCycles >= 4) {
@@ -21239,7 +21240,7 @@ class CPUx86 extends CPU {
             }
              */
 
-            /*
+            /**
             if (MAXDEBUG) {
                 //
                 // Make sure that every instruction is assessing a cycle cost, and that the cost is a net positive.
@@ -21300,7 +21301,7 @@ class CPUx86 extends CPU {
 }
 
 if (PREFETCH) {
-    /*
+    /**
      * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
      * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
      * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
@@ -21315,7 +21316,7 @@ if (PREFETCH) {
 
 CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
 
-/*
+/**
  * Initialize every CPU module on the page
  */
 WebLib.onInit(CPUx86.init);
@@ -21324,7 +21325,7 @@ WebLib.onInit(CPUx86.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * Operand Type Reference
  *
  *      ST(0), ST           stack top; the register currently at the top of the stack
@@ -21374,7 +21375,7 @@ class FPUx86 extends Component {
 
         this.model = this.parms['model'] || X86.FPU.MODEL_8087;
 
-        /*
+        /**
          * We take the 'stepping' value, convert it to a hex value, and then add that to the model to provide
          * a single value that's unique for any given CPU stepping.  If no stepping is provided, then stepping
          * is equal to model.
@@ -21382,20 +21383,20 @@ class FPUx86 extends Component {
         let stepping = this.parms['stepping'];
         this.stepping = this.model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
-        /*
+        /**
          * Perform a one-time allocation of all floating-point registers.
          * NOTE: The FPU's internal registers are supposed to be 80-bit, but JavaScript gives us only 64-bit floats.
          */
         this.regStack = new Float64Array(8);
         this.intStack = new Int32Array(this.regStack.buffer);
 
-        /*
+        /**
          * Used for "short-real" (SR) 32-bit floating-point operations.
          */
         this.regTmpSR = new Float32Array(1);
         this.intTmpSR = new Int32Array(this.regTmpSR.buffer);
 
-        /*
+        /**
          * Used for "long-real" (LR) 64-bit floating-point operations.  We also use intTmpLR as temporary storage
          * for all "word-integer" (WI or INT16), "short-integer" (SI or INT32) and "long-integer" (LI or INT64) values,
          * since it's just large enough to accommodate all three integer sizes.
@@ -21403,14 +21404,14 @@ class FPUx86 extends Component {
         this.regTmpLR = new Float64Array(1);
         this.intTmpLR = new Int32Array(this.regTmpLR.buffer);
 
-        /*
+        /**
          * Used for conversion to/from the 80-bit "temp-real" (TR) format; used as three 32-bit integers,
          * where [0] contains TR bits 0-31, [1] contains TR bits 32-63, and [2] contains TR bits 64-79; the
          * upper 16 bits of [2] are not used and should remain zero.
          */
         this.intTmpTR = new Array(3);
 
-        /*
+        /**
          * Initialize other (non-floating-point) coprocessor registers that resetFPU() doesn't touch,
          * such as the "exception" registers: regCodeSel, regCodeOff, regDataSel, regDataOff, and regOpcode.
          *
@@ -21424,7 +21425,7 @@ class FPUx86 extends Component {
         this.regCodeSel = this.regDataSel = -1;
         this.regCodeOff = this.regDataOff = this.regOpcode = this.iStack = 0;
 
-        /*
+        /**
          * Initialize special floating-point constants, as if they were internal read-only registers;
          * all other simple (non-special) constants are "statically" initialized below, as class constants.
          */
@@ -21432,7 +21433,7 @@ class FPUx86 extends Component {
         this.intIndefinite = new Int32Array(this.regIndefinite.buffer);
         this.intIndefinite[0] = 0x00000000; this.intIndefinite[1] = 0xFFF8000;
 
-        /*
+        /**
          * Initialize all other coprocessor registers (control word, tag word, status word, etc) by resetting them.
          */
         this.resetFPU();
@@ -21479,7 +21480,7 @@ class FPUx86 extends Component {
      */
     clearBusy()
     {
-        /*
+        /**
          * We're never "busy" as far as other components are concerned, because we perform all FPU operations
          * synchronously, so there's nothing to do here.
          */
@@ -21533,7 +21534,7 @@ class FPUx86 extends Component {
         a[i++] = this.regControl;
         a[i++] = this.getStatus();
         a[i++] = this.getTags();
-        /*
+        /**
          * Note that, unlike the FSAVE() and FRSTOR() operations, we save the registers in regStack in their physical
          * order (0-7) rather than their logical order (ST0-ST7).  Moreover, FSAVE() and FRSTOR() use the "temp-real" (TR)
          * format, whereas we use the current native format -- which, sadly, is only a 64-bit "long-real" (LR) format.
@@ -21584,7 +21585,7 @@ class FPUx86 extends Component {
         this.regStatus = 0;         // contains all status register bits EXCEPT for ST
         this.iST = 0;               // the ST bits for regStatus are actually stored here
         if (DEBUG) {
-            /*
+            /**
              * All the registers were tagged "unused" above, which is all that would normally happen, but debugging is
              * a little easier if we zero all the registers as well.
              */
@@ -21699,7 +21700,7 @@ class FPUx86 extends Component {
     checkException()
     {
         this.regStatus &= ~X86.FPU.STATUS.ES;
-        /*
+        /**
          * NOTE: The "Stack Fault" (SF) status bit wasn't introduced until the 80387, so it triggers the pre-existing
          * "Invalid Operation" (IE) exception; there is no corresponding "Stack Fault" (SE) exception, and the matching
          * control bit is still reserved.  Consequently, X86.FPU.CONTROL.EXC is a *subset* of X86.FPU.STATUS.EXC (0x3F
@@ -21797,7 +21798,7 @@ class FPUx86 extends Component {
      */
     getStatus()
     {
-        /*
+        /**
          * As long as we never store any ST bits in regStatus, they should always be zero, so in
          * order to return the complete regStatus, all we need to do is shift and "or" the bits from iST.
          */
@@ -21960,7 +21961,7 @@ class FPUx86 extends Component {
     doSquareRoot(operand)
     {
         let result = null;
-        /*
+        /**
          * Happily, -0 is ALSO >= 0.  Also happily, Math.sqrt(-0) returns -0.
          */
         if (operand >= 0 || !this.setException(X86.FPU.STATUS.IE)) {
@@ -22437,20 +22438,23 @@ class FPUx86 extends Component {
     getLRFromTR(a)
     {
         let loTR = a[0], hiTR = a[1];
-        let signLR = (a[2] & 0x8000) >> 4, expLR = a[2] & 0x7fff;
-        /*
+        let signLR = (a[2] & 0x8000) >> 4;
+        let expLR = a[2] & 0x7fff;
+
+        /**
          * We have no choice but to chop off the bottom 11 TR bits in order to fit in an LR....
          */
-        let loLR = (loTR >>> 11) | (hiTR << 21), hiLR = (hiTR >> 11) & 0xfffff;
+        let loLR = (loTR >>> 11) | (hiTR << 21);
+        let hiLR = (hiTR >> 11) & 0xfffff;
 
         if (expLR == 0x7fff) {
-            /*
+            /**
              * Convert an TR NaN to a LR NaN.
              */
             expLR = 0x7ff;
         }
         else if (expLR) {
-            /*
+            /**
              * We have a normal (biased) TR exponent which we must now convert to a (biased) LR exponent;
              * subtract the TR bias (0x3fff) and add the LR bias (0x3ff); additionally, we have a problem
              * that getTRFromLR() did not: if the TR exponent is too large to fit in an LR exponent, then we
@@ -22485,10 +22489,11 @@ class FPUx86 extends Component {
     {
         let expTR = (hiLR >> 20) & 0x07ff;
         let signTR = (hiLR >> 16) & 0x8000;
-        let loTR = loLR << 11, hiTR = 0x80000000 | ((hiLR & 0x000fffff) << 11) | (loLR >>> 21);
+        let loTR = loLR << 11;
+        let hiTR = 0x80000000 | ((hiLR & 0x000fffff) << 11) | (loLR >>> 21);
 
         if (expTR == 0x07ff) {
-            /*
+            /**
              * Convert an LR NaN to a TR NaN.  NaNs encompass +/- infinity, which in the LR
              * world are fractions of all zeros.  NaNs also encompass indefinite, which in the LR
              * world are negative numbers with only the high fraction bit set.  So, in both cases,
@@ -22498,7 +22503,7 @@ class FPUx86 extends Component {
             expTR = 0x7fff;
         }
         else if (!expTR) {
-            /*
+            /**
              * An LR with an exponent of zero could be an actual +/- zero, if the fraction is zero,
              * or it could be a denormal, if the fraction is non-zero.  In both cases, the only
              * change we need to make the TR form is clearing the leading 1 bit.
@@ -22506,7 +22511,7 @@ class FPUx86 extends Component {
             hiTR &= 0x7fffffff;
         }
         else {
-            /*
+            /**
              * We have a normal (biased) LR exponent which we must now convert to a (biased) TR exponent;
              * subtract the LR bias (0x3ff) and add the TR bias (0x3fff).
              */
@@ -22688,13 +22693,13 @@ class FPUx86 extends Component {
         let reg = (bModRM >> 3) & 7;
         this.iStack = (bModRM & 7);
 
-        /*
+        /**
          * Combine mod and reg into one decodable value: put mod in the high nibble
          * and reg in the low nibble, after first collapsing all mod values < 3 to zero.
          */
         let modReg = (mod < 3? 0 : 0x30) + reg;
 
-        /*
+        /**
          * All values >= 0x34 imply mod == 3 and reg >= 4, so now we shift reg into the high
          * nibble and iStack into the low, yielding values >= 0x40.
          */
@@ -22704,14 +22709,14 @@ class FPUx86 extends Component {
 
         let fnOp = FPUx86.aaOps[bOpcode][modReg];
         if (fnOp) {
-            /*
+            /**
              * A handful of FPU instructions must preserve (at least some of) the "exception" registers,
              * so if the current function is NOT one of those, then update all the "exception" registers.
              */
             if (FPUx86.afnPreserveExceptions.indexOf(fnOp) < 0) {
                 let cpu = this.cpu;
                 let off = cpu.opLIP;
-                /*
+                /**
                  * WARNING: opLIP points to any prefixes preceding the ESC instruction, but the 8087 always
                  * points to the ESC instruction.  Technically, that's a bug, but it's also a reality, so we
                  * check for preceding prefixes and bump the instruction pointer accordingly.  This isn't a
@@ -22730,13 +22735,13 @@ class FPUx86 extends Component {
                 }
                 this.regOpcode = ((bOpcode & 7) << 8) | bModRM;
             }
-            /*
+            /**
              * Finally, perform the FPU operation.
              */
             fnOp.call(this);
         }
         else {
-            /*
+            /**
              * This is a gray area, at least until aaOps has been filled in for all supported coprocessors;
              * but for now, we'll treat all unrecognized operations as "no operation", as opposed to unimplemented.
              */
@@ -22887,7 +22892,7 @@ FPUx86.F2XM1 = function()
  */
 FPUx86.FABS = function()
 {
-    /*
+    /**
      * TODO: This could be implemented more efficiently by simply clearing the sign bit of ST(0).
      */
     this.setST(0, Math.abs(this.getST(0)));
@@ -22953,7 +22958,7 @@ FPUx86.FADDPsti = function()
 FPUx86.FBLDpd = function()
 {
     let a = this.getTRFromEA();
-    /*
+    /**
      * a[0] contains the 8 least-significant BCD digits, a[1] contains the next 8, and a[2] contains
      * the next 2 (bit 15 of a[2] is the sign bit, and bits 8-14 of a[2] are unused).
      */
@@ -22969,12 +22974,12 @@ FPUx86.FBLDpd = function()
  */
 FPUx86.FBSTPpd = function()
 {
-    /*
+    /**
      * TODO: Verify the operation of FBSTP (eg, does it signal an exception if abs(value) >= 1000000000000000000?)
      */
     let v = this.roundValue(this.popValue());
     if (v != null) {
-        /*
+        /**
          * intTmpTR[0] will contain the 8 least-significant BCD digits, intTmpTR[1] will contain the next 8,
          * and intTmpTR[2] will contain the next 2 (bit 15 of intTmpTR[2] will be the sign bit, and bits 8-14 of
          * intTmpTR[2] will be unused).
@@ -22994,7 +22999,7 @@ FPUx86.FBSTPpd = function()
  */
 FPUx86.FCHS = function()
 {
-    /*
+    /**
      * TODO: This could be implemented more efficiently by simply inverting the sign bit of ST(0).
      */
     this.setST(0, -this.getST(0));
@@ -24497,7 +24502,7 @@ FPUx86.FYL2XP1 = function()
     if (this.setST(1, this.getST(1) * Math.log(this.getST(0) + 1.0) / Math.LN2)) this.popValue();
 };
 
-/*
+/**
  * Class constants
  *
  * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
@@ -24528,7 +24533,7 @@ FPUx86.MAX_INT32 = 0x80000000;
 FPUx86.MAX_INT64 = Math.pow(2, 63);
 
 
-/*
+/**
  * FPU operation lookup table (be sure to keep the following table in sync with Debugger.aaaOpFPUDescs).
  *
  * The second lookup value corresponds to bits in the ModRegRM byte that follows the ESC byte (0xD8-0xDF).
@@ -24617,7 +24622,7 @@ FPUx86.aaOps = {
         0x00: FPUx86.FADDlr,    0x01: FPUx86.FMULlr,    0x02: FPUx86.FCOMlr,    0x03: FPUx86.FCOMPlr,
         0x04: FPUx86.FSUBlr,    0x05: FPUx86.FSUBRlr,   0x06: FPUx86.FDIVlr,    0x07: FPUx86.FDIVRlr,
         0x30: FPUx86.FADDsti,   0x31: FPUx86.FMULsti,   0x32: FPUx86.FCOM8087,  0x33: FPUx86.FCOMP8087,
-        /*
+        /**
          * Intel's original 8087 datasheet had these forms of SUB and SUBR (and DIV and DIVR) swapped.
          */
         0x34: FPUx86.FSUBRsti,  0x35: FPUx86.FSUBsti,   0x36: FPUx86.FDIVRsti,  0x37: FPUx86.FDIVsti
@@ -24631,7 +24636,7 @@ FPUx86.aaOps = {
         0x00: FPUx86.FIADD16,   0x01: FPUx86.FIMUL16,   0x02: FPUx86.FICOM16,   0x03: FPUx86.FICOMP16,
         0x04: FPUx86.FISUB16,   0x05: FPUx86.FISUBR16,  0x06: FPUx86.FIDIV16,   0x07: FPUx86.FIDIVR16,
         0x30: FPUx86.FADDPsti,  0x31: FPUx86.FMULPsti,  0x32: FPUx86.FCOMP8087, 0x33: FPUx86.FCOMPP,
-        /*
+        /**
          * Intel's original 8087 datasheet had these forms of SUBP and SUBRP (and DIVP and DIVRP) swapped.
          */
         0x34: FPUx86.FSUBRPsti, 0x35: FPUx86.FSUBPsti,  0x36: FPUx86.FDIVRPsti, 0x37: FPUx86.FDIVPsti
@@ -24644,7 +24649,7 @@ FPUx86.aaOps = {
     }
 };
 
-/*
+/**
  * An array of FPUx86 functions documented as preserving the "exception" registers.
  */
 FPUx86.afnPreserveExceptions = [
@@ -24652,7 +24657,7 @@ FPUx86.afnPreserveExceptions = [
     FPUx86.FSAVE,   FPUx86.FSTCW,   FPUx86.FSTENV,  FPUx86.FSTSW,   FPUx86.FSTSWAX287
 ];
 
-/*
+/**
  * Initialize every FPU module on the page
  */
 WebLib.onInit(FPUx86.init);
@@ -24661,7 +24666,7 @@ WebLib.onInit(FPUx86.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * NOTE: The protected-mode support in this module was initially added for 80286 support, and is
  * currently being upgraded for 80386 support.  In a perfect world, all 80386-related support would
  * be disabled/skipped whenever the processor is merely an 80286.  And in fact, that's the case
@@ -24709,14 +24714,14 @@ class Segx86 {
         this.checkReadV86 = this.checkReadWriteReal;
         this.checkWriteV86 = this.checkReadWriteReal;
 
-        /*
+        /**
          * Preallocated object for "probed" segment loads
          */
         this.probe = {
             sel: -1, base: 0, limit: 0, acc: 0, type: 0, ext: 0, addrDesc: X86.ADDR_INVALID
         };
 
-        /*
+        /**
          * The following properties are used for CODE segments only (ie, segCS); if the process of loading
          * CS also requires a stack switch, then fStackSwitch will be set to true; additionally, if the stack
          * switch was the result of a CALL (ie, fCall is true) and one or more (up to 32) parameters are on
@@ -24798,7 +24803,7 @@ class Segx86 {
     loadReal(sel, fProbe)
     {
         this.sel = sel & 0xffff;
-        /*
+        /**
          * Loading a new value into a segment register in real-mode alters ONLY the selector and the base;
          * all other attributes (eg, limit, operand size, address size, etc) are unchanged.  If you run any
          * code that switches to protected-mode, loads a 32-bit code segment, and then switches back to
@@ -24837,7 +24842,7 @@ class Segx86 {
         let addrDTLimit;
         let cpu = this.cpu;
 
-        /*
+        /**
          * Some instructions (eg, CALLF) load a 32-bit value for the selector, while others (eg, LDS) do not;
          * however, in ALL cases, only the low 16 bits are significant.
          */
@@ -24850,7 +24855,7 @@ class Segx86 {
             addrDT = cpu.segLDT.base;
             addrDTLimit = (addrDT + cpu.segLDT.limit)|0;
         }
-        /*
+        /**
          * The ROM BIOS POST executes some test code in protected-mode without properly initializing the LDT,
          * which has no bearing on the ROM's own code, because it never loads any LDT selectors, but if at the same
          * time our Debugger attempts to validate a selector in one of its breakpoints, that could cause some grief.
@@ -24860,7 +24865,7 @@ class Segx86 {
         if (addrDT) {
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
             if ((addrDTLimit - addrDesc)|0 >= 7) {
-                /*
+                /**
                  * TODO: This is the first of many steps toward accurately counting cycles in protected mode;
                  * I simply noted that "POP segreg" takes 5 cycles in real mode and 20 in protected mode, so I'm
                  * starting with a 15-cycle difference.  Obviously the difference will vary with the instruction,
@@ -24887,7 +24892,7 @@ class Segx86 {
     loadIDTReal(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
-        /*
+        /**
          * NOTE: The COMPAQ DeskPro 386 ROM loads the IDTR for the real-mode IDT with a limit of 0xffff instead
          * of the normal 0x3ff.  A limit higher than 0x3ff is OK, since all real-mode IDT entries are 4 bytes, and
          * there's no way to issue an interrupt with a vector > 0xff.  Just something to be aware of.
@@ -24900,7 +24905,7 @@ class Segx86 {
             }
         }
 
-        /*
+        /**
          * Intel documentation for INT/INTO under "REAL ADDRESS MODE EXCEPTIONS" says:
          *
          *      "[T]he 80286 will shut down if the SP = 1, 3, or 5 before executing the INT or INTO instruction--due to lack of stack space"
@@ -24969,7 +24974,7 @@ class Segx86 {
      */
     checkReadWriteReal(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -24993,7 +24998,7 @@ class Segx86 {
      */
     checkReadProt(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -25013,7 +25018,7 @@ class Segx86 {
      */
     checkReadProtDown(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -25047,7 +25052,7 @@ class Segx86 {
      */
     checkWriteProt(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -25067,7 +25072,7 @@ class Segx86 {
      */
     checkWriteProtDown(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -25101,7 +25106,7 @@ class Segx86 {
      */
     checkReadDebugger(off, cb)
     {
-        /*
+        /**
          * The Debugger doesn't have separate "check" interfaces for real and protected mode,
          * since it's not performance-critical.  If addrDesc is invalid, then we assume real mode.
          *
@@ -25127,7 +25132,7 @@ class Segx86 {
      */
     checkWriteDebugger(off, cb)
     {
-        /*
+        /**
          * The Debugger doesn't have separate "check" interfaces for real and protected mode,
          * since it's not performance-critical.  If addrDesc is invalid, then we assume real mode.
          *
@@ -25167,7 +25172,7 @@ class Segx86 {
         let addrDT = (sel & X86.SEL.LDT)? this.cpu.segLDT.base : this.cpu.addrGDT;
         this.addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
 
-        /*
+        /**
          * NOTE: This code must take care to leave the mode of the TSS, LDT, and VER segment registers alone;
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
@@ -25207,7 +25212,7 @@ class Segx86 {
         this.ext = 0;
         this.addrDesc = addrDesc;
 
-        /*
+        /**
          * NOTE: This code must take care to leave the mode of the TSS, LDT, and VER segment registers alone;
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
@@ -25253,7 +25258,7 @@ class Segx86 {
     {
         let cpu = this.cpu;
 
-        /*
+        /**
          * If the previous load was a successful "probed" load of the same segment, then we simply load
          * up all the cached descriptor values from the probe and return.
          */
@@ -25271,15 +25276,16 @@ class Segx86 {
             return this.base;
         }
 
-        /*
+        /**
          * Any other load, probed or otherwise, should "flush" the probe cache, by setting probe.sel to -1.
          */
         this.probe.sel = -1;
 
-        /*
+        /**
          * Load the descriptor from memory.
          */
-        let limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET), limitOrig;
+        let limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET);
+        let limitOrig;
         let acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
         let type = (acc & X86.DESC.ACC.TYPE.MASK);
         let base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
@@ -25301,14 +25307,14 @@ class Segx86 {
 
         case Segx86.ID.CODE:
 
-            /*
+            /**
              * NOTE: Since we are Segx86.ID.CODE, we can use this.cpl instead of the more convoluted
              * this.cpu.segCS.cpl.
              */
             fCall = this.fCall;
             this.fStackSwitch = false;
 
-            /*
+            /**
              * This special bit of code is currently used only by the Debugger, when it needs to inject
              * a 16:32 callback address into the machine that it can intercept calls to.  We call these
              * "call break" addresses, because they're essentially breakpoints that only operate when
@@ -25341,7 +25347,7 @@ class Segx86 {
             sizeGate = -1;
 
             if (!selMasked) {
-                /*
+                /**
                  * selMasked is really the descriptor table offset, and a zero offset is fine for the IDT,
                  * and it's probably fine for the LDT, but it's definitely NOT fine for the GDT, because
                  * that's a reference to the null selector.  A null selector is allowed in DS, ES, FS, or GS,
@@ -25355,7 +25361,7 @@ class Segx86 {
             }
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
-                /*
+                /**
                  * There are three basic ways to load a new code segment (ignoring special cases like LOADALL):
                  *
                  *      1) CALLF (fCall is true)
@@ -25369,7 +25375,7 @@ class Segx86 {
                     sizeGate = 0;
                 }
                 else if (fCall !== false) {
-                    /*
+                    /**
                      * We deal with CALLF/JMPF first.  We've already ascertained that the selector type is a
                      * segment, not a gate, so the next important distinction is CONFORMING vs. non-CONFORMING.
                      *
@@ -25392,14 +25398,14 @@ class Segx86 {
                     }
                 }
                 else {
-                    /*
+                    /**
                      * We deal with RETF next.  For starters, we must verify that RPL >= CPL.  Moreover, if
                      * RPL > CPL, then we have a privilege level change that requires a stack switch, assuming
                      * the stack selector is acceptable.
                      */
                     if (rpl >= this.cpl) {
                         if (rpl > this.cpl) {
-                            /*
+                            /**
                              * TODO: See if we can defer calling setSS() and setSP() until AFTER the final checks
                              * below, because if, for example, the new CS is not PRESENT, we must generate a fault,
                              * which in turn must restore the original stack, which means helpRETF() must snapshot
@@ -25460,7 +25466,7 @@ class Segx86 {
             if (sizeGate > 0 && !(acc & X86.DESC.ACC.PRESENT)) sizeGate = 0;
 
             if (sizeGate > 0) {
-                /*
+                /**
                  * Note that since GATE_INT/GATE_TRAP descriptors should appear in the IDT only, that means sel
                  * will actually be nIDT * 8, which means the rpl will always be zero; additionally, the nWords
                  * portion of ACC should always be zero, but that's really dependent on the descriptor being properly
@@ -25469,13 +25475,13 @@ class Segx86 {
                 cplOld = this.cpl;
                 fIDT = (addrDesc == cpu.addrIDT + sel);
 
-                /*
+                /**
                  * Software interrupts (where fIDT is true and cpu.nFault < 0) require an additional test:
                  * if DPL < CPL, then we must fall into the GP_FAULT code at the end of this case.
                  */
                 if (rpl <= dpl && (!fIDT || cpu.nFault >= 0 || cplOld <= dpl))  {
 
-                    /*
+                    /**
                      * For gates, there is no "base" and "limit", but rather "selector" and "offset"; the selector
                      * is located where the first 16 bits of base are normally stored, and the offset comes from the
                      * original limit and ext fields.
@@ -25490,13 +25496,13 @@ class Segx86 {
                     let selStack = 0, offStack = 0;
                     cplNew = (selCode & X86.SEL.RPL);
 
-                    /*
+                    /**
                      * If a stack switch is required, we must perform "probed" loads of both the new selCode
                      * and selStack segments, so that if either probe fails, a fault will be generated while the
                      * old code segment is still loaded.
                      */
                     if (cplNew < cplOld) {
-                        /*
+                        /**
                          * Intel pseudo-code suggests that selStack should be "probed" before selCode, but it also
                          * implies that we need to have the DPL of selCode in order to select the correct selStack,
                          * so who knows...?
@@ -25504,7 +25510,7 @@ class Segx86 {
                         if (this.loadProt(selCode, true) === X86.ADDR_INVALID) {
                             return X86.ADDR_INVALID;
                         }
-                        /*
+                        /**
                          * Intel pseudo-code suggests that the TSS stack pointer offset is based on the DPL of selCode
                          * rather than the RPL of selCode.  TODO: Check for instances where DPL and RPL of selCode differ,
                          * and then figure out which should really be used.
@@ -25519,7 +25525,7 @@ class Segx86 {
                         }
                         selStack = cpu.getShort(addrTSS + offSP + lenSP);
 
-                        /*
+                        /**
                          * Intel pseudo-code indicates at least FIVE discrete selStack tests that could trigger
                          * a TS_FAULT at this point:
                          *
@@ -25537,14 +25543,14 @@ class Segx86 {
                         if (cpu.segSS.loadProt(selStack, true) === X86.ADDR_INVALID) {
                             return X86.ADDR_INVALID;
                         }
-                        /*
+                        /**
                          * Both probes succeeded, so we can proceed with "normal" loads for both selCode and
                          * selStack (which should automatically use the values cached by the "probed" loads above).
                          */
                         offStack = (lenSP == 2)? cpu.getShort(addrTSS + offSP) : cpu.getLong(addrTSS + offSP);
                     }
 
-                    /*
+                    /**
                      * Now that we're past all the probes, it should be safe to clear all flags that need clearing.
                      */
                     let regPS = cpu.regPS;
@@ -25553,7 +25559,7 @@ class Segx86 {
                         cpu.setProtMode(true, false);
                     }
 
-                    /*
+                    /**
                      * TODO: Consider whether we can skip this loadProt() call if this.sel already contains selCode
                      * (and the previous mode matches, which might require we cache the mode in the Segx86 object, too).
                      */
@@ -25588,7 +25594,7 @@ class Segx86 {
                         cpu.setSP(offStack);
 
                         if (regPS & X86.PS.VM) {
-                            /*
+                            /**
                              * Frames coming from V86-mode ALWAYS contain 32-bit values, and look like this:
                              *
                              *      low:    EIP
@@ -25636,7 +25642,7 @@ class Segx86 {
 
         case Segx86.ID.DATA:
             if (selMasked) {
-                /*
+                /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
                  *      Fault 0x0B (0x002C) on opcode 0x8E at 3190:3A05 (%112625)
@@ -25675,7 +25681,7 @@ class Segx86 {
                     X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;
                 }
-                /*
+                /**
                  * TODO: This would be a good place to perform some additional access rights checks, too.
                  */
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
@@ -25702,7 +25708,7 @@ class Segx86 {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }
-            /*
+            /**
              * For more efficient IOPM lookups, we cache the starting linear address in segTSS.addrIOPM, and the
              * last valid address in segTSS.addrIOPMLimit.
              */
@@ -25713,7 +25719,7 @@ class Segx86 {
             break;
 
         case Segx86.ID.VER:
-            /*
+            /**
              * For LSL, we must support any descriptor marked X86.DESC.ACC.TYPE.SEG, as well as TSS and LDT descriptors.
              */
             if (!(type & X86.DESC.ACC.TYPE.SEG) && type > X86.DESC.ACC.TYPE.TSS286_BUSY && type != X86.DESC.ACC.TYPE.TSS386 && type != X86.DESC.ACC.TYPE.TSS386_BUSY) {
@@ -25722,7 +25728,7 @@ class Segx86 {
             break;
 
         default:
-            /*
+            /**
              * The only other cases are:
               *
               *     Segx86.ID.NULL, Segx86.ID.LDT, and Segx86.ID.DBG
@@ -25749,7 +25755,7 @@ class Segx86 {
             this.type = type;
             this.ext = ext;
             this.addrDesc = addrDesc;
-            /*
+            /**
              * A quick recap of what updateMode(fLoad=true, fProt=true, fV86=false) actually updates:
              *
              *      cpl
@@ -25809,14 +25815,14 @@ class Segx86 {
         let addrOld = cpu.segTSS.base;
 
         if (!fNest) {
-            /*
+            /**
              * TODO: Verify that it is (always) correct to require that the BUSY bit be currently set.
              */
             if (!(cpu.segTSS.type & X86.DESC.ACC.TYPE.TSS_BUSY)) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, selNew & X86.ERRCODE.SELMASK);
                 return false;
             }
-            /*
+            /**
              * TODO: Should I be more paranoid about writing our cached ACC value back into the descriptor?
              */
             cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc &= ~X86.DESC.ACC.TYPE.TSS_BUSY);
@@ -25839,16 +25845,17 @@ class Segx86 {
             cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc |= X86.DESC.ACC.TYPE.TSS_BUSY);
         }
 
-        /*
+        /**
          * Now that we're done checking the TSS_BUSY bit in the TYPE field (which is a subset of the ACC field),
          * sync any changes made above in the ACC field to the TYPE field.
          */
         cpu.segTSS.type = (cpu.segTSS.type & ~X86.DESC.ACC.TYPE.TSS_BUSY) | (cpu.segTSS.acc & X86.DESC.ACC.TYPE.TSS_BUSY);
 
-        /*
+        /**
          * Update the old TSS
          */
-        let offSS, offSP;
+        let offSS;
+        let offSP;
         if (cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286 || cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286_BUSY) {
             cpu.setShort(addrOld + X86.TSS286.TASK_IP, cpu.getIP());
             cpu.setShort(addrOld + X86.TSS286.TASK_PS, cpu.getPS());
@@ -25864,7 +25871,7 @@ class Segx86 {
             cpu.setShort(addrOld + X86.TSS286.TASK_CS, cpu.segCS.sel);
             cpu.setShort(addrOld + X86.TSS286.TASK_SS, cpu.segSS.sel);
             cpu.setShort(addrOld + X86.TSS286.TASK_DS, cpu.segDS.sel);
-            /*
+            /**
              * Reload all registers from the new TSS; it's important to reload the LDTR sooner
              * rather than later, so that as segment registers are reloaded, any LDT selectors will
              * will be located in the correct table.
@@ -25908,14 +25915,14 @@ class Segx86 {
             cpu.setLong(addrOld + X86.TSS386.TASK_SS,  cpu.segSS.sel);
             cpu.setLong(addrOld + X86.TSS386.TASK_DS,  cpu.segDS.sel);
 
-            /*
+            /**
              * segFS and segGS exist only on 80386 machines
              */
 
             cpu.setLong(addrOld + X86.TSS386.TASK_FS,  cpu.segFS.sel);
             cpu.setLong(addrOld + X86.TSS386.TASK_GS,  cpu.segGS.sel);
 
-            /*
+            /**
              * Reload all registers from the new TSS; it's important to reload the LDTR sooner
              * rather than later, so that as segment registers are reloaded, any LDT selectors will
              * will be located in the correct table.
@@ -25934,7 +25941,7 @@ class Segx86 {
             cpu.segES.load(cpu.getShort(addrNew + X86.TSS386.TASK_ES));
             cpu.segDS.load(cpu.getShort(addrNew + X86.TSS386.TASK_DS));
 
-            /*
+            /**
              * segFS and segGS exist only on 80386 machines
              */
 
@@ -25952,7 +25959,7 @@ class Segx86 {
             cpu.setSP(cpu.getLong(addrNew + offSP));
         }
 
-        /*
+        /**
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          */
         if (fNest) cpu.setShort(addrNew + X86.TSS286.PREV_TSS, selOld);
@@ -26065,7 +26072,7 @@ class Segx86 {
             fProt = !!(this.cpu.regCR0 & X86.CR0.MSW.PE);
         }
 
-        /*
+        /**
          * The fExpDown property is used for STACK segments only (ie, segSS); we want to make it easier for
          * setSS() to set stack lower and upper limits, which requires knowing whether or not the segment is
          * marked as EXPDOWN.
@@ -26086,7 +26093,7 @@ class Segx86 {
                 this.load = this.loadV86;
                 this.checkRead = this.checkReadV86;
                 this.checkWrite = this.checkWriteV86;
-                /*
+                /**
                  * One important feature of V86-mode (as compared to real-mode) are that other segment attributes
                  * (eg, limit, operand size, address size, etc) ARE updated, whereas in real-mode, segment attributes
                  * remain set to whatever was in effect in protected-mode.
@@ -26101,7 +26108,7 @@ class Segx86 {
                 return;
             }
 
-            /*
+            /**
              * TODO: For null GDT selectors, should we rely on the descriptor being invalid, or should we assume that
              * the null descriptor might contain uninitialized (or other) data?  I'm assuming the latter, hence the
              * following null selector test.  However, if we're not going to consult the descriptor, is there anything
@@ -26113,19 +26120,19 @@ class Segx86 {
 
             }
             else if (this.type & X86.DESC.ACC.TYPE.SEG) {
-                /*
+                /**
                  * If the READABLE bit of CODE_READABLE is not set, then disallow reads.
                  */
                 if ((this.type & X86.DESC.ACC.TYPE.CODE_READABLE) == X86.DESC.ACC.TYPE.CODE_EXECONLY) {
                     this.checkRead = this.checkReadProtDisallowed;
                 }
-                /*
+                /**
                  * If the CODE bit is set, or the the WRITABLE bit is not set, then disallow writes.
                  */
                 if ((this.type & X86.DESC.ACC.TYPE.CODE) || !(this.type & X86.DESC.ACC.TYPE.WRITABLE)) {
                     this.checkWrite = this.checkWriteProtDisallowed;
                 }
-                /*
+                /**
                  * If the CODE bit is not set *and* the EXPDOWN bit is set, then invert the limit check.
                  */
                 if ((this.type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.EXPDOWN)) == X86.DESC.ACC.TYPE.EXPDOWN) {
@@ -26134,7 +26141,7 @@ class Segx86 {
                     this.fExpDown = true;
                 }
                 if (fLoad && this.id < Segx86.ID.VER) {
-                    /*
+                    /**
                      * We must update the descriptor's ACCESSED bit whenever the segment is "accessed" (ie,
                      * loaded); unlike the ACCESSED and DIRTY bits in PTEs, a descriptor ACCESSED bit is only
                      * updated on loads, not on every memory access.
@@ -26151,7 +26158,7 @@ class Segx86 {
                     if ((this.sel & ~X86.SEL.RPL) && this.addrDesc !== X86.ADDR_INVALID) {
                         let addrType = this.addrDesc + X86.DESC.ACC.TYPE.OFFSET;
                         let bType = this.cpu.getByte(addrType);
-                        /*
+                        /**
                          * This code used to ALWAYS call setByte(), but that's a waste of time if ACCESSED is already
                          * set.  TODO: It would also be nice if we could simply use the cached type value, and eliminate
                          * the getByte() call; that seems a bit risky, but I think we should still try it someday.
@@ -26163,11 +26170,11 @@ class Segx86 {
                 }
             }
 
-            /*
+            /**
              * TODO: For non-SEG descriptors, are there other checks or functions we should establish?
              */
 
-            /*
+            /**
              * Any update to the following properties must occur only on segment loads, not simply when
              * we're updating segment registers as part of a mode change.
              */
@@ -26186,7 +26193,7 @@ class Segx86 {
             }
             return;
         }
-        /*
+        /**
          * One important feature of real-mode (as compared to V86-mode) are that other segment attributes
          * (eg, limit, operand size, address size, etc) are NOT updated, enabling features like "big real-mode"
          * (aka "unreal mode"), which is used by system software like HIMEM.SYS to access extended memory from
@@ -26221,7 +26228,7 @@ class Segx86 {
                 if (this.id == Segx86.ID.CODE) sDPL += " cpl=" + this.cpl;
                 dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
-            /*
+            /**
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
              * EXT field of descriptors, even when the processor is an 80286; eg, the EXT field below has been set to 0x000F:
              *
@@ -26266,7 +26273,7 @@ class Segx86 {
 
             if ((addrDTLimit - addrDesc)|0 >= 7) {
 
-                /*
+                /**
                  * Load the descriptor from memory using probeAddr().
                  */
                 let limit = cpu.probeAddr(addrDesc + X86.DESC.LIMIT.OFFSET, 2);
@@ -26471,13 +26478,13 @@ X86.fnARPL = function(dst, src)
 X86.fnBOUND = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Generate UD_FAULT (INT 0x06: Invalid Opcode) if src is not a memory operand.
          */
         X86.opInvalid.call(this);
         return dst;
     }
-    /*
+    /**
      * Note that BOUND performs signed comparisons, so we must transform all arguments into signed values.
      */
     let wIndex = dst;
@@ -26490,7 +26497,7 @@ X86.fnBOUND = function(dst, src)
     }
     this.nStepCycles -= this.cycleCounts.nOpCyclesBound;
     if (wIndex < wLower || wIndex > wUpper) {
-        /*
+        /**
          * The INT 0x05 handler must be called with CS:IP pointing to the BOUND instruction.
          *
          * TODO: Determine the cycle cost when a BOUND exception is triggered, over and above nCyclesBound,
@@ -26668,7 +26675,7 @@ X86.fnBTMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBT.call(this, dst, src);
     }
-    /*
+    /**
      * TODO: Consider a worker function that performs the following block of code for: BT, BTC, BTR, and BTS.
      * It's somewhat inconvenient, because it needs to provide two results: an updated src AND an updated dst.
      *
@@ -26677,7 +26684,7 @@ X86.fnBTMem = function(dst, src)
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -26685,7 +26692,7 @@ X86.fnBTMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -26712,13 +26719,13 @@ X86.fnBTCMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTC.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -26726,7 +26733,7 @@ X86.fnBTCMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -26752,13 +26759,13 @@ X86.fnBTRMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTR.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -26766,7 +26773,7 @@ X86.fnBTRMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -26792,13 +26799,13 @@ X86.fnBTSMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTS.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -26806,7 +26813,7 @@ X86.fnBTSMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -26846,7 +26853,7 @@ X86.fnCALLFdw = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnGRPUndefined.call(this, dst, src);
     }
-    /*
+    /**
      * Originally, we would snapshot regLSP into opLSP because helpCALLF() could trigger a segment fault,
      * but additionally, the stack segment could trigger either a segment fault or a page fault; indeed,
      * any operation that performs multiple stack modifications must take this precaution and snapshot regLSP.
@@ -26937,7 +26944,7 @@ X86.fnDECw = function(dst, src)
  */
 X86.fnDIVb = function(dst, src)
 {
-    /*
+    /**
      * Detect zero divisor
      */
     if (!dst) {
@@ -26945,7 +26952,7 @@ X86.fnDIVb = function(dst, src)
         return dst;
     }
 
-    /*
+    /**
      * Detect too-small divisor (quotient overflow)
      */
     let result = ((src = this.regEAX & 0xffff) / dst);
@@ -26973,14 +26980,14 @@ X86.fnDIVb = function(dst, src)
 X86.fnDIVw = function(dst, src)
 {
     if (this.sizeData == 2) {
-        /*
+        /**
          * Detect zero divisor
          */
         if (!dst) {
             X86.helpDIVOverflow.call(this);
             return dst;
         }
-        /*
+        /**
          * Detect too-small divisor (quotient overflow)
          *
          * WARNING: We CANNOT simply do "src = (this.regEDX << 16) | this.regEAX", because if bit 15 of DX
@@ -27039,7 +27046,7 @@ X86.fnESC = function(dst, src)
  */
 X86.fnGRPFault = function(dst, src)
 {
-    /*
+    /**
      * This should NEVER be called on 8086/8088 CPUs, and yet we preset some of the handlers in aOpGrpPOPw,
      * aOpGrp4b, and aOpGrp4w to call it.  initProcessor() DOES patch aOpGrp4b[0x07] and aOpGrp4w[0x07] to
      * fnGRPInvalid, but that's it.
@@ -27093,7 +27100,7 @@ X86.fnGRPUndefined = function(dst, src)
  */
 X86.fnIDIVb = function(dst, src)
 {
-    /*
+    /**
      * Detect zero divisor
      */
     if (!dst) {
@@ -27101,13 +27108,13 @@ X86.fnIDIVb = function(dst, src)
         return dst;
     }
 
-    /*
+    /**
      * Detect too-small divisor (quotient overflow)
      */
     let div = ((dst << 24) >> 24);
     let result = ((src = (this.regEAX << 16) >> 16) / div)|0;
 
-    /*
+    /**
      * Note the following difference, from "AP-186: Introduction to the 80186 Microprocessor, March 1983":
      *
      *      "The 8086 will cause a divide error whenever the absolute value of the quotient is greater then 7FFFH
@@ -27140,7 +27147,7 @@ X86.fnIDIVb = function(dst, src)
 X86.fnIDIVw = function(dst, src)
 {
     if (this.sizeData == 2) {
-        /*
+        /**
          * Detect zero divisor
          */
         if (!dst) {
@@ -27148,13 +27155,13 @@ X86.fnIDIVw = function(dst, src)
             return dst;
         }
 
-        /*
+        /**
          * Detect too-small divisor (quotient overflow)
          */
         let div = ((dst << 16) >> 16);
         let result = ((src = (this.regEDX << 16) | (this.regEAX & 0xffff)) / div)|0;
 
-        /*
+        /**
          * Note the following difference, from "AP-186: Introduction to the 80186 Microprocessor, March 1983":
          *
          *      "The 8086 will cause a divide error whenever the absolute value of the quotient is greater then 7FFFH
@@ -27206,13 +27213,13 @@ X86.fnIDIVw = function(dst, src)
  */
 X86.fnIMUL8 = function(dst, src)
 {
-    /*
+    /**
      * NOTE: getIPDisp() already sign-extends the dst parameter, so fnIMULrw() needlessly sign-extends it again;
      * a small price to pay for a common function.
      */
     let result = X86.fnIMULrw.call(this, this.getIPDisp(), src);
 
-    /*
+    /**
      * NOTE: The above function already accounted for the 80386 cycle count, so we are simply accounting for the
      * increased time on an 80286; the 80186/80188 have even larger values, but we'll worry about that another day.
      */
@@ -27248,7 +27255,7 @@ X86.fnIMULn = function(dst, src)
         result = X86.fnIMULrd.call(this, dst, src);
     }
 
-    /*
+    /**
      * NOTE: The above functions already accounted for 80386 cycle counts, so we are simply accounting for the
      * increased time on an 80286; the 80186/80188 have even larger values, but we'll worry about that another day.
      */
@@ -27379,7 +27386,7 @@ X86.fnIMULw = function(dst, src)
  */
 X86.fnIMULrw = function(dst, src)
 {
-    /*
+    /**
      * Unlike fnIMULrd() below, we can use normal JavaScript multiplication, because there's no danger of
      * overflowing the floating-point result and losing accuracy in the bottom 16 bits.
      */
@@ -27407,7 +27414,7 @@ X86.fnIMULrw = function(dst, src)
  */
 X86.fnIMULrd = function(dst, src)
 {
-    /*
+    /**
      * The following code works, but I've stopped using it because it produces different results from an actual CPU
      * when overflow occurs; the bottom 32 bits of the result are still supposed to be accurate.
      *
@@ -27514,7 +27521,7 @@ X86.fnJMPFdw = function(dst, src)
 X86.fnLAR = function(dst, src)
 {
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
@@ -27651,18 +27658,18 @@ X86.fnLFS = function(dst, src)
  */
 X86.fnLGDT = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (this.regEA === X86.ADDR_INVALID || I386 && (this.regPS & X86.PS.VM)) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * Hopefully it won't hurt to always fetch a 32-bit base address (even on an 80286), which we then
          * mask appropriately.
          */
         this.addrGDT = this.getLong(this.regEA + 2) & (this.maskData | (this.maskData << 8));
-        /*
+        /**
          * An idiosyncrasy of our ModRM decoders is that, if the OPERAND size is 32 bits, then it will have
          * fetched a 32-bit dst operand; we mask off those extra bits now.
          */
@@ -27713,18 +27720,18 @@ X86.fnLGS = function(dst, src)
  */
 X86.fnLIDT = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (this.regEA === X86.ADDR_INVALID || I386 && (this.regPS & X86.PS.VM)) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * Hopefully it won't hurt to always fetch a 32-bit base address (even on an 80286), which we then
          * mask appropriately.
          */
         this.addrIDT = this.getLong(this.regEA + 2) & (this.maskData | (this.maskData << 8));
-        /*
+        /**
          * An idiosyncrasy of our ModRM decoders is that, if the OPERAND size is 32 bits, then it will have
          * fetched a 32-bit dst operand; we mask off those extra bits now.
          */
@@ -27766,7 +27773,7 @@ X86.fnLLDT = function(dst, src)
  */
 X86.fnLMSW = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM)) {
@@ -27789,11 +27796,11 @@ X86.fnLMSW = function(dst, src)
  */
 X86.fnLSL = function(dst, src)
 {
-    /*
+    /**
      * TODO: Is this an invalid operation if regEAWrite is set?  dst is required to be a register.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
@@ -27877,7 +27884,7 @@ X86.fnMOV = function(dst, src)
  */
 X86.fnMOVXb = function(dst, src)
 {
-    /*
+    /**
      * The ModRegByte handlers update the registers in the 1st column, but we need to update those in the 2nd column.
      *
      *      000:    AL      ->      000:    AX
@@ -27988,7 +27995,7 @@ X86.fnMOVsrw = function(dst, src)
         }
         break;
     }
-    /*
+    /**
      * We could just return src, but nStepCycles needs to be updated, too.
      */
     return X86.fnMOV.call(this, dst, src);
@@ -28039,7 +28046,7 @@ X86.fnMOVwsr = function(dst, src)
         break;
     }
 
-    /*
+    /**
      * When a 32-bit OPERAND size is in effect, segment register writes via opMOVwsr() must write 32 bits
      * (zero-extended) if the destination is a register, but only 16 bits if the destination is memory,
      * hence the setDataSize(2) below.
@@ -28049,7 +28056,7 @@ X86.fnMOVwsr = function(dst, src)
     if (this.regEAWrite !== X86.ADDR_INVALID) {
         this.setDataSize(2);
     }
-    /*
+    /**
      * We could just return src, but nStepCycles needs to be updated, too.
      */
     return X86.fnMOV.call(this, dst, src);
@@ -28136,7 +28143,7 @@ X86.fnMULw = function(dst, src)
         X86.fnMUL32.call(this, dst, this.regEAX);
         if (this.stepping == X86.STEPPING_80386_B1) {
             if (this.regEAX == 0x0417A000 && dst == 0x00000081) {
-                /*
+                /**
                  * Normally, the result should be 0x20FE7A000 (ie, regMDHi should be 0x2).
                  * I'm not sure what a typical B1 stepping failure looked like, so I'll set regMDHi to 0.
                  *
@@ -28276,12 +28283,12 @@ X86.fnPUSHw = function(dst, src)
 {
     let w = dst;
     if (this.opFlags & X86.OPFLAG.PUSHSP) {
-        /*
+        /**
          * This is the one case where must actually modify dst, so that the ModRM function will
          * not put a stale value back into the SP register.
          */
         dst = (dst - 2) & 0xffff;
-        /*
+        /**
          * And on the 8086/8088, the value we just calculated also happens to be the value that must
          * be pushed.
          */
@@ -28289,7 +28296,7 @@ X86.fnPUSHw = function(dst, src)
     }
     this.pushWord(w);
     this.nStepCycles -= (this.regEA === X86.ADDR_INVALID? this.cycleCounts.nOpCyclesPushReg : this.cycleCounts.nOpCyclesPushMem);
-    /*
+    /**
      * The PUSH is the only write that needs to occur; dst was the source operand and does not need to be rewritten.
      */
     this.opFlags |= X86.OPFLAG.NOWRITE;
@@ -28362,7 +28369,7 @@ X86.fnRCLd = function(dst, src)
     let count = src & this.nShiftCountMask;     // this 32-bit-only function could mask with 0x1f directly
     if (count) {
         let carry = this.getCarry();
-        /*
+        /**
          * JavaScript Alert: much like a post-8086 Intel CPU, JavaScript shift counts are mod 32,
          * so "dst >>> 32" is equivalent to "dst >>> 0", which doesn't shift any bits at all.  To
          * compensate, we shift one bit less than the maximum, and then shift one bit farther.
@@ -28440,7 +28447,7 @@ X86.fnRCRd = function(dst, src)
     let count = src & this.nShiftCountMask;     // this 32-bit-only function could mask with 0x1f directly
     if (count) {
         let carry = this.getCarry();
-        /*
+        /**
          * JavaScript Alert: much like a post-8086 Intel CPU, JavaScript shift counts are mod 32,
          * so "dst << 32" is equivalent to "dst << 0", which doesn't shift any bits at all.  To
          * compensate, we shift one bit less than the maximum, and then shift one bit farther.
@@ -28910,7 +28917,7 @@ X86.fnSGDT = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * We don't need to set the first word of the operand, because the ModRM group decoder that calls us
          * does that automatically with the value we return (dst).
          */
@@ -28919,7 +28926,7 @@ X86.fnSGDT = function(dst, src)
 
         let addr = this.addrGDT;
         if (this.model == X86.MODEL_80286) {
-            /*
+            /**
              * We previously left the 6th byte of the target operand "undefined".  But it turns out we have to set
              * it to *something*, because there's processor detection in PC-DOS 7.0 (at least in the SETUP portion)
              * that looks like this:
@@ -28952,7 +28959,7 @@ X86.fnSGDT = function(dst, src)
             addr |= (0xff000000|0);
         }
         else if (this.model >= X86.MODEL_80386) {
-            /*
+            /**
              * The 80386 added another wrinkle: Intel's documentation claimed that the 6th byte is either set to zero
              * or the high byte of the BASE field, depending on the OPERAND size; from the "INTEL 80386 PROGRAMMER'S
              * REFERENCE MANUAL 1986":
@@ -28966,7 +28973,7 @@ X86.fnSGDT = function(dst, src)
              * OPERAND size, not when using a 32-bit OPERAND size).
              */
             if (this.sizeData == 2) {
-                /*
+                /**
                  * Thanks to Michal Necasek, we now know that the: "386 in reality does not pay attention to the operand
                  * size (despite Intel's claims to the contrary). In fact Windows 3.11/Win32s relies on it -- at least in
                  * some configurations, it will execute SGDT in 16-bit code and will crash if all 6 bytes aren't stored."
@@ -28976,7 +28983,7 @@ X86.fnSGDT = function(dst, src)
                  *      addr &= 0x00ffffff;
                  */
             } else {
-                /*
+                /**
                  * When the OPERAND size is 4, our ModRM group decoder will call setLong(dst) rather than setShort(dst);
                  * we could fix that by calling setDataSize(2), but it seems safer/simpler to set the high bits (16-31)
                  * of dst to match the low bits (0-15) of addr, so that the caller will harmlessly rewrite what we are
@@ -29237,13 +29244,13 @@ X86.fnSIDT = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * We don't need to set the first word of the operand, because the ModRM group decoder that calls us
          * does that automatically with the value we return (dst).
          */
         dst = this.addrIDTLimit - this.addrIDT;
 
-        /*
+        /**
          * As with SGDT, the 6th byte is technically "undefined" on an 80286, but we now set it to 0xFF, for the
          * same reasons discussed in SGDT (above).
          */
@@ -29253,7 +29260,7 @@ X86.fnSIDT = function(dst, src)
         }
         else if (this.model >= X86.MODEL_80386) {
             if (this.sizeData == 2) {
-                /*
+                /**
                  * Based on the SGDT information above, we no longer mask the 6th byte when the OPERAND size is 2.
                  *
                  *      addr &= 0x00ffffff;
@@ -29432,18 +29439,18 @@ X86.fnTESTw = function(dst, src)
 X86.fnVERR = function(dst, src)
 {
     this.opFlags |= X86.OPFLAG.NOWRITE;
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
     if (this.segVER.load(dst) !== X86.ADDR_INVALID) {
-        /*
+        /**
          * Verify that this is a readable segment; that is, of these four combinations (code+readable,
          * code+nonreadable, data+writable, date+nonwritable), make sure we're not the second combination.
          */
         if ((this.segVER.acc & (X86.DESC.ACC.TYPE.READABLE | X86.DESC.ACC.TYPE.CODE)) != X86.DESC.ACC.TYPE.CODE) {
-            /*
+            /**
              * For VERR, if the code segment is readable and conforming, the descriptor privilege level
              * (DPL) can be any value.
              *
@@ -29475,17 +29482,17 @@ X86.fnVERR = function(dst, src)
 X86.fnVERW = function(dst, src)
 {
     this.opFlags |= X86.OPFLAG.NOWRITE;
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
     if (this.segVER.load(dst) !== X86.ADDR_INVALID) {
-        /*
+        /**
          * Verify that this is a writable data segment
          */
         if ((this.segVER.acc & (X86.DESC.ACC.TYPE.WRITABLE | X86.DESC.ACC.TYPE.CODE)) == X86.DESC.ACC.TYPE.WRITABLE) {
-            /*
+            /**
              * DPL must be greater than or equal to (have less or the same privilege as) both the current
              * privilege level and the selector's RPL.
              */
@@ -29539,7 +29546,7 @@ X86.fnIBTS = function(dst, src)
  */
 X86.fnXBTS = function(dst, src)
 {
-    /*
+    /**
      * Shift src right by the bit offset in [E]AX, then apply a mask equal to the number of bits in CL,
      * then mask the resulting bit string with the current OPERAND size.
      */
@@ -29573,7 +29580,7 @@ X86.fnXBTS = function(dst, src)
 X86.fnXCHGrb = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Decode which register was src
          */
 
@@ -29607,7 +29614,7 @@ X86.fnXCHGrb = function(dst, src)
         }
         this.nStepCycles -= this.cycleCounts.nOpCyclesXchgRR;
     } else {
-        /*
+        /**
          * This is a case where the ModRM decoder that's calling us didn't know it should have set regEAWrite,
          * so we compensate by updating regEAWrite.  However, setEAWord() has since been changed to revalidate
          * the write using segEA:offEA, so updating regEAWrite here isn't strictly necessary.
@@ -29638,7 +29645,7 @@ X86.fnXCHGrb = function(dst, src)
 X86.fnXCHGrw = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Decode which register was src
          */
 
@@ -29672,7 +29679,7 @@ X86.fnXCHGrw = function(dst, src)
         }
         this.nStepCycles -= this.cycleCounts.nOpCyclesXchgRR;
     } else {
-        /*
+        /**
          * This is a case where the ModRM decoder that's calling us didn't know it should have set regEAWrite,
          * so we compensate by updating regEAWrite.  However, setEAWord() has since been changed to revalidate
          * the write using segEA:offEA, so updating regEAWrite here isn't strictly necessary.
@@ -29878,7 +29885,7 @@ X86.helpDIV32 = function(dstLo, dstHi, src)
 X86.helpIDIV32 = function(dstLo, dstHi, src)
 {
     let bNegLo = 0, bNegHi = 0;
-    /*
+    /**
      *      dividend    divisor       quotient    remainder
      *        (dst)      (src)          (lo)         (hi)
      *      --------    -------       --------    ---------
@@ -29933,7 +29940,7 @@ X86.helpLoadCR0 = function(l)
     this.regCR0 = l | X86.CR0.ON;
     this.setProtMode();
     if (this.regCR0 & X86.CR0.PG) {
-        /*
+        /**
          * TODO: Determine if setting X86.CR0.PG when already set should really act as a flush;
          * I'm not currently worried about it, because I'm assuming CR0 is not rewritten that often.
          */
@@ -29954,7 +29961,7 @@ X86.helpLoadCR0 = function(l)
 X86.helpLoadCR3 = function(l)
 {
     this.regCR3 = l;
-    /*
+    /**
      * Normal use of regCR3 involves adding a 0-4K (12-bit) offset to obtain a page directory entry,
      * so let's ensure that the low 12 bits of regCR3 are always zero.
      */
@@ -30144,7 +30151,7 @@ X86.helpSRCxx = function()
  */
 X86.helpCALLF = function(off, sel)
 {
-    /*
+    /**
      * Since we always push the return address AFTER calling setCSIP(), and since either push could trigger
      * a fault (eg, segment fault, page fault, etc), we must not only snapshot regSS and regLSP, but also regCS,
      * so that helpFault() can always make CALLF restartable.
@@ -30155,7 +30162,7 @@ X86.helpCALLF = function(off, sel)
     let oldIP = this.getIP();
     let oldSize = (I386? this.sizeData : 2);
     if (this.setCSIP(off, sel, true) != null) {
-        /*
+        /**
          * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
          * into the 2 lower bytes, and leave the 2 upper bytes untouched; at least, that's the case for all other
          * segment register writes, so we assume this case is no different.  Hence, the hard-coded size of 2.
@@ -30182,14 +30189,14 @@ X86.helpCALLF = function(off, sel)
  */
 X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
 {
-    /*
+    /**
      * TODO: We assess the cycle cost up front, because otherwise, if loadIDT() fails, no cost may be assessed.
      */
     this.nStepCycles -= this.cycleCounts.nOpCyclesInt + nCycles;
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    /*
+    /**
      * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
      * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
      * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
@@ -30237,7 +30244,7 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     }
     let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
-        /*
+        /**
          * TODO: Determine if we should use pushData() instead of pushWord() for oldCS and nError, to deal with
          * the same 32-bit 80386 compatibility issue that helpCALLF(), opPUSHCS(), et al must deal with; namely, that
          * 32-bit segment register writes (and, reportedly, 32-bit error codes) don't modify the upper 16 bits.
@@ -30269,7 +30276,7 @@ X86.helpIRET = function()
 
     if ((this.regCR0 & X86.CR0.MSW.PE) && (this.regPS & (X86.PS.NT | X86.PS.VM)) == X86.PS.NT) {
         let addrNew = this.segTSS.base;
-        /*
+        /**
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          * TODO: Update switchTS() to assess a cycle cost; currently, all we assess is what's shown above.
          */
@@ -30284,7 +30291,7 @@ X86.helpIRET = function()
 
         if (I386) {
             if (this.regPS & X86.PS.VM) {
-                /*
+                /**
                  * On the 80386, in V86-mode, RF is the only defined EFLAGS bit above bit 15 that may be changed by IRETD.
                  * This is less restrictive than POPFD, which cannot change ANY bits above bit 15; see opPOPF() for details.
                  */
@@ -30292,12 +30299,12 @@ X86.helpIRET = function()
             }
             else {
                 if (newPS & X86.PS.VM) {
-                    /*
+                    /**
                      * As noted in loadDesc8(), where the V86-mode frame we're about to pop was originally pushed,
                      * these frames ALWAYS contain 32-bit values, so make sure that sizeData reflects that.
                      */
 
-                    /*
+                    /**
                      * We have to assume that a full V86-mode interrupt frame was on the protected-mode stack; namely:
                      *
                      *      low:    EIP
@@ -30362,7 +30369,7 @@ X86.helpRETF = function(n)
     if (n) this.setSP(this.getSP() + n);            // TODO: optimize
 
     if (this.setCSIP(newIP, newCS, false)) {        // returns true if a stack switch occurred
-        /*
+        /**
          * Fool me once, shame on... whatever.  If setCSIP() indicates a stack switch occurred,
          * make sure we're in protected mode, because automatic stack switches can't occur in real mode.
          */
@@ -30370,7 +30377,7 @@ X86.helpRETF = function(n)
 
         if (n) this.setSP(this.getSP() + n);        // TODO: optimize
 
-        /*
+        /**
          * As per Intel documentation: "If any of [the DS or ES] registers refer to segments whose DPL is
          * less than the new CPL (excluding conforming code segments), the segment register is loaded with
          * the null selector."
@@ -30399,7 +30406,7 @@ X86.helpRETF = function(n)
  */
 X86.helpDIVOverflow = function()
 {
-    /*
+    /**
      * Divide error exceptions are traps on the 8086 and faults on later processors.  I question the value of that
      * change, because it implies that someone might actually want to restart a failing divide.  The only reasonable
      * explanation I can see for the change is to enable the exception handler to accurately record the address of
@@ -30463,7 +30470,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     let fDispatch = false;
 
     if (!this.flags.complete) {
-        /*
+        /**
          * Prior to each new burst of instructions, stepCPU() sets fComplete to true, and the only (normal) way
          * for fComplete to become false is through stopCPU(), which isn't ordinarily called, except by the Debugger.
          */
@@ -30474,7 +30481,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
         fDispatch = true;
 
         if (this.nFault < 0) {
-            /*
+            /**
              * Single-fault (error code is passed through, and the responsible instruction is restartable.
              *
              * TODO: The following opCS/opLIP/opSS/opLSP checks are primarily required for 80386-based machines
@@ -30487,7 +30494,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
              */
             if (this.opCS != -1) {
                 if (this.opCS !== this.segCS.sel) {
-                    /*
+                    /**
                      * HACK: We slam the RPL into this.segCS.cpl to ensure that loading the original CS segment doesn't
                      * fail.  For example, if we faulted in the middle of a ring transition that loaded CS with a higher
                      * privilege (lower CPL) code segment, then our attempt here to reload the lower privilege (higher CPL)
@@ -30517,14 +30524,14 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
             }
         }
         else if (this.nFault != X86.EXCEPTION.DF_FAULT) {
-            /*
+            /**
              * Double-fault (error code is always zero, and the responsible instruction is not restartable).
              */
             nError = 0;
             nFault = X86.EXCEPTION.DF_FAULT;
         }
         else {
-            /*
+            /**
              * This is a triple-fault (usually referred to in Intel literature as a "shutdown", but it's actually a
              * "reset").  There's nothing to "dispatch" in this case, but we still want to let helpCheckFault() see
              * the triple-fault.  However, regardless what helpCheckFault() returns, we must leave via "throw -1",
@@ -30540,7 +30547,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     }
 
     if (X86.helpCheckFault.call(this, nFault, nError, fHalt) || nFault < 0) {
-        /*
+        /**
          * If this is a fault that would normally be dispatched BUT helpCheckFault() wants us to halt,
          * then we throw a bogus fault number (-1), simply to interrupt the current instruction in exactly
          * the same way that a dispatched fault would interrupt it.
@@ -30553,13 +30560,13 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
         this.nFault = nFault;
         X86.helpINT.call(this, nFault, nError, 0, nCycles);
 
-        /*
+        /**
          * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
          * so now we slip the new regLIP into opLIP, effectively turning their action into a no-op.
          */
         this.opLIP = this.regLIP;
 
-        /*
+        /**
          * X86.OPFLAG.FAULT flag is used by selected opcodes to provide an early exit, restore register(s),
          * or whatever is needed to help ensure instruction restartability; there is currently no general
          * mechanism for snapping and restoring all registers for any instruction that might fault.
@@ -30575,7 +30582,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
             this.opFlags |= X86.OPFLAG.FAULT;
         }
 
-        /*
+        /**
          * Since this fault is likely being issued in the context of an instruction that hasn't finished
          * executing, if we don't do anything to interrupt that execution (eg, throw a JavaScript exception),
          * then we would need to shut off all further reads/writes for the current instruction.
@@ -30638,7 +30645,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
 
     let bOpcode = this.probeAddr(this.regLIP);
 
-    /*
+    /**
      * OS/2 1.0 uses an INT3 (0xCC) opcode in conjunction with an invalid IDT to trigger a triple-fault
      * reset and return to real-mode, and these resets happen quite frequently during boot; for example,
      * OS/2 startup messages are displayed using a series of INT 0x10 BIOS calls for each character, and
@@ -30655,7 +30662,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         fHalt = false;
     }
 
-    /*
+    /**
      * There are a number of V86-mode exceptions we don't need to know about.  For starters, Windows 3.00
      * (and other versions of enhanced-mode Windows) use an ARPL to switch out of V86-mode, so we can ignore
      * those UD_FAULTs.
@@ -30682,7 +30689,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
     }
     // else if (DEBUG && nFault == X86.EXCEPTION.GP_FAULT && fHalt === undefined) fHalt = true;
 
-    /*
+    /**
      * If fHalt has been explicitly set to false, we also take that as a cue to disable fault messages
      * (which you can override by turning on CPU messages).
      */
@@ -30690,7 +30697,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         bitsMessage |= MESSAGE.CPU;
     }
 
-    /*
+    /**
      * Similarly, the PC AT ROM BIOS deliberately generates a couple of GP faults as part of the POST
      * (Power-On Self Test); we don't want to ignore those, but we don't want to halt on them either.  We
      * detect those faults by virtue of the LIP being in the range 0x0F0000 to 0x0FFFFF.
@@ -30703,7 +30710,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         fHalt = false;
     }
 
-    /*
+    /**
      * However, the foregoing notwithstanding, if MESSAGE.HALT is enabled along with all the other required
      * MESSAGE bits, then we want to halt regardless.
      */
@@ -30721,7 +30728,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         if (DEBUGGER && this.dbg) {
             this.printf((fHalt? MESSAGE.PROGRESS : bitsMessage) + MESSAGE.ADDR, "%s\n", sMessage);
             if (fHalt) {
-                /*
+                /**
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
                  * this allows a fault to be dispatched when you single-step over a faulting instruction; you can
                  * then continue single-stepping into the fault handler, or start running again.
@@ -30733,7 +30740,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
                 this.dbg.stopCPU();
             }
         } else {
-            /*
+            /**
              * If there's no Debugger, then messageEnabled() must have returned false, which means that fHalt must
              * be true.  Which means we should shut the machine down.
              */
@@ -30769,7 +30776,7 @@ X86.zeroSeg = function(seg)
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86mods.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * Before 80386 support was added to PCx86, the approach to decoding ModRegRM bytes (which I usually
  * just call ModRM bytes) used one generated function per ModRM value.  This was optimal for 16-bit processors,
  * because the functions were small, and it was maximally efficient, turning the entire ModRM decoding operation
@@ -34811,7 +34818,7 @@ X86.modSIB = function(mod)
 X86.opADDmb = function()
 {
     this.decodeModMemByte.call(this, X86.fnADDb);
-    /*
+    /**
      * Opcode bytes 0x00 0x00 are sufficiently uncommon that it's more likely we've started
      * executing in the weeds, so if you're in DEBUG mode, we'll print a warning and stop the
      * CPU if a Debugger is available.
@@ -34863,7 +34870,7 @@ X86.opADDrw = function()
 X86.opADDALb = function()
 {
     this.regEAX = (this.regEAX & ~0xff) | X86.fnADDb.call(this, this.regEAX & 0xff, this.getIPByte());
-    /*
+    /**
      * NOTE: Whenever the result is "blended" value (eg, of btiAL and btiMem0), a new bti should be
      * allocated to reflect that fact; however, I'm leaving "perfect" BACKTRACK support for another day.
      */
@@ -34892,7 +34899,7 @@ X86.opADDAX = function()
  */
 X86.opPUSHES = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -34912,7 +34919,7 @@ X86.opPUSHES = function()
  */
 X86.opPOPES = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -34994,7 +35001,7 @@ X86.opORAX = function()
  */
 X86.opPUSHCS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -35014,7 +35021,7 @@ X86.opPUSHCS = function()
  */
 X86.opPOPCS = function()
 {
-    /*
+    /**
      * Because this is an 8088-only operation, we don't have to worry about taking a snapshot of regLSP first.
      */
     this.setCS(this.popWord());
@@ -35104,7 +35111,7 @@ X86.opADCAX = function()
  */
 X86.opPUSHSS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -35124,7 +35131,7 @@ X86.opPUSHSS = function()
  */
 X86.opPOPSS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -35206,7 +35213,7 @@ X86.opSBBAX = function()
  */
 X86.opPUSHDS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -35226,7 +35233,7 @@ X86.opPUSHDS = function()
  */
 X86.opPOPDS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -35541,7 +35548,7 @@ X86.opAAA = function()
     let AH = (this.regEAX >> 8) & 0xff;
     if ((AL & 0xf) > 9 || this.getAF()) {
         AL += 6;
-        /*
+        /**
          * Simulate the fact that the 80286 and higher add 6 to AX rather than AL.
          */
         if (this.model >= X86.MODEL_80286 && AL > 0xff) AH++;
@@ -36096,12 +36103,12 @@ X86.opPOPDI = function()
  */
 X86.opPUSHA = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
-    /*
+    /**
      * TODO: regLSP needs to be pre-bounds-checked against regLSPLimitLow
      */
     let temp = this.getSP() & this.maskData;
@@ -36146,7 +36153,7 @@ X86.opPUSHA = function()
  */
 X86.opPOPA = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -36163,7 +36170,7 @@ X86.opPOPA = function()
     if (BACKTRACK) {
         this.backTrack.btiBPLo = this.backTrack.btiMem0; this.backTrack.btiBPHi = this.backTrack.btiMem1;
     }
-    /*
+    /**
      * TODO: regLSP needs to be pre-bounds-checked against regLSPLimit at the start
      */
     this.setSP(this.getSP() + this.sizeData);
@@ -36206,7 +36213,7 @@ X86.opBOUND = function()
  */
 X86.opARPL = function()
 {
-    /*
+    /**
      * ARPL is one of several protected-mode instructions that are meaningless and not allowed in either real-mode
      * or V86-mode; others include LAR, LSL, VERR and VERW.  More meaningful but potentially harmful protected-mode
      * instructions that ARE allowed in real-mode but NOT in V86-mode include LIDT, LGDT, LMSW, CLTS, HLT, and
@@ -36268,7 +36275,7 @@ X86.opGS = function()
 X86.opOS = function()
 {
     if (I386) {
-        /*
+        /**
          * See opAS() for a discussion of multiple prefixes, which applies equally to both
          * operand-size and address-size prefixes.
          *
@@ -36294,7 +36301,7 @@ X86.opOS = function()
 X86.opAS = function()
 {
     if (I386) {
-        /*
+        /**
          * Live and learn: multiple address-size prefixes can and do occur on a single instruction,
          * and contrary to my original assumption that the prefixes act independently, they do not.
          * During Windows 95 SETUP, the following instruction is executed:
@@ -36379,14 +36386,14 @@ X86.opINSb = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  However, accurate cycle times for the 80186/80188 is
      * low priority.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -36400,7 +36407,7 @@ X86.opINSb = function()
         if (!this.checkIOPM(port, 1, true)) return;
         let b = this.bus.checkPortInputNotify(port, 1, this.regLIP - nDelta - 1);
         this.setSOByte(this.segES, this.regEDI & maskAddr, b);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -36426,14 +36433,14 @@ X86.opINSw = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  However, accurate cycle times for the 80186/80188 is
      * low priority.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -36450,7 +36457,7 @@ X86.opINSw = function()
             this.backTrack.btiMem1 = this.backTrack.btiIO;
         }
         this.setSOWord(this.segES, this.regEDI & maskAddr, w);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -36475,13 +36482,13 @@ X86.opOUTSb = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  TODO: Fix this someday.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -36493,7 +36500,7 @@ X86.opOUTSb = function()
         let port = this.regEDX & 0xffff;
         if (!this.checkIOPM(port, 1, false)) return;
         let b = this.getSOByte(this.segDS, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -36520,13 +36527,13 @@ X86.opOUTSw = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  TODO: Fix this someday.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -36536,7 +36543,7 @@ X86.opOUTSw = function()
     }
     if (nReps--) {
         let w = this.getSOWord(this.segDS, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -36878,7 +36885,7 @@ X86.opTESTrw = function()
  */
 X86.opXCHGrb = function()
 {
-    /*
+    /**
      * If the second operand is a register, then the ModRegByte decoder must use separate "get" and
      * "set" assignments, otherwise instructions like "XCHG DH,DL" will end up using a stale DL instead of
      * the updated DL.
@@ -36921,7 +36928,7 @@ X86.opXCHGrw = function()
  */
 X86.opMOVmb = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -36935,7 +36942,7 @@ X86.opMOVmb = function()
  */
 X86.opMOVmw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -36972,7 +36979,7 @@ X86.opMOVrw = function()
  */
 X86.opMOVwsr = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -37063,18 +37070,18 @@ X86.opMOVsrw = function()
  */
 X86.opPOPmw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
 
-    /*
+    /**
      * If the word we're about to pop FROM the stack gets popped INTO a not-present page, this
      * instruction will not be restartable unless we snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
-    /*
+    /**
      * A "clever" instruction like this:
      *
      *      #0117:651C 67668F442408    POP      DWORD [ESP+08]
@@ -37103,7 +37110,7 @@ X86.opPOPmw = function()
 X86.opNOP = function()
 {
     this.nStepCycles -= 3;                          // this form of XCHG takes 3 cycles on all CPUs
-    /*
+    /**
      * The following exception is not unique to LOCK NOP on the 80386, but it's the only LOCK exception
      * that seems worth worrying about this point.  See opLOCK() for further discussion.
      */
@@ -37300,7 +37307,7 @@ X86.opWAIT = function()
  */
 X86.opPUSHF = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     let regPS = this.getPS();
@@ -37310,7 +37317,7 @@ X86.opPUSHF = function()
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
-        /*
+        /**
          * It doesn't matter whether this is PUSHF or PUSHFD: the VM and RF flags are never pushed, so
          * we should always clear them.  NOTE: This contradicts what the "INTEL 80386 PROGRAMMER'S REFERENCE
          * MANUAL 1986" says on page 81 (which we assume is wrong):
@@ -37337,7 +37344,7 @@ X86.opPUSHF = function()
  */
 X86.opPOPF = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -37345,13 +37352,13 @@ X86.opPOPF = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * Regardless of mode, VM and RF (the only defined EFLAGS bit above bit 15) are never changed by POPFD.
      */
     let newPS = this.popWord();
     if (I386) newPS = (newPS & 0xffff) | (this.regPS & ~0xffff);
     this.setPS(newPS);
-    /*
+    /**
      * NOTE: I'm assuming that neither POPF nor IRET are required to set NOINTR like STI does.
      */
     this.nStepCycles -= this.cycleCounts.nOpCyclesPopReg;
@@ -37364,7 +37371,7 @@ X86.opPOPF = function()
  */
 X86.opSAHF = function()
 {
-    /*
+    /**
      * NOTE: While it make seem more efficient to do this:
      *
      *      this.setPS((this.getPS() & ~X86.PS_SAHF) | ((this.regEAX >> 8) & X86.PS_SAHF));
@@ -37390,7 +37397,7 @@ X86.opSAHF = function()
  */
 X86.opLAHF = function()
 {
-    /*
+    /**
      * Apparently, this simply uses the low 8 bits of PS as-is (ie, we don't need to mask with PS_SAHF).
      */
     this.regEAX = (this.regEAX & ~0xff00) | (this.getPS() & 0xff) << 8;
@@ -37431,7 +37438,7 @@ X86.opMOVAXm = function()
 X86.opMOVmAL = function()
 {
     if (BACKTRACK) this.backTrack.btiMem0 = this.backTrack.btiAL;
-    /*
+    /**
      * setSOByte() truncates the value as appropriate
      */
     this.setSOByte(this.segData, this.getIPAddr(), this.regEAX);
@@ -37448,7 +37455,7 @@ X86.opMOVmAX = function()
     if (BACKTRACK) {
         this.backTrack.btiMem0 = this.backTrack.btiAL; this.backTrack.btiMem1 = this.backTrack.btiAH;
     }
-    /*
+    /**
      * setSOWord() truncates the value as appropriate
      */
     this.setSOWord(this.segData, this.getIPAddr(), this.regEAX);
@@ -37475,7 +37482,7 @@ X86.opMOVSb = function()
     }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.getSOByte(this.segData, this.regESI & maskAddr));
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37509,7 +37516,7 @@ X86.opMOVSw = function()
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.getSOWord(this.segData, this.regESI & maskAddr));
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37545,7 +37552,7 @@ X86.opCMPSb = function()
         let bDst = this.getEAByte(this.segData, this.regESI);
         let bSrc = this.getEAByte(this.segES, this.regEDI);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37555,11 +37562,11 @@ X86.opCMPSb = function()
         this.regESI = (this.regESI & ~maskAddr) | ((this.regESI + nInc) & maskAddr);
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + nInc) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPb(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -37590,7 +37597,7 @@ X86.opCMPSw = function()
         let wDst = this.getEAWord(this.segData, this.regESI & maskAddr);
         let wSrc = this.getEAWord(this.segES, this.regEDI & maskAddr);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37600,11 +37607,11 @@ X86.opCMPSw = function()
         this.regESI = (this.regESI & ~maskAddr) | ((this.regESI + nInc) & maskAddr);
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + nInc) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPw(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -37657,7 +37664,7 @@ X86.opSTOSb = function()
     }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.regEAX);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37666,7 +37673,7 @@ X86.opSTOSb = function()
 
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
 
-        /*
+        /**
          * Implement 80386 B1 Errata #7, to the extent that Windows 95 checked for it.  This test doesn't
          * detect every possible variation (for example, the ADDRESS override on the next instruction, if
          * it exists, may not be the first prefix byte), but it's adequate for our limited purpose.
@@ -37712,7 +37719,7 @@ X86.opSTOSw = function()
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.regEAX);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37747,7 +37754,7 @@ X86.opLODSb = function()
     }
     if (nReps--) {
         let b = this.getSOByte(this.segData, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37781,7 +37788,7 @@ X86.opLODSw = function()
     }
     if (nReps--) {
         let w = this.getSOWord(this.segData, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -37820,18 +37827,18 @@ X86.opSCASb = function()
         let bSrc = this.getEAByte(this.segES, this.regEDI);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
         X86.fnCMPb.call(this, bDst, bSrc);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
          */
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + ((this.regPS & X86.PS.DF)? -1 : 1)) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPb(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -37863,18 +37870,18 @@ X86.opSCASw = function()
         let wSrc = this.getEAWord(this.segES, this.regEDI & maskAddr);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
         X86.fnCMPw.call(this, wDst, wSrc);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
          */
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + ((this.regPS & X86.PS.DF)? -this.sizeData : this.sizeData)) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPw(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -38165,7 +38172,7 @@ X86.opLDS = function()
  */
 X86.opMOVb = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -38179,7 +38186,7 @@ X86.opMOVb = function()
  */
 X86.opMOVw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -38193,14 +38200,14 @@ X86.opMOVw = function()
  */
 X86.opENTER = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
     let wLocal = this.getIPShort();
     let bLevel = this.getIPByte() & 0x1f;
-    /*
+    /**
      * NOTE: 11 is the minimum cycle time for the 80286; the 80186/80188 has different cycle times: 15, 25 and
      * 22 + 16 * (bLevel - 1) for bLevel 0, 1 and > 1, respectively.  TODO: Fix this someday.
      */
@@ -38228,7 +38235,7 @@ X86.opENTER = function()
  */
 X86.opLEAVE = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -38236,7 +38243,7 @@ X86.opLEAVE = function()
     this.setSP((this.getSP() & ~this.segSS.maskAddr) | (this.regEBP & this.segSS.maskAddr));
 
     this.regEBP = (this.regEBP & ~this.maskData) | (this.popWord() & this.maskData);
-    /*
+    /**
      * NOTE: 5 is the cycle time for the 80286; the 80186/80188 has a cycle time of 8.  TODO: Fix this someday.
      */
     this.nStepCycles -= 5;
@@ -38273,7 +38280,7 @@ X86.opRETF = function()
  */
 X86.opINT3 = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -38281,7 +38288,7 @@ X86.opINT3 = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * Because INT3 is a trap, not a fault, we must use helpTrap() rather than helpFault().  Unfortunately, that
      * means you can't rely on the Debugger logic instead helpFault() to conditionally stop execution on an INT3,
      * so I've changed the Debugger's checkBreakpoint() function to stop execution on INT3 whenever both the
@@ -38298,7 +38305,7 @@ X86.opINT3 = function()
 X86.opINTn = function()
 {
     let nInt = this.getIPByte();
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -38306,7 +38313,7 @@ X86.opINTn = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * checkIntNotify() checks for any notification handlers registered via addIntNotify(), calls them,
      * and returns false ONLY if a notification handler returned false (ie, requesting the interrupt be skipped).
      */
@@ -38325,7 +38332,7 @@ X86.opINTn = function()
 X86.opINTO = function()
 {
     if (this.getOF()) {
-        /*
+        /**
          * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
          */
         if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -38346,7 +38353,7 @@ X86.opINTO = function()
  */
 X86.opIRET = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -38448,7 +38455,7 @@ X86.opAAM = function()
     }
     let AL = this.regEAX & 0xff;
     this.regEAX = (this.regEAX & ~0xffff) | ((AL / b) << 8) | (AL % b);
-    /*
+    /**
      * setLogicResult() is perfect, because it ensures that CF and OF are cleared as well (see above for why).
      */
     this.setLogicResult(this.regEAX, X86.RESULT.BYTE);
@@ -38520,7 +38527,7 @@ X86.opSALC = function()
  */
 X86.opXLAT = function()
 {
-    /*
+    /**
      * TODO: Verify whether XLAT wraps its address calculation....
      */
     this.regEAX = (this.regEAX & ~0xff) | this.getEAByte(this.segData, (this.regEBX + (this.regEAX & 0xff)));
@@ -38921,7 +38928,7 @@ X86.opLOCK = function()
  */
 X86.opINT1 = function()
 {
-    /*
+    /**
      * TODO: Verify this instruction's behavior.
      */
     X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, 1, this.cycleCounts.nOpCyclesInt3D);
@@ -38971,14 +38978,14 @@ X86.opHLT = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * The CPU is never REALLY halted by a HLT instruction; instead, by setting X86.INTFLAG.HALT,
      * we are signalling to stepCPU() that it's free to end the current burst AND that it should not
      * execute any more instructions until checkINTR() indicates a hardware interrupt is requested.
      */
     this.intFlags |= X86.INTFLAG.HALT;
     this.nStepCycles -= 2;
-    /*
+    /**
      * If a Debugger is present and both the CPU and HALT message categories are enabled, then we
      * REALLY halt the CPU, on the theory that whoever's using the Debugger would like to see HLTs.
      */
@@ -38987,7 +38994,7 @@ X86.opHLT = function()
         this.dbg.stopCPU();
         return;
     }
-    /*
+    /**
      * We also REALLY halt the machine if interrupts have been disabled, since that means it's dead in
      * the water (yes, we support NMIs, but none of our devices are going to generate an NMI at this point).
      */
@@ -39094,7 +39101,7 @@ X86.opSTC = function()
  */
 X86.opCLI = function()
 {
-    /*
+    /**
      * The following code should be sufficient for all modes, because in real-mode, CPL is always zero,
      * and in V86-mode, CPL is always 3.
      */
@@ -39114,7 +39121,7 @@ X86.opCLI = function()
  */
 X86.opSTI = function()
 {
-    /*
+    /**
      * The following code should be sufficient for all modes, because in real-mode, CPL is always zero,
      * and in V86-mode, CPL is always 3.
      */
@@ -39204,7 +39211,7 @@ X86.opTBD = function()
     this.stopCPU();
 };
 
-/*
+/**
  * This 256-entry array of opcode functions is at the heart of the CPU engine: stepCPU(n).
  *
  * It might be worth trying a switch() statement instead, to see how the performance compares,
@@ -39236,7 +39243,7 @@ X86.aOps = [
     X86.opPUSHSP_8086,      X86.opPUSHBP,           X86.opPUSHSI,           X86.opPUSHDI,       // 0x54-0x57
     X86.opPOPAX,            X86.opPOPCX,            X86.opPOPDX,            X86.opPOPBX,        // 0x58-0x5B
     X86.opPOPSP,            X86.opPOPBP,            X86.opPOPSI,            X86.opPOPDI,        // 0x5C-0x5F
-    /*
+    /**
      * On an 8086/8088, opcodes 0x60-0x6F are aliases for the conditional jumps 0x70-0x7F.  Sometimes you'll see
      * references to these opcodes (like 0x60) being a "two-byte NOP" and using them differentiate an 8088 from newer
      * CPUs, but they're only a "two-byte NOP" if the second byte is zero, resulting in zero displacement.
@@ -39249,7 +39256,7 @@ X86.aOps = [
     X86.opJZ,               X86.opJNZ,              X86.opJBE,              X86.opJNBE,         // 0x74-0x77
     X86.opJS,               X86.opJNS,              X86.opJP,               X86.opJNP,          // 0x78-0x7B
     X86.opJL,               X86.opJNL,              X86.opJLE,              X86.opJNLE,         // 0x7C-0x7F
-    /*
+    /**
      * On all processors, opcode groups 0x80 and 0x82 perform identically (0x82 opcodes sign-extend their
      * immediate data, but since both 0x80 and 0x82 are byte operations, the sign extension has no effect).
      *
@@ -39273,7 +39280,7 @@ X86.aOps = [
     X86.opMOVAHb,           X86.opMOVCHb,           X86.opMOVDHb,           X86.opMOVBHb,       // 0xB4-0xB7
     X86.opMOVAX,            X86.opMOVCX,            X86.opMOVDX,            X86.opMOVBX,        // 0xB8-0xBB
     X86.opMOVSP,            X86.opMOVBP,            X86.opMOVSI,            X86.opMOVDI,        // 0xBC-0xBF
-    /*
+    /**
      * On an 8086/8088, opcodes 0xC0 -> 0xC2, 0xC1 -> 0xC3, 0xC8 -> 0xCA and 0xC9 -> 0xCB.
      */
     X86.opRETn,             X86.opRET,              X86.opRETn,             X86.opRET,          // 0xC0-0xC3
@@ -39281,7 +39288,7 @@ X86.aOps = [
     X86.opRETFn,            X86.opRETF,             X86.opRETFn,            X86.opRETF,         // 0xC8-0xCB
     X86.opINT3,             X86.opINTn,             X86.opINTO,             X86.opIRET,         // 0xCC-0xCF
     X86.opGRP2b1,           X86.opGRP2w1,           X86.opGRP2bCL,          X86.opGRP2wCL,      // 0xD0-0xD3
-    /*
+    /**
      * Even as of the Pentium, opcode 0xD6 is still marked as "reserved", but it's always been SALC (aka SETALC).
      */
     X86.opAAM,              X86.opAAD,              X86.opSALC,             X86.opXLAT,         // 0xD4-0xD7
@@ -39291,7 +39298,7 @@ X86.aOps = [
     X86.opINb,              X86.opINw,              X86.opOUTb,             X86.opOUTw,         // 0xE4-0xE7
     X86.opCALL,             X86.opJMP,              X86.opJMPF,             X86.opJMPs,         // 0xE8-0xEB
     X86.opINDXb,            X86.opINDXw,            X86.opOUTDXb,           X86.opOUTDXw,       // 0xEC-0xEF
-    /*
+    /**
      * On an 8086/8088, opcode 0xF1 is believed to be an alias for 0xF0; in any case, it definitely behaves like
      * a prefix on those processors, so we treat it as such.  On the 80186 and 80286, we treat it as opUndefined(),
      * and on the 80386, it becomes opINT1().
@@ -39304,7 +39311,7 @@ X86.aOps = [
     X86.opCLD,              X86.opSTD,              X86.opGRP4b,            X86.opGRP4w         // 0xFC-0xFF
 ];
 
-/*
+/**
  * A word (or two) on instruction groups (eg, Grp1, Grp2), which are groups of instructions that
  * use a mod/reg/rm byte, where the reg field of that byte selects a function rather than a register.
  *
@@ -39431,7 +39438,7 @@ X86.opGRP7 = function()
  */
 X86.opLAR = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to real-mode or V86-mode.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
@@ -39450,7 +39457,7 @@ X86.opLAR = function()
  */
 X86.opLSL = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to real-mode or V86-mode.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
@@ -39501,7 +39508,7 @@ X86.opLSL = function()
 X86.opLOADALL286 = function()
 {
     if (this.nCPL) {
-        /*
+        /**
          * To use LOADALL, CPL must be zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0, 0, true);
@@ -39519,13 +39526,13 @@ X86.opLOADALL286 = function()
     this.segCS.loadDesc6(0x83C, this.getShort(0x822));
     this.segSS.loadDesc6(0x842, this.getShort(0x820));
     this.segDS.loadDesc6(0x848, this.getShort(0x81E));
-    /*
+    /**
      * Unlike LOADALL386, there's no requirement for calling setPS() before loading segment registers;
      * in fact, since we're not passing a CPL to setPS(), it may be preferable to have CS (and perhaps SS)
      * already loaded, so that setPS() can query the CPL.  TODO: Verify that CPL is set correctly.
      */
     this.setPS(this.getShort(0x818));
-    /*
+    /**
      * It's important to call setIP() and setSP() *after* the segCS and segSS loads, so that the CPU's
      * linear IP and SP registers (regLIP and regLSP) will be updated properly.  Ordinarily that would be
      * taken care of by simply using the CPU's setCS() and setSS() functions, but those functions call the
@@ -39533,7 +39540,7 @@ X86.opLOADALL286 = function()
      */
     this.setIP(this.getShort(0x81A));
     this.setSP(this.getShort(0x82C));
-    /*
+    /**
      * The bytes at 0x851 and 0x85D "should be zeroes", as per the "Undocumented iAPX 286 Test Instruction"
      * document, but the LOADALL issued by RAMDRIVE in PC-DOS 7.0 contains 0xFF in both of those bytes, resulting
      * in very large addrGDT and addrIDT values.  Obviously, we can't have that, so we load only the low byte
@@ -39546,14 +39553,14 @@ X86.opLOADALL286 = function()
     this.segLDT.loadDesc6(0x854, this.getShort(0x81C));
     this.segTSS.loadDesc6(0x860, this.getShort(0x816));
 
-    /*
+    /**
      * Oddly, the above Intel document gives two contradictory cycle counts for LOADALL: 190 and 195.
      * I'm going with 195, since both the PC Magazine Programmer's Technical Reference and Robert Collins
      * (http://www.rcollins.org/articles/loadall/tspec_a3_doc.html) agree.
      */
     this.nStepCycles -= 195;
 
-    /*
+    /**
      * TODO: LOADALL operation still needs to be verified in protected mode....
      */
     if (DEBUG && DEBUGGER && (this.regCR0 & X86.CR0.MSW.PE)) this.stopCPU();
@@ -39568,7 +39575,7 @@ X86.opLOADALL286 = function()
  */
 X86.opCLTS = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
@@ -39668,7 +39675,7 @@ X86.opCLTS = function()
 X86.opLOADALL386 = function()
 {
     if (this.nCPL) {
-        /*
+        /**
          * To use LOADALL, CPL must be zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0, 0, true);
@@ -39677,14 +39684,14 @@ X86.opLOADALL386 = function()
     let addr = this.segES.checkRead(this.regEDI & this.maskAddr, 0xCC);
     if (addr !== X86.ADDR_INVALID) {
         X86.helpLoadCR0.call(this, this.getLong(addr));
-        /*
+        /**
          * We need to call setPS() before loading any segment registers, because if the Virtual 8086 Mode (VM)
          * bit is set in EFLAGS, the segment registers need to know that.
          */
         let accSS = this.getLong(addr + 0xA8);
         let cpl = (accSS & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
         this.setPS(this.getLong(addr + 0x04), cpl);
-        /*
+        /**
          * TODO: We have no use for the GDT(AR) at offset 0x6C or the IDT(AR) at offset 0x60, because
          * we don't manage them as segment registers.  Should we?
          */
@@ -39707,7 +39714,7 @@ X86.opLOADALL386 = function()
         this.segSS.loadDesc(this.getLong(addr + 0x48), accSS,                     this.getLong(addr + 0xAC), this.getLong(addr + 0xB0));
         this.segCS.loadDesc(this.getLong(addr + 0x4C), this.getLong(addr + 0xB4), this.getLong(addr + 0xB8), this.getLong(addr + 0xBC));
         this.segES.loadDesc(this.getLong(addr + 0x50), this.getLong(addr + 0xC0), this.getLong(addr + 0xC4), this.getLong(addr + 0xC8));
-        /*
+        /**
          * It's important to call setIP() and setSP() *after* the segCS and segSS loads, so that the CPU's
          * linear IP and SP registers (regLIP and regLSP) will be updated properly.  Ordinarily that would be
          * taken care of by simply using the CPU's setCS() and setSS() functions, but those functions call the
@@ -39715,13 +39722,13 @@ X86.opLOADALL386 = function()
          */
         this.setIP(this.getLong(addr + 0x08));
         this.setSP(this.getLong(addr + 0x18));
-        /*
+        /**
          * TODO: We need to factor out the code that updates DR6 and DR7 from X86.opMOVdr(), so that we can
          * more easily update DR6 and DR7 (which we're simply ignoring for now).
          */
     }
 
-    /*
+    /**
      * According to Robert Collins (http://www.rcollins.org/articles/loadall/tspec_a3_doc.html), the 80386 LOADALL
      * takes 122 cycles.  Also, according the above-mentioned Intel document, if the memory buffer is not DWORD aligned,
      * execution time will DOUBLE.
@@ -39750,11 +39757,11 @@ X86.opLOADALL386 = function()
  */
 X86.opMOVrc = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -39782,7 +39789,7 @@ X86.opMOVrc = function()
 
     this.nStepCycles -= 6;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Control registers are not likely to be a conduit for interesting data).
      */
 };
@@ -39799,11 +39806,11 @@ X86.opMOVrc = function()
  */
 X86.opMOVrd = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -39822,7 +39829,7 @@ X86.opMOVrd = function()
 
     this.nStepCycles -= 22;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Debug registers are not likely to be a conduit for interesting data).
      */
 };
@@ -39848,11 +39855,11 @@ X86.opMOVrd = function()
  */
 X86.opMOVcr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -39880,7 +39887,7 @@ X86.opMOVcr = function()
         return;
     }
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Control registers are not likely to be a conduit for interesting data).
      */
 };
@@ -39897,11 +39904,11 @@ X86.opMOVcr = function()
  */
 X86.opMOVdr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -39926,7 +39933,7 @@ X86.opMOVdr = function()
 
     this.nStepCycles -= (iDst < 4? 22 : 14);
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Debug registers are not likely to be a conduit for interesting data).
      */
 };
@@ -39943,11 +39950,11 @@ X86.opMOVdr = function()
  */
 X86.opMOVrt = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -39957,7 +39964,7 @@ X86.opMOVrt = function()
     let bModRM = this.getIPByte();
     let iSrc = (bModRM & 0x38) >> 3;
 
-    /*
+    /**
      * Only TR6 and TR7 are defined, and only for the 80386 and 80486.  From the PC Magazine Prog. TechRef, p.64:
      *
      *  "The 80386 provides two 32-bit test registers, TR6 and TR7, as a mechanism for programmers to verify proper
@@ -39972,7 +39979,7 @@ X86.opMOVrt = function()
     this.setReg(bModRM & 0x7, this.regTR[iSrc]);
     this.nStepCycles -= 12;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Test registers are not likely to be a conduit for interesting data).
      */
 };
@@ -39989,11 +39996,11 @@ X86.opMOVrt = function()
  */
 X86.opMOVtr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -40003,7 +40010,7 @@ X86.opMOVtr = function()
     let bModRM = this.getIPByte();
     let iDst = (bModRM & 0x38) >> 3;
 
-    /*
+    /**
      * Only TR6 and TR7 are defined, and only for the 80386 and 80486.  From the PC Magazine Prog. TechRef, p.64:
      *
      *  "The 80386 provides two 32-bit test registers, TR6 and TR7, as a mechanism for programmers to verify proper
@@ -40015,19 +40022,19 @@ X86.opMOVtr = function()
         return;
     }
 
-    /*
+    /**
      * TODO: Do something useful with the Test registers.
      */
     this.regTR[iDst] = this.getReg(bModRM & 0x7);
 
     this.nStepCycles -= 12;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Test registers are not likely to be a conduit for interesting data).
      */
 };
 
-/*
+/**
  * NOTE: The following 16 new conditional jumps actually rely on the OPERAND override setting
  * for determining whether a signed 16-bit or 32-bit displacement will be fetched, even though
  * the ADDRESS override might seem more intuitive.  Think of them as instructions that are loading
@@ -40533,7 +40540,7 @@ X86.opSETNLE = function()
  */
 X86.opPUSHFS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -40555,7 +40562,7 @@ X86.opPUSHFS = function()
  */
 X86.opPOPFS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -40638,7 +40645,7 @@ X86.opIBTS = function()
  */
 X86.opPUSHGS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -40660,7 +40667,7 @@ X86.opPUSHGS = function()
  */
 X86.opPOPGS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -40999,13 +41006,13 @@ X86.aOps0F[0x03] = X86.opLSL;
 X86.aOps0F[0x05] = X86.opLOADALL286;
 X86.aOps0F[0x06] = X86.opCLTS;
 
-/*
+/**
  * On all processors (except the 8086/8088, of course), X86.OPCODE.UD2 (0x0F,0x0B), aka "UD2", is an
  * instruction guaranteed to raise a #UD (Invalid Opcode) exception (INT 0x06) on all post-8086 processors.
  */
 X86.aOps0F[0x0B] = X86.opInvalid;
 
-/*
+/**
  * The following 0x0F opcodes are of no consequence to us, since they were all introduced post-80386;
  * 0x0F,0xA6 and 0x0F,0xA7 were introduced on some 80486 processors (and then deprecated), while 0x0F,0xB0
  * and 0x0F,0xB1 were introduced on 80586 (aka Pentium) processors.
@@ -41024,7 +41031,7 @@ X86.aOps0F[0x0B] = X86.opInvalid;
  */
 X86.aOps0F[0xA6] = X86.opInvalid;
 
-/*
+/**
  * When Windows 95 Setup initializes in protected-mode, it sets a DPMI exception handler for UD_FAULT and
  * then attempts to generate that exception with undefined opcode 0x0F,0xFF.  Apparently, whoever wrote that code
  * didn't get the Intel memo regarding the preferred invalid opcode (0x0F,0x0B, aka UD2), or perhaps Intel hadn't
@@ -41035,7 +41042,7 @@ X86.aOps0F[0xA6] = X86.opInvalid;
  */
 X86.aOps0F[0xFF] = X86.opInvalid;
 
-/*
+/**
  * NOTE: Any other opcode slots NOT explicitly initialized above with either a dedicated function OR opInvalid()
  * will be set to opUndefined() when initProcessor() finalizes the opcode tables.  If the processor is an 80386,
  * initProcessor() will also incorporate all the handlers listed below in aOps0F386.
@@ -41115,7 +41122,7 @@ if (I386) {
     X86.aOps0F386[0xBF] = X86.opMOVSXw;
 }
 
-/*
+/**
  * These instruction groups are not as orthogonal as the original 8086/8088 groups (Grp1 through Grp4); some of
  * the instructions in Grp6 and Grp7 only read their dst operand (eg, LLDT), which means the ModRM helper function
  * must insure that setEAWord() is disabled, while others only write their dst operand (eg, SLDT), which means that
@@ -41132,7 +41139,7 @@ X86.aOpGrp6Real = [
     X86.fnGRPInvalid,       X86.fnGRPInvalid,       X86.fnGRPUndefined,     X86.fnGRPUndefined      // 0x0F,0x00(reg=0x4-0x7)
 ];
 
-/*
+/**
  * Unlike Grp6, Grp7 and Grp8 do not require separate real-mode and protected-mode dispatch tables, because
  * all Grp7 and Grp8 instructions are valid in both modes.
  */
@@ -41187,7 +41194,7 @@ class ChipSet extends Component {
 
         let model = parmsChipSet['model'];
 
-        /*
+        /**
          * this.model is a numeric version of the 'model' string; when comparing this.model to standard IBM
          * model numbers, you should generally compare (this.model|0) to the target value, which truncates it.
          */
@@ -41200,7 +41207,7 @@ class ChipSet extends Component {
         let bSwitches;
         this.aDIPSwitches = [];
 
-        /*
+        /**
          * SW1 describes the number of floppy drives, the amount of base memory, the primary monitor type,
          * and (on the MODEL_5160) whether or not a coprocessor is installed.  If no SW1 settings are provided,
          * we look for individual 'floppies' and 'monitor' settings and build a default SW1 value.
@@ -41230,7 +41237,7 @@ class ChipSet extends Component {
             this.setDIPSwitches(ChipSet.SWITCH_TYPE.MONITOR, sMonitor);
         }
 
-        /*
+        /**
          * SW2 describes the number of 32Kb blocks of I/O expansion RAM that's present in the system. The MODEL_5150
          * ROM BIOS only checked/supported the first four switches, so the maximum amount of additional RAM specifiable
          * was 15 * 32Kb, or 480Kb.  So with a 16Kb-64Kb motherboard, the MODEL_5150 ROM BIOS could support a grand
@@ -41258,7 +41265,7 @@ class ChipSet extends Component {
         this.fScaleTimers = parmsChipSet['scaleTimers'] || false;
         this.sDateRTC = parmsChipSet['dateRTC'];
 
-        /*
+        /**
          * Here, I'm finally getting around to trying the WebLib Audio API.  Fortunately, based on what little
          * I know about sound generation, using the API to make the same noises as the IBM PC speaker seems
          * straightforward.
@@ -41278,7 +41285,7 @@ class ChipSet extends Component {
                 if (DEBUG) this.printf(MESSAGE.LOG, "AudioContext not available");
             }
         }
-        /*
+        /**
          * fSpeakerEnabled indicates whether the speaker is *logically* on, whereas fSpeakerOn indicates
          * whether we have ACTUALLY turned the speaker on.  And finally, fUserSound is set to true only after
          * we have have created the audio oscillator in the context of a user event (a requirement for most
@@ -41286,7 +41293,7 @@ class ChipSet extends Component {
          */
         this.fSpeakerEnabled = this.fSpeakerOn = this.fUserSound = false;
 
-        /*
+        /**
          * I used to defer ChipSet's reset() to powerUp(), which then gave us the option of doing either
          * reset() OR restore(), instead of both.  However, on MODEL_5170 machines, the initial CMOS data
          * needs to be created earlier, so that when other components are initializing their state (eg, when
@@ -41323,7 +41330,7 @@ class ChipSet extends Component {
         }
         if (!this.volumeInit) this.printf(MESSAGE.NONE, "note: speaker disabled\n");
 
-        /*
+        /**
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
          */
         this.nTicksDivisor = (cpu.getBaseCyclesPerSecond() / ChipSet.TIMER_TICKS_PER_SEC);
@@ -41357,7 +41364,7 @@ class ChipSet extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 let chipset = this;
-                /*
+                /**
                  * TODO: Add more "dumpers" (eg, for DMA, RTC, 8042, etc)
                  */
                 dbg.messageDump(MESSAGE.PIC, function onDumpPIC() {
@@ -41458,20 +41465,20 @@ class ChipSet extends Component {
      */
     reset(fHard)
     {
-        /*
+        /**
          * We propagate the initial DIP switch values to the current DIP switch values on reset;
          * the user is only allowed to tweak the initial values, which require a reset to take effect.
          */
         let i;
         this.updateDIPSwitches();
 
-        /*
+        /**
          * If the CPU is reset first, its resetFPU() function call to getDIPCoprocessor() may return
          * stale information, so now that DIP switches have been updated, we call resetFPU() from here as well.
          */
         if (this.cpu) this.cpu.resetFPU();
 
-        /*
+        /**
          * DMA (Direct Memory Access) Controller initialization
          */
         this.aDMACs = new Array(this.cDMACs);
@@ -41479,7 +41486,7 @@ class ChipSet extends Component {
             this.initDMAController(i);
         }
 
-        /*
+        /**
          * PIC (Programmable Interrupt Controller) initialization
          */
         this.aPICs = new Array(this.cPICs);
@@ -41488,7 +41495,7 @@ class ChipSet extends Component {
             this.initPIC(ChipSet.PIC1.INDEX, ChipSet.PIC1.PORT_LO);
         }
 
-        /*
+        /**
          * PIT (Programmable Interval Timer) initialization
          *
          * Although the DeskPro 386 refers to the timers in the first PIT as "Timer 1, Counter 0",
@@ -41504,7 +41511,7 @@ class ChipSet extends Component {
             this.initTimer(i);
         }
 
-        /*
+        /**
          * PPI and other misc ports
          */
         this.bPPIA = null;              // tracks writes to port 0x60, in case PPI_CTRL.A_IN is not set
@@ -41518,11 +41525,11 @@ class ChipSet extends Component {
             this.b8041Status = 0;       // similar to b8042Status (but apparently only bits 0 and 1 are used)
         }
 
-        /*
+        /**
          * ChipSet state introduced by the MODEL_5170
          */
         if (this.model >= ChipSet.MODEL_5170) {
-            /*
+            /**
              * The 8042 input buffer is treated as a "command byte" when written via port 0x64 and as a "data byte"
              * when written via port 0x60.  So, whenever the C8042.CMD.WRITE_CMD "command byte" is written to the input
              * buffer, the subsequent command data byte is saved in b8042CmdData.  Similarly, for C8042.CMD.WRITE_OUTPORT,
@@ -41536,7 +41543,7 @@ class ChipSet extends Component {
             this.b8042CmdData = ChipSet.C8042.DATA.CMD.NO_CLOCK;
             this.b8042OutBuff = 0;
 
-            /*
+            /**
              * TODO: Provide more control over these 8042 "Input Port" bits (eg, the keyboard lock)
              */
             this.b8042InPort = ChipSet.C8042.INPORT.MFG_OFF | ChipSet.C8042.INPORT.KBD_UNLOCKED;
@@ -41559,7 +41566,7 @@ class ChipSet extends Component {
 
             this.bCMOSAddr = 0;         // NMI is enabled, since the ChipSet.CMOS.ADDR.NMI_DISABLE bit is not set in bCMOSAddr
 
-            /*
+            /**
              * Now that we call reset() from the ChipSet constructor, enabling other components to update
              * their own CMOS information as needed, we must distinguish between the initial ("hard") reset
              * and any later ("soft") resets (eg, from powerUp() calls), and make sure the latter preserves
@@ -41571,7 +41578,7 @@ class ChipSet extends Component {
 
             this.initRTCTime(this.sDateRTC);
 
-            /*
+            /**
              * initCMOSData() will initialize a variety of "legacy" CMOS bytes, but it will NOT overwrite any memory
              * size or hard drive type information that might have been set, via addCMOSMemory() or setCMOSDriveType().
              */
@@ -41579,7 +41586,7 @@ class ChipSet extends Component {
         }
 
         if (DEBUGGER && MAXDEBUG) {
-            /*
+            /**
              * Arrays for interrupt counts (one count per IRQ) and timer data
              */
             this.acInterrupts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -41612,7 +41619,7 @@ class ChipSet extends Component {
      */
     initRTCTime(sDate)
     {
-        /*
+        /**
          * NOTE: I've already been burned once by a JavaScript library function that did NOT treat an undefined
          * parameter (ie, a parameter === undefined) the same as an omitted parameter (eg, the async parameter in
          * xmlHTTP.open() in IE), so I'm taking no chances here: if sDate is undefined, then explicitly call Date()
@@ -41620,7 +41627,7 @@ class ChipSet extends Component {
          */
         let date = sDate? new Date(sDate) : new Date();
 
-        /*
+        /**
          * Example of a valid Date string:
          *
          *      2014-10-01T08:00:00 (interpreted as GMT, resulting in "Wed Oct 01 2014 01:00:00 GMT-0700 (PDT)")
@@ -41665,7 +41672,7 @@ class ChipSet extends Component {
         this.nRTCCyclesLastUpdate = this.nRTCCyclesNextUpdate = 0;
         this.nRTCPeriodsPerSecond = this.nRTCCyclesPerPeriod = null;
 
-        /*
+        /**
          * Return the number of seconds since midnight that have been programmed into the RTC, so that the
          * caller can easily convert that into TIMER_LOW/TIMER_HIGH values for the ROM BIOS data area, if needed.
          */
@@ -41698,7 +41705,7 @@ class ChipSet extends Component {
                 }
             }
             if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.BINARY)) {
-                /*
+                /**
                  * We're in BCD mode, so we must convert b from BINARY to BCD.  But first:
                  *
                  *      If b is a 12-hour value (ie, we're in 12-hour mode) AND the hour is a PM value
@@ -41713,7 +41720,7 @@ class ChipSet extends Component {
             }
         } else {
             if (iRTC == ChipSet.CMOS.ADDR.STATUSA) {
-                /*
+                /**
                  * Make sure that the "Update-In-Progress" bit we set in updateRTCTime() doesn't stay set for
                  * more than one read.
                  */
@@ -41737,7 +41744,7 @@ class ChipSet extends Component {
         if (iRTC < ChipSet.CMOS.ADDR.STATUSA) {
             let fBCD = false;
             if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.BINARY)) {
-                /*
+                /**
                  * We're in BCD mode, so we must convert b from BCD to BINARY (we assume it's valid
                  * BCD; ie, that both nibbles contain only 0-9, not A-F).
                  */
@@ -41746,7 +41753,7 @@ class ChipSet extends Component {
             }
             if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (fBCD) {
-                    /*
+                    /**
                      * If the original BCD hour was 0x81-0x92, then the previous BINARY-to-BCD conversion
                      * transformed it to 0x51-0x5C, so we must add 0x30.
                      */
@@ -41839,7 +41846,7 @@ class ChipSet extends Component {
         let nCyclesPerSecond = this.cpu.getBaseCyclesPerSecond();
         let nCyclesUpdate = this.cpu.getCycles(this.fScaleTimers);
 
-        /*
+        /**
          * We must arrange for the very first calcRTCCyclePeriod() call to occur here, on the very first
          * updateRTCTime() call, because this is the first point we can be guaranteed that CPU cycle counts
          * are initialized (the CPU is the last component to be powered up/restored).
@@ -41849,14 +41856,14 @@ class ChipSet extends Component {
          */
         if (this.nRTCCyclesPerPeriod == null) this.calcRTCCyclePeriod();
 
-        /*
+        /**
          * Step 1: Deal with Periodic Interrupts
          */
         if (nCyclesUpdate >= this.nRTCCyclesNextUpdate) {
             let bPrev = this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC];
             this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.PF;
             if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.PIE) {
-                /*
+                /**
                  * When PIE is set, setBurstCycles() should be getting called as needed to ensure
                  * that updateRTCTime() is called more frequently, so let's assert that we don't have
                  * an excess of cycles and thus possibly some missed Periodic Interrupts.
@@ -41872,7 +41879,7 @@ class ChipSet extends Component {
                 }
                 this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
                 this.setIRR(ChipSet.IRQ.RTC);
-                /*
+                /**
                  * We could also call setRTCCycleLimit() at this point, but I don't think there's any
                  * benefit until the interrupt had been acknowledged and STATUSC has been read, thereby
                  * clearing the way for another Periodic Interrupt; it seems to me that when STATUSC
@@ -41882,7 +41889,7 @@ class ChipSet extends Component {
             this.nRTCCyclesNextUpdate = nCyclesUpdate + this.nRTCCyclesPerPeriod;
         }
 
-        /*
+        /**
          * Step 2: Deal with Alarm Interrupts
          */
         if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM]) {
@@ -41897,14 +41904,14 @@ class ChipSet extends Component {
             }
         }
 
-        /*
+        /**
          * Step 3: Update the RTC date/time and deal with Update Interrupts
          */
         let nCyclesDelta = nCyclesUpdate - this.nRTCCyclesLastUpdate;
         // DEBUG:
         let nSecondsDelta = Math.floor(nCyclesDelta / nCyclesPerSecond);
 
-        /*
+        /**
          * We trust that updateRTCTime() is being called as part of updateAllTimers(), and is therefore
          * being called often enough to ensure that nSecondsDelta will never be greater than one.  In fact,
          * it would always be LESS than one if it weren't also for the fact that we plow any "unused" cycles
@@ -41913,7 +41920,7 @@ class ChipSet extends Component {
          */
         // DEBUG:
 
-        /*
+        /**
          * Make sure that CMOS.STATUSB.SET isn't set; if it is, then the once-per-second RTC updates must be
          * disabled so that software can write new RTC date/time values without interference.
          */
@@ -41939,7 +41946,7 @@ class ChipSet extends Component {
                 }
             }
 
-            /*
+            /**
              * Obviously, setting the "Update-In-Progress" bit now might seem rather pointless, since we just
              * updated the RTC "atomically" as far as the machine is concerned; however, the bit must be set at
              * at some point, in order to make the MODEL_5170 BIOS ("POST2_RTCUP") happy.
@@ -41969,7 +41976,7 @@ class ChipSet extends Component {
      */
     initCMOSData()
     {
-        /*
+        /**
          * On all reset() calls, the RAM component(s) will (re)add their totals, so we have to make sure that
          * the addition always starts with 0.  That also means that ChipSet must always be initialized before RAM.
          */
@@ -41978,7 +41985,7 @@ class ChipSet extends Component {
             this.abCMOSData[iCMOS] = 0;
         }
 
-        /*
+        /**
          * Make sure all the "checksummed" CMOS bytes are initialized (not just the handful we set below) to ensure
          * that the checksum will be valid.
          */
@@ -41986,14 +41993,14 @@ class ChipSet extends Component {
             if (this.abCMOSData[iCMOS] === undefined) this.abCMOSData[iCMOS] = 0;
         }
 
-        /*
+        /**
          * We propagate all compatible "legacy" SW1 bits to the CMOS.EQUIP byte using the old SW masks, but any further
          * access to CMOS.ADDR.EQUIP should use the new CMOS_EQUIP flags (eg, CMOS.EQUIP.FPU, CMOS.EQUIP.MONITOR.CGA80, etc).
          */
         this.abCMOSData[ChipSet.CMOS.ADDR.EQUIP] = this.getDIPLegacyBits(0);
         this.abCMOSData[ChipSet.CMOS.ADDR.FDRIVE] = (this.getDIPFloppyDriveType(0) << 4) | this.getDIPFloppyDriveType(1);
 
-        /*
+        /**
          * The final step is calculating the CMOS checksum, which we then store into the CMOS as a courtesy, so that the
          * user doesn't get unnecessary CMOS errors.
          */
@@ -42102,7 +42109,7 @@ class ChipSet extends Component {
     syncRTCTime()
     {
         if (this.nRTCSeconds != undefined) {
-            /*
+            /**
              * The 8254 ("PIT") is wired to a clock with a frequency of 1.193182MHz, and the PIT is configured
              * to divide that by 65536, which gives us 18.2065 interrupts ("ticks") per second.
              */
@@ -42227,7 +42234,7 @@ class ChipSet extends Component {
             this.abCMOSData = a[3];
             this.nRTCCyclesLastUpdate = a[4];
             this.nRTCCyclesNextUpdate = a[5];
-            /*
+            /**
              * TODO: Decide whether restore() should faithfully preserve the RTC date/time that save() saved,
              * or always reinitialize the date/time, or give the user (or the machine configuration) the option.
              *
@@ -42249,7 +42256,7 @@ class ChipSet extends Component {
      */
     start()
     {
-        /*
+        /**
          * Currently, all we do with this notification is allow the speaker to make noise.
          */
         this.setSpeaker();
@@ -42264,7 +42271,7 @@ class ChipSet extends Component {
      */
     stop()
     {
-        /*
+        /**
          * Currently, all we do with this notification is prevent the speaker from making noise.
          */
         this.setSpeaker();
@@ -42618,7 +42625,7 @@ class ChipSet extends Component {
                     for (let v in switchGroup.VALUES) {
                         if (switchGroup.VALUES[v] == bits) {
                             value = v;
-                            /*
+                            /**
                              * We prefer numeric properties, and all switch definitions must provide them
                              * if their helper functions (eg, getDIPVideoMonitor()) expect numeric properties.
                              */
@@ -42799,7 +42806,7 @@ class ChipSet extends Component {
     {
         let b = bDefault;
         if (sBits) {
-            /*
+            /**
              * NOTE: We can't use parseInt() with a base of 2, because both bit order and bit sense are reversed.
              */
             b = 0;
@@ -42931,7 +42938,7 @@ class ChipSet extends Component {
                 aeCells[i].setAttribute("title", sLabel);
                 this.setDIPSwitchControl(aeCells[i], !(v & (0x1 << i)));
                 aeCells[i].onclick = function(chipset, eSwitch) {
-                    /*
+                    /**
                      * If we define the onclick handler below as "function(e)" instead of simply "function()", then we will
                      * also receive an Event object; however, IE reportedly requires that we examine a global (window.event)
                      * instead.  If that's true, and if we ever care to get more details about the click event, then define
@@ -42957,7 +42964,7 @@ class ChipSet extends Component {
         let controlDesc = this.bindings[ChipSet.CONTROLS.SWDESC];
         if (controlDesc != null) {
             let sText = "";
-            /*
+            /**
              * TODO: Monitor type 0 used to be "None" (ie, "No Monitor"), which was correct in a pre-EGA world,
              * but in the post-EGA world, it depends.  We should ask the Video component for a definitive answer.
              */
@@ -43067,7 +43074,7 @@ class ChipSet extends Component {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
-        /*
+        /**
          * Technically, aTimers[1].fOut is what drives DMA requests for DMA channel 0 (ChipSet.DMA_REFRESH),
          * every 15us, once the BIOS has initialized the channel's "mode" with MODE_SINGLE, INCREMENT, AUTOINIT,
          * and TYPE_READ (0x58) and initialized TIMER1 appropriately.
@@ -43128,7 +43135,7 @@ class ChipSet extends Component {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
-        /*
+        /**
          * Technically, aTimers[1].fOut is what drives DMA requests for DMA channel 0 (ChipSet.DMA_REFRESH),
          * every 15us, once the BIOS has initialized the channel's "mode" with MODE_SINGLE, INCREMENT, AUTOINIT,
          * and TYPE_READ (0x58) and initialized TIMER1 appropriately.
@@ -43143,7 +43150,7 @@ class ChipSet extends Component {
                 channel.countCurrent[1]--;
                 if (channel.countCurrent[1] < 0) {
                     channel.countCurrent[1] = 0xff;
-                    /*
+                    /**
                      * This is the logical point to indicate Terminal Count (TC), but again, there's no need to be
                      * so particular; inDMAStatus() has its own logic for periodically signalling TC.
                      */
@@ -43200,7 +43207,7 @@ class ChipSet extends Component {
      */
     inDMAStatus(iDMAC, port, addrFrom)
     {
-        /*
+        /**
          * HACK: Unlike the MODEL_5150, the MODEL_5160 ROM BIOS checks DMA channel 0 for TC (@F000:E4DF)
          * after running a number of unrelated tests, since enough time would have passed for channel 0 to
          * have reached TC at least once.  So I simply OR in a hard-coded TC bit for channel 0 every time
@@ -43257,11 +43264,11 @@ class ChipSet extends Component {
         if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".REQ", undefined, true);
         }
-        /*
+        /**
          * Bits 0-1 contain the channel number
          */
         let iChannel = (bOut & 0x3);
-        /*
+        /**
          * Bit 2 is the request bit (0 to reset, 1 to set), which must be propagated to the corresponding bit (4-7) in the status register
          */
         let iChannelBit = ((bOut & 0x4) << (iChannel + 2));
@@ -43373,7 +43380,7 @@ class ChipSet extends Component {
         if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASTER_CLEAR", undefined, true);
         }
-        /*
+        /**
          * The value written to this port doesn't matter; any write triggers a "master clear" operation
          *
          * TODO: Can't we just call initDMAController(), which would also take care of clearing controller.bStatus?
@@ -43450,7 +43457,7 @@ class ChipSet extends Component {
      */
     outDMAPageSpare(iSpare, port, bOut, addrFrom)
     {
-        /*
+        /**
          * TODO: Remove this DEBUG-only DESKPRO386 code once we're done debugging DeskPro 386 ROMs;
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
@@ -43523,7 +43530,7 @@ class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * We can't simply slam done into channel.done; that would be fine if requestDMA() was called only by functions
          * like HDC.doRead() and HDC.doWrite(), but we're also called whenever a DMA channel is unmasked, and in those cases,
          * we need to preserve whatever handler may have been previously set.
@@ -43537,7 +43544,7 @@ class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * Let's try to do async DMA without asking the CPU for help...
          *
          *      this.cpu.setDMA(true);
@@ -43563,7 +43570,7 @@ class ChipSet extends Component {
                 channel.sAddrDebug = (DEBUG && DEBUGGER? null : undefined);
             }
         }
-        /*
+        /**
          * To support async DMA without requiring help from the CPU (ie, without relying upon cpu.setDMA()), we require that
          * the data transfer functions provide an fAsync parameter to their callbacks; fAsync must be true if the callback was
          * truly asynchronous (ie, it had to wait for a remote I/O request to finish), or false if the data was already available
@@ -43600,20 +43607,20 @@ class ChipSet extends Component {
                                     if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
-                                /*
+                                /**
                                  * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
                                  */
                                 b = 0xff;
                             }
                             if (!channel.masked && !channel.fError) {
                                 chipset.bus.setByte(addrCur, b);
-                                /*
+                                /**
                                  * WARNING: Do NOT assume that obj is valid; if the sector data was not found, there will be no obj.
                                  */
                                 if (BACKTRACK && obj) {
                                     if (!off && obj.file) {
                                         chipset.printf(MESSAGE.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
-                                        /*
+                                        /**
                                         if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
                                             chipset.cpu.stopCPU();
                                         }
@@ -43633,12 +43640,12 @@ class ChipSet extends Component {
                     }(addr));
                 }
                 else if (channel.type == ChipSet.DMA_MODE.TYPE_READ) {
-                    /*
+                    /**
                      * TODO: Determine whether we should support async dmaWrite() functions (currently not required)
                      */
                     b = chipset.bus.getByte(addr);
                     if (channel.fnTransfer.call(channel.component, channel.obj, b) < 0) {
-                        /*
+                        /**
                          * In this case, I think I have no choice but to terminate the DMA operation in response to a failure,
                          * because the ROM BIOS FDC.REG_DATA.CMD.FORMAT_TRACK command specifies a count that is MUCH too large
                          * (a side-effect of the ROM BIOS using the same "DMA_SETUP" code for reads, writes AND formats).
@@ -43647,7 +43654,7 @@ class ChipSet extends Component {
                     }
                 }
                 else if (channel.type == ChipSet.DMA_MODE.TYPE_VERIFY) {
-                    /*
+                    /**
                      * Originally, we did nothing here and just fell into updateDMA(); however, we actually need to probe for
                      * data even though we're not going to do anything with it, so that any data errors get flagged by the FDC.
                      *
@@ -43665,7 +43672,7 @@ class ChipSet extends Component {
                                     if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
-                                /*
+                                /**
                                  * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
                                  */
                             }
@@ -43706,7 +43713,7 @@ class ChipSet extends Component {
                     if (channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
                 }
             }
-            /*
+            /**
              * In situations where an HDC DMA operation took too long, the Fixed Disk BIOS would give up, but the DMA operation would continue.
              *
              * TODO: Verify that the Fixed Disk BIOS shuts down (ie, re-masks) a DMA channel for failed requests, and that this handles those failures.
@@ -43718,7 +43725,7 @@ class ChipSet extends Component {
         let iDMAChannel = controller.nChannelBase + channel.iChannel;
         controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
 
-        /*
+        /**
          * EOP is supposed to automatically (re)mask the channel, unless it's set for auto-initialize.
          */
         if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) {
@@ -43736,7 +43743,7 @@ class ChipSet extends Component {
             channel.done = null;
         }
 
-        /*
+        /**
          * While it might make sense to call cpu.setDMA() here, it's simpler to let the CPU issue one more call
          * to chipset.checkDMA() and let the CPU update INTR.DMA on its own, based on the return value from checkDMA().
          */
@@ -43789,12 +43796,12 @@ class ChipSet extends Component {
             this.printIO(pic.port, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (bOut & ChipSet.PIC_LO.ICW1) {
-            /*
+            /**
              * This must be an ICW1...
              */
             pic.nICW = 0;
             pic.aICW[pic.nICW++] = bOut;
-            /*
+            /**
              * I used to do the rest of this initialization in outPICHi(), once all the ICW commands had been received,
              * but a closer reading of the 8259A spec indicates that that should happen now, on receipt on ICW1.
              *
@@ -43814,7 +43821,7 @@ class ChipSet extends Component {
              */
             pic.bIMR = 0x00;
             pic.bIRLow = 7;
-            /*
+            /**
              * TODO: I'm also zeroing both IRR and ISR, even though that's not actually mentioned as part of the ICW
              * sequence, because they need to be (re)initialized at some point.  However, if some component is currently
              * requesting an interrupt, what should I do about that?  Originally, I had decided to clear them ONLY if they
@@ -43822,30 +43829,31 @@ class ChipSet extends Component {
              * to unconditionally zeroing them.
              */
             pic.bIRR = pic.bISR = 0;
-            /*
+            /**
              * The spec also says that "Special Mask Mode is cleared and Status Read is set to IRR".  I attempt to insure
              * the latter, but as for special mask mode... well, that mode isn't supported yet.
              */
             pic.bOCW3 = ChipSet.PIC_LO.OCW3 | ChipSet.PIC_LO.OCW3_READ_IRR;
         }
         else if (!(bOut & ChipSet.PIC_LO.OCW3)) {
-            /*
+            /**
              * This must be an OCW2...
              */
             let bOCW2 = bOut & ChipSet.PIC_LO.OCW2_OP_MASK;
             if (bOCW2 & ChipSet.PIC_LO.OCW2_EOI) {
-                /*
+                /**
                  * This OCW2 must be an EOI command...
                  */
-                let nIRL, bIREnd = 0;
+                let nIRL;
+                let bIREnd = 0;
                 if ((bOCW2 & ChipSet.PIC_LO.OCW2_EOI_SPEC) == ChipSet.PIC_LO.OCW2_EOI_SPEC) {
-                    /*
+                    /**
                      * More "specifically", a specific EOI command...
                      */
                     nIRL = bOut & ChipSet.PIC_LO.OCW2_IR_LVL;
                     bIREnd = 1 << nIRL;
                 } else {
-                    /*
+                    /**
                      * Less "specifically", a non-specific EOI command.  The search for the highest priority in-service
                      * interrupt must start with whichever interrupt is opposite the lowest priority interrupt (normally 7,
                      * but technically whatever bIRLow is currently set to).  For example:
@@ -43878,7 +43886,7 @@ class ChipSet extends Component {
                         if (MAXDEBUG && this.dbg) this.dbg.stopCPU();
                     }
                 }
-                /*
+                /**
                  * TODO: Support EOI commands with automatic rotation (eg, ChipSet.PIC_LO.OCW2_EOI_ROT and ChipSet.PIC_LO.OCW2_EOI_ROTSPEC)
                  */
                 if (bOCW2 & ChipSet.PIC_LO.OCW2_SET_ROTAUTO) {
@@ -43886,19 +43894,19 @@ class ChipSet extends Component {
                 }
             }
             else  if (bOCW2 == ChipSet.PIC_LO.OCW2_SET_PRI) {
-                /*
+                /**
                  * This OCW2 changes the lowest priority interrupt to the specified level (the default is 7)
                  */
                 pic.bIRLow = bOut & ChipSet.PIC_LO.OCW2_IR_LVL;
             }
             else {
-                /*
+                /**
                  * TODO: Remaining commands to support: ChipSet.PIC_LO.OCW2_SET_ROTAUTO and ChipSet.PIC_LO.OCW2_CLR_ROTAUTO
                  */
                 this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
             }
         } else {
-            /*
+            /**
              * This must be an OCW3 request. If it's a "Read Register" command (PIC_LO.OCW3_READ_CMD), inPICLo() will take care it.
              *
              * TODO: If OCW3 specified a "Poll" command (PIC_LO.OCW3_POLL_CMD) or a "Special Mask Mode" command (PIC_LO.OCW3_SMM_CMD),
@@ -43953,15 +43961,15 @@ class ChipSet extends Component {
             }
         }
         else {
-            /*
+            /**
              * We have all our ICW "words" (ie, bytes), so this must be an OCW1 write (which is simply an IMR write)
              */
             pic.bIMR = bOut;
-            /*
+            /**
              * See the CPU's delayINTR() function for an explanation of why this explicit delay is necessary.
              */
             this.cpu.delayINTR();
-            /*
+            /**
              * Alas, we need a longer delay for the MODEL_5170's "KBD_RESET" function (F000:17D2), which must drop
              * into a loop and decrement CX at least once after unmasking the KBD IRQ.  The "KBD_RESET" function on
              * previous models could be handled with a 4-instruction delay provided by the Keyboard.resetDevice() call
@@ -43995,7 +44003,7 @@ class ChipSet extends Component {
      */
     setIRR(nIRQ, nDelay)
     {
-        /*
+        /**
          * Whenever the Video component needs to signal a vertical retrace interrupt, it specifies ChipSet.IRQ.VID
          * (aka IRQ 2) and it is blissfully ignorant of whether the machine has one or two PICs; unfortunately, in the
          * case of two PICs (master and slave), its interrupt is supposed to come through IRQ 9 on the slave, since
@@ -44043,7 +44051,7 @@ class ChipSet extends Component {
      */
     checkIRR(nDelay)
     {
-        /*
+        /**
          * Look for any IRR bits that aren't masked and aren't already in service; in theory, all we'd have to
          * check is the master PIC (which is the *only* PIC on pre-5170 models), because when any IRQs are set or
          * cleared on the slave, that would automatically be reflected in IRQ.SLAVE on the master; that's what
@@ -44105,14 +44113,14 @@ class ChipSet extends Component {
     {
         if (iPIC === undefined) iPIC = 0;
 
-        /*
+        /**
          * Look for any IRR bits that aren't masked and aren't already in service...
          */
         let nIDT = -1;
         let pic = this.aPICs[iPIC];
         if (!pic.nDelay) {
             let bIR = pic.bIRR & ((pic.bISR | pic.bIMR) ^ 0xff);
-            /*
+            /**
              * The search for the next highest priority requested interrupt (that's also not in-service and not masked)
              * must start with whichever interrupt is opposite the lowest priority interrupt (normally 7, but technically
              * whatever bIRLow is currently set to).  For example:
@@ -44132,7 +44140,7 @@ class ChipSet extends Component {
                 nIRL &= 0x7;
                 let bIRNext = 1 << nIRL;
 
-                /*
+                /**
                  * If we encounter an interrupt that's still in-service BEFORE we encounter a requested interrupt,
                  * then we're done; we must allow a higher priority in-service interrupt to finish before acknowledging
                  * any lower priority interrupts.
@@ -44142,12 +44150,12 @@ class ChipSet extends Component {
                 if (bIR & bIRNext) {
 
                     if (!iPIC && nIRL == ChipSet.IRQ.SLAVE && this.aPICs.length > 1) {
-                        /*
+                        /**
                          * Slave interrupts are tied to the master PIC on IRQ2; query the slave PIC for the vector #
                          */
                         nIDT = this.getIRRVector(1);
                     } else {
-                        /*
+                        /**
                          * Get the starting IDT vector # from ICW2 and add the IR level to obtain the target IDT vector #
                          */
                         nIDT = pic.aICW[1] + nIRL;
@@ -44156,7 +44164,7 @@ class ChipSet extends Component {
                     if (nIDT >= 0) {
                         pic.bISR |= bIRNext;
 
-                        /*
+                        /**
                          * Setting the ISR implies clearing the IRR, but clearIRR() has side-effects we don't want
                          * (eg, clearing the slave IRQ, notifying the CPU, etc), so we clear the IRR ourselves.
                          */
@@ -44188,7 +44196,7 @@ class ChipSet extends Component {
         if (this.model >= ChipSet.MODEL_5170) {
             this.setIRR(ChipSet.IRQ.FPU);
         } else {
-            /*
+            /**
              * TODO: Determine whether we need to maintain an "Active NMI" state; ie, if NMI.DISABLE is cleared
              * later, and the FPU coprocessor is still indicating an error condition, should we then generate an NMI?
              */
@@ -44208,7 +44216,7 @@ class ChipSet extends Component {
         if (this.model >= ChipSet.MODEL_5170) {
             this.clearIRR(ChipSet.IRQ.FPU);
         } else {
-            /*
+            /**
              * TODO: If we maintain an "Active NMI" state, then we will need code here to clear that state, as well
              * as code in outNMI() to clear that state and generate an NMI as needed.
              */
@@ -44287,7 +44295,7 @@ class ChipSet extends Component {
         timer.countInit[timer.countIndex++] = bOut;
 
         if (timer.countIndex == timer.countBytes) {
-            /*
+            /**
              * In general, writing a new count to a timer that's already counting isn't supposed to affect the current
              * count, with the notable exceptions of MODE0 and MODE4.
              */
@@ -44298,7 +44306,7 @@ class ChipSet extends Component {
                 timer.nCyclesStart = this.cpu.getCycles(this.fScaleTimers);
                 timer.fCounting = true;
 
-                /*
+                /**
                  * I believe MODE0 is the only mode where OUT (fOUT) starts out low (false); for the rest of the modes,
                  * OUT (fOUT) starts high (true).  It's also my understanding that the way edge-triggered interrupts work
                  * on the original PC is that an interrupt is requested only when the corresponding OUT transitions from
@@ -44307,7 +44315,7 @@ class ChipSet extends Component {
                 timer.fOUT = (timer.mode != ChipSet.PIT_CTRL.MODE0);
 
                 if (iPIT == ChipSet.PIT0.INDEX && iPITTimer == ChipSet.PIT0.TIMER0) {
-                    /*
+                    /**
                      * TODO: Determine if there are situations/modes where I should NOT automatically clear IRQ0 on behalf of TIMER0.
                      */
                     this.clearIRR(ChipSet.IRQ.TIMER0);
@@ -44334,7 +44342,7 @@ class ChipSet extends Component {
     inTimerCtrl(iPIT, port, addrFrom)
     {
         this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
-        /*
+        /**
          * NOTE: Even though reads to port 0x43 are undefined (I think), I'm going to "define" it
          * as returning the last value written, purely for the Debugger's benefit.
          */
@@ -44354,7 +44362,7 @@ class ChipSet extends Component {
     {
         this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
 
-        /*
+        /**
          * Extract the SC (Select Counter) bits.
          */
         let iBaseTimer = 0;
@@ -44366,7 +44374,7 @@ class ChipSet extends Component {
             this.bPIT1Ctrl = bOut;
         }
 
-        /*
+        /**
          * Check for the Read-Back command and process as needed.
          */
         if (iPITTimer == ChipSet.PIT_CTRL.SC_BACK) {
@@ -44387,12 +44395,12 @@ class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * Convert the SC (Select Counter) bits into an iPITTimer index (0-2).
          */
         iPITTimer >>= ChipSet.PIT_CTRL.SC_SHIFT;
 
-        /*
+        /**
          * Extract BCD (bit 0), MODE (bits 1-3), and RW (bits 4-5), which we simply store as-is (see setTimerMode).
          */
         let bcd = (bOut & ChipSet.PIT_CTRL.BCD);
@@ -44400,7 +44408,7 @@ class ChipSet extends Component {
         let rw = (bOut & ChipSet.PIT_CTRL.RW);
 
         if (rw == ChipSet.PIT_CTRL.RW_LATCH) {
-            /*
+            /**
              * Of all the RW bit combinations, this is the only one that "countermands" normal control register
              * processing (the BCD and MODE bits are "don't care").
              */
@@ -44409,7 +44417,7 @@ class ChipSet extends Component {
         else {
             this.setTimerMode(iBaseTimer + iPITTimer, bcd, mode, rw);
 
-            /*
+            /**
              * The 5150 ROM BIOS code @F000:E285 ("TEST.7") would fail after a warm boot (eg, after a CTRL-ALT-DEL) because
              * it assumed that no TIMER0 interrupt would occur between the point it unmasked the TIMER0 interrupt and the
              * point it started reprogramming TIMER0.
@@ -44428,7 +44436,7 @@ class ChipSet extends Component {
              */
             if (iPIT == ChipSet.PIT0.INDEX && iPITTimer == ChipSet.PIT0.TIMER0) this.clearIRR(ChipSet.IRQ.TIMER0);
 
-            /*
+            /**
              * Another TIMER0 HACK: The "CASSETTE DATA WRAP TEST" @F000:E51E occasionally reports an error when the second of
              * two TIMER0 counts it latches is greater than the first.  You would think the ROM BIOS would expect this, since
              * TIMER0 can reload its count at any time.  Is the ROM BIOS assuming that TIMER0 was initialized sufficiently
@@ -44519,12 +44527,12 @@ class ChipSet extends Component {
      */
     latchTimerCount(iTimer)
     {
-        /*
+        /**
          * Update the timer's current count.
          */
         this.updateTimer(iTimer);
 
-        /*
+        /**
          * Now we can latch it.
          */
         let timer = this.aTimers[iTimer];
@@ -44532,7 +44540,7 @@ class ChipSet extends Component {
         timer.countLatched[1] = timer.countCurrent[1];
         timer.fCountLatched = true;
 
-        /*
+        /**
          * VERIFY: That a latch request resets the timer index.
          */
         this.resetTimerIndex(iTimer);
@@ -44619,12 +44627,12 @@ class ChipSet extends Component {
     {
         let timer = this.aTimers[iTimer];
 
-        /*
+        /**
          * Every timer's counting state is gated by its own fCounting flag; TIMER2 is further gated by PPI_B's
          * CLK_TIMER2 bit.
          */
         if (timer.fCounting && (iTimer != ChipSet.PIT0.TIMER2 || (this.bPPIB & ChipSet.PPI_B.CLK_TIMER2))) {
-            /*
+            /**
              * We determine the current timer count based on how many instruction cycles have elapsed since we started
              * the timer.  Timers are supposed to be "ticking" at a rate of 1193181.8181 times per second, which is
              * the system clock of 14.31818Mhz, divided by 12.
@@ -44650,7 +44658,7 @@ class ChipSet extends Component {
              */
             let nCycles = this.cpu.getCycles(this.fScaleTimers);
 
-            /*
+            /**
              * Instead of maintaining partial tick counts, we calculate a fresh countCurrent from countStart every
              * time we're called, using the cycle count recorded when the timer was initialized.  countStart is set
              * to countInit when fCounting is first set, and then it is refreshed from countInit at the expiration of
@@ -44675,7 +44683,7 @@ class ChipSet extends Component {
             let fFired = false;
             let count = countStart - ticksElapsed;
 
-            /*
+            /**
              * NOTE: This mode is used by ROM BIOS test code that wants to verify timer interrupts are arriving
              * neither too slowly nor too quickly.  As a result, I've had to add some corresponding trickery
              * in outTimer() to force interrupt simulation immediately after a low initial count (0x16) has been set.
@@ -44693,7 +44701,7 @@ class ChipSet extends Component {
                     }
                 }
             }
-            /*
+            /**
              * Early implementation of this mode was minimal because when using this mode, the ROM BIOS simply wanted
              * to see the count changing; it wasn't looking for interrupts.  See ROM BIOS "TEST.03" code @F000:E0DE,
              * where TIMER1 is programmed for MODE2, LSB (the same settings, incidentally, used immediately afterward
@@ -44714,7 +44722,7 @@ class ChipSet extends Component {
                 if (count <= 0) {
                     count = countInit + count;
                     if (count <= 0) {
-                        /*
+                        /**
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
                         if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=2, underflow=%d\n", iTimer, count);
@@ -44730,7 +44738,7 @@ class ChipSet extends Component {
                     }
                 }
             }
-            /*
+            /**
              * NOTE: This is the normal mode for TIMER0, which the ROM BIOS uses to generate h/w interrupts roughly
              * 18.2 times per second.  In this mode, the count must be decremented twice as fast (hence the extra ticks
              * subtraction below, in addition to the subtraction above), but IRQ_TIMER0 is raised only on alternate
@@ -44746,7 +44754,7 @@ class ChipSet extends Component {
                     timer.fOUT = !timer.fOUT;
                     count = countInit + count;
                     if (count <= 0) {
-                        /*
+                        /**
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
                         if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=3, underflow=%d\n", iTimer, count);
@@ -44898,7 +44906,7 @@ class ChipSet extends Component {
     {
         let toggled = (bOut ^ this.bPPIB);
         if (toggled & ChipSet.PPI_B.CLK_TIMER2) {
-            /*
+            /**
              * If TIMER2 is about to be "declocked", then we should update the timer NOW, because any attempt to read
              * timer's count AFTER it has been declocked will not trigger an update.  This was a problem for the following
              * code in SUPERPCK.EXE from DR DOS 6.00:
@@ -44940,7 +44948,7 @@ class ChipSet extends Component {
         }
         this.bPPIB = bOut;
         if (toggled & ChipSet.PPI_B.SPK_TIMER2) {
-            /*
+            /**
              * Originally, this code didn't catch the "ERROR_BEEP" case @F000:EC34, which first turns both PPI_B.CLK_TIMER2 (0x01)
              * and PPI_B.SPK_TIMER2 (0x02) off, then turns on only PPI_B.SPK_TIMER2 (0x02), then restores the original port value.
              *
@@ -44964,18 +44972,18 @@ class ChipSet extends Component {
     {
         let b = 0;
 
-        /*
+        /**
          * If you ever wanted to simulate I/O channel errors or R/W memory parity errors, you could
          * add either PPI_C.IO_CHANNEL_CHK (0x40) or PPI_C.RW_PARITY_CHK (0x80) to the return value (b).
          */
         if ((this.model|0) == ChipSet.MODEL_4860) {
             b |= this.bNMI & ChipSet.NMI.KBD_LATCH;
-            /*
+            /**
              * We're going to hard-code the rest of the PCjr settings for now, including NOT setting the NO_KBD_CABLE
              * bit, on the theory that if we don't have to deal with IR hardware emulation, so much the better.
              */
             b |= ChipSet.PPI_C.NO_MODEM | ChipSet.PPI_C.NO_DISKETTE | ChipSet.PPI_C.NO_MEMEXP;
-            /*
+            /**
              * I'm just guessing at how keyboard data is "clocked" into the the KBD_DATA bit; this will be revisited.
              */
             b |= (this.bKbdData & 0x1)? ChipSet.PPI_C.KBD_DATA : 0;
@@ -45006,7 +45014,7 @@ class ChipSet extends Component {
             }
         }
 
-        /*
+        /**
          * The ROM BIOS polls this port incessantly during its memory tests, checking for memory parity errors
          * (which of course we never report), so you must use both MESSAGE.PORT and MESSAGE.CHIPSET.
          */
@@ -45199,7 +45207,7 @@ class ChipSet extends Component {
                 this.set8042OutPort(bOut);
                 break;
 
-            /*
+            /**
              * This case is reserved for command bytes that the 8042 is not expecting, which should therefore be passed
              * on to the Keyboard itself.
              *
@@ -45283,7 +45291,7 @@ class ChipSet extends Component {
      */
     in8042RWReg(port, addrFrom)
     {
-        /*
+        /**
          * Normally, we return whatever was last written to this port, but we do need to mask the
          * two upper-most bits (C8042.RWREG.NMI_ERROR), as those are output-only bits used to signal
          * parity errors.
@@ -45308,7 +45316,7 @@ class ChipSet extends Component {
          * is the only choice that also satisfies the pre-"TEST.11A" test as well.
          */
         let b = this.bPPIB & ~(ChipSet.C8042.RWREG.NMI_ERROR | ChipSet.C8042.RWREG.REFRESH_BIT) | ((this.cpu.getCycles() & 0x40)? ChipSet.C8042.RWREG.REFRESH_BIT : 0);
-        /*
+        /**
          * Thanks to the WAITF function, this has become a very "busy" port, so if this generates too
          * many messages, try adding MESSAGE.WARNING to the criteria.
          */
@@ -45342,7 +45350,7 @@ class ChipSet extends Component {
     {
         this.printIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, MESSAGE.C8042);
         let b = this.b8042Status & 0xff;
-        /*
+        /**
          * There's code in the 5170 BIOS (F000:03BF) that writes an 8042 command (0xAA), waits for
          * C8042.STATUS.INBUFF_FULL to go clear (which it always is, because we always accept commands
          * immediately), then checks C8042.STATUS.OUTBUFF_FULL and performs a "flush" on port 0x60 if
@@ -45361,7 +45369,7 @@ class ChipSet extends Component {
             this.b8042Status |= ChipSet.C8042.STATUS.OUTBUFF_FULL;
             this.b8042Status &= ~ChipSet.C8042.STATUS.OUTBUFF_DELAY;
         }
-        /*
+        /**
          * I added this for Windows 95's VMM keyboard driver for DOS sessions, which differs from the keyboard
          * driver for protected-mode applications (see the keyboard's setEnabled() function for more details).
          *
@@ -45399,7 +45407,7 @@ class ChipSet extends Component {
         let bPulseBits = 0;
         if (this.b8042InBuff >= ChipSet.C8042.CMD.PULSE_OUTPORT) {
             bPulseBits = (this.b8042InBuff ^ 0xf);
-            /*
+            /**
              * Now that we have isolated the bit(s) to pulse, map all pulse commands to C8042.CMD.PULSE_OUTPORT
              */
             this.b8042InBuff = ChipSet.C8042.CMD.PULSE_OUTPORT;
@@ -45411,7 +45419,7 @@ class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.WRITE_CMD:       // 0x60
-            /*
+            /**
              * No further action required for this command; more data is expected via out8042InBuffData()
              */
             break;
@@ -45419,7 +45427,7 @@ class ChipSet extends Component {
         case ChipSet.C8042.CMD.DISABLE_KBD:     // 0xAD
             this.set8042CmdData(this.b8042CmdData | ChipSet.C8042.DATA.CMD.NO_CLOCK);
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard disabled\n");
-            /*
+            /**
              * NOTE: The MODEL_5170 BIOS calls "KBD_RESET" (F000:17D2) while the keyboard interface is disabled,
              * yet we must still deliver the Keyboard's CMDRES.BAT_OK response code?  Seems like an odd thing for
              * a "disabled interface" to do.
@@ -45441,7 +45449,7 @@ class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.INTF_TEST:       // 0xAB
-            /*
+            /**
              * TODO: Determine all the side-effects of the Interface Test, if any.
              */
             this.set8042OutBuff(ChipSet.C8042.DATA.INTF_TEST.OK);
@@ -45456,7 +45464,7 @@ class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.WRITE_OUTPORT:   // 0xD1
-            /*
+            /**
              * No further action required for this command; more data is expected via out8042InBuffData()
              */
             break;
@@ -45467,7 +45475,7 @@ class ChipSet extends Component {
 
         case ChipSet.C8042.CMD.PULSE_OUTPORT:   // 0xF0-0xFF
             if (bPulseBits & 0x1) {
-                /*
+                /**
                  * Bit 0 of the 8042's output port is connected to RESET.  If it's pulsed, the processor resets.
                  * We don't want to clear *all* CPU state (eg, cycle counts), so we call cpu.resetRegs() instead
                  * of cpu.reset().
@@ -45497,7 +45505,7 @@ class ChipSet extends Component {
 
         this.b8042Status = (this.b8042Status & ~ChipSet.C8042.STATUS.SYS_FLAG) | (b & ChipSet.C8042.DATA.CMD.SYS_FLAG);
         if (this.kbd) {
-            /*
+            /**
              * This seems to be what the doctor ordered for the MODEL_5170_REV3 BIOS @F000:0A6D, where it
              * sends ChipSet.C8042.CMD.WRITE_CMD to port 0x64, followed by 0x4D to port 0x60, which clears NO_CLOCK
              * and enables the keyboard.  The BIOS then waits for OUTBUFF_FULL to be set, at which point it seems
@@ -45567,7 +45575,7 @@ class ChipSet extends Component {
         this.bus.setA20(!!(b & ChipSet.C8042.OUTPORT.A20_ON));
 
         if (!(b & ChipSet.C8042.OUTPORT.NO_RESET)) {
-            /*
+            /**
              * Bit 0 of the 8042's output port is connected to RESET.  Normally, it's "pulsed" with the
              * C8042.CMD.PULSE_OUTPORT command, so if a RESET is detected via this command, we should try to
              * determine if that's what the caller intended.
@@ -45686,13 +45694,13 @@ class ChipSet extends Component {
         }
         if (b) {
             if (!(this.b8042CmdData & ChipSet.C8042.DATA.CMD.NO_CLOCK)) {
-                /*
+                /**
                  * The next in8042OutBuff() will clear both of these bits and call kbd.checkBuffer(),
                  * which will call receiveKbdData() again if there's still keyboard data to process.
                  */
                 if (!(this.b8042Status & (ChipSet.C8042.STATUS.OUTBUFF_FULL | ChipSet.C8042.STATUS.OUTBUFF_DELAY))) {
                     this.set8042OutBuff(b, true);
-                    /*
+                    /**
                      * A delay of 4 instructions was originally requested as part of the the Keyboard's resetDevice()
                      * response, but a larger delay (120) is now needed for MODEL_5170 machines, per the discussion above.
                      */
@@ -45769,13 +45777,13 @@ class ChipSet extends Component {
         }
         if (addrFrom != null) {
             if (bAddr == ChipSet.CMOS.ADDR.STATUSC) {
-                /*
+                /**
                  * When software reads the STATUSC port, all interrupt bits (PF, AF, and UF) are automatically
                  * cleared, which in turn clears the IRQF bit, which in turn clears the IRQ.
                  */
                 this.abCMOSData[bAddr] &= ChipSet.CMOS.STATUSC.RESERVED;
                 if (bIn & ChipSet.CMOS.STATUSC.IRQF) this.clearIRR(ChipSet.IRQ.RTC);
-                /*
+                /**
                  * If we just cleared PF, and PIE is still set, then we need to make sure the next Periodic Interrupt
                  * occurs in a timely manner, too.
                  */
@@ -45908,7 +45916,7 @@ class ChipSet extends Component {
     {
         if (DEBUGGER) {
             if (this.messageEnabled(MESSAGE.INT) && this.dbg.messageInt(Interrupts.TIMER, addr)) {
-                /*
+                /**
                  * By computing AH now, we get the incoming AH value; if we computed it below, along with
                  * the rest of the register values, we'd get the outgoing AH value, which is not what we want.
                  */
@@ -45959,7 +45967,7 @@ class ChipSet extends Component {
         }
         let freq = Math.round(ChipSet.TIMER_TICKS_PER_SEC / this.getTimerInit(ChipSet.PIT0.TIMER2));
         if (freq < 20 || freq > 20000) {
-            /*
+            /**
              * Treat frequencies outside the normal hearing range (below 20hz or above 20Khz) as a clever
              * attempt to turn sound off.
              */
@@ -45967,7 +45975,7 @@ class ChipSet extends Component {
         }
         if (this.contextAudio) {
             if (fOn && this.startAudio()) {
-                /*
+                /**
                  * Instead of setting the frequency's 'value' property directly, as we used to do, we use the
                  * setValueAtTime() method, with a time of zero, as a work-around to avoid the "easing" (aka
                  * "de-zippering") of the frequency that browsers like to do.  Supposedly de-zippering is an
@@ -46006,7 +46014,7 @@ class ChipSet extends Component {
     startAudio(event)
     {
         if (this.contextAudio) {
-            /*
+            /**
              * NOTE: If the machine happened to enable its speaker *before* the user generated an event
              * (eg, touchstart) that resulted in a call here, then we're too late -- at least as far as iOS
              * devices are concerned, because those devices require the oscillator's start() method to be
@@ -46139,7 +46147,7 @@ class ChipSet extends Component {
     }
 }
 
-/*
+/**
  * Ports Overview
  * --------------
  *
@@ -46197,7 +46205,7 @@ class ChipSet extends Component {
  * FPU coprocessor interrupt line is no longer tied to NMI (it uses IRQ 13).
  */
 
-/*
+/**
  * Supported model numbers
  *
  * In general, when comparing this.model to "base" model numbers (ie, non-REV numbers), you should use
@@ -46233,7 +46241,7 @@ ChipSet.MODEL_5170_REV2         = 5170.2;   // used in reference to the 2nd 5170
 ChipSet.MODEL_5170_REV3         = 5170.3;   // used in reference to the 3rd 5170 ROM BIOS, dated Nov 15, 1985
 ChipSet.MODEL_5170_OTHER        = 5170.9;
 
-/*
+/**
  * Assorted non-IBM models (we don't put "IBM" in the IBM models, but non-IBM models should include the company name).
  */
 ChipSet.MODEL_CDP_MPC1600       = 5150.101; // Columbia Data Products MPC 1600 ("Copyright Columbia Data Products 1983, ROM/BIOS Ver 4.34")
@@ -46244,7 +46252,7 @@ ChipSet.MODEL_ZENITH_Z150       = 5160.150; // Zenith Data Systems Z-150 ("08/11
 
 ChipSet.MODEL_COMPAQ_DESKPRO386 = 5180;     // COMPAQ DeskPro 386 (COMPAQ's first 80386-based PC); should be > MODEL_5170
 
-/*
+/**
  * Last but not least, a complete list of supported model strings, and corresponding internal model numbers.
  */
 ChipSet.MODELS = {
@@ -46269,7 +46277,7 @@ ChipSet.CONTROLS = {
     SWDESC: "swdesc"
 };
 
-/*
+/**
  * Values returned by ChipSet.getDIPVideoMonitor()
  */
 ChipSet.MONITOR = {
@@ -46282,7 +46290,7 @@ ChipSet.MONITOR = {
     VGACOLOR:           7   // VGA Color Display
 };
 
-/*
+/**
  *  8237A DMA Controller (DMAC) I/O ports
  *
  *  MODEL_5150 and up uses DMA channel 0 for memory refresh cycles and channel 2 for the FDC.
@@ -46396,7 +46404,7 @@ ChipSet.DMA_REFRESH   = 0x00;   // DMA channel assigned to memory refresh
 ChipSet.DMA_FDC       = 0x02;   // DMA channel assigned to the Floppy Drive Controller (FDC)
 ChipSet.DMA_HDC       = 0x03;   // DMA channel assigned to the Hard Drive Controller (HDC; XTC only)
 
-/*
+/**
  * 8259A Programmable Interrupt Controller (PIC) I/O ports
  *
  * Internal registers:
@@ -46475,7 +46483,7 @@ ChipSet.PIC_HI = {              // ChipSet.PIC1.PORT_HI or ChipSet.PIC2.PORT_HI
     OCW1_IMR:           0xFF
 };
 
-/*
+/**
  * The priorities of IRQs 0-7 are normally high to low, unless the master PIC has been reprogrammed.
  * Also, if a slave PIC is present, the priorities of IRQs 8-15 fall between the priorities of IRQs 1 and 3.
  *
@@ -46510,7 +46518,7 @@ ChipSet.IRQ = {
     ATC2:               0x0F    // MODEL_5170 *can* use IRQ 15 for secondary ATC controller interrupts
 };
 
-/*
+/**
  * 8253 Programmable Interval Timer (PIT) I/O ports
  *
  * Although technically, a PIT provides 3 "counters" rather than 3 "timers", we have
@@ -46575,7 +46583,7 @@ ChipSet.PIT_CTRL = {
 
 ChipSet.TIMER_TICKS_PER_SEC = 1193181;
 
-/*
+/**
  * 8255A Programmable Peripheral Interface (PPI) I/O ports, for Cassette/Speaker/Keyboard/SW1/etc
  *
  * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI_A.PORT and PPI_C.PORT are INPUT ports
@@ -46627,7 +46635,7 @@ ChipSet.PPI_CTRL = {            // this.bPPICtrl (port 0x63)
     A_MODE:             0x60
 };
 
-/*
+/**
  * Switches Overview
  * -----------------
  *
@@ -46733,7 +46741,7 @@ ChipSet.PPI_SW = {
     }
 };
 
-/*
+/**
  * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
  * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
  * implementations, we now get and set DIP switch values according to SWITCH_TYPE, and rely on the
@@ -46764,7 +46772,7 @@ ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM] = {
     },
     LABEL: "Number of Floppy Drives"
 };
-/*
+/**
  * Notes on the 8087 Math Coprocessor (FPU)
  *
  * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
@@ -46843,7 +46851,7 @@ ChipSet.DIPSW[ChipSet.MODEL_5150][1][ChipSet.SWITCH_TYPE.EXPMEM] = {
         512:    0x10,
         544:    0x11,
         576:    0x12
-        /*
+        /**
          * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
          * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
          * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
@@ -46904,7 +46912,7 @@ ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPTYPE] = {
 ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPNUM] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM];
 ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.MONITOR];
 
-/*
+/**
  * 8041 Keyboard Controller I/O ports (MODEL_ATT_6300)
  *
  * The AT&T 6300 uses an 8041 for its Keyboard Controller, which has the following ports:
@@ -46926,7 +46934,7 @@ ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.
  *      0x80    Reset Interrupt Pending
  */
 
-/*
+/**
  * 8042 Keyboard Controller I/O ports (MODEL_5170)
  *
  * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI_A, although the BIOS also refers to it
@@ -47046,7 +47054,7 @@ ChipSet.C8042 = {
     }
 };
 
-/*
+/**
  * MC146818A RTC/CMOS Ports (MODEL_5170)
  *
  * Write a CMOS address to ChipSet.CMOS.ADDR.PORT, then read/write data from/to ChipSet.CMOS.DATA.PORT.
@@ -47133,7 +47141,7 @@ ChipSet.CMOS = {
         D0_MASK:        0xF0,   // Drive 0 type in high nibble
         D1_MASK:        0x0F,   // Drive 1 type in lower nibble
         NONE:           0,      // no drive
-        /*
+        /**
          * There's at least one floppy drive type that IBM didn't bother defining a CMOS drive type for:
          * single-sided drives that were only capable of storing 160Kb (or 180Kb when using 9 sectors/track).
          * So, as you can see in getDIPFloppyDriveType(), we lump all standard diskette capacities <= 360Kb
@@ -47144,14 +47152,14 @@ ChipSet.CMOS = {
         FD720:          3,      // 3.5-inch drive capable of storing 80 tracks and up to 9 sectors/track, 720Kb max
         FD1440:         4       // 3.5-inch drive capable of storing 80 tracks and up to 18 sectors/track, 1440Kb max
     },
-    /*
+    /**
      * HDRIVE types are defined by table in the HDC component, which uses setCMOSDriveType() to update the CMOS
      */
     HDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.HDRIVE]
         D0_MASK:        0xF0,   // Drive 0 type in high nibble
         D1_MASK:        0x0F    // Drive 1 type in lower nibble
     },
-    /*
+    /**
      * The CMOS equipment flags use the same format as the older PPI equipment flags
      */
     EQUIP: {                    // abCMOSData[ChipSet.CMOS.ADDR.EQUIP]
@@ -47161,7 +47169,7 @@ ChipSet.CMOS = {
     }
 };
 
-/*
+/**
  * DMA Page Registers
  *
  * The MODEL_5170 TechRef lists 0x80-0x9F as the range for DMA page registers, but that may be a bit
@@ -47211,7 +47219,7 @@ ChipSet.CMOS = {
  * reordering the elements would be a bad idea.
  */
 
-/*
+/**
  * NMI Mask Register (port 0xA0)
  *
  * On the MODEL_5150 and MODEL_5160, this is a write-only register, and the only valid bit is ENABLE.
@@ -47229,7 +47237,7 @@ ChipSet.NMI = {                 // this.bNMI
     RESET:              0x00    // default value on reset (TODO: Is NMI really disabled by default on reset?)
 };
 
-/*
+/**
  * FPU Coprocessor Control Registers (MODEL_5170)
  */
 ChipSet.FPU = {                 // TODO: Define a variable for this?
@@ -47245,7 +47253,7 @@ ChipSet.aPICInit = [0, new Array(4)];
 
 ChipSet.aTimerInit = [[0,0], [0,0], [0,0], [0,0]];
 
-/*
+/**
  * Port input notification tables, starting with the one that's common to all models (aPortInput)
  */
 ChipSet.aPortInput = {
@@ -47338,7 +47346,7 @@ if (DESKPRO386) {
     };
 }
 
-/*
+/**
  * Port output notification tables, starting with the one that's common to all models (aPortOutput)
  */
 ChipSet.aPortOutput = {
@@ -47441,7 +47449,7 @@ if (DESKPRO386) {
     };
 }
 
-/*
+/**
  * Initialize every ChipSet module on the page.
  */
 WebLib.onInit(ChipSet.init);
@@ -47483,7 +47491,7 @@ class ROMx86 extends Component {
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
         this.sizeROM = +parmsROM['size'];       // we allow numbers or strings (JSON strings permit hex)
 
-        /*
+        /**
          * The new 'alias' property can now be EITHER a single physical address (like 'addr') OR an array of
          * physical addresses; eg:
          *
@@ -47503,7 +47511,7 @@ class ROMx86 extends Component {
             }
         }
 
-        /*
+        /**
          * The 'notify' property can now (as of v1.18.2) contain an array of parameters that the notified
          * component (typically Video) may use as it sees fit.  For example, the Video component is generally
          * interested in knowing the offsets of specific font tables within the ROM, which used to be hard-coded
@@ -47529,7 +47537,7 @@ class ROMx86 extends Component {
         if (this.sFileURL) {
             let sFileName = StrLib.getBaseName(this.sFileURL);
             if (DEBUG) this.printf(MESSAGE.LOG, "load(\"%s\")\n", this.sFileURL);
-            /*
+            /**
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
              * Otherwise, we ask our server-side ROM converter to return the file in a JSON-compatible format.
@@ -47581,7 +47589,7 @@ class ROMx86 extends Component {
             if (this.dbg) {
                 this.dbg.addSymbols(this.id, 0, this.addrROM >>> 4, 0, this.addrROM, this.sizeROM, this.aSymbols);
             }
-            /*
+            /**
              * Our only role in the handling of symbols is to hand them off to the Debugger at our
              * first opportunity. Now that we've done that, our copy of the symbols, if any, are toast.
              */
@@ -47625,17 +47633,17 @@ class ROMx86 extends Component {
 
         Component.addMachineResource(this.idMachine, sURL, sROMData);
 
-        /*
+        /**
          * Check for JSON formats first.
          */
         if (sROMData.charAt(0) == "[" || sROMData.charAt(0) == "{") {
             try {
-                /*
+                /**
                  * The most likely source of any exception will be here: parsing the JSON-encoded ROM data.
                  */
                 let rom = eval("(" + sROMData + ")");
 
-                /*
+                /**
                  * PCjs v2 ROM images contain, at a minimum, a 'width' value and a 'values' array, along with
                  * other optional properties, like default load address ('addr'), endianness ('littleEndian'), etc.
                  *
@@ -47655,7 +47663,7 @@ class ROMx86 extends Component {
                         width = 32;
                     }
                 }
-                /*
+                /**
                  * Convert all values to bytes, so that subsequent code has a simple and consistent data format: abROM.
                  */
                 if (width) {
@@ -47701,7 +47709,7 @@ class ROMx86 extends Component {
             }
         }
         else {
-            /*
+            /**
              * Parse the ROM data manually; we assume it's in "simplified" hex form (a series of hex byte-values
              * separated by whitespace).
              */
@@ -47731,14 +47739,14 @@ class ROMx86 extends Component {
                 this.setReady();
             }
             else if (this.abROM && this.bus) {
-                /*
+                /**
                  * If no explicit size was specified, then use whatever the actual size is.
                  */
                 if (!this.sizeROM) {
                     this.sizeROM = this.abROM.length;
                 }
                 if (this.abROM.length != this.sizeROM) {
-                    /*
+                    /**
                      * Note that setError() sets the component's fError flag, which in turn prevents setReady() from
                      * marking the component ready.  TODO: Revisit this decision.  On the one hand, it sounds like a
                      * good idea to stop the machine in its tracks whenever a setError() occurs, but there may also be
@@ -47757,7 +47765,7 @@ class ROMx86 extends Component {
                     for (let i = 0; i < aliases.length; i++) {
                         this.cloneROM(aliases[i]);
                     }
-                    /*
+                    /**
                      * If there's a component we should notify, notify it now, and give it the internal byte array, so that
                      * it doesn't have to ask the CPU for the data.  Currently, the only component that uses this notification
                      * option is the Video component, and only when the associated ROM contains font data that it needs.
@@ -47770,7 +47778,7 @@ class ROMx86 extends Component {
                             this.printf(MESSAGE.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
-                    /*
+                    /**
                      * We used to hang onto the original ROM data so that we could restore any bytes the CPU overwrote,
                      * using memory write-notification handlers, but with the introduction of read-only memory blocks, that's
                      * no longer necessary.
@@ -47808,7 +47816,7 @@ class ROMx86 extends Component {
             }
             return true;
         }
-        /*
+        /**
          * We don't need to report an error here, because addMemory() already takes care of that.
          */
         return false;
@@ -47853,7 +47861,7 @@ class ROMx86 extends Component {
     }
 }
 
-/*
+/**
  * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
  * found in the original IBM PC ROM BIOS listing.
  */
@@ -47876,7 +47884,7 @@ ROMx86.BIOS = {
     MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
     COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
     COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
-    /*
+    /**
      * KEYBOARD DATA AREAS
      */
     KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
@@ -47903,7 +47911,7 @@ ROMx86.BIOS = {
     BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
     KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
     KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
-    /*
+    /**
      * DISKETTE DATA AREAS
      */
     SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
@@ -47931,7 +47939,7 @@ ROMx86.BIOS = {
         BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
     },
     NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
-    /*
+    /**
      * VIDEO DISPLAY DATA AREA
      */
     CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
@@ -47944,7 +47952,7 @@ ROMx86.BIOS = {
     ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
     CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
     CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
-    /*
+    /**
      * CASSETTE DATA AREA
      */
     EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
@@ -47953,47 +47961,47 @@ ROMx86.BIOS = {
     IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
     IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
     INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
-    /*
+    /**
      * TIMER DATA AREA
      */
     TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
     TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
     TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
-    /*
+    /**
      * SYSTEM DATA AREA
      */
     BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
-    /*
+    /**
      * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
      */
     RESET_FLAG: {
         ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
         WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
     },
-    /*
+    /**
      * FIXED DISK DATA AREAS
      */
     DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
     HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
     CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
     PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
-    /*
+    /**
      * TIME-OUT VARIABLES
      */
     PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
     RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
-    /*
+    /**
      * ADDITIONAL KEYBOARD DATA AREA
      */
     BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
     BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
-    /*
+    /**
      * EGA/PGA DISPLAY WORK AREA
      */
     ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
     POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
     INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
-    /*
+    /**
      * INFO BITS:
      *
      *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
@@ -48007,7 +48015,7 @@ ROMx86.BIOS = {
      *      0x01: SET C_TYPE EMULATE ACTIVE (0)
      */
     INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
-    /*
+    /**
      *     40:88  byte  PCjr: third keyboard status byte
      *                  EGA feature bit switches, emulated on VGA
      *
@@ -48039,7 +48047,7 @@ ROMx86.BIOS = {
      *             1       0    200 line mode
      *             1       1    reserved
      */
-    /*
+    /**
      * ADDITIONAL MEDIA DATA
      */
     LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
@@ -48049,7 +48057,7 @@ ROMx86.BIOS = {
     HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
     DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
     DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
-    /*
+    /**
      * ADDITIONAL KEYBOARD FLAGS
      */
     KB_FLAG_3: {
@@ -48075,7 +48083,7 @@ ROMx86.BIOS = {
         KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
         KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
     },
-    /*
+    /**
      * REAL TIME CLOCK DATA AREA
      */
     USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
@@ -48083,21 +48091,21 @@ ROMx86.BIOS = {
     RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
     RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
     RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
-    /*
+    /**
      * AREA FOR NETWORK ADAPTER
      */
     NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
-    /*
+    /**
      * EGA/PGA PALETTE POINTER
      */
     SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
-    /*
+    /**
      * DATA AREA - PRINT SCREEN
      */
     STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
 };
 
-/*
+/**
  * NOTE: There's currently no need for this component to have a reset() function, since
  * once the ROM data is loaded, it can't be changed, so there's nothing to reinitialize.
  *
@@ -48110,7 +48118,7 @@ ROMx86.BIOS = {
  * via bus.addMemory().
  */
 
-/*
+/**
  * Initialize all the ROM modules on the page.
  */
 WebLib.onInit(ROMx86.init);
@@ -48247,7 +48255,7 @@ class RAMx86 extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * The Computer powers up the CPU last, at which point CPUx86 state is restored,
              * which includes the Bus state, and since we use the Bus to allocate all our memory,
              * memory contents are already restored for us, so we don't need the usual restore
@@ -48273,7 +48281,7 @@ class RAMx86 extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * The Computer powers down the CPU first, at which point CPUx86 state is saved,
          * which includes the Bus state, and since we use the Bus component to allocate all
          * our memory, memory contents are already saved for us, so we don't need the usual
@@ -48310,7 +48318,7 @@ class RAMx86 extends Component {
             if (baseRAM > 0) {
                 this.chipset.setDIPMemorySize(baseRAM / 1024);
             } else {
-                /*
+                /**
                  * If the user-defined RAM setting is zero, that maps to "Default", so this passes true to
                  * getDIPMemorySize() to get the initial DIP switch setting; otherwise, we get the current setting.
                  */
@@ -48329,7 +48337,7 @@ class RAMx86 extends Component {
             if (this.bus.addMemory(this.addrRAM, this.sizeRAM, Memoryx86.TYPE.RAM)) {
                 this.fAllocated = true;
 
-                /*
+                /**
                  * NOTE: I'm specifying MAXDEBUG for STATUS messages because I'm not yet sure I want these
                  * messages buried in the app, since they're seen only when a Control Panel is active.  Another
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
@@ -48339,7 +48347,7 @@ class RAMx86 extends Component {
                     this.printf(MESSAGE.STATUS, "specified size overrides SW1\n");
                 }
 
-                /*
+                /**
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
                  * boundary on COMPAQ DeskPro 386 machines.
                  *
@@ -48367,7 +48375,7 @@ class RAMx86 extends Component {
         }
         if (this.fAllocated) {
             if (!this.addrRAM && !this.fTestRAM) {
-                /*
+                /**
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
@@ -48376,7 +48384,7 @@ class RAMx86 extends Component {
                 }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
-            /*
+            /**
              * Don't add the "ramCPQ" memory to the CMOS total, because addCMOSMemory() will add it to the extended
              * memory total, which will just confuse the COMPAQ BIOS.
              */
@@ -48482,7 +48490,7 @@ class CompaqController extends Controller {
 
         this.ram = ram;
         this.wMappings = CompaqController.MAPPINGS.DEFAULT;
-        /*
+        /**
          * TODO: wSettings needs to reflect the actual amount of configured memory....
          */
         this.wSettings = CompaqController.SETTINGS.DEFAULT;
@@ -48528,7 +48536,7 @@ class CompaqController extends Controller {
      */
     getByte(off)
     {
-        /*
+        /**
          * Offsets 0-3 correspond to reads from 0x80C00000-0x80C00003; anything outside that range
          * returns our standard non-responsive value of 0xff.
          */
@@ -48552,7 +48560,7 @@ class CompaqController extends Controller {
     setByte(off, b)
     {
         if (!off) {
-            /*
+            /**
              * This is a write to 0x80C00000
              */
             if (b != (this.wMappings & 0xff)) {
@@ -48561,7 +48569,7 @@ class CompaqController extends Controller {
                     if (!this.aBlocksDst) {
                         this.aBlocksDst = bus.getMemoryBlocks(CompaqController.MAP_DST, CompaqController.MAP_SIZE);
                     }
-                    /*
+                    /**
                      * You might think that the next three lines could ALSO be moved to the preceding IF,
                      * but it's possible for the write-protection feature to be enabled/disabled separately
                      * from the mapping feature.  We could avoid executing this code as well by checking the
@@ -48581,7 +48589,7 @@ class CompaqController extends Controller {
             }
         }
         else if (off == 0x2) {
-            /*
+            /**
              * This is a write to 0x80C00002
              */
             this.wRAMSetup = (this.wRAMSetup & ~0xff) | b;
@@ -48651,7 +48659,7 @@ class CompaqController extends Controller {
     static writeByte(off, b, addr)
     {
         this.controller.setByte(off, b);
-        /*
+        /**
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
@@ -48665,7 +48673,7 @@ CompaqController.MAP_SRC    = 0x00FE0000;
 CompaqController.MAP_DST    = 0x000E0000;
 CompaqController.MAP_SIZE   = 0x00020000;
 
-/*
+/**
  * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
  *
  * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
@@ -48679,7 +48687,7 @@ CompaqController.MAPPINGS = {
     DEFAULT:    0xFFFF              // our default settings (no mapping, no write-protection)
 };
 
-/*
+/**
  * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
  *
  * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
@@ -48719,12 +48727,12 @@ CompaqController.SETTINGS = {
     BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
     BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
     BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
-    /*
+    /**
      * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
      * but setting it results in memory configuration errors; review.
      */
     ADDED_1MB:  0x0040,
-    /*
+    /**
      * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
      */
     PIGGYBACK:  0x0080,
@@ -48740,7 +48748,7 @@ CompaqController.SETTINGS = {
     MODC_4MB:   0x4000,         // 4Mb on module C board
     MODC_1MB:   0x8000,         // 1Mb on module C board
     MODC_NONE:  0xC000,         // no memory on module C board
-    /*
+    /**
      * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
      */
     DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
@@ -48756,7 +48764,7 @@ CompaqController.RAMSETUP = {
 CompaqController.BUFFER = [null, 0];
 CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte];
 
-/*
+/**
  * Initialize all the RAM modules on the page.
  */
 WebLib.onInit(RAMx86.init);
@@ -48806,7 +48814,7 @@ class Keyboardx86 extends Component {
         this.fMobile = WebLib.isMobile("!iPad");
         this.printf("mobile keyboard support: %b\n", this.fMobile);
 
-        /*
+        /**
          * This flag (formerly fMSIE, for all versions of Microsoft Internet Explorer, up to and including v11)
          * has been updated to reflect the Microsoft Windows *platform* rather than the *browser*, because it appears
          * that all Windows-based browsers (at least now, as of 2018) have the same behavior with respect to "lock"
@@ -48815,7 +48823,7 @@ class Keyboardx86 extends Component {
          */
         this.fMSWindows = WebLib.isUserAgent("Windows");
 
-        /*
+        /**
          * This is count of the number of "soft keyboard" keys present.  At the moment, its only
          * purpose is to signal findBinding() whether to waste any time looking for SOFTCODE matches.
          */
@@ -48824,12 +48832,12 @@ class Keyboardx86 extends Component {
         this.controlSoftKeyboard = null;
         this.controlTextKeyboard = null;
 
-        /*
+        /**
          * Updated by onFocusChange()
          */
         this.fHasFocus = true;
 
-        /*
+        /**
          * This can be used to delay ALT key generation (ie, until some other key in conjunction with the
          * ALT is pressed as well); however, it is currently off by default, because there are apps (eg, the
          * MS-DOS Manager) that don't deal well the rapid back-to-back ALT+key generation that this work-around
@@ -48837,19 +48845,19 @@ class Keyboardx86 extends Component {
          */
         this.fDelayALT = false;
 
-        /*
+        /**
          * This is true whenever the physical Escape key is disabled (eg, by pointer locking code),
          * giving us the opportunity to map a different physical key to machine's virtual Escape key.
          */
         this.fEscapeDisabled = false;
 
-        /*
+        /**
          * This is set whenever we notice a discrepancy between our internal CAPS_LOCK state and its
          * apparent state; we check whenever aKeysActive has been emptied.
          */
         this.fToggleCapsLock = false;
 
-        /*
+        /**
          * New unified approach to key event processing: When we process a key on the "down" event,
          * we check the aKeysActive array: if the key is already active, do nothing; otherwise, insert
          * it into the table, generate the "make" scan code(s), and set a timeout for "repeat" if it's
@@ -48886,7 +48894,7 @@ class Keyboardx86 extends Component {
          */
         this.aKeysActive = [];
 
-        /*
+        /**
          * msTransmit was originally 10ms, but I was getting some warning "beeps" in this machine:
          *
          *      /devices/pcx86/machine/5170/ega/2048kb/rev3/debugger/machine.xml
@@ -48903,7 +48911,7 @@ class Keyboardx86 extends Component {
         this.cKeysPressed    = 0;           // count of keys pressed since the last time it was reset
         this.softCodeKeys    = Object.keys(Keyboardx86.SOFTCODES);
 
-        /*
+        /**
          * Remove all single-character SOFTCODE keys from the softCodeKeys array, because those SOFTCODES
          * are not supported by injectKeys(); they can be specified normally using their single-character identity.
          */
@@ -48914,7 +48922,7 @@ class Keyboardx86 extends Component {
             }
         }
 
-        /*
+        /**
          * autoType records the machine's specified autoType sequence, if any, and when injectInit() is called
          * with the appropriate INJECTION signal, injectInit() pass autoType to injectKeys().
          */
@@ -48923,7 +48931,7 @@ class Keyboardx86 extends Component {
         this.fnDOSReady = this.fnInjectReady = null;
         this.nInjection = Keyboardx86.INJECTION.ON_INPUT;
 
-        /*
+        /**
          * HACK: We set fAllDown to false to ignore all down/up events for keys not explicitly marked as ONDOWN;
          * even though that prevents those keys from being repeated properly (ie, at the simulation's repeat rate
          * rather than the browser's repeat rate), it's the safest thing to do when dealing with international keyboards,
@@ -48964,7 +48972,7 @@ class Keyboardx86 extends Component {
                 try {
                     let controlSoftKeyboard = document.getElementById(this.idMachine + ".soft-keyboard" + (this.fMobile? "-mobile" : ""));
                     if (!controlSoftKeyboard) {
-                        /*
+                        /**
                          * TODO: Fix this rather fragile code, which depends on the current structure of the given xxxx-softkeys.xml
                          */
                         controlSoftKeyboard = control.parentElement.parentElement.nextElementSibling;
@@ -48984,7 +48992,7 @@ class Keyboardx86 extends Component {
                         control.onclick = function onToggleKeyboard(event) {
                             kbd.enableSoftKeyboard(!kbd.fSoftKeyboard);
                         };
-                        /*
+                        /**
                          * This is added simply to prevent the page from "zooming" around if you accidentally touch between the keys.
                          */
                         if ('ontouchstart' in window) {
@@ -48997,7 +49005,7 @@ class Keyboardx86 extends Component {
                 return true;
 
             case "screen":
-                /*
+                /**
                  * This is a special binding that the Video component uses to effectively bind its screen to the
                  * entire keyboard; eg:
                  *
@@ -49076,7 +49084,7 @@ class Keyboardx86 extends Component {
                 /* falls through */
 
             default:
-                /*
+                /**
                  * Maintain support for older button codes; eg, map button code "ctrl-c" to CLICKCODE "CTRL_C"
                  */
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
@@ -49095,7 +49103,7 @@ class Keyboardx86 extends Component {
                     return true;
                 }
                 else if (Keyboardx86.SOFTCODES[sBinding] !== undefined) {
-                    /*
+                    /**
                      * TODO: Fix this rather fragile code, which depends on the current structure of the given xxxx-softkeys.xml
                      */
                     className = control.parentElement.parentElement.className;
@@ -49142,7 +49150,7 @@ class Keyboardx86 extends Component {
                     return true;
                 }
                 else if (sValue) {
-                    /*
+                    /**
                      * Instead of just having a dedicated "test" control, we now treat any unrecognized control with
                      * a "value" attribute as a test control.  The only caveat is that such controls must have binding IDs
                      * that do not conflict with predefined controls (which, of course, is the only way you can get here).
@@ -49206,7 +49214,7 @@ class Keyboardx86 extends Component {
                     break;
                 }
             }
-            /*
+            /**
              * TODO: Create a table that maps these SIMCODEs to the corresponding entries in the SOFTCODES table;
              * these SIMCODEs can be generated by CLICKCODEs or by the special key remapping HACKs in onKeyActive().
              */
@@ -49357,7 +49365,7 @@ class Keyboardx86 extends Component {
      */
     resetDevice()
     {
-        /*
+        /**
          * TODO: There's more to reset, like LED indicators, default type rate, and emptying the scan code buffer.
          */
         this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard reset\n");
@@ -49402,7 +49410,7 @@ class Keyboardx86 extends Component {
     {
         let fReady = false;
         if (b) {
-            /*
+            /**
              * The following hack is for the 5170 ROM BIOS keyboard diagnostic, which expects the keyboard
              * to report BAT_OK immediately after the ACK from a RESET command.  The BAT_OK response should already
              * be in the keyboard's buffer; we just need to give it a little nudge.
@@ -49498,7 +49506,7 @@ class Keyboardx86 extends Component {
         let fReset = false;
         if (this.fClock !== fClock) {
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard clock line changing to %b\n", fClock);
-            /*
+            /**
              * Toggling the clock line low and then high signals a "reset", which we acknowledge once the
              * data line is high as well.
              */
@@ -49572,7 +49580,7 @@ class Keyboardx86 extends Component {
     {
         if (this.chipset) {
             if (fReady || !this.cpu.isTimerSet(this.timerTransmit)) {
-                /*
+                /**
                  * The original IBM PC BIOS performs a "stuck key" test by resetting the keyboard
                  * (by toggling the CLOCK line), then checking for a BAT_OK response (0xAA), and then
                  * clocking in the next byte (by toggling the DATA line); if that next byte isn't 0x00,
@@ -49600,7 +49608,7 @@ class Keyboardx86 extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * TODO: Save/restore support for Keyboard is the barest minimum.  In fact, originally, I wasn't
              * saving/restoring anything, and that was OK, but if we don't at least re-initialize fClock/fData,
              * we can get a spurious reset following a restore.  In an ideal world, we might choose to save/restore
@@ -49638,7 +49646,7 @@ class Keyboardx86 extends Component {
      */
     reset()
     {
-        /*
+        /**
          * If no keyboard model was specified, our initial setModel() call will select the "US83" keyboard as the
          * default, but now that the ChipSet is initialized, we can pick a better default, based on the ChipSet model.
          */
@@ -49698,7 +49706,7 @@ class Keyboardx86 extends Component {
         if (!data) {
             data = [false, false, Keyboardx86.INJECTION.ON_INPUT];
         } else {
-            /*
+            /**
              * If there is a predefined state for this machine, then the assumption is that any injection
              * sequence can be injected as soon as the machine starts.  Any other kind of state must disable
              * injection, because injection depends on the machine being in a known state.
@@ -49715,7 +49723,7 @@ class Keyboardx86 extends Component {
 
         this.bCmdPending = 0;       // when non-zero, a command is pending (eg, SET_LED or SET_RATE)
 
-        /*
+        /**
          * The current (assumed) physical (and simulated) modifier/lock key states, along with a set
          * of (fake) modifier key states maintained by simulateKey() to keep track of faked modifiers.
          *
@@ -49723,7 +49731,7 @@ class Keyboardx86 extends Component {
          */
         this.bitsState = this.bitsStateSim = this.bitsStateFake = 0;
 
-        /*
+        /**
          * New scan codes are "pushed" onto abBuffer and then "shifted" off.
          */
         this.abBuffer = [];
@@ -49796,7 +49804,7 @@ class Keyboardx86 extends Component {
      */
     addScanCode(bScan)
     {
-        /*
+        /**
          * Prepare for the possibility that our reset() function may not have been called yet.
          *
          * TODO: Determine whether we need to reset() the Keyboard sooner (ie, in the constructor),
@@ -49807,7 +49815,7 @@ class Keyboardx86 extends Component {
             if (this.abBuffer.length < Keyboardx86.LIMIT.MAX_SCANCODES) {
                 if (DESKPRO386) {
                     if (this.chipset && this.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) {
-                        /*
+                        /**
                          * COMPAQ keyclick support is being disabled because we are currently unable to properly
                          * simulate the keyclick sound, due to the way the COMPAQ DeskPro 386 ROM rapidly toggles
                          * the speaker bit.  And there isn't really a better time to disable it, because the
@@ -49873,7 +49881,7 @@ class Keyboardx86 extends Component {
             }
             return false;
         }
-        /*
+        /**
          * Any delay of one second or more ($10 and up) is automatically reverted to the default.
          */
         if (this.msInjectDelay >= 1000) {
@@ -49883,7 +49891,7 @@ class Keyboardx86 extends Component {
         while (this.sInjectBuffer.length > 0 && !simCode) {
             let ch = this.sInjectBuffer.charAt(0);
             if (ch == '$') {
-                /*
+                /**
                  * $<number> pauses injection by the specified number of tenths of a second; eg,
                  * $5 pauses for 1/2 second.  $0 reverts the default injection delay (eg, 100ms).
                  * Also, you may end the number with a period if you need to avoid an injected digit
@@ -49896,7 +49904,7 @@ class Keyboardx86 extends Component {
                     this.sInjectBuffer = this.sInjectBuffer.substr(digits[0].length);
                     break;
                 }
-                /*
+                /**
                  * Yes, this code is slow and gross, but it's simple, and key injection doesn't have
                  * to be that fast anyway.  The added check for SOFTCODES that have omitted the 'num-'
                  * prefix adds to the slowness, but it's a nice convenience, allowing you to specify
@@ -49920,7 +49928,7 @@ class Keyboardx86 extends Component {
             if (simCode) break;
             this.sInjectBuffer = this.sInjectBuffer.substr(1);
             let charCode = ch.charCodeAt(0);
-            /*
+            /**
              * charCodes 0x01-0x1A correspond to key combinations CTRL-A through CTRL-Z, unless they
              * are \t, \n, or \r, which are reserved for TAB, LINE-FEED, and RETURN, respectively, so if
              * you need to simulate CTRL-I, CTRL-J, or CTRL-M, those must be specified using \x1C, \x1D,
@@ -49929,7 +49937,7 @@ class Keyboardx86 extends Component {
              */
             if (charCode <= Keys.ASCII.CTRL_Z) {
                 simCode = charCode;
-                /*
+                /**
                  * I could require all callers to supply CRs instead of LFs, but this is friendlier; besides,
                  * PCs don't have a dedicated LINE-FEED key, so the LF charCode is somewhat meaningless.
                  */
@@ -50040,7 +50048,7 @@ class Keyboardx86 extends Component {
                 }
                 sKeys = sKeys.replace('$' + match[1], sReplace);
             }
-            /*
+            /**
              * Any lingering "$$" sequences are now converted to a special code (\x1F) that injectKeys() knows about.
              */
             sKeys = sKeys.replace(/\$\$/g, '\x1F');
@@ -50089,7 +50097,7 @@ class Keyboardx86 extends Component {
      */
     setLED(control, f)
     {
-        /*
+        /**
          * TODO: Add support for user-definable LED colors
          */
         control.style.backgroundColor = (f? "#00ff00" : "#000000");
@@ -50176,7 +50184,7 @@ class Keyboardx86 extends Component {
                     fDown = !((fSim? this.bitsStateSim : this.bitsState) & bitState);
                 }
                 else if (!fDown && !fSim) {
-                    /*
+                    /**
                      * In current webkit browsers, pressing and then releasing both left and right shift keys together
                      * (or both ALT keys, or both CMD/Windows keys, or presumably both CTRL keys) results in 4 events,
                      * as you would expect, but 3 of the 4 are "down" events; only the last of the 4 is an "up" event.
@@ -50198,7 +50206,7 @@ class Keyboardx86 extends Component {
                     this.bitsState &= ~bitState;
                     if (fDown) this.bitsState |= bitState;
                 } else {
-                    /*
+                    /**
                      * This next line reflects the fact that we don't want to modify any simulated LOCK states if a simulated
                      * shift state (ie, CTRL, ALT, SHIFT, etc) is also active.  For example, CTRL-NUM-LOCK is a special sequence
                      * (Pause) that isn't supposed to alter the NUM-LOCK state; similarly, CTRL-SCROLL-LOCK (aka Ctrl-Break)
@@ -50233,12 +50241,12 @@ class Keyboardx86 extends Component {
             return false;
         }
 
-        /*
+        /**
          * Ignore all active keys if the CPU is not running.
          */
         if (!this.cpu || !this.cpu.isRunning()) return false;
 
-        /*
+        /**
          * If this simCode is in the KEYSTATE table, then stop all repeating.
          */
         if (Keyboardx86.KEYSTATES[simCode] && this.aKeysActive.length) {
@@ -50249,7 +50257,7 @@ class Keyboardx86 extends Component {
         for (i = 0; i < this.aKeysActive.length; i++) {
             key = this.aKeysActive[i];
             if (key.simCode == simCode) {
-                /*
+                /**
                  * This key is already active, so if this a "down" request (or a "press" for a key we already
                  * processed as a "down"), ignore it.
                  */
@@ -50356,7 +50364,7 @@ class Keyboardx86 extends Component {
             return false;
         }
 
-        /*
+        /**
          * Ignore all active keys if the CPU is not running.
          */
         if (!fFlush && (!this.cpu || !this.cpu.isRunning())) return false;
@@ -50396,7 +50404,7 @@ class Keyboardx86 extends Component {
      */
     updateActiveKey(key, msTimer)
     {
-        /*
+        /**
          * All active keys are automatically removed once the CPU stops running.
          */
         if (!this.cpu || !this.cpu.isRunning()) {
@@ -50413,7 +50421,7 @@ class Keyboardx86 extends Component {
         }
 
         if (!this.simulateKey(key.simCode, key.fDown) || !key.nRepeat) {
-            /*
+            /**
              * Why isn't there a simple return here? In order to set breakpoints on two different return conditions, of course!
              */
             if (!msTimer) {
@@ -50493,7 +50501,7 @@ class Keyboardx86 extends Component {
             this.printf(MESSAGE.EVENT, "onFocusChange(%b)\n", fFocus);
         }
         this.fHasFocus = fFocus;
-        /*
+        /**
          * Since we can't be sure of any shift states after losing focus, we clear them all.
          */
         if (!fFocus) {
@@ -50517,7 +50525,7 @@ class Keyboardx86 extends Component {
         let fIgnore = false;
         let keyCode = event.keyCode;
 
-        /*
+        /**
          * HACK for the Apple Magic Keyboard connected to an iPad: iPadOS inexplicably generates CTRL-ENTER (or CTRL-J)
          * whenever CTRL-C is pressed, so we attempt to undo that behavior -- at the loss of a genuine CTRL-ENTER, sadly.
          *
@@ -50530,7 +50538,7 @@ class Keyboardx86 extends Component {
             }
         }
 
-        /*
+        /**
          * We used to be able to capture keystrokes like "Alt-E" by simply checking keyCode for "ALT" (18) and "E" (69),
          * but browsers keep pulling the rug out from under such simple assumptions.  A number of "Alt-Key" combinations
          * have now apparently been repurposed for other things (like IMEs), so what was once simple is now more complicated.
@@ -50564,7 +50572,7 @@ class Keyboardx86 extends Component {
         if (fDown) {
             this.cKeysPressed++;
             this.sInjectBuffer = "";                    // actual key DOWN (not UP) events should also stop any injection in progress
-            /*
+            /**
              * Unless the key happens to be ESC, ANY user input at all now cancels injection.
              */
             if (keyCode != 27) this.nInjection = Keyboardx86.INJECTION.NONE;
@@ -50572,7 +50580,7 @@ class Keyboardx86 extends Component {
 
         Component.processScript(this.idMachine);        // and any script, too
 
-        /*
+        /**
          * Although it would be nice to pay attention ONLY to these "up" and "down" events, and ignore "press"
          * events, iOS devices force us to process "press" events, because they don't give us shift-key events,
          * so we have to infer the shift state from the character code in the "press" event.
@@ -50597,7 +50605,7 @@ class Keyboardx86 extends Component {
             if (nShiftState) {
 
                 if (keyCode == Keys.KEYCODE.CAPS_LOCK || keyCode == Keys.KEYCODE.NUM_LOCK || keyCode == Keys.KEYCODE.SCROLL_LOCK) {
-                    /*
+                    /**
                      * FYI, "lock" keys generate a DOWN event ONLY when getting locked and an UP event ONLY
                      * when getting unlocked--which is a little odd, since the key did go UP and DOWN each time.
                      *
@@ -50613,7 +50621,7 @@ class Keyboardx86 extends Component {
                     }
                 }
 
-                /*
+                /**
                  * HACK for Windows (as the host operating system): the ALT key is often used with key combinations
                  * not meant for our machine (eg, Alt-Tab to switch to a different window, or simply tapping the ALT
                  * key by itself to switch focus to the browser's menubar).  And sadly, browsers are quite happy to
@@ -50630,13 +50638,13 @@ class Keyboardx86 extends Component {
                  */
                 if (this.fDelayALT && keyCode == Keys.KEYCODE.ALT) {
                     if (fDown) {
-                        /*
+                        /**
                          * One exception to this hack is the "Sidekick" exception: if the CTRL key is also down,
                          * we'll still simulate ALT immediately, for those users who press CTRL and then ALT to pop up
                          * Sidekick (as opposed to pressing ALT and then CTRL, which should also work, regardless).
                          */
                         if (!(this.bitsState & Keyboardx86.STATE.CTRL)) fIgnore = true;
-                        /*
+                        /**
                          * Reset cKeysPressed so that we can detect the mere "tapping" of the ALT key, which some PCjs
                          * demos depend on (eg, Multi-tasking MS-DOS 4.0).
                          */
@@ -50644,7 +50652,7 @@ class Keyboardx86 extends Component {
                     }
                     else {
                         if (!this.cKeysPressed) {
-                            /*
+                            /**
                              * Since cKeysPressed is zero, the assumption here is that the ALT key (and the Alt key ALONE)
                              * was just tapped, so as long the ALT key was not already "soft-locked" (based on bitsStateSim),
                              * we will transform this "up" event into a "fake press" event.
@@ -50656,7 +50664,7 @@ class Keyboardx86 extends Component {
                     }
                 }
 
-                /*
+                /**
                  * As a safeguard, whenever the CMD key goes up, clear all active keys, because there appear to be
                  * cases where we don't always get notification of a CMD key's companion key going up (this probably
                  * overlaps with most if not all situations where we also lose focus).
@@ -50666,7 +50674,7 @@ class Keyboardx86 extends Component {
                 }
             }
             else {
-                /*
+                /**
                  * Here we have all the non-shift keys in the ONDOWN category; eg, BS, TAB, ESC, UP, DOWN, LEFT, RIGHT,
                  * and many more.
                  *
@@ -50684,7 +50692,7 @@ class Keyboardx86 extends Component {
                  * "press" event.
                  */
 
-                /*
+                /**
                  * HACKs for mapping CTRL-BACKSPACE and CTRL-ALT-BACKSPACE to CTRL-BREAK and CTRL-ALT-DEL, respectively.
                  */
                 if (keyCode == Keys.KEYCODE.BS && (this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == Keyboardx86.STATE.CTRL) {
@@ -50694,7 +50702,7 @@ class Keyboardx86 extends Component {
                     simCode = Keyboardx86.SIMCODE.CTRL_ALT_DEL;
                 }
 
-                /*
+                /**
                  * There are a number of other common key sequences that interfere with our machines; for example,
                  * the up/down arrows have a "default" behavior of scrolling the web page up and down, which is
                  * definitely NOT a behavior we want.  Since we mark those keys as ONDOWN, we'll catch them all here.
@@ -50703,7 +50711,7 @@ class Keyboardx86 extends Component {
             }
         }
         else {
-            /*
+            /**
              * HACKs for mapping assorted CTRL-ALT sequences involving "normal" keys (eg, PERIOD, EQUALS, and DASH).
              */
             if ((this.bitsState & (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) == (Keyboardx86.STATE.CTRL|Keyboardx86.STATE.ALT)) {
@@ -50718,7 +50726,7 @@ class Keyboardx86 extends Component {
                 }
             }
 
-            /*
+            /**
              * When I have defined system-wide CTRL-key sequences to perform common editing operations (eg, CTRL_W
              * and CTRL_Z to scroll pages of text), the browser likes to act on those operations, so let's set fPass
              * to false to prevent that.
@@ -50730,7 +50738,7 @@ class Keyboardx86 extends Component {
                 fPass = false;
             }
 
-            /*
+            /**
              * Don't simulate any key not explicitly marked ONDOWN, as well as any key sequence with the CMD key held.
              */
             if (!this.fAllDown && fPass && fDown || (this.bitsState & Keyboardx86.STATE.CMDS)) {
@@ -50744,7 +50752,7 @@ class Keyboardx86 extends Component {
 
         this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyActive(%d): %b%s\n", keyCode, fDown, (fIgnore? ",ignore" : (fPass? "" : ",consume")));
 
-        /*
+        /**
          * Mobile (eg, iOS) keyboards don't fully support onkeydown/onkeyup events; for example, they usually
          * don't generate ANY events when a shift key is pressed, and even for normal keys, they seem to generate
          * rapid (ie, fake) "up" and "down" events around "press" events, probably more to satisfy compatibility
@@ -50752,7 +50760,7 @@ class Keyboardx86 extends Component {
          */
         if (!fIgnore && (!this.fMobile || !fPass)) {
             if (fDown) {
-                /*
+                /**
                  * This is the companion code to the onKeyActive() hack for Windows that suppresses DOWN events
                  * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
                  * we fake an ALT activation first.
@@ -50807,7 +50815,7 @@ class Keyboardx86 extends Component {
         this.printf(MESSAGE.EVENT + MESSAGE.KEY, "onKeyPress(%d): %b\n", keyCode, fPass);
 
         if (!fPass) {
-            /*
+            /**
              * This is the companion code to the onKeyActive() hack for Windows that suppresses DOWN events
              * for ALT keys: if we're about to activate another key and we believe that an ALT key is still down,
              * we fake an ALT activation first.
@@ -50886,7 +50894,7 @@ class Keyboardx86 extends Component {
         var clipboardData = event.clipboardData || window.clipboardData;
         if (clipboardData) {
             let s = clipboardData.getData("text/plain");
-            /*
+            /**
              * We replace every '$' with '$$' to ensure there's no misinterpretation of a character sequence as one
              * of our special macro/key/delay sequences; see parseKeys() for a list.  The assumption here is that,
              * normally, the user will want pasted text injected exactly as-is.  But, there are always exceptions,
@@ -50904,7 +50912,7 @@ class Keyboardx86 extends Component {
             if (end != '$') {
                 s = s.replace(/\$/g, '$$$$');   // remember, replace() treats '$' special; '$$' is really just one '$'
             }
-            /*
+            /**
              * Since the text on the clipboard may contain CR+LF line endings, and since injectKeys() maps both CR
              * and LF to the Enter key, and since we don't want TWO carriage returns at the end of every injected line,
              * we must transform every CR+LF into a single CR (it could be an LF as well; injectKeys() doesn't care
@@ -50935,7 +50943,7 @@ class Keyboardx86 extends Component {
             let abScanCodes = [];
             let bCode = wCode & 0xff;
 
-            /*
+            /**
              * TODO: Update the following restrictions to address 84-key and 101-key keyboard limitations.
              */
             if (bCode > 83 && this.modelKeys == 83) {
@@ -50948,7 +50956,7 @@ class Keyboardx86 extends Component {
 
             while ((wCode >>>= 8)) {
                 let bScan = wCode & 0xff;
-                /*
+                /**
                  * TODO: The handling of SIMCODE entries with "extended" codes still needs to be tested, and
                  * moreover, if any of them need to perform any shift-state modifications, those modifications
                  * may need to be encoded differently.
@@ -50978,7 +50986,7 @@ class Keyboardx86 extends Component {
                 else {
                     abScanCodes.push(bCode | (fDown? 0 : Keyboardx86.SCANCODE.BREAK));
                 }
-                /*
+                /**
                  * If we have to fake a modifier key (eg, because some caller wants to simulate a modified key
                  * for which the modifier is not currently down), then if the modified key is going DOWN, make a
                  * note that the modifier is being faked, and if the modified key is going UP, make sure that
@@ -51051,7 +51059,7 @@ class Keyboardx86 extends Component {
     }
 }
 
-/*
+/**
  * Supported keyboard models (the first entry is the default if the specified model isn't recognized)
  */
 Keyboardx86.MODELS = ["US83", "US84", "US101"];
@@ -51066,7 +51074,7 @@ Keyboardx86.SIMCODE = {
     RALT:             Keys.KEYCODE.ALT         + Keys.KEYCODE.ONDOWN + Keys.KEYCODE.ONRIGHT,
     CAPS_LOCK:        Keys.KEYCODE.CAPS_LOCK   + Keys.KEYCODE.ONDOWN,
     ESC:              Keys.KEYCODE.ESC         + Keys.KEYCODE.ONDOWN,
-    /*
+    /**
      * It seems that a recent change to Safari on iOS (first noticed in iOS 9.1) treats SPACE
      * differently now, at least with regard to <textarea> controls, and possibly only readonly
      * or hidden controls, like the hidden <textarea> we overlay on the Video <canvas> element.
@@ -51156,7 +51164,7 @@ Keyboardx86.SIMCODE = {
     SHIFT_TAB:        Keys.KEYCODE.TAB         + Keys.KEYCODE.FAKE
 };
 
-/*
+/**
  * Scan code constants
  */
 Keyboardx86.SCANCODE = {
@@ -51296,7 +51304,7 @@ Keyboardx86.STATE = {
     ALL_LOCKS:      0x0E00              // CAPS_LOCK | NUM_LOCK | SCROLL_LOCK
 };
 
-/*
+/**
  * Maps KEYCODES of modifier keys to their corresponding (default) STATES bit above.
  */
 Keyboardx86.MODIFIERS = {
@@ -51310,7 +51318,7 @@ Keyboardx86.MODIFIERS = {
     [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD
 };
 
-/*
+/**
  * Maps KEYCODES of all modifier and lock keys to their corresponding (default) STATES bit above.
  */
 Keyboardx86.KEYSTATES = {
@@ -51327,7 +51335,7 @@ Keyboardx86.KEYSTATES = {
     [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.STATE.SCROLL_LOCK
 };
 
-/*
+/**
  * Maps CLICKCODE (string) to SIMCODE (number).
  *
  * NOTE: Unlike SOFTCODES, CLICKCODES are upper-case and use underscores instead of dashes, so that this
@@ -51358,7 +51366,7 @@ Keyboardx86.CLICKCODES = {
     'NUM_PGDN':         Keyboardx86.SIMCODE.PGDN,
     'ALT':              Keyboardx86.SIMCODE.ALT,
     'SYS_REQ':          Keyboardx86.SIMCODE.SYS_REQ,
-    /*
+    /**
      * These bindings are for convenience (common key combinations that can be bound to a single control)
      */
     'CTRL_C':           Keyboardx86.SIMCODE.CTRL_C,
@@ -51373,7 +51381,7 @@ Keyboardx86.CLICKCODES = {
     'SHIFT_TAB':        Keyboardx86.SIMCODE.SHIFT_TAB
 };
 
-/*
+/**
  * Maps SOFTCODE (string) to SIMCODE (number) -- which may be the same as KEYCODE for ASCII keys.
  *
  * We define identifiers for all possible keys, based on their primary (unshifted) character or function.
@@ -51494,7 +51502,7 @@ Keyboardx86.SOFTCODES = {
     /* 69 */    'num-lock':     Keyboardx86.SIMCODE.NUM_LOCK,
     /* 70 */    'scroll-lock':  Keyboardx86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
 
-    /*
+    /**
      * Yes, distinguishing keys 71 through 83 with the 'num-' prefix seems like overkill, but it was
      * intended to be future-proofing, for the day when we might eventually add support for 101-key keyboards,
      * because they have their own dedicated non-numeric-keypad versions of these keys (in other words, they
@@ -51520,7 +51528,7 @@ Keyboardx86.SOFTCODES = {
     /* 83 */    'num-del':      Keyboardx86.SIMCODE.DEL,           // formerly "del"
     /* 84 */    'sys-req':      Keyboardx86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
 
-    /*
+    /**
      * If I ever add 101-key keyboard support (and it's not clear that I will), then the following entries
      * will have to be converted to SIMCODE indexes, and each SIMCODE index will need an entry in the SIMCODES
      * table that defines the appropriate SCANCODE(S); as this component has evolved, SOFTCODES are no longer
@@ -51551,7 +51559,7 @@ Keyboardx86.SOFTCODES = {
 //  /*104 */    'menu':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.MENU << 8)
 };
 
-/*
+/**
  * Maps "soft-key" definitions (above) of shift/modifier keys to their corresponding (default) STATES bit.
  */
 Keyboardx86.LEDSTATES = {
@@ -51560,7 +51568,7 @@ Keyboardx86.LEDSTATES = {
     'scroll-lock':  Keyboardx86.STATE.SCROLL_LOCK
 };
 
-/*
+/**
  * Maps SIMCODE (number) to SCANCODE (number(s)).
  *
  * This array is used by simulateKey() to lookup a given SIMCODE and convert it to a SCANCODE
@@ -51578,149 +51586,149 @@ Keyboardx86.LEDSTATES = {
  * that conflict with the state(s) required for the character in question.
  */
 Keyboardx86.SIMCODES = {
-    [Keyboardx86.SIMCODE.ESC]:         Keyboardx86.SCANCODE.ESC,
-    [Keys.ASCII['1']]:            Keyboardx86.SCANCODE.ONE,
-    [Keys.ASCII['!']]:            Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['2']]:            Keyboardx86.SCANCODE.TWO,
-    [Keys.ASCII['@']]:            Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['3']]:            Keyboardx86.SCANCODE.THREE,
-    [Keys.ASCII['#']]:            Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['4']]:            Keyboardx86.SCANCODE.FOUR,
-    [Keys.ASCII['$']]:            Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['5']]:            Keyboardx86.SCANCODE.FIVE,
-    [Keys.ASCII['%']]:            Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['6']]:            Keyboardx86.SCANCODE.SIX,
-    [Keys.ASCII['^']]:            Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['7']]:            Keyboardx86.SCANCODE.SEVEN,
-    [Keys.ASCII['&']]:            Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['8']]:            Keyboardx86.SCANCODE.EIGHT,
-    [Keys.ASCII['*']]:            Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['9']]:            Keyboardx86.SCANCODE.NINE,
-    [Keys.ASCII['(']]:            Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['0']]:            Keyboardx86.SCANCODE.ZERO,
-    [Keys.ASCII[')']]:            Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['-']]:            Keyboardx86.SCANCODE.DASH,
-    [Keys.ASCII['_']]:            Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['=']]:            Keyboardx86.SCANCODE.EQUALS,
-    [Keys.ASCII['+']]:            Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.BS]:          Keyboardx86.SCANCODE.BS,
-    [Keyboardx86.SIMCODE.TAB]:         Keyboardx86.SCANCODE.TAB,
-    [Keys.ASCII.q]:               Keyboardx86.SCANCODE.Q,
-    [Keys.ASCII.Q]:               Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.w]:               Keyboardx86.SCANCODE.W,
-    [Keys.ASCII.W]:               Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.e]:               Keyboardx86.SCANCODE.E,
-    [Keys.ASCII.E]:               Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.r]:               Keyboardx86.SCANCODE.R,
-    [Keys.ASCII.R]:               Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.t]:               Keyboardx86.SCANCODE.T,
-    [Keys.ASCII.T]:               Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.y]:               Keyboardx86.SCANCODE.Y,
-    [Keys.ASCII.Y]:               Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.u]:               Keyboardx86.SCANCODE.U,
-    [Keys.ASCII.U]:               Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.i]:               Keyboardx86.SCANCODE.I,
-    [Keys.ASCII.I]:               Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.o]:               Keyboardx86.SCANCODE.O,
-    [Keys.ASCII.O]:               Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.p]:               Keyboardx86.SCANCODE.P,
-    [Keys.ASCII.P]:               Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['[']]:            Keyboardx86.SCANCODE.LBRACK,
-    [Keys.ASCII['{']]:            Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[']']]:            Keyboardx86.SCANCODE.RBRACK,
-    [Keys.ASCII['}']]:            Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.KEYCODE.CR]:            Keyboardx86.SCANCODE.ENTER,
-    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.SCANCODE.CTRL,
-    [Keys.ASCII.a]:               Keyboardx86.SCANCODE.A,
-    [Keys.ASCII.A]:               Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.s]:               Keyboardx86.SCANCODE.S,
-    [Keys.ASCII.S]:               Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.d]:               Keyboardx86.SCANCODE.D,
-    [Keys.ASCII.D]:               Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.f]:               Keyboardx86.SCANCODE.F,
-    [Keys.ASCII.F]:               Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.g]:               Keyboardx86.SCANCODE.G,
-    [Keys.ASCII.G]:               Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.h]:               Keyboardx86.SCANCODE.H,
-    [Keys.ASCII.H]:               Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.j]:               Keyboardx86.SCANCODE.J,
-    [Keys.ASCII.J]:               Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.k]:               Keyboardx86.SCANCODE.K,
-    [Keys.ASCII.K]:               Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.l]:               Keyboardx86.SCANCODE.L,
-    [Keys.ASCII.L]:               Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[';']]:            Keyboardx86.SCANCODE.SEMI,
-    [Keys.ASCII[':']]:            Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII["'"]]:            Keyboardx86.SCANCODE.QUOTE,
-    [Keys.ASCII['"']]:            Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['`']]:            Keyboardx86.SCANCODE.BQUOTE,
-    [Keys.ASCII['~']]:            Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.SCANCODE.SHIFT,
-    [Keys.ASCII['\\']]:           Keyboardx86.SCANCODE.BSLASH,
-    [Keys.ASCII['|']]:            Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.z]:               Keyboardx86.SCANCODE.Z,
-    [Keys.ASCII.Z]:               Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.x]:               Keyboardx86.SCANCODE.X,
-    [Keys.ASCII.X]:               Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.c]:               Keyboardx86.SCANCODE.C,
-    [Keys.ASCII.C]:               Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.v]:               Keyboardx86.SCANCODE.V,
-    [Keys.ASCII.V]:               Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.b]:               Keyboardx86.SCANCODE.B,
-    [Keys.ASCII.B]:               Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.n]:               Keyboardx86.SCANCODE.N,
-    [Keys.ASCII.N]:               Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.m]:               Keyboardx86.SCANCODE.M,
-    [Keys.ASCII.M]:               Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[',']]:            Keyboardx86.SCANCODE.COMMA,
-    [Keys.ASCII['<']]:            Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['.']]:            Keyboardx86.SCANCODE.PERIOD,
-    [Keys.ASCII['>']]:            Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['/']]:            Keyboardx86.SCANCODE.SLASH,
-    [Keys.ASCII['?']]:            Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.SCANCODE.RSHIFT,
-    [Keyboardx86.SIMCODE.PRTSC]:       Keyboardx86.SCANCODE.PRTSC,
-    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.SCANCODE.ALT,
-    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.SCANCODE.ALT,
-    [Keyboardx86.SIMCODE.SPACE]:       Keyboardx86.SCANCODE.SPACE,
-    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.SCANCODE.CAPS_LOCK,
-    [Keyboardx86.SIMCODE.F1]:          Keyboardx86.SCANCODE.F1,
-    [Keyboardx86.SIMCODE.F2]:          Keyboardx86.SCANCODE.F2,
-    [Keyboardx86.SIMCODE.F3]:          Keyboardx86.SCANCODE.F3,
-    [Keyboardx86.SIMCODE.F4]:          Keyboardx86.SCANCODE.F4,
-    [Keyboardx86.SIMCODE.F5]:          Keyboardx86.SCANCODE.F5,
-    [Keyboardx86.SIMCODE.F6]:          Keyboardx86.SCANCODE.F6,
-    [Keyboardx86.SIMCODE.F7]:          Keyboardx86.SCANCODE.F7,
-    [Keyboardx86.SIMCODE.F8]:          Keyboardx86.SCANCODE.F8,
-    [Keyboardx86.SIMCODE.F9]:          Keyboardx86.SCANCODE.F9,
-    [Keyboardx86.SIMCODE.F10]:         Keyboardx86.SCANCODE.F10,
-    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.SCANCODE.NUM_LOCK,
-    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.SCANCODE.SCROLL_LOCK,
-    [Keyboardx86.SIMCODE.HOME]:        Keyboardx86.SCANCODE.NUM_HOME,
-    [Keyboardx86.SIMCODE.NUM_HOME]:    Keyboardx86.SCANCODE.NUM_HOME,
-    [Keyboardx86.SIMCODE.UP]:          Keyboardx86.SCANCODE.NUM_UP,
-    [Keyboardx86.SIMCODE.NUM_UP]:      Keyboardx86.SCANCODE.NUM_UP,
-    [Keyboardx86.SIMCODE.PGUP]:        Keyboardx86.SCANCODE.NUM_PGUP,
-    [Keyboardx86.SIMCODE.NUM_PGUP]:    Keyboardx86.SCANCODE.NUM_PGUP,
-    [Keyboardx86.SIMCODE.LEFT]:        Keyboardx86.SCANCODE.NUM_LEFT,
-    [Keyboardx86.SIMCODE.NUM_LEFT]:    Keyboardx86.SCANCODE.NUM_LEFT,
-    [Keyboardx86.SIMCODE.NUM_CENTER]:  Keyboardx86.SCANCODE.NUM_CENTER,
-    [Keyboardx86.SIMCODE.RIGHT]:       Keyboardx86.SCANCODE.NUM_RIGHT,
-    [Keyboardx86.SIMCODE.NUM_RIGHT]:   Keyboardx86.SCANCODE.NUM_RIGHT,
-    [Keyboardx86.SIMCODE.END]:         Keyboardx86.SCANCODE.NUM_END,
-    [Keyboardx86.SIMCODE.NUM_END]:     Keyboardx86.SCANCODE.NUM_END,
-    [Keyboardx86.SIMCODE.DOWN]:        Keyboardx86.SCANCODE.NUM_DOWN,
-    [Keyboardx86.SIMCODE.NUM_DOWN]:    Keyboardx86.SCANCODE.NUM_DOWN,
-    [Keyboardx86.SIMCODE.PGDN]:        Keyboardx86.SCANCODE.NUM_PGDN,
-    [Keyboardx86.SIMCODE.NUM_PGDN]:    Keyboardx86.SCANCODE.NUM_PGDN,
-    [Keyboardx86.SIMCODE.INS]:         Keyboardx86.SCANCODE.NUM_INS,
-    [Keyboardx86.SIMCODE.NUM_INS]:     Keyboardx86.SCANCODE.NUM_INS,
-    [Keyboardx86.SIMCODE.NUM_ADD]:     Keyboardx86.SCANCODE.NUM_ADD,
-    [Keyboardx86.SIMCODE.NUM_SUB]:     Keyboardx86.SCANCODE.NUM_SUB,
-    [Keyboardx86.SIMCODE.DEL]:         Keyboardx86.SCANCODE.NUM_DEL,
-    [Keyboardx86.SIMCODE.NUM_DEL]:     Keyboardx86.SCANCODE.NUM_DEL,
+    [Keyboardx86.SIMCODE.ESC]:          Keyboardx86.SCANCODE.ESC,
+    [Keys.ASCII['1']]:                  Keyboardx86.SCANCODE.ONE,
+    [Keys.ASCII['!']]:                  Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['2']]:                  Keyboardx86.SCANCODE.TWO,
+    [Keys.ASCII['@']]:                  Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['3']]:                  Keyboardx86.SCANCODE.THREE,
+    [Keys.ASCII['#']]:                  Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['4']]:                  Keyboardx86.SCANCODE.FOUR,
+    [Keys.ASCII['$']]:                  Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['5']]:                  Keyboardx86.SCANCODE.FIVE,
+    [Keys.ASCII['%']]:                  Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['6']]:                  Keyboardx86.SCANCODE.SIX,
+    [Keys.ASCII['^']]:                  Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['7']]:                  Keyboardx86.SCANCODE.SEVEN,
+    [Keys.ASCII['&']]:                  Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['8']]:                  Keyboardx86.SCANCODE.EIGHT,
+    [Keys.ASCII['*']]:                  Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['9']]:                  Keyboardx86.SCANCODE.NINE,
+    [Keys.ASCII['(']]:                  Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['0']]:                  Keyboardx86.SCANCODE.ZERO,
+    [Keys.ASCII[')']]:                  Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['-']]:                  Keyboardx86.SCANCODE.DASH,
+    [Keys.ASCII['_']]:                  Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['=']]:                  Keyboardx86.SCANCODE.EQUALS,
+    [Keys.ASCII['+']]:                  Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.BS]:           Keyboardx86.SCANCODE.BS,
+    [Keyboardx86.SIMCODE.TAB]:          Keyboardx86.SCANCODE.TAB,
+    [Keys.ASCII.q]:                     Keyboardx86.SCANCODE.Q,
+    [Keys.ASCII.Q]:                     Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.w]:                     Keyboardx86.SCANCODE.W,
+    [Keys.ASCII.W]:                     Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.e]:                     Keyboardx86.SCANCODE.E,
+    [Keys.ASCII.E]:                     Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.r]:                     Keyboardx86.SCANCODE.R,
+    [Keys.ASCII.R]:                     Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.t]:                     Keyboardx86.SCANCODE.T,
+    [Keys.ASCII.T]:                     Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.y]:                     Keyboardx86.SCANCODE.Y,
+    [Keys.ASCII.Y]:                     Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.u]:                     Keyboardx86.SCANCODE.U,
+    [Keys.ASCII.U]:                     Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.i]:                     Keyboardx86.SCANCODE.I,
+    [Keys.ASCII.I]:                     Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.o]:                     Keyboardx86.SCANCODE.O,
+    [Keys.ASCII.O]:                     Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.p]:                     Keyboardx86.SCANCODE.P,
+    [Keys.ASCII.P]:                     Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['[']]:                  Keyboardx86.SCANCODE.LBRACK,
+    [Keys.ASCII['{']]:                  Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[']']]:                  Keyboardx86.SCANCODE.RBRACK,
+    [Keys.ASCII['}']]:                  Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.KEYCODE.CR]:                  Keyboardx86.SCANCODE.ENTER,
+    [Keyboardx86.SIMCODE.CTRL]:         Keyboardx86.SCANCODE.CTRL,
+    [Keys.ASCII.a]:                     Keyboardx86.SCANCODE.A,
+    [Keys.ASCII.A]:                     Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.s]:                     Keyboardx86.SCANCODE.S,
+    [Keys.ASCII.S]:                     Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.d]:                     Keyboardx86.SCANCODE.D,
+    [Keys.ASCII.D]:                     Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.f]:                     Keyboardx86.SCANCODE.F,
+    [Keys.ASCII.F]:                     Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.g]:                     Keyboardx86.SCANCODE.G,
+    [Keys.ASCII.G]:                     Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.h]:                     Keyboardx86.SCANCODE.H,
+    [Keys.ASCII.H]:                     Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.j]:                     Keyboardx86.SCANCODE.J,
+    [Keys.ASCII.J]:                     Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.k]:                     Keyboardx86.SCANCODE.K,
+    [Keys.ASCII.K]:                     Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.l]:                     Keyboardx86.SCANCODE.L,
+    [Keys.ASCII.L]:                     Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[';']]:                  Keyboardx86.SCANCODE.SEMI,
+    [Keys.ASCII[':']]:                  Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII["'"]]:                  Keyboardx86.SCANCODE.QUOTE,
+    [Keys.ASCII['"']]:                  Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['`']]:                  Keyboardx86.SCANCODE.BQUOTE,
+    [Keys.ASCII['~']]:                  Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.SHIFT]:        Keyboardx86.SCANCODE.SHIFT,
+    [Keys.ASCII['\\']]:                 Keyboardx86.SCANCODE.BSLASH,
+    [Keys.ASCII['|']]:                  Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.z]:                     Keyboardx86.SCANCODE.Z,
+    [Keys.ASCII.Z]:                     Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.x]:                     Keyboardx86.SCANCODE.X,
+    [Keys.ASCII.X]:                     Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.c]:                     Keyboardx86.SCANCODE.C,
+    [Keys.ASCII.C]:                     Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.v]:                     Keyboardx86.SCANCODE.V,
+    [Keys.ASCII.V]:                     Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.b]:                     Keyboardx86.SCANCODE.B,
+    [Keys.ASCII.B]:                     Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.n]:                     Keyboardx86.SCANCODE.N,
+    [Keys.ASCII.N]:                     Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII.m]:                     Keyboardx86.SCANCODE.M,
+    [Keys.ASCII.M]:                     Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII[',']]:                  Keyboardx86.SCANCODE.COMMA,
+    [Keys.ASCII['<']]:                  Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['.']]:                  Keyboardx86.SCANCODE.PERIOD,
+    [Keys.ASCII['>']]:                  Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keys.ASCII['/']]:                  Keyboardx86.SCANCODE.SLASH,
+    [Keys.ASCII['?']]:                  Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
+    [Keyboardx86.SIMCODE.RSHIFT]:       Keyboardx86.SCANCODE.RSHIFT,
+    [Keyboardx86.SIMCODE.PRTSC]:        Keyboardx86.SCANCODE.PRTSC,
+    [Keyboardx86.SIMCODE.ALT]:          Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.RALT]:         Keyboardx86.SCANCODE.ALT,
+    [Keyboardx86.SIMCODE.SPACE]:        Keyboardx86.SCANCODE.SPACE,
+    [Keyboardx86.SIMCODE.CAPS_LOCK]:    Keyboardx86.SCANCODE.CAPS_LOCK,
+    [Keyboardx86.SIMCODE.F1]:           Keyboardx86.SCANCODE.F1,
+    [Keyboardx86.SIMCODE.F2]:           Keyboardx86.SCANCODE.F2,
+    [Keyboardx86.SIMCODE.F3]:           Keyboardx86.SCANCODE.F3,
+    [Keyboardx86.SIMCODE.F4]:           Keyboardx86.SCANCODE.F4,
+    [Keyboardx86.SIMCODE.F5]:           Keyboardx86.SCANCODE.F5,
+    [Keyboardx86.SIMCODE.F6]:           Keyboardx86.SCANCODE.F6,
+    [Keyboardx86.SIMCODE.F7]:           Keyboardx86.SCANCODE.F7,
+    [Keyboardx86.SIMCODE.F8]:           Keyboardx86.SCANCODE.F8,
+    [Keyboardx86.SIMCODE.F9]:           Keyboardx86.SCANCODE.F9,
+    [Keyboardx86.SIMCODE.F10]:          Keyboardx86.SCANCODE.F10,
+    [Keyboardx86.SIMCODE.NUM_LOCK]:     Keyboardx86.SCANCODE.NUM_LOCK,
+    [Keyboardx86.SIMCODE.SCROLL_LOCK]:  Keyboardx86.SCANCODE.SCROLL_LOCK,
+    [Keyboardx86.SIMCODE.HOME]:         Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.NUM_HOME]:     Keyboardx86.SCANCODE.NUM_HOME,
+    [Keyboardx86.SIMCODE.UP]:           Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.NUM_UP]:       Keyboardx86.SCANCODE.NUM_UP,
+    [Keyboardx86.SIMCODE.PGUP]:         Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.NUM_PGUP]:     Keyboardx86.SCANCODE.NUM_PGUP,
+    [Keyboardx86.SIMCODE.LEFT]:         Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_LEFT]:     Keyboardx86.SCANCODE.NUM_LEFT,
+    [Keyboardx86.SIMCODE.NUM_CENTER]:   Keyboardx86.SCANCODE.NUM_CENTER,
+    [Keyboardx86.SIMCODE.RIGHT]:        Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.NUM_RIGHT]:    Keyboardx86.SCANCODE.NUM_RIGHT,
+    [Keyboardx86.SIMCODE.END]:          Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.NUM_END]:      Keyboardx86.SCANCODE.NUM_END,
+    [Keyboardx86.SIMCODE.DOWN]:         Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.NUM_DOWN]:     Keyboardx86.SCANCODE.NUM_DOWN,
+    [Keyboardx86.SIMCODE.PGDN]:         Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.NUM_PGDN]:     Keyboardx86.SCANCODE.NUM_PGDN,
+    [Keyboardx86.SIMCODE.INS]:          Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_INS]:      Keyboardx86.SCANCODE.NUM_INS,
+    [Keyboardx86.SIMCODE.NUM_ADD]:      Keyboardx86.SCANCODE.NUM_ADD,
+    [Keyboardx86.SIMCODE.NUM_SUB]:      Keyboardx86.SCANCODE.NUM_SUB,
+    [Keyboardx86.SIMCODE.DEL]:          Keyboardx86.SCANCODE.NUM_DEL,
+    [Keyboardx86.SIMCODE.NUM_DEL]:      Keyboardx86.SCANCODE.NUM_DEL,
 
-    /*
+    /**
      * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
      * which also existed on the 84-key keyboard), which ALSO means that these keys essentially did not exist
      * for a MODEL_5150 or MODEL_5160 machine, because those machines could use only 83-key keyboards.  Remember
@@ -51736,49 +51744,49 @@ Keyboardx86.SIMCODES = {
      * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
      * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
      */
-    [Keyboardx86.SIMCODE.SYS_REQ]:     Keyboardx86.SCANCODE.SYS_REQ,
-    [Keyboardx86.SIMCODE.F11]:         Keyboardx86.SCANCODE.F11,
-    [Keyboardx86.SIMCODE.F12]:         Keyboardx86.SCANCODE.F12,
-    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.SCANCODE.WIN,
-    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.SCANCODE.MENU,
-    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.SYS_REQ]:      Keyboardx86.SCANCODE.SYS_REQ,
+    [Keyboardx86.SIMCODE.F11]:          Keyboardx86.SCANCODE.F11,
+    [Keyboardx86.SIMCODE.F12]:          Keyboardx86.SCANCODE.F12,
+    [Keyboardx86.SIMCODE.CMD]:          Keyboardx86.SCANCODE.WIN,
+    [Keyboardx86.SIMCODE.RCMD]:         Keyboardx86.SCANCODE.MENU,
+    [Keyboardx86.SIMCODE.FF_CMD]:       Keyboardx86.SCANCODE.WIN,
 
-    [Keyboardx86.SIMCODE.CTRL_A]:      Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_B]:      Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_C]:      Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_D]:      Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_E]:      Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_F]:      Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_G]:      Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_H]:      Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_I]:      Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_J]:      Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_K]:      Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_L]:      Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_M]:      Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_N]:      Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_O]:      Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_P]:      Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Q]:      Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_R]:      Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_S]:      Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_T]:      Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_U]:      Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_V]:      Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_W]:      Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_X]:      Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Y]:      Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Z]:      Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_BREAK]:  Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.SHIFT_TAB]:    Keyboardx86.SCANCODE.TAB | (Keyboardx86.SCANCODE.SHIFT << 8),
 
-    [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:    Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_INS]:    Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:    Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:    Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:  Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]:Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_A]:       Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_B]:       Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_C]:       Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_D]:       Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_E]:       Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_F]:       Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_G]:       Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_H]:       Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_I]:       Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_J]:       Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_K]:       Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_L]:       Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_M]:       Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_N]:       Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_O]:       Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_P]:       Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Q]:       Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_R]:       Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_S]:       Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_T]:       Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_U]:       Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_V]:       Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_W]:       Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_X]:       Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Y]:       Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_Z]:       Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
+    [Keyboardx86.SIMCODE.CTRL_BREAK]:   Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
 
-    [Keyboardx86.SIMCODE.SHIFT_TAB]:   Keyboardx86.SCANCODE.TAB         | (Keyboardx86.SCANCODE.SHIFT << 8)
+    [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:     Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_INS]:     Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:     Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:     Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:   Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+    [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]: Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16)
 };
 
 /**
@@ -51796,7 +51804,7 @@ Keyboardx86.SIMCODES = {
  * @enum {number}
  */
 Keyboardx86.CMD = {
-    /*
+    /**
      * RESET (0xFF)
      *
      * The system issues a RESET command to start a program reset and a keyboard internal self-test. The keyboard
@@ -51809,7 +51817,7 @@ Keyboardx86.CMD = {
      */
     RESET:      0xFF,
 
-    /*
+    /**
      * RESEND (0xFE)
      *
      * The system can send this command when it detects an error in any transmission from the keyboard. It can be
@@ -51819,7 +51827,7 @@ Keyboardx86.CMD = {
      */
     RESEND:     0xFE,
 
-    /*
+    /**
      * SET DEFAULT (0xF6)
      *
      * The SET DEFAULT command resets all conditions to the power-on default state. The keyboard responds with ACK,
@@ -51828,21 +51836,21 @@ Keyboardx86.CMD = {
      */
     DEF_ON:     0xF6,
 
-    /*
+    /**
      * DEFAULT DISABLE (0xF5)
      *
      * This command is similar to SET DEFAULT, except the keyboard stops scanning and awaits further instructions.
      */
     DEF_OFF:    0xF5,
 
-    /*
+    /**
      * ENABLE (0xF4)
      *
      * Upon receipt of this command, the keyboard responds with ACK, clears its output buffer, and starts scanning.
      */
     ENABLE:     0xF4,
 
-    /*
+    /**
      * SET TYPEMATIC RATE/DELAY (0xF3)
      *
      * The system issues this command, followed by a parameter, to change the typematic rate and delay. The typematic
@@ -51853,7 +51861,7 @@ Keyboardx86.CMD = {
      */
     SET_RATE:   0xF3,
 
-    /*
+    /**
      * ECHO (0xEE)
      *
      * ECHO is a diagnostic aid. When the keyboard receives this command, it issues a 0xEE response and continues
@@ -51861,7 +51869,7 @@ Keyboardx86.CMD = {
      */
     ECHO:       0xEE,
 
-    /*
+    /**
      * SET/RESET MODE INDICATORS (0xED)
      *
      * Three mode indicators on the keyboard are accessible to the system. The keyboard activates or deactivates
@@ -51903,7 +51911,7 @@ Keyboardx86.CMD = {
  * @enum {number}
  */
 Keyboardx86.CMDRES = {
-    /*
+    /**
      * OVERRUN (0x00)
      *
      * An overrun character is placed in position 17 of the keyboard buffer, overlaying the last code if the
@@ -51913,7 +51921,7 @@ Keyboardx86.CMDRES = {
 
     LOAD_TEST:  0x65,   // undocumented "LOAD MANUFACTURING TEST REQUEST" response code
 
-    /*
+    /**
      * BAT Completion Code (0xAA)
      *
      * Following satisfactory completion of the BAT, the keyboard sends 0xAA. 0xFC (or any other code)
@@ -51921,21 +51929,21 @@ Keyboardx86.CMDRES = {
      */
     BAT_OK:     0xAA,
 
-    /*
+    /**
      * ECHO Response (0xEE)
      *
      * This is sent in response to an ECHO command (also 0xEE) from the system.
      */
     ECHO:       0xEE,
 
-    /*
+    /**
      * BREAK CODE PREFIX (0xF0)
      *
      * This code is sent as the first byte of a 2-byte sequence to indicate the release of a key.
      */
     BREAK_PREF: 0xF0,
 
-    /*
+    /**
      * ACK (0xFA)
      *
      * The keyboard issues an ACK response to any valid input other than an ECHO or RESEND command.
@@ -51944,12 +51952,12 @@ Keyboardx86.CMDRES = {
      */
     ACK:        0xFA,
 
-    /*
+    /**
      * BASIC ASSURANCE TEST FAILURE (0xFC)
      */
     BAT_FAIL:   0xFC,   // TODO: Verify this response code (is this just for older 83-key keyboards?)
 
-    /*
+    /**
      * DIAGNOSTIC FAILURE (0xFD)
      *
      * The keyboard periodically tests the sense amplifier and sends a diagnostic failure code if it detects
@@ -51958,7 +51966,7 @@ Keyboardx86.CMDRES = {
      */
     DIAG_FAIL:  0xFD,
 
-    /*
+    /**
      * RESEND (0xFE)
      *
      * The keyboard issues a RESEND command following receipt of an invalid input, or any input with incorrect parity.
@@ -51979,7 +51987,7 @@ Keyboardx86.INJECTION = {
     ON_INPUT:   2
 };
 
-/*
+/**
  * Initialize every Keyboard module on the page.
  */
 WebLib.onInit(Keyboardx86.init);
@@ -51988,7 +51996,7 @@ WebLib.onInit(Keyboardx86.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * MDA/CGA Support
  * ---------------
  *
@@ -52324,7 +52332,7 @@ class Card extends Controller {
     {
         super();
 
-        /*
+        /**
          * If a card was originally not present (eg, EGA), then the state will be empty,
          * so we need to detect that case and continue indicating that the card is not present.
          */
@@ -52339,7 +52347,7 @@ class Card extends Controller {
                 data = [false, 0, null, null, 0, new Array(nCard < Videox86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
             }
 
-            /*
+            /**
              * If a Debugger is present, we want to stash a bit more info in each Card.
              */
             if (DEBUGGER) {
@@ -52353,7 +52361,7 @@ class Card extends Controller {
             this.sizeBuffer = specs[3];     // default video buffer length (this is the total size, not the current visible size;
                                             // this.cbScreen is calculated on the fly to reflect the latter)
 
-            /*
+            /**
              * If no memory size is specified, then setMode() will use addMemory() to automatically add enough
              * memory blocks to cover the video buffer specified above; otherwise, it instructs addMemory() to call
              * getMemoryBuffer(), which will return a portion of the buffer (adwMemory) allocated below.  This allows
@@ -52362,7 +52370,7 @@ class Card extends Controller {
              */
             this.cbMemory = cbMemory || specs[4];
 
-            /*
+            /**
              * All of our cardSpec video buffer sizes are based on the default text mode (eg, 4Kb for an MDA, 16Kb for
              * a CGA), but for a card with 64Kb or more of memory (ie, any EGA card), the default text mode video buffer
              * size should be dynamically recalculated as the smaller of: cbMemory divided by 4, or 32Kb.
@@ -52398,7 +52406,7 @@ class Card extends Controller {
 
             let monitorSpecs = Videox86.monitorSpecs[nMonitorType] || Videox86.monitorSpecs[ChipSet.MONITOR.MONO];
 
-            /*
+            /**
              * nCyclesVertPeriod determines how frequently startVerticalRetrace() is called.  That function
              * snaps the current cycle count in nCyclesVertRetrace.  Then whenever getRetraceBits() is called,
              * it subtracts nCyclesVertRetrace from the current cycle count, and whenever the delta exceeds
@@ -52459,7 +52467,7 @@ class Card extends Controller {
                 /*12*/  0,
                 /*13*/  [this.addrBuffer, this.sizeBuffer, this.cbMemory],
                 /*14*/  null,
-                /*
+                /**
                  * Card.ACCESS.WRITE.MODE0 by itself is a pretty good default, but if we choose to "randomize" the screen with
                  * text characters prior to starting the machine, defaulting to Card.ACCESS.WRITE.EVENODD is more faithful to how
                  * characters and attributes are typically stored (ie, in planes 0 and 1, respectively).
@@ -52506,7 +52514,7 @@ class Card extends Controller {
         this.asGRCRegs  = DEBUGGER? Card.GRC.REGS : [];
         this.latches    = data[12];
 
-        /*
+        /**
          * Since we originally neglected to save/restore the card's active video buffer address and length,
          * we're now stashing all that information in data[13].  So if we're presented with an old data entry
          * that contains only the card's memory size, fix it up.
@@ -52537,14 +52545,14 @@ class Card extends Controller {
         }
         this.setMemoryAccess(nAccess);
 
-        /*
+        /**
          * nReadMapShift must perfectly track how the GRC.READMAP register is programmed, so that Card.ACCESS.READ.MODE0
          * memory read functions read the appropriate plane.  This default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
          */
         this.nReadMapShift  = data[16];
 
-        /*
+        /**
          * Similarly, nSeqMapMask must perfectly track how the SEQ.MAPMASK register is programmed, so that memory write
          * functions write the appropriate plane(s).  Again, this default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
@@ -52568,7 +52576,7 @@ class Card extends Controller {
             this.regDACData     = data[31];
         }
 
-        /*
+        /**
          * While every Video memory block maintains its own DIRTY flag, used by the Bus cleanMemory() function to
          * quickly determine if anything changed within a given block, we supplement that information at the Card level
          * in certain memory controller functions that we know are used to modify font data in plane 2.
@@ -52717,7 +52725,7 @@ class Card extends Controller {
             let i, s = "";
             let nRegs = (asRegs? asRegs.length : aRegs.length);
             for (i = 0; i < nRegs; i++) {
-                /*
+                /**
                  * In the case of the CRTC, we call the helper function getCRTCReg() to automatically concatenate
                  * the extended bits of certain registers, so that we don't have to "mentally" concatenate them.
                  */
@@ -52737,7 +52745,7 @@ class Card extends Controller {
     dumpVideoCard()
     {
         if (DEBUGGER) {
-            /*
+            /**
              * Start with registers that are common to all cards....
              */
             this.dumpRegs("CRTC", this.regCRTIndx, this.regCRTData, this.asCRTCRegs);
@@ -52751,7 +52759,7 @@ class Card extends Controller {
                 this.dumpRegs("    FEAT", this.regFeat);
                 this.dumpRegs("    MISC", this.regMisc);
                 this.dumpRegs(" STATUS0", this.regStatus0);
-                /*
+                /**
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
                 if (this.nCard == Videox86.CARD.VGA) {
@@ -52759,7 +52767,7 @@ class Card extends Controller {
                 }
             }
 
-            /*
+            /**
              * TODO: This simply dumps the last value read from the STATUS1 register, not necessarily
              * its current state; consider dumping getRetraceBits() instead of (or in addition to) this.
              */
@@ -52778,7 +52786,7 @@ class Card extends Controller {
                 this.dbg.printf("  ACCESS: %04X\n",  this.nAccess);
                 this.dbg.printf("  PLANE2: %02X\n", this.bitsDirtyBanks);
                 this.dbg.printf("Use 'd video [addr]' to dump video memory\n");
-                /*
+                /**
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
             }
@@ -52943,7 +52951,7 @@ class Card extends Controller {
             if (!fnReadByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
-                    /*
+                    /**
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
                      * Controller registers, so if GRC.MODE was set to READ.MODE1 prior to the mode change and the new mode
@@ -52968,7 +52976,7 @@ class Card extends Controller {
             if (!fnWriteByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
-                    /*
+                    /**
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
                      * Controller registers, so if GRC.MODE was set to WRITE.MODE2 prior to the mode change and the new mode
@@ -53042,7 +53050,7 @@ class Card extends Controller {
     }
 }
 
-/*
+/**
  * MDA Registers (ports 0x3B4, 0x3B5, 0x3B8, and 0x3BA)
  *
  * NOTE: All monochrome cards (at least all IBM cards) included a parallel interface at ports 0x3BC/0x3BD/0x3BE;
@@ -53071,7 +53079,7 @@ Card.MDA = {
     }
 };
 
-/*
+/**
  * CGA Registers (ports 0x3D4, 0x3D5, 0x3D8, 0x3D9, and 0x3DA)
  */
 Card.CGA = {
@@ -53107,7 +53115,7 @@ Card.CGA = {
         PEN_ON:             0x04,
         VRETRACE:           0x08        // when set, this indicates the CGA is performing a vertical retrace
     },
-    /*
+    /**
      * TODO: Add support for light pen port(s) someday....
      */
     CLEAR_PEN: {
@@ -53118,7 +53126,7 @@ Card.CGA = {
     }
 };
 
-/*
+/**
  * Common CRT hardware registers (ports 0x3B4/0x3B5 or 0x3D4/0x3D5)
  *
  * NOTE: In this implementation, because we have to make at least two of the registers readable (CURSORHI and CURSORLO),
@@ -53143,7 +53151,7 @@ Card.CRTC = {
     MAXSCAN:            0x09,           // Max Scan Line Address
     CURSCAN:            0x0A,           // Cursor Scan Line Top
     CURSCAN_SLMASK:         0x1F,       // Scan Line Mask
-    /*
+    /**
      * I don't entirely understand the cursor blink control bits.  Here's what the MC6845 datasheet says:
      *
      *      Bit 5 is the blink timing control.  When bit 5 is low, the blink frequency is 1/16 of the vertical field rate,
@@ -53180,7 +53188,7 @@ Card.CRTC = {
             VRSTART_BIT9:   0x80        // bit 9 of register 0x10 (VGA only, unused on EGA)
         },
         PRESCAN:        0x08,
-        /*
+        /**
          * NOTE: EGA/VGA CRTC registers 0x09-0x0F are the same as the MDA/CGA CRTC registers defined above
          */
         MAXSCAN: {
@@ -53204,7 +53212,7 @@ Card.CRTC = {
             DISABLE_VRINT:  0x20        // enable vertical retrace interrupt if NOT set
         },
         VDEND:          0x12,
-        /*
+        /**
          * The OFFSET register (bits 0-7) specifies the logical line width of the screen.  The starting memory address
          * for the next character row is larger than the current character row by two or four times this amount.
          * The OFFSET register is programmed with a word address.  Depending on the method of clocking the CRT Controller,
@@ -53235,7 +53243,7 @@ Card.CRTC = {
     }
 };
 
-/*
+/**
  * TODO: These mask tables need to be card-specific.  For example, the STARTHI and CURSORHI registers used to be
  * limited to 0x3F, because the MC6845 controller used with the original MDA and CGA cards was limited to 16Kb of RAM,
  * whereas later cards like the EGA and VGA had anywhere from 64Kb to 256Kb, so all the bits of those registers were
@@ -53281,7 +53289,7 @@ if (DEBUGGER) {
         "VDEND","OFFSET","UNDERLINE","VBSTART","VBEND","MODECTRL","LINECOMP"];
 }
 
-/*
+/**
  * EGA/VGA Input Status 1 Register (port 0x3DA)
  *
  * STATUS1 bit 0 has confusing documentation: the EGA Tech Ref says "Logical 0 indicates the CRT raster is in a
@@ -53306,7 +53314,7 @@ Card.STATUS1 = {
     RESERVED:               0xC6
 };
 
-/*
+/**
  * EGA/VGA Attribute Controller Registers (port 0x3C0: regATCIndx and regATCData)
  *
  * The current ATC INDX value is stored in cardEGA.regATCIndx (including the Card.ATC.INDX_ENABLE bit), and the
@@ -53377,7 +53385,7 @@ if (DEBUGGER) {
         "ATC08","ATC09","ATC0A","ATC0B","ATC0C","ATC0D","ATC0E","ATC0F", "ATCMODE","OVERSCAN","PLANES","HPAN","COLORSEL"];
 }
 
-/*
+/**
  * EGA/VGA Feature Control Register (port 0x3BA or 0x3DA: regFeat)
  *
  * The EGA BIOS writes 0x1 to Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT, then writes 0x2 to
@@ -53391,7 +53399,7 @@ Card.FEAT_CTRL = {
     BITS:                   0x03        // feature control bits
 };
 
-/*
+/**
  * EGA/VGA Miscellaneous Output Register (port 0x3C2: regMisc)
  */
 Card.MISC = {
@@ -53406,7 +53414,7 @@ Card.MISC = {
     VPOLARITY:              0x80        // 0 selects positive vertical retrace
 };
 
-/*
+/**
  * EGA/VGA Input Status 0 Register (port 0x3C2: regStatus0)
  */
 Card.STATUS0 = {
@@ -53418,7 +53426,7 @@ Card.STATUS0 = {
     INTERRUPT:              0x80        // 1: video is being displayed; 0: vertical retrace is occurring
 };
 
-/*
+/**
  * VGA Subsystem Enable Register (port 0x3C3: regVGAEnable)
  */
 Card.VGA_ENABLE = {
@@ -53427,7 +53435,7 @@ Card.VGA_ENABLE = {
     RESERVED:               0xFE
 };
 
-/*
+/**
  * EGA/VGA Sequencer Registers (ports 0x3C4/0x3C5: regSEQIndx and regSEQData)
  */
 Card.SEQ = {
@@ -53481,7 +53489,7 @@ Card.SEQ = {
 
 if (DEBUGGER) Card.SEQ.REGS = ["RESET","CLKMODE","MAPMASK","CHARMAP","MEMMODE"];
 
-/*
+/**
  * VGA Digital-to-Analog Converter (DAC) Registers (regDACMask, regDACState, regDACAddr, and regDACData)
  *
  * To write DAC data, write an address to DAC.ADDR.PORT_WRITE, then write 3 bytes to DAC.DATA.PORT; the low 6 bits
@@ -53514,7 +53522,7 @@ Card.DAC = {
     TOTAL_REGS:             0x100
 };
 
-/*
+/**
  * EGA/VGA Graphics Controller Registers (ports 0x3CE/0x3CF: regGRCIndx and regGRCData)
  *
  * The VGA added Write Mode 3, which is described as follows:
@@ -53596,7 +53604,7 @@ Card.GRC = {
 
 if (DEBUGGER) Card.GRC.REGS = ["SRESET","ESRESET","COLORCOMP","DATAROT","READMAP","GRCMODE","GRCMISC","COLORDC","BITMASK"];
 
-/*
+/**
  * EGA Memory Access Functions
  *
  * Here's where we define all the getMemoryAccess() functions that know how to deal with "planar" EGA memory,
@@ -53655,7 +53663,7 @@ if (DEBUGGER) Card.GRC.REGS = ["SRESET","ESRESET","COLORCOMP","DATAROT","READMAP
  * TODO: Implement the subtleties.
  */
 
-/*
+/**
  * Values returned by getCardAccess(); the high byte describes the read mode, and the low byte describes the write mode.
  *
  * V2 should never appear in any values used by getCardAccess() or setCardAccess(); the sole purpose of V2 is to
@@ -53690,7 +53698,7 @@ Card.ACCESS = {
     V2:             (0x80000000|0)      // this is a signature bit used ONLY to differentiate V2 access values from V1
 };
 
-/*
+/**
  * Table of older (V1) access values and their corresponding new values; the new values are similar but more orthogonal
  */
 Card.ACCESS.V1 = [];
@@ -53771,7 +53779,7 @@ Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
  */
 Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
 {
-    /*
+    /**
      * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to determine
      * exactly what gets latched (ie, from which address) when EVENODD is in effect.  Whatever we learn may also
      * dictate a special EVENODD function for READ.MODE1 as well.
@@ -53805,7 +53813,7 @@ Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
 {
     let card = this.controller;
     let dw = card.latches = this.adw[off + this.offset];
-    /*
+    /**
      * Minor optimization: we could pre-mask nColorCompare with nColorDontCare, whenever either register
      * is updated, but that's a drop in the bucket compared to all the other work this function must do.
      */
@@ -53930,7 +53938,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
     let card = this.controller;
     let idw = (off & ~0x3) + this.offset;
     let shift = (off & 0x3) << 3;
-    /*
+    /**
      * TODO: Consider adding a separate "unmasked" version of this CHAIN4 write function when nSeqMapMask is -1
      * (or removing nSeqMapMask from the equation altogether, if CHAIN4 is never used with any planes disabled).
      */
@@ -53955,7 +53963,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
     let card = this.controller;
     let idw = (off += this.offset) & ~0x1;
     let dw = b | (b << 8) | (b << 16) | (b << 24);
-    /*
+    /**
      * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1
      * and 3 if the address is even, and cleared for planes 0 and 2 if the address is odd.
      */
@@ -54098,7 +54106,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
  */
 Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
 {
-    /*
+    /**
      * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1 and 3 if the
      * address is even, and cleared for planes 0 and 2 if the address is odd.
      *
@@ -54237,7 +54245,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
-/*
+/**
  * Mappings from getCardAccess() values to access functions above
  */
 Card.ACCESS.afn = [];
@@ -54336,7 +54344,7 @@ class Videox86 extends Component {
         this.bindingsExternal = [];
         this.parmsVideo = parmsVideo;
 
-        /*
+        /**
          * This records the model specified (eg, "mda", "cga", "ega", "vga", "vdu", or "" if no model
          * is specified); when a model is specified, it overrides whatever model we infer from the ChipSet's
          * switches (since those motherboard switches tell us only the type of monitor, not the type of card).
@@ -54357,7 +54365,7 @@ class Videox86 extends Component {
         this.nRandomize = parmsVideo['randomize'];
         if (this.nRandomize == null) this.nRandomize = 1;
 
-        /*
+        /**
          * powerUp() uses the default mode ONLY if ChipSet doesn't give us a default.
          */
         this.nModeDefault = parmsVideo['mode'];
@@ -54365,7 +54373,7 @@ class Videox86 extends Component {
             this.nModeDefault = aModelDefaults[1];
         }
 
-        /*
+        /**
          * setDimensions() uses these values ONLY if it doesn't recognize the video mode.
          */
         this.nColsDefault = parmsVideo['charCols'];
@@ -54375,14 +54383,14 @@ class Videox86 extends Component {
             this.nRowsDefault = Videox86.aModeParms[this.nModeDefault][1];
         }
 
-        /*
+        /**
          * setDimensions() uses these values unconditionally, as the machine has no idea what the
          * physical screen size should be.
          */
         this.cxScreen = parmsVideo['screenWidth'];
         this.cyScreen = parmsVideo['screenHeight'];
 
-        /*
+        /**
          * The font 'scale' parameter is deprecated (we ALWAYS scale now), and the internal fDoubleFont
          * setting is now always true, but it is retained in case we want to revisit the benefits (or lack
          * thereof) of font-doubling.
@@ -54406,7 +54414,7 @@ class Videox86 extends Component {
         this.inputTextArea = textarea;
         this.inputScreen = textarea || canvas || null;
 
-        /*
+        /**
          * We now ensure that a colorScreen property is always set (to "black" if nothing else), and
          * set BOTH the canvas element's AND the container element's backgroundColor to match that color.
          *
@@ -54423,7 +54431,7 @@ class Videox86 extends Component {
         }
         if (container) container.style.backgroundColor = this.colorScreen;
 
-        /*
+        /**
          * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
          * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
          * it still being labelled "experimental technology".  Let's hope the browsers standardize
@@ -54441,20 +54449,20 @@ class Videox86 extends Component {
         this.fSmoothing = fSmoothing;
         this.sSmoothing = WebLib.findProperty(this.contextScreen, 'imageSmoothingEnabled');
 
-        /*
+        /**
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
          */
         this.sTouchScreen = parmsVideo['touchScreen'];
         this.nTouchConfig = Videox86.TOUCH.NONE;
 
-        /*
+        /**
          * If a Mouse exists, we'll be notified when it requests our canvas, and we make a note of it
          * so that if lockPointer() is ever invoked, we can notify the Mouse.
          */
         this.mouse = null;
         this.fAutoLock = parmsVideo['autoLock'];
 
-        /*
+        /**
          * Originally, setMode() would map/unmap the video buffer ONLY when the active card changed,
          * because as long as an MDA or CGA remained active, its video buffer never changed.  However,
          * since the EGA can change its video buffer on the fly, setMode() must also compare the card's
@@ -54463,7 +54471,7 @@ class Videox86 extends Component {
          */
         this.addrBuffer = this.sizeBuffer = 0;
 
-        /*
+        /**
          * aFonts is an array of font objects indexed by FONT ID.  Font characters are arranged
          * in 16x16 grids, with one grid per canvas object in the aCanvas array of each font object.
          *
@@ -54474,14 +54482,14 @@ class Videox86 extends Component {
          */
         this.aFonts = [];
 
-        /*
+        /**
          * aFontDiff entries are created by createFontDiff(), and each entry is a 256-element array of either
          * 0 (no difference) or -1 for every character code that differs between the fonts that correspond to
          * the aFontDiff index.
          */
         this.aFontDiff = [];
 
-        /*
+        /**
          * Instead of (re)allocating a new color array every time getCardColors() is called, we preallocate
          * an array and simply update the entries as needed.  Note that for an EGA (or a VGA operating in an
          * EGA-compatible mode), only the first 16 entries get used (derived from the ATC); only when a VGA
@@ -54496,14 +54504,14 @@ class Videox86 extends Component {
         this.fShifted = false;      // set to true whenever the image has been shifted by one or more pixels
         this.nShiftLeft = this.nShiftUp = 0;
 
-        /*
+        /**
          * Since I've not found clear documentation on a reliable way to check whether a particular DOM element
          * (other than the BODY element) has focus at any given time, I've added onfocus() and onblur() handlers
          * to the screen to maintain my own focus state.
          */
         this.fHasFocus = false;
 
-        /*
+        /**
          * Here's the gross code to handle full-screen support across all supported browsers.  The lack of standards
          * is exasperating; browsers can't agree on 'Fullscreen' (most common) or 'FullScreen' (least common), and while
          * some browsers honor other browser prefixes, most don't.  Event handlers tend to be more consistent (ie, all
@@ -54530,7 +54538,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * More gross code to handle pointer-locking support across all supported browsers.
          */
         if (this.inputScreen) {
@@ -54563,7 +54571,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * TODO: A complete list of what we want to support in terms of "diagnostic elements" needs to be fleshed out
          * at some point.  For now, all I do is save the contexts of all supplied canvas elements and use them in createFont()
          * to display the font data (for as many font banks as there are canvas elements) whenever the font(s) get rebuilt.
@@ -54579,7 +54587,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Allocate image and canvas caches.
          */
         this.imageCache = {};
@@ -54620,18 +54628,19 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Moved this from the constructor (and changed WebLib.getURLParm() to cmp.getMachineParm()),
          * so that the flicker setting can be easily overridden from the page, not just from the URL.
          */
         this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
 
-        /*
+        /**
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).
          */
-        let aModel = Videox86.MODEL[this.model], nCard = aModel && aModel[0];
+        let aModel = Videox86.MODEL[this.model];
+        let nCard = aModel && aModel[0];
 
-        /*
+        /**
          * The only time we do NOT want to trap MDA ports is when the model has been explicitly set to CGA.
          */
         if (nCard !== Videox86.CARD.CGA) {
@@ -54639,7 +54648,7 @@ class Videox86 extends Component {
             bus.addPortOutputTable(this, Videox86.aMDAPortOutput);
         }
 
-        /*
+        /**
          * Similarly, the only time we do NOT want to trap CGA ports is when the model is explicitly set to MDA.
          */
         if (nCard !== Videox86.CARD.MDA) {
@@ -54647,7 +54656,7 @@ class Videox86 extends Component {
             bus.addPortOutputTable(this, Videox86.aCGAPortOutput);
         }
 
-        /*
+        /**
          * Note that in the case of EGA and VGA models, the above code ensures that we will trap both MDA and CGA
          * port ranges -- which is good, because both the EGA and VGA can be reprogrammed to respond to those ports,
          * but also potentially bad if you want to simulate a "dual display" system, where one of the displays is
@@ -54673,7 +54682,7 @@ class Videox86 extends Component {
             });
         }
 
-        /*
+        /**
          * If we have an associated keyboard, then ensure that the keyboard will be notified whenever the canvas
          * gets focus and receives input.
          */
@@ -54697,7 +54706,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * The default value for the 'touchScreen' parameter is an empty string; machine configs must explicitly
          * select one of the following values, via the 'touchscreen' attribute in the <video> element, to enable any
          * touch-screen support.
@@ -54710,7 +54719,7 @@ class Videox86 extends Component {
             if (this.kbd) this.captureTouch(Videox86.TOUCH.KEYGRID);
         }
 
-        /*
+        /**
          * If no touch support was required or requested, we still want to do some minimal touch event processing;
          * eg, notifying the ChipSet component whenever a touchstart occurs, so that it can enable audio in response
          * to a user action on iOS devices.
@@ -54729,7 +54738,7 @@ class Videox86 extends Component {
             return;
         }
 
-        /*
+        /**
          * TODO: Improve how Video readiness is signalled.  Currently, all the video cards we support either have
          * a font ROM (which we load ourselves; see above) OR a system ROM (which the ROM component takes care of),
          * but not both.
@@ -54759,7 +54768,7 @@ class Videox86 extends Component {
 
         if (!this.bindings[sBinding]) {
 
-            /*
+            /**
              * We now save every binding that comes in, so that if there are bindings for "caps-lock' and the like,
              * we can forward them to the Keyboard.  TODO: Perhaps we should limit this to sHTMLType == "led", and collect
              * them in a separate object (eg, ledBindings), so that initBus() can safely enumerate JUST the LEDs.  This
@@ -54899,7 +54908,7 @@ class Videox86 extends Component {
         let fSuccess = false;
         if (this.container) {
             if (this.container.doFullScreen) {
-                /*
+                /**
                  * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
                  * of our virtual screen is at least roughly equivalent to the physical screen's aspect ratio, but now that
                  * we support virtual VGA screens with an aspect ratio of 1.33, that's very much out of step with modern
@@ -54927,7 +54936,7 @@ class Videox86 extends Component {
                     this.container.style.width = sWidth;
                     this.container.style.height = sHeight;
                 } else {
-                    /*
+                    /**
                      * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as:
                      *
                      *      http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
@@ -55056,7 +55065,7 @@ class Videox86 extends Component {
 
                 let addPassive = false;
                 if (nTouchConfig != Videox86.TOUCH.MOUSE) {
-                    /*
+                    /**
                      * If we're not capturing touch events for mouse event simulation, then we won't be calling
                      * preventDefault(), which means we should tell Chrome and any other browser that supports
                      * passive event listeners that we're installing a "passive" event listener, so that the browser
@@ -55104,7 +55113,7 @@ class Videox86 extends Component {
                     false                   // we'll specify false for the 'useCapture' parameter for now...
                 );
 
-                /*
+                /**
                  * Using desktop mouse events to simulate touch events should only be enabled as needed.
                  */
                 if (MAXDEBUG) {
@@ -55135,14 +55144,14 @@ class Videox86 extends Component {
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
-                /*
+                /**
                  * As long as fTouchDefault is false, we call preventDefault() on every touch event, to prevent
                  * the page from moving/scrolling while the canvas is processing touch events.  However, there must
                  * also be exceptions to permit the soft keyboard to activate; see processTouchEvent() for details.
                  */
                 this.fTouchDefault = false;
 
-                /*
+                /**
                  * I also need to come up with some rules for when the simulated mouse's primary button stays down.
                  * Let's try setting a timeout handler whenever a touchstart is received, which we'll immediately cancel
                  * as soon as a touchmove or touchend event is received, and if the timeout handler fires, we'll set
@@ -55165,7 +55174,7 @@ class Videox86 extends Component {
      */
     onFocusChange(fFocus)
     {
-        /*
+        /**
          * As per http://stackoverflow.com/questions/6740253/disable-scrolling-when-changing-focus-form-elements-ipad-web-app,
          * I decided to try this work-around to prevent the webpage from scrolling around whenever the canvas is given
          * focus.  That sort of scrolling-into-view sounds great in principle, but in practice, if you were reading some other
@@ -55242,7 +55251,7 @@ class Videox86 extends Component {
 
         // if (!event) event = window.event;
 
-        /*
+        /**
          * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
          * them relative to the canvas, we must subtract the canvas's left and top positions.  This Apple web page:
          *
@@ -55265,7 +55274,7 @@ class Videox86 extends Component {
             }
         } while ((eCurrent = eCurrent.offsetParent));
 
-        /*
+        /**
          * Due to the responsive nature of our pages, the displayed size of the canvas may be smaller than the
          * allocated size, and the coordinates we receive from touch events are based on the currently displayed size.
          */
@@ -55289,7 +55298,7 @@ class Videox86 extends Component {
 
         if (this.nTouchConfig == Videox86.TOUCH.KEYGRID) {
 
-            /*
+            /**
              * We don't want to simulate a key on EVERY touch event; preferably, only touchstart or touchend.  And
              * I probably would have preferred triggering key presses on touchend, so that if you decided to move
              * your finger off-screen before releasing, you could avoid a key press, but sadly (as I've documented in
@@ -55301,7 +55310,7 @@ class Videox86 extends Component {
                 let xThird = (xTouch / (this.cxScreen / 3)) | 0;
                 let yThird = (yTouch / (this.cyScreen / 3)) | 0;
 
-                /*
+                /**
                  * At this point, xThird and yThird should both be one of 0, 1 or 2, indicating which horizontal and
                  * vertical third of the virtual screen the touch event occurred.
                  */
@@ -55310,7 +55319,7 @@ class Videox86 extends Component {
         } else {
 
             if (this.mouse) {
-                /*
+                /**
                  * As long as fTouchDefault is false, we call preventDefault() on every touch event, to keep
                  * the page stable.  However, we must allow some touch event(s) to perform their default action,
                  * otherwise the soft keyboard can never be activated.  So if a touchstart occurs at least 1/2
@@ -55342,7 +55351,7 @@ class Videox86 extends Component {
                 }
 
                 if (fStart === false) {
-                    /*
+                    /**
                      * NOTE: 200ms is merely my initial stab at a reasonable number of milliseconds to interpret a
                      * start/end touch sequence as a "tap"; I also make no note of any intervening move events (ie,
                      * events where fStart is undefined), and perhaps I should....
@@ -55356,7 +55365,7 @@ class Videox86 extends Component {
                         return;
                     }
                 }
-                /*
+                /**
                  * This 'touchmove" code mimics the 'mousemove' event processing in processMouseEvent() in mouse.js, with
                  * one important difference: every time touching "restarts", we need to reset the variables used to calculate
                  * the deltas, so that the mere act of lifting and replacing your finger doesn't generate a delta by itself.
@@ -55419,7 +55428,7 @@ class Videox86 extends Component {
                 if (!this.restore(data)) return false;
             }
             if (this.timerRetrace == undefined) {
-                /*
+                /**
                  * Note that startVerticalRetrace() will fire every nCyclesVertPeriod, ensuring predictability
                  * and repeatability regardless of the machine's current speed multiplier or the whether the machine
                  * is achieving the desired target number of cycles per second.
@@ -55436,7 +55445,7 @@ class Videox86 extends Component {
                 let video = this;
                 this.timerRetrace = this.cpu.addTimer(this.id, function startVerticalRetrace() {
                     let card = video.cardActive;
-                    /*
+                    /**
                      * The following code is a work-around for IBM's VGA diagnostic code starting at C000:01E5,
                      * which expects an entire screen refresh (ie, 400 horizontal retraces followed by 1 vertical
                      * retrace) to take roughly 1/30 of a second instead of 1/60.  The longer vertical retrace
@@ -55464,7 +55473,7 @@ class Videox86 extends Component {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
                         }
                     }
-                    /*
+                    /**
                      * For simplicity, let's imagine that the normal screen update interval is 15ms.  If retraces are
                      * happening a bit too fast (eg, every 10ms), we'll skip the update on the first retrace, do it on
                      * the second retrace, skip on the third, and so on.  That's clearly too many skips, so when we
@@ -55478,7 +55487,7 @@ class Videox86 extends Component {
                         let fUpdated = video.updateScreen();
                         if (fUpdated) {
                             let cmsUpdate = Date.now() - msUpdate;
-                            /*
+                            /**
                              * Make sure that the modulo number here is always a multiple of the blink modulo in
                              * updateScreen(), so that we don't create blink irregularity every time we reset our
                              * average update time (cmsUpdate).
@@ -55490,7 +55499,7 @@ class Videox86 extends Component {
                                 video.cmsUpdate += cmsUpdate;
                                 cmsUpdate = video.cmsUpdate / video.cUpdates;
                             }
-                            /*
+                            /**
                              * If cmsUpdate is taking more than 25% of the update interval (eg, 4ms of a 16ms interval),
                              * then we want to increase the interval, so that updates are a smaller percentage of the overall
                              * workload.
@@ -55539,7 +55548,7 @@ class Videox86 extends Component {
     {
         let nMonitorType = ChipSet.MONITOR.NONE;
 
-        /*
+        /**
          * We'll ask the ChipSet what SW1 indicates for monitor type, but we may override it if a specific
          * video card model is set.  For EGA, SW1 is supposed to be set to indicate NO monitor, and we rely
          * on the EGA's own switch settings instead.
@@ -55548,7 +55557,7 @@ class Videox86 extends Component {
             nMonitorType = this.chipset.getDIPVideoMonitor();
         }
 
-        /*
+        /**
          * As we noted in the constructor, when a model is specified, that takes precedence over any monitor
          * switch settings.  Conversely, when no model is specified, the nCard setting is considered provisional,
          * so the monitor switch settings, if any, are allowed to determine the card type.
@@ -55567,7 +55576,7 @@ class Videox86 extends Component {
 
         case Videox86.CARD.EGA:
             aMonitors = Videox86.aEGAMonitorSwitches[this.bEGASwitches];
-            /*
+            /**
              * TODO: Figure out how to deal with aMonitors[2], the boolean which indicates
              * whether the EGA is driving the primary monitor (true) or the secondary monitor (false).
              */
@@ -55612,7 +55621,7 @@ class Videox86 extends Component {
         this.setMode(this.nModeDefault);
 
         if (this.cardActive.addrBuffer && this.nRandomize) {
-            /*
+            /**
              * On the initial power-on, we initialize the video buffer to random characters, as a way of testing
              * whether our font(s) were successfully loaded.  It's assumed that our default display mode is a text mode,
              * and that since this is a reset, the CRTC.START_ADDR registers are zero as well.
@@ -55632,7 +55641,7 @@ class Videox86 extends Component {
                 let dataRandom = (Math.random() * 0x10000) | 0;
                 let bChar, bAttr;
                 if (this.nMonitorType == ChipSet.MONITOR.EGACOLOR || this.nMonitorType == ChipSet.MONITOR.VGACOLOR) {
-                    /*
+                    /**
                      * For the EGA, we choose sequential characters; for random characters, copy the MDA/CGA code below.
                      */
                     bChar = (addrScreen >> 1) & 0xff;
@@ -55708,13 +55717,13 @@ class Videox86 extends Component {
         this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA, data[0]);
         this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA, data[1]);
 
-        /*
+        /**
          * If no EGA was originally initialized, then cardEGA will remain uninitialized.
          */
         this.cardEGA = new Card(this, this.nCard, data[3], this.cbMemory);
         if (this.cardEGA.fActive) this.enableEGA();
 
-        /*
+        /**
          * While I could restore the active card here, it's better for setMode() to do it, because
          * setMode() will also take care of mapping the appropriate video buffer.  So, after restore() has
          * finished, we call checkMode(), because the current video mode (nMode) is determined by the
@@ -55752,7 +55761,7 @@ class Videox86 extends Component {
         Component.addMachineResource(this.idMachine, sURL, sFontData);
 
         try {
-            /*
+            /**
              * The most likely source of any exception will be right here, where we're parsing the JSON-encoded data.
              */
             let abFontData = eval("(" + sFontData + ")");
@@ -55767,12 +55776,12 @@ class Videox86 extends Component {
                 Component.error(ab[0]);
                 return;
             }
-            /*
+            /**
              * Translate the character data into separate "fonts", each of which will be a separate canvas object, with all
              * 256 characters arranged in a 16x16 grid.
              */
             if (ab.length == 8192) {
-                /*
+                /**
                  * The assumption here is that we're dealing with the original (IBM) MDA/CGA font data, which apparently
                  * was identical on both MDA and CGA cards (even though the former had no use for the latter, and vice versa).
                  *
@@ -55838,7 +55847,7 @@ class Videox86 extends Component {
                 this.setFontData(ab, [0x1800, 0x0000]);
             }
             else if (ab.length == 2048) {
-                /*
+                /**
                  * The assumption here is that we're dealing strictly with CGA (8x8) font data, like the font data found
                  * in the Columbia Data Products (CDP) Font ROM.
                  */
@@ -55853,7 +55862,7 @@ class Videox86 extends Component {
             this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
-        /*
+        /**
          * If we're still here, then we're ready!
          *
          * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
@@ -55881,12 +55890,12 @@ class Videox86 extends Component {
     onROMLoad(abROM, aParms)
     {
         if (this.nCard == Videox86.CARD.EGA) {
-            /*
+            /**
              * TODO: Unlike the MDA/CGA font data, we may want to hang onto this data, so that we can
              * regenerate the color font(s) whenever the foreground and/or background colors have changed.
              */
             if (DEBUG) this.printf("onROMLoad(): EGA fonts loaded\n");
-            /*
+            /**
              * For EGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM EGA ROM, which stores its 8x14 font data at 0x2230 as one continuous sequence; the total size
              * of the 8x14 font is 0xE00 bytes.
@@ -55908,7 +55917,7 @@ class Videox86 extends Component {
         }
         else if (this.nCard == Videox86.CARD.VGA) {
             if (DEBUG) this.printf("onROMLoad(): VGA fonts loaded\n");
-            /*
+            /**
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM VGA ROM, which contains an 8x14 font at 0x3F8D (and corresponding supplemental table at 0x4D8D)
              * and an 8x8 font at 0x378D; however, it also contains an 8x16 font at 0x4EBA (and corresponding
@@ -55956,7 +55965,7 @@ class Videox86 extends Component {
     getCardColors(nBitsPerPixel)
     {
         if (nBitsPerPixel == 1) {
-            /*
+            /**
              * Only 2 total colors.
              */
             this.aRGB[0] = Videox86.aCGAColors[Videox86.ATTRS.FGND_BLACK];
@@ -55965,7 +55974,7 @@ class Videox86 extends Component {
         }
 
         if (nBitsPerPixel == 2) {
-            /*
+            /**
              * Of the 4 colors returned, the first color comes from regColor and the other 3 come from one of
              * the two hard-coded CGA color sets:
              *
@@ -56014,7 +56023,7 @@ class Videox86 extends Component {
             let aRegs, i, dw, b, bRed, bGreen, bBlue;
 
             if (nBitsPerPixel == 8) {
-                /*
+                /**
                  * The card must be a VGA, and it's using an (8bpp) mode that bypasses the ATC, so we need to pull
                  * RGB data exclusively from the 256-entry DAC; each entry contains 6-bit red, green, and blue values
                  * packed into bits 0-5, 6-11, and 12-17, respectively, each of which we effectively shift left 2 bits:
@@ -56029,7 +56038,7 @@ class Videox86 extends Component {
                     this.aRGB[i] = [bRed, bGreen, bBlue, 0xff];
                 }
             } else {
-                /*
+                /**
                  * We need to pull RGB data from the ATC; moreover, if the ATC hasn't been initialized yet,
                  * we go with a default EGA-compatible 16-color palette.  We'll also use the DAC if there is one
                  * (ie, this is actually a VGA) and it appears to be initialized (ie, the VGA BIOS has been run).
@@ -56038,7 +56047,7 @@ class Videox86 extends Component {
                 aRegs = (card.regATCData[15] != null? card.regATCData : Videox86.aEGAPalDef);
                 for (i = 0; i < 16; i++) {
                     b = aRegs[i] & Card.ATC.PALETTE.MASK;
-                    /*
+                    /**
                      * If the DAC is valid, we need to supplement the 6 bits of each ATC palette entry with the values
                      * for bits 6 and 7 from the ATC COLORSEL register (and overwrite bits 4 and 5 if ATC.MODE.COLORSEL_ALL
                      * is set as well).
@@ -56098,7 +56107,7 @@ class Videox86 extends Component {
         }
         let nColors = aColors.length;
         let nRange = (nColors >> 1);
-        /*
+        /**
          * When nColors is 16, nRange is 8, and iColor (originally 0-15) is now -7 to 8
          */
         iColor = (iColor + 1) - nRange;
@@ -56195,13 +56204,13 @@ class Videox86 extends Component {
         let fChanges = false;
         this.nActiveFont = this.nAlternateFont = this.nCardFont;
 
-        /*
+        /**
          * There's no point building fonts unless we're in a windowed (non-command-line) environment, we're
          * in a font-based mode (nCardFont is set), and font data has been supplied (or can be extracted from RAM).
          */
         if (globals.browser && this.nCardFont) {
 
-            /*
+            /**
              * Build whatever font(s) we need for the current card.  In the case of the EGA/VGA, that can mean up to
              * 4 fonts, if all four font "banks" in plane 2 have been loaded with font data, but if we don't yet know
              * which bank is active, we'll build the default font, using the available font data (ie, abFontData).
@@ -56214,7 +56223,7 @@ class Videox86 extends Component {
                 if (!this.colorFont) {
                     aRGBColors = Videox86.aMDAColors;
                 } else {
-                    /*
+                    /**
                      * When overriding MDA colors, we take rgbFont to be the "normal" color (aMDAColors indices 1 and 2), and
                      * then calculate the MDA's corresponding "intense" color (aMDAColors indices 3 and 4) using getIntenseColor().
                      */
@@ -56276,7 +56285,7 @@ class Videox86 extends Component {
                     this.nAlternateFont = this.nCardFont + (this.nFontSelect >> 8);
                 }
                 if (offData != null) {
-                    /*
+                    /**
                      * Logical fonts 0-3 (0-7 on the VGA) refer to banks in the following order: 0, 2, 4, 6, 1, 3, 5, 7.
                      *
                      * Note that we no longer build all possible fonts; we build ONLY those fonts that are currently selectable.
@@ -56301,7 +56310,7 @@ class Videox86 extends Component {
             }
 
             if (!fRebuild) {
-                /*
+                /**
                  * Perform some additional initialization common to both reset() and restore() sequences.
                  */
                 this.iCellCursor = -1;  // initially, there is no visible cursor cell
@@ -56372,7 +56381,7 @@ class Videox86 extends Component {
 
         for (let iColor = 0; iColor < nColors; iColor++) {
             let rgbColor = aRGBColors[iColor];
-            /*
+            /**
              * If any of the font's shape, data, or color has changed, then recreate it.  Also, we don't need to check
              * for a color change if we already know there was a shape or data change.
              */
@@ -56415,7 +56424,7 @@ class Videox86 extends Component {
                             let canvasSrc = font.aCanvas[iColor];
                             contextDst.fillStyle = font.aCSSColors[(iColor + 9) % nColors];
                             contextDst.fillRect(iColor * cxDstColor, 0, cxDstColor, cyDstColor);
-                            /*
+                            /**
                              * We want to draw whatever vertical slice of the font canvas will fit in the destination slice
                              * without altering the aspect ratio.  So the source and destination heights will be 100% of their
                              * respective canvases, while the source width will be multiplied by the ratio of the heights and
@@ -56469,7 +56478,7 @@ class Videox86 extends Component {
      */
     createFontColor(font, iColor, rgbColor, nDouble, offData, offSplit, cxChar, cyChar, abFontData)
     {
-        /*
+        /**
          * If abFontData is null, we will use font data from plane 2 of video memory, which has a "hard-wired" layout
          * of 32 bytes per character (which, for 256 characters, amounts to 8Kb).  Note that on an EGA, up to 4 font
          * "banks" can be stored in plane 2, since each EGA font bank has a "hard-wired" length of 16Kb, whereas on a VGA,
@@ -56477,14 +56486,16 @@ class Videox86 extends Component {
          * for backward compatibility with the EGA, the VGA's additional 4 font banks are interleaved with the EGA's
          * original 4 font banks.
          */
-        let iChar, y, x;
+        let iChar;
+        let y;
+        let x;
         let cyLimit = 32;
         let adwMemory = this.cardActive && this.cardActive.adwMemory;
         if (abFontData) {
             cyLimit = (cyChar < 8 || !offSplit)? cyChar : 8;
         }
         else {
-            /*
+            /**
              * When font data must be extracted from VRAM (instead of the supplied abFontData), we first do a "pre-scan"
              * to see if any font data actually exists.  For example. the video card's BIOS might zero ALL the font banks
              * (thereby making them "dirty") but then load only the first bank.
@@ -56509,7 +56520,7 @@ class Videox86 extends Component {
 
         let rgbOff = [0x00, 0x00, 0x00, 0x00];
 
-        /*
+        /**
          * Let's take a moment to see if we already have a suitable canvasFont that we can simply reuse.
          */
         let canvasFont = font.aCanvas[iColor];
@@ -56524,7 +56535,7 @@ class Videox86 extends Component {
         for (iChar = 0; iChar < 256; iChar++) {
             let offChar = offData + iChar * cyLimit;
             for (y = 0; y < cyChar; y++) {
-                /*
+                /**
                  * fUnderline should be true only in the FONT_MDA case, and only for the odd color variations
                  * (1 and 3, out of variations 0 to 4), and only for the second-from-bottom row of the character cell
                  * (based on images from actual MDA hardware).
@@ -56532,14 +56543,14 @@ class Videox86 extends Component {
                 let fUnderline = (font.aColorMap && (iColor & 0x1) && y == cyChar - 2);
                 let offScan = (y < cyLimit? offChar + y : offSplit + iChar * cyLimit + y - cyLimit);
 
-                /*
+                /**
                  * If abFontData is null, then we must extract the next byte of font data from plane 2 of video memory.
                  */
                 let b = abFontData? abFontData[offScan] : ((adwMemory[offScan] >> 16) & 0xff);
 
                 for (let nRowDoubler = 0; nRowDoubler <= nDouble; nRowDoubler++) {
                     for (x = 0; x < cxChar; x++) {
-                        /*
+                        /**
                          * This "bit" of logic takes care of those characters (0xC0-0xDF) whose 9th bit must mirror the 8th bit;
                          * in all other cases, any bit past the 8th bit is automatically zero.  It also takes care of embedding a
                          * solid row of bits whenever fUnderline is true.
@@ -56556,12 +56567,12 @@ class Videox86 extends Component {
                     }
                 }
             }
-            /*
+            /**
              * (iChar >> 4) is the equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
              */
             contextFont.putImageData(imageChar, x = (iChar & 0xf) * font.cxCell, y = (iChar >> 4) * font.cyCell);
         }
-        /*
+        /**
          * The colors for cell backgrounds and cursor elements must be converted to CSS color strings.
          */
         font.aCSSColors[iColor] = StrLib.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
@@ -56682,7 +56693,7 @@ class Videox86 extends Component {
         if (this.cBlinkVisible > 0 || this.iCellCursor >= 0) {
             if (this.cBlinks < 0) {
                 this.cBlinks = 0;
-                /*
+                /**
                  * At this point, we can either fire up our own timer (doBlink), or rely on updateScreen() being
                  * called by the CPU at regular bursts (eg, Videox86.UPDATES_PER_SECOND = 60) and advance cBlinks at
                  * the start of updateScreen() accordingly.
@@ -56734,7 +56745,7 @@ class Videox86 extends Component {
      */
     checkCursor()
     {
-        /*
+        /**
          * The "hardware cursor" is never visible in graphics modes.
          */
         if (!this.nCardFont) return false;
@@ -56752,7 +56763,7 @@ class Videox86 extends Component {
         let bCursorMax = card.regCRTData[Card.CRTC.MAXSCAN] & Card.CRTCMASKS[Card.CRTC.MAXSCAN];
         let oCursorStart = bCursorStart, oCursorEnd = bCursorEnd;
 
-        /*
+        /**
          * Before range-checking CURSCAN and CURSCANB, let's see if the cursor is disabled by a starting value
          * outside the visible range; if so, simulate the condition by pretending the CURSCAN_BLINKOFF bit is set.
          *
@@ -56766,7 +56777,7 @@ class Videox86 extends Component {
         let bCursorWrap = 0;
 
         if (this.nCard != Videox86.CARD.EGA) {
-            /*
+            /**
              * Live and learn: I originally thought that the EGA introduced funky split cursors, but it turns
              * out that older cards did it, too (well, I've confirmed it on an actual MDA anyway; haven't tried
              * the CGA).  I've also confirmed that the MDA did NOT have the "mod 16" EGA anomaly described below.
@@ -56774,7 +56785,7 @@ class Videox86 extends Component {
             if (bCursorEnd < bCursorStart) {
                 bCursorWrap = bCursorEnd + 1;
                 bCursorEnd = bCursorMax;
-                /*
+                /**
                  * The VGA didn't support funky split (aka wrap-around) cursors, so as above, we pretend that the
                  * cursor has simply been disabled.
                  */
@@ -56790,7 +56801,7 @@ class Videox86 extends Component {
             bCursorEnd++;
         }
         else {
-            /*
+            /**
              * HACK: The original EGA BIOS has a cursor emulation bug when 43-line mode is enabled; we used to
              * detect that particular combination of bad values and automatically fix them (see below),
              * but in retrospect, that doesn't seem very faithful.  Better to fix things like this 1) only if
@@ -56820,7 +56831,7 @@ class Videox86 extends Component {
 
         let bCursorSize = bCursorEnd - bCursorStart;
 
-        /*
+        /**
          * One way of disabling the cursor is to set bit 5 (Card.CRTC.CURSCAN_BLINKOFF) of the CRTC.CURSCAN flags;
          * another way is setting bCursorStart > bCursorEnd, which implies that bCursorSize <= 0.
          */
@@ -56829,7 +56840,7 @@ class Videox86 extends Component {
             return false;
         }
 
-        /*
+        /**
          * The least tricky way of disabling (ie, hiding) the cursor is to simply move it to an off-screen position.
          */
         let offCursor = card.regCRTData[Card.CRTC.CURSORLO] | ((card.regCRTData[Card.CRTC.CURSORHI] & card.addrMaskHigh) << 8);
@@ -56845,7 +56856,7 @@ class Videox86 extends Component {
                 let colTo = (iCellCursor % this.nCols);
                 this.printf("checkCursor(): cursor moved from %d,%d to %d,%d\n", rowFrom, colFrom, rowTo, colTo);
             }
-            /*
+            /**
              * I commented out this call on Feb 12, 2018 ("More cursor visibility fixes, especially when dealing with
              * non-zero video buffer start addresses") when I was debugging some Xenix issues, at the same time that I
              * also commented out the above printf(); in hindsight, I'm not sure if I intended to comment both out,
@@ -56854,7 +56865,7 @@ class Videox86 extends Component {
              *      this.removeCursor();
              */
             this.iCellCursor = iCellCursor;
-            /*
+            /**
              * We invalidate cBlinkVisible on a cursor position change to ensure the cursor will be redrawn on the
              * next call to updateScreenCells().  It has the downside of requiring ALL cells to be re-examined, not
              * just the old and new cursor cells, but the cell cache should prevent any unnecessary redrawing.
@@ -56862,7 +56873,7 @@ class Videox86 extends Component {
             this.cBlinkVisible = -1;
         }
 
-        /*
+        /**
          * yCursor and cyCursor are no longer scaled at this point, because the necessary scaling will depend on
          * whether we're drawing the cursor to the on-screen or off-screen buffer, and updateChar() is in the best
          * position to determine that.
@@ -56878,7 +56889,7 @@ class Videox86 extends Component {
             this.yCursor = bCursorStart;
             this.cyCursor = bCursorSize;
             this.cyCursorWrap = bCursorWrap;
-            /*
+            /**
              * The best redraw option for cursor shape changes used to be invalidating the cell cache, since merely
              * invalidating cBlinkVisible wouldn't have the desired effect if the cursor was still in the same location.
              * However, that option was rather drastic.  If the cursor had ALSO just moved (ie, this.cBlinkVisible < 0),
@@ -56895,7 +56906,7 @@ class Videox86 extends Component {
 
         this.cyCursorCell = bCursorMax + 1;
 
-        /*
+        /**
          * This next condition is critical; WordStar for PCjr (designed for the CGA) would program CURSCANB to 31,
          * whereas MAXSCAN was 7.  This resulted in cyCursorCell of 8 and cyCursor of 32, producing elongated cursors
          * in updateChar().  By range-checking CURSCAN and CURSCANB against MAXSCAN above, that should no longer happen.
@@ -56927,13 +56938,13 @@ class Videox86 extends Component {
                     let col = this.iCellCursor % this.nColsBuffer;
                     let row = (this.iCellCursor / this.nColsBuffer) | 0;
                     if (this.nActiveFont && this.aFonts[this.nActiveFont]) {
-                        /*
+                        /**
                          * If we're using an off-screen buffer in text mode, then we need to keep it in sync with "reality".
                          */
                         if (this.contextBuffer) {
                             this.updateChar(col, row, data, this.contextBuffer);
                         }
-                        /*
+                        /**
                          * While updating the on-screen canvas directly could open us up to potential subpixel artifacts again,
                          * I'm hopeful that won't be the case, since removeCursor() is called only during certain well-defined
                          * events.  The alternative to this simple updateChar() call is unappealing: redrawing the ENTIRE off-screen
@@ -57020,7 +57031,7 @@ class Videox86 extends Component {
                 if (regGRCMode & Card.GRC.MODE.READ.MODE1) {
                     nReadAccess = Card.ACCESS.READ.MODE1;
                 }
-                /*
+                /**
                  * I discovered that when the IBM EGA ROM scrolls the screen in graphics modes 0x0D and 0x0E, it
                  * reprograms this register for WRITE.MODE1 (which is fine) *and* EVENODD (which is, um, very odd).
                  * Moreover, it does NOT make the complementary change to the SEQ.MEMMODE.SEQUENTIAL bit; under
@@ -57082,7 +57093,7 @@ class Videox86 extends Component {
 
             card.setMemoryAccess(nAccess);
 
-            /*
+            /**
              * Note that setMemoryAccess() can fail, in which case it will an report error, indicating either a
              * misconfiguration or some sort of internal inconsistency; in any case, there's not much we can do about
              * it at this point, other than possibly reverting the current access setting.  There's probably not much
@@ -57124,7 +57135,7 @@ class Videox86 extends Component {
             this.nCardFont = modeParms[5];  // this will be undefined for all graphics modes
 
             if (this.nCardFont) {
-                /*
+                /**
                  * Color text modes originally used an 8x8 font, but beginning with the EGA, they use whatever
                  * font is stored in plane 2, so if the card is "newer" than the default font, update the default
                  * to match the card.
@@ -57141,7 +57152,7 @@ class Videox86 extends Component {
                     cxCell = font.cxCell;
                     cyCell = font.cyCell;
                     if (this.nCard >= Videox86.CARD.EGA) {
-                        /*
+                        /**
                          * Since these cards have programmable font height (font.cyChar), we need to divide that
                          * into the screen height (cyScreen) to determine the effective (ie, visible) number of rows.
                          */
@@ -57177,12 +57188,12 @@ class Videox86 extends Component {
         this.cxBuffer = this.nColsBuffer * cxCell;
         this.cyBuffer = this.nRowsBuffer * cyCell;
 
-        /*
+        /**
          * Beyond calculating the theoretical dimensions, there's nothing more to do if we're in a "headless" mode.
          */
         if (!this.contextScreen) return;
 
-        /*
+        /**
          * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
          * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
          * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
@@ -57191,7 +57202,7 @@ class Videox86 extends Component {
             this.contextScreen[this.sSmoothing] = (this.fSmoothing == null? !!this.nCardFont : this.fSmoothing);
         }
 
-        /*
+        /**
          * Allocate the off-screen buffers, unless a previous setMode() already cached buffers of the required size.
          */
         if (this.imageCache[this.cxBuffer] && this.imageCache[this.cxBuffer][this.cyBuffer]) {
@@ -57209,7 +57220,7 @@ class Videox86 extends Component {
         }
         this.contextBuffer = this.canvasBuffer.getContext("2d");
 
-        /*
+        /**
          * Since cxCell and cyCell were originally defined in terms of cxScreen/nCols and cyScreen/nRows, you might think
          * these border calculations would always be zero, but we used to have code that tried to avoid stretching 40-column
          * modes into an unpleasantly wide shape, so this code is being retained (for now).
@@ -57251,7 +57262,7 @@ class Videox86 extends Component {
         let card = this.cardActive;
 
         if (!card) {
-            /*
+            /**
              * We are likely being called after a restore(), which needs us to call setMode() to insure the proper video
              * buffer is mapped in.  So we unset this.nMode to guarantee that setMode() will be called, and if it wasn't set
              * to anything before, then we fall-back to the default mode.
@@ -57264,7 +57275,7 @@ class Videox86 extends Component {
                 nMode = Videox86.MODE.MDA_80X25;
             }
             else if (card.nCard >= Videox86.CARD.EGA) {
-                /*
+                /**
                  * The sizeBuffer we choose reflects the amount of physical address space that all 4 planes
                  * of EGA memory normally span, NOT the total amount of EGA memory.  So for a 64Kb EGA card,
                  * we would set card.sizeBuffer to 16Kb (0x4000).
@@ -57288,7 +57299,7 @@ class Videox86 extends Component {
                         if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) <= 1) {
                             nMode = Videox86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
                         } else {
-                            /*
+                            /**
                              * This mapping is used by Fantasy Land.
                              *
                              * TODO: Generalize this logic, outside of the context of the GRC.MISC mapping bits.
@@ -57316,7 +57327,7 @@ class Videox86 extends Component {
                     default:
                         break;
                     }
-                    /*
+                    /**
                      * TODO: The following mode discrimination code is all a bit haphazard, a byproduct of its slow evolution
                      * from increasingly greater EGA support to increasingly greater VGA support.  Make it more rational someday,
                      * so that as support is added for even more modes (eg, "Mode X" variations, monochrome modes, etc), it
@@ -57327,7 +57338,7 @@ class Videox86 extends Component {
                      */
                     let regGRCMode = card.regGRCData[Card.GRC.MODE.INDX];
 
-                    /*
+                    /**
                      * This text/graphics hybrid test detects the way Windows 95 reprograms the VGA on boot; ie, switching
                      * to graphics mode 0x13 (320x200) without disturbing the text buffer contents, then reprogramming it
                      * to enable graphics mode 0x15 (320x400), then drawing a logo in the 2nd half of the video memory, and
@@ -57336,7 +57347,7 @@ class Videox86 extends Component {
                      */
                     let fTextGraphicsHybrid = (regGRCMode & (Card.GRC.MODE.COLOR256 | Card.GRC.MODE.EVENODD)) == (Card.GRC.MODE.COLOR256 | Card.GRC.MODE.EVENODD);
 
-                    /*
+                    /**
                      * When fTextGraphicsHybrid is true, we should be at the end of the above process, so addrBuffer
                      * will have changed.  Since we don't (yet) assign a special mode to that configuration, we must at
                      * least set fForce to true, so that setMode() will notice the buffer address change and remap it.
@@ -57354,7 +57365,7 @@ class Videox86 extends Component {
 
                     if (nMode != Videox86.MODE.UNKNOWN) {
                         if (!(regGRCMisc & Card.GRC.MISC.GRAPHICS)) {
-                            /*
+                            /**
                              * Here's where we handle text modes; since nMode will have been assigned a default
                              * of either 0x02 or 0x03, convert that to either 0x05 or 0x04 if we're in a low-res
                              * graphics mode, 0x06 otherwise.
@@ -57362,7 +57373,7 @@ class Videox86 extends Component {
                             nMode -= (fSEQDotClock? 2 : 0);
                         }
                         else if (card.addrBuffer != 0xA0000 && !fTextGraphicsHybrid && !(nCRTCModeCtrl & Card.CRTC.EGA.MODECTRL.COMPAT_MODE)) {
-                            /*
+                            /**
                              * Here's where we handle CGA graphics modes; since nMode will have been assigned a
                              * default of either 0x02 or 0x03, convert that to either 0x05 or 0x04 if we're in a
                              * low-res graphics mode, 0x06 otherwise.
@@ -57374,7 +57385,7 @@ class Videox86 extends Component {
                              */
                             nMode = fSEQDotClock? (7 - nMode) : Videox86.MODE.CGA_640X200;
                         } else {
-                            /*
+                            /**
                              * Here's where we handle EGA/VGA graphics modes, discriminating among modes 0x0D and up;
                              * we've already defaulted to either 0x0F or 0x10.  If COLOR256 is set, then select mode
                              * 0x13 (or greater), else if 200-to-400 scan-line conversion is in effect, select either
@@ -57382,7 +57393,7 @@ class Videox86 extends Component {
                              */
                             if (card.regGRCData[Card.GRC.MODE.INDX] & Card.GRC.MODE.COLOR256) {
                                 if (nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) {
-                                    /*
+                                    /**
                                      * NOTE: Technically, VDEND is one of those CRTC registers that should be read using
                                      * card.getCRTCReg(), because there are overflow bits (8 and 9).  However, all known modes
                                      * always SET bit 8 and CLEAR bit 9, so examining only bits 0-7 is sorta OK.
@@ -57412,7 +57423,7 @@ class Videox86 extends Component {
                 }
             }
             else if (card.regMode & Card.CGA.MODE.VIDEO_ENABLE) {
-                /*
+                /**
                  * NOTE: For the CGA, we precondition any mode change on CGA.MODE.VIDEO_ENABLE being set, otherwise
                  * we'll get spoofed by the ROM BIOS scroll code, which waits for vertical retrace and then turns CGA.MODE.VIDEO_ENABLE
                  * off, using a hard-coded mode value (0x25) that does NOT necessarily match the the CGA video mode currently in effect.
@@ -57434,7 +57445,7 @@ class Videox86 extends Component {
                 }
             }
             else {
-                /*
+                /**
                  * This code is responsible for simulating flicker on a CGA screen.  Note that we have to also
                  * call yieldCPU() to ensure that the browser "comes up for air" and honors the new opacity, otherwise
                  * you'll see very intermittent flicker (which is actually more annoying than regular flicker, believe
@@ -57453,7 +57464,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * NOTE: If setMode() remaps the video memory, that will trigger calls to setCardAccess() to also update the
          * memory's access functions.  However, if the memory access setting is about to change as well, those changes
          * will be moot until the setCardAccess() call that follows.  Basically, whenever both memory mapping AND access
@@ -57494,7 +57505,7 @@ class Videox86 extends Component {
             this.nMode = nMode;
             this.fRGBValid = false;
 
-            /*
+            /**
              * It's CRITICAL that a reset() invalidate cardActive, to ensure that the code below releases the
              * previous video buffer and installs a new one, even if there was no change in the video buffer
              * address or size, because otherwise memory blocks installed at the video buffer address may still
@@ -57516,7 +57527,7 @@ class Videox86 extends Component {
                     if (DEBUG) this.printf("setMode(%#04X): removing %#010X bytes from %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
                     if (!this.bus.removeMemory(this.addrBuffer, this.sizeBuffer)) {
-                        /*
+                        /**
                          * TODO: Force this failure case and see how well the Video component deals with it.
                          */
                         return false;
@@ -57533,13 +57544,13 @@ class Videox86 extends Component {
                 if (DEBUG) this.printf("setMode(%#04X): adding %#010X bytes to %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
                 if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, Memoryx86.TYPE.VIDEO, card)) {
-                    /*
+                    /**
                      * TODO: Force this failure case and see how well the Video component deals with it.
                      */
                     return false;
                 }
 
-                /*
+                /**
                  * As https://www.seasip.info/VintagePC/mda.html explains, the MDA's 4K buffer address is not
                  * fully decoded; it is also addressible at every 4K interval within a 32K (0x8000) address range.
                  * We simulate that now, and not just for purely theoretical reasons: the original monochrome-
@@ -57638,14 +57649,14 @@ class Videox86 extends Component {
                 this.fRGBValid = false;
             }
             else if (nFontSelect !== undefined) {
-                /*
+                /**
                  * We want to do a "smart" (aka selective) invalidation of the cell cache, invalidating only
                  * those cells containing characters whose current font data differs from the previous font data.
                  */
                 if (nFontSelect == nFontPrev) return 0;
                 let aCellCache = this.aCellCache;
                 let nCells = 0;
-                /*
+                /**
                  * getFontDiff() returns an empty array if the current and previous fonts are the same, which
                  * is OK for the code below, because using the "|" operator with undefined values coerces them
                  * to zero, resulting in no change.  If BOTH FontDiff arrays were empty, then we could skip this
@@ -57657,7 +57668,7 @@ class Videox86 extends Component {
                 for (let i = 0; i < aCellCache.length; i++) {
                     let data = aCellCache[i];
                     if (data >= 0) {
-                        /*
+                        /**
                          * The font referenced by any given cell data *usually* only depends on low 8 bits (ie, the
                          * character data), but when the active and alternate fonts differ, bit 3 of the attribute data
                          * must be examined as well, and if it's set, then the alternate font must be used.
@@ -57671,7 +57682,7 @@ class Videox86 extends Component {
                 }
                 return nCells;
             } else {
-                /*
+                /**
                  * When no color change AND no font change has occurred, since the cache was at least partially
                  * valid already, we make sure it's partially valid.
                  */
@@ -57709,7 +57720,7 @@ class Videox86 extends Component {
     {
         let bChar = data & 0xff;
         let bAttr = data >> 8;
-        /*
+        /**
          * The font referenced by any given cell data *usually* only depends on low 8 bits (ie, the
          * character data), but when the active and alternate fonts differ, bit 3 of the attribute data
          * must be examined as well, and if it's set, then the alternate font must be used.
@@ -57720,7 +57731,7 @@ class Videox86 extends Component {
             bAttr &= ~0x08;
         }
 
-        /*
+        /**
          * Just as aColorMap maps the foreground attribute to the appropriate foreground character grid,
          * it also maps the background attribute to the appropriate background color.
          *
@@ -57730,7 +57741,8 @@ class Videox86 extends Component {
          * Similarly, the foreground is NEVER black UNLESS attribute & 0x77 == 0x00 (ie, the attribute is one
          * of 0x00, 0x08, 0x80, or 0x88).
          */
-        let xDst, yDst;
+        let xDst;
+        let yDst;
         let iFgnd = bAttr & 0x0f;
         let iBgnd = (bAttr >> 4) & 0x0f;
         if (font.aColorMap) {
@@ -57762,7 +57774,7 @@ class Videox86 extends Component {
         if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
         if (bAttr & Videox86.ATTRS.DRAW_FGND) {
-            /*
+            /**
              * (bChar & 0xf) is the equivalent of (bChar % 16), and (bChar >> 4) is the equivalent of Math.floor(bChar / 16)
              */
             let xSrcFgnd = (bChar & 0xf) * font.cxCell;
@@ -57802,7 +57814,7 @@ class Videox86 extends Component {
      */
     drawCursor(yCursor, cyCursor, xDst, yDst, iFgnd, font, context)
     {
-        /*
+        /**
          * Drawing the cursor with lineTo() seemed logical, but it was complicated by the fact that the
          * TOP of the line must appear at "yDst + this.yCursor", whereas lineTo() wants to know the CENTER
          * of the line. So it's simpler to draw the cursor with another fillRect().  Here's the old code:
@@ -57877,17 +57889,17 @@ class Videox86 extends Component {
      */
     updateScreen(fForce = false)
     {
-        /*
+        /**
          * Nothing to do for "headless" congfigurations.
          */
         if (!this.canvasScreen) return false;
 
-        /*
+        /**
          * The Computer component maintains the fPowered setting on our behalf, so we use it.
          */
         if (!this.flags.powered) return false;
 
-        /*
+        /**
          * If the card's video signal is disabled (eg, during a mode change), then skip the update,
          * unless fForce is set.
          */
@@ -57908,14 +57920,14 @@ class Videox86 extends Component {
             this.initCellCache();
         }
         else {
-            /*
+            /**
              * This should never happen, but since updateScreen() is also called by Computer.updateStatus(),
              * better safe than sorry.
              */
             if (this.aCellCache === undefined) return false;
         }
 
-        /*
+        /**
          * If this is a hardware update (as opposed to, say, a debugger-triggered update, where fForce is set),
          * and cBlinks is "enabled" (ie, >= 0), then advance cBlinks once every 10 updateScreen() calls.
          *
@@ -57932,7 +57944,7 @@ class Videox86 extends Component {
         let iCell = 0;
         let nCells = this.nCells;
 
-        /*
+        /**
          * Calculate the VISIBLE start of screen memory (addrScreen), not merely the PHYSICAL start,
          * as well as the extent of it (cbScreen) and use those values for all addressing operations to follow.
          * FYI, in these calculations, offScreen does not refer to "off-screen" memory, but rather the "offset"
@@ -57942,7 +57954,7 @@ class Videox86 extends Component {
         let addrScreen = addrBuffer;
         let addrScreenLimit = addrScreen + this.sizeBuffer;
 
-        /*
+        /**
          * HACK: To deal with the fTextGraphicsHybrid 320x400 mode that Windows 95 uses (ie, when the buffer
          * is mapped to B800:0000 instead of A000:0000 and is configured for text mode access, but graphics are
          * still being displayed from the second half of video memory), we must ignore the programmed address.
@@ -57961,19 +57973,20 @@ class Videox86 extends Component {
         this.nColsLogical = this.nCols;
 
         if (this.nCard < Videox86.CARD.EGA) {
-            /*
+            /**
              * Any screen (aka "page") offset must be doubled for text modes, due to the attribute bytes.
              */
             addrScreen += card.offStart << (this.nCardFont? 1 : 0);
         } else {
-            /*
+            /**
              * For the EGA/VGA, we must make offset-doubling dependent on attribute (odd) byte addressibility.
              * For example, Fantasy Land uses a text-mode buffer mapped at 0xA0000 without odd/even addressing.
              *
              * TODO: Setting nPointsPerByte properly would ideally be taken care of in setDimensions(), but there's
              * no guarantee this particular controller tweak will be made BEFORE we detect and initiate a mode change.
              */
-            let shiftAddr = 0, shiftCols = 0;
+            let shiftAddr = 0;
+            let shiftCols = 0;
             let bMemMode = this.cardEGA.regSEQData[Card.SEQ.MEMMODE.INDX] & (Card.SEQ.MEMMODE.ALPHA | Card.SEQ.MEMMODE.SEQUENTIAL);
             if (bMemMode == Card.SEQ.MEMMODE.ALPHA) {
                 shiftAddr = shiftCols = 1;
@@ -57984,7 +57997,7 @@ class Videox86 extends Component {
             }
             addrScreen += card.offStart << shiftAddr;
             if (card.regCRTData[Card.CRTC.EGA.OFFSET] && (card.regCRTData[Card.CRTC.EGA.OFFSET] << 1) != card.regCRTData[Card.CRTC.EGA.HDEND] + 1) {
-                /*
+                /**
                  * Pre-EGA, the extent of visible screen memory (cbScreen) was derived from nCols * nRows, but since
                  * then, the logical width of screen memory (nColsLogical) can differ from the visible width (nCols).
                  * We now calculate the logical width, and the compute a new cbScreen in much the same way the original
@@ -57992,7 +58005,7 @@ class Videox86 extends Component {
                  */
                 this.nColsLogical = card.regCRTData[Card.CRTC.EGA.OFFSET] << (shiftCols || ((card.regCRTData[Card.CRTC.EGA.UNDERLINE.INDX] & Card.CRTC.EGA.UNDERLINE.DWORD)? 3 : 4));
                 cbScreen = ((this.nColsLogical * (this.nRowsBuffer - 1) + this.nColsBuffer) / this.nPointsPerByte)|0;
-                /*
+                /**
                  * If nRowsBuffer is larger than nRows (ie, over-buffering is enabled), we run the risk of attempting
                  * to render past the limit of the frame buffer (addrScreenLimit); we're ONLY over-buffering in case the
                  * the app decides to pan vertically, revealing pixels below the last full row, and obviously if there
@@ -58004,14 +58017,15 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * If the amount of data (cbScreen) we need to display goes beyond the end of the screen buffer
          * (addrScreenLimit), then the assumption is that we will have to do a second update operation that
          * wraps around to addrBuffer.
          */
-        let addrScreenWrap = 0, cbScreenWrap = 0;
+        let addrScreenWrap = 0;
+        let cbScreenWrap = 0;
         if (addrScreen + cbScreen > addrScreenLimit) {
-            /*
+            /**
              * There are two possibilities here: addrScreen itself is at or beyond addrScreenLimit, or just a
              * portion of cbScreen goes beyond the limit.  We'll deal with the first case first.
              */
@@ -58026,7 +58040,7 @@ class Videox86 extends Component {
             }
         }
         else if (this.nCard >= Videox86.CARD.EGA) {
-            /*
+            /**
              * We can leverage our screen wrap support to handle split-screen views as well; we must calculate
              * the number of WHOLE + PARTIAL rows we can draw (which may reduce cbScreen).  TODO: We must also pass
              * along the height of any PARTIAL row, so that pixel-level split-screens can eventually be supported.
@@ -58045,7 +58059,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * updateScreenCells() no longer "scrubs" the screen buffer itself; we call cleanMemory() afterward
          * to take care of that.  This has two benefits: 1) if this was a "forced" updated (or an update to make
          * the cell cache valid), cleaning the screen buffer ourselves reflects the fact that both it and our
@@ -58083,7 +58097,7 @@ class Videox86 extends Component {
      */
     updateScreenCells(addrBuffer, addrScreen, cbScreen, iCell, nCells, fForce, fBlinkUpdate)
     {
-        /*
+        /**
          * When determining the number of cells this update may affect, it is NOT simply cbScreen
          * multiplied by nPointsPerByte, because cbScreen includes any and all off-screen cells, too.
          */
@@ -58092,7 +58106,7 @@ class Videox86 extends Component {
         if (cCells > nCells) cCells = nCells;
         let addrScreenLimit = addrScreen + cbScreen;
 
-        /*
+        /**
          * This next bit of code can be completely disabled if we discover problems with the dirty
          * memory block tracking feature or we need to remove or disable that feature in the future.
          *
@@ -58107,7 +58121,7 @@ class Videox86 extends Component {
                 iCell = nCells;
             }
             else if (!this.cBlinkVisible) {
-                /*
+                /**
                  * iCellCursor may be negative if the cursor is hidden or if it's not on the visible screen.
                  */
                 let iCellCursor = this.iCellCursor - iCell;
@@ -58127,25 +58141,25 @@ class Videox86 extends Component {
         }
 
         if (this.nActiveFont) {
-            /*
+            /**
              * This is the text-mode update case.
              */
             this.updateScreenText(addrBuffer, addrScreen, addrScreenLimit, iCell, nCells);
         }
         else if (this.cbSplit) {
-            /*
+            /**
              * All CGA graphics modes have the goofy split-buffer layout, hence the simple test above.
              */
             cCells = this.updateScreenGraphicsCGA(addrScreen, addrScreenLimit);
         }
         else if (!this.fColor256) {
-            /*
+            /**
              * All EGA graphics modes are taken care of here, including all 16-color VGA graphics modes.
              */
             cCells = this.updateScreenGraphicsEGA(addrBuffer, addrScreen, addrScreenLimit);
         }
         else {
-            /*
+            /**
              * Finally, all 256-color VGA modes are processed here.
              */
             cCells = this.updateScreenGraphicsVGA(addrBuffer, addrScreen, addrScreenLimit);
@@ -58172,7 +58186,7 @@ class Videox86 extends Component {
         let font = this.aFonts[this.nActiveFont];
         if (!font) return 0;
 
-        /*
+        /**
          * If MDA.MODE.BLINK_ENABLE is set and a cell's blink bit is set, then if (cBlinks & 0x2) != 0,
          * we want the foreground element of the cell to be drawn; otherwise we don't.  So every 16-bit
          * data word we pull from the video buffer will be supplemented with our own special attribute bit
@@ -58189,7 +58203,7 @@ class Videox86 extends Component {
         let dataMask = 0xfffff;
         let adwMemory = card.adwMemory;
 
-        /*
+        /**
          * Normally, cbCell will be 2, when attribute bytes are addressible (interleaved) with character bytes,
          * but Fantasy Land is an exception.  Which is another great reason why the loop below needs to get both
          * bytes directly from adwMemory, because reading them with bus.getShortDirect(addrScreen) won't always work.
@@ -58280,7 +58294,7 @@ class Videox86 extends Component {
      */
     updateScreenGraphicsCGA(addrScreen, addrScreenLimit)
     {
-        /*
+        /**
          * This is the CGA graphics-mode update case, where cells are pixels spread across two halves of the buffer.
          */
         let cCells = (addrScreenLimit - addrScreen) >> 1;
@@ -58325,7 +58339,7 @@ class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
          * canvasBuffer onto contextScreen, e{ven for the smallest change, let's try to be a bit smarter about
          * the update (well, to the extent that the canvas APIs permit).
@@ -58335,7 +58349,7 @@ class Videox86 extends Component {
             let cyDirty = yMaxDirty - yDirty;
             // this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
-            /*
+            /**
              * While ideally I would draw only the dirty portion of canvasBuffer, there usually isn't a 1-1 pixel mapping
              * between canvasBuffer and contextScreen.  In fact, the WHOLE POINT of the canvasBuffer is to leverage
              * drawImage()'s scaling ability; for example, a CGA graphics mode might be 640x200, whereas the canvas representing
@@ -58376,7 +58390,7 @@ class Videox86 extends Component {
         let xDirty = this.nCols, xMaxDirty = 0, yDirty = this.nRows, yMaxDirty = 0;
         let iPixelFirst = this.cardActive.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
 
-        /*
+        /**
          * TODO: What should happen if the card is programmed such that nColsLogical is LESS THAN nCols?
          */
         let nRowAdjust = (this.nColsLogical > this.nCols? ((this.nColsLogical - this.nCols - iPixelFirst) >> 3) : 0);
@@ -58387,13 +58401,14 @@ class Videox86 extends Component {
 
             let data = adwMemory[idw];
 
-            /*
+            /**
              * Figure out how many visible pixels this data represents; usually 8, unless panning is being used.
              */
-            let iPixel, nPixels = 8;
+            let iPixel;
+            let nPixels = 8;
 
             if (iPixelFirst) {
-                /*
+                /**
                  * Notice that we're not using the cell cache when panning is active, because the cached cell data no
                  * longer aligns with the data we're pulling out of the video buffer, and it's not clear that the effort
                  * to realign the data and make a valid cache comparison would save enough work to make it worthwhile.
@@ -58401,7 +58416,7 @@ class Videox86 extends Component {
                 if (!x) {
                     data <<= iPixelFirst;
                     nPixels -= iPixelFirst;
-                    /*
+                    /**
                      * This is as good a place as any to invalidate the cell cache when panning is active; this ensures
                      * we don't rely on stale cache contents once panning stops.
                      */
@@ -58424,14 +58439,14 @@ class Videox86 extends Component {
             if (nPixels) {
                 if (x < xDirty) xDirty = x;
                 for (iPixel = 0; iPixel < nPixels; iPixel++) {
-                    /*
+                    /**
                      * 0x80808080 may LOOK like a 32-bit value, but it is not, because JavaScript treats it as a POSITIVE
                      * number, and therefore outside the normal 32-bit integer range; however, the AND operator guarantees
                      * that the result will be a 32-bit value, so it doesn't matter.
                      */
                     let dwPixel = data & 0x80808080;
 
-                    /*
+                    /**
                      * We now ensure that bPixel will default to 0 if an undefined value ever slips through again.
                      *
                      * How did an undefined value slip through?  We had (incorrectly) initialized entries in aEGADWToByte;
@@ -58459,7 +58474,7 @@ class Videox86 extends Component {
 
         if (iPixelFirst) cCells = 0;    // zero the cell count to inhibit setting iCellCacheValid
 
-        /*
+        /**
          * For a fascinating discussion of the best way to update the screen canvas at this point, see updateScreenGraphicsCGA().
          */
         if (xDirty < this.nCols) {
@@ -58501,7 +58516,7 @@ class Videox86 extends Component {
         let cbInc = (this.cardActive.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.CHAIN4)? 4 : 1;
         let iPixelFirst = this.cardActive.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
 
-        /*
+        /**
          * TODO: What should happen if the card is programmed such that nColsLogical is LESS THAN nCols?
          */
         let nRowAdjust = (this.nColsLogical > this.nCols? ((this.nColsLogical - this.nCols - iPixelFirst) >> 3) : 0);
@@ -58512,13 +58527,14 @@ class Videox86 extends Component {
 
             let data = adwMemory[idw];
 
-            /*
+            /**
              * Figure out how many visible pixels this data represents; usually 4, unless panning is being used.
              */
-            let iPixel, nPixels = 4;
+            let iPixel;
+            let nPixels = 4;
 
             if (iPixelFirst) {
-                /*
+                /**
                  * TODO: Implement support for 8bpp panning
                  */
             } else {
@@ -58556,7 +58572,7 @@ class Videox86 extends Component {
 
         if (iPixelFirst) cCells = 0;    // zero the cell count to inhibit setting iCellCacheValid
 
-        /*
+        /**
          * For a fascinating discussion of the best way to update the screen canvas at this point, see updateScreenGraphicsCGA().
          */
         if (xDirty < this.nCols) {
@@ -58579,7 +58595,7 @@ class Videox86 extends Component {
      */
     getRetraceBits(card)
     {
-        /*
+        /**
          * NOTE: The bits CGA.STATUS.RETRACE (0x01) and CGA.STATUS.VRETRACE (0x08) match the EGA definitions,
          * and they also correspond to the MDA bits MDA.STATUS.HDRIVE (0x01) and MDA.STATUS.BWVIDEO (0x08); it's
          * unclear why the MDA uses different designations, but the bits appear to serve the same purpose.
@@ -58587,7 +58603,7 @@ class Videox86 extends Component {
         let b = 0;
         let nCycles = this.cpu.getCycles();
         let nCyclesElapsed = nCycles - card.nCyclesVertRetrace;
-        /*
+        /**
          * The following code is a work-around for IBM's VGA diagnostic code starting at C000:01E5,
          * which expects an entire screen refresh (ie, 400 horizontal retraces followed by 1 vertical
          * retrace) to take roughly 1/30 of a second instead of 1/60.  The longer vertical retrace
@@ -58783,7 +58799,7 @@ class Videox86 extends Component {
             this.printIO(port, bOut, addrFrom, "ATC.INDX");
             card.fATCData = true;
             if ((bOut & Card.ATC.INDX_PAL_ENABLE) && !fPalEnabled) {
-                /*
+                /**
                  * TODO: Consider whether it's really necessary (or desirable) to immediately update the screen
                  * on a font change, or if it's sufficient to simply wait until the next normal periodic update.
                  */
@@ -58792,7 +58808,7 @@ class Videox86 extends Component {
                 }
             }
             else {
-                /*
+                /**
                  * TODO: We might want a screen blanking function, suitable for any mode, when INDX_PAL_ENABLE is cleared.
                  * powerDown() might like to use such a function, too.  updateScreen() already disables any further screen
                  * updates while INDX_PAL_ENABLE is clear (except when fForce is true), but that's all we currently do.
@@ -58832,7 +58848,7 @@ class Videox86 extends Component {
                     if (iReg == Card.ATC.HPAN.INDX) {
                         if (this.fOverBuffer) {
                             this.fShifted = true;
-                            /*
+                            /**
                              * TODO: The SHIFT_LEFT value apparently has a slightly different interpretation in
                              * monochrome mode (ie, when font.cxChar == 9, 8 means no shift and 0-7 means 1-8 shifts).
                              */
@@ -58862,7 +58878,7 @@ class Videox86 extends Component {
             let iBit = 3 - ((this.cardEGA.regMisc & Card.MISC.CLOCK_SELECT) >> 2);    // this is the desired SW # (0-3)
             bSWBit = (this.bEGASwitches & (1 << iBit)) << (Card.STATUS0.SWSENSE_SHIFT - iBit);
         } else {
-            /*
+            /**
              * The IBM VGA ROM expects the SWSENSE bit to change according to how the DAC is programmed.
              *
              * At C000:0391, the ROM selects the following array at 0x0454:
@@ -58901,7 +58917,7 @@ class Videox86 extends Component {
             }
         }
         let b = ((this.cardEGA.regStatus0 & ~Card.STATUS0.SWSENSE) | bSWBit);
-        /*
+        /**
          * TODO: Figure out where Card.STATUS0.FEAT bits should come from....
          */
         this.cardEGA.regStatus0 = b;
@@ -59039,7 +59055,7 @@ class Videox86 extends Component {
                 this.buildFont(true);
 
                 this.invalidateCellCache(false, nFontSelect, nFontPrev);
-                /*
+                /**
                  * TODO: Consider whether this code should, like outATC(), immediately update the screen
                  * on a font change, or if it's sufficient to simply wait until the next normal periodic update.
                  */
@@ -59048,7 +59064,7 @@ class Videox86 extends Component {
 
         case Card.SEQ.MEMMODE.INDX:
             if (this.setCardAccess(this.getCardAccess())) {
-                /*
+                /**
                  * When switching screens (via SysReq) on early revisions of OS/2 (eg, FOOTBALL), the screen would go
                  * blank; this appeared to be because when the card is reprogrammed, we first think the card is going into
                  * graphics mode, then we reverse course when it becomes clear that the card is going back into text mode,
@@ -59518,7 +59534,7 @@ class Videox86 extends Component {
     inCRTCIndx(card, port, addrFrom)
     {
         let b;
-        /*
+        /**
          * The IBM VGA ROM makes some hardware determinations based on how the CRTC controller responds when
          * the IO_SELECT bit in the Miscellaneous Output Register is cleared; normally, that would mean ports
          * 0x3B? are decoded and ports 0x3D? are ignored.  We didn't used to bother ignoring them, but the
@@ -59561,7 +59577,7 @@ class Videox86 extends Component {
     inCRTCData(card, port, addrFrom)
     {
         let b;
-        /*
+        /**
          * The IBM VGA ROM makes some hardware determinations based on how the CRTC controller responds when
          * the IO_SELECT bit in the Miscellaneous Output Register is cleared; normally, that would mean ports
          * 0x3B? are decoded and ports 0x3D? are ignored.  We didn't used to bother ignoring them, but the
@@ -59597,7 +59613,7 @@ class Videox86 extends Component {
     {
         if (card.regCRTIndx < card.nCRTCRegs) {
 
-            /*
+            /**
              * To simulate how the 6845 effectively ignores changes to CURSCAN or CURSCANB whenever one is written
              * while the other is currently > MAXSCAN, we check for those writes now, and ignore the write as appropriate.
              *
@@ -59632,7 +59648,7 @@ class Videox86 extends Component {
                     }
                 }
                 else if (fModified) {
-                    /*
+                    /**
                      * If the split-screen state has been modified, then partially invalidate the cell cache.
                      *
                      * TODO: This register is also used in conjunction with one overflow bit in the OVERFLOW register
@@ -59645,7 +59661,7 @@ class Videox86 extends Component {
                 }
             }
 
-            /*
+            /**
              * During mode changes on the EGA, all the CRTC regs are typically programmed in sequence,
              * and if that's all that's happening with Card.CRTC.MAXSCAN, then we don't want to treat
              * it special; let the mode change be detected normally (eg, when the GRC regs are written later).
@@ -59725,7 +59741,7 @@ class Videox86 extends Component {
         let b = this.getRetraceBits(card);
 
         if (card === this.cardEGA) {
-            /*
+            /**
              * STATUS1 diagnostic bits 5 and 4 are set according to the Card.ATC.PLANES.MUX bits:
              *
              *      MUX     Bit 5   Bit 4
@@ -59751,13 +59767,13 @@ class Videox86 extends Component {
              */
             b |= ((card.regStatus & Card.STATUS1.DIAGNOSTIC) ^ Card.STATUS1.DIAGNOSTIC);
 
-            /*
+            /**
              * Last but not least, we must reset the EGA's ATC flip-flop whenever this register is read.
              */
             card.fATCData = false;
         }
         else {
-            /*
+            /**
              * On the MDA/CGA, to satisfy ROM BIOS testing ("TEST.10"), it's sufficient to do a simple toggle of
              * bits 0 and 3 on every read.
              *
@@ -59862,7 +59878,7 @@ class Videox86 extends Component {
             let element = aElement[iVideo];
             let parmsVideo = Component.getComponentParms(element);
 
-            /*
+            /**
              * We prefer to let the XSL (or HTML) template create the canvas element for us, so that
              * the page is as fully-formed as possible, keeping disruption of page layout to a minimum.
              */
@@ -59887,7 +59903,7 @@ class Videox86 extends Component {
                 element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
             }
 
-            /*
+            /**
              * The "contenteditable" attribute on a canvas element NOTICEABLY slows down canvas drawing on
              * Safari as soon as you give the canvas focus (ie, click away from the canvas, and drawing speeds
              * up; click on the canvas, and drawing slows down).  So the "transparent textarea hack" that we
@@ -59911,7 +59927,7 @@ class Videox86 extends Component {
                 element['onresize'](null);
             }
 
-            /*
+            /**
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
              * until we figure out a better UI.  And note that we use our WebLib.addPageEvent() helper function to make
@@ -59919,14 +59935,14 @@ class Videox86 extends Component {
              */
             let aspect = +(WebLib.getURLParm('aspect') || parmsVideo['aspect']);
 
-            /*
+            /**
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
                 WebLib.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
-                        /*
+                        /**
                          * Since aspectRatio is the target width/height, we have:
                          *
                          *      eParent.clientWidth / eChild.style.height = aspectRatio
@@ -59944,7 +59960,7 @@ class Videox86 extends Component {
                 globals.window['onresize']();
             }
 
-            /*
+            /**
              * HACK: Android-based browsers, like the Silk (Amazon) browser and Chrome for Android, don't honor the
              * "contenteditable" attribute; that is, when the canvas receives focus, they don't activate the on-screen
              * keyboard.  So my fallback is to create a transparent textarea on top of the canvas.
@@ -59982,7 +59998,7 @@ class Videox86 extends Component {
                 element.appendChild(textarea);
             }
 
-            /*
+            /**
              * As noted in keyboard.js, the keyboard on an iOS device tends to pop up with the SHIFT key depressed,
              * which is not the initial keyboard state that the Keyboard component expects, so hopefully turning off
              * these "auto" attributes will help.
@@ -59998,7 +60014,7 @@ class Videox86 extends Component {
                 textarea.setAttribute("autocapitalize", "off");
                 textarea.setAttribute("autocorrect", "off");
                 textarea.setAttribute("spellcheck", "false");
-                /*
+                /**
                 * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
                 * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
@@ -60021,7 +60037,7 @@ class Videox86 extends Component {
                 WebLib.addPageEvent('resize', onResizeTextArea);
             }
 
-            /*
+            /**
              * See if there are any "diagnostic" elements we should pass along, too.
              */
             let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(APPCLASS + "-video-diagnostic"));
@@ -60711,7 +60727,7 @@ class ParallelPort extends Component {
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
-            /*
+            /**
              * If the ParallelPort wants to bind to a control (eg, "print") in a DIFFERENT component (eg, "Panel"),
              * then it specifies the name of that control with the 'binding' property.  The ParallelPort constructor
              * will then call bindExternalControl(), which looks up the control, and then passes it to our own
@@ -60997,7 +61013,7 @@ class ParallelPort extends Component {
                 this.controlBuffer.value = this.controlBuffer.value.slice(0, -1);
             }
             else {
-                /*
+                /**
                  * If we assume that the printer being used was the original IBM 80 CPS Matrix Printer,
                  * characters 0x80-0x9F mirror control codes 0x00-0x1F, and characters 0xA0-0xDF are various
                  * block shapes, sort of in the spirit of the line-drawing characters 0xC0-0xDF defined by
@@ -61057,7 +61073,7 @@ class ParallelPort extends Component {
     }
 }
 
-/*
+/**
  * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -61075,7 +61091,7 @@ ParallelPort.DATA = {           // (read/write)
     REG:        0
 };
 
-/*
+/**
  * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -61099,7 +61115,7 @@ ParallelPort.STATUS = {         // (read)
     NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
 };
 
-/*
+/**
  * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
  *
  *      Bit     Pin
@@ -61121,7 +61137,7 @@ ParallelPort.CONTROL = {        // (read/write)
     ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
 };
 
-/*
+/**
  * Port input notification table
  */
 ParallelPort.aPortInput = {
@@ -61130,7 +61146,7 @@ ParallelPort.aPortInput = {
     0x2: ParallelPort.prototype.inControl
 };
 
-/*
+/**
  * Port output notification table
  */
 ParallelPort.aPortOutput = {
@@ -61138,7 +61154,7 @@ ParallelPort.aPortOutput = {
     0x2: ParallelPort.prototype.outControl
 };
 
-/*
+/**
  * Initialize every ParallelPort module on the page.
  */
 WebLib.onInit(ParallelPort.init);
@@ -61228,14 +61244,14 @@ class SerialPort extends Component {
             break;
         }
 
-        /*
+        /**
          * consoleBuffer becomes a string that records serial port output if the 'binding' property is set to the
          * reserved name "console".  Nothing is written to the console, however, until a linefeed (0x0A) is output
          * or the string length reaches a threshold (currently, 1024 characters).
          */
         this.consoleBuffer = null;
 
-        /*
+        /**
          * controlBuffer is a DOM element bound to the port (currently used for output only; see transmitByte()).
          *
          * Example: CTTY COM2
@@ -61249,7 +61265,7 @@ class SerialPort extends Component {
          */
         this.controlBuffer = null;
 
-        /*
+        /**
          * If controlBuffer is being used AND 'tabSize' is set, then we make an attempt to monitor the characters
          * being echoed via transmitByte(), maintain a logical column position, and convert any tabs into the appropriate
          * number of spaces.
@@ -61266,7 +61282,7 @@ class SerialPort extends Component {
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
         this.fNullModem = true;
 
-        /*
+        /**
          * Normally, any HTML controls defined within the scope of the component's XML element are *implicitly*
          * bound to us.  For example, in the XML below, the textarea control will automatically trigger a call to
          * setBinding() with sBinding set to "serialWindow" and control set to an HTMLTextAreaElement.
@@ -61285,7 +61301,7 @@ class SerialPort extends Component {
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
-            /*
+            /**
              * If the SerialPort wants to bind to a control (eg, "print") in a DIFFERENT component (eg, "Panel"),
              * then it specifies the name of that control with the 'binding' property.  The SerialPort constructor
              * will then call bindExternalControl(), which looks up the control, and then passes it to our own
@@ -61301,14 +61317,14 @@ class SerialPort extends Component {
             Component.bindExternalControl(this, sBinding);
         }
 
-        /*
+        /**
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = null;
         this.fAutoFlow = false;
 
-        /*
+        /**
          * Export all functions required by bindConnection() or initConnection(), whichever is required.
          */
         this['exports'] = {
@@ -61380,12 +61396,12 @@ class SerialPort extends Component {
             let serial = this;
             this.bindings[sBinding] = this.controlBuffer = /** @type {HTMLTextAreaElement} */ (control);
 
-            /*
+            /**
              * By establishing an onkeypress handler here, we make it possible for DOS commands like
              * "CTTY COM1" to more or less work (use "CTTY CON" to restore control to the DOS console).
              */
             this.controlBuffer.onkeydown = function onKeyDown(event) {
-                /*
+                /**
                  * This is required in addition to onkeypress, because it's the only way to prevent
                  * BACKSPACE (keyCode 8) from being interpreted by the browser as a "Back" operation;
                  * moreover, not all browsers generate an onkeypress notification for BACKSPACE.
@@ -61407,14 +61423,14 @@ class SerialPort extends Component {
             };
 
             this.controlBuffer.onkeypress = function onKeyPress(event) {
-                /*
+                /**
                  * Browser-independent keyCode extraction; refer to onKeyPress() and the other key event
                  * handlers in keyboard.js.
                  */
                 event = event || window.event;
                 let keyCode = event.which || event.keyCode;
                 serial.receiveData(keyCode);
-                /*
+                /**
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
                  * (so that the soft keyboard activates on iOS), instead of calling preventDefault() for
                  * selected keys (eg, the SPACE key, whose default behavior is to scroll the page), we must
@@ -61425,7 +61441,7 @@ class SerialPort extends Component {
                 return true;
             };
 
-            /*
+            /**
              * Now that we've added an onkeypress handler that calls preventDefault() for ALL keys, the control
              * itself no longer needs the "readonly" attribute; we primarily need to remove it for iOS browsers,
              * so that the soft keyboard will activate, but it shouldn't hurt to remove the attribute for all browsers.
@@ -61526,7 +61542,7 @@ class SerialPort extends Component {
                         }
                     }
                 }
-                /*
+                /**
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
                 this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
@@ -61545,7 +61561,7 @@ class SerialPort extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * This is as late as we can currently wait to make our first inter-machine connection attempt;
              * even so, the target machine's initialization process may still be ongoing, so any connection
              * may be not fully resolved until the target machine performs its own initConnection(), which will
@@ -61623,7 +61639,7 @@ class SerialPort extends Component {
      */
     initState(data)
     {
-        /*
+        /**
          * The NS8250A spec doesn't explicitly say what the RBR and THR are initialized to on a reset,
          * but I think we can safely assume zeros.  Similarly, we reset the baud rate Divisor Latch (wDL)
          * to an arbitrary but consistent default (DL_DEFAULT).
@@ -61712,7 +61728,7 @@ class SerialPort extends Component {
     receiveData(data, flush)
     {
         if (flush) {
-            /*
+            /**
              * Technically, this component is only emulating an 8250 (not a 16550), so the hardware
              * only has a 1-byte buffer (not a 16-byte buffer), but for debugging/development purposes,
              * I have historically buffered ALL received data.  Unfortunately, that internal buffer can
@@ -61826,7 +61842,7 @@ class SerialPort extends Component {
     inIIR(port, addrFrom)
     {
         let b = this.bIIR;
-        /*
+        /**
          * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR).
          */
         if (b == SerialPort.IIR.INT_THR) {
@@ -61914,7 +61930,7 @@ class SerialPort extends Component {
         } else {
             this.bTHR = bOut;
             this.bLSR &= ~(SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
-            /*
+            /**
              * If transmitByte() returned success, we used to immediately re-set the transmitter empty bits:
              *
              *      this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
@@ -61981,7 +61997,7 @@ class SerialPort extends Component {
         let delta = (bOut ^ this.bMCR);
         this.printIO(port, bOut, addrFrom, "MCR");
         this.bMCR = bOut;
-        /*
+        /**
          * Whenever DTR or RTS changes, we also need to notify any connected machine or mouse, via updateStatus().
          */
         if (delta & (SerialPort.MCR.DTR | SerialPort.MCR.RTS)) {
@@ -61996,7 +62012,7 @@ class SerialPort extends Component {
                 }
                 this.updateStatus.call(this.connection, pins);
             }
-            /*
+            /**
              * Throw in a call to advanceRBR() for good measure, in case fAutoFlow is set and RTS was just enabled.
              */
             this.advanceRBR();
@@ -62011,7 +62027,7 @@ class SerialPort extends Component {
     updateIIR()
     {
         let bIIR = -1;
-        /*
+        /**
          * We check all the interrupt conditions in priority order.  TODO: Add INT_LSR.
          */
         if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
@@ -62026,7 +62042,7 @@ class SerialPort extends Component {
         if (bIIR >= 0) {
             this.bIIR &= ~(SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS);
             this.bIIR |= bIIR;
-            /*
+            /**
              * I still throttle SerialPort interrupts by passing a hard-coded delay of 100 instructions to setIRR(),
              * even though we are now (theoretically) honoring the programmed baud rate.  The setIRR() delay does not
              * ensure any particular baud rate, it simply gives the underlying Interrupt Service Routine (ISR) some
@@ -62078,7 +62094,7 @@ class SerialPort extends Component {
             }
             else if (b == 0x08) {
                 this.controlBuffer.value = this.controlBuffer.value.slice(0, -1);
-                /*
+                /**
                  * TODO: Back up the correct number of columns if the character erased was a tab.
                  */
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
@@ -62093,7 +62109,7 @@ class SerialPort extends Component {
                     if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
-                    /*
+                    /**
                      * When BASIC.COM outputs a listing to a serial port, it ends every line with a CR (0x0D)
                      * but no LF (0x0A), which seems a bit odd.  We fix that here.
                      */
@@ -62154,7 +62170,7 @@ class SerialPort extends Component {
     }
 }
 
-/*
+/**
  * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
  *
  * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
@@ -62186,12 +62202,12 @@ SerialPort.DLL = {REG: 0};      // Divisor Latch LSB (only when SerialPort.LCR.D
 SerialPort.THR = {REG: 0};      // Transmitter Holding Register (write)
 SerialPort.DL_DEFAULT = 0x180;  // we select an arbitrary default Divisor Latch equivalent to 300 baud
 
-/*
+/**
  * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
  */
 SerialPort.RBR = {REG: 0};      // (read)
 
-/*
+/**
  * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
  */
 SerialPort.IER = {
@@ -62205,7 +62221,7 @@ SerialPort.IER = {
 
 SerialPort.DLM = {REG: 1};      // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
 
-/*
+/**
  * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
  *
  * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
@@ -62221,7 +62237,7 @@ SerialPort.IIR = {
     UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
 };
 
-/*
+/**
  * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
  */
 SerialPort.LCR = {
@@ -62238,7 +62254,7 @@ SerialPort.LCR = {
     DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
 };
 
-/*
+/**
  * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
  */
 SerialPort.MCR = {
@@ -62251,7 +62267,7 @@ SerialPort.MCR = {
     UNUSED:         0xE0        // always zero
 };
 
-/*
+/**
  * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
  *
  * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
@@ -62270,7 +62286,7 @@ SerialPort.LSR = {
     UNUSED:         0x80        // always zero
 };
 
-/*
+/**
  * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
  */
 SerialPort.MSR = {
@@ -62285,12 +62301,12 @@ SerialPort.MSR = {
     RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
 };
 
-/*
+/**
  * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
  */
 SerialPort.SCR = {REG: 7};
 
-/*
+/**
  * Port input notification table
  */
 SerialPort.aPortInput = {
@@ -62303,7 +62319,7 @@ SerialPort.aPortInput = {
     0x6: SerialPort.prototype.inMSR
 };
 
-/*
+/**
  * Port output notification table
  */
 SerialPort.aPortOutput = {
@@ -62313,7 +62329,7 @@ SerialPort.aPortOutput = {
     0x4: SerialPort.prototype.outMCR
 };
 
-/*
+/**
  * Initialize every SerialPort module on the page.
  */
 WebLib.onInit(SerialPort.init);
@@ -62322,7 +62338,7 @@ WebLib.onInit(SerialPort.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * This module provides connectivity between the TestMonitor component and whichever PCx86 SerialPort
  * our 'binding' property indicates, if any.
  */
@@ -62471,12 +62487,12 @@ class TestController extends Component {
             this.controlBuffer = /** @type {HTMLTextAreaElement} */ (control);
             this.consoleBuffer = null;          // we currently use one or the other: control or console
 
-            /*
+            /**
              * By establishing an onkeypress handler here, we make it possible for DOS commands like
              * "CTTY COM1" to more or less work (use "CTTY CON" to restore control to the DOS console).
              */
             control.onkeydown = function onKeyDown(event) {
-                /*
+                /**
                  * This is required in addition to onkeypress, because it's the only way to prevent
                  * BACKSPACE (keyCode 8) from being interpreted by the browser as a "Back" operation;
                  * moreover, not all browsers generate an onkeypress notification for BACKSPACE.
@@ -62498,14 +62514,14 @@ class TestController extends Component {
             };
 
             control.onkeypress = function onKeyPress(event) {
-                /*
+                /**
                  * Browser-independent keyCode extraction; refer to onKeyPress() and the other key event
                  * handlers in keyboard.js.
                  */
                 event = event || window.event;
                 let keyCode = event.which || event.keyCode;
                 if (controller.deliverInput) controller.deliverInput(keyCode);
-                /*
+                /**
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
                  * (so that the soft keyboard activates on iOS), instead of calling preventDefault() for
                  * selected keys (eg, the SPACE key, whose default behavior is to scroll the page), we must
@@ -62516,7 +62532,7 @@ class TestController extends Component {
                 return true;
             };
 
-            /*
+            /**
              * Now that we've added an onkeypress handler that calls preventDefault() for ALL keys, the control
              * itself no longer needs the "readonly" attribute; we primarily need to remove it for iOS browsers,
              * so that the soft keyboard will activate, but it shouldn't hurt to remove the attribute for all browsers.
@@ -62569,7 +62585,7 @@ class TestController extends Component {
                 } else {
                     this.controlBuffer.value += s;
                 }
-                /*
+                /**
                  * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                  */
                 if (!DEBUG && this.controlBuffer.value.length > 8192) {
@@ -62629,7 +62645,7 @@ class TestController extends Component {
     }
 }
 
-/*
+/**
  * Initialize every TestController module on the page.
  */
 WebLib.onInit(TestController.init);
@@ -62638,7 +62654,7 @@ WebLib.onInit(TestController.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
+/**
  * Overview
  * --------
  *
@@ -62681,7 +62697,7 @@ class TestMonitor {
     constructor()
     {
         if (DEBUG) console.log("TestMonitor()");
-        /*
+        /**
          * Operations are added to the following queue by addOperation(), which ensures that as soon as it
          * transitions from empty to non-empty, a timeout handler is established to begin draining the queue.
          *
@@ -62733,7 +62749,7 @@ class TestMonitor {
         let commandParts = commandLine.split(' ');
         let command = commandParts[0];
 
-        /*
+        /**
          * Check for a matching command in the current "test suite" category.
          */
         let fExists = false;
@@ -62745,7 +62761,7 @@ class TestMonitor {
         let op, mode;
         if (typeof command == "string") {
             op = command;
-            /*
+            /**
              * If you don't want any special op processing (eg, for-loop), then use an explicit 'op' property.
              */
             if (this.addForLoop(op)) return true;
@@ -62951,7 +62967,7 @@ class TestMonitor {
                     let suite = this.tests[category];
                     let prompt = suite[TestMonitor.MODE.PROMPT];
                     if (prompt) {
-                        /*
+                        /**
                          * The 'prompt' property is allowed to contain a string or array of strings.
                          */
                         if (typeof prompt == "string") {
@@ -63020,7 +63036,7 @@ class TestMonitor {
         } else if (this.mode == TestMonitor.MODE.TERMINAL) {
             this.sendOutput(data);
         } else {
-            /*
+            /**
              * TODO: This is where we need to collect the response to any commands we have issued.
              */
             // this.sendOutput(data);
@@ -63106,7 +63122,7 @@ class Mouse extends Component {
         RIGHT:  2
     };
 
-    /*
+    /**
      * The Microsoft Bus Mouse supported only one base address: 0x23C.
      *
      * NOTE: Windows v1.01 probes ports 0x23D and 0x23F immediately prior to probing COM2 (and then COM1)
@@ -63127,7 +63143,7 @@ class Mouse extends Component {
         }
     };
 
-    /*
+    /**
      * The retail Microsoft InPort card supported two base addresses, 0x23C and 0x238, through the primary and
      * secondary jumpers, respectively.  However, OEMs may have had InPorts on other base addresses.
      *
@@ -63166,7 +63182,7 @@ class Mouse extends Component {
             MODE:       0x07        // InPort Mode Register
         },
         DATA: {
-            /*
+            /**
              * The internal register read or written via this port is determined by the value written to ADDR.PORT
              */
             PORT:       0x23D,
@@ -63185,7 +63201,7 @@ class Mouse extends Component {
             }
         },
         ID: {
-            /*
+            /**
              * The initial read returns the Chip ID; alternate reads return a byte containing the InPort revision number
              * in the low nibble and the InPort version number in the high nibble.
              */
@@ -63197,7 +63213,7 @@ class Mouse extends Component {
         }
     };
 
-    /*
+    /**
      * From http://paulbourke.net/dataformats/serialmouse:
      *
      *      The old MicroSoft serial mouse, while no longer in general use, can be employed to provide a low cost input device,
@@ -63327,7 +63343,7 @@ class Mouse extends Component {
         this.setActive(false);
         this.fActive = this.fCaptured = this.fLocked = false;
 
-        /*
+        /**
          * Initially, no video devices, and therefore no screens, are attached.  initBus() will update aVideo,
          * and powerUp() will update aScreens.
          */
@@ -63351,7 +63367,7 @@ class Mouse extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
         this.scale = cmp.getMachineParm('scaleMouse') || this.scale;
-        /*
+        /**
          * Enumerate all the Video components that we may need to interact with.
          */
         for (let video = null; (video = cmp.getMachineComponent("Video", video));) {
@@ -63384,7 +63400,7 @@ class Mouse extends Component {
     setActive(fActive)
     {
         this.fActive = fActive;
-        /*
+        /**
          * It's currently not possible to automatically lock the pointer outside the context of a user action
          * (eg, a button or screen click), so this code is for naught.
          *
@@ -63416,7 +63432,7 @@ class Mouse extends Component {
                     if (componentDevice.bindMouse) {
                         this.componentDevice = componentDevice.bindMouse(this.idDevice, this, this.receiveStatus);
                         if (this.componentDevice) {
-                            /*
+                            /**
                              * It's possible that the SerialPort we've just attached to might want to bring us "up to speed"
                              * on the device's state, which is why I envisioned a subsequent syncMouse() call.  And you would
                              * want to do that as a separate call, not as part of bindMouse(), because componentDevice
@@ -63522,7 +63538,7 @@ class Mouse extends Component {
         this.fButton1 = data[i++];      // FYI, we consider button1 to be the LEFT button
         this.fButton2 = data[i++];      // FYI, we consider button2 to be the RIGHT button
         this.pins = data[i];
-        /*
+        /**
          * Convert old UART "MCR" data to new RS-232 "pins" data, in case we're loading an old state;
          * detection and conversion relies on the fact that the MCR bits don't overlap with any RS-232 bits.
          */
@@ -63627,7 +63643,7 @@ class Mouse extends Component {
                 },
                 false               // we'll specify false for the 'useCapture' parameter for now...
             );
-            /*
+            /**
              * None of these tricks seemed to work for IE10, so I'm giving up hiding the browser's mouse pointer in IE for now.
              *
              *      control['style']['cursor'] = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='), url('/versions/images/current/blank.cur'), none";
@@ -63674,7 +63690,7 @@ class Mouse extends Component {
     {
         if (fDown !== undefined) {
             if (this.fLocked === false) {
-                /*
+                /**
                  * If there's no support for automatic pointer locking in the Video component, notifyPointerActive()
                  * will return false, and we will set fLocked to null, ensuring that we never attempt this again.
                  */
@@ -63684,11 +63700,12 @@ class Mouse extends Component {
             }
             this.clickMouse(event.button, fDown);
         } else {
-            /*
+            /**
              * All we really care about are deltas.  We record screenX and screenY (as xMouse and yMouse)
              * merely to calculate xDelta and yDelta.
              */
-            let xDelta, yDelta;
+            let xDelta;
+            let yDelta;
             if (this.xMouse < 0 || this.yMouse < 0) {
                 this.xMouse = event.screenX;
                 this.yMouse = event.screenY;
@@ -63751,7 +63768,7 @@ class Mouse extends Component {
     moveMouse(xDelta, yDelta, xDiag, yDiag)
     {
         if (this.isActive()) {
-            /*
+            /**
              * I would prefer to simply say "Math.round(xDelta * this.scale)", but JavaScript's round() function
              * rounds negative numbers toward +infinity if the fraction is exactly 0.5.  All positive numbers are
              * rounded correctly, so we convert the value to positive and restore its sign afterward.  Additionally,
@@ -63763,7 +63780,7 @@ class Mouse extends Component {
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
                 this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
-                /*
+                /**
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
                  * on completion.
@@ -63836,7 +63853,7 @@ class Mouse extends Component {
                     fIdentify = true;
                 }
                 if (fIdentify) {
-                    /*
+                    /**
                      * HEADS UP: Everything I'd read about the (original) Microsoft Serial Mouse "reset" protocol says
                      * that the device sends a single byte (0x4D aka 'M').  It's not surprising to think that newer mice
                      * might send additional bytes, but you would think that newer mouse drivers (eg, MOUSE.COM v8.20)
@@ -63864,7 +63881,7 @@ class Mouse extends Component {
             }
         } else {
             if (this.fActive) {
-                /*
+                /**
                  * Although this would seem nice (ie, for the Windows v1.01 mouse driver to turn RTS off when its mouse
                  * driver shuts down and Windows exits, since it DID turn RTS on), that doesn't appear to actually happen.
                  * At the very least, Windows will have (re)masked the serial port's IRQ, so what does it matter?  Not much,
@@ -64030,7 +64047,7 @@ Mouse.aBusOutput = {
     0x3:    Mouse.prototype.outBusCPPI
 };
 
-/*
+/**
  * Initialize every Mouse module on the page.
  */
 WebLib.onInit(Mouse.init);
@@ -66090,62 +66107,6 @@ class FileInfo {
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
- * FDC Terms (see FDC.TERMS)
- *
- *      C       Cylinder Number         the current or selected cylinder number
- *
- *      D       Data                    the data pattern to be written to a sector
- *
- *      DS      Drive Select            the selected driver number encoded the same as bits 0 and 1 of the Digital Output
- *                                      Register (DOR); eg, DS0, DS1, DS2, or DS3
- *
- *      DTL     Data Length             when N is 00, DTL is the data length to be read from or written to a sector
- *
- *      EOT     End Of Track            the final sector number on a cylinder
- *
- *      GPL     Gap Length              the length of gap 3 (spacing between sectors excluding the VCO synchronous field)
- *
- *      H       Head Address            the head number, either 0 or 1, as specified in the ID field
- *
- *      HD      Head                    the selected head number, 0 or 1 (H = HD in all command words)
- *
- *      HLT     Head Load Time          the head load time in the selected drive (2 to 256 milliseconds in 2-millisecond
- *                                      increments for the 1.2M-byte drive and 4 to 512 milliseconds in 4 millisecond increments
- *                                      for the 320K-byte drive)
- *
- *      HUT     Head Unload Time        the head unload time after a read or write operation (0 to 240 milliseconds in
- *                                      16-millisecond increments for the 1.2M-byte drive and 0 to 480 milliseconds in
- *                                      32-millisecond increments for the 320K-byte drive)
- *
- *      MF      FM or MFM Mode          0 selects FM mode and 1 selects MFM (MFM is selected only if it is implemented)
- *
- *      MT      Multitrack              1 selects multitrack operation (both HD0 and HD1 will be read or written)
- *
- *      N       Number                  the number of data bytes written in a sector
- *
- *      NCN     New Cylinder Number     the new cylinder number for a SEEK operation
- *
- *      ND      Non-Data Mode           indicates an operation in the non-data mode
- *
- *      PCN     Present Cylinder Number the cylinder number at the completion of a SENSE INTERRUPT STATUS command
- *                                      (present position of the head)
- *
- *      R       Record                  the sector number to be read or written
- *
- *      SC      Sectors Per Cylinder    the number of sectors per cylinder
- *
- *      SK      Skip                    this stands for skip deleted-data address mark
- *
- *      SRT     Stepping Rate           this 4 bit byte indicates the stepping rate for the diskette drive as follows:
- *                                      1.2M-Byte Diskette Drive: 1111=1ms, 1110=2ms, 1101=3ms
- *                                      320K-Byte Diskette Drive: 1111=2ms, 1110=4ms, 1101=6ms
- *
- *      STP     STP Scan Test           if STP is 1, the data in contiguous sectors is compared with the data sent
- *                                      by the processor during a scan operation; if STP is 2, then alternate sections
- *                                      are read and compared
- */
-
 /** @typedef {{ name: string, path: string }} */
 let DiskImage;
 
@@ -66199,7 +66160,7 @@ class FDC extends Component {
      */
     constructor(parmsFDC)
     {
-        /*
+        /**
          * TODO: Indicate the type of diskette image being loaded (this might help folks understand what's going
          * on when they try to load a diskette image that's larger than what the selected operating system supports).
          */
@@ -66213,20 +66174,20 @@ class FDC extends Component {
         this.aDiskettes = parmsFDC['diskettes'];
         this.sDisketteServer = parmsFDC['server'] || "";
 
-        /*
+        /**
          * We don't eval() sDriveTypes until initBus() is called, so that we can check for any machine overrides;
          * note that the override, if any, must be named 'floppyDrives' to avoid conflicting with the HDC's 'drives'
          * setting.
          */
         this.sDriveTypes = parmsFDC['drives'];
 
-        /*
+        /**
          * We record any 'autoMount' object now, but we no longer parse it until initBus(), because the Computer's
          * getMachineParm() service may have an override for us.
          */
         this.configMount = this.parseMount(parmsFDC['autoMount']);
 
-        /*
+        /**
          * This establishes "name" as the default; if we decide we'd prefer "none" to be the default (ie, the order
          * to use when no sortBy value is specified), we can just drop the '|| "name"', because an undefined value is
          * just as falsy as null.
@@ -66238,7 +66199,7 @@ class FDC extends Component {
         this.sortBy = parmsFDC['sortBy'] || "name";
         if (this.sortBy == "none") this.sortBy = null;
 
-        /*
+        /**
          * The following array keeps track of every disk image we've ever mounted.  Each entry in the
          * array is another array whose elements are:
          *
@@ -66250,14 +66211,14 @@ class FDC extends Component {
          */
         this.aDiskHistory = [];
 
-        /*
+        /**
          * Support for local disk images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
         this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
-        /*
+        /**
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
          * it may prefer to overload our drive control for easier disc selection, in which case this will contain
          * drive name properties mapped to external disc lists.
@@ -66266,7 +66227,7 @@ class FDC extends Component {
         this.externalDrives = {};
         this.externalActive = null;
 
-        /*
+        /**
          * The remainder of FDC initialization now takes place in our initBus() handler, largely because we
          * want initController() to have access to the ChipSet component, so that it can query switches and/or CMOS
          * settings that determine the number of drives and their characteristics (eg, 40-track vs. 80-track),
@@ -66292,7 +66253,7 @@ class FDC extends Component {
     setBinding(sHTMLType, sBinding, control, sValue)
     {
         let fdc = this;
-        /*
+        /**
          * TODO: Making copies of control that are simply cast to different types seems silly, but it doesn't
          * really cost anything and it's cleaner than doing a lot MORE type overrides inline.  However, it still
          * doesn't solve all my problems: controlForm should really be cast as HTMLFormElement, but JavaScript
@@ -66313,7 +66274,7 @@ class FDC extends Component {
         case "descDisk":
         case "listDrives":
             this.bindings[sBinding] = controlSelect;
-            /*
+            /**
              * I tried going with onclick instead of onchange, so that if you wanted to confirm what's
              * loaded in a particular drive, you could click the drive control without having to change it.
              * However, that doesn't seem to work for all browsers, so I've reverted to onchange.
@@ -66337,14 +66298,14 @@ class FDC extends Component {
             return true;
 
         case "saveDisk":
-            /*
+            /**
              * Yes, technically, this feature does not require "Local disk support" (which is really a reference
              * to FileReader support), but since fLocalDisks is also false for all mobile devices, and since there
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available");
-                /*
+                /**
                  * We could also simply remove the control; eg:
                  *
                  *      control.parentNode.removeChild(@type {Node} (control));
@@ -66362,7 +66323,7 @@ class FDC extends Component {
                     let iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     let drive = fdc.aDrives[iDriveSelected];
                     if (drive) {
-                        /*
+                        /**
                          * Note the similarity (and hence factoring opportunity) between this code and the HDC's
                          * "saveHD*" binding.
                          */
@@ -66384,7 +66345,7 @@ class FDC extends Component {
         case "mountDisk":
             if (!this.fLocalDisks) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
-                /*
+                /**
                  * We could also simply hide the control; eg:
                  *
                  *      controlForm.style.display = "none";
@@ -66395,7 +66356,7 @@ class FDC extends Component {
                 return false;
             }
             this.bindings[sBinding] = controlForm;
-            /*
+            /**
              * Enable "Mount" button only if a file is actually selected
              */
             controlForm.onchange = function onChangeMountDisk() {
@@ -66411,7 +66372,7 @@ class FDC extends Component {
                     let sDiskName = StrLib.getBaseName(sDiskPath, true);
                     fdc.loadSelectedDrive(sDiskName, sDiskPath, file);
                 }
-                /*
+                /**
                  * Prevent reloading of web page after form submission
                  */
                 return false;
@@ -66452,7 +66413,7 @@ class FDC extends Component {
 
         if (this.sDriveTypes) {
             try {
-                /*
+                /**
                  * We must take care when parsing user-supplied JSON-encoded drive data.
                  */
                 this.aDriveTypes = eval("(" + this.sDriveTypes + ")");
@@ -66467,7 +66428,7 @@ class FDC extends Component {
 
         this.panel = cmp.getMachineComponent("Panel", false);
 
-        /*
+        /**
          * If we didn't need auto-mount support, we could defer controller initialization until we received
          * a powerUp() notification, at which point reset() would call initController(), or restore() would
          * restore the controller; in that case, all we'd need to do here is call setReady().
@@ -66477,7 +66438,7 @@ class FDC extends Component {
         bus.addPortInputTable(this, FDC.aPortInput);
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
-        /*
+        /**
          * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter;
          * fortunately, that's not a problem, since we weren't doing anything with the parameter until
          * this point (initBus()) anyway, and it's just a comma-delimited list of "diskettes.json" files,
@@ -66491,7 +66452,7 @@ class FDC extends Component {
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
             let cLoaded = 0, cSuccessful = 0;
-            /*
+            /**
              * Preprocess the list of URLs, removing any that are not appropriate for the current host.
              */
             for (let i = 0; i < urls.length; i++) {
@@ -66551,7 +66512,7 @@ class FDC extends Component {
         if (config) {
             if (typeof config == "string") {
                 try {
-                    /*
+                    /**
                      * We must take care when parsing user-supplied JSON-encoded diskette data.
                      */
                     config = /** @type {Object} */ (eval("(" + config + ")"));
@@ -66563,7 +66524,7 @@ class FDC extends Component {
         } else {
             config = {};
         }
-        /*
+        /**
          * Instead of modifying configMerge, we merely import anything in configMerge that doesn't exist in the new config.
          */
         if (configMerge) {
@@ -66571,7 +66532,7 @@ class FDC extends Component {
                 if (!config[sDrive]) config[sDrive] = configMerge[sDrive];
             }
         }
-        /*
+        /**
          * We now allow "shorthand" configs, where each drive property can simply be a string (ie, the implied 'name' of a diskette)
          * instead of an object containing 'name' and/or 'path' strings.
          */
@@ -66596,7 +66557,7 @@ class FDC extends Component {
             if (!data) {
                 this.reset(true);
                 if (this.cmp.fReload) {
-                    /*
+                    /**
                      * If the computer's fReload flag is set, we're required to toss all currently
                      * loaded disks and remount all disks specified in the auto-mount configuration.
                      */
@@ -66636,12 +66597,12 @@ class FDC extends Component {
      */
     reset(fPowerUp)
     {
-        /*
+        /**
          * NOTE: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
         this.initController();
-        /*
+        /**
          * Don't bother resetting the drive list if we're being called by powerUp(), because powerUp() will.
          */
         if (!fPowerUp) this.resetDriveList();
@@ -66667,7 +66628,7 @@ class FDC extends Component {
      */
     resetDriveList()
     {
-        /*
+        /**
          * Populate the HTML controls to match the actual (well, um, specified) number of floppy drives.
          */
         let controlDrives;
@@ -66682,7 +66643,7 @@ class FDC extends Component {
                 controlOption.value = iDrive.toString();
                 controlOption.text = String.fromCharCode(0x41 + iDrive) + ":";
                 controlDrives.appendChild(controlOption);
-                /*
+                /**
                  * Add a second element for the drive that will automatically "write-protect" the selected diskette.
                  */
                 controlOption = document.createElement("option");
@@ -66751,49 +66712,49 @@ class FDC extends Component {
             data = [0, 0, FDC.REG_STATUS.RQM, new Array(9), 0, 0, 0, []];
         }
 
-        /*
+        /**
          * Selected drive (from regOutput), which can only be selected if its motor is on (see regOutput).
          */
         this.iDrive = data[i++];
         i++;                        // unused slot (if reused, bias by +4, since it was formerly a unit #)
 
-        /*
+        /**
          * Defaults to FDC.REG_STATUS.RQM set (ready for command) and FDC.REG_STATUS.READ_DATA clear (data direction
          * is from processor to the FDC Data Register).
          */
         this.regStatus = data[i++];
 
-        /*
+        /**
          * There can be up to 9 command bytes, and 7 result bytes, so 9 data registers are sufficient for communicating
          * in both directions (hence, the new Array(9) default above).
          */
         this.regDataArray = data[i++];
 
-        /*
+        /**
          * Determines the next data byte to be received.
          */
         this.regDataIndex = data[i++];
 
-        /*
+        /**
          * Determines the next data byte to be sent (internally, we use regDataIndex to read data bytes, up to this total).
          */
         this.regDataTotal = data[i++];
         this.regOutput = data[i++];
         let dataDrives = data[i++];
 
-        /*
+        /**
          * Initialize the disk history (if available) before initializing the drives, so that any disk deltas can be
          * applied to disk images that are already loaded.
          */
         let aDiskHistory = data[i++];
         if (aDiskHistory != null) this.aDiskHistory = aDiskHistory;
 
-        /*
+        /**
          * Default to the maximum number of drives unless ChipSet can give us a specific number of drives.
          */
         this.nDrives = this.aDriveTypes? this.aDriveTypes.length : (this.chipset? this.chipset.getDIPFloppyDrives() : 4);
 
-        /*
+        /**
          * I would prefer to allocate only nDrives, but as discussed in the handling of the FDC.REG_DATA.CMD.SENSE_INT
          * command, we're faced with situations where the controller must respond to any drive in the range 0-3, regardless
          * how many drives are actually installed.  We still rely upon nDrives to determine the number of drives displayed
@@ -66807,7 +66768,7 @@ class FDC extends Component {
             let fInit = false;
             let drive = this.aDrives[iDrive];
             if (drive === undefined) {
-                /*
+                /**
                  * The first time each drive is initialized, we query its capacity (based on switches or CMOS) and set
                  * the drive's physical limits accordingly (ie, max tracks, max heads, and max sectors/track).
                  */
@@ -66845,7 +66806,7 @@ class FDC extends Component {
             }
         }
 
-        /*
+        /**
          * regInput and regControl (port 0x3F7) were not present on controllers prior to MODEL_5170, which is why
          * we don't include initializers for them in the default data array; we could eliminate them on older models,
          * but we don't have access to the model info right now, and there's no real cost to always including them
@@ -66920,7 +66881,7 @@ class FDC extends Component {
         }
 
         if (data === undefined) {
-            /*
+            /**
              * We set a default of two heads (MODEL_5150 PCs originally shipped with single-sided drives,
              * but the ROM BIOS appears to have always supported both drive types).
              */
@@ -66928,7 +66889,7 @@ class FDC extends Component {
         }
 
         if (typeof data[1] == "boolean") {
-            /*
+            /**
              * Note that when no data is provided (eg, when the controller is being reinitialized), we now take
              * care to preserve any drive defaults that initController() already obtained for us, falling back to
              * bare minimums only when all else fails.
@@ -66946,7 +66907,7 @@ class FDC extends Component {
             ];
         }
 
-        /*
+        /**
          * resCode used to be an FDC global, but in order to insulate FDC state from the operation of various functions
          * that operate on drive objects (eg, readData and writeData), I've made it a per-drive variable.  This choice,
          * similar to my choice for handling PCN, may be contrary to how the actual hardware works, but I prefer this
@@ -66954,7 +66915,7 @@ class FDC extends Component {
          */
         drive.resCode = data[i++];
 
-        /*
+        /**
          * Some additional drive properties/defaults that are largely for the Disk component's benefit.
          */
         let a = data[i++];
@@ -66964,7 +66925,7 @@ class FDC extends Component {
         drive.nSectors = a[3];            // sectors/track
         drive.cbSector = a[4];            // bytes/sector
         drive.fRemovable = a[5];
-        /*
+        /**
          * If we have current media parameters, restore them; otherwise, default to the drive's physical parameters.
          */
         if ((drive.nDiskCylinders = a[6])) {
@@ -66976,7 +66937,7 @@ class FDC extends Component {
             drive.nDiskSectors = drive.nSectors;
         }
 
-        /*
+        /**
          * The next group of properties are set by various FDC command sequences.
          *
          * We initialize this.iDrive (above) and drive.bHead and drive.bCylinder (below) to zero, but leave the rest undefined,
@@ -67016,14 +66977,14 @@ class FDC extends Component {
         drive.bSectorEnd = data[i++];           // aka EOT
         drive.nBytes = data[i++];
 
-        /*
+        /**
          * The next group of properties are managed by worker functions (eg, doRead()) to maintain state across DMA requests.
          */
         drive.iByte = data[i++];                // location of the next byte to be accessed in the current sector
         drive.sector = null;
         drive.sectorPrev = null;                // used to remember the last sector read (or written)
 
-        /*
+        /**
          * We no longer reinitialize drive.disk, in order to retain previously mounted diskette across resets;
          * however, we do ensure that sDiskPath is initialized to a default that displayDiskette() can deal with.
          */
@@ -67037,7 +66998,7 @@ class FDC extends Component {
             let sDiskName = data[i++];
             let sDiskPath = data[i++];
             if (data[i] != null) drive.fWritable = data[i];
-            /*
+            /**
              * If we're restoring a local disk image, then the entire disk contents should be captured in aDiskHistory,
              * so all we have to do is mount a blank diskette and let disk.restore() do the rest; ie, there's nothing to
              * "load" (it's a purely synchronous operation).
@@ -67064,7 +67025,7 @@ class FDC extends Component {
                 this.setReady(false);
             }
         } else if (deltas !== undefined) {
-            /*
+            /**
              * If there's any data at all (ie, if this is a restore and not a reset), then it must be in the
              * pre-v1.02 save/restore format, so we'll restore as best we can, but be aware that if disk.restore()
              * notices that the currently mounted disk image differs from the disk image that these deltas belong to,
@@ -67075,7 +67036,7 @@ class FDC extends Component {
             }
         }
 
-        /*
+        /**
          * TODO: If loadDrive() returned true, then this can happen immediately.  Otherwise, loadDrive()
          * will have merely "queued up" the load request and drive.disk won't be ready yet, so figure out how/when
          * we can properly restore drive.sector in that case.
@@ -67138,7 +67099,7 @@ class FDC extends Component {
         data[i++] = drive.resCode;
         data[i++] = [drive.name, drive.nCylinders, drive.nHeads, drive.nSectors, drive.cbSector, drive.fRemovable, drive.nDiskCylinders, drive.nDiskHeads, drive.nDiskSectors];
         data[i++] = drive.bHead;
-        /*
+        /**
          * We used to store drive.nHeads in the next slot, but now we store bCylinderSeek,
          * and we bias it by +100 so that initDrive() can distinguish it from older values.
          */
@@ -67148,7 +67109,7 @@ class FDC extends Component {
         data[i++] = drive.bSectorEnd;
         data[i++] = drive.nBytes;
         data[i++] = drive.iByte;
-        /*
+        /**
          * Now we deviate from the 1.01a save format: instead of next storing all the deltas for the
          * currently mounted disk (if any), we store only the name and path of the currently mounted disk
          * (if any).  Deltas for ALL disks, both currently mounted and previously mounted, are stored later.
@@ -67247,13 +67208,13 @@ class FDC extends Component {
                 drive.bHead = Math.floor(iSector / nSectorsPerTrack);
                 drive.bSector = (iSector % nSectorsPerTrack) + 1;
                 drive.nBytes = nSectors * aDiskInfo[3];
-                /*
+                /**
                  * NOTE: We don't set bSectorEnd, as an FDC command would, but it's irrelevant, because we don't actually
                  * do anything with bSectorEnd at this point.  Perhaps someday, when we faithfully honor/restrict requests
                  * to a single track (or a single cylinder, in the case of multi-track requests).
                  */
                 drive.resCode = FDC.REG_DATA.RES.NONE;
-                /*
+                /**
                  * At this point, we've finished simulating what an FDC.REG_DATA.CMD.READ_DATA command would have performed,
                  * up through doRead().  Now it's the caller responsibility to call readData(), just like the DMA Controller would.
                  */
@@ -67277,7 +67238,7 @@ class FDC extends Component {
             let configDrive = this.configMount[sDrive];
             let sDiskPath = configDrive['path'] || this.findDisketteByName(configDrive['name']);
             if (sDiskPath) {
-                /*
+                /**
                  * WARNING: This conversion of drive letter to drive number, starting with A:, is very simplistic
                  * and is not guaranteed to match the drive mapping that DOS ultimately uses.
                  */
@@ -67342,7 +67303,7 @@ class FDC extends Component {
                 return false;
             }
 
-            /*
+            /**
              * If the special path of "??" is selected, then we want to prompt the user for a URL.  Oh, and
              * make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
              * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
@@ -67362,14 +67323,14 @@ class FDC extends Component {
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
-                /*
+                /**
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (WebLib.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
-                /*
+                /**
                  * So here's the story: loadDrive() returned -1, which it does ONLY if the specified disk is
                  * already mounted AND the user clicked OK to reload the original disk image.  So at the user's
                  * request, we toss any disk history, unload the disk, and then loop back around to loadDrive().
@@ -67430,7 +67391,7 @@ class FDC extends Component {
         }
         else if (sDiskPath) {
             sDiskPath = WebLib.redirectResource(sDiskPath);
-            /*
+            /**
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
              * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
              * removing these hacks is that we can never be sure when all saved states in the wild have been updated.
@@ -67479,7 +67440,7 @@ class FDC extends Component {
         drive.fBusy = false;
 
         if (disk) {
-            /*
+            /**
              * We shouldn't mount the diskette unless the drive is able to handle it; for example, FD360 (40-track)
              * drives cannot read FD1200 (80-track) diskettes.  However, I no longer require that the diskette's
              * sectors/track fall within the drive's standard maximum, because XDF diskettes use 19 physical sectors/track
@@ -67499,7 +67460,7 @@ class FDC extends Component {
             drive.sDiskName = sDiskName;
             drive.sDiskPath = sDiskPath;
 
-            /*
+            /**
              * Since we allow a diskette image to be auto-mounted even if it isn't in the machine's list of disks,
              * let's add it to the list now, since the disk apparently exists.
              */
@@ -67507,7 +67468,7 @@ class FDC extends Component {
                 this.addDiskette(sDiskName, sDiskPath);
             }
 
-            /*
+            /**
              * Adding local disk image names to the disk list seems like a nice idea, but it's too confusing,
              * because then it looks like the "Mount" button should be able to (re)load them, and that can NEVER
              * happen, for security reasons; local disk images can ONLY be loaded via the "Mount" button after
@@ -67521,13 +67482,13 @@ class FDC extends Component {
              */
             this.addDiskHistory(sDiskName, sDiskPath, disk);
 
-            /*
+            /**
              * For a local disk (ie, one loaded via mountDrive()), the disk.restore() performed by addDiskHistory()
              * may have altered the disk geometry, so refresh the disk info.
              */
             aDiskInfo = disk.info();
 
-            /*
+            /**
              * Clearly, a successful mount implies a disk change, and I suppose that, technically, an *unsuccessful*
              * mount should imply the same, but what would the real-world analog be?  Inserting a piece of cardboard
              * instead of an actual diskette?  In any case, if we can do the user a favor by pretending (as far as the
@@ -67537,7 +67498,7 @@ class FDC extends Component {
              */
             this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
 
-            /*
+            /**
              * With the addition of notify(), users are now "alerted" whenever a diskette has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              *
@@ -67549,14 +67510,14 @@ class FDC extends Component {
                 this.printf(MESSAGE.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
-            /*
+            /**
              * Update the drive's current media parameters to match the disk's.
              */
             drive.nDiskCylinders = aDiskInfo[0];
             drive.nDiskHeads = aDiskInfo[1];
             drive.nDiskSectors = aDiskInfo[2];
 
-            /*
+            /**
              * Since you usually want the Computer to have focus again after loading a new diskette, let's try automatically
              * updating the focus after a successful load.
              */
@@ -67621,7 +67582,7 @@ class FDC extends Component {
                 this.addDiskette(diskette['name'], diskette['path']);
             }
         }
-        /*
+        /**
          * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
          * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
@@ -67629,7 +67590,7 @@ class FDC extends Component {
             let i, aOptions = [], fdc = this;
             let controlDisks = this.bindings["listDisks"];
             if (controlDisks) {
-                /*
+                /**
                  * NOTE: All this monkeying around with copying the elements from control.options to aOptions
                  * and then back again is necessary because control.options isn't a *real* Array (at least not
                  * in all browsers); consequently, it may have no sort() method.  It has a length property,
@@ -67645,7 +67606,7 @@ class FDC extends Component {
                     aOptions.push(controlDisks.options[i]);
                 }
                 aOptions.sort(function(a, b) {
-                    /*
+                    /**
                      * I've switched to localeCompare() because it offers case-insensitivity by default;
                      * I'm still a little concerned that we could somehow end up with list elements whose text
                      * and/or value properties are undefined (because calling a method on an undefined variable
@@ -67659,7 +67620,7 @@ class FDC extends Component {
                 });
                 for (i = 0; i < aOptions.length; i++)  {
                     try {
-                        /*
+                        /**
                          * TODO: Determine why this line blows up in IE8; are the properties of an options object not settable in IE8?
                          */
                         controlDisks.options[i] = aOptions[i];
@@ -67809,7 +67770,7 @@ class FDC extends Component {
                     parent2.appendChild(controlDisks1);
                 }
             }
-            /*
+            /**
              * Propagate the actual width (scrollWidth) of the currently visible control to the control we're
              * about to make visible in its place, so that there's no discernable change in the overall layout.
              */
@@ -67818,7 +67779,7 @@ class FDC extends Component {
             controlDisks2.style.display = "inline-block";
             controlDisks1 = controlDisks2;
         }
-        /*
+        /**
          * We need to return multiple values: the requested disk list (controlDisks1) AND the associated drive,
          * since both may now be managed by the HDC; we cheat and return the drive as an FDC property (driveActive).
          *
@@ -67844,7 +67805,7 @@ class FDC extends Component {
     {
         let controlDisks = this.getDiskList(iDrive);
         if (controlDisks) {
-            /*
+            /**
              * Next, make sure the drive whose disk we're updating is the currently selected drive.
              */
             let drive = this.driveActive;
@@ -67863,7 +67824,7 @@ class FDC extends Component {
                 if (i == controlDisks.options.length) controlDisks.selectedIndex = 0;
             }
             if (fDriveChange === false) {
-                /*
+                /**
                  * Update the selected drive to match the specified drive (and its write-protected state, if any).
                  */
                 for (i = 0; i < controlDrives.options.length; i++) {
@@ -67877,7 +67838,7 @@ class FDC extends Component {
                 }
             }
             else if (fDriveChange === true && drive.fWritable !== undefined) {
-                /*
+                /**
                  * Odd drive entries are asterisked (eg, "A*" rather than "A:"), providing the user with a mechanism for
                  * automatically write-protecting all disk images mounted in the drive.  External drives (eg, CD-ROM drives)
                  * don't define fWritable, not because the drive's writability isn't known but rather because we don't want
@@ -67955,7 +67916,7 @@ class FDC extends Component {
     {
         let drive = this.aDrives[iDrive];
         if (drive.disk) {
-            /*
+            /**
              * Before we toss the disk's information, capture any deltas that may have occurred.
              */
             this.updateDiskHistory(drive.sDiskName, drive.sDiskPath, drive.disk);
@@ -67966,7 +67927,7 @@ class FDC extends Component {
 
             this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
 
-            /*
+            /**
              * TODO: Consider adding support for non-modal notices that appear briefly over the machine and then fade,
              * because these modal alerts quickly become annoying.  In the meantime, I now set fPrintOnly to true, on the
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
@@ -67974,7 +67935,7 @@ class FDC extends Component {
             if (!fQuiet) {
                 this.printf(MESSAGE.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
-            /*
+            /**
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
              * a prelude to another load.
              */
@@ -68063,7 +68024,7 @@ class FDC extends Component {
                 return;
             }
         }
-        /*
+        /**
          * I used to report this as an error (at least in the DEBUG release), but it's no longer really
          * an error, because if we're trying to re-mount a clean copy of a disk, we toss its history, then
          * unload, and then reload/remount.  And since unloadDrive's normal behavior is to call updateDiskHistory()
@@ -68085,7 +68046,7 @@ class FDC extends Component {
         this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
             this.initController();
-            /*
+            /**
              * initController() resets, among other things, the selected drive (this.iDrive), so if we were
              * still updating this.iDrive below based on the "drive select" bits in regOutput, we would want
              * to make sure those bits now match what initController() set.  But since we no longer do that
@@ -68095,13 +68056,13 @@ class FDC extends Component {
              */
         }
         else if (!(this.regOutput & FDC.REG_OUTPUT.ENABLE)) {
-            /*
+            /**
              * When FDC.REG_OUTPUT.ENABLE transitions from 0 to 1, generate an interrupt (assuming INT_ENABLE is set).
              */
             this.regOutput = bOut;      // this may look redundant but requestInterrupt() needs to see regOutput set
             this.requestInterrupt();
         }
-        /*
+        /**
          * This no longer updates the internally selected drive (this.iDrive) based on regOutput, because (a) there seems
          * to be no point, as all drive-related commands include their own "drive select" bits, and (b) it breaks the
          * MODEL_5170 boot code.  Here's why:
@@ -68230,7 +68191,7 @@ class FDC extends Component {
         if (this.regDataIndex < this.regDataTotal) {
             bIn = this.regDataArray[this.regDataIndex];
         }
-        /*
+        /**
          * As per the discussion in doCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
          */
         if (this.regOutput & FDC.REG_OUTPUT.INT_ENABLE) {
@@ -68289,7 +68250,7 @@ class FDC extends Component {
     inFDCInput(port, addrFrom)
     {
         let bIn = this.regInput;
-        /*
+        /**
          * TODO: Determine when the DISK_CHANGE bit is *really* cleared (this is just a guess)
          */
         this.regInput &= ~FDC.REG_INPUT.DISK_CHANGE;
@@ -68323,7 +68284,7 @@ class FDC extends Component {
         let bCmd = this.popCmd();
         let drive, bDrive, bHead, c, h, r, n;
 
-        /*
+        /**
          * NOTE: We currently ignore the FDC.REG_DATA.CMD.SK, FDC.REG_DATA.CMD.MF and FDC.REG_DATA.CMD.MT bits of every command.
          * The only command bit of possible interest down the road might be the FDC.REG_DATA.CMD.MT (Multi-Track); the rest relate
          * to storage format details that we cannot emulate as long as our diskette images contain nothing more than sector
@@ -68343,7 +68304,7 @@ class FDC extends Component {
             this.popSRT();                                  // SRT and HUT (encodings?)
             this.popHLT();                                  // HLT and ND (encodings?)
             this.beginResult();
-            /*
+            /**
              * No results are provided by this command, and fIRQ should remain false
              */
             break;
@@ -68371,7 +68332,7 @@ class FDC extends Component {
             drive.bHead = bHead;
             c = drive.bCylinder = this.popCmd(FDC.TERMS.C); // C
             h = this.popCmd(FDC.TERMS.H);                   // H
-            /*
+            /**
              * Controller docs say that H should always match HD, so I assert that, but what if someone
              * made a mistake and didn't program them identically -- what would happen?  Which should we honor?
              */
@@ -68384,7 +68345,7 @@ class FDC extends Component {
             this.popCmd(FDC.TERMS.DTL);                     // DTL (when N is 0, DTL stands for the data length to read out or write into the sector)
             this.setLED(ledState);
             if (drive.disk && drive.disk.nSectors >= 15 && this.regControl != FDC.REG_CONTROL.RATE500K) {
-                /*
+                /**
                  * Originally, I only set RES.INCOMPLETE (which is an ST0 result byte), because that's all that MINIX 1.1
                  * relied upon to differentiate 1.2M media from 360K media, but the COMPAQ DeskPro 386 ROM has a similar
                  * dependency AND requires that an error appear in the ST1 result byte as well -- so I added RES.NO_DATA to
@@ -68430,7 +68391,7 @@ class FDC extends Component {
             this.beginResult();
             this.pushST0(drive);
             this.pushResult(drive.bCylinder, FDC.TERMS.PCN);
-            /*
+            /**
              * For some strange reason, the "DISK_RESET" function in the MODEL_5170_REV3 BIOS resets the
              * adapter and then issues FOUR -- that's right, not ONE but FOUR -- SENSE INTERRUPT STATUS commands
              * in a row, and expects ST0 to contain a different drive number after each command (first 0, then 1,
@@ -68445,13 +68406,13 @@ class FDC extends Component {
              * "auto-increment" the internal drive number (this.iDrive) after each SENSE INTERRUPT STATUS command.
              */
             this.iDrive = (this.iDrive + 1) & 0x3;
-            /*
+            /**
              * No interrupt is generated by this command, so fIRQ should remain false.
              */
             break;
 
         case FDC.REG_DATA.CMD.READ_ID:                      // 0x0A
-            /*
+            /**
              * This command is used by "SETUP_DBL" in the MODEL_5170_REV3 BIOS to determine if a double-density
              * (40-track) diskette has been inserted in a high-density (80-track) drive; ie, whether "double stepping"
              * is required, since only 40 of the 80 possible "steps" are valid for a double-density diskette.
@@ -68470,7 +68431,7 @@ class FDC extends Component {
             if (drive.disk && (drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector))) {
                 n = (drive.sector['length'] >> 8);
             } else {
-                /*
+                /**
                  * TODO: Determine the appropriate response code(s) for the possible errors that can occur here.
                  */
                 drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
@@ -68503,7 +68464,7 @@ class FDC extends Component {
             this.iDrive = (bDrive & 0x3);
             drive = this.aDrives[this.iDrive];
             drive.bHead = bHead;
-            /*
+            /**
              * As discussed in initDrive(), we can no longer simply set bCylinder to the specified NCN;
              * instead, we must calculate the delta between bCylinderSeek and the NCN, and adjust bCylinder
              * by that amount.  Then we simply move the NCN into bCylinderSeek without any range checking.
@@ -68518,7 +68479,7 @@ class FDC extends Component {
             if (drive.bCylinder >= drive.nCylinders) drive.bCylinder = drive.nCylinders - 1;
             drive.bCylinderSeek = c;
             drive.resCode = FDC.REG_DATA.RES.SEEK_END;
-            /*
+            /**
              * TODO: To properly support ALL the ST3 result bits (not just TRACK0), we need a resCode
              * update() function that all FDC commands can use.  This code is merely sufficient to get us
              * through the "DSKETTE_SETUP" gauntlet in the MODEL_5170 BIOS.
@@ -68540,7 +68501,7 @@ class FDC extends Component {
             this.regStatus |= (FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
         }
 
-        /*
+        /**
          * After the Execution Phase (eg, DMA Terminal Count has occurred, or the EOT sector has been read/written),
          * an interrupt is supposed to occur, signaling the beginning of the Result Phase.  Once the first byte of the
          * result has been read, the interrupt is cleared (see inFDCData).
@@ -68561,7 +68522,7 @@ class FDC extends Component {
             fIRQ = false;
         }
 
-        /*
+        /**
          * When the Windows 95 HSFLOP ("High-Speed Floppy") VxD performs its diskette change-line detection logic
          * ("determine_changeline"), it sets a special callback ("dcl_callback_int_entry") for its interrupt handler
          * to invoke, then issues a READ_ID command, and then sets a bit telling its interrupt handler to expect an
@@ -68613,7 +68574,7 @@ class FDC extends Component {
         this.pushST0(drive);
         this.pushST1(drive);
         this.pushST2(drive);
-        /*
+        /**
          * NOTE: I used to set the following C/H/R/N results using the values that advanceSector() had "advanced"
          * them to, which seemed logical but was technically incorrect.  For non-multi-track reads, they should match
          * the programmed C/H/R/N values, except when EOT has been reached, in which case C = C + 1 and R = 1.
@@ -68791,7 +68752,7 @@ class FDC extends Component {
             this.readData(drive, done);
             return;
         }
-        /*
+        /**
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
@@ -68811,7 +68772,7 @@ class FDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
@@ -68831,7 +68792,7 @@ class FDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMAFormat(): invalid DMA acknowledgement\n", this.idComponent);
@@ -68847,7 +68808,7 @@ class FDC extends Component {
      */
     doRead(drive)
     {
-        /*
+        /**
          * With only NOT_READY and INCOMPLETE set, an empty drive causes DOS to report "General Failure";
          * with the addition of NO_DATA, DOS reports "Sector not found".  The traditional "Drive not ready"
          * error message is not triggered by anything we return here, but simply by BIOS commands timing out.
@@ -68934,7 +68895,7 @@ class FDC extends Component {
     doFormat(drive)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
-        /*
+        /**
          * NOTE: Strangely, we must ignore the number of drive heads both here and in seek(); otherwise,
          * PC DOS 1.10 "FORMAT /1" will fail, even though "/1" means format it as a single-sided diskette.
          *
@@ -68986,7 +68947,7 @@ class FDC extends Component {
         let b = -1;
         let obj = null, off = 0;    // these variables are purely for BACKTRACK purposes
 
-        /*
+        /**
          * Our JSON-encoded disk images now support certain copy-protection-related features, such as sectors
          * with non-standard sizes (ie, other than 512), non-sequential sector IDs (see IBM Multiplan 1.00), and
          * sectors with forced CRC errors (see Microsoft Word 1.15).
@@ -69011,7 +68972,7 @@ class FDC extends Component {
                         break;
                     }
                 }
-                /*
+                /**
                  * Locate the next sector, and then try reading again.
                  */
                 drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
@@ -69024,7 +68985,7 @@ class FDC extends Component {
                     drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
                 }
                 drive.iByte = 0;
-                /*
+                /**
                  * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
                  * This allows the initial call to readData() to perform a seek without triggering an unwanted advance.
                  */
@@ -69068,12 +69029,12 @@ class FDC extends Component {
                 }
                 if (drive.disk.write(drive.sector, drive.iByte++, b)) break;
             }
-            /*
+            /**
              * Locate the next sector, and then try writing again.
              */
             drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
             if (!drive.sector) {
-                /*
+                /**
                  * TODO: Determine whether this should be FDC.REG_DATA.RES.CRC_ERROR or FDC.REG_DATA.RES.DATA_FIELD
                  */
                 drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
@@ -69082,7 +69043,7 @@ class FDC extends Component {
             }
             drive.sectorPrev = drive.sector;
             drive.iByte = 0;
-            /*
+            /**
              * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
              * This allows the initial call to writeData() to perform a seek without triggering an unwanted advance.
              */
@@ -69196,7 +69157,7 @@ if (DEBUG) {
     FDC.TERMS = {};
 }
 
-/*
+/**
  * FDC Digital Output Register (DOR) (0x3F2, write-only)
  *
  * NOTE: Reportedly, a drive's MOTOR had to be ON before the drive could be selected; however, outFDCOutput() no
@@ -69222,7 +69183,7 @@ FDC.REG_OUTPUT = {
     MOTOR_D3:   0x80    // reserved on the MODEL_5170
 };
 
-/*
+/**
  * FDC Main Status Register (0x3F4, read-only)
  *
  * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", bits 2 and 3 are reserved, since that adapter
@@ -69240,12 +69201,12 @@ FDC.REG_STATUS = {
     RQM:        0x80    // indicates FDC Data Register is ready to send or receive data to or from the processor (Request for Master)
 };
 
-/*
+/**
  * FDC Data Register (0x3F5, read-write)
  */
 FDC.REG_DATA = {
     PORT:      0x3F5,
-    /*
+    /**
      * FDC Commands
      *
      * NOTE: FDC command bytes need to be masked with FDC.REG_DATA.CMD.MASK before comparing to the values below, since a
@@ -69279,7 +69240,7 @@ FDC.REG_DATA = {
         MF:             0x40,           // MF (Modified Frequency Modulation)
         MT:             0x80            // MT (Multi-Track; ie, data under both heads will be processed)
     },
-    /*
+    /**
      * FDC status/error results, generally assigned according to the corresponding ST0, ST1, ST2 or ST3 status bit.
      *
      * TODO: Determine when EQUIP_CHECK is *really* set; also, "77 step pulses" sounds suspiciously like a typo (it's not 79?)
@@ -69319,14 +69280,14 @@ FDC.REG_DATA = {
     }
 };
 
-/*
+/**
  * FDC "Fixed Disk" Register (0x3F6, write-only)
  *
  * Since this register's functions are all specific to the Hard Drive Controller, see the HDC component for details.
  * The fact that this HDC register is in the middle of the FDC I/O port range is an oddity of the "HFCOMBO" controller.
  */
 
-/*
+/**
  * FDC Digital Input Register (0x3F7, read-only, MODEL_5170 only)
  *
  * Bit 7 indicates a diskette change (the MODEL_5170 introduced change-line support).  Bits 0-6 are for the selected
@@ -69345,7 +69306,7 @@ FDC.REG_INPUT = {
     DISK_CHANGE:0x80    // Diskette Change
 };
 
-/*
+/**
  * FDC Diskette Control Register (0x3F7, write-only, MODEL_5170 only)
  *
  * Only bits 0-1 are used; bits 2-7 are reserved.
@@ -69358,7 +69319,7 @@ FDC.REG_CONTROL = {
     RATEUNUSED: 0x03
 };
 
-/*
+/**
  * FDC Command Sequences
  *
  * For each command, cbReq indicates the total number of bytes in the command request sequence,
@@ -69394,7 +69355,7 @@ FDC.aCmdInfo = {
     0x0F: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SEEK}
 };
 
-/*
+/**
  * Port input notification table
  *
  * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
@@ -69407,7 +69368,7 @@ FDC.aPortInput = {
     0x3F7: FDC.prototype.inFDCInput
 };
 
-/*
+/**
  * Port output notification table
  *
  * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
@@ -69419,7 +69380,7 @@ FDC.aPortOutput = {
     0x3F7: FDC.prototype.outFDCControl
 };
 
-/*
+/**
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
 WebLib.onInit(FDC.init);
@@ -69493,13 +69454,13 @@ class HDC extends Component {
 
         this.aDriveConfigs = [];
 
-        /*
+        /**
          * We used to eval() driveConfigs immediately, but now we wait until initBus() is called, so that
          * we can check for any machine overrides.
          */
         this.driveConfigs = parmsHDC['drives'];
 
-        /*
+        /**
          * Set fATC (AT Controller flag) according to the 'type' parameter.  This in turn determines other
          * defaults.  For example, the default XT drive type is 3 (for a 10Mb disk drive), whereas the default
          * AT drive type is 2 (for a 20Mb disk drive).
@@ -69518,14 +69479,14 @@ class HDC extends Component {
             this.nInterface = 1;
         }
 
-        /*
+        /**
          * Support for local disk images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
         this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
-        /*
+        /**
          * The remainder of HDC initialization now takes place in our initBus() handler.
          */
     }
@@ -69552,14 +69513,14 @@ class HDC extends Component {
 
         case "saveHD0":
         case "saveHD1":
-            /*
+            /**
              * Yes, technically, this feature does not require "Local disk support" (which is really a reference
              * to FileReader support), but since fLocalDisks is also false for all mobile devices, and since there
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
-                /*
+                /**
                  * We could also simply remove the control; eg:
                  *
                  *      control.parentNode.removeChild(@type {Node} (control));
@@ -69575,7 +69536,7 @@ class HDC extends Component {
                 return function onClickSaveDrive(event) {
                     let drive = hdc.aDrives && hdc.aDrives[iDrive];
                     if (drive && drive.disk) {
-                        /*
+                        /**
                          * Note the similarity (and hence factoring opportunity) between this code and the FDC's
                          * "saveDisk" binding.
                          *
@@ -69619,7 +69580,7 @@ class HDC extends Component {
         this.dbg = dbg;
         this.cmp = cmp;
 
-        /*
+        /**
          * Any machine-specific 'drives' settings apply only the first HDC interface.
          */
         let driveConfigs = cmp.getMachineParm(this.nInterface? 'cdromDrives' : 'drives') || this.driveConfigs;
@@ -69629,7 +69590,7 @@ class HDC extends Component {
         }
         else if (typeof driveConfigs == "string") {
             try {
-                /*
+                /**
                  * We must take care when parsing user-supplied JSON-encoded drive data.
                  */
                 this.aDriveConfigs = eval("(" + driveConfigs + ")");
@@ -69638,7 +69599,7 @@ class HDC extends Component {
             }
         }
 
-        /*
+        /**
          * We need access to the ChipSet component, because we need to communicate with
          * the PIC and DMA controller.
          */
@@ -69670,7 +69631,7 @@ class HDC extends Component {
         cpu.addIntNotify(Interrupts.DISK, this.intBIOSDisk.bind(this));
         cpu.addIntNotify(Interrupts.ALT_DISK, this.intBIOSDiskette.bind(this));
 
-        /*
+        /**
          * The following code used to be performed in the HDC constructor, but now we need to wait for information
          * about the Computer to be available (e.g., getMachineID() and getUserID()) before we start loading and/or
          * connecting to disk images.
@@ -69706,7 +69667,7 @@ class HDC extends Component {
             if (!data) {
                 this.initController();
                 if (this.cmp.fReload) {
-                    /*
+                    /**
                      * If the computer's fReload flag is set, we're required to toss all currently
                      * loaded disks and remount all disks specified in the auto-mount configuration.
                      */
@@ -69759,7 +69720,7 @@ class HDC extends Component {
      */
     reset()
     {
-        /*
+        /**
          * TODO: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
@@ -69808,13 +69769,13 @@ class HDC extends Component {
         let i = 0;
         let fSuccess = true;
 
-        /*
+        /**
          * TODO: This is used to re-select the controller's active drive whenever the machine is restored, but alas,
          * we currently only update it and save it for the ATC, not the XTC.
          */
         this.iDrive = -1;
 
-        /*
+        /**
          * At this point, it's worth calling into question my decision to NOT split the HDC component into separate XTC
          * and ATC components, given all the differences, and given that I'm about to write some "if (ATC) else (XTC) ..."
          * code.  And all I can say in my defense is, yes, it's definitely worth calling that into question.
@@ -69828,7 +69789,7 @@ class HDC extends Component {
          * of these conditionals is small and they're not performance-critical, this seems much ado about nothing.
          */
         if (this.fATC) {
-            /*
+            /**
              * Since there's no way (and never will be a way) for an HDC to change its "personality" (from 'xt' to 'at'
              * or vice versa), we're under no obligation to use the same number of registers, or save/restore format, etc,
              * as the original XT controller.
@@ -69849,7 +69810,7 @@ class HDC extends Component {
                 this.regFDR = a[0];
                 this.iDrive = a[1];
             }
-            /*
+            /**
              * Additional state is maintained by the Drive object (e.g., buffer, iByte)
              */
         } else {
@@ -69862,7 +69823,7 @@ class HDC extends Component {
             this.regReset     = data[i++];
             this.regPulse     = data[i++];
             this.regPattern   = data[i++];
-            /*
+            /**
              * Initialize iDriveAllowFail only if it's never been initialized, otherwise its entire purpose will be defeated.
              * See the related HACK in intBIOSDisk() for more details.
              */
@@ -69890,7 +69851,7 @@ class HDC extends Component {
             if (!this.initDrive(iDrive, drive, driveConfig, dataDrives[iDrive], fHard)) {
                 fSuccess = false;
             }
-            /*
+            /**
              * XTC only: the original STC-506/412 controller had two pairs of DIP switches to indicate a drive
              * type (0, 1, 2 or 3) for drives 0 and 1.  Those switch settings are recorded in regConfig, now that
              * drive.type has been validated by initDrive().
@@ -69983,7 +69944,7 @@ class HDC extends Component {
 
         drive.iDrive = iDrive;
 
-        /*
+        /**
          * errorCode could be an HDC global, but in order to insulate HDC state from the operation of various functions
          * that operate on drive objects (e.g., readData and writeData), I've made it a per-drive variable.  This choice
          * may be contrary to how the actual hardware works, but I prefer this approach, as long as it doesn't expose any
@@ -69994,13 +69955,13 @@ class HDC extends Component {
         drive.fRemovable = data[i++];
         drive.abDriveParms = data[i++];         // captures drive parameters programmed via HDC.XTC.DATA.CMD.INIT_DRIVE
 
-        /*
+        /**
          * TODO: Make buffer a DWORD array rather than a BYTE array (we could even allocate a Memory block for it);
          * alternatively, eliminate the buffer entirely and re-establish a reference to the appropriate Disk sector object.
          */
         drive.buffer = data[i++];
 
-        /*
+        /**
          * The next group of properties are set by various HDC command sequences.
          */
         drive.bHead = data[i++];
@@ -70015,13 +69976,13 @@ class HDC extends Component {
         if (drive.name === undefined) drive.name = HDC.DEFAULT_DRIVE_NAME;
         drive.path = drive.sDiskPath = driveConfig['path'];
 
-        /*
+        /**
          * If no 'mode' is specified, we fall back to the original behavior, which is to completely preload
          * any specific disk image, or create an empty (purely local) disk image.
          */
         drive.mode = driveConfig['mode'] || (drive.path? DiskAPI.MODE.PRELOAD : DiskAPI.MODE.LOCAL);
 
-        /*
+        /**
          * On-demand I/O of raw disk images is supported only if there's a valid user ID; fall back to an empty
          * local disk image if there's not.
          */
@@ -70036,14 +69997,14 @@ class HDC extends Component {
         drive.nSectors = driveType[2] || 17;                        // sectors/track
         drive.cbSector = drive.cbTransfer = driveType[3] || 512;    // bytes/sector (default is 512 if unspecified in the table)
 
-        /*
+        /**
          * On a full machine reset, pass the current drive type to setCMOSDriveType() (a no-op on pre-CMOS machines).
          */
         if (fHard && this.chipset) {
             this.chipset.setCMOSDriveType(this.nInterface*2+iDrive, drive.type);
         }
 
-        /*
+        /**
          * The next group of properties are set by user requests to load/unload disk images.
          *
          * We no longer reinitialize drive.disk, in order to retain previously mounted disk across resets.
@@ -70053,7 +70014,7 @@ class HDC extends Component {
             this.printf(MESSAGE.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
-        /*
+        /**
          * With the advent of save/restore, we need to verify every drive at initialization, not just whenever
          * drive characteristics are initialized.  Thus, if we've restored a sensible set of drive characteristics,
          * then verifyDrive will create an empty disk if none has been provided, insuring we are ready for
@@ -70061,7 +70022,7 @@ class HDC extends Component {
          */
         this.verifyDrive(drive);
 
-        /*
+        /**
          * The next group of properties are managed by worker functions (e.g., doRead()) to maintain state across DMA requests.
          */
         drive.iByte = data[i++];                // location of the next byte to be accessed in the above sector
@@ -70161,7 +70122,7 @@ class HDC extends Component {
         if (drive) {
             let nHeads = 0, nCylinders = 0;
             if (type == null) {
-                /*
+                /**
                  * If the caller wants us to use the programmed drive parameters, we use those,
                  * but if there aren't any drive parameters (yet), then use default parameters based
                  * on drive.type.
@@ -70182,7 +70143,7 @@ class HDC extends Component {
                 nCylinders = DRIVE_TYPES[this.iDriveCtrl][type][0];
             }
             if (nHeads) {
-                /*
+                /**
                  * The assumption here is that if the 3rd drive parameter byte (abDriveParms[2]) has been set
                  * (ie, if nHeads is valid) then the first two bytes (ie, the low and high cylinder byte values)
                  * must have been set as well.
@@ -70231,7 +70192,7 @@ class HDC extends Component {
         if (drive.disk) {
             let aDiskInfo = drive.disk.info();
             let nCylinders = aDiskInfo[0];
-            /*
+            /**
              * If nCylinders is zero, we probably have an empty disk image, awaiting initialization (see verifyDrive())
              */
             if (nCylinders) {
@@ -70243,20 +70204,20 @@ class HDC extends Component {
                     drive.wCylinder = Math.floor(iSector / nSectorsPerCylinder);
                     iSector %= nSectorsPerCylinder;
                     drive.bHead = Math.floor(iSector / nSectorsPerTrack);
-                    /*
+                    /**
                      * Important difference between the FDC and the XTC: the XTC uses 0-based sector numbers, so unlike
                      * FDC.seekDrive(), we must NOT add 1 to bSector below.  I could change how sector numbers are stored in
                      * hard drive images, but it seems preferable to keep the image format consistent and controller-independent.
                      */
                     drive.bSector = (iSector % nSectorsPerTrack);
                     drive.nBytes = nSectors * aDiskInfo[3];
-                    /*
+                    /**
                      * NOTE: We don't set nSectorEnd, as an HDC command would, but it's irrelevant, because we don't actually
                      * do anything with nSectorEnd at this point.  Perhaps someday, when we faithfully honor/restrict requests
                      * to a single track (or a single cylinder, in the case of multi-track requests).
                      */
                     drive.errorCode = HDC.XTC.DATA.ERR.NONE;
-                    /*
+                    /**
                      * At this point, we've finished simulating what an HDC.XTC.DATA.CMD.READ_DATA command would have performed,
                      * up through doRead().  Now it's the caller responsibility to call readData(), like the DMA Controller would.
                      */
@@ -70281,7 +70242,7 @@ class HDC extends Component {
             let drive = this.aDrives[iDrive];
             if (drive.name && drive.sDiskPath) {
                 if (fRemount && drive.disk && drive.disk.isRemote() || this.fATAPI) {
-                    /*
+                    /**
                      * The Disk component has its own logic for remounting remote disks, so skip this disk.
                      *
                      * TODO: Consider rewriting how ALL disks are automounted/remounted, now that the Disk component
@@ -70361,7 +70322,7 @@ class HDC extends Component {
     {
         drive.fBusy = false;
         if ((drive.disk = disk)) {
-            /*
+            /**
              * With the addition of notice(), users are now "alerted" whenever a diskette has finished loading;
              * notice() is selective about its output, using print() if a print window is open, otherwise alert().
              *
@@ -70372,7 +70333,7 @@ class HDC extends Component {
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
-                /*
+                /**
                  * TODO: Decide how to deal with this problem; ie, either disallow disk access altogether, or automatically
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
@@ -70435,7 +70396,7 @@ class HDC extends Component {
         let bCmd = this.regDataArray[0];
         let cbCmd = (bCmd != HDC.XTC.DATA.CMD.INIT_DRIVE? 6 : this.regDataArray.length);
         if (this.regDataTotal == 6) {
-            /*
+            /**
              * XTC.STATUS.REQ must be CLEAR following any 6-byte command sequence that the HDC BIOS "COMMAND" function outputs,
              * yet it must also be SET before the HDC BIOS will proceed with the remaining the 8-byte sequence that's part of
              * HDC.XTC.DATA.CMD.INIT_DRIVE command. See inXTCStatus() for HACK details.
@@ -70443,7 +70404,7 @@ class HDC extends Component {
             this.regStatus &= ~HDC.XTC.STATUS.REQ;
         }
         if (this.regDataTotal >= cbCmd) {
-            /*
+            /**
              * It's essential that XTC.STATUS.IOMODE be set here, at least after the final 8-byte HDC.XTC.DATA.CMD.INIT_DRIVE sequence.
              */
             this.regStatus |= HDC.XTC.STATUS.IOMODE;
@@ -70464,7 +70425,7 @@ class HDC extends Component {
     {
         let b = this.regStatus;
         this.printIO(port, undefined, addrFrom, "STATUS", b);
-        /*
+        /**
          * HACK: The HDC BIOS will not finish the HDC.XTC.DATA.CMD.INIT_DRIVE sequence unless it sees XTC.STATUS.REQ set again, nor will
          * it read any of the XTC.DATA bytes returned from a HDC.XTC.DATA.CMD.REQ_SENSE command unless XTC.STATUS.REQ is set again, so
          * we turn it back on if there are unprocessed data bytes.
@@ -70486,7 +70447,7 @@ class HDC extends Component {
     outXTCReset(port, bOut, addrFrom)
     {
         this.printIO(port, bOut, addrFrom, "RESET");
-        /*
+        /**
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
         this.regReset = bOut;
@@ -70519,11 +70480,11 @@ class HDC extends Component {
     outXTCPulse(port, bOut, addrFrom)
     {
         this.printIO(port, bOut, addrFrom, "PULSE");
-        /*
+        /**
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
         this.regPulse = bOut;
-        /*
+        /**
          * The HDC BIOS "COMMAND" function (@C800:0562) waits for these ALL status bits after writing to both regPulse
          * and regPattern, so we must oblige it.
          *
@@ -70576,7 +70537,7 @@ class HDC extends Component {
         let drive = this.drive;
 
         if (drive) {
-            /*
+            /**
              * We use the synchronous form of readData() at this point because we have no choice; an I/O instruction
              * has just occurred and cannot be delayed.  The good news is that doATC() should have already primed
              * the pump; all we can do is assert that the pump has something in it.  If bIn is inexplicably negative,
@@ -70589,7 +70550,7 @@ class HDC extends Component {
                     if (!off && obj.file) {
                         hdc.printf(MESSAGE.DISK + MESSAGE.PORT + MESSAGE.ADDR, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
-                    /*
+                    /**
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
                      * to addBackTrackObject() here instead of null; but for now, we're going to rely on that function's
                      * simplistic MRU logic.  If that fails, the worst that will (or should) happen is we'll burn through
@@ -70602,7 +70563,7 @@ class HDC extends Component {
 
 
             if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
-                /*
+                /**
                  * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                  * and last bytes of each sector.
                  */
@@ -70614,18 +70575,18 @@ class HDC extends Component {
                         let sDump = drive.disk.dumpSector(drive.sector);
                         if (sDump) this.print(sDump);
                     }
-                    /*
+                    /**
                      * Now that we've supplied a full sector of data, see if the caller's expecting additional sectors;
                      * if so, prime the pump again.  The caller should not poll us again until another interrupt's delivered.
                      */
                     drive.nBytes -= drive.cbTransfer;
                     this.regSecCnt = (this.regSecCnt - 1) & 0xff;
-                    /*
+                    /**
                      * TODO: If the WITH_ECC bit is set in the READ_DATA command, then we need to support "stuffing" 4
                      * additional bytes into the inATCByte() stream.  And we must first set DATA_REQ in the STATUS register.
                      */
                     if (drive.nBytes >= drive.cbTransfer) {
-                        /*
+                        /**
                          * FYI, with regard to regStatus, I'm simply aping what the ATC.COMMAND.READ_DATA setup code does
                          * for the first sector, which may not strictly be necessary for subsequent sectors....
                          */
@@ -70633,7 +70594,7 @@ class HDC extends Component {
                         this.readData(drive, function onATCReadDataNext(b, fAsync) {
                             if (b >= 0) {
                                 hdc.setATCIRR();
-                                /*
+                                /**
                                  * Due to the way I'm immediately triggering an interrupt whenever more data is available,
                                  * I must take a "shotgun approach' to regStatus bits in order to make the MODEL_5170_REV1,
                                  * MODEL_5170_REV3, and MODEL_COMPAQ_DESKPRO386 all happy.
@@ -70653,7 +70614,7 @@ class HDC extends Component {
                                 if (hdc.chipset && hdc.chipset.model == ChipSet.MODEL_COMPAQ_DESKPRO386) hdc.regStatus = 0;
                                 hdc.regStatus |= HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK | HDC.ATC.STATUS.DATA_REQ;
                             } else {
-                                /*
+                                /**
                                  * TODO: It would be nice to be a bit more specific about the error (if any) that just occurred.
                                  * Consult drive.errorCode (it uses older XTC error codes, but mapping those codes should be trivial).
                                  */
@@ -70707,7 +70668,7 @@ class HDC extends Component {
         if (drive) {
             if (drive.nBytes >= drive.cbTransfer) {
                 if (this.writeData(drive, bOut) < 0) {
-                    /*
+                    /**
                      * TODO: It would be nice to be a bit more specific about the error (if any) that just occurred.
                      * Consult drive.errorCode (it uses older XTC error codes, but mapping those codes should be trivial).
                      */
@@ -70718,7 +70679,7 @@ class HDC extends Component {
                     }
                 }
                 else if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
-                    /*
+                    /**
                      * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                      * and last bytes of each sector.
                      */
@@ -70746,7 +70707,7 @@ class HDC extends Component {
                     }
                 }
             } else {
-                /*
+                /**
                  * TODO: What to do about unexpected writes? The number of bytes has exceeded what the command specified.
                  */
                 if (DEBUG) {
@@ -70754,7 +70715,7 @@ class HDC extends Component {
                 }
             }
         } else {
-            /*
+            /**
              * TODO: What to do about unexpected writes? No command was specified.
              */
             if (DEBUG) {
@@ -70951,7 +70912,7 @@ class HDC extends Component {
     {
         this.printIO(port, bOut, addrFrom, "DRVHD");
         this.regDrvHd = bOut;
-        /*
+        /**
          * The MODEL_5170_REV3 BIOS (see "POST2_CHK_HF2" @F000:14FC) probes for a 2nd hard drive when the number
          * of configured hard drives is something other than 2, using INT 0x13/AH=0x10.  This in turn calls the
          * BIOS "TST_RDY" function, which selects the drive in this register (see DRIVE_MASK), and then immediately
@@ -70990,7 +70951,7 @@ class HDC extends Component {
     {
         let bIn = this.regStatus;
         this.printIO(port, undefined, addrFrom, "STATUS", bIn);
-        /*
+        /**
          * Despite what IBM's documentation for the "Personal Computer AT Fixed Disk and Diskette Drive Adapter"
          * (August 31, 1984) says (ie, "A read of the status register clears interrupt request 14"), we cannot
          * unilaterally clear the IRQ on any read of STATUS.  For starters, that would completely break the PC AT
@@ -71041,7 +71002,7 @@ class HDC extends Component {
     outATCFDR(port, bOut, addrFrom)
     {
         this.printIO(port, bOut, addrFrom, "FDR");
-        /*
+        /**
          * I'm not really sure if I should set HDC.ATC.DIAG.NO_ERROR in regError after *every* write where
          * HDC.ATC.FDR.RESET is clear, or only after it has transitioned from set to clear; since the BIOS only
          * requires the latter, I'm going to be conservative and restrict regError updates to the latter.
@@ -71096,7 +71057,7 @@ class HDC extends Component {
         this.iDrive = iDrive;
         this.drive = drive;
 
-        /*
+        /**
          * Update the Drive object with the new positional information associated with this command.
          */
         drive.wCylinder = nCylinder;
@@ -71104,7 +71065,7 @@ class HDC extends Component {
         drive.bSector = nSector;
         drive.nBytes = nSectors * (drive.cbTransfer = drive.cbSector);
 
-        /*
+        /**
          * Since the (original) ATC doesn't use DMA, we must now set some additional Drive state for the benefit
          * of any follow-up I/O instructions.  For example, any subsequent inATCByte() and outATCByte() calls need
          * to know which drive to talk to ("this.drive"), to issue their own readData() and writeData() calls.
@@ -71127,7 +71088,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.COMMAND.RESTORE:               // 0x10 (ATA)
-            /*
+            /**
              * Physically, this retracts the heads to cylinder 0, but logically, there isn't anything to do.
              */
             fInterrupt = fProcessed = true;
@@ -71142,7 +71103,7 @@ class HDC extends Component {
             if (!drive.useBuffer) {
                 this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
-            /*
+            /**
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
              * byte of the next sector, we can signal an interrupt without also consuming the first byte, allowing
              * inATCByte() to begin with that byte.
@@ -71151,7 +71112,7 @@ class HDC extends Component {
             this.readData(drive, function onATCReadDataFirst(b, fAsync) {
                 if (b >= 0 && hdc.chipset) {
                     hdc.setATCIRR();
-                    /*
+                    /**
                      * Bytes from the requested sector(s) will now be delivered via inATCByte().
                      *
                      * FYI, I'm taking a shotgun approach to these status bits: I need to clear STATUS.BUSY and
@@ -71160,7 +71121,7 @@ class HDC extends Component {
                      */
                     hdc.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK | HDC.ATC.STATUS.DATA_REQ;
                 } else {
-                    /*
+                    /**
                      * TODO: It would be nice to be a bit more specific about the error (if any) that just occurred.
                      * Consult drive.errorCode (it uses older XTC error codes, but mapping those codes should be trivial).
                      */
@@ -71187,7 +71148,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.COMMAND.READ_VERF:             // 0x40 (ATA)
-            /*
+            /**
              * Since the READ VERIFY command returns no data, once again, logically, there isn't much we HAVE to
              * to do, but... TODO: Verify that all the disk parameters are valid, and return an error if they're not.
              */
@@ -71195,7 +71156,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.COMMAND.SEEK:                  // 0x70 (ATA)
-            /*
+            /**
              * Physically, this moves the head(s) to the requested cylinder, but logically, there isn't anything to do;
              * in fact, we didn't even need this command for the MODEL_5170 ROM BIOS (the COMPAQ DeskPro 386 ROM BIOS was
              * another story).
@@ -71209,7 +71170,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.COMMAND.SETPARMS:              // 0x91 (ATA)
-            /*
+            /**
              * The documentation implies that the only parameters this command really affects are the number
              * of heads (from regDrvHd) and sectors/track (from regSecCnt) -- this despite the fact that the BIOS
              * programs all the other registers.  For a type 2 drive, that includes:
@@ -71228,7 +71189,7 @@ class HDC extends Component {
             fInterrupt = fProcessed = true;
             break;
 
-        /*
+        /**
          * We don't need a 'default' case because any command that declined to set fProcessed will be dealt with below.
          */
         }
@@ -71257,7 +71218,7 @@ class HDC extends Component {
     {
         if (this.chipset) {
             if (!(this.regFDR & HDC.ATC.FDR.INT_DISABLE)) {
-                /*
+                /**
                  * TODO: Determine what the "correct" instruction delay should be here.  When the OS/2 1.0 Install Disk
                  * begins copying files to the hard drive, at one point it performs the following 125-sector write (use the
                  * Debugger's "m hdc on" and "m pic on" commands to enable HDC and PIC messages, along with "m data on"
@@ -71322,7 +71283,7 @@ class HDC extends Component {
             drive.nBytes = bCount * drive.cbSector;
         }
 
-        /*
+        /**
          * I tried to save normal command processing from having to deal with invalid drives,
          * but the HDC BIOS initializes both drive 0 AND drive 1 on a HDC.XTC.DATA.CMD.INIT_DRIVE command,
          * and apparently that particular command has no problem with non-existent drives.
@@ -71338,7 +71299,7 @@ class HDC extends Component {
             this.pushResult(b1);
             this.pushResult(b2);
             this.pushResult(b3);
-            /*
+            /**
              * Although not terribly clear from IBM's "Fixed Disk Adapter" documentation, a data "status byte"
              * also follows the 4 "sense bytes".  Interestingly, The HDC BIOS checks that data status byte for
              * XTC.DATA.STATUS.ERROR, but I have to wonder if it would have ever been set for this command....
@@ -71351,7 +71312,7 @@ class HDC extends Component {
             break;
 
         case HDC.XTC.DATA.CMD.INIT_DRIVE:           // 0x0C
-            /*
+            /**
              * Pop off all the extra "Initialize Drive Characteristics" bytes and store them, for the benefit of
              * other functions, like verifyDrive().
              */
@@ -71386,7 +71347,7 @@ class HDC extends Component {
             if (drive === undefined) {
                 bCmd = -1;
             } else {
-                /*
+                /**
                  * In preparation for this command, zero out the drive's errorCode and senseCode.
                  * Commands that require a disk address should update senseCode with HDC.XTC.DATA.SENSE_ADDR_VALID.
                  * And of course, any command that encounters an error should set the appropriate error code.
@@ -71408,7 +71369,7 @@ class HDC extends Component {
                 break;
 
             case HDC.XTC.DATA.CMD.READ_VERF:        // 0x05
-                /*
+                /**
                  * This is a non-DMA operation, so we simply pretend everything is OK for now.  TODO: Revisit.
                  */
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
@@ -71421,7 +71382,7 @@ class HDC extends Component {
                 break;
 
             case HDC.XTC.DATA.CMD.WRITE_DATA:       // 0x0A
-                /*
+                /**
                  * QUESTION: The IBM TechRef (p.1-188) implies that bCount is used as part of HDC.XTC.DATA.CMD.WRITE_DATA command,
                  * but it is omitted from the HDC.XTC.DATA.CMD.READ_DATA command.  Is that correct?  Note that, as far as the length
                  * of the transfer is concerned, we rely exclusively on the DMA controller being programmed with the appropriate byte count.
@@ -71475,7 +71436,7 @@ class HDC extends Component {
     {
         this.regDataIndex = this.regDataTotal = 0;
         if (bResult !== undefined) this.pushResult(bResult);
-        /*
+        /**
          * After the Execution phase (e.g., DMA Terminal Count has occurred, or the EOT sector has been read/written),
          * an interrupt is supposed to occur, signaling the beginning of the Result Phase.  Once the data "status byte"
          * has been read from XTC.DATA, the interrupt is cleared (see inXTCData).
@@ -71512,7 +71473,7 @@ class HDC extends Component {
             this.readData(drive, done);
             return;
         }
-        /*
+        /**
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
@@ -71532,7 +71493,7 @@ class HDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
@@ -71552,7 +71513,7 @@ class HDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeBuffer(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
@@ -71572,7 +71533,7 @@ class HDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
@@ -71595,7 +71556,7 @@ class HDC extends Component {
         if (drive.disk) {
             drive.sector = null;
             if (this.chipset) {
-                /*
+                /**
                  * We need to reverse the original logic, and default to success unless/until an actual error occurs;
                  * otherwise doDMARead()/readData() will bail on us.  The original approach used to work because requestDMA()
                  * would immediately call us back with fComplete set to true EVEN if the DMA channel was not yet unmasked;
@@ -71605,7 +71566,7 @@ class HDC extends Component {
                 this.chipset.connectDMA(ChipSet.DMA_HDC, this, 'dmaRead', drive);
                 this.chipset.requestDMA(ChipSet.DMA_HDC, function onDMAReadRequest(fComplete) {
                     if (!fComplete) {
-                        /*
+                        /**
                          * If an incomplete request wasn't triggered by an explicit error, then let's make explicit
                          * (ie, revert to the default failure code that we originally set above).
                          */
@@ -71637,7 +71598,7 @@ class HDC extends Component {
         if (drive.disk) {
             drive.sector = null;
             if (this.chipset) {
-                /*
+                /**
                  * We need to reverse the original logic, and default to success unless/until an actual error occurs;
                  * otherwise doDMAWrite()/writeData() will bail on us.  The original approach would work because requestDMA()
                  * would immediately call us back with fComplete set to true EVEN if the DMA channel was not yet unmasked;
@@ -71647,14 +71608,14 @@ class HDC extends Component {
                 this.chipset.connectDMA(ChipSet.DMA_HDC, this, 'dmaWrite', drive);
                 this.chipset.requestDMA(ChipSet.DMA_HDC, function onDMAWriteRequest(fComplete) {
                     if (!fComplete) {
-                        /*
+                        /**
                          * If an incomplete request wasn't triggered by an explicit error, then let's make explicit
                          * (ie, revert to the default failure code that we originally set above).
                          */
                         if (drive.errorCode == HDC.XTC.DATA.ERR.NONE) {
                             drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
                         }
-                        /*
+                        /**
                          * Mask any error that's the result of an attempt to write beyond the end of the track (which is
                          * something the MS-DOS 4.0M's FORMAT utility seems to like to do).
                          */
@@ -71686,7 +71647,7 @@ class HDC extends Component {
         this.initBuffer(drive);
 
         if (this.chipset) {
-            /*
+            /**
              * We need to reverse the original logic, and default to success unless/until an actual error occurs;
              * otherwise doDMAWriteBuffer() will bail on us.  The original approach would work because requestDMA()
              * would immediately call us back with fComplete set to true EVEN if the DMA channel was not yet unmasked;
@@ -71696,7 +71657,7 @@ class HDC extends Component {
             this.chipset.connectDMA(ChipSet.DMA_HDC, this, 'dmaWriteBuffer', drive);
             this.chipset.requestDMA(ChipSet.DMA_HDC, function onDMAWriteBufferRequest(fComplete) {
                 if (!fComplete) {
-                    /*
+                    /**
                      * If an incomplete request wasn't triggered by an explicit error, then let's make explicit
                      * (ie, revert to the default failure code that we originally set above).
                      */
@@ -71766,7 +71727,7 @@ class HDC extends Component {
             }
         }
 
-        /*
+        /**
          * Locate the next sector, and then try reading again.
          *
          * Important difference between the FDC and the XTC: the XTC uses 0-based sector numbers,
@@ -71780,7 +71741,7 @@ class HDC extends Component {
                     if ((drive.sector = sector)) {
                         obj = sector;
                         off = drive.iByte = 0;
-                        /*
+                        /**
                          * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
                          * This allows the initial call to readData() to perform a seek without triggering an unwanted advance.
                          */
@@ -71836,7 +71797,7 @@ class HDC extends Component {
             if (drive.sector) {
                 if (drive.disk.write(drive.sector, drive.iByte++, b)) break;
             }
-            /*
+            /**
              * Locate the next sector, and then try writing again.
              *
              * Important difference between the FDC and the XTC: the XTC uses 0-based sector numbers,
@@ -71854,7 +71815,7 @@ class HDC extends Component {
                 break;
             }
             drive.iByte = 0;
-            /*
+            /**
              * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
              * This allows the initial call to writeData() to perform a seek without triggering an unwanted advance.
              */
@@ -71889,7 +71850,7 @@ class HDC extends Component {
                 drive.bHead = 0;
                 drive.wCylinder++;
             }
-            /*
+            /**
              * ATA Note: It's unclear just from reading specs whether the original PC AT adapter updated
              * the Drive/Head register to reflect the current head at the end of a command.  Since later adapters
              * apparently did, and since the risk of always updating it seems minimal, that's what we'll do.
@@ -71917,7 +71878,7 @@ class HDC extends Component {
         if (drive.iByte < drive.buffer.length) {
             drive.buffer[drive.iByte++] = b;
         } else {
-            /*
+            /**
              * TODO: Determine the proper error code to return here.
              */
             drive.errorCode = HDC.XTC.DATA.ERR.NO_SECTOR;
@@ -71983,7 +71944,7 @@ class HDC extends Component {
 
             this.initBuffer(drive);
 
-            /*
+            /**
              * NOTE: The data for both IDENTIFY commands is stored little-endian, with one unusual exception: string data
              * is returned with every even/odd byte pair swapped.  setString() takes this into account, by XOR'ing bit 0 of
              * each character offset with 0x1.
@@ -72005,7 +71966,7 @@ class HDC extends Component {
                     setByte(offset + (i ^ 0x1), i < value.length? value.charCodeAt(i) : 0x20);
                 }
             };
-            /*
+            /**
              * TODO: Filling out a complete IDENTIFY response packet requires more work; hopefully this is good enough for now.
              */
             setWord(HDC.ATC.IDENTIFY.CONFIG.OFFSET, drive.type? HDC.ATC.IDENTIFY.CONFIG.FIXED : 0x8580);
@@ -72040,7 +72001,7 @@ class HDC extends Component {
         let limit = drive.buffer.length, error = 0;
         let format, lba, num, page = 0, pageCode, pageControl;
         let bPacketCmd, off, iChunk, offChunk, lenChunk, lenTotal, offBuffer, nChunks, nChunkErrors;
-        /*
+        /**
          * NOTE: Packet data is typically stored big-endian, and since BE is not normally assumed,
          * we include BE in the appropriate function signatures.
          */
@@ -72084,7 +72045,7 @@ class HDC extends Component {
             setWordBE(offset + 2, value);
         };
         let done = function(fData, error=0) {
-            /*
+            /**
              * TODO: Deal with errors.  In addition, if nChunkErrors is non-zero, then at least one of the
              * requested chunks returned an error (or simply failed to return any data), so deal with that, too.
              */
@@ -72148,7 +72109,7 @@ class HDC extends Component {
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
-            /*
+            /**
              * If the TEST UNIT READY command status is GOOD, then there is no further response;
              * otherwise, we have a CHECK CONDITION, which will require adding the REQUEST SENSE command.
              * TODO: Worry about that later.
@@ -72208,7 +72169,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.PACKET.COMMAND.READ_TOC:   // 0x43
-            /*
+            /**
                 Sample requests:
 
                     1) 0030:c13d65b0 43 02 00 00 00 00 00 03-24 40 00 00 00 00 00 00
@@ -72243,7 +72204,7 @@ class HDC extends Component {
             break;
 
         case HDC.ATC.PACKET.COMMAND.PLAY_AUDIO: // 0x45
-            /*
+            /**
                 Sample request:
 
                 0030:c13d65b0 45 00 00 00 00 96 00 00-00 00 00 00 00 00 00 00 E...............
@@ -72258,7 +72219,7 @@ class HDC extends Component {
             pageControl = getBits(2, 6, 2);
             switch(pageCode) {
             case HDC.ATC.PACKET.PAGECODE.RW_ERRREC:     // 0x01
-            /*
+            /**
                 Sample requests:
 
                     1) 0030:c13d65b0 5a 00 01 00 00 00 00 00-10 00 00 00 00 00 00 00 Z...............
@@ -72281,7 +72242,7 @@ class HDC extends Component {
                 break;
 
             case HDC.ATC.PACKET.PAGECODE.CD_STATUS:     // 0x2A
-            /*
+            /**
                 Sample request:
 
                     0030:c13d7ba8 5a 00 2a 00 00 00 00 00-1c 00 00 00 00 00 00 00 Z.*.............
@@ -72553,12 +72514,12 @@ class HDC extends Component {
     }
 }
 
-/*
+/**
  * HDC defaults, in case drive parameters weren't specified
  */
 HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
 
-/*
+/**
  * ATC (AT Controller) Registers
  *
  * The "IBM Personal Computer AT Fixed Disk and Diskette Drive Adapter", aka the HFCOMBO card, contains what we refer
@@ -72668,7 +72629,7 @@ HDC.ATC = {
         WITH_ECC:    0x02,      // optional bit for READ_DATA and WRITE_DATA commands
         STEP_RATE:   0x0F,      // optional bits for stepping rate used with RESTORE and SEEK commands
                                 // (low nibble x 500us equals stepping rate, except for 0, which corresponds to 35us)
-        /*
+        /**
          * The following 8 commands comprised the original PC AT (ATA) command set.  You may see other later command
          * set definitions that show "mandatory" commands, such as READ_MULT (0xC4) or WRITE_MULT (0xC5), but those didn't
          * exist until the introduction of later interface enhancements (e.g., ATA-1, ATA-2, IDE, EIDE, ATAPI, etc).
@@ -72681,7 +72642,7 @@ HDC.ATC = {
         SEEK:        0x70,      //
         DIAGNOSE:    0x90,      //
         SETPARMS:    0x91,      //
-        /*
+        /**
          * Additional commands go here.  As for when these commands were introduced, I may try to include
          * that information parenthetically, but I'm not going to pretend this is in any way authoritative.
          */
@@ -72700,7 +72661,7 @@ HDC.ATC = {
     }
 };
 
-/*
+/**
  * Much of the following IDENTIFY structure information came from a Seagate ATA Reference Manual,
  * 36111-001, Rev. C, dated 21 May 1993 (111-1c.pdf), a specification which I believe later became known
  * as ATA-1.
@@ -72764,7 +72725,7 @@ HDC.ATC.IDENTIFY = {
     DMA_SINGLE_ACTIVE:  0x7D,   // BYTE
     DMA_MULTI:          0x7E,   // BYTE
     DMA_MULTI_ACTIVE:   0x7F,   // BYTE
-    /*
+    /**
      * The rest of this 512-byte structure (words 64 through 255) was reserved at the time of the ATA-1 spec,
      * so I will not delve any deeper into this structure now.
      *
@@ -72790,7 +72751,7 @@ HDC.ATC.PACKET = {
         PLAY_AUDIO:     0x45,   // Play Audio
         MODE_SENSE:     0x5A    // Mode Sense
     },
-    /*
+    /**
      * Finding a succinct list of all the (SCSI) Page Codes in old ATAPI/SCSI specs is surprisingly hard,
      * but there is a nice summary on Wikipedia (https://en.wikipedia.org/wiki/SCSI_mode_page).  For details
      * on Page Code contents, check out the ANSI X3.304-1997 spec (e.g., page 72 for Page Code 0x2A).
@@ -72810,11 +72771,11 @@ HDC.ATC.PACKET = {
     }
 };
 
-/*
+/**
  * XTC (XT Controller) Registers
  */
 HDC.XTC = {
-    /*
+    /**
      * XTC Data Register (0x320, read-write)
      *
      * Writes to this register are discussed below; see HDC Commands.
@@ -72830,7 +72791,7 @@ HDC.XTC = {
             ERROR:      0x02,   // error occurred during command execution
             UNIT:       0x20    // logical unit number of the drive
         },
-        /*
+        /**
          * XTC Commands, as issued to XTC_DATA
          *
          * Commands are multi-byte sequences sent to XTC_DATA, starting with a XTC_DATA.CMD byte,
@@ -72881,7 +72842,7 @@ HDC.XTC = {
             WRITE_LONG:     0xE6        // HDC BIOS: WR_LONG_CMD
         },
         ERR: {
-            /*
+            /**
              * HDC error conditions, as returned in byte 0 of the (4) bytes returned by the Request Sense Status command
              */
             NONE:           0x00,
@@ -72909,7 +72870,7 @@ HDC.XTC = {
             ADDR_VALID:     0x80
         }
     },
-    /*
+    /**
      * XTC Status Register (0x321, read-only)
      *
      * WARNING: The IBM Technical Reference Manual *badly* confuses the XTC_DATA "status byte" (above)
@@ -72928,7 +72889,7 @@ HDC.XTC = {
     }
 };
 
-/*
+/**
  * XTC Config Register (0x322, read-only)
  *
  * This register is used to read HDC card switch settings that defined the "Drive Type" for
@@ -72940,7 +72901,7 @@ HDC.XTC = {
  *      OFF, OFF    Drive Type 3   (306 cylinders, 4 heads)
  */
 
-/*
+/**
  * HDC Command Sequences
  *
  * Unlike the FDC, all the HDC commands have fixed-length command request sequences (well, OK, except for
@@ -72995,7 +72956,7 @@ HDC.aXTACommands = {
     0xE6: "Write Long"
 };
 
-/*
+/**
  * Port input notification tables
  */
 HDC.aXTCPortInput = {
@@ -73004,7 +72965,7 @@ HDC.aXTCPortInput = {
     0x322:  HDC.prototype.inXTCConfig
 };
 
-/*
+/**
  * For future reference, the REV2 and REV3 PC AT ROM BIOS also refer to a "FIXED DISK DIAGNOSTIC REGISTER" at
  * port 0x5F7, but I have no documentation on it, and failure to respond is non-fatal.  See the discussion of the
  * FDC diagnostic register in inFDCDiagnostic() for more details.
@@ -73031,7 +72992,7 @@ HDC.aATCPortInputSecondary = {
     0x177:  HDC.prototype.inATCStatus
 };
 
-/*
+/**
  * Port output notification tables
  */
 HDC.aXTCPortOutput = {
@@ -73039,7 +73000,7 @@ HDC.aXTCPortOutput = {
     0x321:  HDC.prototype.outXTCReset,
     0x322:  HDC.prototype.outXTCPulse,
     0x323:  HDC.prototype.outXTCPattern,
-    /*
+    /**
      * The PC XT Fixed Disk BIOS includes some additional "housekeeping" that it performs
      * not only on port 0x323 but also on three additional ports, at increments of 4 (see all
      * references to "RESET INT/DMA MASK" in the Fixed Disk BIOS).  It's not clear to me if
@@ -73075,7 +73036,7 @@ HDC.aATCPortOutputSecondary = {
     0x376:  HDC.prototype.outATCFDR
 };
 
-/*
+/**
  * Initialize every Hard Drive Controller (HDC) module on the page.
  */
 WebLib.onInit(HDC.init);
@@ -82807,13 +82768,13 @@ class Computer extends Component {
         this.nDiagnostics = +this.getMachineParm('diagnostics', parmsComputer);
         if (!(this.nDiagnostics >= 0 && this.nDiagnostics <= 2)) this.nDiagnostics = 1;
 
-        /*
+        /**
          * nPowerChange is 0 while the power state is stable, 1 while power is transitioning
          * to "on", and -1 while power is transitioning to "off".
          */
         this.nPowerChange = 0;
 
-        /*
+        /**
          * TODO: Deprecate 'buswidth' (it should have always used camelCase)
          */
         this.nBusWidth = parmsComputer['busWidth'] || parmsComputer['buswidth'];
@@ -82825,14 +82786,14 @@ class Computer extends Component {
 
         this.url = this.getMachineParm('url') || "";
 
-        /*
+        /**
          * Generate a random number x (where 0 <= x < 1), add 0.1 so that it's guaranteed to be
          * non-zero, convert to base 36, and chop off the leading digit and "decimal" point.
          */
         this.sMachineID = (Math.random() + 0.1).toString(36).substr(2,12);
         this.sUserID = this.queryUserID();
 
-        /*
+        /**
          * Find the appropriate CPU (and Debugger and Control Panel, if any)
          *
          * CLOSURE COMPILER TIP: To override the type of a right-hand expression (as we need to do here,
@@ -82845,7 +82806,7 @@ class Computer extends Component {
             return;
         }
 
-        /*
+        /**
          * We now record whether or not the machine was originally configured with an FPU (this.fpu),
          * but even when not, we still initialize an FPU, so that the machine can be dynamically reconfigured.
          */
@@ -82854,7 +82815,7 @@ class Computer extends Component {
 
         this.dbg = /** @type {Debuggerx86} */ (Component.getComponentByType("Debugger", this.id));
 
-        /*
+        /**
          * Enumerate all the Video components for diagnostic displays, focus changes, and updateStatus() calls.
          */
         this.aVideo = [];
@@ -82862,16 +82823,17 @@ class Computer extends Component {
             this.aVideo.push(video);
         }
 
-        /*
+        /**
          * Initialize the Bus component
          */
         this.bus = new Busx86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
-        /*
+        /**
          * Iterate through all the components and override their notice() and print() methods
          * so that their output can be rerouted to a Diagnostic Display or Control Panel, if any.
          */
-        let iComponent, component;
+        let iComponent;
+        let component;
         let aComponents = Component.getComponents(this.id);
 
         this.panel = /** @type {Panel} */ (Component.getComponentByType("Panel", this.id));
@@ -82899,7 +82861,7 @@ class Computer extends Component {
 
         if (MAXDEBUG) this.printf(MESSAGE.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
-        /*
+        /**
          * Iterate through all the components again and call their initBus() handler, if any
          */
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
@@ -82907,7 +82869,7 @@ class Computer extends Component {
             if (component.initBus) component.initBus(this, this.bus, this.cpu, this.dbg);
         }
 
-        /*
+        /**
          * This timer replaces the CPU's old dedicated STATUS_UPDATES_PER_SECOND logic; periodic updateStatus()
          * calls are now our own responsibility.
          */
@@ -82918,7 +82880,7 @@ class Computer extends Component {
         let sStatePath = null;
         let sResume = this.getMachineParm('resume');
         if (sResume !== undefined) {
-            /*
+            /**
              * Decide whether the 'resume' property is a number or the path of a state file to resume.
              */
             if (sResume.length > 1) {
@@ -82928,7 +82890,7 @@ class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * The Computer 'state' property allows a state file to be specified independent of the 'resume' feature;
          * previously, you could only use 'resume' to load a state file -- which we still support, but loading a state
          * file that way prevents the machine's state from being saved, since we always resume from the 'resume' file.
@@ -82964,7 +82926,7 @@ class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * If sStatePath is set, we must use it.  But if there's no sStatePath AND resume is set,
          * then we have the option of resuming from a server-side state, assuming a valid USERID.
          */
@@ -82988,7 +82950,7 @@ class Computer extends Component {
 
         if (!this.bindings["power"]) this.fAutoPower = true;
 
-        /*
+        /**
          * Power on the computer, giving every component the opportunity to reset or restore itself.
          */
         if (!fSuspended && this.fAutoPower) this.wait(this.powerOn);
@@ -83019,7 +82981,7 @@ class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        /*
+                        /**
                          * By default, the Video textarea overlay has opacity and lineHeight styles set to "0"
                          * to make the overall textarea and its blinking caret invisible (respectively), so in order
                          * to use it as a diagnostic display, we must temporarily set both those styles to "1".
@@ -83047,18 +83009,18 @@ class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        /*
+                        /**
                          * Return the Video textarea overlay's opacity and lineHeight styles to their original values.
                          */
                         control.style.opacity = "0";
                         control.style.lineHeight = "0";
-                        /*
+                        /**
                          * Setting lineHeight in IE isn't sufficient to hide the caret; we must also set fontSize to "0",
                          * and we make the change IE-specific because it can have weird side-effects in other browsers (eg,
                          * it makes Safari on iOS over-zoom whenever the textarea receives focus).
                          */
                         if (WebLib.isUserAgent("MSIE")) control.style.fontSize = "0";
-                        /*
+                        /**
                          * We no longer clear the text, to give the user/system a chance to copy it to the clipboard.
                          *
                          *      control.value = "";
@@ -83091,7 +83053,7 @@ class Computer extends Component {
     {
         if (this.cDiagnosticScreens) {
             if (this.nDiagnostics == 1) {
-                /*
+                /**
                  * If non-prompting diagnostic output is enabled, immediately advance the
                  * state to completion and wait briefly before continuing with donePowerOn();
                  * this allows the user to pause the machine (by tapping a shift key) if desired.
@@ -83109,7 +83071,7 @@ class Computer extends Component {
                 this.printf(MESSAGE.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
-                /*
+                /**
                  * When notifyKbdEvent() is called, it will call setReady(true), ending the wait().
                  */
                 this.setReady(false);
@@ -83253,7 +83215,7 @@ class Computer extends Component {
         let value = WebLib.getURLParm(sParm);
         if (value) {
             try {
-                /*
+                /**
                  * Ideally, we could simply use strings as-is, but unfortunately, we need to convert all
                  * supported escape sequences to their underlying characters, and using eval() is the simplest
                  * way to deal with them; eg:
@@ -83451,7 +83413,7 @@ class Computer extends Component {
         }
         else if (resume > Computer.RESUME_NONE) {
             if (stateComputer.load(this.sStateData)) {
-                /*
+                /**
                  * Since we're resuming something (either a predefined state or a state from localStorage), let's
                  * create a "failsafe" checkpoint in localStorage, and destroy it at the end of a successful powerOn().
                  * Which means, of course, that if a previous "failsafe" checkpoint already exists, something bad
@@ -83461,12 +83423,12 @@ class Computer extends Component {
 
                 if (this.stateFailSafe.load()) {
                     if (resume != Computer.RESUME_AUTO && this.powerReport(stateComputer)) {
-                        /*
+                        /**
                          * Prompt the user; if they decline to restore, the state will be removed.
                          */
                         resume = Computer.RESUME_PROMPT;
                     }
-                    /*
+                    /**
                      * To ensure that the set() below succeeds, we need to call unload(), otherwise it may fail
                      * with a "read only" error (eg, "TypeError: Cannot assign to read only property 'timestamp'").
                      */
@@ -83486,7 +83448,7 @@ class Computer extends Component {
                             if (sCode == UserAPI.CODE.OK) {
                                 stateComputer.load(/** @type {string} */ (sData));
                             } else {
-                                /*
+                                /**
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
@@ -83495,7 +83457,7 @@ class Computer extends Component {
                                 } else {
                                     this.printf(MESSAGE.DEBUG, "%s: %s\n", sCode, sData);
                                 }
-                                /*
+                                /**
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
                                  * server-side state.
                                  */
@@ -83509,7 +83471,7 @@ class Computer extends Component {
                             }
                         }
                     }
-                    /*
+                    /**
                      * If the load/parse was successful, and it was from localStorage (not sStateData),
                      * then we should to try verify that localStorage snapshot is current.  One reason it may
                      * NOT be current is if localStorage was full and we got a quota error during the last
@@ -83517,13 +83479,13 @@ class Computer extends Component {
                      */
                     if (fValidate) this.validateState(fRestore? stateComputer : null);
                 } else {
-                    /*
+                    /**
                      * RESUME_PROMPT indicates we should delete the state if they clicked Cancel to confirm() above.
                      */
                     if (resume == Computer.RESUME_PROMPT) stateComputer.clear();
                 }
             } else {
-                /*
+                /**
                  * If there's no state, then there should also be no validation timestamp; if there is, then once again,
                  * we're probably dealing with a quota error.
                  */
@@ -83533,7 +83495,7 @@ class Computer extends Component {
             delete this.stateComputer;
         }
 
-        /*
+        /**
          * Start powering all components, including any data they may need to restore their state;
          * we restore power to the CPU last.
          */
@@ -83549,7 +83511,7 @@ class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * Assuming this is not a repower, we must perform another wait, because some components may
          * have marked themselves as "not ready" again (eg, the FDC component, if the restore forced it
          * to mount one or more additional disk images).
@@ -83585,7 +83547,7 @@ class Computer extends Component {
                 if (fRestore) {
                     data = stateComputer.get(component.id);
                     if (!data) {
-                        /*
+                        /**
                          * This is a hack that makes it possible for a machine whose ID has been
                          * supplemented with a hyphenated numeric suffix to find object IDs in states
                          * created from a machine without such a suffix.
@@ -83601,7 +83563,7 @@ class Computer extends Component {
                     }
                 }
 
-                /*
+                /**
                  * State.get() will return whatever was originally passed to State.set() (eg, an
                  * Object or a string), but components are supposed to store only Objects, so if a
                  * string comes back, something went wrong.  By explicitly eliminating "string" data,
@@ -83611,7 +83573,7 @@ class Computer extends Component {
                  */
                 if (typeof data === "string") data = null;
 
-                /*
+                /**
                  * If computer is null, this is simply a repower notification, which most components
                  * don't do anything with.  Exceptions include: CPU (since it may be halted) and Video
                  * (since its screen may be "turned off").
@@ -83620,7 +83582,7 @@ class Computer extends Component {
 
                     if (!this.flags.unloading) {
                         this.printf(MESSAGE.NOTICE, "Unable to restore hardware state\n");
-                        /*
+                        /**
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
                          * prevent any new state from being created, and then force a reload, which will
@@ -83634,7 +83596,7 @@ class Computer extends Component {
                             this.resume = Computer.RESUME_NONE;
                             WebLib.reloadPage();
                         } else {
-                            /*
+                            /**
                              * In all other cases, we set fRestoreError, which should trigger a call to
                              * powerReport() and then delete the offending state.
                              */
@@ -83642,12 +83604,12 @@ class Computer extends Component {
                         }
                     }
 
-                    /*
+                    /**
                      * Any failure triggers an automatic to call powerUp() again, without any state,
                      * in the hopes that the component can recover by performing a reset.
                      */
                     component.powerUp(null);
-                    /*
+                    /**
                      * We also disable the rest of the restore operation, because it's not clear
                      * the remaining state information can be trusted;  the machine is already in an
                      * inconsistent state, so we're not likely to make things worse, and the only
@@ -83696,19 +83658,19 @@ class Computer extends Component {
 
         this.flags.powered = true;
 
-        /*
+        /**
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to power the CPU;
          * the CPU should begin executing immediately, unless a debugger is attached.
          */
         if (this.cpu) {
-            /*
+            /**
              * TODO: Do we not care about the return value here? (ie, is checking fRestoreError sufficient)?
              */
             this.powerRestore(this.cpu, stateComputer, fRepower, fRestore);
             this.cpu.autoStart();
         }
 
-        /*
+        /**
          * If the state was bad, offer to report it and then delete it.  Deleting may be moot, since invariably a new
          * state will be created on powerOff() before the next powerOn(), but it seems like good paranoia all the same.
          */
@@ -83736,7 +83698,7 @@ class Computer extends Component {
     checkPower()
     {
         if (this.flags.unloading) {
-            /*
+            /**
              * We happen to know that we're currently only called by the CPU's onClickRun() function, so
              * if the unloading flag is set, then we've somehow gotten into a weird state where the machine
              * thinks it's being (or has been) unloaded by the browser, but in fact, it has not.
@@ -83866,7 +83828,7 @@ class Computer extends Component {
         stateComputer.set(Computer.STATE_HOSTURL, WebLib.getHostURL());
         stateComputer.set(Computer.STATE_BROWSER, WebLib.getUserAgent());
 
-        /*
+        /**
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
          * after they're no longer ready.
          */
@@ -83904,7 +83866,7 @@ class Computer extends Component {
                     }
                     if (!stateValidate.store() || !stateComputer.store()) {
                         sState = null;
-                        /*
+                        /**
                          * New behavior as of v1.13.2:  if it appears that localStorage is full, we blow it ALL away.
                          * Dedicated server-side storage is the only way we'll ever be able to reliably preserve a
                          * particular machine's state.  Historically, attempting to limp along with whatever localStorage
@@ -83914,7 +83876,7 @@ class Computer extends Component {
                     }
                 }
                 else {
-                    /*
+                    /**
                      * I used to ALWAYS clear (ie, delete) any associated computer state, but now I do this only if the
                      * current machine is "resumable", because there are situations where I have two configurations
                      * for the same machine -- one resumable and one not -- and I don't want the latter throwing away the
@@ -84055,21 +84017,21 @@ class Computer extends Component {
             };
             return true;
 
-        /*
+        /**
          * Technically, this binding should now be called "saveState", to clearly distinguish it from
          * the "Save Machine" control that's normally bound to the savePC() function in save.js.  Saving
          * an entire machine includes everything needed to start/restore the machine; eg, the machine
          * XML configuration file(s) *and* the JSON-encoded machine state.
          */
         case "save":
-            /*
+            /**
              * Since this feature depends on the server supporting the PCjs User API (see userapi.js),
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
             if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
-                /*
+                /**
                  * We could also simply hide the control; eg:
                  *
                  *      control.style.display = "none";
@@ -84083,7 +84045,7 @@ class Computer extends Component {
             control.onclick = function onClickSave() {
                 let sUserID = computer.queryUserID(true);
                 if (sUserID) {
-                    /*
+                    /**
                      * I modified the test to include a check for sStatePath so that I could save new states
                      * for machines with existing states; otherwise, I'd have no (easy) way of capturing and
                      * updating their state.  Making the machine (even temporarily) resumable would have been
@@ -84098,7 +84060,7 @@ class Computer extends Component {
                         computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
-                /*
+                /**
                  * This seemed like a handy alternative, but it turned out to be a no-go, at least for large states:
                  *
                  *      let sState = computer.powerOff(true);
@@ -84145,7 +84107,7 @@ class Computer extends Component {
             sUserID = WebLib.getLocalStorageItem(Computer.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
-                    /*
+                    /**
                      * NOTE: Warning the user here that "Save" operations are not currently supported by pcjs.org is
                      * merely a precaution, because ordinarily, setBinding() should have already determined if we are
                      * running from pcjs.org and disabled any "Save" button.
@@ -84224,7 +84186,7 @@ class Computer extends Component {
      */
     saveServerState(sUserID, sState)
     {
-        /*
+        /**
          * We must pass fSync == true, because (as I understand it) browsers will blow off any async
          * requests when a page is being closed.  Since our request is synchronous, storeServerState()
          * should also return a result, but there's not much we can do with it, since browsers ALSO
@@ -84262,7 +84224,7 @@ class Computer extends Component {
     storeServerState(sUserID, sState, fSync)
     {
         if (DEBUG) this.printf("%s for store: %s\n", Computer.STATE_USERID, sUserID);
-        /*
+        /**
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
          * and whether or not it matters if we do an async request (currently, we're not, to try to ensure the request goes through).
          */
@@ -84318,19 +84280,19 @@ class Computer extends Component {
      */
     onReset()
     {
-        /*
+        /**
          * I'm going to start with the presumption that it makes little sense for an "unpowered" computer to be "reset";
          * ditto if the power state is currently being changed.
          */
         if (!this.flags.powered || this.nPowerChange) return;
 
-        /*
+        /**
          * Whether or not we autoStart on reset should depend at least in part on whether we were running originally.
          */
         if (this.cpu) {
             this.cpu.flags.autoStart = this.cpu.flags.running;
         }
-        /*
+        /**
          * If this is a "resumable" machine (and it's not using a predefined state), then we overload the reset
          * operation to offer an explicit "save or discard" option first.  This is currently the only UI we offer to
          * discard a machine's state, including any disk changes.  The traditional "reset" operation is still available
@@ -84340,13 +84302,13 @@ class Computer extends Component {
          * wants to clutter the UI with confusing options. ;-)
          */
         if (this.resume && !this.sResumePath) {
-            /*
+            /**
              * I used to bypass the prompt if this.resume == Computer.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
             let fSave = (/* this.resume == Computer.RESUME_AUTO || */ this.flags.unloading || !Component.confirmUser("Click OK to reset this machine and discard all disk modifications."));
             this.powerOff(fSave, true);
-            /*
+            /**
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
              * and rely on all the components to reset themselves to their default state.  The components with
              * the greatest burden here are FDC and HDC, which must rely on the fReload flag to determine whether
@@ -84411,18 +84373,19 @@ class Computer extends Component {
     updateFocus(fScroll)
     {
         if (globals.browser && this.aVideo.length) {
-            /*
+            /**
              * This seems to be recommended work-around to prevent the browser from scrolling the focused element
              * into view.  The CPU is not a visual component, so when the CPU wants to set focus, the primary intent
              * is to ensure that keyboard input is fielded properly.
              */
-            let x = 0, y = 0;
+            let x = 0;
+            let y = 0;
             if (!fScroll) {
                 x = globals.window.scrollX;
                 y = globals.window.scrollY;
             }
 
-            /*
+            /**
              * TODO: We need a mechanism to determine the "active" display, instead of hard-coding this to aVideo[0].
              */
             this.aVideo[0].setFocus(fScroll);
@@ -84455,7 +84418,7 @@ class Computer extends Component {
       */
     updateStatus(fForce)
     {
-        /*
+        /**
          * fForce is generally set to true whenever the CPU is transitioning to/from a running state, in which case
          * cpu.updateStatus() will definitely want to hide/show register contents; however, at other times, when the
          * CPU is running, constantly updating the DOM controls too frequently can adversely impact overall performance.
@@ -84466,7 +84429,7 @@ class Computer extends Component {
          */
         if (this.cpu) this.cpu.updateStatus(fForce);
         if (this.panel) this.panel.updateStatus(fForce);
-        /*
+        /**
          * When called by our own timer for relatively infrequent DOM (see Computer.UPDATES_PER_SECOND), fForce is
          * explicitly set to false, and in those cases, we should avoid performing screen updates, because it may
          * subtly interfere with the Video component's normal refresh rate.
@@ -84502,7 +84465,7 @@ class Computer extends Component {
                 let eComputer = aeComputers[iComputer];
                 let parmsComputer = Component.getComponentParms(eComputer);
 
-                /*
+                /**
                  * We set fSuspended in the Computer constructor because we want to "power up" the
                  * computer ourselves, after any/all bindings are in place.
                  */
@@ -84510,14 +84473,14 @@ class Computer extends Component {
 
                 if (DEBUG) computer.printf("onInit(%b)\n", computer.flags.powered);
 
-                /*
+                /**
                  * Bind any "power", "reset" and "save" buttons.  An "erase" button was also considered,
                  * but "reset" now provides a way to force the machine to start from scratch again, so "erase"
                  * may be redundant now.
                  */
                 Component.bindComponentControls(computer, eComputer, APPCLASS);
 
-                /*
+                /**
                  * Power on the computer, giving every component the opportunity to reset or restore itself.
                  */
                 if (computer.fAutoPower) computer.wait(computer.powerOn);
@@ -84543,7 +84506,7 @@ class Computer extends Component {
             let computer = /** @type {Computer} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
 
-                /*
+                /**
                  * Clear new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = false;
@@ -84551,7 +84514,7 @@ class Computer extends Component {
                 if (DEBUG) computer.printf("onShow(%b,%b)\n", computer.flags.initDone, computer.flags.powered);
 
                 if (computer.flags.initDone && !computer.flags.powered) {
-                    /*
+                    /**
                      * Repower the computer, notifying every component to continue running as-is.
                      */
                     computer.powerOn(Computer.RESUME_REPOWER);
@@ -84595,7 +84558,7 @@ class Computer extends Component {
             let computer = /** @type {Computer} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
 
-                /*
+                /**
                  * Set new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = true;
@@ -84623,7 +84586,7 @@ Computer.STATE_HOSTURL   = "url";
 Computer.STATE_BROWSER   = "browser";
 Computer.STATE_USERID    = "user";
 
-/*
+/**
  * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
  * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
  * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
@@ -84636,7 +84599,7 @@ Computer.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL machin
 
 Computer.UPDATES_PER_SECOND = 2;
 
-/*
+/**
  * Initialize every Computer on the page.
  */
 WebLib.onInit(Computer.init);

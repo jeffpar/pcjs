@@ -21,7 +21,7 @@ import StrLib from "../../../modules/v2/strlib.js";
 import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
-/*
+/**
  * MDA/CGA Support
  * ---------------
  *
@@ -357,7 +357,7 @@ export class Card extends Controller {
     {
         super();
 
-        /*
+        /**
          * If a card was originally not present (eg, EGA), then the state will be empty,
          * so we need to detect that case and continue indicating that the card is not present.
          */
@@ -372,7 +372,7 @@ export class Card extends Controller {
                 data = [false, 0, null, null, 0, new Array(nCard < Videox86.CARD.EGA? Card.CRTC.TOTAL_REGS : Card.CRTC.EGA.TOTAL_REGS)];
             }
 
-            /*
+            /**
              * If a Debugger is present, we want to stash a bit more info in each Card.
              */
             if (DEBUGGER) {
@@ -386,7 +386,7 @@ export class Card extends Controller {
             this.sizeBuffer = specs[3];     // default video buffer length (this is the total size, not the current visible size;
                                             // this.cbScreen is calculated on the fly to reflect the latter)
 
-            /*
+            /**
              * If no memory size is specified, then setMode() will use addMemory() to automatically add enough
              * memory blocks to cover the video buffer specified above; otherwise, it instructs addMemory() to call
              * getMemoryBuffer(), which will return a portion of the buffer (adwMemory) allocated below.  This allows
@@ -395,7 +395,7 @@ export class Card extends Controller {
              */
             this.cbMemory = cbMemory || specs[4];
 
-            /*
+            /**
              * All of our cardSpec video buffer sizes are based on the default text mode (eg, 4Kb for an MDA, 16Kb for
              * a CGA), but for a card with 64Kb or more of memory (ie, any EGA card), the default text mode video buffer
              * size should be dynamically recalculated as the smaller of: cbMemory divided by 4, or 32Kb.
@@ -431,7 +431,7 @@ export class Card extends Controller {
 
             let monitorSpecs = Videox86.monitorSpecs[nMonitorType] || Videox86.monitorSpecs[ChipSet.MONITOR.MONO];
 
-            /*
+            /**
              * nCyclesVertPeriod determines how frequently startVerticalRetrace() is called.  That function
              * snaps the current cycle count in nCyclesVertRetrace.  Then whenever getRetraceBits() is called,
              * it subtracts nCyclesVertRetrace from the current cycle count, and whenever the delta exceeds
@@ -492,7 +492,7 @@ export class Card extends Controller {
                 /*12*/  0,
                 /*13*/  [this.addrBuffer, this.sizeBuffer, this.cbMemory],
                 /*14*/  null,
-                /*
+                /**
                  * Card.ACCESS.WRITE.MODE0 by itself is a pretty good default, but if we choose to "randomize" the screen with
                  * text characters prior to starting the machine, defaulting to Card.ACCESS.WRITE.EVENODD is more faithful to how
                  * characters and attributes are typically stored (ie, in planes 0 and 1, respectively).
@@ -539,7 +539,7 @@ export class Card extends Controller {
         this.asGRCRegs  = DEBUGGER? Card.GRC.REGS : [];
         this.latches    = data[12];
 
-        /*
+        /**
          * Since we originally neglected to save/restore the card's active video buffer address and length,
          * we're now stashing all that information in data[13].  So if we're presented with an old data entry
          * that contains only the card's memory size, fix it up.
@@ -570,14 +570,14 @@ export class Card extends Controller {
         }
         this.setMemoryAccess(nAccess);
 
-        /*
+        /**
          * nReadMapShift must perfectly track how the GRC.READMAP register is programmed, so that Card.ACCESS.READ.MODE0
          * memory read functions read the appropriate plane.  This default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
          */
         this.nReadMapShift  = data[16];
 
-        /*
+        /**
          * Similarly, nSeqMapMask must perfectly track how the SEQ.MAPMASK register is programmed, so that memory write
          * functions write the appropriate plane(s).  Again, this default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
@@ -601,7 +601,7 @@ export class Card extends Controller {
             this.regDACData     = data[31];
         }
 
-        /*
+        /**
          * While every Video memory block maintains its own DIRTY flag, used by the Bus cleanMemory() function to
          * quickly determine if anything changed within a given block, we supplement that information at the Card level
          * in certain memory controller functions that we know are used to modify font data in plane 2.
@@ -750,7 +750,7 @@ export class Card extends Controller {
             let i, s = "";
             let nRegs = (asRegs? asRegs.length : aRegs.length);
             for (i = 0; i < nRegs; i++) {
-                /*
+                /**
                  * In the case of the CRTC, we call the helper function getCRTCReg() to automatically concatenate
                  * the extended bits of certain registers, so that we don't have to "mentally" concatenate them.
                  */
@@ -770,7 +770,7 @@ export class Card extends Controller {
     dumpVideoCard()
     {
         if (DEBUGGER) {
-            /*
+            /**
              * Start with registers that are common to all cards....
              */
             this.dumpRegs("CRTC", this.regCRTIndx, this.regCRTData, this.asCRTCRegs);
@@ -784,7 +784,7 @@ export class Card extends Controller {
                 this.dumpRegs("    FEAT", this.regFeat);
                 this.dumpRegs("    MISC", this.regMisc);
                 this.dumpRegs(" STATUS0", this.regStatus0);
-                /*
+                /**
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
                 if (this.nCard == Videox86.CARD.VGA) {
@@ -792,7 +792,7 @@ export class Card extends Controller {
                 }
             }
 
-            /*
+            /**
              * TODO: This simply dumps the last value read from the STATUS1 register, not necessarily
              * its current state; consider dumping getRetraceBits() instead of (or in addition to) this.
              */
@@ -811,7 +811,7 @@ export class Card extends Controller {
                 this.dbg.printf("  ACCESS: %04X\n",  this.nAccess);
                 this.dbg.printf("  PLANE2: %02X\n", this.bitsDirtyBanks);
                 this.dbg.printf("Use 'd video [addr]' to dump video memory\n");
-                /*
+                /**
                  * There are few more EGA regs we could dump, like GRCPos1, GRCPos2, but does anyone care?
                  */
             }
@@ -976,7 +976,7 @@ export class Card extends Controller {
             if (!fnReadByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
-                    /*
+                    /**
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
                      * Controller registers, so if GRC.MODE was set to READ.MODE1 prior to the mode change and the new mode
@@ -1001,7 +1001,7 @@ export class Card extends Controller {
             if (!fnWriteByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
-                    /*
+                    /**
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
                      * Controller registers, so if GRC.MODE was set to WRITE.MODE2 prior to the mode change and the new mode
@@ -1075,7 +1075,7 @@ export class Card extends Controller {
     }
 }
 
-/*
+/**
  * MDA Registers (ports 0x3B4, 0x3B5, 0x3B8, and 0x3BA)
  *
  * NOTE: All monochrome cards (at least all IBM cards) included a parallel interface at ports 0x3BC/0x3BD/0x3BE;
@@ -1104,7 +1104,7 @@ Card.MDA = {
     }
 };
 
-/*
+/**
  * CGA Registers (ports 0x3D4, 0x3D5, 0x3D8, 0x3D9, and 0x3DA)
  */
 Card.CGA = {
@@ -1140,7 +1140,7 @@ Card.CGA = {
         PEN_ON:             0x04,
         VRETRACE:           0x08        // when set, this indicates the CGA is performing a vertical retrace
     },
-    /*
+    /**
      * TODO: Add support for light pen port(s) someday....
      */
     CLEAR_PEN: {
@@ -1151,7 +1151,7 @@ Card.CGA = {
     }
 };
 
-/*
+/**
  * Common CRT hardware registers (ports 0x3B4/0x3B5 or 0x3D4/0x3D5)
  *
  * NOTE: In this implementation, because we have to make at least two of the registers readable (CURSORHI and CURSORLO),
@@ -1176,7 +1176,7 @@ Card.CRTC = {
     MAXSCAN:            0x09,           // Max Scan Line Address
     CURSCAN:            0x0A,           // Cursor Scan Line Top
     CURSCAN_SLMASK:         0x1F,       // Scan Line Mask
-    /*
+    /**
      * I don't entirely understand the cursor blink control bits.  Here's what the MC6845 datasheet says:
      *
      *      Bit 5 is the blink timing control.  When bit 5 is low, the blink frequency is 1/16 of the vertical field rate,
@@ -1213,7 +1213,7 @@ Card.CRTC = {
             VRSTART_BIT9:   0x80        // bit 9 of register 0x10 (VGA only, unused on EGA)
         },
         PRESCAN:        0x08,
-        /*
+        /**
          * NOTE: EGA/VGA CRTC registers 0x09-0x0F are the same as the MDA/CGA CRTC registers defined above
          */
         MAXSCAN: {
@@ -1237,7 +1237,7 @@ Card.CRTC = {
             DISABLE_VRINT:  0x20        // enable vertical retrace interrupt if NOT set
         },
         VDEND:          0x12,
-        /*
+        /**
          * The OFFSET register (bits 0-7) specifies the logical line width of the screen.  The starting memory address
          * for the next character row is larger than the current character row by two or four times this amount.
          * The OFFSET register is programmed with a word address.  Depending on the method of clocking the CRT Controller,
@@ -1268,7 +1268,7 @@ Card.CRTC = {
     }
 };
 
-/*
+/**
  * TODO: These mask tables need to be card-specific.  For example, the STARTHI and CURSORHI registers used to be
  * limited to 0x3F, because the MC6845 controller used with the original MDA and CGA cards was limited to 16Kb of RAM,
  * whereas later cards like the EGA and VGA had anywhere from 64Kb to 256Kb, so all the bits of those registers were
@@ -1314,7 +1314,7 @@ if (DEBUGGER) {
         "VDEND","OFFSET","UNDERLINE","VBSTART","VBEND","MODECTRL","LINECOMP"];
 }
 
-/*
+/**
  * EGA/VGA Input Status 1 Register (port 0x3DA)
  *
  * STATUS1 bit 0 has confusing documentation: the EGA Tech Ref says "Logical 0 indicates the CRT raster is in a
@@ -1339,7 +1339,7 @@ Card.STATUS1 = {
     RESERVED:               0xC6
 };
 
-/*
+/**
  * EGA/VGA Attribute Controller Registers (port 0x3C0: regATCIndx and regATCData)
  *
  * The current ATC INDX value is stored in cardEGA.regATCIndx (including the Card.ATC.INDX_ENABLE bit), and the
@@ -1410,7 +1410,7 @@ if (DEBUGGER) {
         "ATC08","ATC09","ATC0A","ATC0B","ATC0C","ATC0D","ATC0E","ATC0F", "ATCMODE","OVERSCAN","PLANES","HPAN","COLORSEL"];
 }
 
-/*
+/**
  * EGA/VGA Feature Control Register (port 0x3BA or 0x3DA: regFeat)
  *
  * The EGA BIOS writes 0x1 to Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT, then writes 0x2 to
@@ -1424,7 +1424,7 @@ Card.FEAT_CTRL = {
     BITS:                   0x03        // feature control bits
 };
 
-/*
+/**
  * EGA/VGA Miscellaneous Output Register (port 0x3C2: regMisc)
  */
 Card.MISC = {
@@ -1439,7 +1439,7 @@ Card.MISC = {
     VPOLARITY:              0x80        // 0 selects positive vertical retrace
 };
 
-/*
+/**
  * EGA/VGA Input Status 0 Register (port 0x3C2: regStatus0)
  */
 Card.STATUS0 = {
@@ -1451,7 +1451,7 @@ Card.STATUS0 = {
     INTERRUPT:              0x80        // 1: video is being displayed; 0: vertical retrace is occurring
 };
 
-/*
+/**
  * VGA Subsystem Enable Register (port 0x3C3: regVGAEnable)
  */
 Card.VGA_ENABLE = {
@@ -1460,7 +1460,7 @@ Card.VGA_ENABLE = {
     RESERVED:               0xFE
 };
 
-/*
+/**
  * EGA/VGA Sequencer Registers (ports 0x3C4/0x3C5: regSEQIndx and regSEQData)
  */
 Card.SEQ = {
@@ -1514,7 +1514,7 @@ Card.SEQ = {
 
 if (DEBUGGER) Card.SEQ.REGS = ["RESET","CLKMODE","MAPMASK","CHARMAP","MEMMODE"];
 
-/*
+/**
  * VGA Digital-to-Analog Converter (DAC) Registers (regDACMask, regDACState, regDACAddr, and regDACData)
  *
  * To write DAC data, write an address to DAC.ADDR.PORT_WRITE, then write 3 bytes to DAC.DATA.PORT; the low 6 bits
@@ -1547,7 +1547,7 @@ Card.DAC = {
     TOTAL_REGS:             0x100
 };
 
-/*
+/**
  * EGA/VGA Graphics Controller Registers (ports 0x3CE/0x3CF: regGRCIndx and regGRCData)
  *
  * The VGA added Write Mode 3, which is described as follows:
@@ -1629,7 +1629,7 @@ Card.GRC = {
 
 if (DEBUGGER) Card.GRC.REGS = ["SRESET","ESRESET","COLORCOMP","DATAROT","READMAP","GRCMODE","GRCMISC","COLORDC","BITMASK"];
 
-/*
+/**
  * EGA Memory Access Functions
  *
  * Here's where we define all the getMemoryAccess() functions that know how to deal with "planar" EGA memory,
@@ -1688,7 +1688,7 @@ if (DEBUGGER) Card.GRC.REGS = ["SRESET","ESRESET","COLORCOMP","DATAROT","READMAP
  * TODO: Implement the subtleties.
  */
 
-/*
+/**
  * Values returned by getCardAccess(); the high byte describes the read mode, and the low byte describes the write mode.
  *
  * V2 should never appear in any values used by getCardAccess() or setCardAccess(); the sole purpose of V2 is to
@@ -1723,7 +1723,7 @@ Card.ACCESS = {
     V2:             (0x80000000|0)      // this is a signature bit used ONLY to differentiate V2 access values from V1
 };
 
-/*
+/**
  * Table of older (V1) access values and their corresponding new values; the new values are similar but more orthogonal
  */
 Card.ACCESS.V1 = [];
@@ -1804,7 +1804,7 @@ Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
  */
 Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
 {
-    /*
+    /**
      * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to determine
      * exactly what gets latched (ie, from which address) when EVENODD is in effect.  Whatever we learn may also
      * dictate a special EVENODD function for READ.MODE1 as well.
@@ -1838,7 +1838,7 @@ Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
 {
     let card = this.controller;
     let dw = card.latches = this.adw[off + this.offset];
-    /*
+    /**
      * Minor optimization: we could pre-mask nColorCompare with nColorDontCare, whenever either register
      * is updated, but that's a drop in the bucket compared to all the other work this function must do.
      */
@@ -1963,7 +1963,7 @@ Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
     let card = this.controller;
     let idw = (off & ~0x3) + this.offset;
     let shift = (off & 0x3) << 3;
-    /*
+    /**
      * TODO: Consider adding a separate "unmasked" version of this CHAIN4 write function when nSeqMapMask is -1
      * (or removing nSeqMapMask from the equation altogether, if CHAIN4 is never used with any planes disabled).
      */
@@ -1988,7 +1988,7 @@ Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
     let card = this.controller;
     let idw = (off += this.offset) & ~0x1;
     let dw = b | (b << 8) | (b << 16) | (b << 24);
-    /*
+    /**
      * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1
      * and 3 if the address is even, and cleared for planes 0 and 2 if the address is odd.
      */
@@ -2131,7 +2131,7 @@ Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
  */
 Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
 {
-    /*
+    /**
      * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1 and 3 if the
      * address is even, and cleared for planes 0 and 2 if the address is odd.
      *
@@ -2270,7 +2270,7 @@ Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
     if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
 };
 
-/*
+/**
  * Mappings from getCardAccess() values to access functions above
  */
 Card.ACCESS.afn = [];
@@ -2369,7 +2369,7 @@ export default class Videox86 extends Component {
         this.bindingsExternal = [];
         this.parmsVideo = parmsVideo;
 
-        /*
+        /**
          * This records the model specified (eg, "mda", "cga", "ega", "vga", "vdu", or "" if no model
          * is specified); when a model is specified, it overrides whatever model we infer from the ChipSet's
          * switches (since those motherboard switches tell us only the type of monitor, not the type of card).
@@ -2390,7 +2390,7 @@ export default class Videox86 extends Component {
         this.nRandomize = parmsVideo['randomize'];
         if (this.nRandomize == null) this.nRandomize = 1;
 
-        /*
+        /**
          * powerUp() uses the default mode ONLY if ChipSet doesn't give us a default.
          */
         this.nModeDefault = parmsVideo['mode'];
@@ -2398,7 +2398,7 @@ export default class Videox86 extends Component {
             this.nModeDefault = aModelDefaults[1];
         }
 
-        /*
+        /**
          * setDimensions() uses these values ONLY if it doesn't recognize the video mode.
          */
         this.nColsDefault = parmsVideo['charCols'];
@@ -2408,14 +2408,14 @@ export default class Videox86 extends Component {
             this.nRowsDefault = Videox86.aModeParms[this.nModeDefault][1];
         }
 
-        /*
+        /**
          * setDimensions() uses these values unconditionally, as the machine has no idea what the
          * physical screen size should be.
          */
         this.cxScreen = parmsVideo['screenWidth'];
         this.cyScreen = parmsVideo['screenHeight'];
 
-        /*
+        /**
          * The font 'scale' parameter is deprecated (we ALWAYS scale now), and the internal fDoubleFont
          * setting is now always true, but it is retained in case we want to revisit the benefits (or lack
          * thereof) of font-doubling.
@@ -2439,7 +2439,7 @@ export default class Videox86 extends Component {
         this.inputTextArea = textarea;
         this.inputScreen = textarea || canvas || null;
 
-        /*
+        /**
          * We now ensure that a colorScreen property is always set (to "black" if nothing else), and
          * set BOTH the canvas element's AND the container element's backgroundColor to match that color.
          *
@@ -2456,7 +2456,7 @@ export default class Videox86 extends Component {
         }
         if (container) container.style.backgroundColor = this.colorScreen;
 
-        /*
+        /**
          * Support for disabling (or, less commonly, enabling) image smoothing, which all browsers
          * seem to support now (well, OK, I still have to test the latest MS Edge browser), despite
          * it still being labelled "experimental technology".  Let's hope the browsers standardize
@@ -2474,20 +2474,20 @@ export default class Videox86 extends Component {
         this.fSmoothing = fSmoothing;
         this.sSmoothing = WebLib.findProperty(this.contextScreen, 'imageSmoothingEnabled');
 
-        /*
+        /**
          * initBus() will determine touch-screen support; for now, just record values and set defaults.
          */
         this.sTouchScreen = parmsVideo['touchScreen'];
         this.nTouchConfig = Videox86.TOUCH.NONE;
 
-        /*
+        /**
          * If a Mouse exists, we'll be notified when it requests our canvas, and we make a note of it
          * so that if lockPointer() is ever invoked, we can notify the Mouse.
          */
         this.mouse = null;
         this.fAutoLock = parmsVideo['autoLock'];
 
-        /*
+        /**
          * Originally, setMode() would map/unmap the video buffer ONLY when the active card changed,
          * because as long as an MDA or CGA remained active, its video buffer never changed.  However,
          * since the EGA can change its video buffer on the fly, setMode() must also compare the card's
@@ -2496,7 +2496,7 @@ export default class Videox86 extends Component {
          */
         this.addrBuffer = this.sizeBuffer = 0;
 
-        /*
+        /**
          * aFonts is an array of font objects indexed by FONT ID.  Font characters are arranged
          * in 16x16 grids, with one grid per canvas object in the aCanvas array of each font object.
          *
@@ -2507,14 +2507,14 @@ export default class Videox86 extends Component {
          */
         this.aFonts = [];
 
-        /*
+        /**
          * aFontDiff entries are created by createFontDiff(), and each entry is a 256-element array of either
          * 0 (no difference) or -1 for every character code that differs between the fonts that correspond to
          * the aFontDiff index.
          */
         this.aFontDiff = [];
 
-        /*
+        /**
          * Instead of (re)allocating a new color array every time getCardColors() is called, we preallocate
          * an array and simply update the entries as needed.  Note that for an EGA (or a VGA operating in an
          * EGA-compatible mode), only the first 16 entries get used (derived from the ATC); only when a VGA
@@ -2529,14 +2529,14 @@ export default class Videox86 extends Component {
         this.fShifted = false;      // set to true whenever the image has been shifted by one or more pixels
         this.nShiftLeft = this.nShiftUp = 0;
 
-        /*
+        /**
          * Since I've not found clear documentation on a reliable way to check whether a particular DOM element
          * (other than the BODY element) has focus at any given time, I've added onfocus() and onblur() handlers
          * to the screen to maintain my own focus state.
          */
         this.fHasFocus = false;
 
-        /*
+        /**
          * Here's the gross code to handle full-screen support across all supported browsers.  The lack of standards
          * is exasperating; browsers can't agree on 'Fullscreen' (most common) or 'FullScreen' (least common), and while
          * some browsers honor other browser prefixes, most don't.  Event handlers tend to be more consistent (ie, all
@@ -2563,7 +2563,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * More gross code to handle pointer-locking support across all supported browsers.
          */
         if (this.inputScreen) {
@@ -2596,7 +2596,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * TODO: A complete list of what we want to support in terms of "diagnostic elements" needs to be fleshed out
          * at some point.  For now, all I do is save the contexts of all supplied canvas elements and use them in createFont()
          * to display the font data (for as many font banks as there are canvas elements) whenever the font(s) get rebuilt.
@@ -2612,7 +2612,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Allocate image and canvas caches.
          */
         this.imageCache = {};
@@ -2653,18 +2653,19 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Moved this from the constructor (and changed WebLib.getURLParm() to cmp.getMachineParm()),
          * so that the flicker setting can be easily overridden from the page, not just from the URL.
          */
         this.opacityFlicker = (1 - (cmp.getMachineParm('flicker', this.parmsVideo) || 0)).toString();
 
-        /*
+        /**
          * nCard will be undefined if no model was explicitly set (whereas this.nCard is ALWAYS defined).
          */
-        let aModel = Videox86.MODEL[this.model], nCard = aModel && aModel[0];
+        let aModel = Videox86.MODEL[this.model];
+        let nCard = aModel && aModel[0];
 
-        /*
+        /**
          * The only time we do NOT want to trap MDA ports is when the model has been explicitly set to CGA.
          */
         if (nCard !== Videox86.CARD.CGA) {
@@ -2672,7 +2673,7 @@ export default class Videox86 extends Component {
             bus.addPortOutputTable(this, Videox86.aMDAPortOutput);
         }
 
-        /*
+        /**
          * Similarly, the only time we do NOT want to trap CGA ports is when the model is explicitly set to MDA.
          */
         if (nCard !== Videox86.CARD.MDA) {
@@ -2680,7 +2681,7 @@ export default class Videox86 extends Component {
             bus.addPortOutputTable(this, Videox86.aCGAPortOutput);
         }
 
-        /*
+        /**
          * Note that in the case of EGA and VGA models, the above code ensures that we will trap both MDA and CGA
          * port ranges -- which is good, because both the EGA and VGA can be reprogrammed to respond to those ports,
          * but also potentially bad if you want to simulate a "dual display" system, where one of the displays is
@@ -2706,7 +2707,7 @@ export default class Videox86 extends Component {
             });
         }
 
-        /*
+        /**
          * If we have an associated keyboard, then ensure that the keyboard will be notified whenever the canvas
          * gets focus and receives input.
          */
@@ -2730,7 +2731,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * The default value for the 'touchScreen' parameter is an empty string; machine configs must explicitly
          * select one of the following values, via the 'touchscreen' attribute in the <video> element, to enable any
          * touch-screen support.
@@ -2743,7 +2744,7 @@ export default class Videox86 extends Component {
             if (this.kbd) this.captureTouch(Videox86.TOUCH.KEYGRID);
         }
 
-        /*
+        /**
          * If no touch support was required or requested, we still want to do some minimal touch event processing;
          * eg, notifying the ChipSet component whenever a touchstart occurs, so that it can enable audio in response
          * to a user action on iOS devices.
@@ -2762,7 +2763,7 @@ export default class Videox86 extends Component {
             return;
         }
 
-        /*
+        /**
          * TODO: Improve how Video readiness is signalled.  Currently, all the video cards we support either have
          * a font ROM (which we load ourselves; see above) OR a system ROM (which the ROM component takes care of),
          * but not both.
@@ -2792,7 +2793,7 @@ export default class Videox86 extends Component {
 
         if (!this.bindings[sBinding]) {
 
-            /*
+            /**
              * We now save every binding that comes in, so that if there are bindings for "caps-lock' and the like,
              * we can forward them to the Keyboard.  TODO: Perhaps we should limit this to sHTMLType == "led", and collect
              * them in a separate object (eg, ledBindings), so that initBus() can safely enumerate JUST the LEDs.  This
@@ -2932,7 +2933,7 @@ export default class Videox86 extends Component {
         let fSuccess = false;
         if (this.container) {
             if (this.container.doFullScreen) {
-                /*
+                /**
                  * Styling the container with a width of "100%" and a height of "auto" works great when the aspect ratio
                  * of our virtual screen is at least roughly equivalent to the physical screen's aspect ratio, but now that
                  * we support virtual VGA screens with an aspect ratio of 1.33, that's very much out of step with modern
@@ -2960,7 +2961,7 @@ export default class Videox86 extends Component {
                     this.container.style.width = sWidth;
                     this.container.style.height = sHeight;
                 } else {
-                    /*
+                    /**
                      * Sadly, the above code doesn't work for Firefox (nor for Chrome, as of Chrome 75 or so), because as:
                      *
                      *      http://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Using_full_screen_mode
@@ -3089,7 +3090,7 @@ export default class Videox86 extends Component {
 
                 let addPassive = false;
                 if (nTouchConfig != Videox86.TOUCH.MOUSE) {
-                    /*
+                    /**
                      * If we're not capturing touch events for mouse event simulation, then we won't be calling
                      * preventDefault(), which means we should tell Chrome and any other browser that supports
                      * passive event listeners that we're installing a "passive" event listener, so that the browser
@@ -3137,7 +3138,7 @@ export default class Videox86 extends Component {
                     false                   // we'll specify false for the 'useCapture' parameter for now...
                 );
 
-                /*
+                /**
                  * Using desktop mouse events to simulate touch events should only be enabled as needed.
                  */
                 if (MAXDEBUG) {
@@ -3168,14 +3169,14 @@ export default class Videox86 extends Component {
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
-                /*
+                /**
                  * As long as fTouchDefault is false, we call preventDefault() on every touch event, to prevent
                  * the page from moving/scrolling while the canvas is processing touch events.  However, there must
                  * also be exceptions to permit the soft keyboard to activate; see processTouchEvent() for details.
                  */
                 this.fTouchDefault = false;
 
-                /*
+                /**
                  * I also need to come up with some rules for when the simulated mouse's primary button stays down.
                  * Let's try setting a timeout handler whenever a touchstart is received, which we'll immediately cancel
                  * as soon as a touchmove or touchend event is received, and if the timeout handler fires, we'll set
@@ -3198,7 +3199,7 @@ export default class Videox86 extends Component {
      */
     onFocusChange(fFocus)
     {
-        /*
+        /**
          * As per http://stackoverflow.com/questions/6740253/disable-scrolling-when-changing-focus-form-elements-ipad-web-app,
          * I decided to try this work-around to prevent the webpage from scrolling around whenever the canvas is given
          * focus.  That sort of scrolling-into-view sounds great in principle, but in practice, if you were reading some other
@@ -3275,7 +3276,7 @@ export default class Videox86 extends Component {
 
         // if (!event) event = window.event;
 
-        /*
+        /**
          * Touch coordinates (that is, the pageX and pageY properties) are relative to the page, so to make
          * them relative to the canvas, we must subtract the canvas's left and top positions.  This Apple web page:
          *
@@ -3298,7 +3299,7 @@ export default class Videox86 extends Component {
             }
         } while ((eCurrent = eCurrent.offsetParent));
 
-        /*
+        /**
          * Due to the responsive nature of our pages, the displayed size of the canvas may be smaller than the
          * allocated size, and the coordinates we receive from touch events are based on the currently displayed size.
          */
@@ -3322,7 +3323,7 @@ export default class Videox86 extends Component {
 
         if (this.nTouchConfig == Videox86.TOUCH.KEYGRID) {
 
-            /*
+            /**
              * We don't want to simulate a key on EVERY touch event; preferably, only touchstart or touchend.  And
              * I probably would have preferred triggering key presses on touchend, so that if you decided to move
              * your finger off-screen before releasing, you could avoid a key press, but sadly (as I've documented in
@@ -3334,7 +3335,7 @@ export default class Videox86 extends Component {
                 let xThird = (xTouch / (this.cxScreen / 3)) | 0;
                 let yThird = (yTouch / (this.cyScreen / 3)) | 0;
 
-                /*
+                /**
                  * At this point, xThird and yThird should both be one of 0, 1 or 2, indicating which horizontal and
                  * vertical third of the virtual screen the touch event occurred.
                  */
@@ -3343,7 +3344,7 @@ export default class Videox86 extends Component {
         } else {
 
             if (this.mouse) {
-                /*
+                /**
                  * As long as fTouchDefault is false, we call preventDefault() on every touch event, to keep
                  * the page stable.  However, we must allow some touch event(s) to perform their default action,
                  * otherwise the soft keyboard can never be activated.  So if a touchstart occurs at least 1/2
@@ -3375,7 +3376,7 @@ export default class Videox86 extends Component {
                 }
 
                 if (fStart === false) {
-                    /*
+                    /**
                      * NOTE: 200ms is merely my initial stab at a reasonable number of milliseconds to interpret a
                      * start/end touch sequence as a "tap"; I also make no note of any intervening move events (ie,
                      * events where fStart is undefined), and perhaps I should....
@@ -3389,7 +3390,7 @@ export default class Videox86 extends Component {
                         return;
                     }
                 }
-                /*
+                /**
                  * This 'touchmove" code mimics the 'mousemove' event processing in processMouseEvent() in mouse.js, with
                  * one important difference: every time touching "restarts", we need to reset the variables used to calculate
                  * the deltas, so that the mere act of lifting and replacing your finger doesn't generate a delta by itself.
@@ -3452,7 +3453,7 @@ export default class Videox86 extends Component {
                 if (!this.restore(data)) return false;
             }
             if (this.timerRetrace == undefined) {
-                /*
+                /**
                  * Note that startVerticalRetrace() will fire every nCyclesVertPeriod, ensuring predictability
                  * and repeatability regardless of the machine's current speed multiplier or the whether the machine
                  * is achieving the desired target number of cycles per second.
@@ -3469,7 +3470,7 @@ export default class Videox86 extends Component {
                 let video = this;
                 this.timerRetrace = this.cpu.addTimer(this.id, function startVerticalRetrace() {
                     let card = video.cardActive;
-                    /*
+                    /**
                      * The following code is a work-around for IBM's VGA diagnostic code starting at C000:01E5,
                      * which expects an entire screen refresh (ie, 400 horizontal retraces followed by 1 vertical
                      * retrace) to take roughly 1/30 of a second instead of 1/60.  The longer vertical retrace
@@ -3497,7 +3498,7 @@ export default class Videox86 extends Component {
                             if (video.chipset) video.chipset.setIRR(video.nIRQ);
                         }
                     }
-                    /*
+                    /**
                      * For simplicity, let's imagine that the normal screen update interval is 15ms.  If retraces are
                      * happening a bit too fast (eg, every 10ms), we'll skip the update on the first retrace, do it on
                      * the second retrace, skip on the third, and so on.  That's clearly too many skips, so when we
@@ -3511,7 +3512,7 @@ export default class Videox86 extends Component {
                         let fUpdated = video.updateScreen();
                         if (fUpdated) {
                             let cmsUpdate = Date.now() - msUpdate;
-                            /*
+                            /**
                              * Make sure that the modulo number here is always a multiple of the blink modulo in
                              * updateScreen(), so that we don't create blink irregularity every time we reset our
                              * average update time (cmsUpdate).
@@ -3523,7 +3524,7 @@ export default class Videox86 extends Component {
                                 video.cmsUpdate += cmsUpdate;
                                 cmsUpdate = video.cmsUpdate / video.cUpdates;
                             }
-                            /*
+                            /**
                              * If cmsUpdate is taking more than 25% of the update interval (eg, 4ms of a 16ms interval),
                              * then we want to increase the interval, so that updates are a smaller percentage of the overall
                              * workload.
@@ -3572,7 +3573,7 @@ export default class Videox86 extends Component {
     {
         let nMonitorType = ChipSet.MONITOR.NONE;
 
-        /*
+        /**
          * We'll ask the ChipSet what SW1 indicates for monitor type, but we may override it if a specific
          * video card model is set.  For EGA, SW1 is supposed to be set to indicate NO monitor, and we rely
          * on the EGA's own switch settings instead.
@@ -3581,7 +3582,7 @@ export default class Videox86 extends Component {
             nMonitorType = this.chipset.getDIPVideoMonitor();
         }
 
-        /*
+        /**
          * As we noted in the constructor, when a model is specified, that takes precedence over any monitor
          * switch settings.  Conversely, when no model is specified, the nCard setting is considered provisional,
          * so the monitor switch settings, if any, are allowed to determine the card type.
@@ -3600,7 +3601,7 @@ export default class Videox86 extends Component {
 
         case Videox86.CARD.EGA:
             aMonitors = Videox86.aEGAMonitorSwitches[this.bEGASwitches];
-            /*
+            /**
              * TODO: Figure out how to deal with aMonitors[2], the boolean which indicates
              * whether the EGA is driving the primary monitor (true) or the secondary monitor (false).
              */
@@ -3645,7 +3646,7 @@ export default class Videox86 extends Component {
         this.setMode(this.nModeDefault);
 
         if (this.cardActive.addrBuffer && this.nRandomize) {
-            /*
+            /**
              * On the initial power-on, we initialize the video buffer to random characters, as a way of testing
              * whether our font(s) were successfully loaded.  It's assumed that our default display mode is a text mode,
              * and that since this is a reset, the CRTC.START_ADDR registers are zero as well.
@@ -3665,7 +3666,7 @@ export default class Videox86 extends Component {
                 let dataRandom = (Math.random() * 0x10000) | 0;
                 let bChar, bAttr;
                 if (this.nMonitorType == ChipSet.MONITOR.EGACOLOR || this.nMonitorType == ChipSet.MONITOR.VGACOLOR) {
-                    /*
+                    /**
                      * For the EGA, we choose sequential characters; for random characters, copy the MDA/CGA code below.
                      */
                     bChar = (addrScreen >> 1) & 0xff;
@@ -3741,13 +3742,13 @@ export default class Videox86 extends Component {
         this.cardMono = this.cardMDA = new Card(this, Videox86.CARD.MDA, data[0]);
         this.cardColor = this.cardCGA = new Card(this, Videox86.CARD.CGA, data[1]);
 
-        /*
+        /**
          * If no EGA was originally initialized, then cardEGA will remain uninitialized.
          */
         this.cardEGA = new Card(this, this.nCard, data[3], this.cbMemory);
         if (this.cardEGA.fActive) this.enableEGA();
 
-        /*
+        /**
          * While I could restore the active card here, it's better for setMode() to do it, because
          * setMode() will also take care of mapping the appropriate video buffer.  So, after restore() has
          * finished, we call checkMode(), because the current video mode (nMode) is determined by the
@@ -3785,7 +3786,7 @@ export default class Videox86 extends Component {
         Component.addMachineResource(this.idMachine, sURL, sFontData);
 
         try {
-            /*
+            /**
              * The most likely source of any exception will be right here, where we're parsing the JSON-encoded data.
              */
             let abFontData = eval("(" + sFontData + ")");
@@ -3800,12 +3801,12 @@ export default class Videox86 extends Component {
                 Component.error(ab[0]);
                 return;
             }
-            /*
+            /**
              * Translate the character data into separate "fonts", each of which will be a separate canvas object, with all
              * 256 characters arranged in a 16x16 grid.
              */
             if (ab.length == 8192) {
-                /*
+                /**
                  * The assumption here is that we're dealing with the original (IBM) MDA/CGA font data, which apparently
                  * was identical on both MDA and CGA cards (even though the former had no use for the latter, and vice versa).
                  *
@@ -3871,7 +3872,7 @@ export default class Videox86 extends Component {
                 this.setFontData(ab, [0x1800, 0x0000]);
             }
             else if (ab.length == 2048) {
-                /*
+                /**
                  * The assumption here is that we're dealing strictly with CGA (8x8) font data, like the font data found
                  * in the Columbia Data Products (CDP) Font ROM.
                  */
@@ -3886,7 +3887,7 @@ export default class Videox86 extends Component {
             this.printf(MESSAGE.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
-        /*
+        /**
          * If we're still here, then we're ready!
          *
          * UPDATE: Per issue #21 (https://github.com/jeffpar/pcjs.v1/issues/21), I issued setReady() *only* if a valid
@@ -3914,12 +3915,12 @@ export default class Videox86 extends Component {
     onROMLoad(abROM, aParms)
     {
         if (this.nCard == Videox86.CARD.EGA) {
-            /*
+            /**
              * TODO: Unlike the MDA/CGA font data, we may want to hang onto this data, so that we can
              * regenerate the color font(s) whenever the foreground and/or background colors have changed.
              */
             if (DEBUG) this.printf("onROMLoad(): EGA fonts loaded\n");
-            /*
+            /**
              * For EGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM EGA ROM, which stores its 8x14 font data at 0x2230 as one continuous sequence; the total size
              * of the 8x14 font is 0xE00 bytes.
@@ -3941,7 +3942,7 @@ export default class Videox86 extends Component {
         }
         else if (this.nCard == Videox86.CARD.VGA) {
             if (DEBUG) this.printf("onROMLoad(): VGA fonts loaded\n");
-            /*
+            /**
              * For VGA cards, in the absence of any parameters, we assume that we're receiving the original
              * IBM VGA ROM, which contains an 8x14 font at 0x3F8D (and corresponding supplemental table at 0x4D8D)
              * and an 8x8 font at 0x378D; however, it also contains an 8x16 font at 0x4EBA (and corresponding
@@ -3989,7 +3990,7 @@ export default class Videox86 extends Component {
     getCardColors(nBitsPerPixel)
     {
         if (nBitsPerPixel == 1) {
-            /*
+            /**
              * Only 2 total colors.
              */
             this.aRGB[0] = Videox86.aCGAColors[Videox86.ATTRS.FGND_BLACK];
@@ -3998,7 +3999,7 @@ export default class Videox86 extends Component {
         }
 
         if (nBitsPerPixel == 2) {
-            /*
+            /**
              * Of the 4 colors returned, the first color comes from regColor and the other 3 come from one of
              * the two hard-coded CGA color sets:
              *
@@ -4047,7 +4048,7 @@ export default class Videox86 extends Component {
             let aRegs, i, dw, b, bRed, bGreen, bBlue;
 
             if (nBitsPerPixel == 8) {
-                /*
+                /**
                  * The card must be a VGA, and it's using an (8bpp) mode that bypasses the ATC, so we need to pull
                  * RGB data exclusively from the 256-entry DAC; each entry contains 6-bit red, green, and blue values
                  * packed into bits 0-5, 6-11, and 12-17, respectively, each of which we effectively shift left 2 bits:
@@ -4062,7 +4063,7 @@ export default class Videox86 extends Component {
                     this.aRGB[i] = [bRed, bGreen, bBlue, 0xff];
                 }
             } else {
-                /*
+                /**
                  * We need to pull RGB data from the ATC; moreover, if the ATC hasn't been initialized yet,
                  * we go with a default EGA-compatible 16-color palette.  We'll also use the DAC if there is one
                  * (ie, this is actually a VGA) and it appears to be initialized (ie, the VGA BIOS has been run).
@@ -4071,7 +4072,7 @@ export default class Videox86 extends Component {
                 aRegs = (card.regATCData[15] != null? card.regATCData : Videox86.aEGAPalDef);
                 for (i = 0; i < 16; i++) {
                     b = aRegs[i] & Card.ATC.PALETTE.MASK;
-                    /*
+                    /**
                      * If the DAC is valid, we need to supplement the 6 bits of each ATC palette entry with the values
                      * for bits 6 and 7 from the ATC COLORSEL register (and overwrite bits 4 and 5 if ATC.MODE.COLORSEL_ALL
                      * is set as well).
@@ -4131,7 +4132,7 @@ export default class Videox86 extends Component {
         }
         let nColors = aColors.length;
         let nRange = (nColors >> 1);
-        /*
+        /**
          * When nColors is 16, nRange is 8, and iColor (originally 0-15) is now -7 to 8
          */
         iColor = (iColor + 1) - nRange;
@@ -4228,13 +4229,13 @@ export default class Videox86 extends Component {
         let fChanges = false;
         this.nActiveFont = this.nAlternateFont = this.nCardFont;
 
-        /*
+        /**
          * There's no point building fonts unless we're in a windowed (non-command-line) environment, we're
          * in a font-based mode (nCardFont is set), and font data has been supplied (or can be extracted from RAM).
          */
         if (globals.browser && this.nCardFont) {
 
-            /*
+            /**
              * Build whatever font(s) we need for the current card.  In the case of the EGA/VGA, that can mean up to
              * 4 fonts, if all four font "banks" in plane 2 have been loaded with font data, but if we don't yet know
              * which bank is active, we'll build the default font, using the available font data (ie, abFontData).
@@ -4247,7 +4248,7 @@ export default class Videox86 extends Component {
                 if (!this.colorFont) {
                     aRGBColors = Videox86.aMDAColors;
                 } else {
-                    /*
+                    /**
                      * When overriding MDA colors, we take rgbFont to be the "normal" color (aMDAColors indices 1 and 2), and
                      * then calculate the MDA's corresponding "intense" color (aMDAColors indices 3 and 4) using getIntenseColor().
                      */
@@ -4309,7 +4310,7 @@ export default class Videox86 extends Component {
                     this.nAlternateFont = this.nCardFont + (this.nFontSelect >> 8);
                 }
                 if (offData != null) {
-                    /*
+                    /**
                      * Logical fonts 0-3 (0-7 on the VGA) refer to banks in the following order: 0, 2, 4, 6, 1, 3, 5, 7.
                      *
                      * Note that we no longer build all possible fonts; we build ONLY those fonts that are currently selectable.
@@ -4334,7 +4335,7 @@ export default class Videox86 extends Component {
             }
 
             if (!fRebuild) {
-                /*
+                /**
                  * Perform some additional initialization common to both reset() and restore() sequences.
                  */
                 this.iCellCursor = -1;  // initially, there is no visible cursor cell
@@ -4405,7 +4406,7 @@ export default class Videox86 extends Component {
 
         for (let iColor = 0; iColor < nColors; iColor++) {
             let rgbColor = aRGBColors[iColor];
-            /*
+            /**
              * If any of the font's shape, data, or color has changed, then recreate it.  Also, we don't need to check
              * for a color change if we already know there was a shape or data change.
              */
@@ -4448,7 +4449,7 @@ export default class Videox86 extends Component {
                             let canvasSrc = font.aCanvas[iColor];
                             contextDst.fillStyle = font.aCSSColors[(iColor + 9) % nColors];
                             contextDst.fillRect(iColor * cxDstColor, 0, cxDstColor, cyDstColor);
-                            /*
+                            /**
                              * We want to draw whatever vertical slice of the font canvas will fit in the destination slice
                              * without altering the aspect ratio.  So the source and destination heights will be 100% of their
                              * respective canvases, while the source width will be multiplied by the ratio of the heights and
@@ -4502,7 +4503,7 @@ export default class Videox86 extends Component {
      */
     createFontColor(font, iColor, rgbColor, nDouble, offData, offSplit, cxChar, cyChar, abFontData)
     {
-        /*
+        /**
          * If abFontData is null, we will use font data from plane 2 of video memory, which has a "hard-wired" layout
          * of 32 bytes per character (which, for 256 characters, amounts to 8Kb).  Note that on an EGA, up to 4 font
          * "banks" can be stored in plane 2, since each EGA font bank has a "hard-wired" length of 16Kb, whereas on a VGA,
@@ -4510,14 +4511,16 @@ export default class Videox86 extends Component {
          * for backward compatibility with the EGA, the VGA's additional 4 font banks are interleaved with the EGA's
          * original 4 font banks.
          */
-        let iChar, y, x;
+        let iChar;
+        let y;
+        let x;
         let cyLimit = 32;
         let adwMemory = this.cardActive && this.cardActive.adwMemory;
         if (abFontData) {
             cyLimit = (cyChar < 8 || !offSplit)? cyChar : 8;
         }
         else {
-            /*
+            /**
              * When font data must be extracted from VRAM (instead of the supplied abFontData), we first do a "pre-scan"
              * to see if any font data actually exists.  For example. the video card's BIOS might zero ALL the font banks
              * (thereby making them "dirty") but then load only the first bank.
@@ -4542,7 +4545,7 @@ export default class Videox86 extends Component {
 
         let rgbOff = [0x00, 0x00, 0x00, 0x00];
 
-        /*
+        /**
          * Let's take a moment to see if we already have a suitable canvasFont that we can simply reuse.
          */
         let canvasFont = font.aCanvas[iColor];
@@ -4557,7 +4560,7 @@ export default class Videox86 extends Component {
         for (iChar = 0; iChar < 256; iChar++) {
             let offChar = offData + iChar * cyLimit;
             for (y = 0; y < cyChar; y++) {
-                /*
+                /**
                  * fUnderline should be true only in the FONT_MDA case, and only for the odd color variations
                  * (1 and 3, out of variations 0 to 4), and only for the second-from-bottom row of the character cell
                  * (based on images from actual MDA hardware).
@@ -4565,14 +4568,14 @@ export default class Videox86 extends Component {
                 let fUnderline = (font.aColorMap && (iColor & 0x1) && y == cyChar - 2);
                 let offScan = (y < cyLimit? offChar + y : offSplit + iChar * cyLimit + y - cyLimit);
 
-                /*
+                /**
                  * If abFontData is null, then we must extract the next byte of font data from plane 2 of video memory.
                  */
                 let b = abFontData? abFontData[offScan] : ((adwMemory[offScan] >> 16) & 0xff);
 
                 for (let nRowDoubler = 0; nRowDoubler <= nDouble; nRowDoubler++) {
                     for (x = 0; x < cxChar; x++) {
-                        /*
+                        /**
                          * This "bit" of logic takes care of those characters (0xC0-0xDF) whose 9th bit must mirror the 8th bit;
                          * in all other cases, any bit past the 8th bit is automatically zero.  It also takes care of embedding a
                          * solid row of bits whenever fUnderline is true.
@@ -4589,12 +4592,12 @@ export default class Videox86 extends Component {
                     }
                 }
             }
-            /*
+            /**
              * (iChar >> 4) is the equivalent of Math.floor(iChar / 16), and (iChar & 0xf) is the equivalent of (iChar % 16).
              */
             contextFont.putImageData(imageChar, x = (iChar & 0xf) * font.cxCell, y = (iChar >> 4) * font.cyCell);
         }
-        /*
+        /**
          * The colors for cell backgrounds and cursor elements must be converted to CSS color strings.
          */
         font.aCSSColors[iColor] = StrLib.sprintf("#%02X%02X%02X", rgbColor[0], rgbColor[1], rgbColor[2]);
@@ -4715,7 +4718,7 @@ export default class Videox86 extends Component {
         if (this.cBlinkVisible > 0 || this.iCellCursor >= 0) {
             if (this.cBlinks < 0) {
                 this.cBlinks = 0;
-                /*
+                /**
                  * At this point, we can either fire up our own timer (doBlink), or rely on updateScreen() being
                  * called by the CPU at regular bursts (eg, Videox86.UPDATES_PER_SECOND = 60) and advance cBlinks at
                  * the start of updateScreen() accordingly.
@@ -4767,7 +4770,7 @@ export default class Videox86 extends Component {
      */
     checkCursor()
     {
-        /*
+        /**
          * The "hardware cursor" is never visible in graphics modes.
          */
         if (!this.nCardFont) return false;
@@ -4785,7 +4788,7 @@ export default class Videox86 extends Component {
         let bCursorMax = card.regCRTData[Card.CRTC.MAXSCAN] & Card.CRTCMASKS[Card.CRTC.MAXSCAN];
         let oCursorStart = bCursorStart, oCursorEnd = bCursorEnd;
 
-        /*
+        /**
          * Before range-checking CURSCAN and CURSCANB, let's see if the cursor is disabled by a starting value
          * outside the visible range; if so, simulate the condition by pretending the CURSCAN_BLINKOFF bit is set.
          *
@@ -4799,7 +4802,7 @@ export default class Videox86 extends Component {
         let bCursorWrap = 0;
 
         if (this.nCard != Videox86.CARD.EGA) {
-            /*
+            /**
              * Live and learn: I originally thought that the EGA introduced funky split cursors, but it turns
              * out that older cards did it, too (well, I've confirmed it on an actual MDA anyway; haven't tried
              * the CGA).  I've also confirmed that the MDA did NOT have the "mod 16" EGA anomaly described below.
@@ -4807,7 +4810,7 @@ export default class Videox86 extends Component {
             if (bCursorEnd < bCursorStart) {
                 bCursorWrap = bCursorEnd + 1;
                 bCursorEnd = bCursorMax;
-                /*
+                /**
                  * The VGA didn't support funky split (aka wrap-around) cursors, so as above, we pretend that the
                  * cursor has simply been disabled.
                  */
@@ -4823,7 +4826,7 @@ export default class Videox86 extends Component {
             bCursorEnd++;
         }
         else {
-            /*
+            /**
              * HACK: The original EGA BIOS has a cursor emulation bug when 43-line mode is enabled; we used to
              * detect that particular combination of bad values and automatically fix them (see below),
              * but in retrospect, that doesn't seem very faithful.  Better to fix things like this 1) only if
@@ -4853,7 +4856,7 @@ export default class Videox86 extends Component {
 
         let bCursorSize = bCursorEnd - bCursorStart;
 
-        /*
+        /**
          * One way of disabling the cursor is to set bit 5 (Card.CRTC.CURSCAN_BLINKOFF) of the CRTC.CURSCAN flags;
          * another way is setting bCursorStart > bCursorEnd, which implies that bCursorSize <= 0.
          */
@@ -4862,7 +4865,7 @@ export default class Videox86 extends Component {
             return false;
         }
 
-        /*
+        /**
          * The least tricky way of disabling (ie, hiding) the cursor is to simply move it to an off-screen position.
          */
         let offCursor = card.regCRTData[Card.CRTC.CURSORLO] | ((card.regCRTData[Card.CRTC.CURSORHI] & card.addrMaskHigh) << 8);
@@ -4878,7 +4881,7 @@ export default class Videox86 extends Component {
                 let colTo = (iCellCursor % this.nCols);
                 this.printf("checkCursor(): cursor moved from %d,%d to %d,%d\n", rowFrom, colFrom, rowTo, colTo);
             }
-            /*
+            /**
              * I commented out this call on Feb 12, 2018 ("More cursor visibility fixes, especially when dealing with
              * non-zero video buffer start addresses") when I was debugging some Xenix issues, at the same time that I
              * also commented out the above printf(); in hindsight, I'm not sure if I intended to comment both out,
@@ -4887,7 +4890,7 @@ export default class Videox86 extends Component {
              *      this.removeCursor();
              */
             this.iCellCursor = iCellCursor;
-            /*
+            /**
              * We invalidate cBlinkVisible on a cursor position change to ensure the cursor will be redrawn on the
              * next call to updateScreenCells().  It has the downside of requiring ALL cells to be re-examined, not
              * just the old and new cursor cells, but the cell cache should prevent any unnecessary redrawing.
@@ -4895,7 +4898,7 @@ export default class Videox86 extends Component {
             this.cBlinkVisible = -1;
         }
 
-        /*
+        /**
          * yCursor and cyCursor are no longer scaled at this point, because the necessary scaling will depend on
          * whether we're drawing the cursor to the on-screen or off-screen buffer, and updateChar() is in the best
          * position to determine that.
@@ -4911,7 +4914,7 @@ export default class Videox86 extends Component {
             this.yCursor = bCursorStart;
             this.cyCursor = bCursorSize;
             this.cyCursorWrap = bCursorWrap;
-            /*
+            /**
              * The best redraw option for cursor shape changes used to be invalidating the cell cache, since merely
              * invalidating cBlinkVisible wouldn't have the desired effect if the cursor was still in the same location.
              * However, that option was rather drastic.  If the cursor had ALSO just moved (ie, this.cBlinkVisible < 0),
@@ -4928,7 +4931,7 @@ export default class Videox86 extends Component {
 
         this.cyCursorCell = bCursorMax + 1;
 
-        /*
+        /**
          * This next condition is critical; WordStar for PCjr (designed for the CGA) would program CURSCANB to 31,
          * whereas MAXSCAN was 7.  This resulted in cyCursorCell of 8 and cyCursor of 32, producing elongated cursors
          * in updateChar().  By range-checking CURSCAN and CURSCANB against MAXSCAN above, that should no longer happen.
@@ -4960,13 +4963,13 @@ export default class Videox86 extends Component {
                     let col = this.iCellCursor % this.nColsBuffer;
                     let row = (this.iCellCursor / this.nColsBuffer) | 0;
                     if (this.nActiveFont && this.aFonts[this.nActiveFont]) {
-                        /*
+                        /**
                          * If we're using an off-screen buffer in text mode, then we need to keep it in sync with "reality".
                          */
                         if (this.contextBuffer) {
                             this.updateChar(col, row, data, this.contextBuffer);
                         }
-                        /*
+                        /**
                          * While updating the on-screen canvas directly could open us up to potential subpixel artifacts again,
                          * I'm hopeful that won't be the case, since removeCursor() is called only during certain well-defined
                          * events.  The alternative to this simple updateChar() call is unappealing: redrawing the ENTIRE off-screen
@@ -5053,7 +5056,7 @@ export default class Videox86 extends Component {
                 if (regGRCMode & Card.GRC.MODE.READ.MODE1) {
                     nReadAccess = Card.ACCESS.READ.MODE1;
                 }
-                /*
+                /**
                  * I discovered that when the IBM EGA ROM scrolls the screen in graphics modes 0x0D and 0x0E, it
                  * reprograms this register for WRITE.MODE1 (which is fine) *and* EVENODD (which is, um, very odd).
                  * Moreover, it does NOT make the complementary change to the SEQ.MEMMODE.SEQUENTIAL bit; under
@@ -5115,7 +5118,7 @@ export default class Videox86 extends Component {
 
             card.setMemoryAccess(nAccess);
 
-            /*
+            /**
              * Note that setMemoryAccess() can fail, in which case it will an report error, indicating either a
              * misconfiguration or some sort of internal inconsistency; in any case, there's not much we can do about
              * it at this point, other than possibly reverting the current access setting.  There's probably not much
@@ -5157,7 +5160,7 @@ export default class Videox86 extends Component {
             this.nCardFont = modeParms[5];  // this will be undefined for all graphics modes
 
             if (this.nCardFont) {
-                /*
+                /**
                  * Color text modes originally used an 8x8 font, but beginning with the EGA, they use whatever
                  * font is stored in plane 2, so if the card is "newer" than the default font, update the default
                  * to match the card.
@@ -5174,7 +5177,7 @@ export default class Videox86 extends Component {
                     cxCell = font.cxCell;
                     cyCell = font.cyCell;
                     if (this.nCard >= Videox86.CARD.EGA) {
-                        /*
+                        /**
                          * Since these cards have programmable font height (font.cyChar), we need to divide that
                          * into the screen height (cyScreen) to determine the effective (ie, visible) number of rows.
                          */
@@ -5210,12 +5213,12 @@ export default class Videox86 extends Component {
         this.cxBuffer = this.nColsBuffer * cxCell;
         this.cyBuffer = this.nRowsBuffer * cyCell;
 
-        /*
+        /**
          * Beyond calculating the theoretical dimensions, there's nothing more to do if we're in a "headless" mode.
          */
         if (!this.contextScreen) return;
 
-        /*
+        /**
          * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
          * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
          * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
@@ -5224,7 +5227,7 @@ export default class Videox86 extends Component {
             this.contextScreen[this.sSmoothing] = (this.fSmoothing == null? !!this.nCardFont : this.fSmoothing);
         }
 
-        /*
+        /**
          * Allocate the off-screen buffers, unless a previous setMode() already cached buffers of the required size.
          */
         if (this.imageCache[this.cxBuffer] && this.imageCache[this.cxBuffer][this.cyBuffer]) {
@@ -5242,7 +5245,7 @@ export default class Videox86 extends Component {
         }
         this.contextBuffer = this.canvasBuffer.getContext("2d");
 
-        /*
+        /**
          * Since cxCell and cyCell were originally defined in terms of cxScreen/nCols and cyScreen/nRows, you might think
          * these border calculations would always be zero, but we used to have code that tried to avoid stretching 40-column
          * modes into an unpleasantly wide shape, so this code is being retained (for now).
@@ -5284,7 +5287,7 @@ export default class Videox86 extends Component {
         let card = this.cardActive;
 
         if (!card) {
-            /*
+            /**
              * We are likely being called after a restore(), which needs us to call setMode() to insure the proper video
              * buffer is mapped in.  So we unset this.nMode to guarantee that setMode() will be called, and if it wasn't set
              * to anything before, then we fall-back to the default mode.
@@ -5297,7 +5300,7 @@ export default class Videox86 extends Component {
                 nMode = Videox86.MODE.MDA_80X25;
             }
             else if (card.nCard >= Videox86.CARD.EGA) {
-                /*
+                /**
                  * The sizeBuffer we choose reflects the amount of physical address space that all 4 planes
                  * of EGA memory normally span, NOT the total amount of EGA memory.  So for a 64Kb EGA card,
                  * we would set card.sizeBuffer to 16Kb (0x4000).
@@ -5321,7 +5324,7 @@ export default class Videox86 extends Component {
                         if ((nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) <= 1) {
                             nMode = Videox86.MODE.UNKNOWN;     // no BIOS mode uses this mapping, but we don't want to leave nMode null if we've come this far
                         } else {
-                            /*
+                            /**
                              * This mapping is used by Fantasy Land.
                              *
                              * TODO: Generalize this logic, outside of the context of the GRC.MISC mapping bits.
@@ -5349,7 +5352,7 @@ export default class Videox86 extends Component {
                     default:
                         break;
                     }
-                    /*
+                    /**
                      * TODO: The following mode discrimination code is all a bit haphazard, a byproduct of its slow evolution
                      * from increasingly greater EGA support to increasingly greater VGA support.  Make it more rational someday,
                      * so that as support is added for even more modes (eg, "Mode X" variations, monochrome modes, etc), it
@@ -5360,7 +5363,7 @@ export default class Videox86 extends Component {
                      */
                     let regGRCMode = card.regGRCData[Card.GRC.MODE.INDX];
 
-                    /*
+                    /**
                      * This text/graphics hybrid test detects the way Windows 95 reprograms the VGA on boot; ie, switching
                      * to graphics mode 0x13 (320x200) without disturbing the text buffer contents, then reprogramming it
                      * to enable graphics mode 0x15 (320x400), then drawing a logo in the 2nd half of the video memory, and
@@ -5369,7 +5372,7 @@ export default class Videox86 extends Component {
                      */
                     let fTextGraphicsHybrid = (regGRCMode & (Card.GRC.MODE.COLOR256 | Card.GRC.MODE.EVENODD)) == (Card.GRC.MODE.COLOR256 | Card.GRC.MODE.EVENODD);
 
-                    /*
+                    /**
                      * When fTextGraphicsHybrid is true, we should be at the end of the above process, so addrBuffer
                      * will have changed.  Since we don't (yet) assign a special mode to that configuration, we must at
                      * least set fForce to true, so that setMode() will notice the buffer address change and remap it.
@@ -5387,7 +5390,7 @@ export default class Videox86 extends Component {
 
                     if (nMode != Videox86.MODE.UNKNOWN) {
                         if (!(regGRCMisc & Card.GRC.MISC.GRAPHICS)) {
-                            /*
+                            /**
                              * Here's where we handle text modes; since nMode will have been assigned a default
                              * of either 0x02 or 0x03, convert that to either 0x05 or 0x04 if we're in a low-res
                              * graphics mode, 0x06 otherwise.
@@ -5395,7 +5398,7 @@ export default class Videox86 extends Component {
                             nMode -= (fSEQDotClock? 2 : 0);
                         }
                         else if (card.addrBuffer != 0xA0000 && !fTextGraphicsHybrid && !(nCRTCModeCtrl & Card.CRTC.EGA.MODECTRL.COMPAT_MODE)) {
-                            /*
+                            /**
                              * Here's where we handle CGA graphics modes; since nMode will have been assigned a
                              * default of either 0x02 or 0x03, convert that to either 0x05 or 0x04 if we're in a
                              * low-res graphics mode, 0x06 otherwise.
@@ -5407,7 +5410,7 @@ export default class Videox86 extends Component {
                              */
                             nMode = fSEQDotClock? (7 - nMode) : Videox86.MODE.CGA_640X200;
                         } else {
-                            /*
+                            /**
                              * Here's where we handle EGA/VGA graphics modes, discriminating among modes 0x0D and up;
                              * we've already defaulted to either 0x0F or 0x10.  If COLOR256 is set, then select mode
                              * 0x13 (or greater), else if 200-to-400 scan-line conversion is in effect, select either
@@ -5415,7 +5418,7 @@ export default class Videox86 extends Component {
                              */
                             if (card.regGRCData[Card.GRC.MODE.INDX] & Card.GRC.MODE.COLOR256) {
                                 if (nCRTCMaxScan & Card.CRTC.EGA.MAXSCAN.SLMASK) {
-                                    /*
+                                    /**
                                      * NOTE: Technically, VDEND is one of those CRTC registers that should be read using
                                      * card.getCRTCReg(), because there are overflow bits (8 and 9).  However, all known modes
                                      * always SET bit 8 and CLEAR bit 9, so examining only bits 0-7 is sorta OK.
@@ -5445,7 +5448,7 @@ export default class Videox86 extends Component {
                 }
             }
             else if (card.regMode & Card.CGA.MODE.VIDEO_ENABLE) {
-                /*
+                /**
                  * NOTE: For the CGA, we precondition any mode change on CGA.MODE.VIDEO_ENABLE being set, otherwise
                  * we'll get spoofed by the ROM BIOS scroll code, which waits for vertical retrace and then turns CGA.MODE.VIDEO_ENABLE
                  * off, using a hard-coded mode value (0x25) that does NOT necessarily match the the CGA video mode currently in effect.
@@ -5467,7 +5470,7 @@ export default class Videox86 extends Component {
                 }
             }
             else {
-                /*
+                /**
                  * This code is responsible for simulating flicker on a CGA screen.  Note that we have to also
                  * call yieldCPU() to ensure that the browser "comes up for air" and honors the new opacity, otherwise
                  * you'll see very intermittent flicker (which is actually more annoying than regular flicker, believe
@@ -5486,7 +5489,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * NOTE: If setMode() remaps the video memory, that will trigger calls to setCardAccess() to also update the
          * memory's access functions.  However, if the memory access setting is about to change as well, those changes
          * will be moot until the setCardAccess() call that follows.  Basically, whenever both memory mapping AND access
@@ -5527,7 +5530,7 @@ export default class Videox86 extends Component {
             this.nMode = nMode;
             this.fRGBValid = false;
 
-            /*
+            /**
              * It's CRITICAL that a reset() invalidate cardActive, to ensure that the code below releases the
              * previous video buffer and installs a new one, even if there was no change in the video buffer
              * address or size, because otherwise memory blocks installed at the video buffer address may still
@@ -5549,7 +5552,7 @@ export default class Videox86 extends Component {
                     if (DEBUG) this.printf("setMode(%#04X): removing %#010X bytes from %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
                     if (!this.bus.removeMemory(this.addrBuffer, this.sizeBuffer)) {
-                        /*
+                        /**
                          * TODO: Force this failure case and see how well the Video component deals with it.
                          */
                         return false;
@@ -5566,13 +5569,13 @@ export default class Videox86 extends Component {
                 if (DEBUG) this.printf("setMode(%#04X): adding %#010X bytes to %#010X\n", nMode, this.sizeBuffer, this.addrBuffer);
 
                 if (!this.bus.addMemory(card.addrBuffer, card.sizeBuffer, Memoryx86.TYPE.VIDEO, card)) {
-                    /*
+                    /**
                      * TODO: Force this failure case and see how well the Video component deals with it.
                      */
                     return false;
                 }
 
-                /*
+                /**
                  * As https://www.seasip.info/VintagePC/mda.html explains, the MDA's 4K buffer address is not
                  * fully decoded; it is also addressible at every 4K interval within a 32K (0x8000) address range.
                  * We simulate that now, and not just for purely theoretical reasons: the original monochrome-
@@ -5671,14 +5674,14 @@ export default class Videox86 extends Component {
                 this.fRGBValid = false;
             }
             else if (nFontSelect !== undefined) {
-                /*
+                /**
                  * We want to do a "smart" (aka selective) invalidation of the cell cache, invalidating only
                  * those cells containing characters whose current font data differs from the previous font data.
                  */
                 if (nFontSelect == nFontPrev) return 0;
                 let aCellCache = this.aCellCache;
                 let nCells = 0;
-                /*
+                /**
                  * getFontDiff() returns an empty array if the current and previous fonts are the same, which
                  * is OK for the code below, because using the "|" operator with undefined values coerces them
                  * to zero, resulting in no change.  If BOTH FontDiff arrays were empty, then we could skip this
@@ -5690,7 +5693,7 @@ export default class Videox86 extends Component {
                 for (let i = 0; i < aCellCache.length; i++) {
                     let data = aCellCache[i];
                     if (data >= 0) {
-                        /*
+                        /**
                          * The font referenced by any given cell data *usually* only depends on low 8 bits (ie, the
                          * character data), but when the active and alternate fonts differ, bit 3 of the attribute data
                          * must be examined as well, and if it's set, then the alternate font must be used.
@@ -5704,7 +5707,7 @@ export default class Videox86 extends Component {
                 }
                 return nCells;
             } else {
-                /*
+                /**
                  * When no color change AND no font change has occurred, since the cache was at least partially
                  * valid already, we make sure it's partially valid.
                  */
@@ -5742,7 +5745,7 @@ export default class Videox86 extends Component {
     {
         let bChar = data & 0xff;
         let bAttr = data >> 8;
-        /*
+        /**
          * The font referenced by any given cell data *usually* only depends on low 8 bits (ie, the
          * character data), but when the active and alternate fonts differ, bit 3 of the attribute data
          * must be examined as well, and if it's set, then the alternate font must be used.
@@ -5753,7 +5756,7 @@ export default class Videox86 extends Component {
             bAttr &= ~0x08;
         }
 
-        /*
+        /**
          * Just as aColorMap maps the foreground attribute to the appropriate foreground character grid,
          * it also maps the background attribute to the appropriate background color.
          *
@@ -5763,7 +5766,8 @@ export default class Videox86 extends Component {
          * Similarly, the foreground is NEVER black UNLESS attribute & 0x77 == 0x00 (ie, the attribute is one
          * of 0x00, 0x08, 0x80, or 0x88).
          */
-        let xDst, yDst;
+        let xDst;
+        let yDst;
         let iFgnd = bAttr & 0x0f;
         let iBgnd = (bAttr >> 4) & 0x0f;
         if (font.aColorMap) {
@@ -5795,7 +5799,7 @@ export default class Videox86 extends Component {
         if (MAXDEBUG) this.printf(MESSAGE.VIDEO + MESSAGE.BUFFER, "updateCharBgnd(%d,%d,%d): filled %d,%d\n", col, row, bChar, xDst, yDst);
 
         if (bAttr & Videox86.ATTRS.DRAW_FGND) {
-            /*
+            /**
              * (bChar & 0xf) is the equivalent of (bChar % 16), and (bChar >> 4) is the equivalent of Math.floor(bChar / 16)
              */
             let xSrcFgnd = (bChar & 0xf) * font.cxCell;
@@ -5835,7 +5839,7 @@ export default class Videox86 extends Component {
      */
     drawCursor(yCursor, cyCursor, xDst, yDst, iFgnd, font, context)
     {
-        /*
+        /**
          * Drawing the cursor with lineTo() seemed logical, but it was complicated by the fact that the
          * TOP of the line must appear at "yDst + this.yCursor", whereas lineTo() wants to know the CENTER
          * of the line. So it's simpler to draw the cursor with another fillRect().  Here's the old code:
@@ -5910,17 +5914,17 @@ export default class Videox86 extends Component {
      */
     updateScreen(fForce = false)
     {
-        /*
+        /**
          * Nothing to do for "headless" congfigurations.
          */
         if (!this.canvasScreen) return false;
 
-        /*
+        /**
          * The Computer component maintains the fPowered setting on our behalf, so we use it.
          */
         if (!this.flags.powered) return false;
 
-        /*
+        /**
          * If the card's video signal is disabled (eg, during a mode change), then skip the update,
          * unless fForce is set.
          */
@@ -5941,14 +5945,14 @@ export default class Videox86 extends Component {
             this.initCellCache();
         }
         else {
-            /*
+            /**
              * This should never happen, but since updateScreen() is also called by Computer.updateStatus(),
              * better safe than sorry.
              */
             if (this.aCellCache === undefined) return false;
         }
 
-        /*
+        /**
          * If this is a hardware update (as opposed to, say, a debugger-triggered update, where fForce is set),
          * and cBlinks is "enabled" (ie, >= 0), then advance cBlinks once every 10 updateScreen() calls.
          *
@@ -5965,7 +5969,7 @@ export default class Videox86 extends Component {
         let iCell = 0;
         let nCells = this.nCells;
 
-        /*
+        /**
          * Calculate the VISIBLE start of screen memory (addrScreen), not merely the PHYSICAL start,
          * as well as the extent of it (cbScreen) and use those values for all addressing operations to follow.
          * FYI, in these calculations, offScreen does not refer to "off-screen" memory, but rather the "offset"
@@ -5975,7 +5979,7 @@ export default class Videox86 extends Component {
         let addrScreen = addrBuffer;
         let addrScreenLimit = addrScreen + this.sizeBuffer;
 
-        /*
+        /**
          * HACK: To deal with the fTextGraphicsHybrid 320x400 mode that Windows 95 uses (ie, when the buffer
          * is mapped to B800:0000 instead of A000:0000 and is configured for text mode access, but graphics are
          * still being displayed from the second half of video memory), we must ignore the programmed address.
@@ -5994,19 +5998,20 @@ export default class Videox86 extends Component {
         this.nColsLogical = this.nCols;
 
         if (this.nCard < Videox86.CARD.EGA) {
-            /*
+            /**
              * Any screen (aka "page") offset must be doubled for text modes, due to the attribute bytes.
              */
             addrScreen += card.offStart << (this.nCardFont? 1 : 0);
         } else {
-            /*
+            /**
              * For the EGA/VGA, we must make offset-doubling dependent on attribute (odd) byte addressibility.
              * For example, Fantasy Land uses a text-mode buffer mapped at 0xA0000 without odd/even addressing.
              *
              * TODO: Setting nPointsPerByte properly would ideally be taken care of in setDimensions(), but there's
              * no guarantee this particular controller tweak will be made BEFORE we detect and initiate a mode change.
              */
-            let shiftAddr = 0, shiftCols = 0;
+            let shiftAddr = 0;
+            let shiftCols = 0;
             let bMemMode = this.cardEGA.regSEQData[Card.SEQ.MEMMODE.INDX] & (Card.SEQ.MEMMODE.ALPHA | Card.SEQ.MEMMODE.SEQUENTIAL);
             if (bMemMode == Card.SEQ.MEMMODE.ALPHA) {
                 shiftAddr = shiftCols = 1;
@@ -6017,7 +6022,7 @@ export default class Videox86 extends Component {
             }
             addrScreen += card.offStart << shiftAddr;
             if (card.regCRTData[Card.CRTC.EGA.OFFSET] && (card.regCRTData[Card.CRTC.EGA.OFFSET] << 1) != card.regCRTData[Card.CRTC.EGA.HDEND] + 1) {
-                /*
+                /**
                  * Pre-EGA, the extent of visible screen memory (cbScreen) was derived from nCols * nRows, but since
                  * then, the logical width of screen memory (nColsLogical) can differ from the visible width (nCols).
                  * We now calculate the logical width, and the compute a new cbScreen in much the same way the original
@@ -6025,7 +6030,7 @@ export default class Videox86 extends Component {
                  */
                 this.nColsLogical = card.regCRTData[Card.CRTC.EGA.OFFSET] << (shiftCols || ((card.regCRTData[Card.CRTC.EGA.UNDERLINE.INDX] & Card.CRTC.EGA.UNDERLINE.DWORD)? 3 : 4));
                 cbScreen = ((this.nColsLogical * (this.nRowsBuffer - 1) + this.nColsBuffer) / this.nPointsPerByte)|0;
-                /*
+                /**
                  * If nRowsBuffer is larger than nRows (ie, over-buffering is enabled), we run the risk of attempting
                  * to render past the limit of the frame buffer (addrScreenLimit); we're ONLY over-buffering in case the
                  * the app decides to pan vertically, revealing pixels below the last full row, and obviously if there
@@ -6037,14 +6042,15 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * If the amount of data (cbScreen) we need to display goes beyond the end of the screen buffer
          * (addrScreenLimit), then the assumption is that we will have to do a second update operation that
          * wraps around to addrBuffer.
          */
-        let addrScreenWrap = 0, cbScreenWrap = 0;
+        let addrScreenWrap = 0;
+        let cbScreenWrap = 0;
         if (addrScreen + cbScreen > addrScreenLimit) {
-            /*
+            /**
              * There are two possibilities here: addrScreen itself is at or beyond addrScreenLimit, or just a
              * portion of cbScreen goes beyond the limit.  We'll deal with the first case first.
              */
@@ -6059,7 +6065,7 @@ export default class Videox86 extends Component {
             }
         }
         else if (this.nCard >= Videox86.CARD.EGA) {
-            /*
+            /**
              * We can leverage our screen wrap support to handle split-screen views as well; we must calculate
              * the number of WHOLE + PARTIAL rows we can draw (which may reduce cbScreen).  TODO: We must also pass
              * along the height of any PARTIAL row, so that pixel-level split-screens can eventually be supported.
@@ -6078,7 +6084,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * updateScreenCells() no longer "scrubs" the screen buffer itself; we call cleanMemory() afterward
          * to take care of that.  This has two benefits: 1) if this was a "forced" updated (or an update to make
          * the cell cache valid), cleaning the screen buffer ourselves reflects the fact that both it and our
@@ -6116,7 +6122,7 @@ export default class Videox86 extends Component {
      */
     updateScreenCells(addrBuffer, addrScreen, cbScreen, iCell, nCells, fForce, fBlinkUpdate)
     {
-        /*
+        /**
          * When determining the number of cells this update may affect, it is NOT simply cbScreen
          * multiplied by nPointsPerByte, because cbScreen includes any and all off-screen cells, too.
          */
@@ -6125,7 +6131,7 @@ export default class Videox86 extends Component {
         if (cCells > nCells) cCells = nCells;
         let addrScreenLimit = addrScreen + cbScreen;
 
-        /*
+        /**
          * This next bit of code can be completely disabled if we discover problems with the dirty
          * memory block tracking feature or we need to remove or disable that feature in the future.
          *
@@ -6140,7 +6146,7 @@ export default class Videox86 extends Component {
                 iCell = nCells;
             }
             else if (!this.cBlinkVisible) {
-                /*
+                /**
                  * iCellCursor may be negative if the cursor is hidden or if it's not on the visible screen.
                  */
                 let iCellCursor = this.iCellCursor - iCell;
@@ -6160,25 +6166,25 @@ export default class Videox86 extends Component {
         }
 
         if (this.nActiveFont) {
-            /*
+            /**
              * This is the text-mode update case.
              */
             this.updateScreenText(addrBuffer, addrScreen, addrScreenLimit, iCell, nCells);
         }
         else if (this.cbSplit) {
-            /*
+            /**
              * All CGA graphics modes have the goofy split-buffer layout, hence the simple test above.
              */
             cCells = this.updateScreenGraphicsCGA(addrScreen, addrScreenLimit);
         }
         else if (!this.fColor256) {
-            /*
+            /**
              * All EGA graphics modes are taken care of here, including all 16-color VGA graphics modes.
              */
             cCells = this.updateScreenGraphicsEGA(addrBuffer, addrScreen, addrScreenLimit);
         }
         else {
-            /*
+            /**
              * Finally, all 256-color VGA modes are processed here.
              */
             cCells = this.updateScreenGraphicsVGA(addrBuffer, addrScreen, addrScreenLimit);
@@ -6205,7 +6211,7 @@ export default class Videox86 extends Component {
         let font = this.aFonts[this.nActiveFont];
         if (!font) return 0;
 
-        /*
+        /**
          * If MDA.MODE.BLINK_ENABLE is set and a cell's blink bit is set, then if (cBlinks & 0x2) != 0,
          * we want the foreground element of the cell to be drawn; otherwise we don't.  So every 16-bit
          * data word we pull from the video buffer will be supplemented with our own special attribute bit
@@ -6222,7 +6228,7 @@ export default class Videox86 extends Component {
         let dataMask = 0xfffff;
         let adwMemory = card.adwMemory;
 
-        /*
+        /**
          * Normally, cbCell will be 2, when attribute bytes are addressible (interleaved) with character bytes,
          * but Fantasy Land is an exception.  Which is another great reason why the loop below needs to get both
          * bytes directly from adwMemory, because reading them with bus.getShortDirect(addrScreen) won't always work.
@@ -6313,7 +6319,7 @@ export default class Videox86 extends Component {
      */
     updateScreenGraphicsCGA(addrScreen, addrScreenLimit)
     {
-        /*
+        /**
          * This is the CGA graphics-mode update case, where cells are pixels spread across two halves of the buffer.
          */
         let cCells = (addrScreenLimit - addrScreen) >> 1;
@@ -6358,7 +6364,7 @@ export default class Videox86 extends Component {
             }
         }
 
-        /*
+        /**
          * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
          * canvasBuffer onto contextScreen, e{ven for the smallest change, let's try to be a bit smarter about
          * the update (well, to the extent that the canvas APIs permit).
@@ -6368,7 +6374,7 @@ export default class Videox86 extends Component {
             let cyDirty = yMaxDirty - yDirty;
             // this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
-            /*
+            /**
              * While ideally I would draw only the dirty portion of canvasBuffer, there usually isn't a 1-1 pixel mapping
              * between canvasBuffer and contextScreen.  In fact, the WHOLE POINT of the canvasBuffer is to leverage
              * drawImage()'s scaling ability; for example, a CGA graphics mode might be 640x200, whereas the canvas representing
@@ -6409,7 +6415,7 @@ export default class Videox86 extends Component {
         let xDirty = this.nCols, xMaxDirty = 0, yDirty = this.nRows, yMaxDirty = 0;
         let iPixelFirst = this.cardActive.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
 
-        /*
+        /**
          * TODO: What should happen if the card is programmed such that nColsLogical is LESS THAN nCols?
          */
         let nRowAdjust = (this.nColsLogical > this.nCols? ((this.nColsLogical - this.nCols - iPixelFirst) >> 3) : 0);
@@ -6420,13 +6426,14 @@ export default class Videox86 extends Component {
             this.assert(idw >= 0 && idw < adwMemory.length);
             let data = adwMemory[idw];
 
-            /*
+            /**
              * Figure out how many visible pixels this data represents; usually 8, unless panning is being used.
              */
-            let iPixel, nPixels = 8;
+            let iPixel;
+            let nPixels = 8;
 
             if (iPixelFirst) {
-                /*
+                /**
                  * Notice that we're not using the cell cache when panning is active, because the cached cell data no
                  * longer aligns with the data we're pulling out of the video buffer, and it's not clear that the effort
                  * to realign the data and make a valid cache comparison would save enough work to make it worthwhile.
@@ -6434,7 +6441,7 @@ export default class Videox86 extends Component {
                 if (!x) {
                     data <<= iPixelFirst;
                     nPixels -= iPixelFirst;
-                    /*
+                    /**
                      * This is as good a place as any to invalidate the cell cache when panning is active; this ensures
                      * we don't rely on stale cache contents once panning stops.
                      */
@@ -6457,14 +6464,14 @@ export default class Videox86 extends Component {
             if (nPixels) {
                 if (x < xDirty) xDirty = x;
                 for (iPixel = 0; iPixel < nPixels; iPixel++) {
-                    /*
+                    /**
                      * 0x80808080 may LOOK like a 32-bit value, but it is not, because JavaScript treats it as a POSITIVE
                      * number, and therefore outside the normal 32-bit integer range; however, the AND operator guarantees
                      * that the result will be a 32-bit value, so it doesn't matter.
                      */
                     let dwPixel = data & 0x80808080;
                     this.assert(Videox86.aEGADWToByte[dwPixel] !== undefined);
-                    /*
+                    /**
                      * We now ensure that bPixel will default to 0 if an undefined value ever slips through again.
                      *
                      * How did an undefined value slip through?  We had (incorrectly) initialized entries in aEGADWToByte;
@@ -6492,7 +6499,7 @@ export default class Videox86 extends Component {
 
         if (iPixelFirst) cCells = 0;    // zero the cell count to inhibit setting iCellCacheValid
 
-        /*
+        /**
          * For a fascinating discussion of the best way to update the screen canvas at this point, see updateScreenGraphicsCGA().
          */
         if (xDirty < this.nCols) {
@@ -6534,7 +6541,7 @@ export default class Videox86 extends Component {
         let cbInc = (this.cardActive.regSEQData[Card.SEQ.MEMMODE.INDX] & Card.SEQ.MEMMODE.CHAIN4)? 4 : 1;
         let iPixelFirst = this.cardActive.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
 
-        /*
+        /**
          * TODO: What should happen if the card is programmed such that nColsLogical is LESS THAN nCols?
          */
         let nRowAdjust = (this.nColsLogical > this.nCols? ((this.nColsLogical - this.nCols - iPixelFirst) >> 3) : 0);
@@ -6545,13 +6552,14 @@ export default class Videox86 extends Component {
             this.assert(idw >= 0 && idw < adwMemory.length);
             let data = adwMemory[idw];
 
-            /*
+            /**
              * Figure out how many visible pixels this data represents; usually 4, unless panning is being used.
              */
-            let iPixel, nPixels = 4;
+            let iPixel;
+            let nPixels = 4;
 
             if (iPixelFirst) {
-                /*
+                /**
                  * TODO: Implement support for 8bpp panning
                  */
             } else {
@@ -6589,7 +6597,7 @@ export default class Videox86 extends Component {
 
         if (iPixelFirst) cCells = 0;    // zero the cell count to inhibit setting iCellCacheValid
 
-        /*
+        /**
          * For a fascinating discussion of the best way to update the screen canvas at this point, see updateScreenGraphicsCGA().
          */
         if (xDirty < this.nCols) {
@@ -6612,7 +6620,7 @@ export default class Videox86 extends Component {
      */
     getRetraceBits(card)
     {
-        /*
+        /**
          * NOTE: The bits CGA.STATUS.RETRACE (0x01) and CGA.STATUS.VRETRACE (0x08) match the EGA definitions,
          * and they also correspond to the MDA bits MDA.STATUS.HDRIVE (0x01) and MDA.STATUS.BWVIDEO (0x08); it's
          * unclear why the MDA uses different designations, but the bits appear to serve the same purpose.
@@ -6620,7 +6628,7 @@ export default class Videox86 extends Component {
         let b = 0;
         let nCycles = this.cpu.getCycles();
         let nCyclesElapsed = nCycles - card.nCyclesVertRetrace;
-        /*
+        /**
          * The following code is a work-around for IBM's VGA diagnostic code starting at C000:01E5,
          * which expects an entire screen refresh (ie, 400 horizontal retraces followed by 1 vertical
          * retrace) to take roughly 1/30 of a second instead of 1/60.  The longer vertical retrace
@@ -6816,7 +6824,7 @@ export default class Videox86 extends Component {
             this.printIO(port, bOut, addrFrom, "ATC.INDX");
             card.fATCData = true;
             if ((bOut & Card.ATC.INDX_PAL_ENABLE) && !fPalEnabled) {
-                /*
+                /**
                  * TODO: Consider whether it's really necessary (or desirable) to immediately update the screen
                  * on a font change, or if it's sufficient to simply wait until the next normal periodic update.
                  */
@@ -6825,7 +6833,7 @@ export default class Videox86 extends Component {
                 }
             }
             else {
-                /*
+                /**
                  * TODO: We might want a screen blanking function, suitable for any mode, when INDX_PAL_ENABLE is cleared.
                  * powerDown() might like to use such a function, too.  updateScreen() already disables any further screen
                  * updates while INDX_PAL_ENABLE is clear (except when fForce is true), but that's all we currently do.
@@ -6865,7 +6873,7 @@ export default class Videox86 extends Component {
                     if (iReg == Card.ATC.HPAN.INDX) {
                         if (this.fOverBuffer) {
                             this.fShifted = true;
-                            /*
+                            /**
                              * TODO: The SHIFT_LEFT value apparently has a slightly different interpretation in
                              * monochrome mode (ie, when font.cxChar == 9, 8 means no shift and 0-7 means 1-8 shifts).
                              */
@@ -6895,7 +6903,7 @@ export default class Videox86 extends Component {
             let iBit = 3 - ((this.cardEGA.regMisc & Card.MISC.CLOCK_SELECT) >> 2);    // this is the desired SW # (0-3)
             bSWBit = (this.bEGASwitches & (1 << iBit)) << (Card.STATUS0.SWSENSE_SHIFT - iBit);
         } else {
-            /*
+            /**
              * The IBM VGA ROM expects the SWSENSE bit to change according to how the DAC is programmed.
              *
              * At C000:0391, the ROM selects the following array at 0x0454:
@@ -6934,7 +6942,7 @@ export default class Videox86 extends Component {
             }
         }
         let b = ((this.cardEGA.regStatus0 & ~Card.STATUS0.SWSENSE) | bSWBit);
-        /*
+        /**
          * TODO: Figure out where Card.STATUS0.FEAT bits should come from....
          */
         this.cardEGA.regStatus0 = b;
@@ -7072,7 +7080,7 @@ export default class Videox86 extends Component {
                 this.buildFont(true);
                 this.assert(this.nFontSelect == nFontSelect);
                 this.invalidateCellCache(false, nFontSelect, nFontPrev);
-                /*
+                /**
                  * TODO: Consider whether this code should, like outATC(), immediately update the screen
                  * on a font change, or if it's sufficient to simply wait until the next normal periodic update.
                  */
@@ -7081,7 +7089,7 @@ export default class Videox86 extends Component {
 
         case Card.SEQ.MEMMODE.INDX:
             if (this.setCardAccess(this.getCardAccess())) {
-                /*
+                /**
                  * When switching screens (via SysReq) on early revisions of OS/2 (eg, FOOTBALL), the screen would go
                  * blank; this appeared to be because when the card is reprogrammed, we first think the card is going into
                  * graphics mode, then we reverse course when it becomes clear that the card is going back into text mode,
@@ -7551,7 +7559,7 @@ export default class Videox86 extends Component {
     inCRTCIndx(card, port, addrFrom)
     {
         let b;
-        /*
+        /**
          * The IBM VGA ROM makes some hardware determinations based on how the CRTC controller responds when
          * the IO_SELECT bit in the Miscellaneous Output Register is cleared; normally, that would mean ports
          * 0x3B? are decoded and ports 0x3D? are ignored.  We didn't used to bother ignoring them, but the
@@ -7594,7 +7602,7 @@ export default class Videox86 extends Component {
     inCRTCData(card, port, addrFrom)
     {
         let b;
-        /*
+        /**
          * The IBM VGA ROM makes some hardware determinations based on how the CRTC controller responds when
          * the IO_SELECT bit in the Miscellaneous Output Register is cleared; normally, that would mean ports
          * 0x3B? are decoded and ports 0x3D? are ignored.  We didn't used to bother ignoring them, but the
@@ -7630,7 +7638,7 @@ export default class Videox86 extends Component {
     {
         if (card.regCRTIndx < card.nCRTCRegs) {
 
-            /*
+            /**
              * To simulate how the 6845 effectively ignores changes to CURSCAN or CURSCANB whenever one is written
              * while the other is currently > MAXSCAN, we check for those writes now, and ignore the write as appropriate.
              *
@@ -7665,7 +7673,7 @@ export default class Videox86 extends Component {
                     }
                 }
                 else if (fModified) {
-                    /*
+                    /**
                      * If the split-screen state has been modified, then partially invalidate the cell cache.
                      *
                      * TODO: This register is also used in conjunction with one overflow bit in the OVERFLOW register
@@ -7678,7 +7686,7 @@ export default class Videox86 extends Component {
                 }
             }
 
-            /*
+            /**
              * During mode changes on the EGA, all the CRTC regs are typically programmed in sequence,
              * and if that's all that's happening with Card.CRTC.MAXSCAN, then we don't want to treat
              * it special; let the mode change be detected normally (eg, when the GRC regs are written later).
@@ -7758,7 +7766,7 @@ export default class Videox86 extends Component {
         let b = this.getRetraceBits(card);
 
         if (card === this.cardEGA) {
-            /*
+            /**
              * STATUS1 diagnostic bits 5 and 4 are set according to the Card.ATC.PLANES.MUX bits:
              *
              *      MUX     Bit 5   Bit 4
@@ -7784,13 +7792,13 @@ export default class Videox86 extends Component {
              */
             b |= ((card.regStatus & Card.STATUS1.DIAGNOSTIC) ^ Card.STATUS1.DIAGNOSTIC);
 
-            /*
+            /**
              * Last but not least, we must reset the EGA's ATC flip-flop whenever this register is read.
              */
             card.fATCData = false;
         }
         else {
-            /*
+            /**
              * On the MDA/CGA, to satisfy ROM BIOS testing ("TEST.10"), it's sufficient to do a simple toggle of
              * bits 0 and 3 on every read.
              *
@@ -7895,7 +7903,7 @@ export default class Videox86 extends Component {
             let element = aElement[iVideo];
             let parmsVideo = Component.getComponentParms(element);
 
-            /*
+            /**
              * We prefer to let the XSL (or HTML) template create the canvas element for us, so that
              * the page is as fully-formed as possible, keeping disruption of page layout to a minimum.
              */
@@ -7920,7 +7928,7 @@ export default class Videox86 extends Component {
                 element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
             }
 
-            /*
+            /**
              * The "contenteditable" attribute on a canvas element NOTICEABLY slows down canvas drawing on
              * Safari as soon as you give the canvas focus (ie, click away from the canvas, and drawing speeds
              * up; click on the canvas, and drawing slows down).  So the "transparent textarea hack" that we
@@ -7944,7 +7952,7 @@ export default class Videox86 extends Component {
                 element['onresize'](null);
             }
 
-            /*
+            /**
              * The following is a related hack that allows the user to force the screen to use a particular aspect
              * ratio if an 'aspect' attribute or URL parameter is set.  Initially, it's just for testing purposes
              * until we figure out a better UI.  And note that we use our WebLib.addPageEvent() helper function to make
@@ -7952,14 +7960,14 @@ export default class Videox86 extends Component {
              */
             let aspect = +(WebLib.getURLParm('aspect') || parmsVideo['aspect']);
 
-            /*
+            /**
              * No 'aspect' parameter yields NaN, which is falsey, and anything else must satisfy my arbitrary
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
                 WebLib.addPageEvent('resize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
-                        /*
+                        /**
                          * Since aspectRatio is the target width/height, we have:
                          *
                          *      eParent.clientWidth / eChild.style.height = aspectRatio
@@ -7977,7 +7985,7 @@ export default class Videox86 extends Component {
                 globals.window['onresize']();
             }
 
-            /*
+            /**
              * HACK: Android-based browsers, like the Silk (Amazon) browser and Chrome for Android, don't honor the
              * "contenteditable" attribute; that is, when the canvas receives focus, they don't activate the on-screen
              * keyboard.  So my fallback is to create a transparent textarea on top of the canvas.
@@ -8015,7 +8023,7 @@ export default class Videox86 extends Component {
                 element.appendChild(textarea);
             }
 
-            /*
+            /**
              * As noted in keyboard.js, the keyboard on an iOS device tends to pop up with the SHIFT key depressed,
              * which is not the initial keyboard state that the Keyboard component expects, so hopefully turning off
              * these "auto" attributes will help.
@@ -8031,7 +8039,7 @@ export default class Videox86 extends Component {
                 textarea.setAttribute("autocapitalize", "off");
                 textarea.setAttribute("autocorrect", "off");
                 textarea.setAttribute("spellcheck", "false");
-                /*
+                /**
                 * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
                 * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
                 * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
@@ -8054,7 +8062,7 @@ export default class Videox86 extends Component {
                 WebLib.addPageEvent('resize', onResizeTextArea);
             }
 
-            /*
+            /**
              * See if there are any "diagnostic" elements we should pass along, too.
              */
             let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(APPCLASS + "-video-diagnostic"));

@@ -114,7 +114,7 @@ var SYMBOLS = DEBUGGER;
  */
 const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
 
-/*
+/**
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override BACKTRACK with a "backtrack=false" embedded in
  * the URL; note that the Closure Compiler won't let us alter the BACKTRACK variable, because it's defined as a @define, which
  * implies @const as well, so we must resort to modifying it indirectly, using the global window object.

@@ -9,7 +9,7 @@
 
 import { globals } from "./defines.js";
 
-/*
+/**
  * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
  * In the compiled case, we rely on the Closure Compiler to override DEBUGGER as appropriate.  When it's *false*,
  * nearly all of debugger.js will be conditionally removed by the compiler, reducing it to little more than a

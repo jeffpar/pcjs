@@ -14,7 +14,7 @@ import StrLib from "../../../modules/v2/strlib.js";
 import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
-/*
+/**
  * Operand Type Reference
  *
  *      ST(0), ST           stack top; the register currently at the top of the stack
@@ -64,7 +64,7 @@ export default class FPUx86 extends Component {
 
         this.model = this.parms['model'] || X86.FPU.MODEL_8087;
 
-        /*
+        /**
          * We take the 'stepping' value, convert it to a hex value, and then add that to the model to provide
          * a single value that's unique for any given CPU stepping.  If no stepping is provided, then stepping
          * is equal to model.
@@ -72,20 +72,20 @@ export default class FPUx86 extends Component {
         let stepping = this.parms['stepping'];
         this.stepping = this.model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
-        /*
+        /**
          * Perform a one-time allocation of all floating-point registers.
          * NOTE: The FPU's internal registers are supposed to be 80-bit, but JavaScript gives us only 64-bit floats.
          */
         this.regStack = new Float64Array(8);
         this.intStack = new Int32Array(this.regStack.buffer);
 
-        /*
+        /**
          * Used for "short-real" (SR) 32-bit floating-point operations.
          */
         this.regTmpSR = new Float32Array(1);
         this.intTmpSR = new Int32Array(this.regTmpSR.buffer);
 
-        /*
+        /**
          * Used for "long-real" (LR) 64-bit floating-point operations.  We also use intTmpLR as temporary storage
          * for all "word-integer" (WI or INT16), "short-integer" (SI or INT32) and "long-integer" (LI or INT64) values,
          * since it's just large enough to accommodate all three integer sizes.
@@ -93,14 +93,14 @@ export default class FPUx86 extends Component {
         this.regTmpLR = new Float64Array(1);
         this.intTmpLR = new Int32Array(this.regTmpLR.buffer);
 
-        /*
+        /**
          * Used for conversion to/from the 80-bit "temp-real" (TR) format; used as three 32-bit integers,
          * where [0] contains TR bits 0-31, [1] contains TR bits 32-63, and [2] contains TR bits 64-79; the
          * upper 16 bits of [2] are not used and should remain zero.
          */
         this.intTmpTR = new Array(3);
 
-        /*
+        /**
          * Initialize other (non-floating-point) coprocessor registers that resetFPU() doesn't touch,
          * such as the "exception" registers: regCodeSel, regCodeOff, regDataSel, regDataOff, and regOpcode.
          *
@@ -114,7 +114,7 @@ export default class FPUx86 extends Component {
         this.regCodeSel = this.regDataSel = -1;
         this.regCodeOff = this.regDataOff = this.regOpcode = this.iStack = 0;
 
-        /*
+        /**
          * Initialize special floating-point constants, as if they were internal read-only registers;
          * all other simple (non-special) constants are "statically" initialized below, as class constants.
          */
@@ -122,7 +122,7 @@ export default class FPUx86 extends Component {
         this.intIndefinite = new Int32Array(this.regIndefinite.buffer);
         this.intIndefinite[0] = 0x00000000; this.intIndefinite[1] = 0xFFF8000;
 
-        /*
+        /**
          * Initialize all other coprocessor registers (control word, tag word, status word, etc) by resetting them.
          */
         this.resetFPU();
@@ -169,7 +169,7 @@ export default class FPUx86 extends Component {
      */
     clearBusy()
     {
-        /*
+        /**
          * We're never "busy" as far as other components are concerned, because we perform all FPU operations
          * synchronously, so there's nothing to do here.
          */
@@ -223,7 +223,7 @@ export default class FPUx86 extends Component {
         a[i++] = this.regControl;
         a[i++] = this.getStatus();
         a[i++] = this.getTags();
-        /*
+        /**
          * Note that, unlike the FSAVE() and FRSTOR() operations, we save the registers in regStack in their physical
          * order (0-7) rather than their logical order (ST0-ST7).  Moreover, FSAVE() and FRSTOR() use the "temp-real" (TR)
          * format, whereas we use the current native format -- which, sadly, is only a 64-bit "long-real" (LR) format.
@@ -274,7 +274,7 @@ export default class FPUx86 extends Component {
         this.regStatus = 0;         // contains all status register bits EXCEPT for ST
         this.iST = 0;               // the ST bits for regStatus are actually stored here
         if (DEBUG) {
-            /*
+            /**
              * All the registers were tagged "unused" above, which is all that would normally happen, but debugging is
              * a little easier if we zero all the registers as well.
              */
@@ -389,7 +389,7 @@ export default class FPUx86 extends Component {
     checkException()
     {
         this.regStatus &= ~X86.FPU.STATUS.ES;
-        /*
+        /**
          * NOTE: The "Stack Fault" (SF) status bit wasn't introduced until the 80387, so it triggers the pre-existing
          * "Invalid Operation" (IE) exception; there is no corresponding "Stack Fault" (SE) exception, and the matching
          * control bit is still reserved.  Consequently, X86.FPU.CONTROL.EXC is a *subset* of X86.FPU.STATUS.EXC (0x3F
@@ -487,7 +487,7 @@ export default class FPUx86 extends Component {
      */
     getStatus()
     {
-        /*
+        /**
          * As long as we never store any ST bits in regStatus, they should always be zero, so in
          * order to return the complete regStatus, all we need to do is shift and "or" the bits from iST.
          */
@@ -650,7 +650,7 @@ export default class FPUx86 extends Component {
     doSquareRoot(operand)
     {
         let result = null;
-        /*
+        /**
          * Happily, -0 is ALSO >= 0.  Also happily, Math.sqrt(-0) returns -0.
          */
         if (operand >= 0 || !this.setException(X86.FPU.STATUS.IE)) {
@@ -1127,20 +1127,23 @@ export default class FPUx86 extends Component {
     getLRFromTR(a)
     {
         let loTR = a[0], hiTR = a[1];
-        let signLR = (a[2] & 0x8000) >> 4, expLR = a[2] & 0x7fff;
-        /*
+        let signLR = (a[2] & 0x8000) >> 4;
+        let expLR = a[2] & 0x7fff;
+
+        /**
          * We have no choice but to chop off the bottom 11 TR bits in order to fit in an LR....
          */
-        let loLR = (loTR >>> 11) | (hiTR << 21), hiLR = (hiTR >> 11) & 0xfffff;
+        let loLR = (loTR >>> 11) | (hiTR << 21);
+        let hiLR = (hiTR >> 11) & 0xfffff;
 
         if (expLR == 0x7fff) {
-            /*
+            /**
              * Convert an TR NaN to a LR NaN.
              */
             expLR = 0x7ff;
         }
         else if (expLR) {
-            /*
+            /**
              * We have a normal (biased) TR exponent which we must now convert to a (biased) LR exponent;
              * subtract the TR bias (0x3fff) and add the LR bias (0x3ff); additionally, we have a problem
              * that getTRFromLR() did not: if the TR exponent is too large to fit in an LR exponent, then we
@@ -1175,10 +1178,11 @@ export default class FPUx86 extends Component {
     {
         let expTR = (hiLR >> 20) & 0x07ff;
         let signTR = (hiLR >> 16) & 0x8000;
-        let loTR = loLR << 11, hiTR = 0x80000000 | ((hiLR & 0x000fffff) << 11) | (loLR >>> 21);
+        let loTR = loLR << 11;
+        let hiTR = 0x80000000 | ((hiLR & 0x000fffff) << 11) | (loLR >>> 21);
 
         if (expTR == 0x07ff) {
-            /*
+            /**
              * Convert an LR NaN to a TR NaN.  NaNs encompass +/- infinity, which in the LR
              * world are fractions of all zeros.  NaNs also encompass indefinite, which in the LR
              * world are negative numbers with only the high fraction bit set.  So, in both cases,
@@ -1188,7 +1192,7 @@ export default class FPUx86 extends Component {
             expTR = 0x7fff;
         }
         else if (!expTR) {
-            /*
+            /**
              * An LR with an exponent of zero could be an actual +/- zero, if the fraction is zero,
              * or it could be a denormal, if the fraction is non-zero.  In both cases, the only
              * change we need to make the TR form is clearing the leading 1 bit.
@@ -1196,7 +1200,7 @@ export default class FPUx86 extends Component {
             hiTR &= 0x7fffffff;
         }
         else {
-            /*
+            /**
              * We have a normal (biased) LR exponent which we must now convert to a (biased) TR exponent;
              * subtract the LR bias (0x3ff) and add the TR bias (0x3fff).
              */
@@ -1378,13 +1382,13 @@ export default class FPUx86 extends Component {
         let reg = (bModRM >> 3) & 7;
         this.iStack = (bModRM & 7);
 
-        /*
+        /**
          * Combine mod and reg into one decodable value: put mod in the high nibble
          * and reg in the low nibble, after first collapsing all mod values < 3 to zero.
          */
         let modReg = (mod < 3? 0 : 0x30) + reg;
 
-        /*
+        /**
          * All values >= 0x34 imply mod == 3 and reg >= 4, so now we shift reg into the high
          * nibble and iStack into the low, yielding values >= 0x40.
          */
@@ -1394,14 +1398,14 @@ export default class FPUx86 extends Component {
 
         let fnOp = FPUx86.aaOps[bOpcode][modReg];
         if (fnOp) {
-            /*
+            /**
              * A handful of FPU instructions must preserve (at least some of) the "exception" registers,
              * so if the current function is NOT one of those, then update all the "exception" registers.
              */
             if (FPUx86.afnPreserveExceptions.indexOf(fnOp) < 0) {
                 let cpu = this.cpu;
                 let off = cpu.opLIP;
-                /*
+                /**
                  * WARNING: opLIP points to any prefixes preceding the ESC instruction, but the 8087 always
                  * points to the ESC instruction.  Technically, that's a bug, but it's also a reality, so we
                  * check for preceding prefixes and bump the instruction pointer accordingly.  This isn't a
@@ -1420,13 +1424,13 @@ export default class FPUx86 extends Component {
                 }
                 this.regOpcode = ((bOpcode & 7) << 8) | bModRM;
             }
-            /*
+            /**
              * Finally, perform the FPU operation.
              */
             fnOp.call(this);
         }
         else {
-            /*
+            /**
              * This is a gray area, at least until aaOps has been filled in for all supported coprocessors;
              * but for now, we'll treat all unrecognized operations as "no operation", as opposed to unimplemented.
              */
@@ -1577,7 +1581,7 @@ FPUx86.F2XM1 = function()
  */
 FPUx86.FABS = function()
 {
-    /*
+    /**
      * TODO: This could be implemented more efficiently by simply clearing the sign bit of ST(0).
      */
     this.setST(0, Math.abs(this.getST(0)));
@@ -1643,7 +1647,7 @@ FPUx86.FADDPsti = function()
 FPUx86.FBLDpd = function()
 {
     let a = this.getTRFromEA();
-    /*
+    /**
      * a[0] contains the 8 least-significant BCD digits, a[1] contains the next 8, and a[2] contains
      * the next 2 (bit 15 of a[2] is the sign bit, and bits 8-14 of a[2] are unused).
      */
@@ -1659,12 +1663,12 @@ FPUx86.FBLDpd = function()
  */
 FPUx86.FBSTPpd = function()
 {
-    /*
+    /**
      * TODO: Verify the operation of FBSTP (eg, does it signal an exception if abs(value) >= 1000000000000000000?)
      */
     let v = this.roundValue(this.popValue());
     if (v != null) {
-        /*
+        /**
          * intTmpTR[0] will contain the 8 least-significant BCD digits, intTmpTR[1] will contain the next 8,
          * and intTmpTR[2] will contain the next 2 (bit 15 of intTmpTR[2] will be the sign bit, and bits 8-14 of
          * intTmpTR[2] will be unused).
@@ -1684,7 +1688,7 @@ FPUx86.FBSTPpd = function()
  */
 FPUx86.FCHS = function()
 {
-    /*
+    /**
      * TODO: This could be implemented more efficiently by simply inverting the sign bit of ST(0).
      */
     this.setST(0, -this.getST(0));
@@ -3187,7 +3191,7 @@ FPUx86.FYL2XP1 = function()
     if (this.setST(1, this.getST(1) * Math.log(this.getST(0) + 1.0) / Math.LN2)) this.popValue();
 };
 
-/*
+/**
  * Class constants
  *
  * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
@@ -3218,7 +3222,7 @@ FPUx86.MAX_INT32 = 0x80000000;
 FPUx86.MAX_INT64 = Math.pow(2, 63);
 
 
-/*
+/**
  * FPU operation lookup table (be sure to keep the following table in sync with Debugger.aaaOpFPUDescs).
  *
  * The second lookup value corresponds to bits in the ModRegRM byte that follows the ESC byte (0xD8-0xDF).
@@ -3307,7 +3311,7 @@ FPUx86.aaOps = {
         0x00: FPUx86.FADDlr,    0x01: FPUx86.FMULlr,    0x02: FPUx86.FCOMlr,    0x03: FPUx86.FCOMPlr,
         0x04: FPUx86.FSUBlr,    0x05: FPUx86.FSUBRlr,   0x06: FPUx86.FDIVlr,    0x07: FPUx86.FDIVRlr,
         0x30: FPUx86.FADDsti,   0x31: FPUx86.FMULsti,   0x32: FPUx86.FCOM8087,  0x33: FPUx86.FCOMP8087,
-        /*
+        /**
          * Intel's original 8087 datasheet had these forms of SUB and SUBR (and DIV and DIVR) swapped.
          */
         0x34: FPUx86.FSUBRsti,  0x35: FPUx86.FSUBsti,   0x36: FPUx86.FDIVRsti,  0x37: FPUx86.FDIVsti
@@ -3321,7 +3325,7 @@ FPUx86.aaOps = {
         0x00: FPUx86.FIADD16,   0x01: FPUx86.FIMUL16,   0x02: FPUx86.FICOM16,   0x03: FPUx86.FICOMP16,
         0x04: FPUx86.FISUB16,   0x05: FPUx86.FISUBR16,  0x06: FPUx86.FIDIV16,   0x07: FPUx86.FIDIVR16,
         0x30: FPUx86.FADDPsti,  0x31: FPUx86.FMULPsti,  0x32: FPUx86.FCOMP8087, 0x33: FPUx86.FCOMPP,
-        /*
+        /**
          * Intel's original 8087 datasheet had these forms of SUBP and SUBRP (and DIVP and DIVRP) swapped.
          */
         0x34: FPUx86.FSUBRPsti, 0x35: FPUx86.FSUBPsti,  0x36: FPUx86.FDIVRPsti, 0x37: FPUx86.FDIVPsti
@@ -3334,7 +3338,7 @@ FPUx86.aaOps = {
     }
 };
 
-/*
+/**
  * An array of FPUx86 functions documented as preserving the "exception" registers.
  */
 FPUx86.afnPreserveExceptions = [
@@ -3342,7 +3346,7 @@ FPUx86.afnPreserveExceptions = [
     FPUx86.FSAVE,   FPUx86.FSTCW,   FPUx86.FSTENV,  FPUx86.FSTSW,   FPUx86.FSTSWAX287
 ];
 
-/*
+/**
  * Initialize every FPU module on the page
  */
 WebLib.onInit(FPUx86.init);

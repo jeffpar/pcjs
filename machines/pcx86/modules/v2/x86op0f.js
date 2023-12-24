@@ -47,7 +47,7 @@ X86.opGRP7 = function()
  */
 X86.opLAR = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to real-mode or V86-mode.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
@@ -66,7 +66,7 @@ X86.opLAR = function()
  */
 X86.opLSL = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to real-mode or V86-mode.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
@@ -117,7 +117,7 @@ X86.opLSL = function()
 X86.opLOADALL286 = function()
 {
     if (this.nCPL) {
-        /*
+        /**
          * To use LOADALL, CPL must be zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0, 0, true);
@@ -135,13 +135,13 @@ X86.opLOADALL286 = function()
     this.segCS.loadDesc6(0x83C, this.getShort(0x822));
     this.segSS.loadDesc6(0x842, this.getShort(0x820));
     this.segDS.loadDesc6(0x848, this.getShort(0x81E));
-    /*
+    /**
      * Unlike LOADALL386, there's no requirement for calling setPS() before loading segment registers;
      * in fact, since we're not passing a CPL to setPS(), it may be preferable to have CS (and perhaps SS)
      * already loaded, so that setPS() can query the CPL.  TODO: Verify that CPL is set correctly.
      */
     this.setPS(this.getShort(0x818));
-    /*
+    /**
      * It's important to call setIP() and setSP() *after* the segCS and segSS loads, so that the CPU's
      * linear IP and SP registers (regLIP and regLSP) will be updated properly.  Ordinarily that would be
      * taken care of by simply using the CPU's setCS() and setSS() functions, but those functions call the
@@ -149,7 +149,7 @@ X86.opLOADALL286 = function()
      */
     this.setIP(this.getShort(0x81A));
     this.setSP(this.getShort(0x82C));
-    /*
+    /**
      * The bytes at 0x851 and 0x85D "should be zeroes", as per the "Undocumented iAPX 286 Test Instruction"
      * document, but the LOADALL issued by RAMDRIVE in PC-DOS 7.0 contains 0xFF in both of those bytes, resulting
      * in very large addrGDT and addrIDT values.  Obviously, we can't have that, so we load only the low byte
@@ -162,14 +162,14 @@ X86.opLOADALL286 = function()
     this.segLDT.loadDesc6(0x854, this.getShort(0x81C));
     this.segTSS.loadDesc6(0x860, this.getShort(0x816));
 
-    /*
+    /**
      * Oddly, the above Intel document gives two contradictory cycle counts for LOADALL: 190 and 195.
      * I'm going with 195, since both the PC Magazine Programmer's Technical Reference and Robert Collins
      * (http://www.rcollins.org/articles/loadall/tspec_a3_doc.html) agree.
      */
     this.nStepCycles -= 195;
 
-    /*
+    /**
      * TODO: LOADALL operation still needs to be verified in protected mode....
      */
     if (DEBUG && DEBUGGER && (this.regCR0 & X86.CR0.MSW.PE)) this.stopCPU();
@@ -184,7 +184,7 @@ X86.opLOADALL286 = function()
  */
 X86.opCLTS = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
@@ -284,7 +284,7 @@ X86.opCLTS = function()
 X86.opLOADALL386 = function()
 {
     if (this.nCPL) {
-        /*
+        /**
          * To use LOADALL, CPL must be zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0, 0, true);
@@ -293,14 +293,14 @@ X86.opLOADALL386 = function()
     let addr = this.segES.checkRead(this.regEDI & this.maskAddr, 0xCC);
     if (addr !== X86.ADDR_INVALID) {
         X86.helpLoadCR0.call(this, this.getLong(addr));
-        /*
+        /**
          * We need to call setPS() before loading any segment registers, because if the Virtual 8086 Mode (VM)
          * bit is set in EFLAGS, the segment registers need to know that.
          */
         let accSS = this.getLong(addr + 0xA8);
         let cpl = (accSS & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
         this.setPS(this.getLong(addr + 0x04), cpl);
-        /*
+        /**
          * TODO: We have no use for the GDT(AR) at offset 0x6C or the IDT(AR) at offset 0x60, because
          * we don't manage them as segment registers.  Should we?
          */
@@ -323,7 +323,7 @@ X86.opLOADALL386 = function()
         this.segSS.loadDesc(this.getLong(addr + 0x48), accSS,                     this.getLong(addr + 0xAC), this.getLong(addr + 0xB0));
         this.segCS.loadDesc(this.getLong(addr + 0x4C), this.getLong(addr + 0xB4), this.getLong(addr + 0xB8), this.getLong(addr + 0xBC));
         this.segES.loadDesc(this.getLong(addr + 0x50), this.getLong(addr + 0xC0), this.getLong(addr + 0xC4), this.getLong(addr + 0xC8));
-        /*
+        /**
          * It's important to call setIP() and setSP() *after* the segCS and segSS loads, so that the CPU's
          * linear IP and SP registers (regLIP and regLSP) will be updated properly.  Ordinarily that would be
          * taken care of by simply using the CPU's setCS() and setSS() functions, but those functions call the
@@ -331,13 +331,13 @@ X86.opLOADALL386 = function()
          */
         this.setIP(this.getLong(addr + 0x08));
         this.setSP(this.getLong(addr + 0x18));
-        /*
+        /**
          * TODO: We need to factor out the code that updates DR6 and DR7 from X86.opMOVdr(), so that we can
          * more easily update DR6 and DR7 (which we're simply ignoring for now).
          */
     }
 
-    /*
+    /**
      * According to Robert Collins (http://www.rcollins.org/articles/loadall/tspec_a3_doc.html), the 80386 LOADALL
      * takes 122 cycles.  Also, according the above-mentioned Intel document, if the memory buffer is not DWORD aligned,
      * execution time will DOUBLE.
@@ -366,11 +366,11 @@ X86.opLOADALL386 = function()
  */
 X86.opMOVrc = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -398,7 +398,7 @@ X86.opMOVrc = function()
 
     this.nStepCycles -= 6;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Control registers are not likely to be a conduit for interesting data).
      */
 };
@@ -415,11 +415,11 @@ X86.opMOVrc = function()
  */
 X86.opMOVrd = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -438,7 +438,7 @@ X86.opMOVrd = function()
 
     this.nStepCycles -= 22;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Debug registers are not likely to be a conduit for interesting data).
      */
 };
@@ -464,11 +464,11 @@ X86.opMOVrd = function()
  */
 X86.opMOVcr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -496,7 +496,7 @@ X86.opMOVcr = function()
         return;
     }
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Control registers are not likely to be a conduit for interesting data).
      */
 };
@@ -513,11 +513,11 @@ X86.opMOVcr = function()
  */
 X86.opMOVdr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -542,7 +542,7 @@ X86.opMOVdr = function()
 
     this.nStepCycles -= (iDst < 4? 22 : 14);
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Debug registers are not likely to be a conduit for interesting data).
      */
 };
@@ -559,11 +559,11 @@ X86.opMOVdr = function()
  */
 X86.opMOVrt = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to read control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -573,7 +573,7 @@ X86.opMOVrt = function()
     let bModRM = this.getIPByte();
     let iSrc = (bModRM & 0x38) >> 3;
 
-    /*
+    /**
      * Only TR6 and TR7 are defined, and only for the 80386 and 80486.  From the PC Magazine Prog. TechRef, p.64:
      *
      *  "The 80386 provides two 32-bit test registers, TR6 and TR7, as a mechanism for programmers to verify proper
@@ -588,7 +588,7 @@ X86.opMOVrt = function()
     this.setReg(bModRM & 0x7, this.regTR[iSrc]);
     this.nStepCycles -= 12;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Test registers are not likely to be a conduit for interesting data).
      */
 };
@@ -605,11 +605,11 @@ X86.opMOVrt = function()
  */
 X86.opMOVtr = function()
 {
-    /*
+    /**
      * NOTE: The following code shouldn't need to also test X86.PS.VM, because V86-mode is CPL 3.
      */
     if (this.nCPL) {
-        /*
+        /**
          * You're not allowed to write control registers if the current privilege level is not zero.
          */
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
@@ -619,7 +619,7 @@ X86.opMOVtr = function()
     let bModRM = this.getIPByte();
     let iDst = (bModRM & 0x38) >> 3;
 
-    /*
+    /**
      * Only TR6 and TR7 are defined, and only for the 80386 and 80486.  From the PC Magazine Prog. TechRef, p.64:
      *
      *  "The 80386 provides two 32-bit test registers, TR6 and TR7, as a mechanism for programmers to verify proper
@@ -631,19 +631,19 @@ X86.opMOVtr = function()
         return;
     }
 
-    /*
+    /**
      * TODO: Do something useful with the Test registers.
      */
     this.regTR[iDst] = this.getReg(bModRM & 0x7);
 
     this.nStepCycles -= 12;
 
-    /*
+    /**
      * TODO: Implement BACKTRACK for this instruction (although Test registers are not likely to be a conduit for interesting data).
      */
 };
 
-/*
+/**
  * NOTE: The following 16 new conditional jumps actually rely on the OPERAND override setting
  * for determining whether a signed 16-bit or 32-bit displacement will be fetched, even though
  * the ADDRESS override might seem more intuitive.  Think of them as instructions that are loading
@@ -1149,7 +1149,7 @@ X86.opSETNLE = function()
  */
 X86.opPUSHFS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -1171,7 +1171,7 @@ X86.opPUSHFS = function()
  */
 X86.opPOPFS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -1254,7 +1254,7 @@ X86.opIBTS = function()
  */
 X86.opPUSHGS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -1276,7 +1276,7 @@ X86.opPUSHGS = function()
  */
 X86.opPOPGS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -1615,13 +1615,13 @@ X86.aOps0F[0x03] = X86.opLSL;
 X86.aOps0F[0x05] = X86.opLOADALL286;
 X86.aOps0F[0x06] = X86.opCLTS;
 
-/*
+/**
  * On all processors (except the 8086/8088, of course), X86.OPCODE.UD2 (0x0F,0x0B), aka "UD2", is an
  * instruction guaranteed to raise a #UD (Invalid Opcode) exception (INT 0x06) on all post-8086 processors.
  */
 X86.aOps0F[0x0B] = X86.opInvalid;
 
-/*
+/**
  * The following 0x0F opcodes are of no consequence to us, since they were all introduced post-80386;
  * 0x0F,0xA6 and 0x0F,0xA7 were introduced on some 80486 processors (and then deprecated), while 0x0F,0xB0
  * and 0x0F,0xB1 were introduced on 80586 (aka Pentium) processors.
@@ -1640,7 +1640,7 @@ X86.aOps0F[0x0B] = X86.opInvalid;
  */
 X86.aOps0F[0xA6] = X86.opInvalid;
 
-/*
+/**
  * When Windows 95 Setup initializes in protected-mode, it sets a DPMI exception handler for UD_FAULT and
  * then attempts to generate that exception with undefined opcode 0x0F,0xFF.  Apparently, whoever wrote that code
  * didn't get the Intel memo regarding the preferred invalid opcode (0x0F,0x0B, aka UD2), or perhaps Intel hadn't
@@ -1651,7 +1651,7 @@ X86.aOps0F[0xA6] = X86.opInvalid;
  */
 X86.aOps0F[0xFF] = X86.opInvalid;
 
-/*
+/**
  * NOTE: Any other opcode slots NOT explicitly initialized above with either a dedicated function OR opInvalid()
  * will be set to opUndefined() when initProcessor() finalizes the opcode tables.  If the processor is an 80386,
  * initProcessor() will also incorporate all the handlers listed below in aOps0F386.
@@ -1731,7 +1731,7 @@ if (I386) {
     X86.aOps0F386[0xBF] = X86.opMOVSXw;
 }
 
-/*
+/**
  * These instruction groups are not as orthogonal as the original 8086/8088 groups (Grp1 through Grp4); some of
  * the instructions in Grp6 and Grp7 only read their dst operand (eg, LLDT), which means the ModRM helper function
  * must insure that setEAWord() is disabled, while others only write their dst operand (eg, SLDT), which means that
@@ -1748,7 +1748,7 @@ X86.aOpGrp6Real = [
     X86.fnGRPInvalid,       X86.fnGRPInvalid,       X86.fnGRPUndefined,     X86.fnGRPUndefined      // 0x0F,0x00(reg=0x4-0x7)
 ];
 
-/*
+/**
  * Unlike Grp6, Grp7 and Grp8 do not require separate real-mode and protected-mode dispatch tables, because
  * all Grp7 and Grp8 instructions are valid in both modes.
  */

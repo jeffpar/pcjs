@@ -306,7 +306,7 @@ export default class Panel extends Component {
             this.canvas = /** @type {HTMLCanvasElement} */ (control);
             this.context = /** @type {CanvasRenderingContext2D} */ (this.canvas.getContext("2d"));
 
-            /*
+            /**
              * Employ the same gross onresize() hack for IE9/IE10 that we had to use for the Video canvas
              */
             if (WebLib.getUserAgent().indexOf("MSIE") >= 0) {
@@ -416,7 +416,7 @@ export default class Panel extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) Panel.init();
-        /*
+        /**
          * TODO: Investigate what changed since the "visual" portion of the Panel module was originally written,
          * because now, when updateAnimation() is first called, the machine's memory map hasn't been initialized yet,
          * so no regions are displayed, and since no other code was setting fRedraw, no regions were ever displayed.
@@ -447,7 +447,7 @@ export default class Panel extends Component {
      */
     clickMouse(event, fDown)
     {
-        /*
+        /**
          * event.button is 0 for the LEFT button and 2 for the RIGHT button
          */
         if (!event.button) {
@@ -486,7 +486,7 @@ export default class Panel extends Component {
      */
     updateMouse(event, fDown)
     {
-        /*
+        /**
          * Due to the responsive nature of our pages, the displayed size of the canvas may be smaller than the
          * allocated size, and the coordinates we receive from mouse events are based on the currently displayed size.
          */
@@ -514,7 +514,7 @@ export default class Panel extends Component {
         if (MAXDEBUG) this.printf(MESSAGE.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
 
         if (x >= 0 && x < Panel.LIVECANVAS.CX && y >= 0 && y < Panel.LIVECANVAS.CY) {
-            /*
+            /**
              * Convert the mouse position into the corresponding memory address, assuming it's over the live memory area
              */
             let addr = this.findAddress(x, y);
@@ -550,7 +550,7 @@ export default class Panel extends Component {
                     let addr = iBlock * this.bus.nBlockSize;
                     let addrLimit = (iBlock + region.cBlocks) * this.bus.nBlockSize - 1;
 
-                    /*
+                    /**
                      * If you want memory to be arranged "vertically" instead of "horizontally", do this:
                      *
                      *      if (x > 0) addr += rect.cy * (x - 1) * this.ratioMemoryToPixels;
@@ -590,16 +590,16 @@ export default class Panel extends Component {
             if (this.fVisual) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "begin scanMemory()\n");
                 this.busInfo = this.bus.scanMemory(this.busInfo);
-                /*
+                /**
                  * Calculate the pixel-to-memory-address ratio
                  */
                 this.ratioMemoryToPixels = (this.busInfo.cBlocks * this.bus.nBlockSize) / (Panel.LIVEMEM.CX * Panel.LIVEMEM.CY);
-                /*
+                /**
                  * Update the BusInfo object with region information (cRegions and aRegions); return true if region
                  * information has changed since the last call.
                  */
                 if (this.findRegions()) {
-                    /*
+                    /**
                      * For each region, I choose a slice of the LiveMem canvas and record the corresponding rectangle
                      * within an aRects array (parallel to the aRegions array) in the BusInfo object.
                      *
@@ -607,7 +607,8 @@ export default class Panel extends Component {
                      * subDivide() makes a simple horizontal or vertical slicing decision based on the ratio of region blocks
                      * to remaining blocks.
                      */
-                    let i, rect;
+                    let i;
+                    let rect;
                     let rectAvail = new Rectangle(0, 0, this.canvasLiveMem.width, this.canvasLiveMem.height);
                     this.busInfo.aRects = [];
                     let cBlocksRemaining = this.busInfo.cBlocks;
@@ -619,13 +620,13 @@ export default class Panel extends Component {
                         cBlocksRemaining -= cBlocksRegion;
                     }
 
-                    /*
+                    /**
                      * Assert that not only did all the specified regions account for all the specified blocks, but also that
                      * the series of subDivide() calls exhausted the original rectangle to one of either zero width or zero height.
                      */
                     this.assert(!cBlocksRemaining && (!rectAvail.cx || !rectAvail.cy));
 
-                    /*
+                    /**
                      * Now draw all the rectangles produced by the series of subDivide() calls.
                      */
                     for (i = 0; i < this.busInfo.aRects.length; i++) {
@@ -1037,7 +1038,7 @@ export default class Panel extends Component {
             if (fReady) panel.setReady();
         }
         if (!fReady) {
-            /*
+            /**
              * If no panel was created for this invocation, then there must be a machine without
              * a panel; find it and give it a panel now.  Panels used to be optional, but now they
              * provide services to other components, so every machine gets one now, even if there
@@ -1071,7 +1072,7 @@ Panel.STATE = {
     SEEK:   Panel.COLOR.BLUE
 };
 
-/*
+/**
  * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
  * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
  * stretch the live images to fit.
@@ -1101,7 +1102,7 @@ Panel.LIVEDUMP = {
     CY: (Panel.LIVECANVAS.CY >> 1)
 };
 
-/*
+/**
  * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
  */
 Panel.REGION = {
@@ -1112,7 +1113,7 @@ Panel.REGION = {
 
 Panel.UPDATES_PER_SECOND = 10;
 
-/*
+/**
  * Initialize every Panel module on the page.
  */
 WebLib.onInit(Panel.init);

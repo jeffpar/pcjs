@@ -11,7 +11,7 @@ import X86 from "./x86.js";
 import StrLib from "../../../modules/v2/strlib.js";
 import { BACKTRACK } from "./defines.js";
 
-/*
+/**
  * Before 80386 support was added to PCx86, the approach to decoding ModRegRM bytes (which I usually
  * just call ModRM bytes) used one generated function per ModRM value.  This was optimal for 16-bit processors,
  * because the functions were small, and it was maximally efficient, turning the entire ModRM decoding operation

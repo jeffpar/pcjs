@@ -145,7 +145,7 @@ export default class RAMx86 extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * The Computer powers up the CPU last, at which point CPUx86 state is restored,
              * which includes the Bus state, and since we use the Bus to allocate all our memory,
              * memory contents are already restored for us, so we don't need the usual restore
@@ -171,7 +171,7 @@ export default class RAMx86 extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * The Computer powers down the CPU first, at which point CPUx86 state is saved,
          * which includes the Bus state, and since we use the Bus component to allocate all
          * our memory, memory contents are already saved for us, so we don't need the usual
@@ -208,7 +208,7 @@ export default class RAMx86 extends Component {
             if (baseRAM > 0) {
                 this.chipset.setDIPMemorySize(baseRAM / 1024);
             } else {
-                /*
+                /**
                  * If the user-defined RAM setting is zero, that maps to "Default", so this passes true to
                  * getDIPMemorySize() to get the initial DIP switch setting; otherwise, we get the current setting.
                  */
@@ -227,7 +227,7 @@ export default class RAMx86 extends Component {
             if (this.bus.addMemory(this.addrRAM, this.sizeRAM, Memoryx86.TYPE.RAM)) {
                 this.fAllocated = true;
 
-                /*
+                /**
                  * NOTE: I'm specifying MAXDEBUG for STATUS messages because I'm not yet sure I want these
                  * messages buried in the app, since they're seen only when a Control Panel is active.  Another
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
@@ -237,7 +237,7 @@ export default class RAMx86 extends Component {
                     this.printf(MESSAGE.STATUS, "specified size overrides SW1\n");
                 }
 
-                /*
+                /**
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
                  * boundary on COMPAQ DeskPro 386 machines.
                  *
@@ -265,7 +265,7 @@ export default class RAMx86 extends Component {
         }
         if (this.fAllocated) {
             if (!this.addrRAM && !this.fTestRAM) {
-                /*
+                /**
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
@@ -274,7 +274,7 @@ export default class RAMx86 extends Component {
                 }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
-            /*
+            /**
              * Don't add the "ramCPQ" memory to the CMOS total, because addCMOSMemory() will add it to the extended
              * memory total, which will just confuse the COMPAQ BIOS.
              */
@@ -380,7 +380,7 @@ class CompaqController extends Controller {
 
         this.ram = ram;
         this.wMappings = CompaqController.MAPPINGS.DEFAULT;
-        /*
+        /**
          * TODO: wSettings needs to reflect the actual amount of configured memory....
          */
         this.wSettings = CompaqController.SETTINGS.DEFAULT;
@@ -426,7 +426,7 @@ class CompaqController extends Controller {
      */
     getByte(off)
     {
-        /*
+        /**
          * Offsets 0-3 correspond to reads from 0x80C00000-0x80C00003; anything outside that range
          * returns our standard non-responsive value of 0xff.
          */
@@ -450,7 +450,7 @@ class CompaqController extends Controller {
     setByte(off, b)
     {
         if (!off) {
-            /*
+            /**
              * This is a write to 0x80C00000
              */
             if (b != (this.wMappings & 0xff)) {
@@ -459,7 +459,7 @@ class CompaqController extends Controller {
                     if (!this.aBlocksDst) {
                         this.aBlocksDst = bus.getMemoryBlocks(CompaqController.MAP_DST, CompaqController.MAP_SIZE);
                     }
-                    /*
+                    /**
                      * You might think that the next three lines could ALSO be moved to the preceding IF,
                      * but it's possible for the write-protection feature to be enabled/disabled separately
                      * from the mapping feature.  We could avoid executing this code as well by checking the
@@ -479,7 +479,7 @@ class CompaqController extends Controller {
             }
         }
         else if (off == 0x2) {
-            /*
+            /**
              * This is a write to 0x80C00002
              */
             this.wRAMSetup = (this.wRAMSetup & ~0xff) | b;
@@ -549,7 +549,7 @@ class CompaqController extends Controller {
     static writeByte(off, b, addr)
     {
         this.controller.setByte(off, b);
-        /*
+        /**
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
@@ -563,7 +563,7 @@ CompaqController.MAP_SRC    = 0x00FE0000;
 CompaqController.MAP_DST    = 0x000E0000;
 CompaqController.MAP_SIZE   = 0x00020000;
 
-/*
+/**
  * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
  *
  * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
@@ -577,7 +577,7 @@ CompaqController.MAPPINGS = {
     DEFAULT:    0xFFFF              // our default settings (no mapping, no write-protection)
 };
 
-/*
+/**
  * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
  *
  * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
@@ -617,12 +617,12 @@ CompaqController.SETTINGS = {
     BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
     BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
     BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
-    /*
+    /**
      * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
      * but setting it results in memory configuration errors; review.
      */
     ADDED_1MB:  0x0040,
-    /*
+    /**
      * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
      */
     PIGGYBACK:  0x0080,
@@ -638,7 +638,7 @@ CompaqController.SETTINGS = {
     MODC_4MB:   0x4000,         // 4Mb on module C board
     MODC_1MB:   0x8000,         // 1Mb on module C board
     MODC_NONE:  0xC000,         // no memory on module C board
-    /*
+    /**
      * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
      */
     DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
@@ -654,7 +654,7 @@ CompaqController.RAMSETUP = {
 CompaqController.BUFFER = [null, 0];
 CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte];
 
-/*
+/**
  * Initialize all the RAM modules on the page.
  */
 WebLib.onInit(RAMx86.init);

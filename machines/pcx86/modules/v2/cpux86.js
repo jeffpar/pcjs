@@ -80,7 +80,7 @@ export default class CPUx86 extends CPU {
 
         this.model = model;
 
-        /*
+        /**
          * We take the 'stepping' value, convert it to a hex value, and then add that to the model to provide
          * a single value that's unique for any given CPU stepping.  If no stepping is provided, then stepping
          * is equal to model.
@@ -88,12 +88,12 @@ export default class CPUx86 extends CPU {
         let stepping = parmsCPU['stepping'];
         this.stepping = model + (stepping? StrLib.parseInt(stepping, 16) : 0);
 
-        /*
+        /**
          * Initialize processor operation to match the requested model
          */
         this.initProcessor();
 
-        /*
+        /**
          * List of software interrupt notification functions: aIntNotify is an array, indexed by
          * interrupt number, where each element contains:
          *
@@ -118,25 +118,25 @@ export default class CPUx86 extends CPU {
         this.aIntNotify = [];
         this.aIntReturn = [];
 
-        /*
+        /**
          * Since aReturnNotify is a "sparse array", this global count gives the CPU a quick way of knowing whether
          * or not RETF or IRET instructions need to bother calling checkIntReturn().
          */
         this.cIntReturn = 0;
 
-        /*
+        /**
          * A variety of stepCPU() state variables that don't strictly need to be initialized before the first
          * stepCPU() call, but it's good form to do so.
          */
         this.resetCycles();
         this.flags.complete = this.flags.debugCheck = false;
 
-        /*
+        /**
          * If there are no live registers to display, then updateStatus() can skip a bit....
          */
         this.cLiveRegs = 0;
 
-        /*
+        /**
          * We're just declaring aMemBlocks and associated Bus parameters here; they'll be initialized by initMemory()
          * when the Bus is initialized.
          */
@@ -149,7 +149,7 @@ export default class CPUx86 extends CPU {
             this.adwPrefetch = null;
         }
 
-        /*
+        /**
          * This initial resetRegs() call is important to create all the registers (eg, the Segx86 registers),
          * so that if/when we call restore(), it will have something to fill in.
          */
@@ -191,7 +191,7 @@ export default class CPUx86 extends CPU {
      */
     initMemory(aMemBlocks, nBlockShift)
     {
-        /*
+        /**
          * aBusBlocks preserves the Bus block array for the life of the machine, whereas aMemBlocks
          * will be altered if/when the CPU enables paging.  PAGEBLOCKS must be true when using Memory
          * blocks to simulate paging, ensuring that physical blocks and pages have the same size (4Kb).
@@ -255,7 +255,7 @@ export default class CPUx86 extends CPU {
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
             if (aBlocks[iBlock]) {
                 aBlocks[iBlock].addBreakpoint(addr & this.nBlockLimit, fWrite);
-                /*
+                /**
                  * When a physical memory breakpoint is added, a fresh setPhysBlock() call is REQUIRED for any
                  * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
                  */
@@ -285,7 +285,7 @@ export default class CPUx86 extends CPU {
             let iBlock = addr >>> this.nBlockShift;
             let aBlocks = (fPhysical? this.aBusBlocks : this.aMemBlocks);
             aBlocks[iBlock].removeBreakpoint(addr & this.nBlockLimit, fWrite);
-            /*
+            /**
              * When a physical memory breakpoint is removed, a fresh setPhysBlock() call is RECOMMENDED for any
              * linear mappings to that address.  This is a bit of a sledgehammer solution, but at least it's a solution.
              */
@@ -354,7 +354,7 @@ export default class CPUx86 extends CPU {
         let iBlock;
         if (this.aMemBlocks === this.aBusBlocks) {
             this.aMemBlocks = new Array(this.nBlockTotal);
-            /*
+            /**
              * TODO: Currently we allocate only one UNPAGED block for the entire linear address space;
              * only when a block is touched and becomes PAGED do we allocate a dedicated Memory block
              * for that slot.  One potential downside to using a single UNPAGED block, however, is that
@@ -379,7 +379,7 @@ export default class CPUx86 extends CPU {
             for (iBlock = 0; iBlock < this.nBlockTotal; iBlock++) {
                 this.aMemBlocks[iBlock] = this.blockUnpaged;
             }
-            /*
+            /**
              * We also use a special "empty" Memory block that mapPageBlock() can pass back to callers
              * whenever a valid block cannot be found for an UNPAGED block.  Under normal conditions,
              * an invalid block will trigger a fault, so memEmpty will never actually be returned, but
@@ -387,13 +387,13 @@ export default class CPUx86 extends CPU {
              */
             this.memEmpty = new Memoryx86();
 
-            /*
+            /**
              * Initialize our PAGEBLOCKS cache (see acquirePageBlock() and releasePageBlock()).
              */
             this.aCacheBlocks = new Array(CPUx86.PAGEBLOCKS_CACHE);
             this.iCacheBlocks = 0;
         } else {
-            /*
+            /**
              * Our equivalent of a TLB flush.  NOTE: We do not attempt to simulate an actual TLB; our
              * aMemBlocks array will "cache" as many pages (ie, allow as many PAGED block) as there are
              * entries in the array.  I'm assuming we won't run into any system software that relies on
@@ -436,7 +436,7 @@ export default class CPUx86 extends CPU {
         let block;
         if (this.iCacheBlocks > 0) {
             block = this.aCacheBlocks[--this.iCacheBlocks];
-            /*
+            /**
              * Paged memory blocks are all very generic and contain no memory of their own, so the fact
              * that we're not calling the Memory constructor to reinitialize it is OK.  setPhysBlock() is
              * what's critical, and the caller will take care of that.  However, to avoid any confusion,
@@ -503,7 +503,7 @@ export default class CPUx86 extends CPU {
         let offPDE = (addr & X86.LADDR.PDE.MASK) >>> X86.LADDR.PDE.SHIFT;
         let addrPDE = this.regCR3 + offPDE;
 
-        /*
+        /**
          * bus.getLong(addrPDE) would be simpler, but setPhysBlock() needs to know blockPDE and offPDE, too.
          * TODO: Since we're immediately shifting addrPDE by nBlockShift, then we could also skip adding offPDE.
          */
@@ -523,7 +523,7 @@ export default class CPUx86 extends CPU {
         let offPTE = (addr & X86.LADDR.PTE.MASK) >>> X86.LADDR.PTE.SHIFT;
         let addrPTE = (pde & X86.PTE.FRAME) + offPTE;
 
-        /*
+        /**
          * bus.getLong(addrPTE) would be simpler, but setPhysBlock() needs to know blockPTE and offPTE, too.
          * TODO: Since we're immediately shifting addrPDE by nBlockShift, then we could also skip adding offPTE.
          */
@@ -541,7 +541,7 @@ export default class CPUx86 extends CPU {
         }
 
         let addrPhys = (pte & X86.PTE.FRAME) + (addr & X86.LADDR.OFFSET);
-        /*
+        /**
          * TODO: Since we're immediately shifting addrPhys by nBlockShift, we could also skip adding the addr's offset.
          */
         let blockPhys = this.aBusBlocks[(addrPhys & this.nBusMask) >>> this.nBlockShift];
@@ -550,7 +550,7 @@ export default class CPUx86 extends CPU {
         let iBlock = addr >>> this.nBlockShift;
         let block = this.aMemBlocks[iBlock];
 
-        /*
+        /**
          * So we have the block containing the physical memory corresponding to the given linear address.
          *
          * Now we can create a new PAGED Memory block and record the physical block info using setPhysBlock().
@@ -785,7 +785,7 @@ export default class CPUx86 extends CPU {
         this.aOpGrp6  = X86.aOpGrp6Real;        // setProtMode() will ensure that aOpGrp6 is switched
 
         if (this.model >= X86.MODEL_80186) {
-            /*
+            /**
              * I don't go out of my way to make 80186/80188 cycle times accurate, since I'm not aware of any
              * IBM PC models that used those processors; beyond the 8086, my next priorities are the 80286 and
              * 80386, but I might revisit the 80186 someday.
@@ -856,7 +856,7 @@ export default class CPUx86 extends CPU {
                             this.aOps0F[0xA7] = X86.opIBTS;
                         }
                     } else {
-                        /*
+                        /**
                          * Let's make any "undefined" 80286 0x0F opcode handler "invalid" instead IFF the opcode
                          * is defined on the 80386.  Whereas if someone is using an opcode that isn't defined on ANY
                          * of these processors, then I want to know about it; ie, leave it set to opUndefined().
@@ -1050,7 +1050,7 @@ export default class CPUx86 extends CPU {
         this.regESI = 0;
         this.regEDI = 0;
 
-        /*
+        /**
          * The following are internal "registers" used to capture intermediate values inside selected helper
          * functions and use them if they've been modified (or are known to change); for example, the MUL and DIV
          * instructions perform calculations that must be propagated to specific registers (eg, AX and/or DX), which
@@ -1062,20 +1062,20 @@ export default class CPUx86 extends CPU {
         this.r64Rem = [0, 0];
         this.regXX = 0;             // for internal use only (eg, assists with ModRM helper functions)
 
-        /*
+        /**
          * This internal "register" is set in selected opcode handlers to record the original opcode; ordinarily,
          * we dispatch on the opcode but never save it, because it's rarely needed.
          */
         this.bOpcode = 0;
 
-        /*
+        /**
          * Another internal "register" we occasionally need is an interim copy of bModRM, set inside selected opcode
          * handlers so that the helper function can have access to the instruction's bModRM without resorting to a
          * closure (which, in the Chrome V8 engine, for example, may cause constant recompilation).
          */
         this.bModRM = 0;
 
-        /*
+        /**
          * NOTE: Even though the 8086 doesn't have CR0 (aka MSW) and IDTR, we initialize them for ALL CPUs, so
          * that functions like X86.helpINT() can use the same code for both.  The 8086/8088 have no direct way
          * of accessing or changing them, so this is an implementation detail those processors are unaware of.
@@ -1085,7 +1085,7 @@ export default class CPUx86 extends CPU {
         this.addrIDTLimit = 0x03FF;
         this.regPS = this.nIOPL = 0;// these should be set before the first setPS() call
 
-        /*
+        /**
          * Define all the result registers that can be used to "cache" arithmetic and logical flags.
          *
          * In addition, setPS() will initialize resultType, which keeps track of which flags are cached,
@@ -1093,7 +1093,7 @@ export default class CPUx86 extends CPU {
          */
         this.resultDst = this.resultSrc = this.resultArith = this.resultLogic = 0;
 
-        /*
+        /**
          * nFault is set by helpFault() and reset (to -1) by resetRegs() and opIRET().  Its initial purpose was to
          * help helpFault() determine when a nested fault should be converted into either a double-fault (DF_FAULT)
          * or a triple-fault (ie, a processor reset).
@@ -1109,7 +1109,7 @@ export default class CPUx86 extends CPU {
          */
         this.nFault = -1;
 
-        /*
+        /**
          * These are used to snapshot regLIP and regLSP, to help make instructions restartable;
          * currently opLIP is updated prior to every instruction, but opLSP is updated only for instructions
          * that modify the stack pointer (eg, RETF) and should otherwise remain set to X86.ADDR_INVALID.
@@ -1123,7 +1123,7 @@ export default class CPUx86 extends CPU {
         this.opCS = this.opSS = -1;
         this.opLIP = this.opLSP = X86.ADDR_INVALID;
 
-        /*
+        /**
          * Segment registers used to be defined as separate selector and base variables (eg, regCS and regCS0),
          * but now they are defined as Segx86 objects.
          */
@@ -1135,7 +1135,7 @@ export default class CPUx86 extends CPU {
         this.setSS(0);
 
         if (I386 && this.model >= X86.MODEL_80386) {
-            /*
+            /**
              * As explained above, EAX depends upon the results of the CPU's power-up self-test; however, the only
              * documented value is zero, which indicates that the 80386 passed.  Additionally, DH is set to the CPU
              * identifier (3) and DL is set to the revision level (stepping).
@@ -1167,7 +1167,7 @@ export default class CPUx86 extends CPU {
             this.regTR  = [null,null,null,null,null,null,0,0];  // Test Registers TR0-TR7 (TR0-TR5 are undefined)
             this.segFS = new Segx86(this, Segx86.ID.DATA,  "FS");
             this.segGS = new Segx86(this, Segx86.ID.DATA,  "GS");
-            /*
+            /**
              * Synchronize the fact that paging is initially disabled with our PAGEBLOCKS functions
              */
             this.disablePageBlocks();
@@ -1175,7 +1175,7 @@ export default class CPUx86 extends CPU {
 
         this.segNULL = new Segx86(this, Segx86.ID.NULL,  "NULL");
 
-        /*
+        /**
          * The next few initializations mirror what we must do prior to each instruction (ie, inside the stepCPU() function);
          * note that opPrefixes, along with segData and segStack, are reset only after we've executed a non-prefix instruction.
          */
@@ -1186,7 +1186,7 @@ export default class CPUx86 extends CPU {
 
         this.segEA = this.segNULL;
 
-        /*
+        /**
          * intFlags contains some internal states we use to indicate whether a hardware interrupt (INTFLAG.INTR) or
          * Trap software interrupt (INTR.TRAP) has been requested, as well as when we're in a "HLT" state (INTFLAG.HALT)
          * that requires us to wait for a hardware interrupt (INTFLAG.INTR) before continuing execution.
@@ -1196,7 +1196,7 @@ export default class CPUx86 extends CPU {
         this.intFlags = X86.INTFLAG.NONE;
 
         if (BACKTRACK) {
-            /*
+            /**
              * Initialize the backtrack indexes for all registers to zero.  And while, yes, it IS possible
              * for raw data to flow through segment registers as well, it's not common enough in real-mode
              * (and too difficult in protected-mode) to merit the overhead.  Ditto for SP, which can't really
@@ -1231,14 +1231,14 @@ export default class CPUx86 extends CPU {
             };
         }
 
-        /*
+        /**
          * Set the initial CS:IP appropriate for the processor; this should be done before the first setPS() call,
          * in part so that CPL will be set properly.
          */
         if (this.model < X86.MODEL_80286) {
             this.setCSIP(0, 0xffff);
         } else {
-            /*
+            /**
              * Assorted 80286-specific registers.  The GDTR and IDTR registers are stored as the following pieces:
              *
              *      GDTR:   addrGDT (24 bits) and addrGDTLimit (24 bits)
@@ -1264,13 +1264,13 @@ export default class CPUx86 extends CPU {
             this.setCSBase(0xffff0000|0);                   // on an 80286 or 80386, all CS base address bits above bit 15 must be set
         }
 
-        /*
+        /**
          * This resets the Processor Status flags (regPS), along with all the internal "result registers";
          * we've taken care to ensure that both CPL and IOPL are initialized before this first setPS() call.
          */
         this.setPS(0);
 
-        /*
+        /**
          * Now that all the segment registers have been created, it's safe to set the current addressing mode.
          */
         this.setProtMode();
@@ -1422,7 +1422,7 @@ export default class CPUx86 extends CPU {
      */
     resetSizes()
     {
-        /*
+        /**
          * The following contain the (default) ADDRESS size (2 for 16 bits, 4 for 32 bits), and the corresponding
          * masks for isolating the (src) bits of an address and clearing the (dst) bits of an address.  Like the
          * OPERAND size properties, these are reset to their segCS counterparts at the start of every new instruction.
@@ -1431,7 +1431,7 @@ export default class CPUx86 extends CPU {
             this.sizeAddr = this.segCS.sizeAddr;
             this.maskAddr = this.segCS.maskAddr;
 
-            /*
+            /**
              * It's also worth noting that instructions that implicitly use the stack also rely on STACK size,
              * which is based on the BIG bit of the last descriptor loaded into SS; use the following segSS properties:
              *
@@ -1444,7 +1444,7 @@ export default class CPUx86 extends CPU {
             this.updateAddrSize();
         }
 
-        /*
+        /**
          * The following contain the (default) OPERAND size (2 for 16 bits, 4 for 32 bits), and the corresponding masks
          * for isolating the (src) bits of an OPERAND and clearing the (dst) bits of an OPERAND.  These are reset to
          * their segCS counterparts at the start of every new instruction, but are also set here for documentation purposes.
@@ -1513,7 +1513,7 @@ export default class CPUx86 extends CPU {
                 }
             }
         }
-        /*
+        /**
          * The enabling of INT messages is one of the criteria that's also included in the Debugger's checksEnabled()
          * function, and therefore included in debugCheck, so for maximum speed, we check debugCheck first.
          *
@@ -1600,7 +1600,7 @@ export default class CPUx86 extends CPU {
      */
     checkDebugRegisters(fEnable)
     {
-        /*
+        /**
          * We use a constant mask for the enable bits (X86.DR7.L0 | X86.DR7.G0) and shift our copy of regDR7
          * right 2 bits after each Debug register check.
          *
@@ -1612,12 +1612,12 @@ export default class CPUx86 extends CPU {
 
         for (let i = 0; i < 4; i++) {
             if (regDR7 & (X86.DR7.L0 | X86.DR7.G0)) {
-                /*
+                /**
                  * We look only to the low bit of the RW field to determine if we should be watching for a write.
                  * FYI, if the low bit is clear but the high bit is set, that's "undefined"; we treat it as a read.
                  */
                 let fWrite = !!(bitsDR7 & 0x1);
-                /*
+                /**
                  * The address in regDR[i] should already be masked with ~0x1 for 2-byte accesses (LEN == 0x1) or
                  * with ~0x3 for 4-byte accesses (LEN == 0x3), but if the client forgets, the hardware supposedly
                  * enforces it, so that's what we do here, too.
@@ -1655,7 +1655,7 @@ export default class CPUx86 extends CPU {
      */
     checkMemoryException(addr, nb, fWrite)
     {
-        /*
+        /**
          * NOTE: We're preventing redundant X86.EXCEPTION.DB_EXC exceptions for a single instruction by checking
          * X86.OPFLAG.DBEXC.  I decided not to rely on the generic X86.OPFLAG.FAULT, because if an instruction
          * first triggers a DIFFERENT exception which then triggers a DEBUG exception (eg, because a Debug register
@@ -1664,7 +1664,7 @@ export default class CPUx86 extends CPU {
          */
         if (!(this.opFlags & X86.OPFLAG.DBEXC) && (this.regDR[7] & X86.DR7.ENABLE)) {
             nb--;
-            /*
+            /**
              * We use a constant mask for the enable bits (X86.DR7.L0 | X86.DR7.G0) and shift our copy of regDR7
              * right 2 bits after each Debug register check.
              *
@@ -1679,16 +1679,16 @@ export default class CPUx86 extends CPU {
 
             for (let i = 0; i < 4; i++) {
                 if ((regDR7 & (X86.DR7.L0 | X86.DR7.G0)) && (bitsDR7 & bitsRWMask) == bitsRWRequired) {
-                    /*
+                    /**
                      * NOTE: We reduced nb from 1-4 to 0-3 above, so we don't need to add 1 to len either.
                      */
                     let len = (bitsDR7 >> 2);
-                    /*
+                    /**
                      * Time to determine if addr through addr + nb overlaps regDR[i] through regDR[i] + len.
                      */
                     if (addr + nb >= this.regDR[i] && addr <= this.regDR[i] + len) {
                         this.regDR[6] |= (1 << i);
-                        /*
+                        /**
                          * Data access breakpoints are not faults; they must generate a trap at the end of the
                          * instruction, so we use the X86.INTFLAG.TRAP flag to generate the X86.EXCEPTION.DB_EXC trap.
                          *
@@ -1761,7 +1761,7 @@ export default class CPUx86 extends CPU {
             this.segFS.updateMode(false, fProt, fV86);
             this.segGS.updateMode(false, fProt, fV86);
         }
-        /*
+        /**
          * This function used to be called only when I386 is true, but it's probably best if we ALWAYS call it, even
          * for 16-bit-only CPUs like the 8086 and 80286; this allows us to write opcode logic by either checking I386
          * and using appropriate hard-coded sizes, or NOT checking I386 and simply using the "soft-coded" sizes in
@@ -1896,20 +1896,20 @@ export default class CPUx86 extends CPU {
         this.restoreProtMode(a[5]);
         this.setPS(a[6]);
 
-        /*
+        /**
          * The introduction of protected-mode requires us to restore memory contents sooner than we used to
          * (ie, before we load any segment registers).
          */
         let fRestored = false;
 
         if (this.bus.restoreMemory(data[4])) {
-            /*
+            /**
              * It's important to call setCSIP(), both to ensure that the CPU's linear IP register (regLIP) is updated
              * properly AND to ensure the CPU's default ADDRESS and OPERAND sizes are set properly.
              */
             this.setCSIP(a[0], this.segCS.sel);
 
-            /*
+            /**
              * It's also important to call setSP(), so that the linear SP register (regLSP) will be updated properly;
              * we also need to call setSS(), to ensure that the lower and upper stack limits are properly initialized.
              */
@@ -1935,7 +1935,7 @@ export default class CPUx86 extends CPU {
         a = data[3];
         this.nTotalCycles = a[1];   // a[0] was previously nBurstDivisor (no longer used)
         this.setSpeed(a[2]);        // old states didn't contain a value from getSpeed(), but setSpeed() checks
-        /*
+        /**
          * autoStart is normally either true, false, or null (the latter depends on the presence of a debugger),
          * but there are special circumstances where it can be a number (ie, zero) if someone has decided that the
          * machine should NOT be auto-started regardless.
@@ -1946,7 +1946,7 @@ export default class CPUx86 extends CPU {
         if (a[4] != null) {
             this.restoreTimers(a[4]);
         }
-        /*
+        /**
          * Making sure the ROM BIOS timer values are synced with the RTC (if any) is something the ChipSet component
          * would take care of automatically, but alas, it is initialized long before RAM is restored, so we have to make
          * this callback.
@@ -1975,7 +1975,7 @@ export default class CPUx86 extends CPU {
         case "NULL":
             return this.segNULL;
         default:
-            /*
+            /**
              * HACK: We return a fake segment register object in which only the base linear address is valid,
              * because that's all the caller provided (ie, we must be restoring from an older state).
              */
@@ -2067,7 +2067,7 @@ export default class CPUx86 extends CPU {
         let regESP = this.getSP();
         let regLSP = this.segSS.load(sel);
         if (regLSP !== X86.ADDR_INVALID) {
-            /*
+            /**
              * The safest way to update regLSP after a potential change to segSS.base is to call setSP() with the
              * original stack pointer retrieved above via getSP().  When I tried to be clever and do this instead:
              *
@@ -2077,7 +2077,7 @@ export default class CPUx86 extends CPU {
              */
             this.setSP(regESP);
 
-            /*
+            /**
              * The desire to use a linear stack pointer (regLSP) for internal stack operations has some pitfalls;
              * one involves these upper and lower limit calculations.  Example: Xenix 386 creates a (non-expand-down)
              * 32-bit data segment for all of DS, ES, and SS, which uses a limit of "-1"; ie:
@@ -2221,7 +2221,7 @@ export default class CPUx86 extends CPU {
         this.regLIP = addr;
         this.regLIPMax = (this.segCS.base >>> 0) + (this.segCS.limit >>> 0) + 1;
 
-        /*
+        /**
          * TODO: Verify the proper source for CPL.  Should it come from segCS.cpl or segCS.dpl?
          * Note that LOADALL386 wants it to come from segSS.dpl.
          */
@@ -2231,7 +2231,7 @@ export default class CPUx86 extends CPU {
             this.resetSizes();
         }
 
-        /*
+        /**
          * Here, we need to additionally test whether the prefetch buffer (adwPrefetch) has been allocated yet,
          * because when resetRegs() is first called, the Bus hasn't been initialized yet, so there's nothing to fetch.
          *
@@ -2260,7 +2260,7 @@ export default class CPUx86 extends CPU {
      */
     setCSIP(off, sel, fCall)
     {
-        /*
+        /**
          * Setting IP needs to occur AFTER loadCode(), because it may differ from the given IP if sel refers to a gate.
          */
         let base = this.segCS.loadCode(off, sel, fCall);
@@ -2308,7 +2308,7 @@ export default class CPUx86 extends CPU {
     {
         let newLIP = (this.regLIP >>> 0) + inc;
         if (newLIP > this.regLIPMax) {
-            /*
+            /**
              * There's no such thing as a GP fault on the 8086/8088, and I'm now assuming that,
              * on newer processors, all attempts to fetch opcodes beyond the limit trigger a fault.
              */
@@ -2332,7 +2332,7 @@ export default class CPUx86 extends CPU {
         if (PREFETCH) {
             this.cbPrefetch += this.regLIP - this.opLIP;
             this.regLIP = this.opLIP;
-            /*
+            /**
              * If the reset produces a prefetch total greater than the allocated amount, then we must have
              * refilled the queue somewhere in the middle of the rewound instruction, so we need to refill the
              * queue all over again; otherwise, the next repetition may fetch future data instead of past data.
@@ -2357,7 +2357,7 @@ export default class CPUx86 extends CPU {
     rewindIP(fCheckSeg = false)
     {
         if (fCheckSeg && (this.opPrefixes & X86.OPFLAG.SEG)) {
-            /*
+            /**
              * This instruction has both REP and SEG overrides, so if we IRET'ed to it with interrupts enabled,
              * don't repeat it; this helps simulate the 8086/8088's failure to properly restart such an instruction
              * after a hardware interrupt (which became known as a "feature", hence not part of BUGS_8086).
@@ -2473,7 +2473,7 @@ export default class CPUx86 extends CPU {
         this.resultLogic = value;
         if (carry) this.setCF(); else this.clearCF();
         if (overflow) this.setOF(); else this.clearOF();
-        /*
+        /**
          * Limited testing on actual hardware (the Intel Core i5 in my Mac Mini) as well as test
          * results from another user (https://github.com/jeffpar/pcjs/issues/81) suggest that AF is
          * cleared by logic ops (at least AND/OR/TEST/XOR; see https://sandpile.org/x86/flags.htm).
@@ -2944,13 +2944,13 @@ export default class CPUx86 extends CPU {
      */
     setMSW(w)
     {
-        /*
+        /**
          * This instruction is always allowed to set MSW.PE, but it cannot clear MSW.PE once set;
          * therefore, we always OR the previous value of MSW.PE into the new value before loading.
          */
         w |= (this.regCR0 & X86.CR0.MSW.PE) | X86.CR0.MSW.ON;
         this.regCR0 = (this.regCR0 & ~X86.CR0.MSW.MASK) | (w & X86.CR0.MSW.MASK);
-        /*
+        /**
          * Since the 80286 cannot return to real-mode via this instruction, the only transition we
          * must worry about is to protected-mode.  And there's no harm calling setProtMode() if the
          * CPU is already in protected-mode; we could certainly optimize out the call in that case,
@@ -2968,7 +2968,7 @@ export default class CPUx86 extends CPU {
      */
     setPS(regPS, cpl)
     {
-        /*
+        /**
          * OS/2 1.0 discriminates between an 80286 and an 80386 based on whether an IRET in real-mode that
          * pops 0xF000 into the flags is able to set *any* of flag bits 12-15: if it can, then OS/2 declares
          * the CPU an 80386.
@@ -2980,13 +2980,13 @@ export default class CPUx86 extends CPU {
          */
         if (!(this.regCR0 & X86.CR0.MSW.PE)) regPS &= ~this.PS_CLEAR_RM;
 
-        /*
+        /**
          * There are some cases (eg, an IRET returning to a less privileged code segment) where the CPL
          * we compare against should come from the outgoing code segment, so if the caller provided it, use it.
          */
         if (cpl === undefined) cpl = this.nCPL;
 
-        /*
+        /**
          * Since PS.IOPL and PS.IF are part of PS_DIRECT, we need to take care of any 80286-specific behaviors
          * before setting the PS_DIRECT bits from the incoming regPS bits.
          *
@@ -3151,7 +3151,7 @@ export default class CPUx86 extends CPU {
             }
         }
 
-        /*
+        /**
          * Since the Bus component initializes all unused portions of physical address space with an empty
          * block, we have also written mapPageBlock() to return an empty block (memEmpty) whenever there is
          * no valid mapping.  So if we ever end up here, this may represent a hole that needs plugging.
@@ -3192,7 +3192,7 @@ export default class CPUx86 extends CPU {
     {
         let off = addr & this.nBlockLimit;
         let iBlock = (addr & this.nMemMask) >>> this.nBlockShift;
-        /*
+        /**
          * On the 8088, it takes 4 cycles to read the additional byte REGARDLESS whether the address is odd or even.
          * TODO: For the 8086, the penalty is actually "(addr & 0x1) << 2" (4 additional cycles only when the address is odd).
          */
@@ -3235,7 +3235,7 @@ export default class CPUx86 extends CPU {
         if (off < this.nBlockLimit - 2) {
             return this.aMemBlocks[iBlock].readLong(off, addr);
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
          * long in the current block and the first long in the next block and masking/combining the results),
          * which may have also created some undesirable side-effects for custom memory controllers.
@@ -3286,7 +3286,7 @@ export default class CPUx86 extends CPU {
     {
         let off = addr & this.nBlockLimit;
         let iBlock = (addr & this.nMemMask) >>> this.nBlockShift;
-        /*
+        /**
          * On the 8088, it takes 4 cycles to write the additional byte REGARDLESS whether the address is odd or even.
          * TODO: For the 8086, the penalty is actually "(addr & 0x1) << 2" (4 additional cycles only when the address is odd).
          */
@@ -3331,7 +3331,7 @@ export default class CPUx86 extends CPU {
             this.aMemBlocks[iBlock].writeLong(off, l, addr);
             return;
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading and rewriting
          * the last long in the current block, and then reading and rewriting the first long in the next
          * block), which may have also created some undesirable side-effects for custom memory controllers.
@@ -3409,7 +3409,7 @@ export default class CPUx86 extends CPU {
         this.regEA = seg.checkRead(this.offEA, (I386? this.sizeData : 2));
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3440,7 +3440,7 @@ export default class CPUx86 extends CPU {
         this.regEA = this.segEA.checkRead(this.offEA, 2);
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3472,7 +3472,7 @@ export default class CPUx86 extends CPU {
         this.regEA = this.segEA.checkRead(this.offEA, 2);
         if (this.opFlags & (X86.OPFLAG.NOREAD | X86.OPFLAG.WRAP)) {
             if (this.opFlags & X86.OPFLAG.NOREAD) return 0;
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3601,7 +3601,7 @@ export default class CPUx86 extends CPU {
         }
         let addr = this.segEA.checkWrite(this.offEA, 2);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -3645,7 +3645,7 @@ export default class CPUx86 extends CPU {
         }
         let addr = this.segEA.checkWrite(this.offEA, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -3688,7 +3688,7 @@ export default class CPUx86 extends CPU {
         let w;
         let addr = seg.checkRead(off, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkReadReal(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3730,7 +3730,7 @@ export default class CPUx86 extends CPU {
     {
         let addr = seg.checkWrite(off, this.sizeData);
         if (this.opFlags & X86.OPFLAG.WRAP) {
-            /*
+            /**
              * The WRAP flag must have been set by checkWriteReal(), so we also know that we're dealing with
              * a 16-bit write, which allows us to make some simplifications here.
              */
@@ -3869,7 +3869,7 @@ export default class CPUx86 extends CPU {
         let newLIP = this.checkIP(1);
         let b = (PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP));
         if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
-        /*
+        /**
          * With the following cycle penalty (which really only affects 8086/8088 CPUs), PC Tools 4.30
          * correctly reports an IBM PC-relative speed of 100% (assuming you're using a 4.77Mhz configuration).
          *
@@ -3898,7 +3898,7 @@ export default class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getShort(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(2), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3928,7 +3928,7 @@ export default class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getAddr(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -3958,7 +3958,7 @@ export default class CPUx86 extends CPU {
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
             w = this.getWord(this.regLIP);
         } else {
-            /*
+            /**
              * The WRAP flag must have been set by checkIP(), so we also know that we're dealing with
              * a 16-bit read, which allows us to make some simplifications here.
              */
@@ -4013,7 +4013,7 @@ export default class CPUx86 extends CPU {
 
         let delta = this.regLSPLimit - (this.regLSP >>> 0);
         if (delta < 0) {
-            /*
+            /**
              * There's no such thing as an SS fault on the 8086/8088, and in fact, we have to support the
              * operation even when the address straddles the wrap boundary; other emulators tend to barf on
              * a wrap, usually because they're running in V86 mode instead of real mode.
@@ -4025,7 +4025,7 @@ export default class CPUx86 extends CPU {
                 }
             }
             else {
-                /*
+                /**
                  * I'm assuming that, on newer processors, when the stack segment limit is set to the maximum,
                  * it's OK for the stack to wrap, unless the new address is straddling the wrap boundary (ie, when
                  * delta is < -1).
@@ -4087,7 +4087,7 @@ export default class CPUx86 extends CPU {
 
         let delta = (regLSP >>> 0) - this.regLSPLimitLow;
         if (delta < 0) {
-            /*
+            /**
              * There's no such thing as an SS fault on the 8086/8088, and in fact, we have to support the
              * operation even when the address straddles the wrap boundary (ie, when delta is -1); other
              * emulators tend to barf on a wrap, usually because they're running in V86 mode instead of real mode.
@@ -4101,7 +4101,7 @@ export default class CPUx86 extends CPU {
                 }
                 this.assert(!this.segSS.fExpDown && this.segSS.limit == this.segSS.maskAddr);
             }
-            /*
+            /**
              * I'm assuming that, on newer processors, when the stack segment limit is set to the maximum,
              * it's OK for the stack to wrap, unless the new address is straddling the wrap boundary (ie, when
              * delta is < 0 and > -width).
@@ -4134,7 +4134,7 @@ export default class CPUx86 extends CPU {
             break;
         }
 
-        /*
+        /**
          * We update this.regLSP at the end to make life simpler for opcode handlers that perform only one
          * pushWord() operation, relieving them from having to snapshot this.regLSP into this.opLSP needlessly.
          */
@@ -4196,7 +4196,7 @@ export default class CPUx86 extends CPU {
         // DEBUG: this.assert(this.intFlags);
 
         if (!(this.opFlags & X86.OPFLAG.NOINTR)) {
-            /*
+            /**
              * As discussed above, the 8086/8088 give hardware interrupts higher priority than the TRAP interrupt,
              * whereas the 80286 and up give TRAPs higher priority.
              */
@@ -4228,7 +4228,7 @@ export default class CPUx86 extends CPU {
                 iPriority = 1 - iPriority;
             }
         }
-        /*
+        /**
          * As long as the ChipSet component isn't calling setDMA(), we don't need to test INTFLAG.DMA...
          *
         if (this.intFlags & X86.INTFLAG.DMA) {
@@ -4409,7 +4409,7 @@ export default class CPUx86 extends CPU {
      */
     stepCPU(nMinCycles)
     {
-        /*
+        /**
          * The Debugger uses fComplete to determine if the instruction completed (true) or was interrupted
          * by a breakpoint or some other exceptional condition (false).  NOTE: this does NOT include JavaScript
          * exceptions, which stepCPU() expects the caller to catch using its own exception handler.
@@ -4421,12 +4421,12 @@ export default class CPUx86 extends CPU {
          */
         this.flags.complete = true;
 
-        /*
+        /**
          * debugCheck is true if we need to "check" every instruction with the Debugger.
          */
-        this.setDebugCheck(DEBUGGER && this.dbg && this.dbg.checksEnabled());
+        this.setDebugCheck(DEBUGGER && this.dbg != undefined && this.dbg.checksEnabled());
 
-        /*
+        /**
          * nDebugState is checked only when debugCheck is true, and its sole purpose is to tell the first call
          * to checkInstruction() that it can skip breakpoint checks, and that will be true ONLY when fStarting is
          * true OR nMinCycles is zero (the latter means the Debugger is single-stepping).
@@ -4437,20 +4437,20 @@ export default class CPUx86 extends CPU {
         let nDebugState = (!nMinCycles)? -1 : (this.flags.starting? 0 : 1);
         this.flags.starting = false;
 
-        /*
+        /**
          * We move the minimum cycle count to nStepCycles (the number of cycles left to step), so that other
          * functions have the ability to force that number to zero (eg, stopCPU()), and thus we don't have to check
          * any other criteria to determine whether we should continue stepping or not.
          */
         this.nBurstCycles = this.nStepCycles = nMinCycles;
 
-        /*
+        /**
          * NOTE: Even though runCPU() calls updateAllTimers(), we need an additional call here if we're being
          * called from the Debugger, so that single-stepping will update timers as well.  TODO: What about RTC?
          */
         if (this.chipset && !nMinCycles) this.chipset.updateAllTimers();
 
-        /*
+        /**
          * Let's also suppress h/w interrupts whenever the Debugger is single-stepping an instruction; I'm loathe
          * to allow Debugger interactions to affect the behavior of the virtual machine in ANY way, but I'm making
          * this small concession to avoid the occasional and sometimes unexpected Debugger command that ends up
@@ -4470,7 +4470,7 @@ export default class CPUx86 extends CPU {
             if (opPrefixes) {
                 this.opPrefixes |= opPrefixes;
             } else {
-                /*
+                /**
                  * opLIP is used, among other things, to help string instructions rewind to the first prefix
                  * byte whenever the instruction needs to be repeated.  Repeating string instructions in this
                  * manner (essentially restarting them) is a bit heavy-handed, but ultimately it's more compatible,
@@ -4506,7 +4506,7 @@ export default class CPUx86 extends CPU {
                         }
                     }
                     if (this.intFlags & X86.INTFLAG.HALT) {
-                        /*
+                        /**
                          * As discussed in opHLT(), the CPU is never REALLY halted by a HLT instruction, because the
                          * entire machine relies on the steady advance of the overall cycle count, to ensure that timer
                          * updates, video updates, etc, all continue to occur at the expected rates.
@@ -4543,7 +4543,7 @@ export default class CPUx86 extends CPU {
 
             this.opFlags = 0;
 
-            /*
+            /**
             if (DEBUG || PREFETCH) {
                 this.nBusCycles = 0;
                 this.nSnapCycles = this.nStepCycles;
@@ -4552,7 +4552,7 @@ export default class CPUx86 extends CPU {
 
             this.aOps[this.getIPByte()].call(this);
 
-            /*
+            /**
             if (PREFETCH) {
                 let nSpareCycles = (this.nSnapCycles - this.nStepCycles) - this.nBusCycles;
                 if (nSpareCycles >= 4) {
@@ -4561,7 +4561,7 @@ export default class CPUx86 extends CPU {
             }
              */
 
-            /*
+            /**
             if (MAXDEBUG) {
                 //
                 // Make sure that every instruction is assessing a cycle cost, and that the cost is a net positive.
@@ -4622,7 +4622,7 @@ export default class CPUx86 extends CPU {
 }
 
 if (PREFETCH) {
-    /*
+    /**
      * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
      * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
      * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
@@ -4637,7 +4637,7 @@ if (PREFETCH) {
 
 CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
 
-/*
+/**
  * Initialize every CPU module on the page
  */
 WebLib.onInit(CPUx86.init);

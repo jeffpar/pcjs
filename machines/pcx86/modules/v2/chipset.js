@@ -71,7 +71,7 @@ export default class ChipSet extends Component {
 
         let model = parmsChipSet['model'];
 
-        /*
+        /**
          * this.model is a numeric version of the 'model' string; when comparing this.model to standard IBM
          * model numbers, you should generally compare (this.model|0) to the target value, which truncates it.
          */
@@ -84,7 +84,7 @@ export default class ChipSet extends Component {
         let bSwitches;
         this.aDIPSwitches = [];
 
-        /*
+        /**
          * SW1 describes the number of floppy drives, the amount of base memory, the primary monitor type,
          * and (on the MODEL_5160) whether or not a coprocessor is installed.  If no SW1 settings are provided,
          * we look for individual 'floppies' and 'monitor' settings and build a default SW1 value.
@@ -114,7 +114,7 @@ export default class ChipSet extends Component {
             this.setDIPSwitches(ChipSet.SWITCH_TYPE.MONITOR, sMonitor);
         }
 
-        /*
+        /**
          * SW2 describes the number of 32Kb blocks of I/O expansion RAM that's present in the system. The MODEL_5150
          * ROM BIOS only checked/supported the first four switches, so the maximum amount of additional RAM specifiable
          * was 15 * 32Kb, or 480Kb.  So with a 16Kb-64Kb motherboard, the MODEL_5150 ROM BIOS could support a grand
@@ -142,7 +142,7 @@ export default class ChipSet extends Component {
         this.fScaleTimers = parmsChipSet['scaleTimers'] || false;
         this.sDateRTC = parmsChipSet['dateRTC'];
 
-        /*
+        /**
          * Here, I'm finally getting around to trying the WebLib Audio API.  Fortunately, based on what little
          * I know about sound generation, using the API to make the same noises as the IBM PC speaker seems
          * straightforward.
@@ -162,7 +162,7 @@ export default class ChipSet extends Component {
                 if (DEBUG) this.printf(MESSAGE.LOG, "AudioContext not available");
             }
         }
-        /*
+        /**
          * fSpeakerEnabled indicates whether the speaker is *logically* on, whereas fSpeakerOn indicates
          * whether we have ACTUALLY turned the speaker on.  And finally, fUserSound is set to true only after
          * we have have created the audio oscillator in the context of a user event (a requirement for most
@@ -170,7 +170,7 @@ export default class ChipSet extends Component {
          */
         this.fSpeakerEnabled = this.fSpeakerOn = this.fUserSound = false;
 
-        /*
+        /**
          * I used to defer ChipSet's reset() to powerUp(), which then gave us the option of doing either
          * reset() OR restore(), instead of both.  However, on MODEL_5170 machines, the initial CMOS data
          * needs to be created earlier, so that when other components are initializing their state (eg, when
@@ -207,7 +207,7 @@ export default class ChipSet extends Component {
         }
         if (!this.volumeInit) this.printf(MESSAGE.NONE, "note: speaker disabled\n");
 
-        /*
+        /**
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
          */
         this.nTicksDivisor = (cpu.getBaseCyclesPerSecond() / ChipSet.TIMER_TICKS_PER_SEC);
@@ -241,7 +241,7 @@ export default class ChipSet extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 let chipset = this;
-                /*
+                /**
                  * TODO: Add more "dumpers" (eg, for DMA, RTC, 8042, etc)
                  */
                 dbg.messageDump(MESSAGE.PIC, function onDumpPIC() {
@@ -342,20 +342,20 @@ export default class ChipSet extends Component {
      */
     reset(fHard)
     {
-        /*
+        /**
          * We propagate the initial DIP switch values to the current DIP switch values on reset;
          * the user is only allowed to tweak the initial values, which require a reset to take effect.
          */
         let i;
         this.updateDIPSwitches();
 
-        /*
+        /**
          * If the CPU is reset first, its resetFPU() function call to getDIPCoprocessor() may return
          * stale information, so now that DIP switches have been updated, we call resetFPU() from here as well.
          */
         if (this.cpu) this.cpu.resetFPU();
 
-        /*
+        /**
          * DMA (Direct Memory Access) Controller initialization
          */
         this.aDMACs = new Array(this.cDMACs);
@@ -363,7 +363,7 @@ export default class ChipSet extends Component {
             this.initDMAController(i);
         }
 
-        /*
+        /**
          * PIC (Programmable Interrupt Controller) initialization
          */
         this.aPICs = new Array(this.cPICs);
@@ -372,7 +372,7 @@ export default class ChipSet extends Component {
             this.initPIC(ChipSet.PIC1.INDEX, ChipSet.PIC1.PORT_LO);
         }
 
-        /*
+        /**
          * PIT (Programmable Interval Timer) initialization
          *
          * Although the DeskPro 386 refers to the timers in the first PIT as "Timer 1, Counter 0",
@@ -388,7 +388,7 @@ export default class ChipSet extends Component {
             this.initTimer(i);
         }
 
-        /*
+        /**
          * PPI and other misc ports
          */
         this.bPPIA = null;              // tracks writes to port 0x60, in case PPI_CTRL.A_IN is not set
@@ -402,11 +402,11 @@ export default class ChipSet extends Component {
             this.b8041Status = 0;       // similar to b8042Status (but apparently only bits 0 and 1 are used)
         }
 
-        /*
+        /**
          * ChipSet state introduced by the MODEL_5170
          */
         if (this.model >= ChipSet.MODEL_5170) {
-            /*
+            /**
              * The 8042 input buffer is treated as a "command byte" when written via port 0x64 and as a "data byte"
              * when written via port 0x60.  So, whenever the C8042.CMD.WRITE_CMD "command byte" is written to the input
              * buffer, the subsequent command data byte is saved in b8042CmdData.  Similarly, for C8042.CMD.WRITE_OUTPORT,
@@ -420,7 +420,7 @@ export default class ChipSet extends Component {
             this.b8042CmdData = ChipSet.C8042.DATA.CMD.NO_CLOCK;
             this.b8042OutBuff = 0;
 
-            /*
+            /**
              * TODO: Provide more control over these 8042 "Input Port" bits (eg, the keyboard lock)
              */
             this.b8042InPort = ChipSet.C8042.INPORT.MFG_OFF | ChipSet.C8042.INPORT.KBD_UNLOCKED;
@@ -443,7 +443,7 @@ export default class ChipSet extends Component {
 
             this.bCMOSAddr = 0;         // NMI is enabled, since the ChipSet.CMOS.ADDR.NMI_DISABLE bit is not set in bCMOSAddr
 
-            /*
+            /**
              * Now that we call reset() from the ChipSet constructor, enabling other components to update
              * their own CMOS information as needed, we must distinguish between the initial ("hard") reset
              * and any later ("soft") resets (eg, from powerUp() calls), and make sure the latter preserves
@@ -455,7 +455,7 @@ export default class ChipSet extends Component {
 
             this.initRTCTime(this.sDateRTC);
 
-            /*
+            /**
              * initCMOSData() will initialize a variety of "legacy" CMOS bytes, but it will NOT overwrite any memory
              * size or hard drive type information that might have been set, via addCMOSMemory() or setCMOSDriveType().
              */
@@ -463,7 +463,7 @@ export default class ChipSet extends Component {
         }
 
         if (DEBUGGER && MAXDEBUG) {
-            /*
+            /**
              * Arrays for interrupt counts (one count per IRQ) and timer data
              */
             this.acInterrupts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -496,7 +496,7 @@ export default class ChipSet extends Component {
      */
     initRTCTime(sDate)
     {
-        /*
+        /**
          * NOTE: I've already been burned once by a JavaScript library function that did NOT treat an undefined
          * parameter (ie, a parameter === undefined) the same as an omitted parameter (eg, the async parameter in
          * xmlHTTP.open() in IE), so I'm taking no chances here: if sDate is undefined, then explicitly call Date()
@@ -504,7 +504,7 @@ export default class ChipSet extends Component {
          */
         let date = sDate? new Date(sDate) : new Date();
 
-        /*
+        /**
          * Example of a valid Date string:
          *
          *      2014-10-01T08:00:00 (interpreted as GMT, resulting in "Wed Oct 01 2014 01:00:00 GMT-0700 (PDT)")
@@ -549,7 +549,7 @@ export default class ChipSet extends Component {
         this.nRTCCyclesLastUpdate = this.nRTCCyclesNextUpdate = 0;
         this.nRTCPeriodsPerSecond = this.nRTCCyclesPerPeriod = null;
 
-        /*
+        /**
          * Return the number of seconds since midnight that have been programmed into the RTC, so that the
          * caller can easily convert that into TIMER_LOW/TIMER_HIGH values for the ROM BIOS data area, if needed.
          */
@@ -582,7 +582,7 @@ export default class ChipSet extends Component {
                 }
             }
             if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.BINARY)) {
-                /*
+                /**
                  * We're in BCD mode, so we must convert b from BINARY to BCD.  But first:
                  *
                  *      If b is a 12-hour value (ie, we're in 12-hour mode) AND the hour is a PM value
@@ -597,7 +597,7 @@ export default class ChipSet extends Component {
             }
         } else {
             if (iRTC == ChipSet.CMOS.ADDR.STATUSA) {
-                /*
+                /**
                  * Make sure that the "Update-In-Progress" bit we set in updateRTCTime() doesn't stay set for
                  * more than one read.
                  */
@@ -621,7 +621,7 @@ export default class ChipSet extends Component {
         if (iRTC < ChipSet.CMOS.ADDR.STATUSA) {
             let fBCD = false;
             if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.BINARY)) {
-                /*
+                /**
                  * We're in BCD mode, so we must convert b from BCD to BINARY (we assume it's valid
                  * BCD; ie, that both nibbles contain only 0-9, not A-F).
                  */
@@ -630,7 +630,7 @@ export default class ChipSet extends Component {
             }
             if (iRTC == ChipSet.CMOS.ADDR.RTC_HOUR || iRTC == ChipSet.CMOS.ADDR.RTC_HOUR_ALARM) {
                 if (fBCD) {
-                    /*
+                    /**
                      * If the original BCD hour was 0x81-0x92, then the previous BINARY-to-BCD conversion
                      * transformed it to 0x51-0x5C, so we must add 0x30.
                      */
@@ -723,7 +723,7 @@ export default class ChipSet extends Component {
         let nCyclesPerSecond = this.cpu.getBaseCyclesPerSecond();
         let nCyclesUpdate = this.cpu.getCycles(this.fScaleTimers);
 
-        /*
+        /**
          * We must arrange for the very first calcRTCCyclePeriod() call to occur here, on the very first
          * updateRTCTime() call, because this is the first point we can be guaranteed that CPU cycle counts
          * are initialized (the CPU is the last component to be powered up/restored).
@@ -733,14 +733,14 @@ export default class ChipSet extends Component {
          */
         if (this.nRTCCyclesPerPeriod == null) this.calcRTCCyclePeriod();
 
-        /*
+        /**
          * Step 1: Deal with Periodic Interrupts
          */
         if (nCyclesUpdate >= this.nRTCCyclesNextUpdate) {
             let bPrev = this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC];
             this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.PF;
             if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.PIE) {
-                /*
+                /**
                  * When PIE is set, setBurstCycles() should be getting called as needed to ensure
                  * that updateRTCTime() is called more frequently, so let's assert that we don't have
                  * an excess of cycles and thus possibly some missed Periodic Interrupts.
@@ -756,7 +756,7 @@ export default class ChipSet extends Component {
                 }
                 this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
                 this.setIRR(ChipSet.IRQ.RTC);
-                /*
+                /**
                  * We could also call setRTCCycleLimit() at this point, but I don't think there's any
                  * benefit until the interrupt had been acknowledged and STATUSC has been read, thereby
                  * clearing the way for another Periodic Interrupt; it seems to me that when STATUSC
@@ -766,7 +766,7 @@ export default class ChipSet extends Component {
             this.nRTCCyclesNextUpdate = nCyclesUpdate + this.nRTCCyclesPerPeriod;
         }
 
-        /*
+        /**
          * Step 2: Deal with Alarm Interrupts
          */
         if (this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] == this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC_ALARM]) {
@@ -781,14 +781,14 @@ export default class ChipSet extends Component {
             }
         }
 
-        /*
+        /**
          * Step 3: Update the RTC date/time and deal with Update Interrupts
          */
         let nCyclesDelta = nCyclesUpdate - this.nRTCCyclesLastUpdate;
         // DEBUG: this.assert(nCyclesDelta >= 0);
         let nSecondsDelta = Math.floor(nCyclesDelta / nCyclesPerSecond);
 
-        /*
+        /**
          * We trust that updateRTCTime() is being called as part of updateAllTimers(), and is therefore
          * being called often enough to ensure that nSecondsDelta will never be greater than one.  In fact,
          * it would always be LESS than one if it weren't also for the fact that we plow any "unused" cycles
@@ -797,7 +797,7 @@ export default class ChipSet extends Component {
          */
         // DEBUG: this.assert(nSecondsDelta <= 1);
 
-        /*
+        /**
          * Make sure that CMOS.STATUSB.SET isn't set; if it is, then the once-per-second RTC updates must be
          * disabled so that software can write new RTC date/time values without interference.
          */
@@ -823,7 +823,7 @@ export default class ChipSet extends Component {
                 }
             }
 
-            /*
+            /**
              * Obviously, setting the "Update-In-Progress" bit now might seem rather pointless, since we just
              * updated the RTC "atomically" as far as the machine is concerned; however, the bit must be set at
              * at some point, in order to make the MODEL_5170 BIOS ("POST2_RTCUP") happy.
@@ -853,7 +853,7 @@ export default class ChipSet extends Component {
      */
     initCMOSData()
     {
-        /*
+        /**
          * On all reset() calls, the RAM component(s) will (re)add their totals, so we have to make sure that
          * the addition always starts with 0.  That also means that ChipSet must always be initialized before RAM.
          */
@@ -862,7 +862,7 @@ export default class ChipSet extends Component {
             this.abCMOSData[iCMOS] = 0;
         }
 
-        /*
+        /**
          * Make sure all the "checksummed" CMOS bytes are initialized (not just the handful we set below) to ensure
          * that the checksum will be valid.
          */
@@ -870,14 +870,14 @@ export default class ChipSet extends Component {
             if (this.abCMOSData[iCMOS] === undefined) this.abCMOSData[iCMOS] = 0;
         }
 
-        /*
+        /**
          * We propagate all compatible "legacy" SW1 bits to the CMOS.EQUIP byte using the old SW masks, but any further
          * access to CMOS.ADDR.EQUIP should use the new CMOS_EQUIP flags (eg, CMOS.EQUIP.FPU, CMOS.EQUIP.MONITOR.CGA80, etc).
          */
         this.abCMOSData[ChipSet.CMOS.ADDR.EQUIP] = this.getDIPLegacyBits(0);
         this.abCMOSData[ChipSet.CMOS.ADDR.FDRIVE] = (this.getDIPFloppyDriveType(0) << 4) | this.getDIPFloppyDriveType(1);
 
-        /*
+        /**
          * The final step is calculating the CMOS checksum, which we then store into the CMOS as a courtesy, so that the
          * user doesn't get unnecessary CMOS errors.
          */
@@ -986,7 +986,7 @@ export default class ChipSet extends Component {
     syncRTCTime()
     {
         if (this.nRTCSeconds != undefined) {
-            /*
+            /**
              * The 8254 ("PIT") is wired to a clock with a frequency of 1.193182MHz, and the PIT is configured
              * to divide that by 65536, which gives us 18.2065 interrupts ("ticks") per second.
              */
@@ -1111,7 +1111,7 @@ export default class ChipSet extends Component {
             this.abCMOSData = a[3];
             this.nRTCCyclesLastUpdate = a[4];
             this.nRTCCyclesNextUpdate = a[5];
-            /*
+            /**
              * TODO: Decide whether restore() should faithfully preserve the RTC date/time that save() saved,
              * or always reinitialize the date/time, or give the user (or the machine configuration) the option.
              *
@@ -1133,7 +1133,7 @@ export default class ChipSet extends Component {
      */
     start()
     {
-        /*
+        /**
          * Currently, all we do with this notification is allow the speaker to make noise.
          */
         this.setSpeaker();
@@ -1148,7 +1148,7 @@ export default class ChipSet extends Component {
      */
     stop()
     {
-        /*
+        /**
          * Currently, all we do with this notification is prevent the speaker from making noise.
          */
         this.setSpeaker();
@@ -1502,7 +1502,7 @@ export default class ChipSet extends Component {
                     for (let v in switchGroup.VALUES) {
                         if (switchGroup.VALUES[v] == bits) {
                             value = v;
-                            /*
+                            /**
                              * We prefer numeric properties, and all switch definitions must provide them
                              * if their helper functions (eg, getDIPVideoMonitor()) expect numeric properties.
                              */
@@ -1683,7 +1683,7 @@ export default class ChipSet extends Component {
     {
         let b = bDefault;
         if (sBits) {
-            /*
+            /**
              * NOTE: We can't use parseInt() with a base of 2, because both bit order and bit sense are reversed.
              */
             b = 0;
@@ -1815,7 +1815,7 @@ export default class ChipSet extends Component {
                 aeCells[i].setAttribute("title", sLabel);
                 this.setDIPSwitchControl(aeCells[i], !(v & (0x1 << i)));
                 aeCells[i].onclick = function(chipset, eSwitch) {
-                    /*
+                    /**
                      * If we define the onclick handler below as "function(e)" instead of simply "function()", then we will
                      * also receive an Event object; however, IE reportedly requires that we examine a global (window.event)
                      * instead.  If that's true, and if we ever care to get more details about the click event, then define
@@ -1841,7 +1841,7 @@ export default class ChipSet extends Component {
         let controlDesc = this.bindings[ChipSet.CONTROLS.SWDESC];
         if (controlDesc != null) {
             let sText = "";
-            /*
+            /**
              * TODO: Monitor type 0 used to be "None" (ie, "No Monitor"), which was correct in a pre-EGA world,
              * but in the post-EGA world, it depends.  We should ask the Video component for a definitive answer.
              */
@@ -1951,7 +1951,7 @@ export default class ChipSet extends Component {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
-        /*
+        /**
          * Technically, aTimers[1].fOut is what drives DMA requests for DMA channel 0 (ChipSet.DMA_REFRESH),
          * every 15us, once the BIOS has initialized the channel's "mode" with MODE_SINGLE, INCREMENT, AUTOINIT,
          * and TYPE_READ (0x58) and initialized TIMER1 appropriately.
@@ -2012,7 +2012,7 @@ export default class ChipSet extends Component {
             this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
-        /*
+        /**
          * Technically, aTimers[1].fOut is what drives DMA requests for DMA channel 0 (ChipSet.DMA_REFRESH),
          * every 15us, once the BIOS has initialized the channel's "mode" with MODE_SINGLE, INCREMENT, AUTOINIT,
          * and TYPE_READ (0x58) and initialized TIMER1 appropriately.
@@ -2027,7 +2027,7 @@ export default class ChipSet extends Component {
                 channel.countCurrent[1]--;
                 if (channel.countCurrent[1] < 0) {
                     channel.countCurrent[1] = 0xff;
-                    /*
+                    /**
                      * This is the logical point to indicate Terminal Count (TC), but again, there's no need to be
                      * so particular; inDMAStatus() has its own logic for periodically signalling TC.
                      */
@@ -2084,7 +2084,7 @@ export default class ChipSet extends Component {
      */
     inDMAStatus(iDMAC, port, addrFrom)
     {
-        /*
+        /**
          * HACK: Unlike the MODEL_5150, the MODEL_5160 ROM BIOS checks DMA channel 0 for TC (@F000:E4DF)
          * after running a number of unrelated tests, since enough time would have passed for channel 0 to
          * have reached TC at least once.  So I simply OR in a hard-coded TC bit for channel 0 every time
@@ -2141,11 +2141,11 @@ export default class ChipSet extends Component {
         if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".REQ", undefined, true);
         }
-        /*
+        /**
          * Bits 0-1 contain the channel number
          */
         let iChannel = (bOut & 0x3);
-        /*
+        /**
          * Bit 2 is the request bit (0 to reset, 1 to set), which must be propagated to the corresponding bit (4-7) in the status register
          */
         let iChannelBit = ((bOut & 0x4) << (iChannel + 2));
@@ -2257,7 +2257,7 @@ export default class ChipSet extends Component {
         if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
             this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASTER_CLEAR", undefined, true);
         }
-        /*
+        /**
          * The value written to this port doesn't matter; any write triggers a "master clear" operation
          *
          * TODO: Can't we just call initDMAController(), which would also take care of clearing controller.bStatus?
@@ -2334,7 +2334,7 @@ export default class ChipSet extends Component {
      */
     outDMAPageSpare(iSpare, port, bOut, addrFrom)
     {
-        /*
+        /**
          * TODO: Remove this DEBUG-only DESKPRO386 code once we're done debugging DeskPro 386 ROMs;
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
@@ -2407,7 +2407,7 @@ export default class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * We can't simply slam done into channel.done; that would be fine if requestDMA() was called only by functions
          * like HDC.doRead() and HDC.doWrite(), but we're also called whenever a DMA channel is unmasked, and in those cases,
          * we need to preserve whatever handler may have been previously set.
@@ -2421,7 +2421,7 @@ export default class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * Let's try to do async DMA without asking the CPU for help...
          *
          *      this.cpu.setDMA(true);
@@ -2447,7 +2447,7 @@ export default class ChipSet extends Component {
                 channel.sAddrDebug = (DEBUG && DEBUGGER? null : undefined);
             }
         }
-        /*
+        /**
          * To support async DMA without requiring help from the CPU (ie, without relying upon cpu.setDMA()), we require that
          * the data transfer functions provide an fAsync parameter to their callbacks; fAsync must be true if the callback was
          * truly asynchronous (ie, it had to wait for a remote I/O request to finish), or false if the data was already available
@@ -2484,20 +2484,20 @@ export default class ChipSet extends Component {
                                     if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
-                                /*
+                                /**
                                  * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
                                  */
                                 b = 0xff;
                             }
                             if (!channel.masked && !channel.fError) {
                                 chipset.bus.setByte(addrCur, b);
-                                /*
+                                /**
                                  * WARNING: Do NOT assume that obj is valid; if the sector data was not found, there will be no obj.
                                  */
                                 if (BACKTRACK && obj) {
                                     if (!off && obj.file) {
                                         chipset.printf(MESSAGE.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
-                                        /*
+                                        /**
                                         if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
                                             chipset.cpu.stopCPU();
                                         }
@@ -2517,12 +2517,12 @@ export default class ChipSet extends Component {
                     }(addr));
                 }
                 else if (channel.type == ChipSet.DMA_MODE.TYPE_READ) {
-                    /*
+                    /**
                      * TODO: Determine whether we should support async dmaWrite() functions (currently not required)
                      */
                     b = chipset.bus.getByte(addr);
                     if (channel.fnTransfer.call(channel.component, channel.obj, b) < 0) {
-                        /*
+                        /**
                          * In this case, I think I have no choice but to terminate the DMA operation in response to a failure,
                          * because the ROM BIOS FDC.REG_DATA.CMD.FORMAT_TRACK command specifies a count that is MUCH too large
                          * (a side-effect of the ROM BIOS using the same "DMA_SETUP" code for reads, writes AND formats).
@@ -2531,7 +2531,7 @@ export default class ChipSet extends Component {
                     }
                 }
                 else if (channel.type == ChipSet.DMA_MODE.TYPE_VERIFY) {
-                    /*
+                    /**
                      * Originally, we did nothing here and just fell into updateDMA(); however, we actually need to probe for
                      * data even though we're not going to do anything with it, so that any data errors get flagged by the FDC.
                      *
@@ -2549,7 +2549,7 @@ export default class ChipSet extends Component {
                                     if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
                                     channel.fWarning = true;
                                 }
-                                /*
+                                /**
                                  * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
                                  */
                             }
@@ -2590,7 +2590,7 @@ export default class ChipSet extends Component {
                     if (channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
                 }
             }
-            /*
+            /**
              * In situations where an HDC DMA operation took too long, the Fixed Disk BIOS would give up, but the DMA operation would continue.
              *
              * TODO: Verify that the Fixed Disk BIOS shuts down (ie, re-masks) a DMA channel for failed requests, and that this handles those failures.
@@ -2602,7 +2602,7 @@ export default class ChipSet extends Component {
         let iDMAChannel = controller.nChannelBase + channel.iChannel;
         controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
 
-        /*
+        /**
          * EOP is supposed to automatically (re)mask the channel, unless it's set for auto-initialize.
          */
         if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) {
@@ -2620,7 +2620,7 @@ export default class ChipSet extends Component {
             channel.done = null;
         }
 
-        /*
+        /**
          * While it might make sense to call cpu.setDMA() here, it's simpler to let the CPU issue one more call
          * to chipset.checkDMA() and let the CPU update INTR.DMA on its own, based on the return value from checkDMA().
          */
@@ -2673,12 +2673,12 @@ export default class ChipSet extends Component {
             this.printIO(pic.port, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (bOut & ChipSet.PIC_LO.ICW1) {
-            /*
+            /**
              * This must be an ICW1...
              */
             pic.nICW = 0;
             pic.aICW[pic.nICW++] = bOut;
-            /*
+            /**
              * I used to do the rest of this initialization in outPICHi(), once all the ICW commands had been received,
              * but a closer reading of the 8259A spec indicates that that should happen now, on receipt on ICW1.
              *
@@ -2698,7 +2698,7 @@ export default class ChipSet extends Component {
              */
             pic.bIMR = 0x00;
             pic.bIRLow = 7;
-            /*
+            /**
              * TODO: I'm also zeroing both IRR and ISR, even though that's not actually mentioned as part of the ICW
              * sequence, because they need to be (re)initialized at some point.  However, if some component is currently
              * requesting an interrupt, what should I do about that?  Originally, I had decided to clear them ONLY if they
@@ -2706,30 +2706,31 @@ export default class ChipSet extends Component {
              * to unconditionally zeroing them.
              */
             pic.bIRR = pic.bISR = 0;
-            /*
+            /**
              * The spec also says that "Special Mask Mode is cleared and Status Read is set to IRR".  I attempt to insure
              * the latter, but as for special mask mode... well, that mode isn't supported yet.
              */
             pic.bOCW3 = ChipSet.PIC_LO.OCW3 | ChipSet.PIC_LO.OCW3_READ_IRR;
         }
         else if (!(bOut & ChipSet.PIC_LO.OCW3)) {
-            /*
+            /**
              * This must be an OCW2...
              */
             let bOCW2 = bOut & ChipSet.PIC_LO.OCW2_OP_MASK;
             if (bOCW2 & ChipSet.PIC_LO.OCW2_EOI) {
-                /*
+                /**
                  * This OCW2 must be an EOI command...
                  */
-                let nIRL, bIREnd = 0;
+                let nIRL;
+                let bIREnd = 0;
                 if ((bOCW2 & ChipSet.PIC_LO.OCW2_EOI_SPEC) == ChipSet.PIC_LO.OCW2_EOI_SPEC) {
-                    /*
+                    /**
                      * More "specifically", a specific EOI command...
                      */
                     nIRL = bOut & ChipSet.PIC_LO.OCW2_IR_LVL;
                     bIREnd = 1 << nIRL;
                 } else {
-                    /*
+                    /**
                      * Less "specifically", a non-specific EOI command.  The search for the highest priority in-service
                      * interrupt must start with whichever interrupt is opposite the lowest priority interrupt (normally 7,
                      * but technically whatever bIRLow is currently set to).  For example:
@@ -2762,7 +2763,7 @@ export default class ChipSet extends Component {
                         if (MAXDEBUG && this.dbg) this.dbg.stopCPU();
                     }
                 }
-                /*
+                /**
                  * TODO: Support EOI commands with automatic rotation (eg, ChipSet.PIC_LO.OCW2_EOI_ROT and ChipSet.PIC_LO.OCW2_EOI_ROTSPEC)
                  */
                 if (bOCW2 & ChipSet.PIC_LO.OCW2_SET_ROTAUTO) {
@@ -2770,19 +2771,19 @@ export default class ChipSet extends Component {
                 }
             }
             else  if (bOCW2 == ChipSet.PIC_LO.OCW2_SET_PRI) {
-                /*
+                /**
                  * This OCW2 changes the lowest priority interrupt to the specified level (the default is 7)
                  */
                 pic.bIRLow = bOut & ChipSet.PIC_LO.OCW2_IR_LVL;
             }
             else {
-                /*
+                /**
                  * TODO: Remaining commands to support: ChipSet.PIC_LO.OCW2_SET_ROTAUTO and ChipSet.PIC_LO.OCW2_CLR_ROTAUTO
                  */
                 this.printf(MESSAGE.PIC + MESSAGE.WARNING + MESSAGE.ADDR, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
             }
         } else {
-            /*
+            /**
              * This must be an OCW3 request. If it's a "Read Register" command (PIC_LO.OCW3_READ_CMD), inPICLo() will take care it.
              *
              * TODO: If OCW3 specified a "Poll" command (PIC_LO.OCW3_POLL_CMD) or a "Special Mask Mode" command (PIC_LO.OCW3_SMM_CMD),
@@ -2837,15 +2838,15 @@ export default class ChipSet extends Component {
             }
         }
         else {
-            /*
+            /**
              * We have all our ICW "words" (ie, bytes), so this must be an OCW1 write (which is simply an IMR write)
              */
             pic.bIMR = bOut;
-            /*
+            /**
              * See the CPU's delayINTR() function for an explanation of why this explicit delay is necessary.
              */
             this.cpu.delayINTR();
-            /*
+            /**
              * Alas, we need a longer delay for the MODEL_5170's "KBD_RESET" function (F000:17D2), which must drop
              * into a loop and decrement CX at least once after unmasking the KBD IRQ.  The "KBD_RESET" function on
              * previous models could be handled with a 4-instruction delay provided by the Keyboard.resetDevice() call
@@ -2879,7 +2880,7 @@ export default class ChipSet extends Component {
      */
     setIRR(nIRQ, nDelay)
     {
-        /*
+        /**
          * Whenever the Video component needs to signal a vertical retrace interrupt, it specifies ChipSet.IRQ.VID
          * (aka IRQ 2) and it is blissfully ignorant of whether the machine has one or two PICs; unfortunately, in the
          * case of two PICs (master and slave), its interrupt is supposed to come through IRQ 9 on the slave, since
@@ -2927,7 +2928,7 @@ export default class ChipSet extends Component {
      */
     checkIRR(nDelay)
     {
-        /*
+        /**
          * Look for any IRR bits that aren't masked and aren't already in service; in theory, all we'd have to
          * check is the master PIC (which is the *only* PIC on pre-5170 models), because when any IRQs are set or
          * cleared on the slave, that would automatically be reflected in IRQ.SLAVE on the master; that's what
@@ -2989,14 +2990,14 @@ export default class ChipSet extends Component {
     {
         if (iPIC === undefined) iPIC = 0;
 
-        /*
+        /**
          * Look for any IRR bits that aren't masked and aren't already in service...
          */
         let nIDT = -1;
         let pic = this.aPICs[iPIC];
         if (!pic.nDelay) {
             let bIR = pic.bIRR & ((pic.bISR | pic.bIMR) ^ 0xff);
-            /*
+            /**
              * The search for the next highest priority requested interrupt (that's also not in-service and not masked)
              * must start with whichever interrupt is opposite the lowest priority interrupt (normally 7, but technically
              * whatever bIRLow is currently set to).  For example:
@@ -3016,7 +3017,7 @@ export default class ChipSet extends Component {
                 nIRL &= 0x7;
                 let bIRNext = 1 << nIRL;
 
-                /*
+                /**
                  * If we encounter an interrupt that's still in-service BEFORE we encounter a requested interrupt,
                  * then we're done; we must allow a higher priority in-service interrupt to finish before acknowledging
                  * any lower priority interrupts.
@@ -3026,12 +3027,12 @@ export default class ChipSet extends Component {
                 if (bIR & bIRNext) {
 
                     if (!iPIC && nIRL == ChipSet.IRQ.SLAVE && this.aPICs.length > 1) {
-                        /*
+                        /**
                          * Slave interrupts are tied to the master PIC on IRQ2; query the slave PIC for the vector #
                          */
                         nIDT = this.getIRRVector(1);
                     } else {
-                        /*
+                        /**
                          * Get the starting IDT vector # from ICW2 and add the IR level to obtain the target IDT vector #
                          */
                         nIDT = pic.aICW[1] + nIRL;
@@ -3040,7 +3041,7 @@ export default class ChipSet extends Component {
                     if (nIDT >= 0) {
                         pic.bISR |= bIRNext;
 
-                        /*
+                        /**
                          * Setting the ISR implies clearing the IRR, but clearIRR() has side-effects we don't want
                          * (eg, clearing the slave IRQ, notifying the CPU, etc), so we clear the IRR ourselves.
                          */
@@ -3072,7 +3073,7 @@ export default class ChipSet extends Component {
         if (this.model >= ChipSet.MODEL_5170) {
             this.setIRR(ChipSet.IRQ.FPU);
         } else {
-            /*
+            /**
              * TODO: Determine whether we need to maintain an "Active NMI" state; ie, if NMI.DISABLE is cleared
              * later, and the FPU coprocessor is still indicating an error condition, should we then generate an NMI?
              */
@@ -3092,7 +3093,7 @@ export default class ChipSet extends Component {
         if (this.model >= ChipSet.MODEL_5170) {
             this.clearIRR(ChipSet.IRQ.FPU);
         } else {
-            /*
+            /**
              * TODO: If we maintain an "Active NMI" state, then we will need code here to clear that state, as well
              * as code in outNMI() to clear that state and generate an NMI as needed.
              */
@@ -3171,7 +3172,7 @@ export default class ChipSet extends Component {
         timer.countInit[timer.countIndex++] = bOut;
 
         if (timer.countIndex == timer.countBytes) {
-            /*
+            /**
              * In general, writing a new count to a timer that's already counting isn't supposed to affect the current
              * count, with the notable exceptions of MODE0 and MODE4.
              */
@@ -3182,7 +3183,7 @@ export default class ChipSet extends Component {
                 timer.nCyclesStart = this.cpu.getCycles(this.fScaleTimers);
                 timer.fCounting = true;
 
-                /*
+                /**
                  * I believe MODE0 is the only mode where OUT (fOUT) starts out low (false); for the rest of the modes,
                  * OUT (fOUT) starts high (true).  It's also my understanding that the way edge-triggered interrupts work
                  * on the original PC is that an interrupt is requested only when the corresponding OUT transitions from
@@ -3191,7 +3192,7 @@ export default class ChipSet extends Component {
                 timer.fOUT = (timer.mode != ChipSet.PIT_CTRL.MODE0);
 
                 if (iPIT == ChipSet.PIT0.INDEX && iPITTimer == ChipSet.PIT0.TIMER0) {
-                    /*
+                    /**
                      * TODO: Determine if there are situations/modes where I should NOT automatically clear IRQ0 on behalf of TIMER0.
                      */
                     this.clearIRR(ChipSet.IRQ.TIMER0);
@@ -3218,7 +3219,7 @@ export default class ChipSet extends Component {
     inTimerCtrl(iPIT, port, addrFrom)
     {
         this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
-        /*
+        /**
          * NOTE: Even though reads to port 0x43 are undefined (I think), I'm going to "define" it
          * as returning the last value written, purely for the Debugger's benefit.
          */
@@ -3238,7 +3239,7 @@ export default class ChipSet extends Component {
     {
         this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, MESSAGE.TIMER);
 
-        /*
+        /**
          * Extract the SC (Select Counter) bits.
          */
         let iBaseTimer = 0;
@@ -3250,7 +3251,7 @@ export default class ChipSet extends Component {
             this.bPIT1Ctrl = bOut;
         }
 
-        /*
+        /**
          * Check for the Read-Back command and process as needed.
          */
         if (iPITTimer == ChipSet.PIT_CTRL.SC_BACK) {
@@ -3271,12 +3272,12 @@ export default class ChipSet extends Component {
             return;
         }
 
-        /*
+        /**
          * Convert the SC (Select Counter) bits into an iPITTimer index (0-2).
          */
         iPITTimer >>= ChipSet.PIT_CTRL.SC_SHIFT;
 
-        /*
+        /**
          * Extract BCD (bit 0), MODE (bits 1-3), and RW (bits 4-5), which we simply store as-is (see setTimerMode).
          */
         let bcd = (bOut & ChipSet.PIT_CTRL.BCD);
@@ -3284,7 +3285,7 @@ export default class ChipSet extends Component {
         let rw = (bOut & ChipSet.PIT_CTRL.RW);
 
         if (rw == ChipSet.PIT_CTRL.RW_LATCH) {
-            /*
+            /**
              * Of all the RW bit combinations, this is the only one that "countermands" normal control register
              * processing (the BCD and MODE bits are "don't care").
              */
@@ -3293,7 +3294,7 @@ export default class ChipSet extends Component {
         else {
             this.setTimerMode(iBaseTimer + iPITTimer, bcd, mode, rw);
 
-            /*
+            /**
              * The 5150 ROM BIOS code @F000:E285 ("TEST.7") would fail after a warm boot (eg, after a CTRL-ALT-DEL) because
              * it assumed that no TIMER0 interrupt would occur between the point it unmasked the TIMER0 interrupt and the
              * point it started reprogramming TIMER0.
@@ -3312,7 +3313,7 @@ export default class ChipSet extends Component {
              */
             if (iPIT == ChipSet.PIT0.INDEX && iPITTimer == ChipSet.PIT0.TIMER0) this.clearIRR(ChipSet.IRQ.TIMER0);
 
-            /*
+            /**
              * Another TIMER0 HACK: The "CASSETTE DATA WRAP TEST" @F000:E51E occasionally reports an error when the second of
              * two TIMER0 counts it latches is greater than the first.  You would think the ROM BIOS would expect this, since
              * TIMER0 can reload its count at any time.  Is the ROM BIOS assuming that TIMER0 was initialized sufficiently
@@ -3403,12 +3404,12 @@ export default class ChipSet extends Component {
      */
     latchTimerCount(iTimer)
     {
-        /*
+        /**
          * Update the timer's current count.
          */
         this.updateTimer(iTimer);
 
-        /*
+        /**
          * Now we can latch it.
          */
         let timer = this.aTimers[iTimer];
@@ -3416,7 +3417,7 @@ export default class ChipSet extends Component {
         timer.countLatched[1] = timer.countCurrent[1];
         timer.fCountLatched = true;
 
-        /*
+        /**
          * VERIFY: That a latch request resets the timer index.
          */
         this.resetTimerIndex(iTimer);
@@ -3503,12 +3504,12 @@ export default class ChipSet extends Component {
     {
         let timer = this.aTimers[iTimer];
 
-        /*
+        /**
          * Every timer's counting state is gated by its own fCounting flag; TIMER2 is further gated by PPI_B's
          * CLK_TIMER2 bit.
          */
         if (timer.fCounting && (iTimer != ChipSet.PIT0.TIMER2 || (this.bPPIB & ChipSet.PPI_B.CLK_TIMER2))) {
-            /*
+            /**
              * We determine the current timer count based on how many instruction cycles have elapsed since we started
              * the timer.  Timers are supposed to be "ticking" at a rate of 1193181.8181 times per second, which is
              * the system clock of 14.31818Mhz, divided by 12.
@@ -3534,7 +3535,7 @@ export default class ChipSet extends Component {
              */
             let nCycles = this.cpu.getCycles(this.fScaleTimers);
 
-            /*
+            /**
              * Instead of maintaining partial tick counts, we calculate a fresh countCurrent from countStart every
              * time we're called, using the cycle count recorded when the timer was initialized.  countStart is set
              * to countInit when fCounting is first set, and then it is refreshed from countInit at the expiration of
@@ -3559,7 +3560,7 @@ export default class ChipSet extends Component {
             let fFired = false;
             let count = countStart - ticksElapsed;
 
-            /*
+            /**
              * NOTE: This mode is used by ROM BIOS test code that wants to verify timer interrupts are arriving
              * neither too slowly nor too quickly.  As a result, I've had to add some corresponding trickery
              * in outTimer() to force interrupt simulation immediately after a low initial count (0x16) has been set.
@@ -3577,7 +3578,7 @@ export default class ChipSet extends Component {
                     }
                 }
             }
-            /*
+            /**
              * Early implementation of this mode was minimal because when using this mode, the ROM BIOS simply wanted
              * to see the count changing; it wasn't looking for interrupts.  See ROM BIOS "TEST.03" code @F000:E0DE,
              * where TIMER1 is programmed for MODE2, LSB (the same settings, incidentally, used immediately afterward
@@ -3598,7 +3599,7 @@ export default class ChipSet extends Component {
                 if (count <= 0) {
                     count = countInit + count;
                     if (count <= 0) {
-                        /*
+                        /**
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
                         if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=2, underflow=%d\n", iTimer, count);
@@ -3614,7 +3615,7 @@ export default class ChipSet extends Component {
                     }
                 }
             }
-            /*
+            /**
              * NOTE: This is the normal mode for TIMER0, which the ROM BIOS uses to generate h/w interrupts roughly
              * 18.2 times per second.  In this mode, the count must be decremented twice as fast (hence the extra ticks
              * subtraction below, in addition to the subtraction above), but IRQ_TIMER0 is raised only on alternate
@@ -3630,7 +3631,7 @@ export default class ChipSet extends Component {
                     timer.fOUT = !timer.fOUT;
                     count = countInit + count;
                     if (count <= 0) {
-                        /*
+                        /**
                          * TODO: Consider whether we ever care about TIMER1 or TIMER2 underflow
                          */
                         if (DEBUG && !iTimer) this.printf(MESSAGE.TIMER, "updateTimer(%d): mode=3, underflow=%d\n", iTimer, count);
@@ -3782,7 +3783,7 @@ export default class ChipSet extends Component {
     {
         let toggled = (bOut ^ this.bPPIB);
         if (toggled & ChipSet.PPI_B.CLK_TIMER2) {
-            /*
+            /**
              * If TIMER2 is about to be "declocked", then we should update the timer NOW, because any attempt to read
              * timer's count AFTER it has been declocked will not trigger an update.  This was a problem for the following
              * code in SUPERPCK.EXE from DR DOS 6.00:
@@ -3824,7 +3825,7 @@ export default class ChipSet extends Component {
         }
         this.bPPIB = bOut;
         if (toggled & ChipSet.PPI_B.SPK_TIMER2) {
-            /*
+            /**
              * Originally, this code didn't catch the "ERROR_BEEP" case @F000:EC34, which first turns both PPI_B.CLK_TIMER2 (0x01)
              * and PPI_B.SPK_TIMER2 (0x02) off, then turns on only PPI_B.SPK_TIMER2 (0x02), then restores the original port value.
              *
@@ -3848,18 +3849,18 @@ export default class ChipSet extends Component {
     {
         let b = 0;
 
-        /*
+        /**
          * If you ever wanted to simulate I/O channel errors or R/W memory parity errors, you could
          * add either PPI_C.IO_CHANNEL_CHK (0x40) or PPI_C.RW_PARITY_CHK (0x80) to the return value (b).
          */
         if ((this.model|0) == ChipSet.MODEL_4860) {
             b |= this.bNMI & ChipSet.NMI.KBD_LATCH;
-            /*
+            /**
              * We're going to hard-code the rest of the PCjr settings for now, including NOT setting the NO_KBD_CABLE
              * bit, on the theory that if we don't have to deal with IR hardware emulation, so much the better.
              */
             b |= ChipSet.PPI_C.NO_MODEM | ChipSet.PPI_C.NO_DISKETTE | ChipSet.PPI_C.NO_MEMEXP;
-            /*
+            /**
              * I'm just guessing at how keyboard data is "clocked" into the the KBD_DATA bit; this will be revisited.
              */
             b |= (this.bKbdData & 0x1)? ChipSet.PPI_C.KBD_DATA : 0;
@@ -3890,7 +3891,7 @@ export default class ChipSet extends Component {
             }
         }
 
-        /*
+        /**
          * The ROM BIOS polls this port incessantly during its memory tests, checking for memory parity errors
          * (which of course we never report), so you must use both MESSAGE.PORT and MESSAGE.CHIPSET.
          */
@@ -4083,7 +4084,7 @@ export default class ChipSet extends Component {
                 this.set8042OutPort(bOut);
                 break;
 
-            /*
+            /**
              * This case is reserved for command bytes that the 8042 is not expecting, which should therefore be passed
              * on to the Keyboard itself.
              *
@@ -4167,7 +4168,7 @@ export default class ChipSet extends Component {
      */
     in8042RWReg(port, addrFrom)
     {
-        /*
+        /**
          * Normally, we return whatever was last written to this port, but we do need to mask the
          * two upper-most bits (C8042.RWREG.NMI_ERROR), as those are output-only bits used to signal
          * parity errors.
@@ -4192,7 +4193,7 @@ export default class ChipSet extends Component {
          * is the only choice that also satisfies the pre-"TEST.11A" test as well.
          */
         let b = this.bPPIB & ~(ChipSet.C8042.RWREG.NMI_ERROR | ChipSet.C8042.RWREG.REFRESH_BIT) | ((this.cpu.getCycles() & 0x40)? ChipSet.C8042.RWREG.REFRESH_BIT : 0);
-        /*
+        /**
          * Thanks to the WAITF function, this has become a very "busy" port, so if this generates too
          * many messages, try adding MESSAGE.WARNING to the criteria.
          */
@@ -4226,7 +4227,7 @@ export default class ChipSet extends Component {
     {
         this.printIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, MESSAGE.C8042);
         let b = this.b8042Status & 0xff;
-        /*
+        /**
          * There's code in the 5170 BIOS (F000:03BF) that writes an 8042 command (0xAA), waits for
          * C8042.STATUS.INBUFF_FULL to go clear (which it always is, because we always accept commands
          * immediately), then checks C8042.STATUS.OUTBUFF_FULL and performs a "flush" on port 0x60 if
@@ -4245,7 +4246,7 @@ export default class ChipSet extends Component {
             this.b8042Status |= ChipSet.C8042.STATUS.OUTBUFF_FULL;
             this.b8042Status &= ~ChipSet.C8042.STATUS.OUTBUFF_DELAY;
         }
-        /*
+        /**
          * I added this for Windows 95's VMM keyboard driver for DOS sessions, which differs from the keyboard
          * driver for protected-mode applications (see the keyboard's setEnabled() function for more details).
          *
@@ -4283,7 +4284,7 @@ export default class ChipSet extends Component {
         let bPulseBits = 0;
         if (this.b8042InBuff >= ChipSet.C8042.CMD.PULSE_OUTPORT) {
             bPulseBits = (this.b8042InBuff ^ 0xf);
-            /*
+            /**
              * Now that we have isolated the bit(s) to pulse, map all pulse commands to C8042.CMD.PULSE_OUTPORT
              */
             this.b8042InBuff = ChipSet.C8042.CMD.PULSE_OUTPORT;
@@ -4295,7 +4296,7 @@ export default class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.WRITE_CMD:       // 0x60
-            /*
+            /**
              * No further action required for this command; more data is expected via out8042InBuffData()
              */
             break;
@@ -4303,7 +4304,7 @@ export default class ChipSet extends Component {
         case ChipSet.C8042.CMD.DISABLE_KBD:     // 0xAD
             this.set8042CmdData(this.b8042CmdData | ChipSet.C8042.DATA.CMD.NO_CLOCK);
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "keyboard disabled\n");
-            /*
+            /**
              * NOTE: The MODEL_5170 BIOS calls "KBD_RESET" (F000:17D2) while the keyboard interface is disabled,
              * yet we must still deliver the Keyboard's CMDRES.BAT_OK response code?  Seems like an odd thing for
              * a "disabled interface" to do.
@@ -4325,7 +4326,7 @@ export default class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.INTF_TEST:       // 0xAB
-            /*
+            /**
              * TODO: Determine all the side-effects of the Interface Test, if any.
              */
             this.set8042OutBuff(ChipSet.C8042.DATA.INTF_TEST.OK);
@@ -4340,7 +4341,7 @@ export default class ChipSet extends Component {
             break;
 
         case ChipSet.C8042.CMD.WRITE_OUTPORT:   // 0xD1
-            /*
+            /**
              * No further action required for this command; more data is expected via out8042InBuffData()
              */
             break;
@@ -4351,7 +4352,7 @@ export default class ChipSet extends Component {
 
         case ChipSet.C8042.CMD.PULSE_OUTPORT:   // 0xF0-0xFF
             if (bPulseBits & 0x1) {
-                /*
+                /**
                  * Bit 0 of the 8042's output port is connected to RESET.  If it's pulsed, the processor resets.
                  * We don't want to clear *all* CPU state (eg, cycle counts), so we call cpu.resetRegs() instead
                  * of cpu.reset().
@@ -4381,7 +4382,7 @@ export default class ChipSet extends Component {
         this.assert(ChipSet.C8042.DATA.CMD.SYS_FLAG === ChipSet.C8042.STATUS.SYS_FLAG);
         this.b8042Status = (this.b8042Status & ~ChipSet.C8042.STATUS.SYS_FLAG) | (b & ChipSet.C8042.DATA.CMD.SYS_FLAG);
         if (this.kbd) {
-            /*
+            /**
              * This seems to be what the doctor ordered for the MODEL_5170_REV3 BIOS @F000:0A6D, where it
              * sends ChipSet.C8042.CMD.WRITE_CMD to port 0x64, followed by 0x4D to port 0x60, which clears NO_CLOCK
              * and enables the keyboard.  The BIOS then waits for OUTBUFF_FULL to be set, at which point it seems
@@ -4451,7 +4452,7 @@ export default class ChipSet extends Component {
         this.bus.setA20(!!(b & ChipSet.C8042.OUTPORT.A20_ON));
 
         if (!(b & ChipSet.C8042.OUTPORT.NO_RESET)) {
-            /*
+            /**
              * Bit 0 of the 8042's output port is connected to RESET.  Normally, it's "pulsed" with the
              * C8042.CMD.PULSE_OUTPORT command, so if a RESET is detected via this command, we should try to
              * determine if that's what the caller intended.
@@ -4570,13 +4571,13 @@ export default class ChipSet extends Component {
         }
         if (b) {
             if (!(this.b8042CmdData & ChipSet.C8042.DATA.CMD.NO_CLOCK)) {
-                /*
+                /**
                  * The next in8042OutBuff() will clear both of these bits and call kbd.checkBuffer(),
                  * which will call receiveKbdData() again if there's still keyboard data to process.
                  */
                 if (!(this.b8042Status & (ChipSet.C8042.STATUS.OUTBUFF_FULL | ChipSet.C8042.STATUS.OUTBUFF_DELAY))) {
                     this.set8042OutBuff(b, true);
-                    /*
+                    /**
                      * A delay of 4 instructions was originally requested as part of the the Keyboard's resetDevice()
                      * response, but a larger delay (120) is now needed for MODEL_5170 machines, per the discussion above.
                      */
@@ -4653,13 +4654,13 @@ export default class ChipSet extends Component {
         }
         if (addrFrom != null) {
             if (bAddr == ChipSet.CMOS.ADDR.STATUSC) {
-                /*
+                /**
                  * When software reads the STATUSC port, all interrupt bits (PF, AF, and UF) are automatically
                  * cleared, which in turn clears the IRQF bit, which in turn clears the IRQ.
                  */
                 this.abCMOSData[bAddr] &= ChipSet.CMOS.STATUSC.RESERVED;
                 if (bIn & ChipSet.CMOS.STATUSC.IRQF) this.clearIRR(ChipSet.IRQ.RTC);
-                /*
+                /**
                  * If we just cleared PF, and PIE is still set, then we need to make sure the next Periodic Interrupt
                  * occurs in a timely manner, too.
                  */
@@ -4792,7 +4793,7 @@ export default class ChipSet extends Component {
     {
         if (DEBUGGER) {
             if (this.messageEnabled(MESSAGE.INT) && this.dbg.messageInt(Interrupts.TIMER, addr)) {
-                /*
+                /**
                  * By computing AH now, we get the incoming AH value; if we computed it below, along with
                  * the rest of the register values, we'd get the outgoing AH value, which is not what we want.
                  */
@@ -4843,7 +4844,7 @@ export default class ChipSet extends Component {
         }
         let freq = Math.round(ChipSet.TIMER_TICKS_PER_SEC / this.getTimerInit(ChipSet.PIT0.TIMER2));
         if (freq < 20 || freq > 20000) {
-            /*
+            /**
              * Treat frequencies outside the normal hearing range (below 20hz or above 20Khz) as a clever
              * attempt to turn sound off.
              */
@@ -4851,7 +4852,7 @@ export default class ChipSet extends Component {
         }
         if (this.contextAudio) {
             if (fOn && this.startAudio()) {
-                /*
+                /**
                  * Instead of setting the frequency's 'value' property directly, as we used to do, we use the
                  * setValueAtTime() method, with a time of zero, as a work-around to avoid the "easing" (aka
                  * "de-zippering") of the frequency that browsers like to do.  Supposedly de-zippering is an
@@ -4890,7 +4891,7 @@ export default class ChipSet extends Component {
     startAudio(event)
     {
         if (this.contextAudio) {
-            /*
+            /**
              * NOTE: If the machine happened to enable its speaker *before* the user generated an event
              * (eg, touchstart) that resulted in a call here, then we're too late -- at least as far as iOS
              * devices are concerned, because those devices require the oscillator's start() method to be
@@ -5023,7 +5024,7 @@ export default class ChipSet extends Component {
     }
 }
 
-/*
+/**
  * Ports Overview
  * --------------
  *
@@ -5081,7 +5082,7 @@ export default class ChipSet extends Component {
  * FPU coprocessor interrupt line is no longer tied to NMI (it uses IRQ 13).
  */
 
-/*
+/**
  * Supported model numbers
  *
  * In general, when comparing this.model to "base" model numbers (ie, non-REV numbers), you should use
@@ -5117,7 +5118,7 @@ ChipSet.MODEL_5170_REV2         = 5170.2;   // used in reference to the 2nd 5170
 ChipSet.MODEL_5170_REV3         = 5170.3;   // used in reference to the 3rd 5170 ROM BIOS, dated Nov 15, 1985
 ChipSet.MODEL_5170_OTHER        = 5170.9;
 
-/*
+/**
  * Assorted non-IBM models (we don't put "IBM" in the IBM models, but non-IBM models should include the company name).
  */
 ChipSet.MODEL_CDP_MPC1600       = 5150.101; // Columbia Data Products MPC 1600 ("Copyright Columbia Data Products 1983, ROM/BIOS Ver 4.34")
@@ -5128,7 +5129,7 @@ ChipSet.MODEL_ZENITH_Z150       = 5160.150; // Zenith Data Systems Z-150 ("08/11
 
 ChipSet.MODEL_COMPAQ_DESKPRO386 = 5180;     // COMPAQ DeskPro 386 (COMPAQ's first 80386-based PC); should be > MODEL_5170
 
-/*
+/**
  * Last but not least, a complete list of supported model strings, and corresponding internal model numbers.
  */
 ChipSet.MODELS = {
@@ -5153,7 +5154,7 @@ ChipSet.CONTROLS = {
     SWDESC: "swdesc"
 };
 
-/*
+/**
  * Values returned by ChipSet.getDIPVideoMonitor()
  */
 ChipSet.MONITOR = {
@@ -5166,7 +5167,7 @@ ChipSet.MONITOR = {
     VGACOLOR:           7   // VGA Color Display
 };
 
-/*
+/**
  *  8237A DMA Controller (DMAC) I/O ports
  *
  *  MODEL_5150 and up uses DMA channel 0 for memory refresh cycles and channel 2 for the FDC.
@@ -5280,7 +5281,7 @@ ChipSet.DMA_REFRESH   = 0x00;   // DMA channel assigned to memory refresh
 ChipSet.DMA_FDC       = 0x02;   // DMA channel assigned to the Floppy Drive Controller (FDC)
 ChipSet.DMA_HDC       = 0x03;   // DMA channel assigned to the Hard Drive Controller (HDC; XTC only)
 
-/*
+/**
  * 8259A Programmable Interrupt Controller (PIC) I/O ports
  *
  * Internal registers:
@@ -5359,7 +5360,7 @@ ChipSet.PIC_HI = {              // ChipSet.PIC1.PORT_HI or ChipSet.PIC2.PORT_HI
     OCW1_IMR:           0xFF
 };
 
-/*
+/**
  * The priorities of IRQs 0-7 are normally high to low, unless the master PIC has been reprogrammed.
  * Also, if a slave PIC is present, the priorities of IRQs 8-15 fall between the priorities of IRQs 1 and 3.
  *
@@ -5394,7 +5395,7 @@ ChipSet.IRQ = {
     ATC2:               0x0F    // MODEL_5170 *can* use IRQ 15 for secondary ATC controller interrupts
 };
 
-/*
+/**
  * 8253 Programmable Interval Timer (PIT) I/O ports
  *
  * Although technically, a PIT provides 3 "counters" rather than 3 "timers", we have
@@ -5459,7 +5460,7 @@ ChipSet.PIT_CTRL = {
 
 ChipSet.TIMER_TICKS_PER_SEC = 1193181;
 
-/*
+/**
  * 8255A Programmable Peripheral Interface (PPI) I/O ports, for Cassette/Speaker/Keyboard/SW1/etc
  *
  * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI_A.PORT and PPI_C.PORT are INPUT ports
@@ -5511,7 +5512,7 @@ ChipSet.PPI_CTRL = {            // this.bPPICtrl (port 0x63)
     A_MODE:             0x60
 };
 
-/*
+/**
  * Switches Overview
  * -----------------
  *
@@ -5617,7 +5618,7 @@ ChipSet.PPI_SW = {
     }
 };
 
-/*
+/**
  * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
  * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
  * implementations, we now get and set DIP switch values according to SWITCH_TYPE, and rely on the
@@ -5648,7 +5649,7 @@ ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM] = {
     },
     LABEL: "Number of Floppy Drives"
 };
-/*
+/**
  * Notes on the 8087 Math Coprocessor (FPU)
  *
  * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
@@ -5727,7 +5728,7 @@ ChipSet.DIPSW[ChipSet.MODEL_5150][1][ChipSet.SWITCH_TYPE.EXPMEM] = {
         512:    0x10,
         544:    0x11,
         576:    0x12
-        /*
+        /**
          * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
          * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
          * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
@@ -5788,7 +5789,7 @@ ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPTYPE] = {
 ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPNUM] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM];
 ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.MONITOR];
 
-/*
+/**
  * 8041 Keyboard Controller I/O ports (MODEL_ATT_6300)
  *
  * The AT&T 6300 uses an 8041 for its Keyboard Controller, which has the following ports:
@@ -5810,7 +5811,7 @@ ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.
  *      0x80    Reset Interrupt Pending
  */
 
-/*
+/**
  * 8042 Keyboard Controller I/O ports (MODEL_5170)
  *
  * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI_A, although the BIOS also refers to it
@@ -5930,7 +5931,7 @@ ChipSet.C8042 = {
     }
 };
 
-/*
+/**
  * MC146818A RTC/CMOS Ports (MODEL_5170)
  *
  * Write a CMOS address to ChipSet.CMOS.ADDR.PORT, then read/write data from/to ChipSet.CMOS.DATA.PORT.
@@ -6017,7 +6018,7 @@ ChipSet.CMOS = {
         D0_MASK:        0xF0,   // Drive 0 type in high nibble
         D1_MASK:        0x0F,   // Drive 1 type in lower nibble
         NONE:           0,      // no drive
-        /*
+        /**
          * There's at least one floppy drive type that IBM didn't bother defining a CMOS drive type for:
          * single-sided drives that were only capable of storing 160Kb (or 180Kb when using 9 sectors/track).
          * So, as you can see in getDIPFloppyDriveType(), we lump all standard diskette capacities <= 360Kb
@@ -6028,14 +6029,14 @@ ChipSet.CMOS = {
         FD720:          3,      // 3.5-inch drive capable of storing 80 tracks and up to 9 sectors/track, 720Kb max
         FD1440:         4       // 3.5-inch drive capable of storing 80 tracks and up to 18 sectors/track, 1440Kb max
     },
-    /*
+    /**
      * HDRIVE types are defined by table in the HDC component, which uses setCMOSDriveType() to update the CMOS
      */
     HDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.HDRIVE]
         D0_MASK:        0xF0,   // Drive 0 type in high nibble
         D1_MASK:        0x0F    // Drive 1 type in lower nibble
     },
-    /*
+    /**
      * The CMOS equipment flags use the same format as the older PPI equipment flags
      */
     EQUIP: {                    // abCMOSData[ChipSet.CMOS.ADDR.EQUIP]
@@ -6045,7 +6046,7 @@ ChipSet.CMOS = {
     }
 };
 
-/*
+/**
  * DMA Page Registers
  *
  * The MODEL_5170 TechRef lists 0x80-0x9F as the range for DMA page registers, but that may be a bit
@@ -6095,7 +6096,7 @@ ChipSet.CMOS = {
  * reordering the elements would be a bad idea.
  */
 
-/*
+/**
  * NMI Mask Register (port 0xA0)
  *
  * On the MODEL_5150 and MODEL_5160, this is a write-only register, and the only valid bit is ENABLE.
@@ -6113,7 +6114,7 @@ ChipSet.NMI = {                 // this.bNMI
     RESET:              0x00    // default value on reset (TODO: Is NMI really disabled by default on reset?)
 };
 
-/*
+/**
  * FPU Coprocessor Control Registers (MODEL_5170)
  */
 ChipSet.FPU = {                 // TODO: Define a variable for this?
@@ -6129,7 +6130,7 @@ ChipSet.aPICInit = [0, new Array(4)];
 
 ChipSet.aTimerInit = [[0,0], [0,0], [0,0], [0,0]];
 
-/*
+/**
  * Port input notification tables, starting with the one that's common to all models (aPortInput)
  */
 ChipSet.aPortInput = {
@@ -6222,7 +6223,7 @@ if (DESKPRO386) {
     };
 }
 
-/*
+/**
  * Port output notification tables, starting with the one that's common to all models (aPortOutput)
  */
 ChipSet.aPortOutput = {
@@ -6325,7 +6326,7 @@ if (DESKPRO386) {
     };
 }
 
-/*
+/**
  * Initialize every ChipSet module on the page.
  */
 WebLib.onInit(ChipSet.init);

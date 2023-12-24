@@ -20,7 +20,7 @@ import StrLib from "../../../modules/v2/strlib.js";
 import WebLib from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
-/*
+/**
  * FDC Terms (see FDC.TERMS)
  *
  *      C       Cylinder Number         the current or selected cylinder number
@@ -158,7 +158,7 @@ export default class FDC extends Component {
      */
     constructor(parmsFDC)
     {
-        /*
+        /**
          * TODO: Indicate the type of diskette image being loaded (this might help folks understand what's going
          * on when they try to load a diskette image that's larger than what the selected operating system supports).
          */
@@ -172,20 +172,20 @@ export default class FDC extends Component {
         this.aDiskettes = parmsFDC['diskettes'];
         this.sDisketteServer = parmsFDC['server'] || "";
 
-        /*
+        /**
          * We don't eval() sDriveTypes until initBus() is called, so that we can check for any machine overrides;
          * note that the override, if any, must be named 'floppyDrives' to avoid conflicting with the HDC's 'drives'
          * setting.
          */
         this.sDriveTypes = parmsFDC['drives'];
 
-        /*
+        /**
          * We record any 'autoMount' object now, but we no longer parse it until initBus(), because the Computer's
          * getMachineParm() service may have an override for us.
          */
         this.configMount = this.parseMount(parmsFDC['autoMount']);
 
-        /*
+        /**
          * This establishes "name" as the default; if we decide we'd prefer "none" to be the default (ie, the order
          * to use when no sortBy value is specified), we can just drop the '|| "name"', because an undefined value is
          * just as falsy as null.
@@ -197,7 +197,7 @@ export default class FDC extends Component {
         this.sortBy = parmsFDC['sortBy'] || "name";
         if (this.sortBy == "none") this.sortBy = null;
 
-        /*
+        /**
          * The following array keeps track of every disk image we've ever mounted.  Each entry in the
          * array is another array whose elements are:
          *
@@ -209,14 +209,14 @@ export default class FDC extends Component {
          */
         this.aDiskHistory = [];
 
-        /*
+        /**
          * Support for local disk images is currently limited to desktop browsers with FileReader support;
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
         this.fLocalDisks = (!WebLib.isMobile() && 'FileReader' in globals.window);
 
-        /*
+        /**
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
          * it may prefer to overload our drive control for easier disc selection, in which case this will contain
          * drive name properties mapped to external disc lists.
@@ -225,7 +225,7 @@ export default class FDC extends Component {
         this.externalDrives = {};
         this.externalActive = null;
 
-        /*
+        /**
          * The remainder of FDC initialization now takes place in our initBus() handler, largely because we
          * want initController() to have access to the ChipSet component, so that it can query switches and/or CMOS
          * settings that determine the number of drives and their characteristics (eg, 40-track vs. 80-track),
@@ -251,7 +251,7 @@ export default class FDC extends Component {
     setBinding(sHTMLType, sBinding, control, sValue)
     {
         let fdc = this;
-        /*
+        /**
          * TODO: Making copies of control that are simply cast to different types seems silly, but it doesn't
          * really cost anything and it's cleaner than doing a lot MORE type overrides inline.  However, it still
          * doesn't solve all my problems: controlForm should really be cast as HTMLFormElement, but JavaScript
@@ -272,7 +272,7 @@ export default class FDC extends Component {
         case "descDisk":
         case "listDrives":
             this.bindings[sBinding] = controlSelect;
-            /*
+            /**
              * I tried going with onclick instead of onchange, so that if you wanted to confirm what's
              * loaded in a particular drive, you could click the drive control without having to change it.
              * However, that doesn't seem to work for all browsers, so I've reverted to onchange.
@@ -296,14 +296,14 @@ export default class FDC extends Component {
             return true;
 
         case "saveDisk":
-            /*
+            /**
              * Yes, technically, this feature does not require "Local disk support" (which is really a reference
              * to FileReader support), but since fLocalDisks is also false for all mobile devices, and since there
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available");
-                /*
+                /**
                  * We could also simply remove the control; eg:
                  *
                  *      control.parentNode.removeChild(@type {Node} (control));
@@ -321,7 +321,7 @@ export default class FDC extends Component {
                     let iDriveSelected = StrLib.parseInt(controlDrives.value, 10) || 0;
                     let drive = fdc.aDrives[iDriveSelected];
                     if (drive) {
-                        /*
+                        /**
                          * Note the similarity (and hence factoring opportunity) between this code and the HDC's
                          * "saveHD*" binding.
                          */
@@ -343,7 +343,7 @@ export default class FDC extends Component {
         case "mountDisk":
             if (!this.fLocalDisks) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Local disk support not available\n");
-                /*
+                /**
                  * We could also simply hide the control; eg:
                  *
                  *      controlForm.style.display = "none";
@@ -354,7 +354,7 @@ export default class FDC extends Component {
                 return false;
             }
             this.bindings[sBinding] = controlForm;
-            /*
+            /**
              * Enable "Mount" button only if a file is actually selected
              */
             controlForm.onchange = function onChangeMountDisk() {
@@ -370,7 +370,7 @@ export default class FDC extends Component {
                     let sDiskName = StrLib.getBaseName(sDiskPath, true);
                     fdc.loadSelectedDrive(sDiskName, sDiskPath, file);
                 }
-                /*
+                /**
                  * Prevent reloading of web page after form submission
                  */
                 return false;
@@ -411,7 +411,7 @@ export default class FDC extends Component {
 
         if (this.sDriveTypes) {
             try {
-                /*
+                /**
                  * We must take care when parsing user-supplied JSON-encoded drive data.
                  */
                 this.aDriveTypes = eval("(" + this.sDriveTypes + ")");
@@ -426,7 +426,7 @@ export default class FDC extends Component {
 
         this.panel = cmp.getMachineComponent("Panel", false);
 
-        /*
+        /**
          * If we didn't need auto-mount support, we could defer controller initialization until we received
          * a powerUp() notification, at which point reset() would call initController(), or restore() would
          * restore the controller; in that case, all we'd need to do here is call setReady().
@@ -436,7 +436,7 @@ export default class FDC extends Component {
         bus.addPortInputTable(this, FDC.aPortInput);
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
-        /*
+        /**
          * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter;
          * fortunately, that's not a problem, since we weren't doing anything with the parameter until
          * this point (initBus()) anyway, and it's just a comma-delimited list of "diskettes.json" files,
@@ -450,7 +450,7 @@ export default class FDC extends Component {
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
             let cLoaded = 0, cSuccessful = 0;
-            /*
+            /**
              * Preprocess the list of URLs, removing any that are not appropriate for the current host.
              */
             for (let i = 0; i < urls.length; i++) {
@@ -510,7 +510,7 @@ export default class FDC extends Component {
         if (config) {
             if (typeof config == "string") {
                 try {
-                    /*
+                    /**
                      * We must take care when parsing user-supplied JSON-encoded diskette data.
                      */
                     config = /** @type {Object} */ (eval("(" + config + ")"));
@@ -522,7 +522,7 @@ export default class FDC extends Component {
         } else {
             config = {};
         }
-        /*
+        /**
          * Instead of modifying configMerge, we merely import anything in configMerge that doesn't exist in the new config.
          */
         if (configMerge) {
@@ -530,7 +530,7 @@ export default class FDC extends Component {
                 if (!config[sDrive]) config[sDrive] = configMerge[sDrive];
             }
         }
-        /*
+        /**
          * We now allow "shorthand" configs, where each drive property can simply be a string (ie, the implied 'name' of a diskette)
          * instead of an object containing 'name' and/or 'path' strings.
          */
@@ -555,7 +555,7 @@ export default class FDC extends Component {
             if (!data) {
                 this.reset(true);
                 if (this.cmp.fReload) {
-                    /*
+                    /**
                      * If the computer's fReload flag is set, we're required to toss all currently
                      * loaded disks and remount all disks specified in the auto-mount configuration.
                      */
@@ -595,12 +595,12 @@ export default class FDC extends Component {
      */
     reset(fPowerUp)
     {
-        /*
+        /**
          * NOTE: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
         this.initController();
-        /*
+        /**
          * Don't bother resetting the drive list if we're being called by powerUp(), because powerUp() will.
          */
         if (!fPowerUp) this.resetDriveList();
@@ -626,7 +626,7 @@ export default class FDC extends Component {
      */
     resetDriveList()
     {
-        /*
+        /**
          * Populate the HTML controls to match the actual (well, um, specified) number of floppy drives.
          */
         let controlDrives;
@@ -641,7 +641,7 @@ export default class FDC extends Component {
                 controlOption.value = iDrive.toString();
                 controlOption.text = String.fromCharCode(0x41 + iDrive) + ":";
                 controlDrives.appendChild(controlOption);
-                /*
+                /**
                  * Add a second element for the drive that will automatically "write-protect" the selected diskette.
                  */
                 controlOption = document.createElement("option");
@@ -710,49 +710,49 @@ export default class FDC extends Component {
             data = [0, 0, FDC.REG_STATUS.RQM, new Array(9), 0, 0, 0, []];
         }
 
-        /*
+        /**
          * Selected drive (from regOutput), which can only be selected if its motor is on (see regOutput).
          */
         this.iDrive = data[i++];
         i++;                        // unused slot (if reused, bias by +4, since it was formerly a unit #)
 
-        /*
+        /**
          * Defaults to FDC.REG_STATUS.RQM set (ready for command) and FDC.REG_STATUS.READ_DATA clear (data direction
          * is from processor to the FDC Data Register).
          */
         this.regStatus = data[i++];
 
-        /*
+        /**
          * There can be up to 9 command bytes, and 7 result bytes, so 9 data registers are sufficient for communicating
          * in both directions (hence, the new Array(9) default above).
          */
         this.regDataArray = data[i++];
 
-        /*
+        /**
          * Determines the next data byte to be received.
          */
         this.regDataIndex = data[i++];
 
-        /*
+        /**
          * Determines the next data byte to be sent (internally, we use regDataIndex to read data bytes, up to this total).
          */
         this.regDataTotal = data[i++];
         this.regOutput = data[i++];
         let dataDrives = data[i++];
 
-        /*
+        /**
          * Initialize the disk history (if available) before initializing the drives, so that any disk deltas can be
          * applied to disk images that are already loaded.
          */
         let aDiskHistory = data[i++];
         if (aDiskHistory != null) this.aDiskHistory = aDiskHistory;
 
-        /*
+        /**
          * Default to the maximum number of drives unless ChipSet can give us a specific number of drives.
          */
         this.nDrives = this.aDriveTypes? this.aDriveTypes.length : (this.chipset? this.chipset.getDIPFloppyDrives() : 4);
 
-        /*
+        /**
          * I would prefer to allocate only nDrives, but as discussed in the handling of the FDC.REG_DATA.CMD.SENSE_INT
          * command, we're faced with situations where the controller must respond to any drive in the range 0-3, regardless
          * how many drives are actually installed.  We still rely upon nDrives to determine the number of drives displayed
@@ -766,7 +766,7 @@ export default class FDC extends Component {
             let fInit = false;
             let drive = this.aDrives[iDrive];
             if (drive === undefined) {
-                /*
+                /**
                  * The first time each drive is initialized, we query its capacity (based on switches or CMOS) and set
                  * the drive's physical limits accordingly (ie, max tracks, max heads, and max sectors/track).
                  */
@@ -804,7 +804,7 @@ export default class FDC extends Component {
             }
         }
 
-        /*
+        /**
          * regInput and regControl (port 0x3F7) were not present on controllers prior to MODEL_5170, which is why
          * we don't include initializers for them in the default data array; we could eliminate them on older models,
          * but we don't have access to the model info right now, and there's no real cost to always including them
@@ -879,7 +879,7 @@ export default class FDC extends Component {
         }
 
         if (data === undefined) {
-            /*
+            /**
              * We set a default of two heads (MODEL_5150 PCs originally shipped with single-sided drives,
              * but the ROM BIOS appears to have always supported both drive types).
              */
@@ -887,7 +887,7 @@ export default class FDC extends Component {
         }
 
         if (typeof data[1] == "boolean") {
-            /*
+            /**
              * Note that when no data is provided (eg, when the controller is being reinitialized), we now take
              * care to preserve any drive defaults that initController() already obtained for us, falling back to
              * bare minimums only when all else fails.
@@ -905,7 +905,7 @@ export default class FDC extends Component {
             ];
         }
 
-        /*
+        /**
          * resCode used to be an FDC global, but in order to insulate FDC state from the operation of various functions
          * that operate on drive objects (eg, readData and writeData), I've made it a per-drive variable.  This choice,
          * similar to my choice for handling PCN, may be contrary to how the actual hardware works, but I prefer this
@@ -913,7 +913,7 @@ export default class FDC extends Component {
          */
         drive.resCode = data[i++];
 
-        /*
+        /**
          * Some additional drive properties/defaults that are largely for the Disk component's benefit.
          */
         let a = data[i++];
@@ -923,7 +923,7 @@ export default class FDC extends Component {
         drive.nSectors = a[3];            // sectors/track
         drive.cbSector = a[4];            // bytes/sector
         drive.fRemovable = a[5];
-        /*
+        /**
          * If we have current media parameters, restore them; otherwise, default to the drive's physical parameters.
          */
         if ((drive.nDiskCylinders = a[6])) {
@@ -935,7 +935,7 @@ export default class FDC extends Component {
             drive.nDiskSectors = drive.nSectors;
         }
 
-        /*
+        /**
          * The next group of properties are set by various FDC command sequences.
          *
          * We initialize this.iDrive (above) and drive.bHead and drive.bCylinder (below) to zero, but leave the rest undefined,
@@ -975,14 +975,14 @@ export default class FDC extends Component {
         drive.bSectorEnd = data[i++];           // aka EOT
         drive.nBytes = data[i++];
 
-        /*
+        /**
          * The next group of properties are managed by worker functions (eg, doRead()) to maintain state across DMA requests.
          */
         drive.iByte = data[i++];                // location of the next byte to be accessed in the current sector
         drive.sector = null;
         drive.sectorPrev = null;                // used to remember the last sector read (or written)
 
-        /*
+        /**
          * We no longer reinitialize drive.disk, in order to retain previously mounted diskette across resets;
          * however, we do ensure that sDiskPath is initialized to a default that displayDiskette() can deal with.
          */
@@ -996,7 +996,7 @@ export default class FDC extends Component {
             let sDiskName = data[i++];
             let sDiskPath = data[i++];
             if (data[i] != null) drive.fWritable = data[i];
-            /*
+            /**
              * If we're restoring a local disk image, then the entire disk contents should be captured in aDiskHistory,
              * so all we have to do is mount a blank diskette and let disk.restore() do the rest; ie, there's nothing to
              * "load" (it's a purely synchronous operation).
@@ -1023,7 +1023,7 @@ export default class FDC extends Component {
                 this.setReady(false);
             }
         } else if (deltas !== undefined) {
-            /*
+            /**
              * If there's any data at all (ie, if this is a restore and not a reset), then it must be in the
              * pre-v1.02 save/restore format, so we'll restore as best we can, but be aware that if disk.restore()
              * notices that the currently mounted disk image differs from the disk image that these deltas belong to,
@@ -1034,7 +1034,7 @@ export default class FDC extends Component {
             }
         }
 
-        /*
+        /**
          * TODO: If loadDrive() returned true, then this can happen immediately.  Otherwise, loadDrive()
          * will have merely "queued up" the load request and drive.disk won't be ready yet, so figure out how/when
          * we can properly restore drive.sector in that case.
@@ -1097,7 +1097,7 @@ export default class FDC extends Component {
         data[i++] = drive.resCode;
         data[i++] = [drive.name, drive.nCylinders, drive.nHeads, drive.nSectors, drive.cbSector, drive.fRemovable, drive.nDiskCylinders, drive.nDiskHeads, drive.nDiskSectors];
         data[i++] = drive.bHead;
-        /*
+        /**
          * We used to store drive.nHeads in the next slot, but now we store bCylinderSeek,
          * and we bias it by +100 so that initDrive() can distinguish it from older values.
          */
@@ -1107,7 +1107,7 @@ export default class FDC extends Component {
         data[i++] = drive.bSectorEnd;
         data[i++] = drive.nBytes;
         data[i++] = drive.iByte;
-        /*
+        /**
          * Now we deviate from the 1.01a save format: instead of next storing all the deltas for the
          * currently mounted disk (if any), we store only the name and path of the currently mounted disk
          * (if any).  Deltas for ALL disks, both currently mounted and previously mounted, are stored later.
@@ -1206,13 +1206,13 @@ export default class FDC extends Component {
                 drive.bHead = Math.floor(iSector / nSectorsPerTrack);
                 drive.bSector = (iSector % nSectorsPerTrack) + 1;
                 drive.nBytes = nSectors * aDiskInfo[3];
-                /*
+                /**
                  * NOTE: We don't set bSectorEnd, as an FDC command would, but it's irrelevant, because we don't actually
                  * do anything with bSectorEnd at this point.  Perhaps someday, when we faithfully honor/restrict requests
                  * to a single track (or a single cylinder, in the case of multi-track requests).
                  */
                 drive.resCode = FDC.REG_DATA.RES.NONE;
-                /*
+                /**
                  * At this point, we've finished simulating what an FDC.REG_DATA.CMD.READ_DATA command would have performed,
                  * up through doRead().  Now it's the caller responsibility to call readData(), just like the DMA Controller would.
                  */
@@ -1236,7 +1236,7 @@ export default class FDC extends Component {
             let configDrive = this.configMount[sDrive];
             let sDiskPath = configDrive['path'] || this.findDisketteByName(configDrive['name']);
             if (sDiskPath) {
-                /*
+                /**
                  * WARNING: This conversion of drive letter to drive number, starting with A:, is very simplistic
                  * and is not guaranteed to match the drive mapping that DOS ultimately uses.
                  */
@@ -1301,7 +1301,7 @@ export default class FDC extends Component {
                 return false;
             }
 
-            /*
+            /**
              * If the special path of "??" is selected, then we want to prompt the user for a URL.  Oh, and
              * make sure we pass an empty string as the 2nd parameter to prompt(), so that IE won't display
              * "undefined" -- because after all, undefined and "undefined" are EXACTLY the same thing, right?
@@ -1321,14 +1321,14 @@ export default class FDC extends Component {
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
-                /*
+                /**
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (WebLib.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     this.printf(MESSAGE.DEBUG, "load cancelled\n");
                     return false;
                 }
-                /*
+                /**
                  * So here's the story: loadDrive() returned -1, which it does ONLY if the specified disk is
                  * already mounted AND the user clicked OK to reload the original disk image.  So at the user's
                  * request, we toss any disk history, unload the disk, and then loop back around to loadDrive().
@@ -1389,7 +1389,7 @@ export default class FDC extends Component {
         }
         else if (sDiskPath) {
             sDiskPath = WebLib.redirectResource(sDiskPath);
-            /*
+            /**
              * TODO: Machines with saved states may be using lower-case disk image names, whereas we now use
              * UPPER-CASE names for disk images, so we upper-case both before comparing.  The only problem with
              * removing these hacks is that we can never be sure when all saved states in the wild have been updated.
@@ -1438,7 +1438,7 @@ export default class FDC extends Component {
         drive.fBusy = false;
 
         if (disk) {
-            /*
+            /**
              * We shouldn't mount the diskette unless the drive is able to handle it; for example, FD360 (40-track)
              * drives cannot read FD1200 (80-track) diskettes.  However, I no longer require that the diskette's
              * sectors/track fall within the drive's standard maximum, because XDF diskettes use 19 physical sectors/track
@@ -1458,7 +1458,7 @@ export default class FDC extends Component {
             drive.sDiskName = sDiskName;
             drive.sDiskPath = sDiskPath;
 
-            /*
+            /**
              * Since we allow a diskette image to be auto-mounted even if it isn't in the machine's list of disks,
              * let's add it to the list now, since the disk apparently exists.
              */
@@ -1466,7 +1466,7 @@ export default class FDC extends Component {
                 this.addDiskette(sDiskName, sDiskPath);
             }
 
-            /*
+            /**
              * Adding local disk image names to the disk list seems like a nice idea, but it's too confusing,
              * because then it looks like the "Mount" button should be able to (re)load them, and that can NEVER
              * happen, for security reasons; local disk images can ONLY be loaded via the "Mount" button after
@@ -1480,13 +1480,13 @@ export default class FDC extends Component {
              */
             this.addDiskHistory(sDiskName, sDiskPath, disk);
 
-            /*
+            /**
              * For a local disk (ie, one loaded via mountDrive()), the disk.restore() performed by addDiskHistory()
              * may have altered the disk geometry, so refresh the disk info.
              */
             aDiskInfo = disk.info();
 
-            /*
+            /**
              * Clearly, a successful mount implies a disk change, and I suppose that, technically, an *unsuccessful*
              * mount should imply the same, but what would the real-world analog be?  Inserting a piece of cardboard
              * instead of an actual diskette?  In any case, if we can do the user a favor by pretending (as far as the
@@ -1496,7 +1496,7 @@ export default class FDC extends Component {
              */
             this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
 
-            /*
+            /**
              * With the addition of notify(), users are now "alerted" whenever a diskette has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              *
@@ -1508,14 +1508,14 @@ export default class FDC extends Component {
                 this.printf(MESSAGE.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
-            /*
+            /**
              * Update the drive's current media parameters to match the disk's.
              */
             drive.nDiskCylinders = aDiskInfo[0];
             drive.nDiskHeads = aDiskInfo[1];
             drive.nDiskSectors = aDiskInfo[2];
 
-            /*
+            /**
              * Since you usually want the Computer to have focus again after loading a new diskette, let's try automatically
              * updating the focus after a successful load.
              */
@@ -1580,7 +1580,7 @@ export default class FDC extends Component {
                 this.addDiskette(diskette['name'], diskette['path']);
             }
         }
-        /*
+        /**
          * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
          * Because that wouldn't handle any prepopulated entries already stored in the list control.
          */
@@ -1588,7 +1588,7 @@ export default class FDC extends Component {
             let i, aOptions = [], fdc = this;
             let controlDisks = this.bindings["listDisks"];
             if (controlDisks) {
-                /*
+                /**
                  * NOTE: All this monkeying around with copying the elements from control.options to aOptions
                  * and then back again is necessary because control.options isn't a *real* Array (at least not
                  * in all browsers); consequently, it may have no sort() method.  It has a length property,
@@ -1604,7 +1604,7 @@ export default class FDC extends Component {
                     aOptions.push(controlDisks.options[i]);
                 }
                 aOptions.sort(function(a, b) {
-                    /*
+                    /**
                      * I've switched to localeCompare() because it offers case-insensitivity by default;
                      * I'm still a little concerned that we could somehow end up with list elements whose text
                      * and/or value properties are undefined (because calling a method on an undefined variable
@@ -1618,7 +1618,7 @@ export default class FDC extends Component {
                 });
                 for (i = 0; i < aOptions.length; i++)  {
                     try {
-                        /*
+                        /**
                          * TODO: Determine why this line blows up in IE8; are the properties of an options object not settable in IE8?
                          */
                         controlDisks.options[i] = aOptions[i];
@@ -1768,7 +1768,7 @@ export default class FDC extends Component {
                     parent2.appendChild(controlDisks1);
                 }
             }
-            /*
+            /**
              * Propagate the actual width (scrollWidth) of the currently visible control to the control we're
              * about to make visible in its place, so that there's no discernable change in the overall layout.
              */
@@ -1777,7 +1777,7 @@ export default class FDC extends Component {
             controlDisks2.style.display = "inline-block";
             controlDisks1 = controlDisks2;
         }
-        /*
+        /**
          * We need to return multiple values: the requested disk list (controlDisks1) AND the associated drive,
          * since both may now be managed by the HDC; we cheat and return the drive as an FDC property (driveActive).
          *
@@ -1803,7 +1803,7 @@ export default class FDC extends Component {
     {
         let controlDisks = this.getDiskList(iDrive);
         if (controlDisks) {
-            /*
+            /**
              * Next, make sure the drive whose disk we're updating is the currently selected drive.
              */
             let drive = this.driveActive;
@@ -1822,7 +1822,7 @@ export default class FDC extends Component {
                 if (i == controlDisks.options.length) controlDisks.selectedIndex = 0;
             }
             if (fDriveChange === false) {
-                /*
+                /**
                  * Update the selected drive to match the specified drive (and its write-protected state, if any).
                  */
                 for (i = 0; i < controlDrives.options.length; i++) {
@@ -1836,7 +1836,7 @@ export default class FDC extends Component {
                 }
             }
             else if (fDriveChange === true && drive.fWritable !== undefined) {
-                /*
+                /**
                  * Odd drive entries are asterisked (eg, "A*" rather than "A:"), providing the user with a mechanism for
                  * automatically write-protecting all disk images mounted in the drive.  External drives (eg, CD-ROM drives)
                  * don't define fWritable, not because the drive's writability isn't known but rather because we don't want
@@ -1914,7 +1914,7 @@ export default class FDC extends Component {
     {
         let drive = this.aDrives[iDrive];
         if (drive.disk) {
-            /*
+            /**
              * Before we toss the disk's information, capture any deltas that may have occurred.
              */
             this.updateDiskHistory(drive.sDiskName, drive.sDiskPath, drive.disk);
@@ -1925,7 +1925,7 @@ export default class FDC extends Component {
 
             this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
 
-            /*
+            /**
              * TODO: Consider adding support for non-modal notices that appear briefly over the machine and then fade,
              * because these modal alerts quickly become annoying.  In the meantime, I now set fPrintOnly to true, on the
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
@@ -1933,7 +1933,7 @@ export default class FDC extends Component {
             if (!fQuiet) {
                 this.printf(MESSAGE.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
-            /*
+            /**
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
              * a prelude to another load.
              */
@@ -2022,7 +2022,7 @@ export default class FDC extends Component {
                 return;
             }
         }
-        /*
+        /**
          * I used to report this as an error (at least in the DEBUG release), but it's no longer really
          * an error, because if we're trying to re-mount a clean copy of a disk, we toss its history, then
          * unload, and then reload/remount.  And since unloadDrive's normal behavior is to call updateDiskHistory()
@@ -2044,7 +2044,7 @@ export default class FDC extends Component {
         this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
             this.initController();
-            /*
+            /**
              * initController() resets, among other things, the selected drive (this.iDrive), so if we were
              * still updating this.iDrive below based on the "drive select" bits in regOutput, we would want
              * to make sure those bits now match what initController() set.  But since we no longer do that
@@ -2054,13 +2054,13 @@ export default class FDC extends Component {
              */
         }
         else if (!(this.regOutput & FDC.REG_OUTPUT.ENABLE)) {
-            /*
+            /**
              * When FDC.REG_OUTPUT.ENABLE transitions from 0 to 1, generate an interrupt (assuming INT_ENABLE is set).
              */
             this.regOutput = bOut;      // this may look redundant but requestInterrupt() needs to see regOutput set
             this.requestInterrupt();
         }
-        /*
+        /**
          * This no longer updates the internally selected drive (this.iDrive) based on regOutput, because (a) there seems
          * to be no point, as all drive-related commands include their own "drive select" bits, and (b) it breaks the
          * MODEL_5170 boot code.  Here's why:
@@ -2189,7 +2189,7 @@ export default class FDC extends Component {
         if (this.regDataIndex < this.regDataTotal) {
             bIn = this.regDataArray[this.regDataIndex];
         }
-        /*
+        /**
          * As per the discussion in doCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
          */
         if (this.regOutput & FDC.REG_OUTPUT.INT_ENABLE) {
@@ -2248,7 +2248,7 @@ export default class FDC extends Component {
     inFDCInput(port, addrFrom)
     {
         let bIn = this.regInput;
-        /*
+        /**
          * TODO: Determine when the DISK_CHANGE bit is *really* cleared (this is just a guess)
          */
         this.regInput &= ~FDC.REG_INPUT.DISK_CHANGE;
@@ -2282,7 +2282,7 @@ export default class FDC extends Component {
         let bCmd = this.popCmd();
         let drive, bDrive, bHead, c, h, r, n;
 
-        /*
+        /**
          * NOTE: We currently ignore the FDC.REG_DATA.CMD.SK, FDC.REG_DATA.CMD.MF and FDC.REG_DATA.CMD.MT bits of every command.
          * The only command bit of possible interest down the road might be the FDC.REG_DATA.CMD.MT (Multi-Track); the rest relate
          * to storage format details that we cannot emulate as long as our diskette images contain nothing more than sector
@@ -2302,7 +2302,7 @@ export default class FDC extends Component {
             this.popSRT();                                  // SRT and HUT (encodings?)
             this.popHLT();                                  // HLT and ND (encodings?)
             this.beginResult();
-            /*
+            /**
              * No results are provided by this command, and fIRQ should remain false
              */
             break;
@@ -2330,7 +2330,7 @@ export default class FDC extends Component {
             drive.bHead = bHead;
             c = drive.bCylinder = this.popCmd(FDC.TERMS.C); // C
             h = this.popCmd(FDC.TERMS.H);                   // H
-            /*
+            /**
              * Controller docs say that H should always match HD, so I assert that, but what if someone
              * made a mistake and didn't program them identically -- what would happen?  Which should we honor?
              */
@@ -2343,7 +2343,7 @@ export default class FDC extends Component {
             this.popCmd(FDC.TERMS.DTL);                     // DTL (when N is 0, DTL stands for the data length to read out or write into the sector)
             this.setLED(ledState);
             if (drive.disk && drive.disk.nSectors >= 15 && this.regControl != FDC.REG_CONTROL.RATE500K) {
-                /*
+                /**
                  * Originally, I only set RES.INCOMPLETE (which is an ST0 result byte), because that's all that MINIX 1.1
                  * relied upon to differentiate 1.2M media from 360K media, but the COMPAQ DeskPro 386 ROM has a similar
                  * dependency AND requires that an error appear in the ST1 result byte as well -- so I added RES.NO_DATA to
@@ -2389,7 +2389,7 @@ export default class FDC extends Component {
             this.beginResult();
             this.pushST0(drive);
             this.pushResult(drive.bCylinder, FDC.TERMS.PCN);
-            /*
+            /**
              * For some strange reason, the "DISK_RESET" function in the MODEL_5170_REV3 BIOS resets the
              * adapter and then issues FOUR -- that's right, not ONE but FOUR -- SENSE INTERRUPT STATUS commands
              * in a row, and expects ST0 to contain a different drive number after each command (first 0, then 1,
@@ -2404,13 +2404,13 @@ export default class FDC extends Component {
              * "auto-increment" the internal drive number (this.iDrive) after each SENSE INTERRUPT STATUS command.
              */
             this.iDrive = (this.iDrive + 1) & 0x3;
-            /*
+            /**
              * No interrupt is generated by this command, so fIRQ should remain false.
              */
             break;
 
         case FDC.REG_DATA.CMD.READ_ID:                      // 0x0A
-            /*
+            /**
              * This command is used by "SETUP_DBL" in the MODEL_5170_REV3 BIOS to determine if a double-density
              * (40-track) diskette has been inserted in a high-density (80-track) drive; ie, whether "double stepping"
              * is required, since only 40 of the 80 possible "steps" are valid for a double-density diskette.
@@ -2429,7 +2429,7 @@ export default class FDC extends Component {
             if (drive.disk && (drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector))) {
                 n = (drive.sector['length'] >> 8);
             } else {
-                /*
+                /**
                  * TODO: Determine the appropriate response code(s) for the possible errors that can occur here.
                  */
                 drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
@@ -2462,7 +2462,7 @@ export default class FDC extends Component {
             this.iDrive = (bDrive & 0x3);
             drive = this.aDrives[this.iDrive];
             drive.bHead = bHead;
-            /*
+            /**
              * As discussed in initDrive(), we can no longer simply set bCylinder to the specified NCN;
              * instead, we must calculate the delta between bCylinderSeek and the NCN, and adjust bCylinder
              * by that amount.  Then we simply move the NCN into bCylinderSeek without any range checking.
@@ -2477,7 +2477,7 @@ export default class FDC extends Component {
             if (drive.bCylinder >= drive.nCylinders) drive.bCylinder = drive.nCylinders - 1;
             drive.bCylinderSeek = c;
             drive.resCode = FDC.REG_DATA.RES.SEEK_END;
-            /*
+            /**
              * TODO: To properly support ALL the ST3 result bits (not just TRACK0), we need a resCode
              * update() function that all FDC commands can use.  This code is merely sufficient to get us
              * through the "DSKETTE_SETUP" gauntlet in the MODEL_5170 BIOS.
@@ -2499,7 +2499,7 @@ export default class FDC extends Component {
             this.regStatus |= (FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
         }
 
-        /*
+        /**
          * After the Execution Phase (eg, DMA Terminal Count has occurred, or the EOT sector has been read/written),
          * an interrupt is supposed to occur, signaling the beginning of the Result Phase.  Once the first byte of the
          * result has been read, the interrupt is cleared (see inFDCData).
@@ -2520,7 +2520,7 @@ export default class FDC extends Component {
             fIRQ = false;
         }
 
-        /*
+        /**
          * When the Windows 95 HSFLOP ("High-Speed Floppy") VxD performs its diskette change-line detection logic
          * ("determine_changeline"), it sets a special callback ("dcl_callback_int_entry") for its interrupt handler
          * to invoke, then issues a READ_ID command, and then sets a bit telling its interrupt handler to expect an
@@ -2572,7 +2572,7 @@ export default class FDC extends Component {
         this.pushST0(drive);
         this.pushST1(drive);
         this.pushST2(drive);
-        /*
+        /**
          * NOTE: I used to set the following C/H/R/N results using the values that advanceSector() had "advanced"
          * them to, which seemed logical but was technically incorrect.  For non-multi-track reads, they should match
          * the programmed C/H/R/N values, except when EOT has been reached, in which case C = C + 1 and R = 1.
@@ -2750,7 +2750,7 @@ export default class FDC extends Component {
             this.readData(drive, done);
             return;
         }
-        /*
+        /**
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
@@ -2770,7 +2770,7 @@ export default class FDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeData(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
@@ -2790,7 +2790,7 @@ export default class FDC extends Component {
         if (b !== undefined && b >= 0) {
             return this.writeFormat(drive, b);
         }
-        /*
+        /**
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
         if (DEBUG) this.printf("%s.doDMAFormat(): invalid DMA acknowledgement\n", this.idComponent);
@@ -2806,7 +2806,7 @@ export default class FDC extends Component {
      */
     doRead(drive)
     {
-        /*
+        /**
          * With only NOT_READY and INCOMPLETE set, an empty drive causes DOS to report "General Failure";
          * with the addition of NO_DATA, DOS reports "Sector not found".  The traditional "Drive not ready"
          * error message is not triggered by anything we return here, but simply by BIOS commands timing out.
@@ -2893,7 +2893,7 @@ export default class FDC extends Component {
     doFormat(drive)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
-        /*
+        /**
          * NOTE: Strangely, we must ignore the number of drive heads both here and in seek(); otherwise,
          * PC DOS 1.10 "FORMAT /1" will fail, even though "/1" means format it as a single-sided diskette.
          *
@@ -2945,7 +2945,7 @@ export default class FDC extends Component {
         let b = -1;
         let obj = null, off = 0;    // these variables are purely for BACKTRACK purposes
 
-        /*
+        /**
          * Our JSON-encoded disk images now support certain copy-protection-related features, such as sectors
          * with non-standard sizes (ie, other than 512), non-sequential sector IDs (see IBM Multiplan 1.00), and
          * sectors with forced CRC errors (see Microsoft Word 1.15).
@@ -2970,7 +2970,7 @@ export default class FDC extends Component {
                         break;
                     }
                 }
-                /*
+                /**
                  * Locate the next sector, and then try reading again.
                  */
                 drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
@@ -2983,7 +2983,7 @@ export default class FDC extends Component {
                     drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
                 }
                 drive.iByte = 0;
-                /*
+                /**
                  * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
                  * This allows the initial call to readData() to perform a seek without triggering an unwanted advance.
                  */
@@ -3027,12 +3027,12 @@ export default class FDC extends Component {
                 }
                 if (drive.disk.write(drive.sector, drive.iByte++, b)) break;
             }
-            /*
+            /**
              * Locate the next sector, and then try writing again.
              */
             drive.sector = drive.disk.seek(drive.bCylinder, drive.bHead, drive.bSector, drive.sectorPrev);
             if (!drive.sector) {
-                /*
+                /**
                  * TODO: Determine whether this should be FDC.REG_DATA.RES.CRC_ERROR or FDC.REG_DATA.RES.DATA_FIELD
                  */
                 drive.resCode = FDC.REG_DATA.RES.CRC_ERROR | FDC.REG_DATA.RES.INCOMPLETE;
@@ -3041,7 +3041,7 @@ export default class FDC extends Component {
             }
             drive.sectorPrev = drive.sector;
             drive.iByte = 0;
-            /*
+            /**
              * We "pre-advance" bSector et al now, instead of waiting to advance it right before the seek().
              * This allows the initial call to writeData() to perform a seek without triggering an unwanted advance.
              */
@@ -3155,7 +3155,7 @@ if (DEBUG) {
     FDC.TERMS = {};
 }
 
-/*
+/**
  * FDC Digital Output Register (DOR) (0x3F2, write-only)
  *
  * NOTE: Reportedly, a drive's MOTOR had to be ON before the drive could be selected; however, outFDCOutput() no
@@ -3181,7 +3181,7 @@ FDC.REG_OUTPUT = {
     MOTOR_D3:   0x80    // reserved on the MODEL_5170
 };
 
-/*
+/**
  * FDC Main Status Register (0x3F4, read-only)
  *
  * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", bits 2 and 3 are reserved, since that adapter
@@ -3199,12 +3199,12 @@ FDC.REG_STATUS = {
     RQM:        0x80    // indicates FDC Data Register is ready to send or receive data to or from the processor (Request for Master)
 };
 
-/*
+/**
  * FDC Data Register (0x3F5, read-write)
  */
 FDC.REG_DATA = {
     PORT:      0x3F5,
-    /*
+    /**
      * FDC Commands
      *
      * NOTE: FDC command bytes need to be masked with FDC.REG_DATA.CMD.MASK before comparing to the values below, since a
@@ -3238,7 +3238,7 @@ FDC.REG_DATA = {
         MF:             0x40,           // MF (Modified Frequency Modulation)
         MT:             0x80            // MT (Multi-Track; ie, data under both heads will be processed)
     },
-    /*
+    /**
      * FDC status/error results, generally assigned according to the corresponding ST0, ST1, ST2 or ST3 status bit.
      *
      * TODO: Determine when EQUIP_CHECK is *really* set; also, "77 step pulses" sounds suspiciously like a typo (it's not 79?)
@@ -3278,14 +3278,14 @@ FDC.REG_DATA = {
     }
 };
 
-/*
+/**
  * FDC "Fixed Disk" Register (0x3F6, write-only)
  *
  * Since this register's functions are all specific to the Hard Drive Controller, see the HDC component for details.
  * The fact that this HDC register is in the middle of the FDC I/O port range is an oddity of the "HFCOMBO" controller.
  */
 
-/*
+/**
  * FDC Digital Input Register (0x3F7, read-only, MODEL_5170 only)
  *
  * Bit 7 indicates a diskette change (the MODEL_5170 introduced change-line support).  Bits 0-6 are for the selected
@@ -3304,7 +3304,7 @@ FDC.REG_INPUT = {
     DISK_CHANGE:0x80    // Diskette Change
 };
 
-/*
+/**
  * FDC Diskette Control Register (0x3F7, write-only, MODEL_5170 only)
  *
  * Only bits 0-1 are used; bits 2-7 are reserved.
@@ -3317,7 +3317,7 @@ FDC.REG_CONTROL = {
     RATEUNUSED: 0x03
 };
 
-/*
+/**
  * FDC Command Sequences
  *
  * For each command, cbReq indicates the total number of bytes in the command request sequence,
@@ -3353,7 +3353,7 @@ FDC.aCmdInfo = {
     0x0F: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SEEK}
 };
 
-/*
+/**
  * Port input notification table
  *
  * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
@@ -3366,7 +3366,7 @@ FDC.aPortInput = {
     0x3F7: FDC.prototype.inFDCInput
 };
 
-/*
+/**
  * Port output notification table
  *
  * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
@@ -3378,7 +3378,7 @@ FDC.aPortOutput = {
     0x3F7: FDC.prototype.outFDCControl
 };
 
-/*
+/**
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
 WebLib.onInit(FDC.init);

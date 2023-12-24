@@ -31,7 +31,7 @@ export default class Mouse extends Component {
         RIGHT:  2
     };
 
-    /*
+    /**
      * The Microsoft Bus Mouse supported only one base address: 0x23C.
      *
      * NOTE: Windows v1.01 probes ports 0x23D and 0x23F immediately prior to probing COM2 (and then COM1)
@@ -52,7 +52,7 @@ export default class Mouse extends Component {
         }
     };
 
-    /*
+    /**
      * The retail Microsoft InPort card supported two base addresses, 0x23C and 0x238, through the primary and
      * secondary jumpers, respectively.  However, OEMs may have had InPorts on other base addresses.
      *
@@ -91,7 +91,7 @@ export default class Mouse extends Component {
             MODE:       0x07        // InPort Mode Register
         },
         DATA: {
-            /*
+            /**
              * The internal register read or written via this port is determined by the value written to ADDR.PORT
              */
             PORT:       0x23D,
@@ -110,7 +110,7 @@ export default class Mouse extends Component {
             }
         },
         ID: {
-            /*
+            /**
              * The initial read returns the Chip ID; alternate reads return a byte containing the InPort revision number
              * in the low nibble and the InPort version number in the high nibble.
              */
@@ -122,7 +122,7 @@ export default class Mouse extends Component {
         }
     };
 
-    /*
+    /**
      * From http://paulbourke.net/dataformats/serialmouse:
      *
      *      The old MicroSoft serial mouse, while no longer in general use, can be employed to provide a low cost input device,
@@ -252,7 +252,7 @@ export default class Mouse extends Component {
         this.setActive(false);
         this.fActive = this.fCaptured = this.fLocked = false;
 
-        /*
+        /**
          * Initially, no video devices, and therefore no screens, are attached.  initBus() will update aVideo,
          * and powerUp() will update aScreens.
          */
@@ -276,7 +276,7 @@ export default class Mouse extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
         this.scale = cmp.getMachineParm('scaleMouse') || this.scale;
-        /*
+        /**
          * Enumerate all the Video components that we may need to interact with.
          */
         for (let video = null; (video = cmp.getMachineComponent("Video", video));) {
@@ -309,7 +309,7 @@ export default class Mouse extends Component {
     setActive(fActive)
     {
         this.fActive = fActive;
-        /*
+        /**
          * It's currently not possible to automatically lock the pointer outside the context of a user action
          * (eg, a button or screen click), so this code is for naught.
          *
@@ -341,7 +341,7 @@ export default class Mouse extends Component {
                     if (componentDevice.bindMouse) {
                         this.componentDevice = componentDevice.bindMouse(this.idDevice, this, this.receiveStatus);
                         if (this.componentDevice) {
-                            /*
+                            /**
                              * It's possible that the SerialPort we've just attached to might want to bring us "up to speed"
                              * on the device's state, which is why I envisioned a subsequent syncMouse() call.  And you would
                              * want to do that as a separate call, not as part of bindMouse(), because componentDevice
@@ -447,7 +447,7 @@ export default class Mouse extends Component {
         this.fButton1 = data[i++];      // FYI, we consider button1 to be the LEFT button
         this.fButton2 = data[i++];      // FYI, we consider button2 to be the RIGHT button
         this.pins = data[i];
-        /*
+        /**
          * Convert old UART "MCR" data to new RS-232 "pins" data, in case we're loading an old state;
          * detection and conversion relies on the fact that the MCR bits don't overlap with any RS-232 bits.
          */
@@ -552,7 +552,7 @@ export default class Mouse extends Component {
                 },
                 false               // we'll specify false for the 'useCapture' parameter for now...
             );
-            /*
+            /**
              * None of these tricks seemed to work for IE10, so I'm giving up hiding the browser's mouse pointer in IE for now.
              *
              *      control['style']['cursor'] = "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAZdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCB2My41LjbQg61aAAAADUlEQVQYV2P4//8/IwAI/QL/+TZZdwAAAABJRU5ErkJggg=='), url('/versions/images/current/blank.cur'), none";
@@ -599,7 +599,7 @@ export default class Mouse extends Component {
     {
         if (fDown !== undefined) {
             if (this.fLocked === false) {
-                /*
+                /**
                  * If there's no support for automatic pointer locking in the Video component, notifyPointerActive()
                  * will return false, and we will set fLocked to null, ensuring that we never attempt this again.
                  */
@@ -609,11 +609,12 @@ export default class Mouse extends Component {
             }
             this.clickMouse(event.button, fDown);
         } else {
-            /*
+            /**
              * All we really care about are deltas.  We record screenX and screenY (as xMouse and yMouse)
              * merely to calculate xDelta and yDelta.
              */
-            let xDelta, yDelta;
+            let xDelta;
+            let yDelta;
             if (this.xMouse < 0 || this.yMouse < 0) {
                 this.xMouse = event.screenX;
                 this.yMouse = event.screenY;
@@ -676,7 +677,7 @@ export default class Mouse extends Component {
     moveMouse(xDelta, yDelta, xDiag, yDiag)
     {
         if (this.isActive()) {
-            /*
+            /**
              * I would prefer to simply say "Math.round(xDelta * this.scale)", but JavaScript's round() function
              * rounds negative numbers toward +infinity if the fraction is exactly 0.5.  All positive numbers are
              * rounded correctly, so we convert the value to positive and restore its sign afterward.  Additionally,
@@ -688,7 +689,7 @@ export default class Mouse extends Component {
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
                 this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
-                /*
+                /**
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
                  * on completion.
@@ -761,7 +762,7 @@ export default class Mouse extends Component {
                     fIdentify = true;
                 }
                 if (fIdentify) {
-                    /*
+                    /**
                      * HEADS UP: Everything I'd read about the (original) Microsoft Serial Mouse "reset" protocol says
                      * that the device sends a single byte (0x4D aka 'M').  It's not surprising to think that newer mice
                      * might send additional bytes, but you would think that newer mouse drivers (eg, MOUSE.COM v8.20)
@@ -789,7 +790,7 @@ export default class Mouse extends Component {
             }
         } else {
             if (this.fActive) {
-                /*
+                /**
                  * Although this would seem nice (ie, for the Windows v1.01 mouse driver to turn RTS off when its mouse
                  * driver shuts down and Windows exits, since it DID turn RTS on), that doesn't appear to actually happen.
                  * At the very least, Windows will have (re)masked the serial port's IRQ, so what does it matter?  Not much,
@@ -955,7 +956,7 @@ Mouse.aBusOutput = {
     0x3:    Mouse.prototype.outBusCPPI
 };
 
-/*
+/**
  * Initialize every Mouse module on the page.
  */
 WebLib.onInit(Mouse.init);

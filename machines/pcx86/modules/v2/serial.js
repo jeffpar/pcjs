@@ -96,14 +96,14 @@ export default class SerialPort extends Component {
             break;
         }
 
-        /*
+        /**
          * consoleBuffer becomes a string that records serial port output if the 'binding' property is set to the
          * reserved name "console".  Nothing is written to the console, however, until a linefeed (0x0A) is output
          * or the string length reaches a threshold (currently, 1024 characters).
          */
         this.consoleBuffer = null;
 
-        /*
+        /**
          * controlBuffer is a DOM element bound to the port (currently used for output only; see transmitByte()).
          *
          * Example: CTTY COM2
@@ -117,7 +117,7 @@ export default class SerialPort extends Component {
          */
         this.controlBuffer = null;
 
-        /*
+        /**
          * If controlBuffer is being used AND 'tabSize' is set, then we make an attempt to monitor the characters
          * being echoed via transmitByte(), maintain a logical column position, and convert any tabs into the appropriate
          * number of spaces.
@@ -134,7 +134,7 @@ export default class SerialPort extends Component {
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
         this.fNullModem = true;
 
-        /*
+        /**
          * Normally, any HTML controls defined within the scope of the component's XML element are *implicitly*
          * bound to us.  For example, in the XML below, the textarea control will automatically trigger a call to
          * setBinding() with sBinding set to "serialWindow" and control set to an HTMLTextAreaElement.
@@ -153,7 +153,7 @@ export default class SerialPort extends Component {
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
-            /*
+            /**
              * If the SerialPort wants to bind to a control (eg, "print") in a DIFFERENT component (eg, "Panel"),
              * then it specifies the name of that control with the 'binding' property.  The SerialPort constructor
              * will then call bindExternalControl(), which looks up the control, and then passes it to our own
@@ -169,14 +169,14 @@ export default class SerialPort extends Component {
             Component.bindExternalControl(this, sBinding);
         }
 
-        /*
+        /**
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = null;
         this.fAutoFlow = false;
 
-        /*
+        /**
          * Export all functions required by bindConnection() or initConnection(), whichever is required.
          */
         this['exports'] = {
@@ -248,12 +248,12 @@ export default class SerialPort extends Component {
             let serial = this;
             this.bindings[sBinding] = this.controlBuffer = /** @type {HTMLTextAreaElement} */ (control);
 
-            /*
+            /**
              * By establishing an onkeypress handler here, we make it possible for DOS commands like
              * "CTTY COM1" to more or less work (use "CTTY CON" to restore control to the DOS console).
              */
             this.controlBuffer.onkeydown = function onKeyDown(event) {
-                /*
+                /**
                  * This is required in addition to onkeypress, because it's the only way to prevent
                  * BACKSPACE (keyCode 8) from being interpreted by the browser as a "Back" operation;
                  * moreover, not all browsers generate an onkeypress notification for BACKSPACE.
@@ -275,14 +275,14 @@ export default class SerialPort extends Component {
             };
 
             this.controlBuffer.onkeypress = function onKeyPress(event) {
-                /*
+                /**
                  * Browser-independent keyCode extraction; refer to onKeyPress() and the other key event
                  * handlers in keyboard.js.
                  */
                 event = event || window.event;
                 let keyCode = event.which || event.keyCode;
                 serial.receiveData(keyCode);
-                /*
+                /**
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
                  * (so that the soft keyboard activates on iOS), instead of calling preventDefault() for
                  * selected keys (eg, the SPACE key, whose default behavior is to scroll the page), we must
@@ -293,7 +293,7 @@ export default class SerialPort extends Component {
                 return true;
             };
 
-            /*
+            /**
              * Now that we've added an onkeypress handler that calls preventDefault() for ALL keys, the control
              * itself no longer needs the "readonly" attribute; we primarily need to remove it for iOS browsers,
              * so that the soft keyboard will activate, but it shouldn't hurt to remove the attribute for all browsers.
@@ -394,7 +394,7 @@ export default class SerialPort extends Component {
                         }
                     }
                 }
-                /*
+                /**
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
                 this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
@@ -413,7 +413,7 @@ export default class SerialPort extends Component {
     powerUp(data, fRepower)
     {
         if (!fRepower) {
-            /*
+            /**
              * This is as late as we can currently wait to make our first inter-machine connection attempt;
              * even so, the target machine's initialization process may still be ongoing, so any connection
              * may be not fully resolved until the target machine performs its own initConnection(), which will
@@ -491,7 +491,7 @@ export default class SerialPort extends Component {
      */
     initState(data)
     {
-        /*
+        /**
          * The NS8250A spec doesn't explicitly say what the RBR and THR are initialized to on a reset,
          * but I think we can safely assume zeros.  Similarly, we reset the baud rate Divisor Latch (wDL)
          * to an arbitrary but consistent default (DL_DEFAULT).
@@ -580,7 +580,7 @@ export default class SerialPort extends Component {
     receiveData(data, flush)
     {
         if (flush) {
-            /*
+            /**
              * Technically, this component is only emulating an 8250 (not a 16550), so the hardware
              * only has a 1-byte buffer (not a 16-byte buffer), but for debugging/development purposes,
              * I have historically buffered ALL received data.  Unfortunately, that internal buffer can
@@ -694,7 +694,7 @@ export default class SerialPort extends Component {
     inIIR(port, addrFrom)
     {
         let b = this.bIIR;
-        /*
+        /**
          * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR).
          */
         if (b == SerialPort.IIR.INT_THR) {
@@ -782,7 +782,7 @@ export default class SerialPort extends Component {
         } else {
             this.bTHR = bOut;
             this.bLSR &= ~(SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
-            /*
+            /**
              * If transmitByte() returned success, we used to immediately re-set the transmitter empty bits:
              *
              *      this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
@@ -849,7 +849,7 @@ export default class SerialPort extends Component {
         let delta = (bOut ^ this.bMCR);
         this.printIO(port, bOut, addrFrom, "MCR");
         this.bMCR = bOut;
-        /*
+        /**
          * Whenever DTR or RTS changes, we also need to notify any connected machine or mouse, via updateStatus().
          */
         if (delta & (SerialPort.MCR.DTR | SerialPort.MCR.RTS)) {
@@ -864,7 +864,7 @@ export default class SerialPort extends Component {
                 }
                 this.updateStatus.call(this.connection, pins);
             }
-            /*
+            /**
              * Throw in a call to advanceRBR() for good measure, in case fAutoFlow is set and RTS was just enabled.
              */
             this.advanceRBR();
@@ -879,7 +879,7 @@ export default class SerialPort extends Component {
     updateIIR()
     {
         let bIIR = -1;
-        /*
+        /**
          * We check all the interrupt conditions in priority order.  TODO: Add INT_LSR.
          */
         if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
@@ -894,7 +894,7 @@ export default class SerialPort extends Component {
         if (bIIR >= 0) {
             this.bIIR &= ~(SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS);
             this.bIIR |= bIIR;
-            /*
+            /**
              * I still throttle SerialPort interrupts by passing a hard-coded delay of 100 instructions to setIRR(),
              * even though we are now (theoretically) honoring the programmed baud rate.  The setIRR() delay does not
              * ensure any particular baud rate, it simply gives the underlying Interrupt Service Routine (ISR) some
@@ -946,7 +946,7 @@ export default class SerialPort extends Component {
             }
             else if (b == 0x08) {
                 this.controlBuffer.value = this.controlBuffer.value.slice(0, -1);
-                /*
+                /**
                  * TODO: Back up the correct number of columns if the character erased was a tab.
                  */
                 if (this.iLogicalCol > 0) this.iLogicalCol--;
@@ -961,7 +961,7 @@ export default class SerialPort extends Component {
                     if (this.tabSize) s = StrLib.pad("", -nChars);
                 }
                 if (!this.iLogicalCol && nChars) {
-                    /*
+                    /**
                      * When BASIC.COM outputs a listing to a serial port, it ends every line with a CR (0x0D)
                      * but no LF (0x0A), which seems a bit odd.  We fix that here.
                      */
@@ -1022,7 +1022,7 @@ export default class SerialPort extends Component {
     }
 }
 
-/*
+/**
  * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
  *
  * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
@@ -1054,12 +1054,12 @@ SerialPort.DLL = {REG: 0};      // Divisor Latch LSB (only when SerialPort.LCR.D
 SerialPort.THR = {REG: 0};      // Transmitter Holding Register (write)
 SerialPort.DL_DEFAULT = 0x180;  // we select an arbitrary default Divisor Latch equivalent to 300 baud
 
-/*
+/**
  * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
  */
 SerialPort.RBR = {REG: 0};      // (read)
 
-/*
+/**
  * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
  */
 SerialPort.IER = {
@@ -1073,7 +1073,7 @@ SerialPort.IER = {
 
 SerialPort.DLM = {REG: 1};      // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
 
-/*
+/**
  * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
  *
  * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
@@ -1089,7 +1089,7 @@ SerialPort.IIR = {
     UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
 };
 
-/*
+/**
  * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
  */
 SerialPort.LCR = {
@@ -1106,7 +1106,7 @@ SerialPort.LCR = {
     DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
 };
 
-/*
+/**
  * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
  */
 SerialPort.MCR = {
@@ -1119,7 +1119,7 @@ SerialPort.MCR = {
     UNUSED:         0xE0        // always zero
 };
 
-/*
+/**
  * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
  *
  * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
@@ -1138,7 +1138,7 @@ SerialPort.LSR = {
     UNUSED:         0x80        // always zero
 };
 
-/*
+/**
  * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
  */
 SerialPort.MSR = {
@@ -1153,12 +1153,12 @@ SerialPort.MSR = {
     RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
 };
 
-/*
+/**
  * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
  */
 SerialPort.SCR = {REG: 7};
 
-/*
+/**
  * Port input notification table
  */
 SerialPort.aPortInput = {
@@ -1171,7 +1171,7 @@ SerialPort.aPortInput = {
     0x6: SerialPort.prototype.inMSR
 };
 
-/*
+/**
  * Port output notification table
  */
 SerialPort.aPortOutput = {
@@ -1181,7 +1181,7 @@ SerialPort.aPortOutput = {
     0x4: SerialPort.prototype.outMCR
 };
 
-/*
+/**
  * Initialize every SerialPort module on the page.
  */
 WebLib.onInit(SerialPort.init);

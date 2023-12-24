@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-/*
+/**
  * This module provides connectivity between the TestMonitor component and whichever PCx86 SerialPort
  * our 'binding' property indicates, if any.
  */
@@ -162,12 +162,12 @@ export default class TestController extends Component {
             this.controlBuffer = /** @type {HTMLTextAreaElement} */ (control);
             this.consoleBuffer = null;          // we currently use one or the other: control or console
 
-            /*
+            /**
              * By establishing an onkeypress handler here, we make it possible for DOS commands like
              * "CTTY COM1" to more or less work (use "CTTY CON" to restore control to the DOS console).
              */
             control.onkeydown = function onKeyDown(event) {
-                /*
+                /**
                  * This is required in addition to onkeypress, because it's the only way to prevent
                  * BACKSPACE (keyCode 8) from being interpreted by the browser as a "Back" operation;
                  * moreover, not all browsers generate an onkeypress notification for BACKSPACE.
@@ -189,14 +189,14 @@ export default class TestController extends Component {
             };
 
             control.onkeypress = function onKeyPress(event) {
-                /*
+                /**
                  * Browser-independent keyCode extraction; refer to onKeyPress() and the other key event
                  * handlers in keyboard.js.
                  */
                 event = event || window.event;
                 let keyCode = event.which || event.keyCode;
                 if (controller.deliverInput) controller.deliverInput(keyCode);
-                /*
+                /**
                  * Since we're going to remove the "readonly" attribute from the <textarea> control
                  * (so that the soft keyboard activates on iOS), instead of calling preventDefault() for
                  * selected keys (eg, the SPACE key, whose default behavior is to scroll the page), we must
@@ -207,7 +207,7 @@ export default class TestController extends Component {
                 return true;
             };
 
-            /*
+            /**
              * Now that we've added an onkeypress handler that calls preventDefault() for ALL keys, the control
              * itself no longer needs the "readonly" attribute; we primarily need to remove it for iOS browsers,
              * so that the soft keyboard will activate, but it shouldn't hurt to remove the attribute for all browsers.
@@ -260,7 +260,7 @@ export default class TestController extends Component {
                 } else {
                     this.controlBuffer.value += s;
                 }
-                /*
+                /**
                  * Prevent the <textarea> from getting too large; otherwise, printing becomes slower and slower.
                  */
                 if (!DEBUG && this.controlBuffer.value.length > 8192) {
@@ -320,7 +320,7 @@ export default class TestController extends Component {
     }
 }
 
-/*
+/**
  * Initialize every TestController module on the page.
  */
 WebLib.onInit(TestController.init);

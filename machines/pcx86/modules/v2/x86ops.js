@@ -20,7 +20,7 @@ import { BACKTRACK, DEBUG, DEBUGGER, I386 } from "./defines.js";
 X86.opADDmb = function()
 {
     this.decodeModMemByte.call(this, X86.fnADDb);
-    /*
+    /**
      * Opcode bytes 0x00 0x00 are sufficiently uncommon that it's more likely we've started
      * executing in the weeds, so if you're in DEBUG mode, we'll print a warning and stop the
      * CPU if a Debugger is available.
@@ -72,7 +72,7 @@ X86.opADDrw = function()
 X86.opADDALb = function()
 {
     this.regEAX = (this.regEAX & ~0xff) | X86.fnADDb.call(this, this.regEAX & 0xff, this.getIPByte());
-    /*
+    /**
      * NOTE: Whenever the result is "blended" value (eg, of btiAL and btiMem0), a new bti should be
      * allocated to reflect that fact; however, I'm leaving "perfect" BACKTRACK support for another day.
      */
@@ -101,7 +101,7 @@ X86.opADDAX = function()
  */
 X86.opPUSHES = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -121,7 +121,7 @@ X86.opPUSHES = function()
  */
 X86.opPOPES = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -203,7 +203,7 @@ X86.opORAX = function()
  */
 X86.opPUSHCS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -223,7 +223,7 @@ X86.opPUSHCS = function()
  */
 X86.opPOPCS = function()
 {
-    /*
+    /**
      * Because this is an 8088-only operation, we don't have to worry about taking a snapshot of regLSP first.
      */
     this.setCS(this.popWord());
@@ -313,7 +313,7 @@ X86.opADCAX = function()
  */
 X86.opPUSHSS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -333,7 +333,7 @@ X86.opPUSHSS = function()
  */
 X86.opPOPSS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -415,7 +415,7 @@ X86.opSBBAX = function()
  */
 X86.opPUSHDS = function()
 {
-    /*
+    /**
      * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
      * into the 2 lower bytes, and leave the 2 upper bytes untouched; to properly emulate that, we must use the
      * more generic pushData() instead of pushWord().
@@ -435,7 +435,7 @@ X86.opPUSHDS = function()
  */
 X86.opPOPDS = function()
 {
-    /*
+    /**
      * Any operation that modifies the stack before loading a new segment must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -750,7 +750,7 @@ X86.opAAA = function()
     let AH = (this.regEAX >> 8) & 0xff;
     if ((AL & 0xf) > 9 || this.getAF()) {
         AL += 6;
-        /*
+        /**
          * Simulate the fact that the 80286 and higher add 6 to AX rather than AL.
          */
         if (this.model >= X86.MODEL_80286 && AL > 0xff) AH++;
@@ -1305,12 +1305,12 @@ X86.opPOPDI = function()
  */
 X86.opPUSHA = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
-    /*
+    /**
      * TODO: regLSP needs to be pre-bounds-checked against regLSPLimitLow
      */
     let temp = this.getSP() & this.maskData;
@@ -1355,7 +1355,7 @@ X86.opPUSHA = function()
  */
 X86.opPOPA = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -1372,7 +1372,7 @@ X86.opPOPA = function()
     if (BACKTRACK) {
         this.backTrack.btiBPLo = this.backTrack.btiMem0; this.backTrack.btiBPHi = this.backTrack.btiMem1;
     }
-    /*
+    /**
      * TODO: regLSP needs to be pre-bounds-checked against regLSPLimit at the start
      */
     this.setSP(this.getSP() + this.sizeData);
@@ -1415,7 +1415,7 @@ X86.opBOUND = function()
  */
 X86.opARPL = function()
 {
-    /*
+    /**
      * ARPL is one of several protected-mode instructions that are meaningless and not allowed in either real-mode
      * or V86-mode; others include LAR, LSL, VERR and VERW.  More meaningful but potentially harmful protected-mode
      * instructions that ARE allowed in real-mode but NOT in V86-mode include LIDT, LGDT, LMSW, CLTS, HLT, and
@@ -1477,7 +1477,7 @@ X86.opGS = function()
 X86.opOS = function()
 {
     if (I386) {
-        /*
+        /**
          * See opAS() for a discussion of multiple prefixes, which applies equally to both
          * operand-size and address-size prefixes.
          *
@@ -1503,7 +1503,7 @@ X86.opOS = function()
 X86.opAS = function()
 {
     if (I386) {
-        /*
+        /**
          * Live and learn: multiple address-size prefixes can and do occur on a single instruction,
          * and contrary to my original assumption that the prefixes act independently, they do not.
          * During Windows 95 SETUP, the following instruction is executed:
@@ -1588,14 +1588,14 @@ X86.opINSb = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  However, accurate cycle times for the 80186/80188 is
      * low priority.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -1609,7 +1609,7 @@ X86.opINSb = function()
         if (!this.checkIOPM(port, 1, true)) return;
         let b = this.bus.checkPortInputNotify(port, 1, this.regLIP - nDelta - 1);
         this.setSOByte(this.segES, this.regEDI & maskAddr, b);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -1635,14 +1635,14 @@ X86.opINSw = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  However, accurate cycle times for the 80186/80188 is
      * low priority.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -1659,7 +1659,7 @@ X86.opINSw = function()
             this.backTrack.btiMem1 = this.backTrack.btiIO;
         }
         this.setSOWord(this.segES, this.regEDI & maskAddr, w);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -1684,13 +1684,13 @@ X86.opOUTSb = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  TODO: Fix this someday.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -1702,7 +1702,7 @@ X86.opOUTSb = function()
         let port = this.regEDX & 0xffff;
         if (!this.checkIOPM(port, 1, false)) return;
         let b = this.getSOByte(this.segDS, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -1729,13 +1729,13 @@ X86.opOUTSw = function()
     let nDelta = 0;
     let maskAddr = this.maskAddr;
 
-    /*
+    /**
      * NOTE: 5 + 4n is the cycle time for the 80286; the 80186/80188 has different values: 14 cycles for
      * an unrepeated INS, and 8 + 8n for a repeated INS.  TODO: Fix this someday.
      */
     let nCycles = 5;
 
-    /*
+    /**
      * The (normal) REP prefix, if used, is REPNZ (0xf2), but either one works....
      */
     if (this.opPrefixes & (X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ)) {
@@ -1745,7 +1745,7 @@ X86.opOUTSw = function()
     }
     if (nReps--) {
         let w = this.getSOWord(this.segDS, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2087,7 +2087,7 @@ X86.opTESTrw = function()
  */
 X86.opXCHGrb = function()
 {
-    /*
+    /**
      * If the second operand is a register, then the ModRegByte decoder must use separate "get" and
      * "set" assignments, otherwise instructions like "XCHG DH,DL" will end up using a stale DL instead of
      * the updated DL.
@@ -2130,7 +2130,7 @@ X86.opXCHGrw = function()
  */
 X86.opMOVmb = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -2144,7 +2144,7 @@ X86.opMOVmb = function()
  */
 X86.opMOVmw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -2181,7 +2181,7 @@ X86.opMOVrw = function()
  */
 X86.opMOVwsr = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -2272,18 +2272,18 @@ X86.opMOVsrw = function()
  */
 X86.opPOPmw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
 
-    /*
+    /**
      * If the word we're about to pop FROM the stack gets popped INTO a not-present page, this
      * instruction will not be restartable unless we snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
-    /*
+    /**
      * A "clever" instruction like this:
      *
      *      #0117:651C 67668F442408    POP      DWORD [ESP+08]
@@ -2312,7 +2312,7 @@ X86.opPOPmw = function()
 X86.opNOP = function()
 {
     this.nStepCycles -= 3;                          // this form of XCHG takes 3 cycles on all CPUs
-    /*
+    /**
      * The following exception is not unique to LOCK NOP on the 80386, but it's the only LOCK exception
      * that seems worth worrying about this point.  See opLOCK() for further discussion.
      */
@@ -2509,7 +2509,7 @@ X86.opWAIT = function()
  */
 X86.opPUSHF = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     let regPS = this.getPS();
@@ -2519,7 +2519,7 @@ X86.opPUSHF = function()
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
-        /*
+        /**
          * It doesn't matter whether this is PUSHF or PUSHFD: the VM and RF flags are never pushed, so
          * we should always clear them.  NOTE: This contradicts what the "INTEL 80386 PROGRAMMER'S REFERENCE
          * MANUAL 1986" says on page 81 (which we assume is wrong):
@@ -2546,7 +2546,7 @@ X86.opPUSHF = function()
  */
 X86.opPOPF = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -2554,13 +2554,13 @@ X86.opPOPF = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * Regardless of mode, VM and RF (the only defined EFLAGS bit above bit 15) are never changed by POPFD.
      */
     let newPS = this.popWord();
     if (I386) newPS = (newPS & 0xffff) | (this.regPS & ~0xffff);
     this.setPS(newPS);
-    /*
+    /**
      * NOTE: I'm assuming that neither POPF nor IRET are required to set NOINTR like STI does.
      */
     this.nStepCycles -= this.cycleCounts.nOpCyclesPopReg;
@@ -2573,7 +2573,7 @@ X86.opPOPF = function()
  */
 X86.opSAHF = function()
 {
-    /*
+    /**
      * NOTE: While it make seem more efficient to do this:
      *
      *      this.setPS((this.getPS() & ~X86.PS_SAHF) | ((this.regEAX >> 8) & X86.PS_SAHF));
@@ -2599,7 +2599,7 @@ X86.opSAHF = function()
  */
 X86.opLAHF = function()
 {
-    /*
+    /**
      * Apparently, this simply uses the low 8 bits of PS as-is (ie, we don't need to mask with PS_SAHF).
      */
     this.regEAX = (this.regEAX & ~0xff00) | (this.getPS() & 0xff) << 8;
@@ -2640,7 +2640,7 @@ X86.opMOVAXm = function()
 X86.opMOVmAL = function()
 {
     if (BACKTRACK) this.backTrack.btiMem0 = this.backTrack.btiAL;
-    /*
+    /**
      * setSOByte() truncates the value as appropriate
      */
     this.setSOByte(this.segData, this.getIPAddr(), this.regEAX);
@@ -2657,7 +2657,7 @@ X86.opMOVmAX = function()
     if (BACKTRACK) {
         this.backTrack.btiMem0 = this.backTrack.btiAL; this.backTrack.btiMem1 = this.backTrack.btiAH;
     }
-    /*
+    /**
      * setSOWord() truncates the value as appropriate
      */
     this.setSOWord(this.segData, this.getIPAddr(), this.regEAX);
@@ -2684,7 +2684,7 @@ X86.opMOVSb = function()
     }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.getSOByte(this.segData, this.regESI & maskAddr));
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2718,7 +2718,7 @@ X86.opMOVSw = function()
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.getSOWord(this.segData, this.regESI & maskAddr));
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2754,7 +2754,7 @@ X86.opCMPSb = function()
         let bDst = this.getEAByte(this.segData, this.regESI);
         let bSrc = this.getEAByte(this.segES, this.regEDI);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2764,11 +2764,11 @@ X86.opCMPSb = function()
         this.regESI = (this.regESI & ~maskAddr) | ((this.regESI + nInc) & maskAddr);
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + nInc) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPb(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -2799,7 +2799,7 @@ X86.opCMPSw = function()
         let wDst = this.getEAWord(this.segData, this.regESI & maskAddr);
         let wSrc = this.getEAWord(this.segES, this.regEDI & maskAddr);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2809,11 +2809,11 @@ X86.opCMPSw = function()
         this.regESI = (this.regESI & ~maskAddr) | ((this.regESI + nInc) & maskAddr);
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + nInc) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPw(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -2866,7 +2866,7 @@ X86.opSTOSb = function()
     }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.regEAX);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2875,7 +2875,7 @@ X86.opSTOSb = function()
 
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
 
-        /*
+        /**
          * Implement 80386 B1 Errata #7, to the extent that Windows 95 checked for it.  This test doesn't
          * detect every possible variation (for example, the ADDRESS override on the next instruction, if
          * it exists, may not be the first prefix byte), but it's adequate for our limited purpose.
@@ -2921,7 +2921,7 @@ X86.opSTOSw = function()
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.regEAX);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2956,7 +2956,7 @@ X86.opLODSb = function()
     }
     if (nReps--) {
         let b = this.getSOByte(this.segData, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -2990,7 +2990,7 @@ X86.opLODSw = function()
     }
     if (nReps--) {
         let w = this.getSOWord(this.segData, this.regESI & maskAddr);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
@@ -3029,18 +3029,18 @@ X86.opSCASb = function()
         let bSrc = this.getEAByte(this.segES, this.regEDI);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
         X86.fnCMPb.call(this, bDst, bSrc);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
          */
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + ((this.regPS & X86.PS.DF)? -1 : 1)) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPb(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -3072,18 +3072,18 @@ X86.opSCASw = function()
         let wSrc = this.getEAWord(this.segES, this.regEDI & maskAddr);
         this.regEAWrite = this.regEA;           // TODO: Is this necessary?
         X86.fnCMPw.call(this, wDst, wSrc);
-        /*
+        /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
          *      if (this.opFlags & X86.OPFLAG.FAULT) return;
          */
         this.regEDI = (this.regEDI & ~maskAddr) | ((this.regEDI + ((this.regPS & X86.PS.DF)? -this.sizeData : this.sizeData)) & maskAddr);
         this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - nDelta) & maskAddr);
-        /*
+        /**
          * NOTE: As long as we're calling fnCMPw(), all our cycle times must be reduced by nOpCyclesArithRM
          */
         this.nStepCycles -= nCycles - this.cycleCounts.nOpCyclesArithRM;
-        /*
+        /**
          * Repetition continues while ZF matches bit 0 of the REP prefix.  getZF() returns 0x40 if ZF is
          * set, and OP_REPZ (which represents the REP prefix whose bit 0 is set) is 0x40 as well, so when those
          * two values are equal, we must continue.
@@ -3374,7 +3374,7 @@ X86.opLDS = function()
  */
 X86.opMOVb = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -3388,7 +3388,7 @@ X86.opMOVb = function()
  */
 X86.opMOVw = function()
 {
-    /*
+    /**
      * Like other MOV operations, the destination does not need to be read, just written.
      */
     this.opFlags |= X86.OPFLAG.NOREAD;
@@ -3402,14 +3402,14 @@ X86.opMOVw = function()
  */
 X86.opENTER = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
 
     let wLocal = this.getIPShort();
     let bLevel = this.getIPByte() & 0x1f;
-    /*
+    /**
      * NOTE: 11 is the minimum cycle time for the 80286; the 80186/80188 has different cycle times: 15, 25 and
      * 22 + 16 * (bLevel - 1) for bLevel 0, 1 and > 1, respectively.  TODO: Fix this someday.
      */
@@ -3437,7 +3437,7 @@ X86.opENTER = function()
  */
 X86.opLEAVE = function()
 {
-    /*
+    /**
      * Any operation that performs multiple stack modifications must snapshot regLSP first.
      */
     this.opLSP = this.regLSP;
@@ -3445,7 +3445,7 @@ X86.opLEAVE = function()
     this.setSP((this.getSP() & ~this.segSS.maskAddr) | (this.regEBP & this.segSS.maskAddr));
 
     this.regEBP = (this.regEBP & ~this.maskData) | (this.popWord() & this.maskData);
-    /*
+    /**
      * NOTE: 5 is the cycle time for the 80286; the 80186/80188 has a cycle time of 8.  TODO: Fix this someday.
      */
     this.nStepCycles -= 5;
@@ -3482,7 +3482,7 @@ X86.opRETF = function()
  */
 X86.opINT3 = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -3490,7 +3490,7 @@ X86.opINT3 = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * Because INT3 is a trap, not a fault, we must use helpTrap() rather than helpFault().  Unfortunately, that
      * means you can't rely on the Debugger logic instead helpFault() to conditionally stop execution on an INT3,
      * so I've changed the Debugger's checkBreakpoint() function to stop execution on INT3 whenever both the
@@ -3507,7 +3507,7 @@ X86.opINT3 = function()
 X86.opINTn = function()
 {
     let nInt = this.getIPByte();
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -3515,7 +3515,7 @@ X86.opINTn = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * checkIntNotify() checks for any notification handlers registered via addIntNotify(), calls them,
      * and returns false ONLY if a notification handler returned false (ie, requesting the interrupt be skipped).
      */
@@ -3534,7 +3534,7 @@ X86.opINTn = function()
 X86.opINTO = function()
 {
     if (this.getOF()) {
-        /*
+        /**
          * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
          */
         if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -3555,7 +3555,7 @@ X86.opINTO = function()
  */
 X86.opIRET = function()
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
@@ -3657,7 +3657,7 @@ X86.opAAM = function()
     }
     let AL = this.regEAX & 0xff;
     this.regEAX = (this.regEAX & ~0xffff) | ((AL / b) << 8) | (AL % b);
-    /*
+    /**
      * setLogicResult() is perfect, because it ensures that CF and OF are cleared as well (see above for why).
      */
     this.setLogicResult(this.regEAX, X86.RESULT.BYTE);
@@ -3729,7 +3729,7 @@ X86.opSALC = function()
  */
 X86.opXLAT = function()
 {
-    /*
+    /**
      * TODO: Verify whether XLAT wraps its address calculation....
      */
     this.regEAX = (this.regEAX & ~0xff) | this.getEAByte(this.segData, (this.regEBX + (this.regEAX & 0xff)));
@@ -4130,7 +4130,7 @@ X86.opLOCK = function()
  */
 X86.opINT1 = function()
 {
-    /*
+    /**
      * TODO: Verify this instruction's behavior.
      */
     X86.helpTrap.call(this, X86.EXCEPTION.DB_EXC, 1, this.cycleCounts.nOpCyclesInt3D);
@@ -4180,14 +4180,14 @@ X86.opHLT = function()
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
-    /*
+    /**
      * The CPU is never REALLY halted by a HLT instruction; instead, by setting X86.INTFLAG.HALT,
      * we are signalling to stepCPU() that it's free to end the current burst AND that it should not
      * execute any more instructions until checkINTR() indicates a hardware interrupt is requested.
      */
     this.intFlags |= X86.INTFLAG.HALT;
     this.nStepCycles -= 2;
-    /*
+    /**
      * If a Debugger is present and both the CPU and HALT message categories are enabled, then we
      * REALLY halt the CPU, on the theory that whoever's using the Debugger would like to see HLTs.
      */
@@ -4196,7 +4196,7 @@ X86.opHLT = function()
         this.dbg.stopCPU();
         return;
     }
-    /*
+    /**
      * We also REALLY halt the machine if interrupts have been disabled, since that means it's dead in
      * the water (yes, we support NMIs, but none of our devices are going to generate an NMI at this point).
      */
@@ -4303,7 +4303,7 @@ X86.opSTC = function()
  */
 X86.opCLI = function()
 {
-    /*
+    /**
      * The following code should be sufficient for all modes, because in real-mode, CPL is always zero,
      * and in V86-mode, CPL is always 3.
      */
@@ -4323,7 +4323,7 @@ X86.opCLI = function()
  */
 X86.opSTI = function()
 {
-    /*
+    /**
      * The following code should be sufficient for all modes, because in real-mode, CPL is always zero,
      * and in V86-mode, CPL is always 3.
      */
@@ -4413,7 +4413,7 @@ X86.opTBD = function()
     this.stopCPU();
 };
 
-/*
+/**
  * This 256-entry array of opcode functions is at the heart of the CPU engine: stepCPU(n).
  *
  * It might be worth trying a switch() statement instead, to see how the performance compares,
@@ -4445,7 +4445,7 @@ X86.aOps = [
     X86.opPUSHSP_8086,      X86.opPUSHBP,           X86.opPUSHSI,           X86.opPUSHDI,       // 0x54-0x57
     X86.opPOPAX,            X86.opPOPCX,            X86.opPOPDX,            X86.opPOPBX,        // 0x58-0x5B
     X86.opPOPSP,            X86.opPOPBP,            X86.opPOPSI,            X86.opPOPDI,        // 0x5C-0x5F
-    /*
+    /**
      * On an 8086/8088, opcodes 0x60-0x6F are aliases for the conditional jumps 0x70-0x7F.  Sometimes you'll see
      * references to these opcodes (like 0x60) being a "two-byte NOP" and using them differentiate an 8088 from newer
      * CPUs, but they're only a "two-byte NOP" if the second byte is zero, resulting in zero displacement.
@@ -4458,7 +4458,7 @@ X86.aOps = [
     X86.opJZ,               X86.opJNZ,              X86.opJBE,              X86.opJNBE,         // 0x74-0x77
     X86.opJS,               X86.opJNS,              X86.opJP,               X86.opJNP,          // 0x78-0x7B
     X86.opJL,               X86.opJNL,              X86.opJLE,              X86.opJNLE,         // 0x7C-0x7F
-    /*
+    /**
      * On all processors, opcode groups 0x80 and 0x82 perform identically (0x82 opcodes sign-extend their
      * immediate data, but since both 0x80 and 0x82 are byte operations, the sign extension has no effect).
      *
@@ -4482,7 +4482,7 @@ X86.aOps = [
     X86.opMOVAHb,           X86.opMOVCHb,           X86.opMOVDHb,           X86.opMOVBHb,       // 0xB4-0xB7
     X86.opMOVAX,            X86.opMOVCX,            X86.opMOVDX,            X86.opMOVBX,        // 0xB8-0xBB
     X86.opMOVSP,            X86.opMOVBP,            X86.opMOVSI,            X86.opMOVDI,        // 0xBC-0xBF
-    /*
+    /**
      * On an 8086/8088, opcodes 0xC0 -> 0xC2, 0xC1 -> 0xC3, 0xC8 -> 0xCA and 0xC9 -> 0xCB.
      */
     X86.opRETn,             X86.opRET,              X86.opRETn,             X86.opRET,          // 0xC0-0xC3
@@ -4490,7 +4490,7 @@ X86.aOps = [
     X86.opRETFn,            X86.opRETF,             X86.opRETFn,            X86.opRETF,         // 0xC8-0xCB
     X86.opINT3,             X86.opINTn,             X86.opINTO,             X86.opIRET,         // 0xCC-0xCF
     X86.opGRP2b1,           X86.opGRP2w1,           X86.opGRP2bCL,          X86.opGRP2wCL,      // 0xD0-0xD3
-    /*
+    /**
      * Even as of the Pentium, opcode 0xD6 is still marked as "reserved", but it's always been SALC (aka SETALC).
      */
     X86.opAAM,              X86.opAAD,              X86.opSALC,             X86.opXLAT,         // 0xD4-0xD7
@@ -4500,7 +4500,7 @@ X86.aOps = [
     X86.opINb,              X86.opINw,              X86.opOUTb,             X86.opOUTw,         // 0xE4-0xE7
     X86.opCALL,             X86.opJMP,              X86.opJMPF,             X86.opJMPs,         // 0xE8-0xEB
     X86.opINDXb,            X86.opINDXw,            X86.opOUTDXb,           X86.opOUTDXw,       // 0xEC-0xEF
-    /*
+    /**
      * On an 8086/8088, opcode 0xF1 is believed to be an alias for 0xF0; in any case, it definitely behaves like
      * a prefix on those processors, so we treat it as such.  On the 80186 and 80286, we treat it as opUndefined(),
      * and on the 80386, it becomes opINT1().
@@ -4513,7 +4513,7 @@ X86.aOps = [
     X86.opCLD,              X86.opSTD,              X86.opGRP4b,            X86.opGRP4w         // 0xFC-0xFF
 ];
 
-/*
+/**
  * A word (or two) on instruction groups (eg, Grp1, Grp2), which are groups of instructions that
  * use a mod/reg/rm byte, where the reg field of that byte selects a function rather than a register.
  *

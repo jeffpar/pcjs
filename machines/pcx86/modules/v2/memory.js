@@ -10,7 +10,6 @@
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
-import StrLib from "../../../modules/v2/strlib.js";
 import { BACKTRACK, BYTEARRAYS, DEBUG, DEBUGGER, I386, PAGEBLOCKS, TYPEDARRAYS } from "./defines.js";
 
 /**
@@ -34,6 +33,60 @@ var littleEndian = (TYPEDARRAYS? (function() {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Memoryx86 {
+    /**
+     * Basic memory types
+     *
+     * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
+     * 'little endian") storage.  ROM is equally conventional, except that the fReadOnly property is set,
+     * disabling writes.  VIDEO is treated exactly like RAM, unless a controller is provided.  Both RAM and
+     * VIDEO memory are always considered writable, and even ROM can be written using the Bus setByteDirect()
+     * interface (which in turn uses the Memory writeByteDirect() interface), allowing the ROM component to
+     * initialize its own memory.  The CTRL type is used to identify memory-mapped devices that do not need
+     * any default storage and always provide their own controller.
+     *
+     * UNPAGED and PAGED blocks are created by the CPU when paging is enabled; the role of an UNPAGED block
+     * is simply to perform page translation and replace itself with a PAGED block, which redirects read/write
+     * requests to the physical page located during translation.  UNPAGED and PAGED blocks are considered
+     * "logical" blocks that don't contain any storage of their own; all other block types represent "physical"
+     * memory (or a memory-mapped device).
+     *
+     * Unallocated regions of the address space contain a special memory block of type NONE that contains
+     * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
+     * exactly the same manner, without resorting to any range or processor checks.
+     *
+     * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
+     * but with the introduction of protected mode memory segmentation (and later paging), where logical and
+     * physical addresses were no longer the same, that is no longer true.  For coherency, all Debugger memory
+     * accesses now go through Segx86 and CPUx86 memory interfaces, so that the user sees the same segment
+     * and page translation that the CPU sees.  However, the Debugger uses a special probeAddr() interface to
+     * read memory, along with a special "fSuppress" flag to mapPageBlock(), to prevent its memory accesses
+     * from triggering segment and/or page faults when invalid or not-present segments or pages are accessed.
+     *
+     * These types are not mutually exclusive.  For example, VIDEO memory could be allocated as RAM, with or
+     * without a custom controller (the original Monochrome and CGA video cards used read/write storage that
+     * was indistinguishable from RAM), and CTRL memory could be allocated as an empty block of any type, with
+     * a custom controller.  A few types are required for certain features (eg, ROM is required if you want
+     * read-only memory), but the larger purpose of these types is to help document the caller's intent and to
+     * provide the Control Panel with the ability to highlight memory regions accordingly.
+     */
+    static TYPE = {
+        NONE:       0,
+        RAM:        1,
+        ROM:        2,
+        VIDEO:      3,
+        CTRL:       4,
+        UNPAGED:    5,
+        PAGED:      6,
+        COLORS:     ["black", "blue", "green", "cyan"],
+        NAMES:      ["NONE",  "RAM",  "ROM",   "VIDEO", "H/W", "UNPAGED", "PAGED"]
+    };
+
+    static FLAGS = {
+        CLEAN:      0x0,
+        DIRTY:      0x1,
+        MODIFIED:   0x2
+    };
+
     /**
      * Memory(addr, used, size, type, controller)
      *
@@ -90,7 +143,7 @@ export default class Memoryx86 {
         this.cpu = cpu;             // if a CPU reference is provided, then this must be an UNPAGED Memory block allocation
         this.copyBreakpoints();     // initialize the block's Debugger info (eg, breakpoint totals); the caller will reinitialize
 
-        /*
+        /**
          * Dirty block tracking is now controller-specific.  As noted in the paged block handlers (eg, writeBytePLE),
          * the original purposes were to allow saveMemory() to save only dirty blocks and to enable the Video component
          * to quickly detect changes to the video buffer.  But saveMemory() has since been changed to save (and compress)
@@ -116,7 +169,7 @@ export default class Memoryx86 {
             }
         }
 
-        /*
+        /**
          * For empty memory blocks, all we need to do is ensure all access functions
          * are mapped to "none" handlers (or "unpaged" handlers if paging is enabled).
          */
@@ -125,7 +178,7 @@ export default class Memoryx86 {
             return;
         }
 
-        /*
+        /**
          * When a controller is specified, the controller must provide a buffer,
          * via getMemoryBuffer(), and memory access functions, via getMemoryAccess().
          */
@@ -138,7 +191,7 @@ export default class Memoryx86 {
             return;
         }
 
-        /*
+        /**
          * This is the normal case: allocate a buffer that provides 8 bits of data per address;
          * no controller is required because our default memory access functions (see afnMemory)
          * know how to deal with this simple 1-1 mapping of addresses to bytes and words.
@@ -149,7 +202,7 @@ export default class Memoryx86 {
         if (TYPEDARRAYS) {
             this.buffer = new ArrayBuffer(size);
             this.dv = new DataView(this.buffer, 0, size);
-            /*
+            /**
              * If littleEndian is true, we can use ab[], aw[] and adw[] directly; well, we can use them
              * whenever the offset is a multiple of 1, 2 or 4, respectively.  Otherwise, we must fallback to
              * dv.getUint8()/dv.setUint8(), dv.getUint16()/dv.setUint16() and dv.getInt32()/dv.setInt32().
@@ -162,7 +215,7 @@ export default class Memoryx86 {
             if (BYTEARRAYS) {
                 this.ab = new Array(size);
             } else {
-                /*
+                /**
                  * NOTE: This is the default mode of operation (!TYPEDARRAYS && !BYTEARRAYS), because it
                  * seems to provide the best performance; and although in theory, that performance might
                  * come at twice the overhead of TYPEDARRAYS, it's increasingly likely that the JavaScript
@@ -230,7 +283,7 @@ export default class Memoryx86 {
      */
     clone(mem, type, dbg)
     {
-        /*
+        /**
          * Original memory block IDs are even; cloned memory block IDs are odd;
          * the original ID of the current block is lost, but that's OK, since it was presumably
          * produced merely to become a clone.
@@ -287,7 +340,7 @@ export default class Memoryx86 {
             }
         }
         else if (TYPEDARRAYS) {
-            /*
+            /**
              * It might be tempting to just return a copy of Int32Array(this.buffer, 0, this.size >> 2),
              * but we can't be sure of the "endianness" of an Int32Array -- which would be OK if the array
              * was always saved/restored on the same machine, but there's no guarantee of that, either.
@@ -321,16 +374,17 @@ export default class Memoryx86 {
      */
     restore(adw)
     {
-        /*
+        /**
          * If this block has its own controller, then that controller is responsible for performing the
          * restore, since we don't know the underlying memory format.  However, we no longer blow off these
          * restore calls, because old machine states may still try to restore video memory blocks for MDA
          * and CGA video buffers (and in those cases, the memory formats should be compatible).
          */
-        let i, off;
+        let i;
+        let off;
         if (this.controller) {
             if (this.adw) {
-                /*
+                /**
                  * If the controller memory buffer appears to be for either an MDA using 2048 16-bit values
                  * or a CGA using 8192 16-bit values, then split up the saved 32-bit values accordingly.
                  * Otherwise, do a 1-for-1 restore and hope for the best.
@@ -493,7 +547,7 @@ export default class Memoryx86 {
      */
     getPageBlock(addr, fWrite)
     {
-        /*
+        /**
          * Even when mapPageBlock() fails (ie, when the page is not present or has insufficient privileges), it
          * will trigger a fault (since we don't set fSuppress), but it will still return a block (ie, an empty block).
          */
@@ -517,7 +571,7 @@ export default class Memoryx86 {
         this.iPDE = offPDE >> 2;    // convert offPDE into iPDE (an adw index)
         this.blockPTE = blockPTE;
         this.iPTE = offPTE >> 2;    // convert offPTE into iPTE (an adw index)
-        /*
+        /**
          * This is an optimization for "normal" pages, installing paged memory handlers that mimic
          * normal memory but also know how to update page tables.  If any of the criteria are not met
          * for these special handlers, we fall back to the slower default "paged" memory handlers.
@@ -1179,7 +1233,7 @@ export default class Memoryx86 {
     {
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
          * we redirect the default read handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -1215,7 +1269,7 @@ export default class Memoryx86 {
      */
     readShortLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1232,13 +1286,13 @@ export default class Memoryx86 {
      */
     readShortPLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
          * we redirect the default read handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -1274,7 +1328,7 @@ export default class Memoryx86 {
      */
     readLongLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1291,13 +1345,13 @@ export default class Memoryx86 {
      */
     readLongPLE(off, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned read
          * vs. always reading the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first read of a page, we redirect the default
          * read handler to a faster handler.  However, if operating systems clear the PDE/PTE bits without reloading
          * CR3, they won't get set again.
@@ -1350,7 +1404,7 @@ export default class Memoryx86 {
         this.ab[off] = b;
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page, we redirect the default
          * write handler to a faster handler.  However, if operating systems clear the PDE/PTE bits without reloading
          * CR3, they won't get set again.
@@ -1359,7 +1413,7 @@ export default class Memoryx86 {
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
         this.writeByte = this.writeByteLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's consider
          * the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by the Video component,
          * and video memory should never contain page directories or page tables, so no worries there.  Second, we have
@@ -1393,7 +1447,7 @@ export default class Memoryx86 {
      */
     writeShortLE(off, w, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1416,7 +1470,7 @@ export default class Memoryx86 {
      */
     writeShortPLE(off, w, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1428,7 +1482,7 @@ export default class Memoryx86 {
         }
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page,
          * we redirect the default write handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -1438,7 +1492,7 @@ export default class Memoryx86 {
          * for the corresponding pages.
          */
         this.writeShort = this.writeShortLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
          * the Video component, and video memory should never contain page directories or page tables, so no
@@ -1472,7 +1526,7 @@ export default class Memoryx86 {
      */
     writeLongLE(off, l, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1497,7 +1551,7 @@ export default class Memoryx86 {
      */
     writeLongPLE(off, l, addr)
     {
-        /*
+        /**
          * TODO: It remains to be seen if there's any advantage to checking the offset for an aligned write
          * vs. always writing the bytes separately; it seems a safe bet for longs, but it's less clear for shorts.
          */
@@ -1511,7 +1565,7 @@ export default class Memoryx86 {
         }
         this.blockPDE.adw[this.iPDE] |= X86.PTE.ACCESSED;
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED | X86.PTE.DIRTY;
-        /*
+        /**
          * TODO: Review this performance hack.  Basically, after the first write of a page,
          * we redirect the default write handler to a faster handler.  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
@@ -1521,7 +1575,7 @@ export default class Memoryx86 {
          * for the corresponding pages.
          */
         this.writeLong = this.writeLongLE;
-        /*
+        /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
          * the Video component, and video memory should never contain page directories or page tables, so no
@@ -1622,67 +1676,12 @@ export default class Memoryx86 {
     }
 }
 
-/*
- * Basic memory types
- *
- * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
- * 'little endian") storage.  ROM is equally conventional, except that the fReadOnly property is set,
- * disabling writes.  VIDEO is treated exactly like RAM, unless a controller is provided.  Both RAM and
- * VIDEO memory are always considered writable, and even ROM can be written using the Bus setByteDirect()
- * interface (which in turn uses the Memory writeByteDirect() interface), allowing the ROM component to
- * initialize its own memory.  The CTRL type is used to identify memory-mapped devices that do not need
- * any default storage and always provide their own controller.
- *
- * UNPAGED and PAGED blocks are created by the CPU when paging is enabled; the role of an UNPAGED block
- * is simply to perform page translation and replace itself with a PAGED block, which redirects read/write
- * requests to the physical page located during translation.  UNPAGED and PAGED blocks are considered
- * "logical" blocks that don't contain any storage of their own; all other block types represent "physical"
- * memory (or a memory-mapped device).
- *
- * Unallocated regions of the address space contain a special memory block of type NONE that contains
- * no storage.  Mapping every addressable location to a memory block allows all accesses to be routed in
- * exactly the same manner, without resorting to any range or processor checks.
- *
- * Originally, the Debugger always went through the Bus interfaces, and could therefore modify ROMs as well,
- * but with the introduction of protected mode memory segmentation (and later paging), where logical and
- * physical addresses were no longer the same, that is no longer true.  For coherency, all Debugger memory
- * accesses now go through Segx86 and CPUx86 memory interfaces, so that the user sees the same segment
- * and page translation that the CPU sees.  However, the Debugger uses a special probeAddr() interface to
- * read memory, along with a special "fSuppress" flag to mapPageBlock(), to prevent its memory accesses
- * from triggering segment and/or page faults when invalid or not-present segments or pages are accessed.
- *
- * These types are not mutually exclusive.  For example, VIDEO memory could be allocated as RAM, with or
- * without a custom controller (the original Monochrome and CGA video cards used read/write storage that
- * was indistinguishable from RAM), and CTRL memory could be allocated as an empty block of any type, with
- * a custom controller.  A few types are required for certain features (eg, ROM is required if you want
- * read-only memory), but the larger purpose of these types is to help document the caller's intent and to
- * provide the Control Panel with the ability to highlight memory regions accordingly.
- */
-Memoryx86.TYPE = {
-    NONE:       0,
-    RAM:        1,
-    ROM:        2,
-    VIDEO:      3,
-    CTRL:       4,
-    UNPAGED:    5,
-    PAGED:      6,
-    COLORS:     ["black", "blue", "green", "cyan"],
-    NAMES:      ["NONE",  "RAM",  "ROM",   "VIDEO", "H/W", "UNPAGED", "PAGED"]
-};
-
-Memoryx86.FLAGS = {
-    CLEAN:      0x0,
-    DIRTY:      0x1,
-    MODIFIED:   0x2
-};
-
-/*
+/**
  * Last used block ID (used for debugging only)
  */
 Memoryx86.idBlock = 0;
 
-
-/*
+/**
  * This is the effective definition of afnNone, but we need not fully define it, because setAccess() uses these
  * defaults when any of the 6 handlers (ie, 2 byte handlers, 2 short handlers, and 2 long handlers) are undefined.
  *

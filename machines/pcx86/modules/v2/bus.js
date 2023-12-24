@@ -72,7 +72,7 @@ export class Controller {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Busx86 extends Component {
-    /*
+    /**
      * BackTrack indexes are 31-bit values, where bits 0-8 store an object offset (0-511) and bits 16-30 store
      * an object number (1-32767).  Object number 0 is reserved for dynamic data (ie, data created independent
      * of any source); examples include zero values produced by instructions such as "SUB AX,AX" or "XOR AX,AX".
@@ -130,7 +130,7 @@ export default class Busx86 extends Component {
         REM_MEM_BADRANGE:   5
     };
 
-    /*
+    /**
      * This defines the BlockInfo bit fields used by scanMemory() when it creates the aBlocks array.
      */
     static BlockInfo = UsrLib.defineBitFields({num:20, count:8, btmod:1, type:3});
@@ -173,7 +173,7 @@ export default class Busx86 extends Component {
 
         this.nBusWidth = +parmsBus['busWidth'] || 20;
 
-        /*
+        /**
          * Compute all Bus memory block parameters, based on the width of the bus.
          *
          * Regarding blockTotal, we want to avoid using block overflow expressions like:
@@ -228,7 +228,7 @@ export default class Busx86 extends Component {
         this.nBlockMask = this.nBlockTotal - 1;
         this.assert(this.nBlockMask <= Busx86.BlockInfo.num.mask);
 
-        /*
+        /**
          * Lists of I/O notification functions: aPortInputNotify and aPortOutputNotify are arrays, indexed by
          * port, of sub-arrays which contain:
          *
@@ -254,14 +254,14 @@ export default class Busx86 extends Component {
         this.aPortOutputNotify = [];
         this.fPortInputBreakAll = this.fPortOutputBreakAll = false;
 
-        /*
+        /**
          * By default, all I/O ports are 1 byte wide; ports that are wider must add themselves to one or both of
          * these lists, using addPortInputWidth() and/or addPortOutputWidth().
          */
         this.aPortInputWidth = [];
         this.aPortOutputWidth = [];
 
-        /*
+        /**
          * Allocate empty Memory blocks to span the entire physical address space.
          */
         this.initMemory();
@@ -375,7 +375,7 @@ export default class Busx86 extends Component {
 
             if (block && block.size) {
                 if (block.type == type && block.controller == controller) {
-                    /*
+                    /**
                      * Where there is already a similar block with a non-zero size, we allow the allocation only if:
                      *
                      *   1) addrNext + sizeLeft <= block.addr (the request precedes the used portion of the current block), or
@@ -407,7 +407,7 @@ export default class Busx86 extends Component {
             sizeLeft -= sizeBlock;
         }
         if (sizeLeft <= 0) {
-            /*
+            /**
              * If all addMemory() calls happened ONLY during device initialization, the following code would not
              * be necessary; unfortunately, the Video component can add and remove physical memory blocks during video
              * mode changes, so we have to kick out any PAGED blocks that could have references to those physical memory
@@ -607,7 +607,7 @@ export default class Busx86 extends Component {
                 addr = iBlock * this.nBlockSize;
                 size -= this.nBlockSize;
             }
-            /*
+            /**
              * If all removeMemory() calls happened ONLY during device initialization, the following code would not
              * be necessary; unfortunately, the Video component can add and remove physical memory blocks during video
              * mode changes, so we have to kick out any PAGED blocks that could have references to those physical memory
@@ -756,7 +756,7 @@ export default class Busx86 extends Component {
         if (off < this.nBlockLimit - 2) {
             return this.aMemBlocks[iBlock].readLong(off, addr);
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
          * long in the current block and the first long in the next block and masking/combining the results),
          * which may have also created some undesirable side-effects for custom memory controllers.
@@ -865,7 +865,7 @@ export default class Busx86 extends Component {
             this.aMemBlocks[iBlock].writeLong(off, l);
             return;
         }
-        /*
+        /**
          * I think the previous version of this function tried to be too clever (ie, reading and rewriting
          * the last long in the current block, and then reading and rewriting the first long in the next
          * block), which may have also created some undesirable side-effects for custom memory controllers.
@@ -902,7 +902,7 @@ export default class Busx86 extends Component {
         if (BACKTRACK && obj) {
             let cbtObjects = this.abtObjects.length;
             if (!bto) {
-                /*
+                /**
                  * Try the most recently created bto, on the off-chance it's what the caller needs
                  */
                 if (this.ibtLastAlloc >= 0) bto = this.abtObjects[this.ibtLastAlloc];
@@ -923,7 +923,7 @@ export default class Busx86 extends Component {
                             break;
                         }
                     }
-                    /*
+                    /**
                      * There's no longer any guarantee that simply because cbtDeletions was non-zero that there WILL
                      * be an available (existing) slot, because cbtDeletions also counts weak references that may still
                      * be weak.
@@ -931,7 +931,7 @@ export default class Busx86 extends Component {
                      *      this.assert(slot < cbtObjects);
                      */
                 }
-                /*
+                /**
                  *  I hit the following error after running in a machine with lots of disk activity:
                  *
                  *      Error: assertion failure in deskpro386.bus
@@ -1034,7 +1034,7 @@ export default class Busx86 extends Component {
                     }
                     else if (btoPrev.refs <= 0) {
                         this.printf(MESSAGE.DEBUG + MESSAGE.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
-                        /*
+                        /**
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
                          *
@@ -1044,7 +1044,7 @@ export default class Busx86 extends Component {
                          * after which we can re-use the slot if all its weak references are now gone.
                          */
                         if (!this.isBackTrackWeak(btiPrev)) this.abtObjects[slotPrev-1] = null;
-                        /*
+                        /**
                          * TODO: Consider what the appropriate trigger should be for resetting ibtLastDelete to zero;
                          * if we don't OCCASIONALLY set it to zero, we may never clear out obsolete weak references,
                          * whereas if we ALWAYS set it to zero, we may be forcing addBackTrackObject() to scan the entire
@@ -1208,7 +1208,7 @@ export default class Busx86 extends Component {
      */
     saveMemory(fAll = true)
     {
-        /*
+        /**
          * A quick-and-dirty work-around for 32-bit bus machines, to ensure that all blocks in the 2nd Mb are
          * mapped in before we save.  We do this by forcing A20 on, and then turning it off again before we leave.
          */
@@ -1255,7 +1255,7 @@ export default class Busx86 extends Component {
         let i, scale = 1;
         for (i = 0; i < a.length - 1; i += 2) {
             let iBlock = a[i] * scale, adw = a[i+1];
-            /*
+            /**
              * One wrinkle here is dealing with blocks that were saved when the machine was using an
              * older (larger) block size (eg, 16K or 32K), because now I ALWAYS use a block size of 4K.
              *
@@ -1279,7 +1279,7 @@ export default class Busx86 extends Component {
                     let adwBlock = nBlocks > 1? adw.splice(0, this.nBlockLen) : adw;
                     let block = this.aMemBlocks[iBlock];
                     if (!block || !block.restore(adwBlock)) {
-                        /*
+                        /**
                          * Either the block to restore hasn't been allocated, indicating a change in the machine
                          * configuration since it was last saved (the most likely explanation) or there's some internal
                          * inconsistency (eg, the block size is wrong).
@@ -1395,7 +1395,7 @@ export default class Busx86 extends Component {
             let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
             let dataPort = maskPort;
 
-            /*
+            /**
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
              * to a 32-bit port).  We probably should pass the size through to the aNotify[0] handler,
              * and let it decide what to do, but I don't feel like changing all the I/O handlers right now.
@@ -1534,7 +1534,7 @@ export default class Busx86 extends Component {
             let maskPort = (sizePort == 1? 0xff : (sizePort == 2? 0xffff : -1));
             let dataPort = (data >>>= shift) & maskPort;
 
-            /*
+            /**
              * TODO: We need to decide what to do about 8-bit I/O to a 16-bit port (ditto for 16-bit I/O
              * to a 32-bit port).  We probably should pass the size through to the aNotify[0] handler,
              * and let it decide what to do, but I don't feel like changing all the I/O handlers right now.
