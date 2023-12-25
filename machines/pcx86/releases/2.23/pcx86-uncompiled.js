@@ -52313,6 +52313,596 @@ WebLib.onInit(Keyboardx86.init);
  */
 class Card extends Controller {
     /**
+     * MDA Registers (ports 0x3B4, 0x3B5, 0x3B8, and 0x3BA)
+     *
+     * NOTE: All monochrome cards (at least all IBM cards) included a parallel interface at ports 0x3BC/0x3BD/0x3BE;
+     * for the same functionality in PCx86, you must include a properly configured ParallelPort component.
+     */
+    static MDA = {
+        CRTC: {
+            INDX: {
+                PORT:           0x3B4,      // NOTE: the low byte of this port address (0xB4) is mirrored at 40:0063 (0x0463)
+                MASK:           0x1F
+            },
+            DATA: {
+                PORT:           0x3B5
+            }
+        },
+        MODE: {
+            PORT:               0x3B8,      // Mode Select Register, aka CRT Control Port 1 (write-only); the BIOS mirrors this register at 40:0065 (0x0465)
+            HIRES:              0x01,
+            VIDEO_ENABLE:       0x08,
+            BLINK_ENABLE:       0x20
+        },
+        STATUS: {
+            PORT:               0x3BA,
+            HDRIVE:             0x01,
+            BWVIDEO:            0x08
+        }
+    };
+
+    /**
+     * CGA Registers (ports 0x3D4, 0x3D5, 0x3D8, 0x3D9, and 0x3DA)
+     */
+    static CGA = {
+        CRTC: {
+            INDX: {
+                PORT:           0x3D4,      // NOTE: the low byte of this port address (0xB4) is mirrored at 40:0063 (0x0463)
+                MASK:           0x1F
+            },
+            DATA: {
+                PORT:           0x3D5
+            }
+        },
+        MODE: {
+            PORT:               0x3D8,      // Mode Select Register (write-only); the BIOS mirrors this register at 40:0065 (0x0465)
+            _80X25:             0x01,
+            GRAPHIC_SEL:        0x02,
+            BW_SEL:             0x04,
+            VIDEO_ENABLE:       0x08,       // same as MDA.MODE.VIDEO_ENABLE
+            HIRES_BW:           0x10,
+            BLINK_ENABLE:       0x20        // same as MDA.MODE.BLINK_ENABLE
+        },
+        COLOR: {
+            PORT:               0x3D9,      // Color Select Register, aka Overscan Register (write-only)
+            BORDER:             0x07,
+            BRIGHT:             0x08,
+            BGND_ALT:           0x10,       // alternate, intensified background colors in text mode
+            COLORSET1:          0x20        // selects aCGAColorSet1 colors for 320x200 graphics mode; aCGAColorSet0 otherwise
+        },
+        STATUS: {
+            PORT:               0x3DA,      // read-only; same for EGA (although the EGA calls this STATUS1, to distinguish it from STATUS0)
+            RETRACE:            0x01,
+            PEN_TRIGGER:        0x02,
+            PEN_ON:             0x04,
+            VRETRACE:           0x08        // when set, this indicates the CGA is performing a vertical retrace
+        },
+        /**
+         * TODO: Add support for light pen port(s) someday....
+         */
+        CLEAR_PEN: {
+            PORT:               0x3DB
+        },
+        PRESET_PEN: {
+            PORT:               0x3DC
+        }
+    };
+
+    /**
+     * Common CRT hardware registers (ports 0x3B4/0x3B5 or 0x3D4/0x3D5)
+     *
+     * NOTE: In this implementation, because we have to make at least two of the registers readable (CURSORHI and CURSORLO),
+     * we end up making ALL the registers readable, otherwise we would have to explicitly block any register marked write-only.
+     * I don't think making the CRT registers fully readable presents any serious compatibility issues, and it actually offers
+     * some benefits (eg, improved debugging).
+     *
+     * However, some things are broken: the (readable) light pen registers on the EGA are overloaded as (writable) vertical retrace
+     * registers, so the vertical retrace registers cannot actually be read that way.  I'm sure the VGA solved that problem, but I haven't
+     * looked into it yet.
+     */
+    static CRTC = {
+        HTOTAL:             0x00,           // Horizontal Total
+        HDISP:              0x01,           // Horizontal Displayed
+        HSPOS:              0x02,           // Horizontal Sync Position
+        HSWIDTH:            0x03,           // Horizontal Sync Width
+        VTOTAL:             0x04,           // Vertical Total
+        VTOTADJ:            0x05,           // Vertical Total Adjust
+        VDISP:              0x06,           // Vertical Displayed
+        VSPOS:              0x07,           // Vertical Sync Position
+        ILMODE:             0x08,           // Interlace Mode
+        MAXSCAN:            0x09,           // Max Scan Line Address
+        CURSCAN:            0x0A,           // Cursor Scan Line Top
+        CURSCAN_SLMASK:         0x1F,       // Scan Line Mask
+        /**
+         * I don't entirely understand the cursor blink control bits.  Here's what the MC6845 datasheet says:
+         *
+         *      Bit 5 is the blink timing control.  When bit 5 is low, the blink frequency is 1/16 of the vertical field rate,
+         *      and when bit 5 is high, the blink frequency is 1/32 of the vertical field rate.  Bit 6 is used to enable a blink.
+         */
+        CURSCAN_BLINKON:        0x00,       // (supposedly, 0x40 has the same effect as 0x00?)
+        CURSCAN_BLINKOFF:       0x20,       // if blinking is disabled, the cursor is effectively hidden (TODO: CGA and VGA only?)
+        CURSCAN_BLINKFAST:      0x60,       // default is 1/16 of the frame rate; this switches to 1/32 of the frame rate (TODO: CGA only?)
+        CURSCANB:           0x0B,           // Cursor Scan Line Bottom
+        STARTHI:            0x0C,           // Start Address High
+        STARTLO:            0x0D,           // Start Address Low
+        CURSORHI:           0x0E,           // Cursor Address High
+        CURSORLO:           0x0F,           // Cursor Address Low
+        PENHI:              0x10,           // Light Pen High
+        PENLO:              0x11,           // Light Pen Low
+        TOTAL_REGS:         0x12,           // total CRT registers on MDA/CGA
+        EGA: {
+            HDEND:          0x01,
+            HBSTART:        0x02,
+            HBEND:          0x03,
+            HRSTART:        0x04,
+            HREND:          0x05,
+            VTOTAL:         0x06,
+            OVERFLOW: {
+                INDX:       0x07,
+                VTOTAL_BIT8:    0x01,       // bit 8 of register 0x06
+                VDEND_BIT8:     0x02,       // bit 8 of register 0x12
+                VRSTART_BIT8:   0x04,       // bit 8 of register 0x10
+                VBSTART_BIT8:   0x08,       // bit 8 of register 0x15
+                LINECOMP_BIT8:  0x10,       // bit 8 of register 0x18
+                CURSCAN_BIT8:   0x20,       // bit 8 of register 0x0A (EGA only; TODO: What is this for? The CURSCAN register doesn't even use bit 7, so why would it need a bit 8?)
+                VTOTAL_BIT9:    0x20,       // bit 9 of register 0x06 (VGA only)
+                VDEND_BIT9:     0x40,       // bit 9 of register 0x12 (VGA only, unused on EGA)
+                VRSTART_BIT9:   0x80        // bit 9 of register 0x10 (VGA only, unused on EGA)
+            },
+            PRESCAN:        0x08,
+            /**
+             * NOTE: EGA/VGA CRTC registers 0x09-0x0F are the same as the MDA/CGA CRTC registers defined above
+             */
+            MAXSCAN: {
+                INDX:       0x09,           // (same as MDA/CGA)
+                SLMASK:         0x1F,       // Scan Line Mask
+                VBSTART_BIT9:   0x20,       // (VGA only)
+                LINECOMP_BIT9:  0x40,       // (VGA only)
+                CONVERT400:     0x80        // 200-to-400 scan-line conversion is in effect (VGA only)
+            },
+            CURSCAN:        0x0A,           // (same as MDA/CGA)
+            CURSCANB:       0x0B,           // (same as MDA/CGA)
+            STARTHI:        0x0C,           // (same as MDA/CGA)
+            STARTLO:        0x0D,           // (same as MDA/CGA)
+            CURSORHI:       0x0E,           // (same as MDA/CGA)
+            CURSORLO:       0x0F,           // (same as MDA/CGA)
+            VRSTART:        0x10,           // (formerly PENHI on MDA/CGA)
+            VREND:          {               // (formerly PENLO on MDA/CGA; last register on the original 6845 controller)
+                INDX:       0x11,
+                HSCAN:          0x0F,       // the horizontal scan count value when the vertical retrace output signal becomes inactive
+                UNCLEAR_VRINT:  0x10,       // clear vertical retrace interrupt if NOT set
+                DISABLE_VRINT:  0x20        // enable vertical retrace interrupt if NOT set
+            },
+            VDEND:          0x12,
+            /**
+             * The OFFSET register (bits 0-7) specifies the logical line width of the screen.  The starting memory address
+             * for the next character row is larger than the current character row by two or four times this amount.
+             * The OFFSET register is programmed with a word address.  Depending on the method of clocking the CRT Controller,
+             * this word address is [effectively] either a word or double-word address. #IBMVGATechRef
+             */
+            OFFSET:         0x13,
+            UNDERLINE: {
+                INDX:       0x14,
+                SLMASK:         0x1F,
+                COUNT_BY_4:     0x20,       // (VGA only)
+                DWORD:          0x40        // (VGA only)
+            },
+            VBSTART:        0x15,
+            VBEND:          0x16,
+            MODECTRL: {
+                INDX:       0x17,
+                COMPAT_MODE:    0x01,       // Compatibility Mode Support (CGA A13 control)
+                SEL_ROW_SCAN:   0x02,       // Select Row Scan Counter
+                SEL_HRETRACE:   0x04,       // Horizontal Retrace Select
+                COUNT_BY_2:     0x08,       // Count By Two
+                OUTPUT_CTRL:    0x10,       // Output Control
+                ADDR_WRAP:      0x20,       // Address Wrap (in Word mode, 1 maps A15 to A0 and 0 maps A13; use the latter when only 64Kb is installed)
+                BYTE_MODE:      0x40,       // Byte Mode (1 selects Byte Mode; 0 selects Word Mode)
+                HARD_RESET:     0x80        // Hardware Reset
+            },
+            LINECOMP:       0x18,
+            TOTAL_REGS:     0x19            // total CRT registers on EGA/VGA
+        }
+    };
+
+    /**
+     * TODO: These mask tables need to be card-specific.  For example, the STARTHI and CURSORHI registers used to be
+     * limited to 0x3F, because the MC6845 controller used with the original MDA and CGA cards was limited to 16Kb of RAM,
+     * whereas later cards like the EGA and VGA had anywhere from 64Kb to 256Kb, so all the bits of those registers were
+     * significant.  Currently, I'm doing very little masking, which means most CRTC registers are treated as full 8-bit
+     * registers (and fully readable as well), which might cause some compatibility problems for any MDA/CGA apps that
+     * were sloppy about how they programmed registers.
+     *
+     * I do make an exception, however, in the case of STARTHI and CURSORHI, due to the way the MC6845 controller wraps
+     * addresses around to the beginning of the buffer, because that seems like a high-risk case.  See the card-specific
+     * variable addrMaskHigh.
+     */
+    static CRTCMASKS = {
+        [Card.CRTC.HTOTAL]:     0xFF,       // R0
+        [Card.CRTC.HDISP]:      0xFF,       // R1
+        [Card.CRTC.HSPOS]:      0xFF,       // R2
+        [Card.CRTC.HSWIDTH]:    0x0F,       // R3
+        [Card.CRTC.VTOTAL]:     0x7F,       // R4
+        [Card.CRTC.VTOTADJ]:    0x1F,       // R5
+        [Card.CRTC.VDISP]:      0x7F,       // R6
+        [Card.CRTC.VSPOS]:      0x7F,       // R7
+        [Card.CRTC.ILMODE]:     0x03,       // R8
+        [Card.CRTC.MAXSCAN]:    0x1F,       // R9
+        [Card.CRTC.CURSCAN]:    0x7F,       // R10
+        [Card.CRTC.CURSCANB]:   0x1F,       // R11
+        [Card.CRTC.STARTHI]:    0x3F,       // R12
+        [Card.CRTC.STARTLO]:    0xFF,       // R13
+        [Card.CRTC.CURSORHI]:   0x3F,       // R14
+        [Card.CRTC.CURSORLO]:   0xFF,       // R15
+        [Card.CRTC.PENHI]:      0x3F,       // R16
+        [Card.CRTC.PENLO]:      0xFF        // R17
+    };
+
+    /**
+     * EGA/VGA Input Status 1 Register (port 0x3DA)
+     *
+     * STATUS1 bit 0 has confusing documentation: the EGA Tech Ref says "Logical 0 indicates the CRT raster is in a
+     * horizontal or vertical retrace interval", whereas the VGA Tech Ref says "Logical 1 indicates a horizontal or
+     * vertical retrace interval," but then clarifies: "This bit is the real-time status of the INVERTED display enable
+     * signal".  So, instead of calling bit 0 DISP_ENABLE (or more precisely, DISP_ENABLE_INVERTED), it's simply RETRACE.
+     *
+     * STATUS1 diagnostic bits 5 and 4 are set according to the Card.ATC.PLANES.MUX bits:
+     *
+     *      MUX     Bit 5   Bit 4
+     *      ---     ----    ----
+     *      00:     Red     Blue
+     *      01:     SecBlue Green
+     *      10:     SecRed  SecGreen
+     *      11:     unused  unused
+     */
+    static STATUS1 = {
+        PORT:                   0x3DA,
+        RETRACE:                0x01,       // bit 0: logical OR of horizontal and vertical retrace
+        VRETRACE:               0x08,       // bit 3: set during vertical retrace interval
+        DIAGNOSTIC:             0x30,       // bits 5,4 are controlled by the Card.ATC.PLANES.MUX bits
+        RESERVED:               0xC6
+    };
+
+    /**
+     * EGA/VGA Attribute Controller Registers (port 0x3C0: regATCIndx and regATCData)
+     *
+     * The current ATC INDX value is stored in cardEGA.regATCIndx (including the Card.ATC.INDX_ENABLE bit), and the
+     * ATC DATA values are stored in cardEGA.regATCData.  The state of the ATC INDX/DATA flip-flop is stored in fATCData.
+     *
+     * Note that the ATC palette registers (0x0-0xf) all use the following 6 bit assignments, with bits 6 and 7 unused:
+     *
+     *      0: Blue
+     *      1: Green
+     *      2: Red
+     *      3: SecBlue (or mono video)
+     *      4: SecGreen (or intensity)
+     *      5: SecRed
+     */
+    static ATC = {
+        PORT:                   0x3C0,      // ATC Index/Data Port
+        INDX_MASK:              0x1F,
+        INDX_PAL_ENABLE:        0x20,       // must be clear when loading palette registers
+        PALETTE: {
+            INDX:               0x00,       // 16 registers: 0x00 - 0x0F
+            MASK:               0x3f,
+            BLUE:               0x01,
+            GREEN:              0x02,
+            RED:                0x04,
+            SECBLUE:            0x08,
+            BRIGHT:             0x10,       // NOTE: The IBM EGA manual (p.56) also calls this the "intensity" bit
+            SECGREEN:           0x10,
+            SECRED:             0x20
+        },
+        PALETTE_REGS:           0x10,       // 16 total palette registers
+        MODE: {
+            INDX:               0x10,       // ATC Mode Control Register
+            GRAPHICS:           0x01,       // bit 0: set for graphics mode, clear for alphanumeric mode
+            MONOEM:             0x02,       // bit 1: set for monochrome emulation mode, clear for color emulation
+            TEXT_9DOT:          0x04,       // bit 2: set for 9-dot replication in character codes 0xC0-0xDF
+            BLINK_ENABLE:       0x08,       // bit 3: set for text/graphics blink, clear for background intensity
+            RESERVED:           0x10,       // bit 4: reserved
+            PANCOMPAT:          0x20,       // bit 5: set for pixel-panning compatibility
+            PELWIDTH:           0x40,       // bit 6: set for 256-color modes, clear for all other modes
+            COLORSEL_ALL:       0x80        // bit 7: set to enable all COLORSEL bits (ie, COLORSEL.DAC_BIT5 and COLORSEL.DAC_BIT4)
+        },
+        OVERSCAN: {
+            INDX:               0x11        // ATC Overscan Color Register
+        },
+        PLANES: {
+            INDX:               0x12,       // ATC Color Plane Enable Register
+            MASK:               0x0F,
+            MUX:                0x30,
+            RESERVED:           0xC0
+        },
+        HPAN: {
+            INDX:               0x13,       // ATC Horizontal PEL Panning Register
+            SHIFT_LEFT:         0x0F        // bits 0-3 indicate # of pixels to shift left
+        },
+        COLORSEL: {
+            INDX:               0x14,       // ATC Color Select Register (VGA only)
+            DAC_BIT7:           0x08,       // specifies bit 7 of DAC values (ignored in 256-color modes)
+            DAC_BIT6:           0x04,       // specifies bit 6 of DAC values (ignored in 256-color modes)
+            DAC_BIT5:           0x02,       // specifies bit 5 of DAC values (if ATC.MODE.COLORSEL_ALL is set; ignored in 256-color modes)
+            DAC_BIT4:           0x01        // specifies bit 4 of DAC values (if ATC.MODE.COLORSEL_ALL is set; ignored in 256-color modes)
+        },
+        TOTAL_REGS:             0x14
+    };
+
+    /**
+     * EGA/VGA Feature Control Register (port 0x3BA or 0x3DA: regFeat)
+     *
+     * The EGA BIOS writes 0x1 to Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT, then writes 0x2 to
+     * Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT.  The bits from the first and second reads are shifted
+     * into the high nibble of the byte at 40:88h.
+     */
+    static FEAT_CTRL = {
+        PORT_MONO:              0x3BA,      // write port address (other than the two bits below, the rest are reserved and/or unused)
+        PORT_COLOR:             0x3DA,      // write port address (other than the two bits below, the rest are reserved and/or unused)
+        PORT_READ:              0x3CA,      // read port address (VGA only)
+        BITS:                   0x03        // feature control bits
+    };
+
+    /**
+     * EGA/VGA Miscellaneous Output Register (port 0x3C2: regMisc)
+     */
+    static MISC = {
+        PORT_WRITE:             0x3C2,      // write port address (EGA and VGA)
+        PORT_READ:              0x3CC,      // read port address (VGA only)
+        IO_SELECT:              0x01,       // 0 sets CRT ports to 0x3Bn, 1 sets CRT ports to 0x3Dn
+        ENABLE_RAM:             0x02,       // 0 disables video RAM, 1 enables
+        CLOCK_SELECT:           0x0C,       // 0x0: 14Mhz I/O clock, 0x4: 16Mhz on-board clock, 0x8: external clock, 0xC: unused
+        DISABLE_DRV:            0x10,       // 0 activates internal video drivers, 1 activates feature connector direct drive outputs
+        PAGE_ODD_EVEN:          0x20,       // 0 selects the low 64Kb page of video RAM for text modes, 1 selects the high page
+        HPOLARITY:              0x40,       // 0 selects positive horizontal retrace
+        VPOLARITY:              0x80        // 0 selects positive vertical retrace
+    };
+
+    /**
+     * EGA/VGA Input Status 0 Register (port 0x3C2: regStatus0)
+     */
+    static STATUS0 = {
+        PORT:                   0x3C2,      // read-only (aka STATUS0, to distinguish it from PORT_CGA_STATUS)
+        RESERVED:               0x0F,
+        SWSENSE:                0x10,
+        SWSENSE_SHIFT:          4,
+        FEAT:                   0x60,       // VGA: reserved
+        INTERRUPT:              0x80        // 1: video is being displayed; 0: vertical retrace is occurring
+    };
+
+    /**
+     * VGA Subsystem Enable Register (port 0x3C3: regVGAEnable)
+     */
+    static VGA_ENABLE = {
+        PORT:                   0x3C3,
+        ENABLED:                0x01,       // when set, all VGA I/O and memory decoding is enabled; otherwise disabled (TODO: Implement)
+        RESERVED:               0xFE
+    };
+
+    /**
+     * EGA/VGA Sequencer Registers (ports 0x3C4/0x3C5: regSEQIndx and regSEQData)
+     */
+    static SEQ = {
+        INDX: {
+            PORT:               0x3C4,      // Sequencer Index Port
+            MASK:               0x07
+        },
+        DATA: {
+            PORT:               0x3C5       // Sequencer Data Port
+        },
+        RESET: {
+            INDX:               0x00,       // Sequencer Reset Register
+            ASYNC:              0x01,
+            SYNC:               0x02
+        },
+        CLKMODE: {
+            INDX:               0x01,       // Sequencer Clocking Mode Register
+            DOTS8:              0x01,       // 1: 8 dots; 0: 9 dots
+            BANDWIDTH:          0x02,       // 0: CRTC has access 4 out of every 5 cycles (for high-res modes); 1: CRTC has access 2 out of 5 (VGA: reserved)
+            SHIFTLOAD:          0x04,
+            DOTCLOCK:           0x08,       // 0: normal dot clock; 1: master clock divided by two (used for 320x200 modes: 0, 1, 4, 5, and D)
+            SHIFT4:             0x10,       // VGA only
+            SCREEN_OFF:         0x20,       // VGA only
+            RESERVED:           0xC0
+        },
+        MAPMASK: {
+            INDX:               0x02,       // Sequencer Map Mask Register
+            PL0:                0x01,
+            PL1:                0x02,
+            PL2:                0x04,
+            PL3:                0x08,
+            MAPS:               0x0F,
+            RESERVED:           0xF0
+        },
+        CHARMAP: {
+            INDX:               0x03,       // Sequencer Character Map Select Register
+            SELB:               0x03,       // 0x0: 1st 8Kb of plane 2; 0x1: 2nd 8Kb; 0x2: 3rd 8Kb; 0x3: 4th 8Kb (used when attribute bit 3 is 0)
+            SELA:               0x0C,       // 0x0: 1st 8Kb of plane 2; 0x4: 2nd 8Kb; 0x8: 3rd 8Kb; 0xC: 4th 8Kb (used when attribute bit 3 is 1)
+            SELB_HI:            0x10,       // VGA only
+            SELA_HI:            0x20        // VGA only
+        },
+        MEMMODE: {
+            INDX:               0x04,       // Sequencer Memory Mode Register
+            ALPHA:              0x01,       // set for alphanumeric (A/N) mode, clear for graphics (APA or "All Points Addressable") mode (EGA only)
+            EXT:                0x02,       // set if memory expansion installed, clear if not installed
+            SEQUENTIAL:         0x04,       // set for sequential memory access, clear for mapping even addresses to planes 0/2, odd addresses to planes 1/3
+            CHAIN4:             0x08        // VGA only: set to select memory map (plane) based on low 2 bits of address
+        },
+        TOTAL_REGS:             0x05
+    };
+
+    /**
+     * VGA Digital-to-Analog Converter (DAC) Registers (regDACMask, regDACState, regDACAddr, and regDACData)
+     *
+     * To write DAC data, write an address to DAC.ADDR.PORT_WRITE, then write 3 bytes to DAC.DATA.PORT; the low 6 bits
+     * of each byte will be concatenated to form an 18-bit DAC value (red is least significant, followed by green, then blue).
+     * When the final byte is received, the 18-bit DAC value is updated and regDACAddr is auto-incremented.
+     *
+     * To read DAC data, the process is similar, but the initial address is written to DAC.ADDR.PORT_READ instead.
+     *
+     * DAC.STATE.PORT and DAC.ADDR.PORT_WRITE can be read at any time and will not interfere with a read or write operation
+     * in progress.  To prevent "snow", reading or writing DAC values should be limited to retrace intervals (see regStatus1),
+     * or by using the SCREEN_OFF bit in the SEQ.CLKMODE register.
+     */
+    static DAC = {
+        MASK: {
+            PORT:               0x3C6,      // initialized to 0xFF and should not be changed
+            DEFAULT:            0xFF
+        },
+        STATE: {
+            PORT:               0x3C7,
+            MODE_WRITE:         0x00,       // the DAC is in write mode if bits 0 and 1 are clear
+            MODE_READ:          0x03        // the DAC is in read mode if bits 0 and 1 are set
+        },
+        ADDR: {
+            PORT_READ:          0x3C7,      // write to initiate a read
+            PORT_WRITE:         0x3C8       // write to initiate a write; read to determine the current ADDR
+        },
+        DATA: {
+            PORT:               0x3C9
+        },
+        TOTAL_REGS:             0x100
+    };
+
+    /**
+     * EGA/VGA Graphics Controller Registers (ports 0x3CE/0x3CF: regGRCIndx and regGRCData)
+     *
+     * The VGA added Write Mode 3, which is described as follows:
+     *
+     *      "Each map is written with 8 bits of the value contained in the Set/Reset register for that map
+     *      (the Enable Set/Reset register has no effect). Rotated system microprocessor data is ANDed with the
+     *      Bit Mask register data to form an 8-bit value that performs the same function as the Bit Mask register
+     *      does in write modes 0 and 2."
+     */
+    static GRC = {
+        POS1_PORT:              0x3CC,      // EGA only, write-only
+        POS2_PORT:              0x3CA,      // EGA only, write-only
+        INDX: {
+            PORT:               0x3CE,      // GRC Index Port
+            MASK:               0x0F
+        },
+        DATA: {
+            PORT:               0x3CF       // GRC Data Port
+        },
+        SRESET: {
+            INDX:               0x00        // GRC Set/Reset Register (write-only; each bit used only if WRITE.MODE0 and corresponding ESR bit set)
+        },
+        ESRESET: {
+            INDX:               0x01        // GRC Enable Set/Reset Register
+        },
+        COLORCOMP: {
+            INDX:               0x02        // GRC Color Compare Register
+        },
+        DATAROT: {
+            INDX:               0x03,       // GRC Data Rotate Register
+            COUNT:              0x07,
+            AND:                0x08,
+            OR:                 0x10,
+            XOR:                0x18,
+            FUNC:               0x18,
+            MASK:               0x1F
+        },
+        READMAP: {
+            INDX:               0x04,       // GRC Read Map Select Register
+            NUM:                0x03
+        },
+        MODE: {
+            INDX:               0x05,       // GRC Mode Register
+            WRITE: {
+                MODE0:          0x00,       // write mode 0: each plane written with CPU data, rotated as needed, unless SR enabled
+                MODE1:          0x01,       // write mode 1: each plane written with contents of the processor latches (loaded by a read)
+                MODE2:          0x02,       // write mode 2: memory plane N is written with 8 bits matching data bit N
+                MODE3:          0x03,       // write mode 3: VGA only
+                MASK:           0x03
+            },
+            TEST:               0x04,
+            READ: {
+                MODE0:          0x00,       // read mode 0: read map mode
+                MODE1:          0x08,       // read mode 1: color compare mode
+                MASK:           0x08
+            },
+            EVENODD:            0x10,
+            SHIFT:              0x20,
+            COLOR256:           0x40        // VGA only
+        },
+        MISC: {
+            INDX:               0x06,       // GRC Miscellaneous Register
+            GRAPHICS:           0x01,       // set for graphics mode addressing, clear for text mode addressing
+            CHAIN:              0x02,       // set for odd/even planes selected with odd/even values of the processor AO bit
+            MAPMEM:             0x0C,       //
+            MAPA0128:           0x00,       //
+            MAPA064:            0x04,       //
+            MAPB032:            0x08,       //
+            MAPB832:            0x0C        //
+        },
+        COLORDC: {
+            INDX:               0x07        // GRC Color "Don't Care" Register
+        },
+        BITMASK: {
+            INDX:               0x08        // GRC Bit Mask Register
+        },
+        TOTAL_REGS:             0x09
+    };
+
+    /**
+     * EGA Memory Access Functions
+     *
+     * Here's where we define all the getMemoryAccess() functions that know how to deal with "planar" EGA memory,
+     * which consists of 32-bit values for every byte of address space, allowing us to internally store plane 0
+     * bytes in bits 0-7, plane 1 bytes in bits 8-15, plane 2 bytes in bits 16-23, and plane 3 bytes in bits 24-31.
+     *
+     * All our functions have slightly more overhead than the standard Bus memory access functions, because the
+     * offset (off) parameter is block-relative, which we must transform into a buffer-relative offset.  Fortunately,
+     * all our Memory objects know this and have already recorded their buffer-relative offset in "this.offset".
+     *
+     * Also, the EGA includes a set of latches, one for each plane, which must be updated on most reads/writes;
+     * we rely on the Memory object's "this.controller" property to give us access to the Card's state.
+     *
+     * And we take a little extra time to conditionally set DIRTY on writes, meaning if a write did not actually
+     * change the value of the memory, we will not set DIRTY.  The default write functions in memory.js don't take
+     * that performance hit, but here, it may be worthwhile, because if it results in fewer dirty blocks, display
+     * updates may be faster.
+     *
+     * Note that we don't have to worry about dealing with word accesses that straddle block boundaries, because
+     * the Bus component automatically breaks those accesses into separate byte requests.  Similarly, byte and word
+     * values for the write functions have already been pre-masked by the Bus component to 8 and 16 bits, respectively.
+     *
+     * My motto: Be paranoid, but also be careful not to do any more work than you absolutely have to.
+     *
+     *
+     * CGA Emulation on the EGA
+     *
+     * Modes 4/5 (320x200 low-res graphics) emulate the same buffer format that the CGA uses.  To recap: 1 byte contains
+     * 4 pixels (pixel 0 in bits 7-6, pixel 1 in bits 5-4, etc), and thus one row of pixels is 80 (0x50) bytes long.
+     * Moreover, all even rows are stored in the first 8K of the video buffer (at 0xB8000), and all odd rows are stored
+     * in the second 8K (at 0xBA000).  Of each 8K, only 8000 (0x1F40) bytes are used (80 bytes X 100 rows); the remaining
+     * 192 bytes of each 8K are unused.
+     *
+     * For these modes, the EGA's GRC.MODE is programmed with 0x30: Card.GRC.MODE.EVENODD and Card.GRC.MODE.SHIFT.
+     * The latter claims to work by forming each 2-bit pixel with even bits from plane 0 and odd bits from plane 1;
+     * however, I'm unclear how that works if even bytes are only written to plane 0 and odd bytes are only written to
+     * plane 1, as Card.GRC.MODE.EVENODD implies, because plane 0 would never have any bits for the odd bytes, and
+     * plane 1 would never have any bits for the even bytes.  TODO: Figure this out.
+     *
+     *
+     * Even/Odd Memory Access Functions
+     *
+     * The "EVENODD" functions deal with the EGA's default text-mode addressing, where EVEN addresses are mapped to
+     * plane 0 (and 2) and ODD addresses are mapped to plane 1 (and 3).  This occurs when SEQ.MEMMODE.SEQUENTIAL is
+     * clear (and GRC.MODE.EVENODD is set), turning address bit 0 (A0) into a "plane select" bit.  Whether A0 is also
+     * used as a memory address bit depends on CRTC.MODECTRL.BYTE_MODE: if it's set, then we're in "Byte Mode" and A0 is
+     * used as-is; if it's clear, then we're in "Word Mode", and either A15 (when CRTC.MODECTRL.ADDR_WRAP is set) or A13
+     * (when CRTC.MODECTRL.ADDR_WRAP is clear, typically when only 64Kb of EGA memory is installed) is substituted for A0.
+     *
+     * Note that A13 remains clear until addresses reach 8K, at which point we've spanned 32Kb of EGA memory, so it makes
+     * sense to propagate A13 to A0 at that point, so that the next 8K of addresses start using ODD instead of EVEN bytes,
+     * and no memory is wasted on a 64Kb EGA card.
+     *
+     * These functions, however, don't yet deal with all those subtleties: A0 is currently used only as a "plane select"
+     * bit and set to zero for addressing purposes, meaning that only the EVEN bytes in EGA memory will ever be used.
+     * TODO: Implement the subtleties.
+     */
+
+    /**
      * Card(video, nCard, data, cbMemory)
      *
      * Creates an object representing an initial video card state;
@@ -52396,7 +52986,7 @@ class Card extends Controller {
 
             if (nCard < Videox86.CARD.EGA) {
                 this.initMemory(data[6], data[8]);
-                this.setMemoryAccess(Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS);
+                this.setMemoryAccess(Card.READ.PAIRS | Card.WRITE.PAIRS);
             } else {
                 this.addrMaskHigh = 0xFF;
                 this.nCRTCRegs = Card.CRTC.EGA.TOTAL_REGS;
@@ -52468,16 +53058,16 @@ class Card extends Controller {
                 /*13*/  [this.addrBuffer, this.sizeBuffer, this.cbMemory],
                 /*14*/  null,
                 /**
-                 * Card.ACCESS.WRITE.MODE0 by itself is a pretty good default, but if we choose to "randomize" the screen with
-                 * text characters prior to starting the machine, defaulting to Card.ACCESS.WRITE.EVENODD is more faithful to how
+                 * Card.WRITE.MODE0 by itself is a pretty good default, but if we choose to "randomize" the screen with
+                 * text characters prior to starting the machine, defaulting to Card.WRITE.EVENODD is more faithful to how
                  * characters and attributes are typically stored (ie, in planes 0 and 1, respectively).
                  *
-                 *      Card.ACCESS.READ.MODE0 | Card.ACCESS.READ.EVENODD | Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.EVENODD | Card.ACCESS.V2
+                 *      Card.READ.MODE0 | Card.READ.EVENODD | Card.WRITE.MODE0 | Card.WRITE.EVENODD | Card.V2
                  *
                  * Unfortunately, a typical ROM BIOS will almost immediately write to one of the original MDA or CGA mode registers,
                  * changing the default mode, so we may as well initialize the card to byte-pair access.
                  */
-                /*15*/  Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS  | Card.ACCESS.V2,
+                /*15*/  Card.READ.PAIRS | Card.WRITE.PAIRS  | Card.V2,
                 /*16*/  0,
                 /*17*/  0xffffffff|0,
                 /*18*/  0,
@@ -52536,25 +53126,25 @@ class Card extends Controller {
 
         let nAccess = data[15];
         if (nAccess) {
-            if (nAccess & Card.ACCESS.V2) {
-                nAccess &= ~Card.ACCESS.V2;
+            if (nAccess & Card.V2) {
+                nAccess &= ~Card.V2;
             } else {
 
-                nAccess = Card.ACCESS.V1[nAccess & 0xff00] | Card.ACCESS.V1[nAccess & 0xff];
+                nAccess = Card.V1[nAccess & 0xff00] | Card.V1[nAccess & 0xff];
             }
         }
         this.setMemoryAccess(nAccess);
 
         /**
-         * nReadMapShift must perfectly track how the GRC.READMAP register is programmed, so that Card.ACCESS.READ.MODE0
-         * memory read functions read the appropriate plane.  This default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
+         * nReadMapShift must perfectly track how the GRC.READMAP register is programmed, so that Card.READ.MODE0
+         * memory read functions read the appropriate plane.  This default is not terribly critical, unless Card.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
          */
         this.nReadMapShift  = data[16];
 
         /**
          * Similarly, nSeqMapMask must perfectly track how the SEQ.MAPMASK register is programmed, so that memory write
-         * functions write the appropriate plane(s).  Again, this default is not terribly critical, unless Card.ACCESS.WRITE.MODE0
+         * functions write the appropriate plane(s).  Again, this default is not terribly critical, unless Card.WRITE.MODE0
          * is chosen as our default AND you want the screen randomizer to work.
          */
         this.nSeqMapMask    = data[17];
@@ -52680,7 +53270,7 @@ class Card extends Controller {
         data[12] = this.latches;
         data[13] = [this.addrBuffer, this.sizeBuffer, this.cbMemory];
         data[14] = State.compressEvenOdd(this.adwMemory);
-        data[15] = this.nAccess | Card.ACCESS.V2;
+        data[15] = this.nAccess | Card.V2;
         data[16] = this.nReadMapShift;
         data[17] = this.nSeqMapMask;
         data[18] = this.nDataRotate;
@@ -52946,8 +53536,8 @@ class Card extends Controller {
     {
         if (nAccess != null && nAccess != this.nAccess) {
 
-            let nReadAccess = nAccess & Card.ACCESS.READ.MASK;
-            let fnReadByte = Card.ACCESS.afn[nReadAccess];
+            let nReadAccess = nAccess & Card.READ.MASK;
+            let fnReadByte = Card.FUNCS[nReadAccess];
             if (!fnReadByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
@@ -52967,12 +53557,12 @@ class Card extends Controller {
                      *      this.dbg.stopCPU();     // let's take a look
                      */
                 }
-                if (nReadAccess & Card.ACCESS.READ.EVENODD) {
-                    fnReadByte = Card.ACCESS.afn[Card.ACCESS.READ.EVENODD];
+                if (nReadAccess & Card.READ.EVENODD) {
+                    fnReadByte = Card.FUNCS[Card.READ.EVENODD];
                 }
             }
-            let nWriteAccess = nAccess & Card.ACCESS.WRITE.MASK;
-            let fnWriteByte = Card.ACCESS.afn[nWriteAccess];
+            let nWriteAccess = nAccess & Card.WRITE.MASK;
+            let fnWriteByte = Card.FUNCS[nWriteAccess];
             if (!fnWriteByte) {
                 if (DEBUG && this.dbg) {
                     this.dbg.printf(MESSAGE.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
@@ -52992,8 +53582,8 @@ class Card extends Controller {
                      *      this.dbg.stopCPU();     // let's take a look
                      */
                 }
-                if (nWriteAccess & Card.ACCESS.WRITE.EVENODD) {
-                    fnWriteByte = Card.ACCESS.afn[Card.ACCESS.WRITE.EVENODD];
+                if (nWriteAccess & Card.WRITE.EVENODD) {
+                    fnWriteByte = Card.FUNCS[Card.WRITE.EVENODD];
                 }
             }
             if (!this.afnAccess) this.afnAccess = new Array(6);
@@ -53048,1229 +53638,680 @@ class Card extends Controller {
         }
         return reg;
     }
-}
 
-/**
- * MDA Registers (ports 0x3B4, 0x3B5, 0x3B8, and 0x3BA)
- *
- * NOTE: All monochrome cards (at least all IBM cards) included a parallel interface at ports 0x3BC/0x3BD/0x3BE;
- * for the same functionality in PCx86, you must include a properly configured ParallelPort component.
- */
-Card.MDA = {
-    CRTC: {
-        INDX: {
-            PORT:           0x3B4,      // NOTE: the low byte of this port address (0xB4) is mirrored at 40:0063 (0x0463)
-            MASK:           0x1F
-        },
-        DATA: {
-            PORT:           0x3B5
-        }
-    },
-    MODE: {
-        PORT:               0x3B8,      // Mode Select Register, aka CRT Control Port 1 (write-only); the BIOS mirrors this register at 40:0065 (0x0465)
-        HIRES:              0x01,
-        VIDEO_ENABLE:       0x08,
-        BLINK_ENABLE:       0x20
-    },
-    STATUS: {
-        PORT:               0x3BA,
-        HDRIVE:             0x01,
-        BWVIDEO:            0x08
-    }
-};
-
-/**
- * CGA Registers (ports 0x3D4, 0x3D5, 0x3D8, 0x3D9, and 0x3DA)
- */
-Card.CGA = {
-    CRTC: {
-        INDX: {
-            PORT:           0x3D4,      // NOTE: the low byte of this port address (0xB4) is mirrored at 40:0063 (0x0463)
-            MASK:           0x1F
-        },
-        DATA: {
-            PORT:           0x3D5
-        }
-    },
-    MODE: {
-        PORT:               0x3D8,      // Mode Select Register (write-only); the BIOS mirrors this register at 40:0065 (0x0465)
-        _80X25:             0x01,
-        GRAPHIC_SEL:        0x02,
-        BW_SEL:             0x04,
-        VIDEO_ENABLE:       0x08,       // same as MDA.MODE.VIDEO_ENABLE
-        HIRES_BW:           0x10,
-        BLINK_ENABLE:       0x20        // same as MDA.MODE.BLINK_ENABLE
-    },
-    COLOR: {
-        PORT:               0x3D9,      // Color Select Register, aka Overscan Register (write-only)
-        BORDER:             0x07,
-        BRIGHT:             0x08,
-        BGND_ALT:           0x10,       // alternate, intensified background colors in text mode
-        COLORSET1:          0x20        // selects aCGAColorSet1 colors for 320x200 graphics mode; aCGAColorSet0 otherwise
-    },
-    STATUS: {
-        PORT:               0x3DA,      // read-only; same for EGA (although the EGA calls this STATUS1, to distinguish it from STATUS0)
-        RETRACE:            0x01,
-        PEN_TRIGGER:        0x02,
-        PEN_ON:             0x04,
-        VRETRACE:           0x08        // when set, this indicates the CGA is performing a vertical retrace
-    },
     /**
-     * TODO: Add support for light pen port(s) someday....
-     */
-    CLEAR_PEN: {
-        PORT:               0x3DB
-    },
-    PRESET_PEN: {
-        PORT:               0x3DC
-    }
-};
-
-/**
- * Common CRT hardware registers (ports 0x3B4/0x3B5 or 0x3D4/0x3D5)
- *
- * NOTE: In this implementation, because we have to make at least two of the registers readable (CURSORHI and CURSORLO),
- * we end up making ALL the registers readable, otherwise we would have to explicitly block any register marked write-only.
- * I don't think making the CRT registers fully readable presents any serious compatibility issues, and it actually offers
- * some benefits (eg, improved debugging).
- *
- * However, some things are broken: the (readable) light pen registers on the EGA are overloaded as (writable) vertical retrace
- * registers, so the vertical retrace registers cannot actually be read that way.  I'm sure the VGA solved that problem, but I haven't
- * looked into it yet.
- */
-Card.CRTC = {
-    HTOTAL:             0x00,           // Horizontal Total
-    HDISP:              0x01,           // Horizontal Displayed
-    HSPOS:              0x02,           // Horizontal Sync Position
-    HSWIDTH:            0x03,           // Horizontal Sync Width
-    VTOTAL:             0x04,           // Vertical Total
-    VTOTADJ:            0x05,           // Vertical Total Adjust
-    VDISP:              0x06,           // Vertical Displayed
-    VSPOS:              0x07,           // Vertical Sync Position
-    ILMODE:             0x08,           // Interlace Mode
-    MAXSCAN:            0x09,           // Max Scan Line Address
-    CURSCAN:            0x0A,           // Cursor Scan Line Top
-    CURSCAN_SLMASK:         0x1F,       // Scan Line Mask
-    /**
-     * I don't entirely understand the cursor blink control bits.  Here's what the MC6845 datasheet says:
+     * readBytePairs(off, addr)
      *
-     *      Bit 5 is the blink timing control.  When bit 5 is low, the blink frequency is 1/16 of the vertical field rate,
-     *      and when bit 5 is high, the blink frequency is 1/32 of the vertical field rate.  Bit 6 is used to enable a blink.
+     * Used for MDA/CGA byte-pair access (ie, pairs of bytes stored in a single dword).
+     *
+     * Externally, this makes the buffer look like a linear series of byte pairs, perfect for emulating MDA and CGA
+     * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
+     * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} [addr]
+     * @returns {number}
      */
-    CURSCAN_BLINKON:        0x00,       // (supposedly, 0x40 has the same effect as 0x00?)
-    CURSCAN_BLINKOFF:       0x20,       // if blinking is disabled, the cursor is effectively hidden (TODO: CGA and VGA only?)
-    CURSCAN_BLINKFAST:      0x60,       // default is 1/16 of the frame rate; this switches to 1/32 of the frame rate (TODO: CGA only?)
-    CURSCANB:           0x0B,           // Cursor Scan Line Bottom
-    STARTHI:            0x0C,           // Start Address High
-    STARTLO:            0x0D,           // Start Address Low
-    CURSORHI:           0x0E,           // Cursor Address High
-    CURSORLO:           0x0F,           // Cursor Address Low
-    PENHI:              0x10,           // Light Pen High
-    PENLO:              0x11,           // Light Pen Low
-    TOTAL_REGS:         0x12,           // total CRT registers on MDA/CGA
-    EGA: {
-        HDEND:          0x01,
-        HBSTART:        0x02,
-        HBEND:          0x03,
-        HRSTART:        0x04,
-        HREND:          0x05,
-        VTOTAL:         0x06,
-        OVERFLOW: {
-            INDX:       0x07,
-            VTOTAL_BIT8:    0x01,       // bit 8 of register 0x06
-            VDEND_BIT8:     0x02,       // bit 8 of register 0x12
-            VRSTART_BIT8:   0x04,       // bit 8 of register 0x10
-            VBSTART_BIT8:   0x08,       // bit 8 of register 0x15
-            LINECOMP_BIT8:  0x10,       // bit 8 of register 0x18
-            CURSCAN_BIT8:   0x20,       // bit 8 of register 0x0A (EGA only; TODO: What is this for? The CURSCAN register doesn't even use bit 7, so why would it need a bit 8?)
-            VTOTAL_BIT9:    0x20,       // bit 9 of register 0x06 (VGA only)
-            VDEND_BIT9:     0x40,       // bit 9 of register 0x12 (VGA only, unused on EGA)
-            VRSTART_BIT9:   0x80        // bit 9 of register 0x10 (VGA only, unused on EGA)
-        },
-        PRESCAN:        0x08,
-        /**
-         * NOTE: EGA/VGA CRTC registers 0x09-0x0F are the same as the MDA/CGA CRTC registers defined above
-         */
-        MAXSCAN: {
-            INDX:       0x09,           // (same as MDA/CGA)
-            SLMASK:         0x1F,       // Scan Line Mask
-            VBSTART_BIT9:   0x20,       // (VGA only)
-            LINECOMP_BIT9:  0x40,       // (VGA only)
-            CONVERT400:     0x80        // 200-to-400 scan-line conversion is in effect (VGA only)
-        },
-        CURSCAN:        0x0A,           // (same as MDA/CGA)
-        CURSCANB:       0x0B,           // (same as MDA/CGA)
-        STARTHI:        0x0C,           // (same as MDA/CGA)
-        STARTLO:        0x0D,           // (same as MDA/CGA)
-        CURSORHI:       0x0E,           // (same as MDA/CGA)
-        CURSORLO:       0x0F,           // (same as MDA/CGA)
-        VRSTART:        0x10,           // (formerly PENHI on MDA/CGA)
-        VREND:          {               // (formerly PENLO on MDA/CGA; last register on the original 6845 controller)
-            INDX:       0x11,
-            HSCAN:          0x0F,       // the horizontal scan count value when the vertical retrace output signal becomes inactive
-            UNCLEAR_VRINT:  0x10,       // clear vertical retrace interrupt if NOT set
-            DISABLE_VRINT:  0x20        // enable vertical retrace interrupt if NOT set
-        },
-        VDEND:          0x12,
-        /**
-         * The OFFSET register (bits 0-7) specifies the logical line width of the screen.  The starting memory address
-         * for the next character row is larger than the current character row by two or four times this amount.
-         * The OFFSET register is programmed with a word address.  Depending on the method of clocking the CRT Controller,
-         * this word address is [effectively] either a word or double-word address. #IBMVGATechRef
-         */
-        OFFSET:         0x13,
-        UNDERLINE: {
-            INDX:       0x14,
-            SLMASK:         0x1F,
-            COUNT_BY_4:     0x20,       // (VGA only)
-            DWORD:          0x40        // (VGA only)
-        },
-        VBSTART:        0x15,
-        VBEND:          0x16,
-        MODECTRL: {
-            INDX:       0x17,
-            COMPAT_MODE:    0x01,       // Compatibility Mode Support (CGA A13 control)
-            SEL_ROW_SCAN:   0x02,       // Select Row Scan Counter
-            SEL_HRETRACE:   0x04,       // Horizontal Retrace Select
-            COUNT_BY_2:     0x08,       // Count By Two
-            OUTPUT_CTRL:    0x10,       // Output Control
-            ADDR_WRAP:      0x20,       // Address Wrap (in Word mode, 1 maps A15 to A0 and 0 maps A13; use the latter when only 64Kb is installed)
-            BYTE_MODE:      0x40,       // Byte Mode (1 selects Byte Mode; 0 selects Word Mode)
-            HARD_RESET:     0x80        // Hardware Reset
-        },
-        LINECOMP:       0x18,
-        TOTAL_REGS:     0x19            // total CRT registers on EGA/VGA
+    static readBytePairs(off, addr)
+    {
+        off += this.offset;
+        return ((this.adw[off >> 1] >>> ((off & 0x1) << 3)) & 0xff);
     }
-};
 
-/**
- * TODO: These mask tables need to be card-specific.  For example, the STARTHI and CURSORHI registers used to be
- * limited to 0x3F, because the MC6845 controller used with the original MDA and CGA cards was limited to 16Kb of RAM,
- * whereas later cards like the EGA and VGA had anywhere from 64Kb to 256Kb, so all the bits of those registers were
- * significant.  Currently, I'm doing very little masking, which means most CRTC registers are treated as full 8-bit
- * registers (and fully readable as well), which might cause some compatibility problems for any MDA/CGA apps that
- * were sloppy about how they programmed registers.
- *
- * I do make an exception, however, in the case of STARTHI and CURSORHI, due to the way the MC6845 controller wraps
- * addresses around to the beginning of the buffer, because that seems like a high-risk case.  See the card-specific
- * variable addrMaskHigh.
- */
-Card.CRTCMASKS = {
-    [Card.CRTC.HTOTAL]:     0xFF,       // R0
-    [Card.CRTC.HDISP]:      0xFF,       // R1
-    [Card.CRTC.HSPOS]:      0xFF,       // R2
-    [Card.CRTC.HSWIDTH]:    0x0F,       // R3
-    [Card.CRTC.VTOTAL]:     0x7F,       // R4
-    [Card.CRTC.VTOTADJ]:    0x1F,       // R5
-    [Card.CRTC.VDISP]:      0x7F,       // R6
-    [Card.CRTC.VSPOS]:      0x7F,       // R7
-    [Card.CRTC.ILMODE]:     0x03,       // R8
-    [Card.CRTC.MAXSCAN]:    0x1F,       // R9
-    [Card.CRTC.CURSCAN]:    0x7F,       // R10
-    [Card.CRTC.CURSCANB]:   0x1F,       // R11
-    [Card.CRTC.STARTHI]:    0x3F,       // R12
-    [Card.CRTC.STARTLO]:    0xFF,       // R13
-    [Card.CRTC.CURSORHI]:   0x3F,       // R14
-    [Card.CRTC.CURSORLO]:   0xFF,       // R15
-    [Card.CRTC.PENHI]:      0x3F,       // R16
-    [Card.CRTC.PENLO]:      0xFF        // R17
-};
+    /**
+     * readByteMode0(off, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} [addr]
+     * @returns {number}
+     */
+    static readByteMode0(off, addr)
+    {
+        off += this.offset;
+        let dw = this.controller.latches = this.adw[off];
+        return (dw >> this.controller.nReadMapShift) & 0xff;
+    }
+
+    /**
+     * readByteMode0Chain4(off, addr)
+     *
+     * See writeByteMode0Chain4 for a description of how writes are distributed across planes.
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} [addr]
+     * @returns {number}
+     */
+    static readByteMode0Chain4(off, addr)
+    {
+        let idw = (off & ~0x3) + this.offset;
+        let shift = (off & 0x3) << 3;
+        return ((this.controller.latches = this.adw[idw]) >> shift) & 0xff;
+    }
+
+    /**
+     * readByteMode0EvenOdd(off, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} [addr]
+     * @returns {number}
+     */
+    static readByteMode0EvenOdd(off, addr)
+    {
+        /**
+         * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to determine
+         * exactly what gets latched (ie, from which address) when EVENODD is in effect.  Whatever we learn may also
+         * dictate a special EVENODD function for READ.MODE1 as well.
+         */
+        let idw = (off += this.offset) & ~0x1;
+        let dw = this.controller.latches = this.adw[idw];
+        return (!(off & 1)? dw : (dw >> 8)) & 0xff;
+    }
+
+    /**
+     * readByteMode1(off, addr)
+     *
+     * This mode requires us to step through each of the 8 sets of 4 bits in the specified DWORD of video memory,
+     * returning a 1 wherever all 4 match the Color Compare (COLORCOMP) Register and a 0 otherwise.  An added wrinkle
+     * is that the Color Don't Care (COLORDC) Register can specify that any/all/none of the 4 bits must be ignored.
+     *
+     * We perform the comparison from most to least significant bit, because that matches how the nColorCompare and
+     * nColorDontCare masks are initialized; we could have gone either way, but this is more consistent with the rest
+     * of the component (eg, pixels are drawn across the screen from left to right, starting with the most significant
+     * bit of each byte).
+     *
+     * Also note that, while not well-documented, this mode also affects the internal latches, so we make sure those
+     * are updated as well.
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} [addr]
+     * @returns {number}
+     */
+    static readByteMode1(off, addr)
+    {
+        let card = this.controller;
+        let dw = card.latches = this.adw[off + this.offset];
+        /**
+         * Minor optimization: we could pre-mask nColorCompare with nColorDontCare, whenever either register
+         * is updated, but that's a drop in the bucket compared to all the other work this function must do.
+         */
+        let mask = card.nColorDontCare;
+        let color = card.nColorCompare & mask;
+        let b = 0, bit = 0x80;
+        while (bit) {
+            if ((dw & mask) == color) b |= bit;
+            color >>>= 1;  mask >>>= 1;  bit >>= 1;
+        }
+        return b;
+    }
+
+    /**
+     * writeBytePairs(off, b, addr)
+     *
+     * Used for MDA/CGA byte-pair access (ie, pairs of bytes stored in a single dword).
+     *
+     * Externally, this makes the buffer look like a linear series of byte pairs, perfect for emulating MDA and CGA
+     * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
+     * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeBytePairs(off, b, addr)
+    {
+        off += this.offset;
+        let idw = off >> 1;
+        let nShift = (off & 0x1) << 3;
+        let dw = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+    }
+
+    /**
+     * writeByteMode0(off, b, addr)
+     *
+     * Supporting Set/Reset means that for every plane for which Set/Reset is enabled, we must
+     * replace the corresponding byte in dw with a byte of zeros or ones.  This is accomplished with
+     * nSetMapMask, nSetMapData, and nSetMapBits.  nSetMapMask is the inverse of the ESRESET bits,
+     * because we use it to mask the processor data, nSetMapData records the desired SRESET bits,
+     * and nSetMapBits contains the bits to replace those that we masked in the processor data.
+     *
+     * We could have done this:
+     *
+     *      dw = (dw & card.nSetMapMask) | (card.nSetMapData & ~card.nSetMapMask)
+     *
+     * but by maintaining nSetMapBits equal to (nSetMapData & ~nSetMapMask), we are able to make the
+     * writes slightly more efficient.
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        dw = (dw & card.nSetMapMask) | card.nSetMapBits;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        let delta = (this.adw[idw] ^ dw);
+        if (delta) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+            // card.bitsDirtyPlanes |= delta;       // we no longer track dirty planes, just dirty font banks
+            if (delta & 0x00ff0000) {               // if any plane 2 bits were modified, mark the appropriate font bank dirty
+                let bitDirtyBank = (1 << ((idw >> 13) & 7));
+                if (!(card.bitsDirtyBanks & bitDirtyBank)) {
+                    card.bitsDirtyBanks |= bitDirtyBank;
+                    if (DEBUG) card.video.printf(MESSAGE.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
+                }
+            }
+        }
+        if (DEBUG) card.video.printf(MESSAGE.VIDEO + MESSAGE.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0Chain4(off, b, addr)
+     *
+     * This is how we distribute writes of 0xff across the address space to the planes (assuming that all
+     * planes are enabled by the Sequencer's MAPMASK register):
+     *
+     *      off     idw     adw[idw]
+     *      ------  ------  ----------
+     *      0x0000: 0x0000  0x000000ff
+     *      0x0001: 0x0000  0x0000ff00
+     *      0x0002: 0x0000  0x00ff0000
+     *      0x0003: 0x0000  0xff000000
+     *      0x0004: 0x0004  0x000000ff
+     *      0x0005: 0x0004  0x0000ff00
+     *      0x0006: 0x0004  0x00ff0000
+     *      0x0007: 0x0004  0xff000000
+     *      ...
+     *
+     * Some VGA emulations calculate the video buffer index (idw) by shifting the offset (off) right 2 bits,
+     * instead of simply masking off the low 2 bits, as we do here.  That would be a more "pleasing" arrangement,
+     * because we would be using sequential video buffer locations, instead of multiples of 4, and would match how
+     * pixels are stored in "Mode X".  However, I don't think that's how CHAIN4 modes operate (although that still
+     * needs to be confirmed, because multiple sources conflict on this point).  TODO: Confirm CHAIN4 operation on
+     * actual VGA hardware, including the extent to which ALU and other writeByteMode0() functionality needs to
+     * be folded into this.
+     *
+     * Address decoding may not matter that much, as long as both the read and write CHAIN4 functions decode their
+     * addresses in exactly the same manner; we'd only get into trouble with software that "unchained" or otherwise
+     * reconfigured the planes and then made assumptions about existing data in the video buffer.
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0Chain4(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = (off & ~0x3) + this.offset;
+        let shift = (off & 0x3) << 3;
+        /**
+         * TODO: Consider adding a separate "unmasked" version of this CHAIN4 write function when nSeqMapMask is -1
+         * (or removing nSeqMapMask from the equation altogether, if CHAIN4 is never used with any planes disabled).
+         */
+        let dw = ((b << shift) & card.nSeqMapMask) | (this.adw[idw] & ~((0xff << shift) & card.nSeqMapMask));
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0EvenOdd(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0EvenOdd(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = (off += this.offset) & ~0x1;
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        /**
+         * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1
+         * and 3 if the address is even, and cleared for planes 0 and 2 if the address is odd.
+         */
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        let maskMaps = card.nSeqMapMask & (idw == off? 0x00ff00ff : (0xff00ff00|0));
+        dw = (dw & maskMaps) | (this.adw[idw] & ~maskMaps);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0Rot(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0Rot(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        dw = (dw & card.nSetMapMask) | card.nSetMapBits;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0And(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0And(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        dw = (dw & card.nSetMapMask) | card.nSetMapBits;
+        dw &= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0Or(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0Or(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        dw = (dw & card.nSetMapMask) | card.nSetMapBits;
+        dw |= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode0Xor(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode0Xor(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        dw = (dw & card.nSetMapMask) | card.nSetMapBits;
+        dw ^= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode1(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (ignored; the EGA latches provide the source data)
+     * @param {number} [addr]
+     */
+    static writeByteMode1(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = (this.adw[idw] & ~card.nSeqMapMask) | (card.latches & card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
+    }
+
+    /**
+     * writeByteMode1EvenOdd(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (ignored; the EGA latches provide the source data)
+     * @param {number} [addr]
+     */
+    static writeByteMode1EvenOdd(off, b, addr)
+    {
+        /**
+         * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1 and 3 if the
+         * address is even, and cleared for planes 0 and 2 if the address is odd.
+         *
+         * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to
+         * determine exactly where latches are written (ie, to which address) when EVENODD is in effect.
+         */
+        let card = this.controller;
+        let idw = (off += this.offset) & ~0x1;
+        let maskMaps = card.nSeqMapMask & (idw == off? 0x00ff00ff : (0xff00ff00|0));
+        let dw = (this.adw[idw] & ~maskMaps) | (card.latches & maskMaps);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
+    }
+
+    /**
+     * writeByteMode2(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode2(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = Videox86.aEGAByteToDW[b & 0xf];
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode2And(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode2And(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = Videox86.aEGAByteToDW[b & 0xf];
+        dw &= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode2Or(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode2Or(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = Videox86.aEGAByteToDW[b & 0xf];
+        dw |= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode2Xor(off, b, addr)
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode2Xor(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        let dw = Videox86.aEGAByteToDW[b & 0xf];
+        dw ^= card.latches;
+        dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * writeByteMode3(off, b, addr)
+     *
+     * In MODE3, Set/Reset is always enabled, so the ESRESET bits (and therefore nSetMapMask and nSetMapBits)
+     * are ignored; we look only at the SRESET bits, which are stored in nSetMapData.
+     *
+     * Unlike MODE0, we currently have no non-rotate function for MODE3.  If performance dictates, we can add one;
+     * ditto for other features like the Sequencer's MAPMASK register (nSeqMapMask).
+     *
+     * @this {Memoryx86}
+     * @param {number} off
+     * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
+     * @param {number} [addr]
+     */
+    static writeByteMode3(off, b, addr)
+    {
+        let card = this.controller;
+        let idw = off + this.offset;
+        b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
+        let dw = b | (b << 8) | (b << 16) | (b << 24);
+        let dwMask = (dw & card.nBitMapMask);
+        dw = (card.nSetMapData & dwMask) | (card.latches & ~dwMask);
+        dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
+        if (this.adw[idw] != dw) {
+            this.adw[idw] = dw;
+            this.flags |= Memoryx86.FLAGS.DIRTY;
+        }
+        if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
+    }
+
+    /**
+     * Values returned by getCardAccess(); the high byte describes the read mode, and the low byte describes the write mode.
+     *
+     * V2 should never appear in any values used by getCardAccess() or setCardAccess(); the sole purpose of V2 is to
+     * distinguish newer (V2) access values from older (V1) access values in saved contexts.  It's set when the context
+     * is saved, and cleared when the context is restored.  Thus, if V2 is not set on restore, we assume we're dealing with
+     * a V1 value, so we run it through the V1 table (below) to produce a V2 value.  Hopefully at some point V1 contexts
+     * can be deprecated, and the V2 bit can be eliminated/repurposed.
+     */
+    static READ = {                     // READ values are designed to be OR'ed with WRITE values
+        MODE0:      0x0400,
+        MODE1:      0x0500,
+        PAIRS:      0x0800,
+        EVENODD:    0x1000,
+        CHAIN4:     0x4000,
+        MASK:       0xFF00
+    };
+
+    static WRITE = {                    // and WRITE values are designed to be OR'ed with READ values
+        MODE0:      0x0000,
+        MODE1:      0x0001,
+        MODE2:      0x0002,
+        MODE3:      0x0003,             // VGA only
+        CHAIN4:     0x0004,
+        PAIRS:      0x0008,
+        EVENODD:    0x0010,
+        ROT:        0x0020,
+        AND:        0x0060,
+        OR:         0x00A0,
+        XOR:        0x00E0,
+        MASK:       0x00FF
+    };
+
+    /**
+     * Table of older (V1) access values and their corresponding new values; the new values are similar but more orthogonal
+     */
+    static V1 = {
+        0x0002: Card.READ.MODE0,
+        0x0003: Card.READ.MODE0  | Card.READ.EVENODD,
+        0x0010: Card.READ.MODE1,
+        0x0200: Card.WRITE.MODE0,
+        0x0400: Card.WRITE.MODE0 | Card.WRITE.ROT,
+        0x0600: Card.WRITE.MODE0 | Card.WRITE.AND,
+        0x0A00: Card.WRITE.MODE0 | Card.WRITE.OR,
+        0x0E00: Card.WRITE.MODE0 | Card.WRITE.XOR,
+        0x0300: Card.WRITE.MODE0 | Card.WRITE.EVENODD,
+        0x1000: Card.WRITE.MODE1,
+        0x2000: Card.WRITE.MODE2,
+        0x6000: Card.WRITE.MODE2 | Card.WRITE.AND,
+        0xA000: Card.WRITE.MODE2 | Card.WRITE.OR,
+        0xE000: Card.WRITE.MODE2 | Card.WRITE.XOR
+    };
+
+    static V2 = (0x80000000|0);         // this is a signature bit used ONLY to differentiate V2 access values from V1
+
+    /**
+     * Mappings from getCardAccess() values to access functions above
+     */
+    static FUNCS = {
+        [Card.READ.MODE0]:                          Card.readByteMode0,
+        [Card.READ.MODE0  | Card.READ.CHAIN4]:      Card.readByteMode0Chain4,
+        [Card.READ.MODE0  | Card.READ.EVENODD]:     Card.readByteMode0EvenOdd,
+        [Card.READ.MODE1]:                          Card.readByteMode1,
+        [Card.READ.PAIRS]:                          Card.readBytePairs,
+        [Card.WRITE.MODE0]:                         Card.writeByteMode0,
+        [Card.WRITE.MODE0 | Card.WRITE.ROT]:        Card.writeByteMode0Rot,
+        [Card.WRITE.MODE0 | Card.WRITE.AND]:        Card.writeByteMode0And,
+        [Card.WRITE.MODE0 | Card.WRITE.OR]:         Card.writeByteMode0Or,
+        [Card.WRITE.MODE0 | Card.WRITE.XOR]:        Card.writeByteMode0Xor,
+        [Card.WRITE.MODE0 | Card.WRITE.CHAIN4]:     Card.writeByteMode0Chain4,
+        [Card.WRITE.MODE0 | Card.WRITE.EVENODD]:    Card.writeByteMode0EvenOdd,
+        [Card.WRITE.MODE1]:                         Card.writeByteMode1,
+        [Card.WRITE.MODE1 | Card.WRITE.EVENODD]:    Card.writeByteMode1EvenOdd,
+        [Card.WRITE.MODE2]:                         Card.writeByteMode2,
+        [Card.WRITE.MODE2 | Card.WRITE.AND]:        Card.writeByteMode2And,
+        [Card.WRITE.MODE2 | Card.WRITE.OR]:         Card.writeByteMode2Or,
+        [Card.WRITE.MODE2 | Card.WRITE.XOR]:        Card.writeByteMode2Xor,
+        [Card.WRITE.MODE3]:                         Card.writeByteMode3,
+        [Card.WRITE.PAIRS]:                         Card.writeBytePairs
+    };
+}
 
 if (DEBUGGER) {
     Card.CRTC.REGS = [
         "HTOTAL","HDISP","HSPOS","HSWIDTH","VTOTAL","VTOTADJ",
         "VDISP","VSPOS","ILMODE","MAXSCAN","CURSCAN","CURSCANB",
-        "STARTHI","STARTLO","CURSORHI","CURSORLO","PENHI","PENLO"];
-
+        "STARTHI","STARTLO","CURSORHI","CURSORLO","PENHI","PENLO"
+    ];
     Card.CRTC.EGA_REGS = [
         "HTOTAL","HDEND","HBSTART","HBEND","HRSTART","HREND",
         "VTOTAL","OVERFLOW","PRESCAN","MAXSCAN","CURSCAN","CURSCANB",
         "STARTHI","STARTLO","CURSORHI","CURSORLO","VRSTART","VREND",
-        "VDEND","OFFSET","UNDERLINE","VBSTART","VBEND","MODECTRL","LINECOMP"];
-}
-
-/**
- * EGA/VGA Input Status 1 Register (port 0x3DA)
- *
- * STATUS1 bit 0 has confusing documentation: the EGA Tech Ref says "Logical 0 indicates the CRT raster is in a
- * horizontal or vertical retrace interval", whereas the VGA Tech Ref says "Logical 1 indicates a horizontal or
- * vertical retrace interval," but then clarifies: "This bit is the real-time status of the INVERTED display enable
- * signal".  So, instead of calling bit 0 DISP_ENABLE (or more precisely, DISP_ENABLE_INVERTED), it's simply RETRACE.
- *
- * STATUS1 diagnostic bits 5 and 4 are set according to the Card.ATC.PLANES.MUX bits:
- *
- *      MUX     Bit 5   Bit 4
- *      ---     ----    ----
- *      00:     Red     Blue
- *      01:     SecBlue Green
- *      10:     SecRed  SecGreen
- *      11:     unused  unused
- */
-Card.STATUS1 = {
-    PORT:                   0x3DA,
-    RETRACE:                0x01,       // bit 0: logical OR of horizontal and vertical retrace
-    VRETRACE:               0x08,       // bit 3: set during vertical retrace interval
-    DIAGNOSTIC:             0x30,       // bits 5,4 are controlled by the Card.ATC.PLANES.MUX bits
-    RESERVED:               0xC6
-};
-
-/**
- * EGA/VGA Attribute Controller Registers (port 0x3C0: regATCIndx and regATCData)
- *
- * The current ATC INDX value is stored in cardEGA.regATCIndx (including the Card.ATC.INDX_ENABLE bit), and the
- * ATC DATA values are stored in cardEGA.regATCData.  The state of the ATC INDX/DATA flip-flop is stored in fATCData.
- *
- * Note that the ATC palette registers (0x0-0xf) all use the following 6 bit assignments, with bits 6 and 7 unused:
- *
- *      0: Blue
- *      1: Green
- *      2: Red
- *      3: SecBlue (or mono video)
- *      4: SecGreen (or intensity)
- *      5: SecRed
- */
-Card.ATC = {
-    PORT:                   0x3C0,      // ATC Index/Data Port
-    INDX_MASK:              0x1F,
-    INDX_PAL_ENABLE:        0x20,       // must be clear when loading palette registers
-    PALETTE: {
-        INDX:               0x00,       // 16 registers: 0x00 - 0x0F
-        MASK:               0x3f,
-        BLUE:               0x01,
-        GREEN:              0x02,
-        RED:                0x04,
-        SECBLUE:            0x08,
-        BRIGHT:             0x10,       // NOTE: The IBM EGA manual (p.56) also calls this the "intensity" bit
-        SECGREEN:           0x10,
-        SECRED:             0x20
-    },
-    PALETTE_REGS:           0x10,       // 16 total palette registers
-    MODE: {
-        INDX:               0x10,       // ATC Mode Control Register
-        GRAPHICS:           0x01,       // bit 0: set for graphics mode, clear for alphanumeric mode
-        MONOEM:             0x02,       // bit 1: set for monochrome emulation mode, clear for color emulation
-        TEXT_9DOT:          0x04,       // bit 2: set for 9-dot replication in character codes 0xC0-0xDF
-        BLINK_ENABLE:       0x08,       // bit 3: set for text/graphics blink, clear for background intensity
-        RESERVED:           0x10,       // bit 4: reserved
-        PANCOMPAT:          0x20,       // bit 5: set for pixel-panning compatibility
-        PELWIDTH:           0x40,       // bit 6: set for 256-color modes, clear for all other modes
-        COLORSEL_ALL:       0x80        // bit 7: set to enable all COLORSEL bits (ie, COLORSEL.DAC_BIT5 and COLORSEL.DAC_BIT4)
-    },
-    OVERSCAN: {
-        INDX:               0x11        // ATC Overscan Color Register
-    },
-    PLANES: {
-        INDX:               0x12,       // ATC Color Plane Enable Register
-        MASK:               0x0F,
-        MUX:                0x30,
-        RESERVED:           0xC0
-    },
-    HPAN: {
-        INDX:               0x13,       // ATC Horizontal PEL Panning Register
-        SHIFT_LEFT:         0x0F        // bits 0-3 indicate # of pixels to shift left
-    },
-    COLORSEL: {
-        INDX:               0x14,       // ATC Color Select Register (VGA only)
-        DAC_BIT7:           0x08,       // specifies bit 7 of DAC values (ignored in 256-color modes)
-        DAC_BIT6:           0x04,       // specifies bit 6 of DAC values (ignored in 256-color modes)
-        DAC_BIT5:           0x02,       // specifies bit 5 of DAC values (if ATC.MODE.COLORSEL_ALL is set; ignored in 256-color modes)
-        DAC_BIT4:           0x01        // specifies bit 4 of DAC values (if ATC.MODE.COLORSEL_ALL is set; ignored in 256-color modes)
-    },
-    TOTAL_REGS:             0x14
-};
-
-if (DEBUGGER) {
+        "VDEND","OFFSET","UNDERLINE","VBSTART","VBEND","MODECTRL","LINECOMP"
+    ];
     Card.ATC.REGS = [
         "ATC00","ATC01","ATC02","ATC03","ATC04","ATC05","ATC06","ATC07",
-        "ATC08","ATC09","ATC0A","ATC0B","ATC0C","ATC0D","ATC0E","ATC0F", "ATCMODE","OVERSCAN","PLANES","HPAN","COLORSEL"];
+        "ATC08","ATC09","ATC0A","ATC0B","ATC0C","ATC0D","ATC0E","ATC0F",
+        "ATCMODE","OVERSCAN","PLANES","HPAN","COLORSEL"
+    ];
+    Card.SEQ.REGS = [
+        "RESET","CLKMODE","MAPMASK","CHARMAP","MEMMODE"
+    ];
+    Card.GRC.REGS = [
+        "SRESET","ESRESET","COLORCOMP","DATAROT","READMAP","GRCMODE","GRCMISC","COLORDC","BITMASK"
+    ];
 }
 
 /**
- * EGA/VGA Feature Control Register (port 0x3BA or 0x3DA: regFeat)
+ * Supported Monitors
  *
- * The EGA BIOS writes 0x1 to Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT, then writes 0x2 to
- * Card.FEAT_CTRL.BITS and reads Card.STATUS0.FEAT.  The bits from the first and second reads are shifted
- * into the high nibble of the byte at 40:88h.
- */
-Card.FEAT_CTRL = {
-    PORT_MONO:              0x3BA,      // write port address (other than the two bits below, the rest are reserved and/or unused)
-    PORT_COLOR:             0x3DA,      // write port address (other than the two bits below, the rest are reserved and/or unused)
-    PORT_READ:              0x3CA,      // read port address (VGA only)
-    BITS:                   0x03        // feature control bits
-};
-
-/**
- * EGA/VGA Miscellaneous Output Register (port 0x3C2: regMisc)
- */
-Card.MISC = {
-    PORT_WRITE:             0x3C2,      // write port address (EGA and VGA)
-    PORT_READ:              0x3CC,      // read port address (VGA only)
-    IO_SELECT:              0x01,       // 0 sets CRT ports to 0x3Bn, 1 sets CRT ports to 0x3Dn
-    ENABLE_RAM:             0x02,       // 0 disables video RAM, 1 enables
-    CLOCK_SELECT:           0x0C,       // 0x0: 14Mhz I/O clock, 0x4: 16Mhz on-board clock, 0x8: external clock, 0xC: unused
-    DISABLE_DRV:            0x10,       // 0 activates internal video drivers, 1 activates feature connector direct drive outputs
-    PAGE_ODD_EVEN:          0x20,       // 0 selects the low 64Kb page of video RAM for text modes, 1 selects the high page
-    HPOLARITY:              0x40,       // 0 selects positive horizontal retrace
-    VPOLARITY:              0x80        // 0 selects positive vertical retrace
-};
-
-/**
- * EGA/VGA Input Status 0 Register (port 0x3C2: regStatus0)
- */
-Card.STATUS0 = {
-    PORT:                   0x3C2,      // read-only (aka STATUS0, to distinguish it from PORT_CGA_STATUS)
-    RESERVED:               0x0F,
-    SWSENSE:                0x10,
-    SWSENSE_SHIFT:          4,
-    FEAT:                   0x60,       // VGA: reserved
-    INTERRUPT:              0x80        // 1: video is being displayed; 0: vertical retrace is occurring
-};
-
-/**
- * VGA Subsystem Enable Register (port 0x3C3: regVGAEnable)
- */
-Card.VGA_ENABLE = {
-    PORT:                   0x3C3,
-    ENABLED:                0x01,       // when set, all VGA I/O and memory decoding is enabled; otherwise disabled (TODO: Implement)
-    RESERVED:               0xFE
-};
-
-/**
- * EGA/VGA Sequencer Registers (ports 0x3C4/0x3C5: regSEQIndx and regSEQData)
- */
-Card.SEQ = {
-    INDX: {
-        PORT:               0x3C4,      // Sequencer Index Port
-        MASK:               0x07
-    },
-    DATA: {
-        PORT:               0x3C5       // Sequencer Data Port
-    },
-    RESET: {
-        INDX:               0x00,       // Sequencer Reset Register
-        ASYNC:              0x01,
-        SYNC:               0x02
-    },
-    CLKMODE: {
-        INDX:               0x01,       // Sequencer Clocking Mode Register
-        DOTS8:              0x01,       // 1: 8 dots; 0: 9 dots
-        BANDWIDTH:          0x02,       // 0: CRTC has access 4 out of every 5 cycles (for high-res modes); 1: CRTC has access 2 out of 5 (VGA: reserved)
-        SHIFTLOAD:          0x04,
-        DOTCLOCK:           0x08,       // 0: normal dot clock; 1: master clock divided by two (used for 320x200 modes: 0, 1, 4, 5, and D)
-        SHIFT4:             0x10,       // VGA only
-        SCREEN_OFF:         0x20,       // VGA only
-        RESERVED:           0xC0
-    },
-    MAPMASK: {
-        INDX:               0x02,       // Sequencer Map Mask Register
-        PL0:                0x01,
-        PL1:                0x02,
-        PL2:                0x04,
-        PL3:                0x08,
-        MAPS:               0x0F,
-        RESERVED:           0xF0
-    },
-    CHARMAP: {
-        INDX:               0x03,       // Sequencer Character Map Select Register
-        SELB:               0x03,       // 0x0: 1st 8Kb of plane 2; 0x1: 2nd 8Kb; 0x2: 3rd 8Kb; 0x3: 4th 8Kb (used when attribute bit 3 is 0)
-        SELA:               0x0C,       // 0x0: 1st 8Kb of plane 2; 0x4: 2nd 8Kb; 0x8: 3rd 8Kb; 0xC: 4th 8Kb (used when attribute bit 3 is 1)
-        SELB_HI:            0x10,       // VGA only
-        SELA_HI:            0x20        // VGA only
-    },
-    MEMMODE: {
-        INDX:               0x04,       // Sequencer Memory Mode Register
-        ALPHA:              0x01,       // set for alphanumeric (A/N) mode, clear for graphics (APA or "All Points Addressable") mode (EGA only)
-        EXT:                0x02,       // set if memory expansion installed, clear if not installed
-        SEQUENTIAL:         0x04,       // set for sequential memory access, clear for mapping even addresses to planes 0/2, odd addresses to planes 1/3
-        CHAIN4:             0x08        // VGA only: set to select memory map (plane) based on low 2 bits of address
-    },
-    TOTAL_REGS:             0x05
-};
-
-if (DEBUGGER) Card.SEQ.REGS = ["RESET","CLKMODE","MAPMASK","CHARMAP","MEMMODE"];
-
-/**
- * VGA Digital-to-Analog Converter (DAC) Registers (regDACMask, regDACState, regDACAddr, and regDACData)
+ * The MDA monitor displays 350 lines of vertical resolution, 720 lines of horizontal resolution, and refreshes
+ * at ~50Hz.  The CGA monitor displays 200 lines vertically, 640 horizontally, and refreshes at ~60Hz.
  *
- * To write DAC data, write an address to DAC.ADDR.PORT_WRITE, then write 3 bytes to DAC.DATA.PORT; the low 6 bits
- * of each byte will be concatenated to form an 18-bit DAC value (red is least significant, followed by green, then blue).
- * When the final byte is received, the 18-bit DAC value is updated and regDACAddr is auto-incremented.
+ * Based on actual MDA timings (see http://diylab.atwebpages.com/pressureDev.htm), the total horizontal
+ * period (drawing a line and retracing) is ~54.25uSec (1000000uSec / 18432) and the horizontal retrace interval
+ * is about 15% of that, or ~8.14uSec.  Vertical sync occurs once every 370 horizontal periods.  Of those 370,
+ * only 354 represent actively drawn lines (and of those, only 350 are visible); the remaining 16 horizontal
+ * periods, or 4% of the 370 total, represent the vertical retrace interval.
  *
- * To read DAC data, the process is similar, but the initial address is written to DAC.ADDR.PORT_READ instead.
+ * I don't have similar numbers for the CGA or EGA, so for now, I assume similar percentages; ie, 15% of
+ * the horizontal period will represent horizontal retrace, and 4% of the vertical pixel maximum (262) will
+ * represent vertical retrace.  However, 24% of the CGA's 262 vertical maximum represents non-visible lines,
+ * whereas only 5% of the MDA's 370 maximum represents non-visible lines; is there really that much "overscan"
+ * on the CGA?
  *
- * DAC.STATE.PORT and DAC.ADDR.PORT_WRITE can be read at any time and will not interfere with a read or write operation
- * in progress.  To prevent "snow", reading or writing DAC values should be limited to retrace intervals (see regStatus1),
- * or by using the SCREEN_OFF bit in the SEQ.CLKMODE register.
- */
-Card.DAC = {
-    MASK: {
-        PORT:               0x3C6,      // initialized to 0xFF and should not be changed
-        DEFAULT:            0xFF
-    },
-    STATE: {
-        PORT:               0x3C7,
-        MODE_WRITE:         0x00,       // the DAC is in write mode if bits 0 and 1 are clear
-        MODE_READ:          0x03        // the DAC is in read mode if bits 0 and 1 are set
-    },
-    ADDR: {
-        PORT_READ:          0x3C7,      // write to initiate a read
-        PORT_WRITE:         0x3C8       // write to initiate a write; read to determine the current ADDR
-    },
-    DATA: {
-        PORT:               0x3C9
-    },
-    TOTAL_REGS:             0x100
-};
-
-/**
- * EGA/VGA Graphics Controller Registers (ports 0x3CE/0x3CF: regGRCIndx and regGRCData)
+ * For each monitor type, there's a MonitorSpecs object that describes the horizontal and vertical
+ * timings, along with my assumptions about the percentage of time that drawing is "active" within those periods,
+ * and then based on the selected monitor type, I compute the number of CPU cycles that each period lasts,
+ * as well as the number of CPU cycles that drawing lasts within each period, so that the horizontal and vertical
+ * retrace status flags can be quickly calculated.
  *
- * The VGA added Write Mode 3, which is described as follows:
+ * For reference, here are some important numbers to know (from https://github.com/reenigne/reenigne/blob/master/8088/cga/register_values.txt):
  *
- *      "Each map is written with 8 bits of the value contained in the Set/Reset register for that map
- *      (the Enable Set/Reset register has no effect). Rotated system microprocessor data is ANDed with the
- *      Bit Mask register data to form an 8-bit value that performs the same function as the Bit Mask register
- *      does in write modes 0 and 2."
- */
-Card.GRC = {
-    POS1_PORT:              0x3CC,      // EGA only, write-only
-    POS2_PORT:              0x3CA,      // EGA only, write-only
-    INDX: {
-        PORT:               0x3CE,      // GRC Index Port
-        MASK:               0x0F
-    },
-    DATA: {
-        PORT:               0x3CF       // GRC Data Port
-    },
-    SRESET: {
-        INDX:               0x00        // GRC Set/Reset Register (write-only; each bit used only if WRITE.MODE0 and corresponding ESR bit set)
-    },
-    ESRESET: {
-        INDX:               0x01        // GRC Enable Set/Reset Register
-    },
-    COLORCOMP: {
-        INDX:               0x02        // GRC Color Compare Register
-    },
-    DATAROT: {
-        INDX:               0x03,       // GRC Data Rotate Register
-        COUNT:              0x07,
-        AND:                0x08,
-        OR:                 0x10,
-        XOR:                0x18,
-        FUNC:               0x18,
-        MASK:               0x1F
-    },
-    READMAP: {
-        INDX:               0x04,       // GRC Read Map Select Register
-        NUM:                0x03
-    },
-    MODE: {
-        INDX:               0x05,       // GRC Mode Register
-        WRITE: {
-            MODE0:          0x00,       // write mode 0: each plane written with CPU data, rotated as needed, unless SR enabled
-            MODE1:          0x01,       // write mode 1: each plane written with contents of the processor latches (loaded by a read)
-            MODE2:          0x02,       // write mode 2: memory plane N is written with 8 bits matching data bit N
-            MODE3:          0x03,       // write mode 3: VGA only
-            MASK:           0x03
-        },
-        TEST:               0x04,
-        READ: {
-            MODE0:          0x00,       // read mode 0: read map mode
-            MODE1:          0x08,       // read mode 1: color compare mode
-            MASK:           0x08
-        },
-        EVENODD:            0x10,
-        SHIFT:              0x20,
-        COLOR256:           0x40        // VGA only
-    },
-    MISC: {
-        INDX:               0x06,       // GRC Miscellaneous Register
-        GRAPHICS:           0x01,       // set for graphics mode addressing, clear for text mode addressing
-        CHAIN:              0x02,       // set for odd/even planes selected with odd/even values of the processor AO bit
-        MAPMEM:             0x0C,       //
-        MAPA0128:           0x00,       //
-        MAPA064:            0x04,       //
-        MAPB032:            0x08,       //
-        MAPB832:            0x0C        //
-    },
-    COLORDC: {
-        INDX:               0x07        // GRC Color "Don't Care" Register
-    },
-    BITMASK: {
-        INDX:               0x08        // GRC Bit Mask Register
-    },
-    TOTAL_REGS:             0x09
-};
-
-if (DEBUGGER) Card.GRC.REGS = ["SRESET","ESRESET","COLORCOMP","DATAROT","READMAP","GRCMODE","GRCMISC","COLORDC","BITMASK"];
-
-/**
- * EGA Memory Access Functions
- *
- * Here's where we define all the getMemoryAccess() functions that know how to deal with "planar" EGA memory,
- * which consists of 32-bit values for every byte of address space, allowing us to internally store plane 0
- * bytes in bits 0-7, plane 1 bytes in bits 8-15, plane 2 bytes in bits 16-23, and plane 3 bytes in bits 24-31.
- *
- * All our functions have slightly more overhead than the standard Bus memory access functions, because the
- * offset (off) parameter is block-relative, which we must transform into a buffer-relative offset.  Fortunately,
- * all our Memory objects know this and have already recorded their buffer-relative offset in "this.offset".
- *
- * Also, the EGA includes a set of latches, one for each plane, which must be updated on most reads/writes;
- * we rely on the Memory object's "this.controller" property to give us access to the Card's state.
- *
- * And we take a little extra time to conditionally set DIRTY on writes, meaning if a write did not actually
- * change the value of the memory, we will not set DIRTY.  The default write functions in memory.js don't take
- * that performance hit, but here, it may be worthwhile, because if it results in fewer dirty blocks, display
- * updates may be faster.
- *
- * Note that we don't have to worry about dealing with word accesses that straddle block boundaries, because
- * the Bus component automatically breaks those accesses into separate byte requests.  Similarly, byte and word
- * values for the write functions have already been pre-masked by the Bus component to 8 and 16 bits, respectively.
- *
- * My motto: Be paranoid, but also be careful not to do any more work than you absolutely have to.
- *
- *
- * CGA Emulation on the EGA
- *
- * Modes 4/5 (320x200 low-res graphics) emulate the same buffer format that the CGA uses.  To recap: 1 byte contains
- * 4 pixels (pixel 0 in bits 7-6, pixel 1 in bits 5-4, etc), and thus one row of pixels is 80 (0x50) bytes long.
- * Moreover, all even rows are stored in the first 8K of the video buffer (at 0xB8000), and all odd rows are stored
- * in the second 8K (at 0xBA000).  Of each 8K, only 8000 (0x1F40) bytes are used (80 bytes X 100 rows); the remaining
- * 192 bytes of each 8K are unused.
- *
- * For these modes, the EGA's GRC.MODE is programmed with 0x30: Card.GRC.MODE.EVENODD and Card.GRC.MODE.SHIFT.
- * The latter claims to work by forming each 2-bit pixel with even bits from plane 0 and odd bits from plane 1;
- * however, I'm unclear how that works if even bytes are only written to plane 0 and odd bytes are only written to
- * plane 1, as Card.GRC.MODE.EVENODD implies, because plane 0 would never have any bits for the odd bytes, and
- * plane 1 would never have any bits for the even bytes.  TODO: Figure this out.
- *
- *
- * Even/Odd Memory Access Functions
- *
- * The "EVENODD" functions deal with the EGA's default text-mode addressing, where EVEN addresses are mapped to
- * plane 0 (and 2) and ODD addresses are mapped to plane 1 (and 3).  This occurs when SEQ.MEMMODE.SEQUENTIAL is
- * clear (and GRC.MODE.EVENODD is set), turning address bit 0 (A0) into a "plane select" bit.  Whether A0 is also
- * used as a memory address bit depends on CRTC.MODECTRL.BYTE_MODE: if it's set, then we're in "Byte Mode" and A0 is
- * used as-is; if it's clear, then we're in "Word Mode", and either A15 (when CRTC.MODECTRL.ADDR_WRAP is set) or A13
- * (when CRTC.MODECTRL.ADDR_WRAP is clear, typically when only 64Kb of EGA memory is installed) is substituted for A0.
- *
- * Note that A13 remains clear until addresses reach 8K, at which point we've spanned 32Kb of EGA memory, so it makes
- * sense to propagate A13 to A0 at that point, so that the next 8K of addresses start using ODD instead of EVEN bytes,
- * and no memory is wasted on a 64Kb EGA card.
- *
- * These functions, however, don't yet deal with all those subtleties: A0 is currently used only as a "plane select"
- * bit and set to zero for addressing purposes, meaning that only the EVEN bytes in EGA memory will ever be used.
- * TODO: Implement the subtleties.
+ *              CGA          MDA
+ *  Pixel clock 14.318 MHz   16.257 MHz (aka "maximum video bandwidth", as IBM Tech Refs sometimes call it)
+ *  Horizontal  15.700 KHz   18.432 KHz (aka "horizontal drive", as IBM Tech Refs sometimes call it)
+ *  Vertical    59.923 Hz    49.816 Hz
+ *  Usage       53.69%       77.22%
+ *  H pix       912 = 114*8  882 = 98*9
+ *  V pix       262          370
+ *  Dots        238944       326340
  */
 
-/**
- * Values returned by getCardAccess(); the high byte describes the read mode, and the low byte describes the write mode.
- *
- * V2 should never appear in any values used by getCardAccess() or setCardAccess(); the sole purpose of V2 is to
- * distinguish newer (V2) access values from older (V1) access values in saved contexts.  It's set when the context
- * is saved, and cleared when the context is restored.  Thus, if V2 is not set on restore, we assume we're dealing with
- * a V1 value, so we run it through the V1 table (below) to produce a V2 value.  Hopefully at some point V1 contexts
- * can be deprecated, and the V2 bit can be eliminated/repurposed.
- */
-Card.ACCESS = {
-    READ: {                             // READ values are designed to be OR'ed with WRITE values
-        MODE0:              0x0400,
-        MODE1:              0x0500,
-        PAIRS:              0x0800,
-        EVENODD:            0x1000,
-        CHAIN4:             0x4000,
-        MASK:               0xFF00
-    },
-    WRITE: {                            // and WRITE values are designed to be OR'ed with READ values
-        MODE0:              0x0000,
-        MODE1:              0x0001,
-        MODE2:              0x0002,
-        MODE3:              0x0003,     // VGA only
-        CHAIN4:             0x0004,
-        PAIRS:              0x0008,
-        EVENODD:            0x0010,
-        ROT:                0x0020,
-        AND:                0x0060,
-        OR:                 0x00A0,
-        XOR:                0x00E0,
-        MASK:               0x00FF
-    },
-    V2:             (0x80000000|0)      // this is a signature bit used ONLY to differentiate V2 access values from V1
-};
-
-/**
- * Table of older (V1) access values and their corresponding new values; the new values are similar but more orthogonal
- */
-Card.ACCESS.V1 = [];
-Card.ACCESS.V1[0x0002] = Card.ACCESS.READ.MODE0;
-Card.ACCESS.V1[0x0003] = Card.ACCESS.READ.MODE0  | Card.ACCESS.READ.EVENODD;
-Card.ACCESS.V1[0x0010] = Card.ACCESS.READ.MODE1;
-Card.ACCESS.V1[0x0200] = Card.ACCESS.WRITE.MODE0;
-Card.ACCESS.V1[0x0400] = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.ROT;
-Card.ACCESS.V1[0x0600] = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.AND;
-Card.ACCESS.V1[0x0A00] = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.OR;
-Card.ACCESS.V1[0x0E00] = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.XOR;
-Card.ACCESS.V1[0x0300] = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.EVENODD;
-Card.ACCESS.V1[0x1000] = Card.ACCESS.WRITE.MODE1;
-Card.ACCESS.V1[0x2000] = Card.ACCESS.WRITE.MODE2;
-Card.ACCESS.V1[0x6000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.AND;
-Card.ACCESS.V1[0xA000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.OR;
-Card.ACCESS.V1[0xE000] = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.XOR;
-
-/**
- * readBytePairs(off, addr)
- *
- * Used for MDA/CGA byte-pair access (ie, pairs of bytes stored in a single dword).
- *
- * Externally, this makes the buffer look like a linear series of byte pairs, perfect for emulating MDA and CGA
- * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
- * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} [addr]
- * @returns {number}
- */
-Card.ACCESS.readBytePairs = function readByte(off, addr)
-{
-    off += this.offset;
-    return ((this.adw[off >> 1] >>> ((off & 0x1) << 3)) & 0xff);
-};
-
-/**
- * readByteMode0(off, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} [addr]
- * @returns {number}
- */
-Card.ACCESS.readByteMode0 = function readByteMode0(off, addr)
-{
-    off += this.offset;
-    let dw = this.controller.latches = this.adw[off];
-    return (dw >> this.controller.nReadMapShift) & 0xff;
-};
-
-/**
- * readByteMode0Chain4(off, addr)
- *
- * See writeByteMode0Chain4 for a description of how writes are distributed across planes.
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} [addr]
- * @returns {number}
- */
-Card.ACCESS.readByteMode0Chain4 = function readByteMode0Chain4(off, addr)
-{
-    let idw = (off & ~0x3) + this.offset;
-    let shift = (off & 0x3) << 3;
-    return ((this.controller.latches = this.adw[idw]) >> shift) & 0xff;
-};
-
-/**
- * readByteMode0EvenOdd(off, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} [addr]
- * @returns {number}
- */
-Card.ACCESS.readByteMode0EvenOdd = function readByteMode0EvenOdd(off, addr)
-{
-    /**
-     * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to determine
-     * exactly what gets latched (ie, from which address) when EVENODD is in effect.  Whatever we learn may also
-     * dictate a special EVENODD function for READ.MODE1 as well.
-     */
-    let idw = (off += this.offset) & ~0x1;
-    let dw = this.controller.latches = this.adw[idw];
-    return (!(off & 1)? dw : (dw >> 8)) & 0xff;
-};
-
-/**
- * readByteMode1(off, addr)
- *
- * This mode requires us to step through each of the 8 sets of 4 bits in the specified DWORD of video memory,
- * returning a 1 wherever all 4 match the Color Compare (COLORCOMP) Register and a 0 otherwise.  An added wrinkle
- * is that the Color Don't Care (COLORDC) Register can specify that any/all/none of the 4 bits must be ignored.
- *
- * We perform the comparison from most to least significant bit, because that matches how the nColorCompare and
- * nColorDontCare masks are initialized; we could have gone either way, but this is more consistent with the rest
- * of the component (eg, pixels are drawn across the screen from left to right, starting with the most significant
- * bit of each byte).
- *
- * Also note that, while not well-documented, this mode also affects the internal latches, so we make sure those
- * are updated as well.
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} [addr]
- * @returns {number}
- */
-Card.ACCESS.readByteMode1 = function readByteMode1(off, addr)
-{
-    let card = this.controller;
-    let dw = card.latches = this.adw[off + this.offset];
-    /**
-     * Minor optimization: we could pre-mask nColorCompare with nColorDontCare, whenever either register
-     * is updated, but that's a drop in the bucket compared to all the other work this function must do.
-     */
-    let mask = card.nColorDontCare;
-    let color = card.nColorCompare & mask;
-    let b = 0, bit = 0x80;
-    while (bit) {
-        if ((dw & mask) == color) b |= bit;
-        color >>>= 1;  mask >>>= 1;  bit >>= 1;
-    }
-    return b;
-};
-
-/**
- * writeBytePairs(off, b, addr)
- *
- * Used for MDA/CGA byte-pair access (ie, pairs of bytes stored in a single dword).
- *
- * Externally, this makes the buffer look like a linear series of byte pairs, perfect for emulating MDA and CGA
- * character/attribute text modes, while internally, it looks similar to an EvenOdd arrangement, except that odd
- * dwords not skipped (ie, wasted).  This similarity makes life simpler for updateScreenText().
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeBytePairs = function writeByte(off, b, addr)
-{
-    off += this.offset;
-    let idw = off >> 1;
-    let nShift = (off & 0x1) << 3;
-    let dw = (this.adw[idw] & ~(0xff << nShift)) | (b << nShift);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-};
-
-/**
- * writeByteMode0(off, b, addr)
- *
- * Supporting Set/Reset means that for every plane for which Set/Reset is enabled, we must
- * replace the corresponding byte in dw with a byte of zeros or ones.  This is accomplished with
- * nSetMapMask, nSetMapData, and nSetMapBits.  nSetMapMask is the inverse of the ESRESET bits,
- * because we use it to mask the processor data, nSetMapData records the desired SRESET bits,
- * and nSetMapBits contains the bits to replace those that we masked in the processor data.
- *
- * We could have done this:
- *
- *      dw = (dw & card.nSetMapMask) | (card.nSetMapData & ~card.nSetMapMask)
- *
- * but by maintaining nSetMapBits equal to (nSetMapData & ~nSetMapMask), we are able to make the
- * writes slightly more efficient.
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0 = function writeByteMode0(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    dw = (dw & card.nSetMapMask) | card.nSetMapBits;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    let delta = (this.adw[idw] ^ dw);
-    if (delta) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-        // card.bitsDirtyPlanes |= delta;       // we no longer track dirty planes, just dirty font banks
-        if (delta & 0x00ff0000) {               // if any plane 2 bits were modified, mark the appropriate font bank dirty
-            let bitDirtyBank = (1 << ((idw >> 13) & 7));
-            if (!(card.bitsDirtyBanks & bitDirtyBank)) {
-                card.bitsDirtyBanks |= bitDirtyBank;
-                if (DEBUG) card.video.printf(MESSAGE.VIDEO, "writeByteMode0(%#010X): modified font bank %#04X\n", addr, bitDirtyBank);
-            }
-        }
-    }
-    if (DEBUG) card.video.printf(MESSAGE.VIDEO + MESSAGE.MEM, "writeByteMode0(%#10X): %#04X -> %#10X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0Chain4(off, b, addr)
- *
- * This is how we distribute writes of 0xff across the address space to the planes (assuming that all
- * planes are enabled by the Sequencer's MAPMASK register):
- *
- *      off     idw     adw[idw]
- *      ------  ------  ----------
- *      0x0000: 0x0000  0x000000ff
- *      0x0001: 0x0000  0x0000ff00
- *      0x0002: 0x0000  0x00ff0000
- *      0x0003: 0x0000  0xff000000
- *      0x0004: 0x0004  0x000000ff
- *      0x0005: 0x0004  0x0000ff00
- *      0x0006: 0x0004  0x00ff0000
- *      0x0007: 0x0004  0xff000000
- *      ...
- *
- * Some VGA emulations calculate the video buffer index (idw) by shifting the offset (off) right 2 bits,
- * instead of simply masking off the low 2 bits, as we do here.  That would be a more "pleasing" arrangement,
- * because we would be using sequential video buffer locations, instead of multiples of 4, and would match how
- * pixels are stored in "Mode X".  However, I don't think that's how CHAIN4 modes operate (although that still
- * needs to be confirmed, because multiple sources conflict on this point).  TODO: Confirm CHAIN4 operation on
- * actual VGA hardware, including the extent to which ALU and other writeByteMode0() functionality needs to
- * be folded into this.
- *
- * Address decoding may not matter that much, as long as both the read and write CHAIN4 functions decode their
- * addresses in exactly the same manner; we'd only get into trouble with software that "unchained" or otherwise
- * reconfigured the planes and then made assumptions about existing data in the video buffer.
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0Chain4 = function writeByteMode0Chain4(off, b, addr)
-{
-    let card = this.controller;
-    let idw = (off & ~0x3) + this.offset;
-    let shift = (off & 0x3) << 3;
-    /**
-     * TODO: Consider adding a separate "unmasked" version of this CHAIN4 write function when nSeqMapMask is -1
-     * (or removing nSeqMapMask from the equation altogether, if CHAIN4 is never used with any planes disabled).
-     */
-    let dw = ((b << shift) & card.nSeqMapMask) | (this.adw[idw] & ~((0xff << shift) & card.nSeqMapMask));
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Chain4(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0EvenOdd(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0EvenOdd = function writeByteMode0EvenOdd(off, b, addr)
-{
-    let card = this.controller;
-    let idw = (off += this.offset) & ~0x1;
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    /**
-     * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1
-     * and 3 if the address is even, and cleared for planes 0 and 2 if the address is odd.
-     */
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    let maskMaps = card.nSeqMapMask & (idw == off? 0x00ff00ff : (0xff00ff00|0));
-    dw = (dw & maskMaps) | (this.adw[idw] & ~maskMaps);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0EvenOdd(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0Rot(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0Rot = function writeByteMode0Rot(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    dw = (dw & card.nSetMapMask) | card.nSetMapBits;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Rot(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0And(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0And = function writeByteMode0And(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    dw = (dw & card.nSetMapMask) | card.nSetMapBits;
-    dw &= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0And(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0Or(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0Or = function writeByteMode0Or(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    dw = (dw & card.nSetMapMask) | card.nSetMapBits;
-    dw |= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode0Xor(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode0Xor = function writeByteMode0Xor(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    dw = (dw & card.nSetMapMask) | card.nSetMapBits;
-    dw ^= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode0Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode1(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (ignored; the EGA latches provide the source data)
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode1 = function writeByteMode1(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = (this.adw[idw] & ~card.nSeqMapMask) | (card.latches & card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1(%#010X): %#010X\n", addr, dw);
-};
-
-/**
- * writeByteMode1EvenOdd(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (ignored; the EGA latches provide the source data)
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode1EvenOdd = function writeByteMode1EvenOdd(off, b, addr)
-{
-    /**
-     * When even/odd addressing is enabled, nSeqMapMask must be cleared for planes 1 and 3 if the
-     * address is even, and cleared for planes 0 and 2 if the address is odd.
-     *
-     * TODO: As discussed in getCardAccess(), we need to run some tests on real EGA/VGA hardware to
-     * determine exactly where latches are written (ie, to which address) when EVENODD is in effect.
-     */
-    let card = this.controller;
-    let idw = (off += this.offset) & ~0x1;
-    let maskMaps = card.nSeqMapMask & (idw == off? 0x00ff00ff : (0xff00ff00|0));
-    let dw = (this.adw[idw] & ~maskMaps) | (card.latches & maskMaps);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode1EvenOdd(%#010X): %#010X\n", addr, dw);
-};
-
-/**
- * writeByteMode2(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode2 = function writeByteMode2(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = Videox86.aEGAByteToDW[b & 0xf];
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode2And(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode2And = function writeByteMode2And(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = Videox86.aEGAByteToDW[b & 0xf];
-    dw &= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2And(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode2Or(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode2Or = function writeByteMode2Or(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = Videox86.aEGAByteToDW[b & 0xf];
-    dw |= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Or(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode2Xor(off, b, addr)
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode2Xor = function writeByteMode2Xor(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    let dw = Videox86.aEGAByteToDW[b & 0xf];
-    dw ^= card.latches;
-    dw = (dw & card.nBitMapMask) | (card.latches & ~card.nBitMapMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode2Xor(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * writeByteMode3(off, b, addr)
- *
- * In MODE3, Set/Reset is always enabled, so the ESRESET bits (and therefore nSetMapMask and nSetMapBits)
- * are ignored; we look only at the SRESET bits, which are stored in nSetMapData.
- *
- * Unlike MODE0, we currently have no non-rotate function for MODE3.  If performance dictates, we can add one;
- * ditto for other features like the Sequencer's MAPMASK register (nSeqMapMask).
- *
- * @this {Memoryx86}
- * @param {number} off
- * @param {number} b (which should already be pre-masked to 8 bits; see cpu.setByte())
- * @param {number} [addr]
- */
-Card.ACCESS.writeByteMode3 = function writeByteMode3(off, b, addr)
-{
-    let card = this.controller;
-    let idw = off + this.offset;
-    b = ((b >> card.nDataRotate) | (b << (8 - card.nDataRotate)) & 0xff);
-    let dw = b | (b << 8) | (b << 16) | (b << 24);
-    let dwMask = (dw & card.nBitMapMask);
-    dw = (card.nSetMapData & dwMask) | (card.latches & ~dwMask);
-    dw = (dw & card.nSeqMapMask) | (this.adw[idw] & ~card.nSeqMapMask);
-    if (this.adw[idw] != dw) {
-        this.adw[idw] = dw;
-        this.flags |= Memoryx86.FLAGS.DIRTY;
-    }
-    if (DEBUG) card.video.printf(MESSAGE.MEM + MESSAGE.VIDEO, "writeByteMode3(%#010X): %#04X -> %#010X\n", addr, b, dw);
-};
-
-/**
- * Mappings from getCardAccess() values to access functions above
- */
-Card.ACCESS.afn = [];
-
-Card.ACCESS.afn[Card.ACCESS.READ.MODE0]  = Card.ACCESS.readByteMode0;
-Card.ACCESS.afn[Card.ACCESS.READ.MODE0  |  Card.ACCESS.READ.CHAIN4]  = Card.ACCESS.readByteMode0Chain4;
-Card.ACCESS.afn[Card.ACCESS.READ.MODE0  |  Card.ACCESS.READ.EVENODD] = Card.ACCESS.readByteMode0EvenOdd;
-Card.ACCESS.afn[Card.ACCESS.READ.MODE1]  = Card.ACCESS.readByteMode1;
-Card.ACCESS.afn[Card.ACCESS.READ.PAIRS]  = Card.ACCESS.readBytePairs;
-
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0] = Card.ACCESS.writeByteMode0;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.ROT] = Card.ACCESS.writeByteMode0Rot;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.AND] = Card.ACCESS.writeByteMode0And;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.OR]  = Card.ACCESS.writeByteMode0Or;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.XOR] = Card.ACCESS.writeByteMode0Xor;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.CHAIN4]  = Card.ACCESS.writeByteMode0Chain4;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE0 |  Card.ACCESS.WRITE.EVENODD] = Card.ACCESS.writeByteMode0EvenOdd;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE1] = Card.ACCESS.writeByteMode1;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE1 |  Card.ACCESS.WRITE.EVENODD] = Card.ACCESS.writeByteMode1EvenOdd;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE2] = Card.ACCESS.writeByteMode2;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE2 |  Card.ACCESS.WRITE.AND] = Card.ACCESS.writeByteMode2And;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE2 |  Card.ACCESS.WRITE.OR]  = Card.ACCESS.writeByteMode2Or;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE2 |  Card.ACCESS.WRITE.XOR] = Card.ACCESS.writeByteMode2Xor;
-Card.ACCESS.afn[Card.ACCESS.WRITE.MODE3] = Card.ACCESS.writeByteMode3;
-Card.ACCESS.afn[Card.ACCESS.WRITE.PAIRS] = Card.ACCESS.writeBytePairs;
+/** @typedef {{ nHorzPeriodsPerSec: number, nHorzPeriodsPerFrame: number, percentHorzActive: number, percentVertActive: number }} */
+let MonitorSpecs;
 
 /**
  * @class Videox86
@@ -54281,6 +54322,143 @@ Card.ACCESS.afn[Card.ACCESS.WRITE.PAIRS] = Card.ACCESS.writeBytePairs;
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Videox86 extends Component {
+
+    static TRAPALL = true;      // monitor all I/O by default (not just deltas)
+
+    /**
+     * Supported Cards (and associated fonts)
+     *
+     * These IDs are also used to identify which "slots" in the aFonts[] array contain fonts, which is why
+     * there are gaps between the numbers.  The MDA and CGA use a single supplied font, so they will always
+     * use font slot 1 or 2, respectively, but the EGA supports up to 4 font "banks", so depending on which
+     * bank is being used, font slots 4-7 may be used.  Similarly, the VGA supports up to 8 font "banks",
+     * using font slots 8-15.
+     *
+     * Once we've finished loading the standard 8K font file, aFonts[] should contain at least one of the
+     * entries listed below.  For the standard MDA/CGA font ROM, the first (MDA) font resides in the first 4Kb,
+     * and the second and third (CGA) fonts reside in the two 2K halves of the second 4Kb.
+     *
+     * Additional notes from the IBM EGA Manual (p.5):
+     *
+     *      In alphanumeric modes, characters are formed from one of two ROM (Read Only Memory) character
+     *      generators on the adapter. One character generator defines 7x9 characters in a 9x14 character box.
+     *      For Enhanced Color Display support, the 9x14 character set is modified to provide an 8x14 character set.
+     *      The second character generator defines 7x7 characters in an 8x8 character box. These generators contain
+     *      dot patterns for 256 different characters. The character sets are identical to those provided by the
+     *      IBM Monochrome Display Adapter and the IBM Color/Graphics Monitor Adapter.
+     */
+    static CARD = {
+        MDA:    1,              // uses 9x14 monochrome font
+        CGA:    2,              // uses 8x8 color font
+        EGA:    4,              // uses 8x14 color font (by default)
+        VGA:    8               // uses 9x16 color font (by default)
+    };
+
+    /**
+     * Supported Modes
+     *
+     * Although this component is designed to be a video hardware emulation, not a BIOS simulation, we DO
+     * look for changes to the hardware state that correspond to standard BIOS mode settings, so our internal
+     * mode setting will normally match the current BIOS mode setting; however, this a debugging convenience,
+     * not an attempt to monitor or emulate the BIOS.
+     *
+     * We do have some BIOS awareness (eg, when loading ROM-based fonts, and some special code to ensure all
+     * the BIOS diagnostics pass), but for the most part, we treat the BIOS like any other application code.
+     *
+     * As we expand support to include more programmable cards like the EGA, it becomes quite easy for the card
+     * to enter a "mode" that has no BIOS counterpart (eg, non-standard combinations of video buffer address,
+     * memory access modes, fonts, display regions, etc).  Our hardware emulation routines will cope with those
+     * situations as best they can (and when they don't, it should be considered a bug if some application is
+     * broken as a result), but realistically, our hardware emulation is never likely to be 100% accurate.
+     */
+    static MODE = {
+        CGA_40X25_BW:       0,
+        CGA_40X25:          1,
+        CGA_80X25_BW:       2,
+        CGA_80X25:          3,
+        CGA_320X200:        4,
+        CGA_320X200_BW:     5,
+        CGA_640X200:        6,
+        MDA_80X25:          7,
+        EGA_320X200:        0x0D,   // mapped at A000:0000, color, 4bpp, planar
+        EGA_640X200:        0x0E,   // mapped at A000:0000, color, 4bpp, planar
+        EGA_640X350_MONO:   0x0F,   // mapped at A000:0000, mono,  2bpp, planar
+        EGA_640X350:        0x10,   // mapped at A000:0000, color, 4bpp, planar
+        VGA_640X480_MONO:   0x11,   // mapped at A000:0000, mono,  2bpp, planar
+        VGA_640X480:        0x12,   // mapped at A000:0000, color, 4bpp, planar
+        VGA_320X200:        0x13,   // mapped at A000:0000, color, 8bpp, linear
+        /*
+         * The remaining mode identifiers are for internal use only; there is no correlation with any
+         * publicly defined BIOS modes, and overlap with any third-party mode numbers is purely coincidental.
+         */
+        VGA_320X200P:       0x14,   // mapped at A000:0000, color, 8bpp, planar
+        VGA_320X240P:       0x15,   // mapped at A000:0000, color, 8bpp, planar ("Mode X")
+        VGA_320X400P:       0x16,   // mapped at A000:0000, color, 8bpp, planar
+        /*
+         * Here's where we might assign additional identifiers to certain unique combinations, like the
+         * fTextGraphicsHybrid 320x400 mode that Windows 95 uses (ie, when the buffer is mapped to B800:0000
+         * instead of A000:0000 and is configured for text mode access, but graphics are still being displayed
+         * from the second half of video memory).
+         */
+        UNKNOWN:            0xFF
+    };
+
+    static UPDATES_PER_SECOND = 60;
+
+    /**
+     * Supported Models
+     *
+     * Each model refers to an array where [0] is the card ID, and [1] is the default mode.
+     */
+    static MODEL = {
+        "mda": [Videox86.CARD.MDA, Videox86.MODE.MDA_80X25],
+        "cga": [Videox86.CARD.CGA, Videox86.MODE.CGA_80X25],
+        "ega": [Videox86.CARD.EGA, Videox86.MODE.CGA_80X25],
+        "vga": [Videox86.CARD.VGA, Videox86.MODE.CGA_80X25]
+    };
+
+    /**
+     * @type {Object.<MonitorSpecs>}
+     */
+    static monitorSpecs = {
+        /**
+         * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
+         */
+        [ChipSet.MONITOR.COLOR]: {
+            nHorzPeriodsPerSec: 15700,
+            nHorzPeriodsPerFrame: 200,
+            percentHorzActive: 75,
+            percentVertActive: 96
+        },
+        /**
+         * NOTE: The number of horizontal periods per frame (350) is dictated by the EGA ROM BIOS at C000:03D0.
+         */
+        [ChipSet.MONITOR.MONO]: {
+            nHorzPeriodsPerSec: 18432,
+            nHorzPeriodsPerFrame: 350,
+            percentHorzActive: 75,
+            percentVertActive: 96
+        },
+        /**
+         * NOTE: The number of horizontal periods per frame (350) is dictated by the EGA ROM BIOS at C000:03D0.
+         */
+        [ChipSet.MONITOR.EGACOLOR]: {
+            nHorzPeriodsPerSec: 21850,
+            nHorzPeriodsPerFrame: 350,
+            percentHorzActive: 75,
+            percentVertActive: 96
+        },
+        /**
+         * NOTE: The number of horizontal periods per frame (400) is dictated by the IBM VGA ROM code at C000:024A.
+         */
+        [ChipSet.MONITOR.VGACOLOR]: {
+            nHorzPeriodsPerSec: 31500,
+            nHorzPeriodsPerFrame: 400,
+            percentHorzActive: 85,
+            percentVertActive: 83
+        }
+    };
+
     /**
      * Videox86(parmsVideo, canvas, context, textarea, container, aDiagElements)
      *
@@ -56969,29 +57147,29 @@ class Videox86 extends Component {
     getCardAccess()
     {
         let card = this.cardActive;
-        let nAccess = Card.ACCESS.READ.PAIRS | Card.ACCESS.WRITE.PAIRS;
+        let nAccess = Card.READ.PAIRS | Card.WRITE.PAIRS;
 
         if (card.nCard >= Videox86.CARD.EGA) {
             this.fColor256 = false;
             let regGRCMode = card.regGRCData[Card.GRC.MODE.INDX];
             if (regGRCMode != null) {
-                let nReadAccess = Card.ACCESS.READ.MODE0;
-                let nWriteAccess = Card.ACCESS.WRITE.MODE0;
+                let nReadAccess = Card.READ.MODE0;
+                let nWriteAccess = Card.WRITE.MODE0;
                 let nWriteMode = regGRCMode & Card.GRC.MODE.WRITE.MASK;
                 let regDataRotate = card.regGRCData[Card.GRC.DATAROT.INDX] & Card.GRC.DATAROT.MASK;
                 switch (nWriteMode) {
                 case Card.GRC.MODE.WRITE.MODE0:
                     if (regDataRotate) {
-                        nWriteAccess = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.ROT;
+                        nWriteAccess = Card.WRITE.MODE0 | Card.WRITE.ROT;
                         switch (regDataRotate & Card.GRC.DATAROT.FUNC) {
                         case Card.GRC.DATAROT.AND:
-                            nWriteAccess = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.AND;
+                            nWriteAccess = Card.WRITE.MODE0 | Card.WRITE.AND;
                             break;
                         case Card.GRC.DATAROT.OR:
-                            nWriteAccess = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.OR;
+                            nWriteAccess = Card.WRITE.MODE0 | Card.WRITE.OR;
                             break;
                         case Card.GRC.DATAROT.XOR:
-                            nWriteAccess = Card.ACCESS.WRITE.MODE0 | Card.ACCESS.WRITE.XOR;
+                            nWriteAccess = Card.WRITE.MODE0 | Card.WRITE.XOR;
                             break;
                         default:
                             break;
@@ -57000,27 +57178,27 @@ class Videox86 extends Component {
                     }
                     break;
                 case Card.GRC.MODE.WRITE.MODE1:
-                    nWriteAccess = Card.ACCESS.WRITE.MODE1;
+                    nWriteAccess = Card.WRITE.MODE1;
                     break;
                 case Card.GRC.MODE.WRITE.MODE2:
                     switch (regDataRotate & Card.GRC.DATAROT.FUNC) {
                     default:
-                        nWriteAccess = Card.ACCESS.WRITE.MODE2;
+                        nWriteAccess = Card.WRITE.MODE2;
                         break;
                     case Card.GRC.DATAROT.AND:
-                        nWriteAccess = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.AND;
+                        nWriteAccess = Card.WRITE.MODE2 | Card.WRITE.AND;
                         break;
                     case Card.GRC.DATAROT.OR:
-                        nWriteAccess = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.OR;
+                        nWriteAccess = Card.WRITE.MODE2 | Card.WRITE.OR;
                         break;
                     case Card.GRC.DATAROT.XOR:
-                        nWriteAccess = Card.ACCESS.WRITE.MODE2 | Card.ACCESS.WRITE.XOR;
+                        nWriteAccess = Card.WRITE.MODE2 | Card.WRITE.XOR;
                         break;
                     }
                     break;
                 case Card.GRC.MODE.WRITE.MODE3:
                     if (this.nCard == Videox86.CARD.VGA) {
-                        nWriteAccess = Card.ACCESS.WRITE.MODE3;
+                        nWriteAccess = Card.WRITE.MODE3;
                         card.nDataRotate = regDataRotate & Card.GRC.DATAROT.COUNT;
                     }
                     break;
@@ -57029,7 +57207,7 @@ class Videox86 extends Component {
                     break;
                 }
                 if (regGRCMode & Card.GRC.MODE.READ.MODE1) {
-                    nReadAccess = Card.ACCESS.READ.MODE1;
+                    nReadAccess = Card.READ.MODE1;
                 }
                 /**
                  * I discovered that when the IBM EGA ROM scrolls the screen in graphics modes 0x0D and 0x0E, it
@@ -57053,20 +57231,20 @@ class Videox86 extends Component {
                  * TODO: Perform some tests on actual EGA/VGA hardware, to determine the proper course of action.
                  *
                  *  if (regGRCMode & Card.GRC.MODE.EVENODD) {
-                 *      nReadAccess |= Card.ACCESS.READ.EVENODD;
-                 *      nWriteAccess |= Card.ACCESS.WRITE.EVENODD;
+                 *      nReadAccess |= Card.READ.EVENODD;
+                 *      nWriteAccess |= Card.WRITE.EVENODD;
                  *  }
                  */
                 let regSEQMode = card.regSEQData[Card.SEQ.MEMMODE.INDX];
                 if (regSEQMode != null) {
                     if (!(regSEQMode & Card.SEQ.MEMMODE.SEQUENTIAL)) {
-                        nReadAccess |= Card.ACCESS.READ.EVENODD;
-                        nWriteAccess |= Card.ACCESS.WRITE.EVENODD;
+                        nReadAccess |= Card.READ.EVENODD;
+                        nWriteAccess |= Card.WRITE.EVENODD;
                     }
                     if (regGRCMode & Card.GRC.MODE.COLOR256) {
                         if (regSEQMode & Card.SEQ.MEMMODE.CHAIN4) {
-                            nReadAccess |= Card.ACCESS.READ.CHAIN4;
-                            nWriteAccess |= Card.ACCESS.WRITE.CHAIN4;
+                            nReadAccess |= Card.READ.CHAIN4;
+                            nWriteAccess |= Card.WRITE.CHAIN4;
                         }
                         this.fColor256 = true;
                     }
@@ -58209,7 +58387,7 @@ class Videox86 extends Component {
          * bytes directly from adwMemory, because reading them with bus.getShortDirect(addrScreen) won't always work.
          */
         let cbCell = (1 / this.nPointsPerByte)|0;
-        let nShift = (card.nAccess & Card.ACCESS.WRITE.PAIRS)? 1 : 0;
+        let nShift = (card.nAccess & Card.WRITE.PAIRS)? 1 : 0;
 
         let fBlinkEnable = (card.regMode & Card.MDA.MODE.BLINK_ENABLE);
         if (this.nCard >= Videox86.CARD.EGA) {
@@ -60057,192 +60235,6 @@ class Videox86 extends Component {
         }
     }
 }
-
-Videox86.TRAPALL = true;           // monitor all I/O by default (not just deltas)
-
-/*
- * Supported Cards (and associated fonts)
- *
- * These IDs are also used to identify which "slots" in the aFonts[] array contain fonts, which is why
- * there are gaps between the numbers.  The MDA and CGA use a single supplied font, so they will always
- * use font slot 1 or 2, respectively, but the EGA supports up to 4 font "banks", so depending on which
- * bank is being used, font slots 4-7 may be used.  Similarly, the VGA supports up to 8 font "banks",
- * using font slots 8-15.
- *
- * Once we've finished loading the standard 8K font file, aFonts[] should contain at least one of the
- * entries listed below.  For the standard MDA/CGA font ROM, the first (MDA) font resides in the first 4Kb,
- * and the second and third (CGA) fonts reside in the two 2K halves of the second 4Kb.
- *
- * Additional notes from the IBM EGA Manual (p.5):
- *
- *      In alphanumeric modes, characters are formed from one of two ROM (Read Only Memory) character
- *      generators on the adapter. One character generator defines 7x9 characters in a 9x14 character box.
- *      For Enhanced Color Display support, the 9x14 character set is modified to provide an 8x14 character set.
- *      The second character generator defines 7x7 characters in an 8x8 character box. These generators contain
- *      dot patterns for 256 different characters. The character sets are identical to those provided by the
- *      IBM Monochrome Display Adapter and the IBM Color/Graphics Monitor Adapter.
- */
-Videox86.CARD = {
-    MDA:    1,          // uses 9x14 monochrome font
-    CGA:    2,          // uses 8x8 color font
-    EGA:    4,          // uses 8x14 color font (by default)
-    VGA:    8           // uses 9x16 color font (by default)
-};
-
-/*
- * Supported Modes
- *
- * Although this component is designed to be a video hardware emulation, not a BIOS simulation, we DO
- * look for changes to the hardware state that correspond to standard BIOS mode settings, so our internal
- * mode setting will normally match the current BIOS mode setting; however, this a debugging convenience,
- * not an attempt to monitor or emulate the BIOS.
- *
- * We do have some BIOS awareness (eg, when loading ROM-based fonts, and some special code to ensure all
- * the BIOS diagnostics pass), but for the most part, we treat the BIOS like any other application code.
- *
- * As we expand support to include more programmable cards like the EGA, it becomes quite easy for the card
- * to enter a "mode" that has no BIOS counterpart (eg, non-standard combinations of video buffer address,
- * memory access modes, fonts, display regions, etc).  Our hardware emulation routines will cope with those
- * situations as best they can (and when they don't, it should be considered a bug if some application is
- * broken as a result), but realistically, our hardware emulation is never likely to be 100% accurate.
- */
-Videox86.MODE = {
-    CGA_40X25_BW:       0,
-    CGA_40X25:          1,
-    CGA_80X25_BW:       2,
-    CGA_80X25:          3,
-    CGA_320X200:        4,
-    CGA_320X200_BW:     5,
-    CGA_640X200:        6,
-    MDA_80X25:          7,
-    EGA_320X200:        0x0D,   // mapped at A000:0000, color, 4bpp, planar
-    EGA_640X200:        0x0E,   // mapped at A000:0000, color, 4bpp, planar
-    EGA_640X350_MONO:   0x0F,   // mapped at A000:0000, mono,  2bpp, planar
-    EGA_640X350:        0x10,   // mapped at A000:0000, color, 4bpp, planar
-    VGA_640X480_MONO:   0x11,   // mapped at A000:0000, mono,  2bpp, planar
-    VGA_640X480:        0x12,   // mapped at A000:0000, color, 4bpp, planar
-    VGA_320X200:        0x13,   // mapped at A000:0000, color, 8bpp, linear
-    /*
-     * The remaining mode identifiers are for internal use only; there is no correlation with any
-     * publicly defined BIOS modes, and overlap with any third-party mode numbers is purely coincidental.
-     */
-    VGA_320X200P:       0x14,   // mapped at A000:0000, color, 8bpp, planar
-    VGA_320X240P:       0x15,   // mapped at A000:0000, color, 8bpp, planar ("Mode X")
-    VGA_320X400P:       0x16,   // mapped at A000:0000, color, 8bpp, planar
-    /*
-     * Here's where we might assign additional identifiers to certain unique combinations, like the
-     * fTextGraphicsHybrid 320x400 mode that Windows 95 uses (ie, when the buffer is mapped to B800:0000
-     * instead of A000:0000 and is configured for text mode access, but graphics are still being displayed
-     * from the second half of video memory).
-     */
-    UNKNOWN:            0xFF
-};
-
-Videox86.UPDATES_PER_SECOND = 60;
-
-/*
- * Supported Models
- *
- * Each model refers to an array where [0] is the card ID, and [1] is the default mode.
- */
-Videox86.MODEL = {
-    "mda": [Videox86.CARD.MDA, Videox86.MODE.MDA_80X25],
-    "cga": [Videox86.CARD.CGA, Videox86.MODE.CGA_80X25],
-    "ega": [Videox86.CARD.EGA, Videox86.MODE.CGA_80X25],
-    "vga": [Videox86.CARD.VGA, Videox86.MODE.CGA_80X25]
-};
-
-/*
- * Supported Monitors
- *
- * The MDA monitor displays 350 lines of vertical resolution, 720 lines of horizontal resolution, and refreshes
- * at ~50Hz.  The CGA monitor displays 200 lines vertically, 640 horizontally, and refreshes at ~60Hz.
- *
- * Based on actual MDA timings (see http://diylab.atwebpages.com/pressureDev.htm), the total horizontal
- * period (drawing a line and retracing) is ~54.25uSec (1000000uSec / 18432) and the horizontal retrace interval
- * is about 15% of that, or ~8.14uSec.  Vertical sync occurs once every 370 horizontal periods.  Of those 370,
- * only 354 represent actively drawn lines (and of those, only 350 are visible); the remaining 16 horizontal
- * periods, or 4% of the 370 total, represent the vertical retrace interval.
- *
- * I don't have similar numbers for the CGA or EGA, so for now, I assume similar percentages; ie, 15% of
- * the horizontal period will represent horizontal retrace, and 4% of the vertical pixel maximum (262) will
- * represent vertical retrace.  However, 24% of the CGA's 262 vertical maximum represents non-visible lines,
- * whereas only 5% of the MDA's 370 maximum represents non-visible lines; is there really that much "overscan"
- * on the CGA?
- *
- * For each monitor type, there's a MonitorSpecs object that describes the horizontal and vertical
- * timings, along with my assumptions about the percentage of time that drawing is "active" within those periods,
- * and then based on the selected monitor type, I compute the number of CPU cycles that each period lasts,
- * as well as the number of CPU cycles that drawing lasts within each period, so that the horizontal and vertical
- * retrace status flags can be quickly calculated.
- *
- * For reference, here are some important numbers to know (from https://github.com/reenigne/reenigne/blob/master/8088/cga/register_values.txt):
- *
- *              CGA          MDA
- *  Pixel clock 14.318 MHz   16.257 MHz (aka "maximum video bandwidth", as IBM Tech Refs sometimes call it)
- *  Horizontal  15.700 KHz   18.432 KHz (aka "horizontal drive", as IBM Tech Refs sometimes call it)
- *  Vertical    59.923 Hz    49.816 Hz
- *  Usage       53.69%       77.22%
- *  H pix       912 = 114*8  882 = 98*9
- *  V pix       262          370
- *  Dots        238944       326340
- */
-
-/** @typedef {{ nHorzPeriodsPerSec: number, nHorzPeriodsPerFrame: number, percentHorzActive: number, percentVertActive: number }} */
-let MonitorSpecs;
-
-/**
- * @type {Object}
- */
-Videox86.monitorSpecs = {};
-
-/**
- * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
- *
- * @type {MonitorSpecs}
- */
-Videox86.monitorSpecs[ChipSet.MONITOR.COLOR] = {
-    nHorzPeriodsPerSec: 15700,
-    nHorzPeriodsPerFrame: 200,
-    percentHorzActive: 75,
-    percentVertActive: 96
-};
-
-/**
- * NOTE: The number of horizontal periods per frame (350) is dictated by the EGA ROM BIOS at C000:03D0.
- *
- * @type {MonitorSpecs}
- */
-Videox86.monitorSpecs[ChipSet.MONITOR.MONO] = {
-    nHorzPeriodsPerSec: 18432,
-    nHorzPeriodsPerFrame: 350,
-    percentHorzActive: 75,
-    percentVertActive: 96
-};
-
-/**
- * NOTE: The number of horizontal periods per frame (350) is dictated by the EGA ROM BIOS at C000:03D0.
- *
- * @type {MonitorSpecs}
- */
-Videox86.monitorSpecs[ChipSet.MONITOR.EGACOLOR] = {
-    nHorzPeriodsPerSec: 21850,
-    nHorzPeriodsPerFrame: 350,
-    percentHorzActive: 75,
-    percentVertActive: 96
-};
-
-/**
- * NOTE: The number of horizontal periods per frame (400) is dictated by the IBM VGA ROM code at C000:024A.
- *
- * @type {MonitorSpecs}
- */
-Videox86.monitorSpecs[ChipSet.MONITOR.VGACOLOR] = {
-    nHorzPeriodsPerSec: 31500,
-    nHorzPeriodsPerFrame: 400,
-    percentHorzActive: 85,
-    percentVertActive: 83
-};
 
 /*
  * EGA Miscellaneous ports and SW1-Sw4
@@ -64056,6 +64048,132 @@ WebLib.onInit(Mouse.init);
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
 
+/**
+ *  The Disk component provides methods for:
+ *
+ *      1) creating an empty disk: create()
+ *      2) loading a disk image: load()
+ *      3) getting disk information: info()
+ *      4) seeking a disk sector: seek()
+ *      5) reading data from a sector: read()
+ *      6) writing data to a sector: write()
+ *      7) save disk deltas: save()
+ *      8) restore disk deltas: restore()
+ *      9) converting disk contents: convertToJSON()
+ *
+ *  More functionality may be factored out of the FDC and HDC components later and moved here, to
+ *  further reduce some of the duplication between them, but the above functionality is a good start.
+ */
+
+/**
+ * Client/Server Disk I/O
+ *
+ * To support large disks without consuming large amounts of client-side memory, and to push
+ * client-side disk changes back the server, we need a DiskIO API that can be used in place of
+ * the DiskDump API.
+ *
+ * Use of the DiskIO API and any associated disk images must be tightly coupled to per-user
+ * storage and specific machine configurations, to prevent the disk images from being corrupted
+ * by inconsistent I/O operations.  Our basic User API (userapi.js) already provides some
+ * per-user storage that we can use to get the design rolling.
+ *
+ * The DiskIO API must also provide the ability to create new (empty) hard disk images in per-user
+ * storage and automatically associate them with the machine configurations that requested them.
+ */
+
+/**
+ * Principles
+ *
+ * Originally, when the Disk class was given a disk image to load and mount, it would request the
+ * ENTIRE disk image from the DiskDump module.  That works well for small (floppy) disk images, but
+ * for larger disks -- let's just say anything stored on the server as an "img" file -- we'd prefer
+ * to interact with that disk using "On-Demand I/O".  Any "img" file on the same server as the PCjs
+ * application should be a candidate for on-demand access.
+ *
+ * On-Demand I/O means that nothing is initially transferred from the server.  As sectors are
+ * requested by the PCx86 machine, PCx86 requests them from the server, and maintains an MRU cache
+ * of sectors, periodically discarding the least-used clean sectors above a certain memory limit.
+ * Dirty sectors (ie, those that the PCx86 machine has written to) must be periodically sent
+ * back to the server and then marked as clean, so that they can be discarded like any other
+ * sector.
+ *
+ * We also support "local" init-only disk images, which means that dirty sectors are never sent
+ * back to the server and are instead retained by the client for the lifetime of the app; such
+ * images are "read-only" as far as the server is concerned, but "read-write" as far as the client
+ * is concerned.  Reloading/restarting an app with an "local" disk will return the disk to its
+ * initial state.
+ *
+ * Practice
+ *
+ * Let's first look at what we *already* do for the HDC component:
+ *
+ *  1) Creating new (empty) disk images
+ *  2) Pre-loading pre-built JSON-encoded disk images (converting them to JSON on the fly as needed)
+ *
+ * An example of #1 is in /devices/pc/machine/5160/cga/256kb/demo/machine.xml:
+ *
+ *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",type:3}]'/>
+ *
+ * and an example of #2 is in /disks/pc/fixed/win101.xml:
+ *
+ *      <hdc id="hdcXT" drives='[{name:"10Mb Hard Drive",path:"/disks/pc/fixed/win101/10mb.json",type:3}]'/>
+ *
+ * The HDC component expects an array of drive entries.  Array position determines drive numbering
+ * (the first entry is drive 0, the second is drive 1, etc), and each entry contains the following
+ * properties:
+ *
+ *      'name': user-friendly name for the disk, if any
+ *      'path': URL of the disk image, if any
+ *      'type': a drive type
+ *
+ * Of those properties, only 'type' is required, which provides an index into an HDC "Drive Type"
+ * table that determines disk geometry and therefore disk size.  As we add support for larger disks and
+ * newer disk controllers, the 'type' parameter will be superseded by either a user-defined 'geometry'
+ * parameter that will define number of heads, cylinders, tracks, sectors per track, and (max) bytes per
+ * sector, or perhaps a generic 'size' parameter that leaves geometry choices to the HDC component,
+ * which will then pass those decisions on to the Disk component.
+ *
+ * We will enable on-demand I/O for a disk image with a new 'mode' parameter that looks like:
+ *
+ *      'mode': one of "local", "preload", "demandrw", "demandro"
+ *
+ * "preload" means the disk image will be completely preloaded, exactly as before; "demandrw" enables
+ * full on-demand I/O support; and "demandro" enables on-demand I/O for reads only (all writes are retained
+ * and never written back to the server).
+ *
+ * "ro" will be the fallback for "rw" unless TWO other important criteria are met: 1) the user has a
+ * private user key, and therefore per-user storage; and 2) the disk image 'path' contains an asterisk (*)
+ * that the server can internally remap to a directory in the user's storage; eg:
+ *
+ *      'path': <asterisk>/10mb.img (path components following the asterisk are optional)
+ *
+ * If the disk image does not already exist, it will be created (but not formatted).
+ *
+ * This preserves the promise that EVERYTHING a user does within a PCx86 machine is private (ie, not
+ * visible to any other PCjs users).  I don't want to be in the business of saving any user machine
+ * states or disk changes, but at least those operations are limited to users who have asked for (and
+ * received) a private user key.
+ *
+ * Another important consideration at this stage is dealing with multiple machines writing to the same
+ * disk image; even though we're limiting the "demandrw" mode to per-user images, a single user may still
+ * inadvertently start up multiple machines that refer to the same disk image.
+ *
+ * So, every PCx86 machine needs to generate a unique token and include that token with every Disk I/O API
+ * operation, so that the server can revoke a previous machine's "rw" access to a disk image when a new
+ * machine requests "rw" access to the same disk image.
+ *
+ * From the client's perspective, revocation can be quietly dealt with by reverting to "demandro" mode;
+ * that client becomes stuck with all their dirty sectors until they can reclaim "rw" access, which should
+ * only happen if no intervening writes to the disk image on the server have occurred (if I bother allowing
+ * reclamation at all).
+ *
+ * The real challenge here is avoiding revocation of a machine that still has critical changes to commit,
+ * but since we can't even solve the problem of a user closing their browser at an inopportune time
+ * and potentially leaving a disk image in an inconsistent state, premature revocation is the least of
+ * our problems.  Since a real hard drive could suffer the same fate if the machine's power was turned off
+ * at the wrong time, you could say that we're simply providing a faithful simulation of reality.
+ */
+
 /** @typedef {{ c: number, h: number, s: number, l: number, d: Array.<number>, f: number, o: number, iCylinder: number, iHead: number, sector: number, length: number, data: Array.<number>, pattern: (number|null), file: FileInfo, offFile: number, dataCRC: number, dataError: boolean, dataMark: number, headCRC: number, headError: boolean, iModify: number, cModify: number, fDirty: boolean }} */
 let Sector;
 
@@ -66105,6 +66223,62 @@ class FileInfo {
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2023 Jeff Parsons
+ */
+
+/**
+ * FDC Terms (see FDC.TERMS)
+ *
+ *      C       Cylinder Number         the current or selected cylinder number
+ *
+ *      D       Data                    the data pattern to be written to a sector
+ *
+ *      DS      Drive Select            the selected driver number encoded the same as bits 0 and 1 of the Digital Output
+ *                                      Register (DOR); eg, DS0, DS1, DS2, or DS3
+ *
+ *      DTL     Data Length             when N is 00, DTL is the data length to be read from or written to a sector
+ *
+ *      EOT     End Of Track            the final sector number on a cylinder
+ *
+ *      GPL     Gap Length              the length of gap 3 (spacing between sectors excluding the VCO synchronous field)
+ *
+ *      H       Head Address            the head number, either 0 or 1, as specified in the ID field
+ *
+ *      HD      Head                    the selected head number, 0 or 1 (H = HD in all command words)
+ *
+ *      HLT     Head Load Time          the head load time in the selected drive (2 to 256 milliseconds in 2-millisecond
+ *                                      increments for the 1.2M-byte drive and 4 to 512 milliseconds in 4 millisecond increments
+ *                                      for the 320K-byte drive)
+ *
+ *      HUT     Head Unload Time        the head unload time after a read or write operation (0 to 240 milliseconds in
+ *                                      16-millisecond increments for the 1.2M-byte drive and 0 to 480 milliseconds in
+ *                                      32-millisecond increments for the 320K-byte drive)
+ *
+ *      MF      FM or MFM Mode          0 selects FM mode and 1 selects MFM (MFM is selected only if it is implemented)
+ *
+ *      MT      Multitrack              1 selects multitrack operation (both HD0 and HD1 will be read or written)
+ *
+ *      N       Number                  the number of data bytes written in a sector
+ *
+ *      NCN     New Cylinder Number     the new cylinder number for a SEEK operation
+ *
+ *      ND      Non-Data Mode           indicates an operation in the non-data mode
+ *
+ *      PCN     Present Cylinder Number the cylinder number at the completion of a SENSE INTERRUPT STATUS command
+ *                                      (present position of the head)
+ *
+ *      R       Record                  the sector number to be read or written
+ *
+ *      SC      Sectors Per Cylinder    the number of sectors per cylinder
+ *
+ *      SK      Skip                    this stands for skip deleted-data address mark
+ *
+ *      SRT     Stepping Rate           this 4 bit byte indicates the stepping rate for the diskette drive as follows:
+ *                                      1.2M-Byte Diskette Drive: 1111=1ms, 1110=2ms, 1101=3ms
+ *                                      320K-Byte Diskette Drive: 1111=2ms, 1110=4ms, 1101=6ms
+ *
+ *      STP     STP Scan Test           if STP is 1, the data in contiguous sectors is compared with the data sent
+ *                                      by the processor during a scan operation; if STP is 2, then alternate sections
+ *                                      are read and compared
  */
 
 /** @typedef {{ name: string, path: string }} */
