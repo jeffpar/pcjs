@@ -332,6 +332,50 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
  */
 
 /**
+ * Supported Monitors
+ *
+ * The MDA monitor displays 350 lines of vertical resolution, 720 lines of horizontal resolution, and refreshes
+ * at ~50Hz.  The CGA monitor displays 200 lines vertically, 640 horizontally, and refreshes at ~60Hz.
+ *
+ * Based on actual MDA timings (see http://diylab.atwebpages.com/pressureDev.htm), the total horizontal
+ * period (drawing a line and retracing) is ~54.25uSec (1000000uSec / 18432) and the horizontal retrace interval
+ * is about 15% of that, or ~8.14uSec.  Vertical sync occurs once every 370 horizontal periods.  Of those 370,
+ * only 354 represent actively drawn lines (and of those, only 350 are visible); the remaining 16 horizontal
+ * periods, or 4% of the 370 total, represent the vertical retrace interval.
+ *
+ * I don't have similar numbers for the CGA or EGA, so for now, I assume similar percentages; ie, 15% of
+ * the horizontal period will represent horizontal retrace, and 4% of the vertical pixel maximum (262) will
+ * represent vertical retrace.  However, 24% of the CGA's 262 vertical maximum represents non-visible lines,
+ * whereas only 5% of the MDA's 370 maximum represents non-visible lines; is there really that much "overscan"
+ * on the CGA?
+ *
+ * For each monitor type, there's a MonitorSpecs object that describes the horizontal and vertical
+ * timings, along with my assumptions about the percentage of time that drawing is "active" within those periods,
+ * and then based on the selected monitor type, I compute the number of CPU cycles that each period lasts,
+ * as well as the number of CPU cycles that drawing lasts within each period, so that the horizontal and vertical
+ * retrace status flags can be quickly calculated.
+ *
+ * For reference, here are some important numbers to know (from https://github.com/reenigne/reenigne/blob/master/8088/cga/register_values.txt):
+ *
+ *              CGA          MDA
+ *  Pixel clock 14.318 MHz   16.257 MHz (aka "maximum video bandwidth", as IBM Tech Refs sometimes call it)
+ *  Horizontal  15.700 KHz   18.432 KHz (aka "horizontal drive", as IBM Tech Refs sometimes call it)
+ *  Vertical    59.923 Hz    49.816 Hz
+ *  Usage       53.69%       77.22%
+ *  H pix       912 = 114*8  882 = 98*9
+ *  V pix       262          370
+ *  Dots        238944       326340
+ */
+
+/**
+ * @typedef {Object} MonitorSpecs
+ * @property {number} nHorzPeriodsPerSec
+ * @property {number} nHorzPeriodsPerFrame
+ * @property {number} percentHorzActive
+ * @property {number} percentVertActive
+ */
+
+/**
  * @class Card
  * @property {Debuggerx86} dbg
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
@@ -2300,47 +2344,15 @@ if (DEBUGGER) {
 }
 
 /**
- * Supported Monitors
- *
- * The MDA monitor displays 350 lines of vertical resolution, 720 lines of horizontal resolution, and refreshes
- * at ~50Hz.  The CGA monitor displays 200 lines vertically, 640 horizontally, and refreshes at ~60Hz.
- *
- * Based on actual MDA timings (see http://diylab.atwebpages.com/pressureDev.htm), the total horizontal
- * period (drawing a line and retracing) is ~54.25uSec (1000000uSec / 18432) and the horizontal retrace interval
- * is about 15% of that, or ~8.14uSec.  Vertical sync occurs once every 370 horizontal periods.  Of those 370,
- * only 354 represent actively drawn lines (and of those, only 350 are visible); the remaining 16 horizontal
- * periods, or 4% of the 370 total, represent the vertical retrace interval.
- *
- * I don't have similar numbers for the CGA or EGA, so for now, I assume similar percentages; ie, 15% of
- * the horizontal period will represent horizontal retrace, and 4% of the vertical pixel maximum (262) will
- * represent vertical retrace.  However, 24% of the CGA's 262 vertical maximum represents non-visible lines,
- * whereas only 5% of the MDA's 370 maximum represents non-visible lines; is there really that much "overscan"
- * on the CGA?
- *
- * For each monitor type, there's a MonitorSpecs object that describes the horizontal and vertical
- * timings, along with my assumptions about the percentage of time that drawing is "active" within those periods,
- * and then based on the selected monitor type, I compute the number of CPU cycles that each period lasts,
- * as well as the number of CPU cycles that drawing lasts within each period, so that the horizontal and vertical
- * retrace status flags can be quickly calculated.
- *
- * For reference, here are some important numbers to know (from https://github.com/reenigne/reenigne/blob/master/8088/cga/register_values.txt):
- *
- *              CGA          MDA
- *  Pixel clock 14.318 MHz   16.257 MHz (aka "maximum video bandwidth", as IBM Tech Refs sometimes call it)
- *  Horizontal  15.700 KHz   18.432 KHz (aka "horizontal drive", as IBM Tech Refs sometimes call it)
- *  Vertical    59.923 Hz    49.816 Hz
- *  Usage       53.69%       77.22%
- *  H pix       912 = 114*8  882 = 98*9
- *  V pix       262          370
- *  Dots        238944       326340
- */
-
-/**
- * @typedef {Object} MonitorSpecs
- * @property {number} nHorzPeriodsPerSec
- * @property {number} nHorzPeriodsPerFrame
- * @property {number} percentHorzActive
- * @property {number} percentVertActive
+ * @typedef {Object} Font
+ * @property {number} cxChar
+ * @property {number} cyChar
+ * @property {number} cxCell
+ * @property {number} cyCell
+ * @property {Array} aCSSColors
+ * @property {Array} aRGBColors
+ * @property {Array} aColorMap
+ * @property {Array} aCanvas
  */
 
 /**
@@ -2417,14 +2429,14 @@ export default class Videox86 extends Component {
         VGA_640X480_MONO:   0x11,   // mapped at A000:0000, mono,  2bpp, planar
         VGA_640X480:        0x12,   // mapped at A000:0000, color, 4bpp, planar
         VGA_320X200:        0x13,   // mapped at A000:0000, color, 8bpp, linear
-        /*
+        /**
          * The remaining mode identifiers are for internal use only; there is no correlation with any
          * publicly defined BIOS modes, and overlap with any third-party mode numbers is purely coincidental.
          */
         VGA_320X200P:       0x14,   // mapped at A000:0000, color, 8bpp, planar
         VGA_320X240P:       0x15,   // mapped at A000:0000, color, 8bpp, planar ("Mode X")
         VGA_320X400P:       0x16,   // mapped at A000:0000, color, 8bpp, planar
-        /*
+        /**
          * Here's where we might assign additional identifiers to certain unique combinations, like the
          * fTextGraphicsHybrid 320x400 mode that Windows 95 uses (ie, when the buffer is mapped to B800:0000
          * instead of A000:0000 and is configured for text mode access, but graphics are still being displayed
@@ -2487,6 +2499,256 @@ export default class Videox86 extends Component {
             percentHorzActive: 85,
             percentVertActive: 83
         }
+    };
+
+    /**
+     * EGA Miscellaneous ports and SW1-Sw4
+     *
+     * The Card.MISC.CLOCK_SELECT bits determine which of the EGA board's 4 configuration switches are
+     * returned via Card.STATUS0.SWSENSE (when SWSENSE is zero, the switch is closed):
+     *
+     *      0xC: return SW1
+     *      0x8: return SW2
+     *      0x4: return SW3
+     *      0x0: return SW4
+     *
+     * These 4 bits are also copied to the byte at 40:88h by the EGA BIOS, where bit 0 is SW1, bit 1 is SW2,
+     * bit 2 is SW3 and bit 3 is SW4.  Our switch settings come from bEGASwitches, which in turn comes from
+     * sSwitches, which in turn comes from the "switches" property passed to the Video component, if any.
+     *
+     * As usual, the switch settings are reversed in both direction and sense from the switch settings; the
+     * good news, however, is that we can use the parseSwitches() method in the ChipSet component to parse them.
+     *
+     * The set of valid EGA switch values, after conversion, is stored in the table below.  For each value,
+     * there is an array that defines the corresponding monitor type(s) for the EGA adapter and any secondary
+     * adapter.  The third value is a boolean indicating whether the EGA is the primary adapter.
+     */
+    static aEGAMonitorSwitches = {
+        0x06: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  true],  // "1001"
+        0x07: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  true],  // "0001" [used by 5153 monitor configs]
+        0x08: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  true],  // "1110"
+        0x09: [ChipSet.MONITOR.EGACOLOR,     ChipSet.MONITOR.MONO,  true],  // "0110" [used by 5154 monitor configs (default; see bEGASwitches below)]
+        0x0a: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.TV,    true],  // "1010"
+        0x0b: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.COLOR, true],  // "0010" [used by 5151 monitor configs]
+        0x00: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  false], // "1111"
+        0x01: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  false], // "0111"
+        0x02: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  false], // "1011"
+        0x03: [ChipSet.MONITOR.EGACOLOR,     ChipSet.MONITOR.MONO,  false], // "0011"
+        0x04: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.TV,    false], // "1101"
+        0x05: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.COLOR, false]  // "0101"
+    };
+
+    /**
+     * For each video mode, we need to know the following pieces of information:
+     *
+     *      0: # of columns (nCols)
+     *      1: # of rows (nRows)
+     *      2: # points per cell (nPointsPerCell: # of points per cell cache entry)
+     *      3: # points per byte (nPointsPerByte: # of points per frame buffer byte)
+     *      4: # bytes of visible screen padding, if any (used for CGA graphics modes only)
+     *      5: font ID (nFont: undefined if graphics mode)
+     *
+     * The 3rd entry used to be nCellsPerWord, but it is now nPointsPerCell.  nCols * nRows yields total
+     * (viewable) points, and dividing that by nPointsPerCell yields the size of the cell cache (nCellCache).
+     *
+     * For MDA and CGA modes, a "word" of memory is 16 bits of CPU-addressable data, so by calculating
+     * ([0] * [1]) / [2], we obtain the number of words that mode actively displays; for example, the
+     * amount of visible memory used by mode 0x04 is (320 * 200) / 4, or 16000.
+     *
+     * However, for EGA and VGA graphics modes, a "word" of memory is a single element in the video buffer
+     * containing 32 bits of pixel data.
+     */
+    static aModeParms = {                                                                   // Mode
+        [Videox86.MODE.CGA_40X25_BW]:        [ 40,  25,  1, 0.5,   0, Videox86.CARD.CGA],   // 0x00
+        [Videox86.MODE.CGA_40X25]:           [ 40,  25,  1, 0.5,   0, Videox86.CARD.CGA],   // 0x01
+        [Videox86.MODE.CGA_80X25_BW]:        [ 80,  25,  1, 0.5,   0, Videox86.CARD.CGA],   // 0x02
+        [Videox86.MODE.CGA_80X25]:           [ 80,  25,  1, 0.5,   0, Videox86.CARD.CGA],   // 0x03
+        [Videox86.MODE.CGA_320X200]:         [320, 200,  8,   4, 192],                      // 0x04
+        [Videox86.MODE.CGA_320X200_BW]:      [320, 200,  8,   4, 192],                      // 0x05
+        [Videox86.MODE.CGA_640X200]:         [640, 200, 16,   8, 192],                      // 0x06
+        [Videox86.MODE.MDA_80X25]:           [ 80,  25,  1, 0.5,   0, Videox86.CARD.MDA],   // 0x07
+        [Videox86.MODE.EGA_320X200]:         [320, 200,  8,   8],                           // 0x0D
+        [Videox86.MODE.EGA_640X200]:         [640, 200,  8,   8],                           // 0x0E
+        [Videox86.MODE.EGA_640X350_MONO]:    [640, 350,  8,   8],                           // 0x0F
+        [Videox86.MODE.EGA_640X350]:         [640, 350,  8,   8],                           // 0x10
+        [Videox86.MODE.VGA_640X480_MONO]:    [640, 480,  8,   8],                           // 0x11
+        [Videox86.MODE.VGA_640X480]:         [640, 480,  8,   8],                           // 0x12
+        [Videox86.MODE.VGA_320X200]:         [320, 200,  4,   1],                           // 0x13
+        [Videox86.MODE.VGA_320X200P]:        [320, 200,  4,   4],                           // 0x14
+        [Videox86.MODE.VGA_320X240P]:        [320, 240,  4,   4],                           // 0x15
+        [Videox86.MODE.VGA_320X400P]:        [320, 400,  4,   4]                            // 0x16
+    };
+
+    /**
+     * MDA attribute byte definitions
+     *
+     * For MDA, only the first eight ATTR definitions are supported; any FGND/BGND value combinations outside that
+     * group will be treated as "normal" (ATTR_FGND_WHITE | ATTR_BGND_BLACK).
+     *
+     * NOTE: Assuming MDA.MODE.BLINK_ENABLE is set (which the ROM BIOS sets by default), ATTR_BGND_BLINK will
+     * cause the *foreground* element of the cell to blink, even though it is part of the *background* attribute bits.
+     *
+     * Regarding blink rate, characters are supposed to blink every 16 vertical frames, which amounts to .26667 blinks
+     * per second, assuming a 60Hz vertical refresh rate.  So roughly every 267ms, we need to take care of any blinking
+     * characters.  updateScreen() maintains a global count (cBlinkVisible) of blinking characters, to simplify the
+     * decision of when to redraw the screen.
+     *
+     * Here's a "cheat sheet" for attribute byte combinations that the IBM MDA could have supported.  The original (Aug 1981)
+     * IBM Tech Ref is very terse and implies that only those marked with * are actually supported.
+     *
+     *     *0x00: non-display                       ATTR_FGND_BLACK |                    ATTR_BGND_BLACK
+     *     *0x01: underline                         ATTR_FGND_ULINE |                    ATTR_BGND_BLACK
+     *     *0x07: normal (white on black)           ATTR_FGND_WHITE |                    ATTR_BGND_BLACK
+     *    **0x09: bright underline                  ATTR_FGND_ULINE | ATTR_FGND_BRIGHT | ATTR_BGND_BLACK
+     *    **0x0F: bold (bright white on black)      ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLACK
+     *     *0x70: reverse (black on white)          ATTR_FGND_BLACK |                  | ATTR_BGND_WHITE
+     *      0x81: blinking underline                ATTR_FGND_ULINE |                  | ATTR_BGND_BLINK (or dim background if blink disabled)
+     *    **0x87: blinking normal                   ATTR_FGND_WHITE |                  | ATTR_BGND_BLINK (or dim background if blink disabled)
+     *      0x89: blinking bright underline         ATTR_FGND_ULINE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or dim background if blink disabled)
+     *    **0x8F: blinking bold                     ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or dim background if blink disabled)
+     *    **0xF0: blinking reverse                  ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or bright background if blink disabled)
+     *
+     * Unsupported attributes reportedly display as "normal" (ATTR_FGND_WHITE | ATTR_BGND_BLACK).  However, precisely which
+     * attributes are unsupported on the MDA varies depending on the source.  Some sources (eg, the IBM Tech Ref) imply that
+     * only those marked by * are supported, while others (eg, some--but not all--Peter Norton guides) include those marked
+     * by **, and still others include ALL the combinations listed above.
+     *
+     * Furthermore, according to http://www.seasip.info/VintagePC/mda.html:
+     *
+     *      Attributes 0x00, 0x08, 0x80 and 0x88 display as black space;
+     *      Attribute 0x78 displays as dark green on green; depending on the monitor, there may be a green "halo" where the dark and bright bits meet;
+     *      Attribute 0xF0 displays as a blinking version of 0x70 if blink enabled, and black on bright green otherwise;
+     *      Attribute 0xF8 displays as a blinking version of 0x78 if blink enabled, and as dark green on bright green otherwise.
+     *
+     * However, I'm rather skeptical about supporting 0x78 and 0xF8, until I see some evidence that "bright black" actually
+     * produced dark green on IBM equipment; it also doesn't sound like a combination many people would have used.  I'll probably
+     * treat all of 0x08, 0x80 and 0x88 the same as 0x00, only because it seems logical (they're all "black on black" combinations
+     * with only BRIGHT and/or BLINK bits set). Beyond that, I'll likely treat any other combination not listed in the above cheat
+     * sheet as "normal".
+     *
+     * All the discrepancies/disagreements I've found are probably due in part to the proliferation of IBM and non-IBM MDA
+     * cards, combined with IBM and non-IBM monochrome monitors, and people assuming that their non-IBM card and/or monitor
+     * behaved exactly like the original IBM equipment, which probably wasn't true in all cases.
+     *
+     * I would like to limit my MDA display support to EXACTLY everything that the IBM MDA supported and nothing more, but
+     * since there will be combinations that will logically "fall out" unless I specifically exclude them, it's very likely
+     * this implementation will end up being a superset.
+     *
+     * CGA attribute byte definitions simply extend the set of MDA attributes, with the exception of ATTR_FNGD_ULINE,
+     * which the CGA can treat only as ATTR_FGND_BLUE.
+     */
+    static ATTRS = {
+        FGND_BLACK:     0x00,
+        FGND_ULINE:     0x01,
+        FGND_WHITE:     0x07,
+        FGND_BRIGHT:    0x08,
+        BGND_BLACK:     0x00,
+        BGND_WHITE:     0x70,
+        BGND_BLINK:     0x80,
+        BGND_BRIGHT:    0x80,
+
+        FGND_BLUE:      0x01,
+        FGND_GREEN:     0x02,
+        FGND_CYAN:      0x03,
+        FGND_RED:       0x04,
+        FGND_MAGENTA:   0x05,
+        FGND_BROWN:     0x06,
+        BGND_BLUE:      0x10,
+        BGND_GREEN:     0x20,
+        BGND_CYAN:      0x30,
+        BGND_RED:       0x40,
+        BGND_MAGENTA:   0x50,
+        BGND_BROWN:     0x60,
+
+        DRAW_FGND:     0x100,   // this is an internal attribute bit, indicating the foreground should be drawn
+        DRAW_CURSOR:   0x200    // this is an internal attribute bit, indicating when the cursor should be drawn
+    };
+
+    /**
+     * For the MDA, there are currently three distinct "colors": off, normal, and intense.  There are
+     * also two variations of normal and intense: with and without underlining.  Technically, underlining
+     * makes no difference in the actual color, but because different fonts must be built for each, and
+     * because the presence of underlining is determined by character's attribute (aka "color") bits, we
+     * use separate color indices for each variation; so ODD color indices are used for underlining and
+     * EVEN indices are not.
+     *
+     * I'm still not sure about dark green (see comments above); if it exists on a standard IBM monitor
+     * (model 5151), then I may need to support another "color": dark.  For now, the attributes that may
+     * require dark (ie, 0x78 and 0xF8) have their foreground attribute (0x8) mapped to 0x0 (off) instead.
+     */
+    static aMDAColors = [
+        [0x00, 0x00, 0x00, 0xff],       // 0: off
+        [0x09, 0xcc, 0x50, 0xff],       // 1: normal (with underlining)
+        [0x09, 0xcc, 0x50, 0xff],       // 2: normal
+        [0x3c, 0xff, 0x83, 0xff],       // 3: intense (with underlining)
+        [0x3c, 0xff, 0x83, 0xff]        // 4: intense
+    ];
+
+    /**
+     * Each of the following FGND attribute values are mapped to one of the above "colors":
+     *
+     *      0x0: black font (per above, attribute value 0x8 is also mapped to attribute 0x0)
+     *      0x1: green font with underlining
+     *      0x7: green font without underlining (attribute values 0x2-0x6 are mapped to attribute 0x7)
+     *      0x9: bright green font with underlining
+     *      0xf: bright green font without underlining (attribute values 0xa-0xe are mapped to attribute 0xf)
+     *
+     * MDA attributes form an index into aMDAColorMap, which in turn provides an index into aMDAColors.
+     */
+    static aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
+
+    static aCGAColors = [
+        [0x00, 0x00, 0x00, 0xff],   // 0x00: ATTR_FGND_BLACK
+        [0x00, 0x00, 0xaa, 0xff],   // 0x01: ATTR_FGND_BLUE
+        [0x00, 0xaa, 0x00, 0xff],   // 0x02: ATTR_FGND_GREEN
+        [0x00, 0xaa, 0xaa, 0xff],   // 0x03: ATTR_FGND_CYAN
+        [0xaa, 0x00, 0x00, 0xff],   // 0x04: ATTR_FGND_RED
+        [0xaa, 0x00, 0xaa, 0xff],   // 0x05: ATTR_FGND_MAGENTA
+        [0xaa, 0x55, 0x00, 0xff],   // 0x06: ATTR_FGND_BROWN
+        [0xaa, 0xaa, 0xaa, 0xff],   // 0x07: ATTR_FGND_WHITE                      (aka light gray)
+        [0x55, 0x55, 0x55, 0xff],   // 0x08: ATTR_FGND_BLACK   | ATTR_FGND_BRIGHT (aka gray)
+        [0x55, 0x55, 0xff, 0xff],   // 0x09: ATTR_FGND_BLUE    | ATTR_FGND_BRIGHT
+        [0x55, 0xff, 0x55, 0xff],   // 0x0A: ATTR_FGND_GREEN   | ATTR_FGND_BRIGHT
+        [0x55, 0xff, 0xff, 0xff],   // 0x0B: ATTR_FGND_CYAN    | ATTR_FGND_BRIGHT
+        [0xff, 0x55, 0x55, 0xff],   // 0x0C: ATTR_FGND_RED     | ATTR_FGND_BRIGHT
+        [0xff, 0x55, 0xff, 0xff],   // 0x0D: ATTR_FGND_MAGENTA | ATTR_FGND_BRIGHT
+        [0xff, 0xff, 0x55, 0xff],   // 0x0E: ATTR_FGND_BROWN   | ATTR_FGND_BRIGHT (aka yellow)
+        [0xff, 0xff, 0xff, 0xff]    // 0x0F: ATTR_FGND_WHITE   | ATTR_FGND_BRIGHT (aka white)
+    ];
+
+    static aCGAColorSet0 = [Videox86.ATTRS.FGND_GREEN, Videox86.ATTRS.FGND_RED,     Videox86.ATTRS.FGND_BROWN];
+    static aCGAColorSet1 = [Videox86.ATTRS.FGND_CYAN,  Videox86.ATTRS.FGND_MAGENTA, Videox86.ATTRS.FGND_WHITE];
+
+    /**
+     * Here is the EGA BIOS default ATC palette register set for color text modes, from which getCardColors()
+     * builds a default RGB array, similar to aCGAColors above.
+     */
+    static aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
+
+    static aEGAByteToDW = [
+        0x00000000,   0x000000ff,   0x0000ff00,   0x0000ffff,
+        0x00ff0000,   0x00ff00ff,   0x00ffff00,   0x00ffffff,
+        0xff000000|0, 0xff0000ff|0, 0xff00ff00|0, 0xff00ffff|0,
+        0xffff0000|0, 0xffff00ff|0, 0xffffff00|0, 0xffffffff|0
+    ];
+
+    static aEGADWToByte = {
+        [0x00000000]:    0x0,
+        [0x00000080]:    0x1,
+        [0x00008000]:    0x2,
+        [0x00008080]:    0x3,
+        [0x00800000]:    0x4,
+        [0x00800080]:    0x5,
+        [0x00808000]:    0x6,
+        [0x00808080]:    0x7,
+        [0x80000000|0]:  0x8,
+        [0x80000080|0]:  0x9,
+        [0x80008000|0]:  0xa,
+        [0x80008080|0]:  0xb,
+        [0x80800000|0]:  0xc,
+        [0x80800080|0]:  0xd,
+        [0x80808000|0]:  0xe,
+        [0x80808080|0]:  0xf
     };
 
     /**
@@ -8250,14 +8512,14 @@ export default class Videox86 extends Component {
              */
             let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(APPCLASS + "-video-diagnostic"));
 
-            /*
+            /**
              * Now we can create the Video object, record it, and wire it up to the associated document elements.
              */
             let container;
             if (element.style) container = element;
             let video = new Videox86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
 
-            /*
+            /**
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
              * even the "Refresh" button is just a diagnostic tool, to ensure that the screen contents are up-to-date.
              */
@@ -8266,268 +8528,7 @@ export default class Videox86 extends Component {
     }
 }
 
-/*
- * EGA Miscellaneous ports and SW1-Sw4
- *
- * The Card.MISC.CLOCK_SELECT bits determine which of the EGA board's 4 configuration switches are
- * returned via Card.STATUS0.SWSENSE (when SWSENSE is zero, the switch is closed):
- *
- *      0xC: return SW1
- *      0x8: return SW2
- *      0x4: return SW3
- *      0x0: return SW4
- *
- * These 4 bits are also copied to the byte at 40:88h by the EGA BIOS, where bit 0 is SW1, bit 1 is SW2,
- * bit 2 is SW3 and bit 3 is SW4.  Our switch settings come from bEGASwitches, which in turn comes from
- * sSwitches, which in turn comes from the "switches" property passed to the Video component, if any.
- *
- * As usual, the switch settings are reversed in both direction and sense from the switch settings; the
- * good news, however, is that we can use the parseSwitches() method in the ChipSet component to parse them.
- *
- * The set of valid EGA switch values, after conversion, is stored in the table below.  For each value,
- * there is an array that defines the corresponding monitor type(s) for the EGA adapter and any secondary
- * adapter.  The third value is a boolean indicating whether the EGA is the primary adapter.
- */
-Videox86.aEGAMonitorSwitches = {
-    0x06: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  true],  // "1001"
-    0x07: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  true],  // "0001" [used by 5153 monitor configs]
-    0x08: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  true],  // "1110"
-    0x09: [ChipSet.MONITOR.EGACOLOR,     ChipSet.MONITOR.MONO,  true],  // "0110" [used by 5154 monitor configs (default; see bEGASwitches below)]
-    0x0a: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.TV,    true],  // "1010"
-    0x0b: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.COLOR, true],  // "0010" [used by 5151 monitor configs]
-    0x00: [ChipSet.MONITOR.TV,           ChipSet.MONITOR.MONO,  false], // "1111"
-    0x01: [ChipSet.MONITOR.COLOR,        ChipSet.MONITOR.MONO,  false], // "0111"
-    0x02: [ChipSet.MONITOR.EGAEMULATION, ChipSet.MONITOR.MONO,  false], // "1011"
-    0x03: [ChipSet.MONITOR.EGACOLOR,     ChipSet.MONITOR.MONO,  false], // "0011"
-    0x04: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.TV,    false], // "1101"
-    0x05: [ChipSet.MONITOR.MONO,         ChipSet.MONITOR.COLOR, false]  // "0101"
-};
-
 /**
- * @typedef {Object} Font
- * @property {number} cxChar
- * @property {number} cyChar
- * @property {number} cxCell
- * @property {number} cyCell
- * @property {Array} aCSSColors
- * @property {Array} aRGBColors
- * @property {Array} aColorMap
- * @property {Array} aCanvas
- */
-
-/*
- * For each video mode, we need to know the following pieces of information:
- *
- *      0: # of columns (nCols)
- *      1: # of rows (nRows)
- *      2: # points per cell (nPointsPerCell: # of points per cell cache entry)
- *      3: # points per byte (nPointsPerByte: # of points per frame buffer byte)
- *      4: # bytes of visible screen padding, if any (used for CGA graphics modes only)
- *      5: font ID (nFont: undefined if graphics mode)
- *
- * The 3rd entry used to be nCellsPerWord, but it is now nPointsPerCell.  nCols * nRows yields total
- * (viewable) points, and dividing that by nPointsPerCell yields the size of the cell cache (nCellCache).
- *
- * For MDA and CGA modes, a "word" of memory is 16 bits of CPU-addressable data, so by calculating
- * ([0] * [1]) / [2], we obtain the number of words that mode actively displays; for example, the
- * amount of visible memory used by mode 0x04 is (320 * 200) / 4, or 16000.
- *
- * However, for EGA and VGA graphics modes, a "word" of memory is a single element in the video buffer
- * containing 32 bits of pixel data.
- */
-Videox86.aModeParms = [];                                                                              // Mode
-Videox86.aModeParms[Videox86.MODE.CGA_40X25]          = [ 40,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x01
-Videox86.aModeParms[Videox86.MODE.CGA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.CGA];         // 0x03
-Videox86.aModeParms[Videox86.MODE.CGA_320X200]        = [320, 200,  8,   4, 192];                         // 0x04
-Videox86.aModeParms[Videox86.MODE.CGA_640X200]        = [640, 200, 16,   8, 192];                         // 0x06
-Videox86.aModeParms[Videox86.MODE.MDA_80X25]          = [ 80,  25,  1, 0.5,   0, Videox86.CARD.MDA];         // 0x07
-Videox86.aModeParms[Videox86.MODE.EGA_320X200]        = [320, 200,  8,   8];                              // 0x0D
-Videox86.aModeParms[Videox86.MODE.EGA_640X200]        = [640, 200,  8,   8];                              // 0x0E
-Videox86.aModeParms[Videox86.MODE.EGA_640X350_MONO]   = [640, 350,  8,   8];                              // 0x0F
-Videox86.aModeParms[Videox86.MODE.EGA_640X350]        = [640, 350,  8,   8];                              // 0x10
-Videox86.aModeParms[Videox86.MODE.VGA_640X480_MONO]   = [640, 480,  8,   8];                              // 0x11
-Videox86.aModeParms[Videox86.MODE.VGA_640X480]        = [640, 480,  8,   8];                              // 0x12
-Videox86.aModeParms[Videox86.MODE.VGA_320X200]        = [320, 200,  4,   1];                              // 0x13
-Videox86.aModeParms[Videox86.MODE.VGA_320X200P]       = [320, 200,  4,   4];                              // 0x14
-Videox86.aModeParms[Videox86.MODE.VGA_320X240P]       = [320, 240,  4,   4];                              // 0x15
-Videox86.aModeParms[Videox86.MODE.VGA_320X400P]       = [320, 400,  4,   4];                              // 0x16
-Videox86.aModeParms[Videox86.MODE.CGA_40X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_40X25];           // 0x00
-Videox86.aModeParms[Videox86.MODE.CGA_80X25_BW]       = Videox86.aModeParms[Videox86.MODE.CGA_80X25];           // 0x02
-Videox86.aModeParms[Videox86.MODE.CGA_320X200_BW]     = Videox86.aModeParms[Videox86.MODE.CGA_320X200];         // 0x05
-
-/*
- * MDA attribute byte definitions
- *
- * For MDA, only the following group of ATTR definitions are supported; any FGND/BGND value combinations
- * outside this group will be treated as "normal" (ATTR_FGND_WHITE | ATTR_BGND_BLACK).
- *
- * NOTE: Assuming MDA.MODE.BLINK_ENABLE is set (which the ROM BIOS sets by default), ATTR_BGND_BLINK will
- * cause the *foreground* element of the cell to blink, even though it is part of the *background* attribute bits.
- *
- * Regarding blink rate, characters are supposed to blink every 16 vertical frames, which amounts to .26667 blinks
- * per second, assuming a 60Hz vertical refresh rate.  So roughly every 267ms, we need to take care of any blinking
- * characters.  updateScreen() maintains a global count (cBlinkVisible) of blinking characters, to simplify the
- * decision of when to redraw the screen.
- */
-Videox86.ATTRS = {};
-Videox86.ATTRS.FGND_BLACK  = 0x00;
-Videox86.ATTRS.FGND_ULINE  = 0x01;
-Videox86.ATTRS.FGND_WHITE  = 0x07;
-Videox86.ATTRS.FGND_BRIGHT = 0x08;
-Videox86.ATTRS.BGND_BLACK  = 0x00;
-Videox86.ATTRS.BGND_WHITE  = 0x70;
-Videox86.ATTRS.BGND_BLINK  = 0x80;
-Videox86.ATTRS.BGND_BRIGHT = 0x80;
-Videox86.ATTRS.DRAW_FGND   = 0x100;        // this is an internal attribute bit, indicating the foreground should be drawn
-Videox86.ATTRS.DRAW_CURSOR = 0x200;        // this is an internal attribute bit, indicating when the cursor should be drawn
-
-/*
- * Here's a "cheat sheet" for attribute byte combinations that the IBM MDA could have supported.  The original (Aug 1981)
- * IBM Tech Ref is very terse and implies that only those marked with * are actually supported.
- *
- *     *0x00: non-display                       ATTR_FGND_BLACK |                    ATTR_BGND_BLACK
- *     *0x01: underline                         ATTR_FGND_ULINE |                    ATTR_BGND_BLACK
- *     *0x07: normal (white on black)           ATTR_FGND_WHITE |                    ATTR_BGND_BLACK
- *    **0x09: bright underline                  ATTR_FGND_ULINE | ATTR_FGND_BRIGHT | ATTR_BGND_BLACK
- *    **0x0F: bold (bright white on black)      ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLACK
- *     *0x70: reverse (black on white)          ATTR_FGND_BLACK |                  | ATTR_BGND_WHITE
- *      0x81: blinking underline                ATTR_FGND_ULINE |                  | ATTR_BGND_BLINK (or dim background if blink disabled)
- *    **0x87: blinking normal                   ATTR_FGND_WHITE |                  | ATTR_BGND_BLINK (or dim background if blink disabled)
- *      0x89: blinking bright underline         ATTR_FGND_ULINE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or dim background if blink disabled)
- *    **0x8F: blinking bold                     ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or dim background if blink disabled)
- *    **0xF0: blinking reverse                  ATTR_FGND_WHITE | ATTR_FGND_BRIGHT | ATTR_BGND_BLINK (or bright background if blink disabled)
- *
- * Unsupported attributes reportedly display as "normal" (ATTR_FGND_WHITE | ATTR_BGND_BLACK).  However, precisely which
- * attributes are unsupported on the MDA varies depending on the source.  Some sources (eg, the IBM Tech Ref) imply that
- * only those marked by * are supported, while others (eg, some--but not all--Peter Norton guides) include those marked
- * by **, and still others include ALL the combinations listed above.
- *
- * Furthermore, according to http://www.seasip.info/VintagePC/mda.html:
- *
- *      Attributes 0x00, 0x08, 0x80 and 0x88 display as black space;
- *      Attribute 0x78 displays as dark green on green; depending on the monitor, there may be a green "halo" where the dark and bright bits meet;
- *      Attribute 0xF0 displays as a blinking version of 0x70 if blink enabled, and black on bright green otherwise;
- *      Attribute 0xF8 displays as a blinking version of 0x78 if blink enabled, and as dark green on bright green otherwise.
- *
- * However, I'm rather skeptical about supporting 0x78 and 0xF8, until I see some evidence that "bright black" actually
- * produced dark green on IBM equipment; it also doesn't sound like a combination many people would have used.  I'll probably
- * treat all of 0x08, 0x80 and 0x88 the same as 0x00, only because it seems logical (they're all "black on black" combinations
- * with only BRIGHT and/or BLINK bits set). Beyond that, I'll likely treat any other combination not listed in the above cheat
- * sheet as "normal".
- *
- * All the discrepancies/disagreements I've found are probably due in part to the proliferation of IBM and non-IBM MDA
- * cards, combined with IBM and non-IBM monochrome monitors, and people assuming that their non-IBM card and/or monitor
- * behaved exactly like the original IBM equipment, which probably wasn't true in all cases.
- *
- * I would like to limit my MDA display support to EXACTLY everything that the IBM MDA supported and nothing more, but
- * since there will be combinations that will logically "fall out" unless I specifically exclude them, it's very likely
- * this implementation will end up being a superset.
- */
-
-/*
- * CGA attribute byte definitions; these simply extend the set of MDA attributes, with the exception of ATTR_FNGD_ULINE,
- * which the CGA can treat only as ATTR_FGND_BLUE.
- */
-Videox86.ATTRS.FGND_BLUE       = 0x01;
-Videox86.ATTRS.FGND_GREEN      = 0x02;
-Videox86.ATTRS.FGND_CYAN       = 0x03;
-Videox86.ATTRS.FGND_RED        = 0x04;
-Videox86.ATTRS.FGND_MAGENTA    = 0x05;
-Videox86.ATTRS.FGND_BROWN      = 0x06;
-
-Videox86.ATTRS.BGND_BLUE       = 0x10;
-Videox86.ATTRS.BGND_GREEN      = 0x20;
-Videox86.ATTRS.BGND_CYAN       = 0x30;
-Videox86.ATTRS.BGND_RED        = 0x40;
-Videox86.ATTRS.BGND_MAGENTA    = 0x50;
-Videox86.ATTRS.BGND_BROWN      = 0x60;
-
-/*
- * For the MDA, there are currently three distinct "colors": off, normal, and intense.  There are
- * also two variations of normal and intense: with and without underlining.  Technically, underlining
- * makes no difference in the actual color, but because different fonts must be built for each, and
- * because the presence of underlining is determined by character's attribute (aka "color") bits, we
- * use separate color indices for each variation; so ODD color indices are used for underlining and
- * EVEN indices are not.
- *
- * I'm still not sure about dark green (see comments above); if it exists on a standard IBM monitor
- * (model 5151), then I may need to support another "color": dark.  For now, the attributes that may
- * require dark (ie, 0x78 and 0xF8) have their foreground attribute (0x8) mapped to 0x0 (off) instead.
- */
-Videox86.aMDAColors = [
-    [0x00, 0x00, 0x00, 0xff],       // 0: off
-    [0x09, 0xcc, 0x50, 0xff],       // 1: normal (with underlining)
-    [0x09, 0xcc, 0x50, 0xff],       // 2: normal
-    [0x3c, 0xff, 0x83, 0xff],       // 3: intense (with underlining)
-    [0x3c, 0xff, 0x83, 0xff]        // 4: intense
-];
-/*
- * Each of the following FGND attribute values are mapped to one of the above "colors":
- *
- *      0x0: black font (per above, attribute value 0x8 is also mapped to attribute 0x0)
- *      0x1: green font with underlining
- *      0x7: green font without underlining (attribute values 0x2-0x6 are mapped to attribute 0x7)
- *      0x9: bright green font with underlining
- *      0xf: bright green font without underlining (attribute values 0xa-0xe are mapped to attribute 0xf)
- *
- * MDA attributes form an index into aMDAColorMap, which in turn provides an index into aMDAColors.
- */
-Videox86.aMDAColorMap = [0x0, 0x1, 0x2, 0x2, 0x2, 0x2, 0x2, 0x2, 0x0, 0x3, 0x4, 0x4, 0x4, 0x4, 0x4, 0x4];
-
-Videox86.aCGAColors = [
-    [0x00, 0x00, 0x00, 0xff],   // 0x00: ATTR_FGND_BLACK
-    [0x00, 0x00, 0xaa, 0xff],   // 0x01: ATTR_FGND_BLUE
-    [0x00, 0xaa, 0x00, 0xff],   // 0x02: ATTR_FGND_GREEN
-    [0x00, 0xaa, 0xaa, 0xff],   // 0x03: ATTR_FGND_CYAN
-    [0xaa, 0x00, 0x00, 0xff],   // 0x04: ATTR_FGND_RED
-    [0xaa, 0x00, 0xaa, 0xff],   // 0x05: ATTR_FGND_MAGENTA
-    [0xaa, 0x55, 0x00, 0xff],   // 0x06: ATTR_FGND_BROWN
-    [0xaa, 0xaa, 0xaa, 0xff],   // 0x07: ATTR_FGND_WHITE                      (aka light gray)
-    [0x55, 0x55, 0x55, 0xff],   // 0x08: ATTR_FGND_BLACK   | ATTR_FGND_BRIGHT (aka gray)
-    [0x55, 0x55, 0xff, 0xff],   // 0x09: ATTR_FGND_BLUE    | ATTR_FGND_BRIGHT
-    [0x55, 0xff, 0x55, 0xff],   // 0x0A: ATTR_FGND_GREEN   | ATTR_FGND_BRIGHT
-    [0x55, 0xff, 0xff, 0xff],   // 0x0B: ATTR_FGND_CYAN    | ATTR_FGND_BRIGHT
-    [0xff, 0x55, 0x55, 0xff],   // 0x0C: ATTR_FGND_RED     | ATTR_FGND_BRIGHT
-    [0xff, 0x55, 0xff, 0xff],   // 0x0D: ATTR_FGND_MAGENTA | ATTR_FGND_BRIGHT
-    [0xff, 0xff, 0x55, 0xff],   // 0x0E: ATTR_FGND_BROWN   | ATTR_FGND_BRIGHT (aka yellow)
-    [0xff, 0xff, 0xff, 0xff]    // 0x0F: ATTR_FGND_WHITE   | ATTR_FGND_BRIGHT (aka white)
-];
-
-Videox86.aCGAColorSet0 = [Videox86.ATTRS.FGND_GREEN, Videox86.ATTRS.FGND_RED,     Videox86.ATTRS.FGND_BROWN];
-Videox86.aCGAColorSet1 = [Videox86.ATTRS.FGND_CYAN,  Videox86.ATTRS.FGND_MAGENTA, Videox86.ATTRS.FGND_WHITE];
-
-/*
- * Here is the EGA BIOS default ATC palette register set for color text modes, from which getCardColors()
- * builds a default RGB array, similar to aCGAColors above.
- */
-Videox86.aEGAPalDef = [0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x14, 0x07, 0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F];
-
-Videox86.aEGAByteToDW = [
-    0x00000000,   0x000000ff,   0x0000ff00,   0x0000ffff,
-    0x00ff0000,   0x00ff00ff,   0x00ffff00,   0x00ffffff,
-    0xff000000|0, 0xff0000ff|0, 0xff00ff00|0, 0xff00ffff|0,
-    0xffff0000|0, 0xffff00ff|0, 0xffffff00|0, 0xffffffff|0
-];
-
-Videox86.aEGADWToByte = [];
-Videox86.aEGADWToByte[0x00000000]   = 0x0;
-Videox86.aEGADWToByte[0x00000080]   = 0x1;
-Videox86.aEGADWToByte[0x00008000]   = 0x2;
-Videox86.aEGADWToByte[0x00008080]   = 0x3;
-Videox86.aEGADWToByte[0x00800000]   = 0x4;
-Videox86.aEGADWToByte[0x00800080]   = 0x5;
-Videox86.aEGADWToByte[0x00808000]   = 0x6;
-Videox86.aEGADWToByte[0x00808080]   = 0x7;
-Videox86.aEGADWToByte[0x80000000|0] = 0x8;
-Videox86.aEGADWToByte[0x80000080|0] = 0x9;
-Videox86.aEGADWToByte[0x80008000|0] = 0xa;
-Videox86.aEGADWToByte[0x80008080|0] = 0xb;
-Videox86.aEGADWToByte[0x80800000|0] = 0xc;
-Videox86.aEGADWToByte[0x80800080|0] = 0xd;
-Videox86.aEGADWToByte[0x80808000|0] = 0xe;
-Videox86.aEGADWToByte[0x80808080|0] = 0xf;
-
-/*
  * Card Specifications
  *
  * We support dynamically switching between MDA and CGA cards by simply flipping switches on
@@ -8555,7 +8556,7 @@ Videox86.cardSpecs[Videox86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000
 Videox86.cardSpecs[Videox86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
 Videox86.cardSpecs[Videox86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
 
-/*
+/**
  * Values for nTouchConfig; a value will be selected based on the sTouchScreen configuration parameter.
  */
 Videox86.TOUCH = {
@@ -8565,7 +8566,7 @@ Videox86.TOUCH = {
     MOUSE:      3
 };
 
-/*
+/**
  * Why simulate a SPACE if the tap is in the middle third (center) of the screen?  Well, apparently
  * I didn't explain earlier that the WHOLE reason I originally added KEYGRID support (before it was
  * even called KEYGRID support) was to make the 1985 game "Rogue" (pcjs.org/apps/pcx86/1985/rogue)
@@ -8577,7 +8578,7 @@ Videox86.KEYGRID = [
     [Keyboardx86.SIMCODE.END,  Keyboardx86.SIMCODE.DOWN,  Keyboardx86.SIMCODE.PGDN],
 ];
 
-/*
+/**
  * Port input/output notification tables
  */
 Videox86.aMDAPortInput = {
@@ -8630,7 +8631,7 @@ Videox86.aEGAPortInput = {
     0x3CF: Videox86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
 };
 
-/*
+/**
  * WARNING: Unlike the EGA, a standard VGA does not support writes to 0x3C1, but it's easier for me to leave that
  * ability in place, treating the VGA as a superset of the EGA as much as possible; will any code break because word
  * OUTs to port 0x3C0 (and/or byte OUTs to port 0x3C1) actually work?  Possibly, but highly unlikely.
@@ -8666,7 +8667,7 @@ Videox86.aVGAPortOutput = {
     0x3C9: Videox86.prototype.outDACData
 };
 
-/*
+/**
  * Initialize every Video module on the page.
  */
 WebLib.onInit(Videox86.init);
