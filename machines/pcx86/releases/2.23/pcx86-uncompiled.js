@@ -54713,6 +54713,57 @@ class Videox86 extends Component {
     };
 
     /**
+     * Card Specifications
+     *
+     * We support dynamically switching between MDA and CGA cards by simply flipping switches on
+     * the virtual SW1 switch block and resetting the machine.  However, I'm not sure I'll support
+     * dynamically switching the EGA card the same way; there's certainly no UI for it at this point.
+     *
+     * For each supported card, there is a cardSpec array that the Card class uses to initialize the
+     * card's defaults:
+     *
+     *      [0]: card descriptor
+     *      [1]: default CRTC port address
+     *      [2]: default video buffer address
+     *      [3]: default video buffer size
+     *      [4]: total on-board memory (if no "memory" parm was specified)
+     *      [5]: default monitor type
+     *
+     * If total on-board memory is zero, then addMemory() will simply add the specified video buffer
+     * to the address space; otherwise, we will allocate an internal buffer (adwMemory) and tell addMemory()
+     * to map it to the video buffer address.  The latter approach gives us total control over the buffer;
+     * refer to getMemoryAccess().
+     */
+    static cardSpecs = {
+        [Videox86.CARD.MDA]: ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO],
+        [Videox86.CARD.CGA]: ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR],
+        [Videox86.CARD.EGA]: ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR],
+        [Videox86.CARD.VGA]: ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR]
+    };
+
+    /**
+     * Values for nTouchConfig; a value will be selected based on the sTouchScreen configuration parameter.
+     */
+    static TOUCH = {
+        NONE:       0,
+        DEFAULT:    1,
+        KEYGRID:    2,
+        MOUSE:      3
+    };
+
+    /**
+     * Why simulate a SPACE if the tap is in the middle third (center) of the screen?  Well, apparently
+     * I didn't explain earlier that the WHOLE reason I originally added KEYGRID support (before it was
+     * even called KEYGRID support) was to make the 1985 game "Rogue" (pcjs.org/apps/pcx86/1985/rogue)
+     * more fun to play on an iPad (the space-bar is a commonly required key).
+     */
+    static KEYGRID = [
+        [Keyboardx86.SIMCODE.HOME, Keyboardx86.SIMCODE.UP,    Keyboardx86.SIMCODE.PGUP],
+        [Keyboardx86.SIMCODE.LEFT, Keyboardx86.SIMCODE.SPACE, Keyboardx86.SIMCODE.RIGHT],
+        [Keyboardx86.SIMCODE.END,  Keyboardx86.SIMCODE.DOWN,  Keyboardx86.SIMCODE.PGDN],
+    ];
+
+    /**
      * Videox86(parmsVideo, canvas, context, textarea, container, aDiagElements)
      *
      * The Videox86 component can be configured with the following (parmsVideo) properties:
@@ -60487,146 +60538,97 @@ class Videox86 extends Component {
             Component.bindComponentControls(video, element, APPCLASS);
         }
     }
+
+    /**
+     * Port input/output notification tables
+     */
+    static aMDAPortInput = {
+        0x3B0: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+        0x3B1: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+        0x3B2: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+        0x3B3: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+        0x3B4: Videox86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+        0x3B5: Videox86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+        0x3B6: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
+        0x3B7: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
+        0x3B8: Videox86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+        0x3BA: Videox86.prototype.inMDAStatus
+    };
+
+    static aMDAPortOutput = {
+        0x3B0: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+        0x3B1: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+        0x3B2: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+        0x3B3: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+        0x3B4: Videox86.prototype.outMDAIndx,
+        0x3B5: Videox86.prototype.outMDAData,
+        0x3B6: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
+        0x3B7: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
+        0x3B8: Videox86.prototype.outMDAMode
+    };
+
+    static aCGAPortInput = {
+        0x3D4: Videox86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
+        0x3D5: Videox86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
+        0x3D8: Videox86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
+        0x3D9: Videox86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
+        0x3DA: Videox86.prototype.inCGAStatus
+    };
+
+    static aCGAPortOutput = {
+        0x3D4: Videox86.prototype.outCGAIndx,
+        0x3D5: Videox86.prototype.outCGAData,
+        0x3D8: Videox86.prototype.outCGAMode,
+        0x3D9: Videox86.prototype.outCGAColor
+    };
+
+    static aEGAPortInput = {
+        0x3C0: Videox86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+        0x3C1: Videox86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+        0x3C2: Videox86.prototype.inStatus0,
+        0x3C4: Videox86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+        0x3C5: Videox86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+        0x3CE: Videox86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+        0x3CF: Videox86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
+    };
+
+    /**
+     * WARNING: Unlike the EGA, a standard VGA does not support writes to 0x3C1, but it's easier for me to leave that
+     * ability in place, treating the VGA as a superset of the EGA as much as possible; will any code break because word
+     * OUTs to port 0x3C0 (and/or byte OUTs to port 0x3C1) actually work?  Possibly, but highly unlikely.
+     */
+    static aEGAPortOutput = {
+        0x3BA: Videox86.prototype.outFeat,
+        0x3C0: Videox86.prototype.outATC,
+        0x3C1: Videox86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
+        0x3C2: Videox86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
+        0x3C4: Videox86.prototype.outSEQIndx,
+        0x3C5: Videox86.prototype.outSEQData,
+        0x3CA: Videox86.prototype.outGRCPos2,
+        0x3CC: Videox86.prototype.outGRCPos1,
+        0x3CE: Videox86.prototype.outGRCIndx,
+        0x3CF: Videox86.prototype.outGRCData,
+        0x3DA: Videox86.prototype.outFeat
+    };
+
+    static aVGAPortInput = {
+        0x3C3: Videox86.prototype.inVGAEnable,
+        0x3C6: Videox86.prototype.inDACMask,
+        0x3C7: Videox86.prototype.inDACState,
+        0x3C9: Videox86.prototype.inDACData,
+        0x3CA: Videox86.prototype.inVGAFeat,
+        0x3CC: Videox86.prototype.inVGAMisc
+    };
+
+    static aVGAPortOutput = {
+        0x3C3: Videox86.prototype.outVGAEnable,
+        0x3C6: Videox86.prototype.outDACMask,
+        0x3C7: Videox86.prototype.outDACRead,
+        0x3C8: Videox86.prototype.outDACWrite,
+        0x3C9: Videox86.prototype.outDACData
+    };
+
 }
-
-/**
- * Card Specifications
- *
- * We support dynamically switching between MDA and CGA cards by simply flipping switches on
- * the virtual SW1 switch block and resetting the machine.  However, I'm not sure I'll support
- * dynamically switching the EGA card the same way; there's certainly no UI for it at this point.
- *
- * For each supported card, there is a cardSpec array that the Card class uses to initialize the
- * card's defaults:
- *
- *      [0]: card descriptor
- *      [1]: default CRTC port address
- *      [2]: default video buffer address
- *      [3]: default video buffer size
- *      [4]: total on-board memory (if no "memory" parm was specified)
- *      [5]: default monitor type
- *
- * If total on-board memory is zero, then addMemory() will simply add the specified video buffer
- * to the address space; otherwise, we will allocate an internal buffer (adwMemory) and tell addMemory()
- * to map it to the video buffer address.  The latter approach gives us total control over the buffer;
- * refer to getMemoryAccess().
- */
-Videox86.cardSpecs = [];
-Videox86.cardSpecs[Videox86.CARD.MDA] = ["MDA", Card.MDA.CRTC.INDX.PORT, 0xB0000, 0x01000, 0x01000, ChipSet.MONITOR.MONO];
-Videox86.cardSpecs[Videox86.CARD.CGA] = ["CGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x04000, ChipSet.MONITOR.COLOR];
-Videox86.cardSpecs[Videox86.CARD.EGA] = ["EGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x10000, ChipSet.MONITOR.EGACOLOR];
-Videox86.cardSpecs[Videox86.CARD.VGA] = ["VGA", Card.CGA.CRTC.INDX.PORT, 0xB8000, 0x04000, 0x40000, ChipSet.MONITOR.VGACOLOR];
-
-/**
- * Values for nTouchConfig; a value will be selected based on the sTouchScreen configuration parameter.
- */
-Videox86.TOUCH = {
-    NONE:       0,
-    DEFAULT:    1,
-    KEYGRID:    2,
-    MOUSE:      3
-};
-
-/**
- * Why simulate a SPACE if the tap is in the middle third (center) of the screen?  Well, apparently
- * I didn't explain earlier that the WHOLE reason I originally added KEYGRID support (before it was
- * even called KEYGRID support) was to make the 1985 game "Rogue" (pcjs.org/apps/pcx86/1985/rogue)
- * more fun to play on an iPad (the space-bar is a commonly required key).
- */
-Videox86.KEYGRID = [
-    [Keyboardx86.SIMCODE.HOME, Keyboardx86.SIMCODE.UP,    Keyboardx86.SIMCODE.PGUP],
-    [Keyboardx86.SIMCODE.LEFT, Keyboardx86.SIMCODE.SPACE, Keyboardx86.SIMCODE.RIGHT],
-    [Keyboardx86.SIMCODE.END,  Keyboardx86.SIMCODE.DOWN,  Keyboardx86.SIMCODE.PGDN],
-];
-
-/**
- * Port input/output notification tables
- */
-Videox86.aMDAPortInput = {
-    0x3B0: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B1: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B2: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B3: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B4: Videox86.prototype.inMDAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3B5: Videox86.prototype.inMDAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3B6: Videox86.prototype.inMDAIndx,           // duplicate of 0x3B4
-    0x3B7: Videox86.prototype.inMDAData,           // duplicate of 0x3B5
-    0x3B8: Videox86.prototype.inMDAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3BA: Videox86.prototype.inMDAStatus
-};
-
-Videox86.aMDAPortOutput = {
-    0x3B0: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B1: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B2: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B3: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B4: Videox86.prototype.outMDAIndx,
-    0x3B5: Videox86.prototype.outMDAData,
-    0x3B6: Videox86.prototype.outMDAIndx,          // duplicate of 0x3B4
-    0x3B7: Videox86.prototype.outMDAData,          // duplicate of 0x3B5
-    0x3B8: Videox86.prototype.outMDAMode
-};
-
-Videox86.aCGAPortInput = {
-    0x3D4: Videox86.prototype.inCGAIndx,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D5: Videox86.prototype.inCGAData,           // technically, the only CRTC Data registers that are readable are R14-R17
-    0x3D8: Videox86.prototype.inCGAMode,           // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3D9: Videox86.prototype.inCGAColor,          // technically, not actually readable, but I want the Debugger to be able to read this
-    0x3DA: Videox86.prototype.inCGAStatus
-};
-
-Videox86.aCGAPortOutput = {
-    0x3D4: Videox86.prototype.outCGAIndx,
-    0x3D5: Videox86.prototype.outCGAData,
-    0x3D8: Videox86.prototype.outCGAMode,
-    0x3D9: Videox86.prototype.outCGAColor
-};
-
-Videox86.aEGAPortInput = {
-    0x3C0: Videox86.prototype.inATCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C1: Videox86.prototype.inATCData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C2: Videox86.prototype.inStatus0,
-    0x3C4: Videox86.prototype.inSEQIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3C5: Videox86.prototype.inSEQData,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CE: Videox86.prototype.inGRCIndx,           // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-    0x3CF: Videox86.prototype.inGRCData            // technically, only readable on a VGA, but I want the Debugger to be able to read this, too
-};
-
-/**
- * WARNING: Unlike the EGA, a standard VGA does not support writes to 0x3C1, but it's easier for me to leave that
- * ability in place, treating the VGA as a superset of the EGA as much as possible; will any code break because word
- * OUTs to port 0x3C0 (and/or byte OUTs to port 0x3C1) actually work?  Possibly, but highly unlikely.
- */
-Videox86.aEGAPortOutput = {
-    0x3BA: Videox86.prototype.outFeat,
-    0x3C0: Videox86.prototype.outATC,
-    0x3C1: Videox86.prototype.outATC,              // the EGA BIOS writes to this port (see C000:0416), implying that 0x3C0 and 0x3C1 both decode the same register
-    0x3C2: Videox86.prototype.outMisc,             // FYI, since this overlaps with STATUS0.PORT, there's currently no way for the Debugger to read the Misc register
-    0x3C4: Videox86.prototype.outSEQIndx,
-    0x3C5: Videox86.prototype.outSEQData,
-    0x3CA: Videox86.prototype.outGRCPos2,
-    0x3CC: Videox86.prototype.outGRCPos1,
-    0x3CE: Videox86.prototype.outGRCIndx,
-    0x3CF: Videox86.prototype.outGRCData,
-    0x3DA: Videox86.prototype.outFeat
-};
-
-Videox86.aVGAPortInput = {
-    0x3C3: Videox86.prototype.inVGAEnable,
-    0x3C6: Videox86.prototype.inDACMask,
-    0x3C7: Videox86.prototype.inDACState,
-    0x3C9: Videox86.prototype.inDACData,
-    0x3CA: Videox86.prototype.inVGAFeat,
-    0x3CC: Videox86.prototype.inVGAMisc
-};
-
-Videox86.aVGAPortOutput = {
-    0x3C3: Videox86.prototype.outVGAEnable,
-    0x3C6: Videox86.prototype.outDACMask,
-    0x3C7: Videox86.prototype.outDACRead,
-    0x3C8: Videox86.prototype.outDACWrite,
-    0x3C9: Videox86.prototype.outDACData
-};
 
 /**
  * Initialize every Video module on the page.
