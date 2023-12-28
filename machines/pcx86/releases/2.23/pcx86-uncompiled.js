@@ -24685,6 +24685,20 @@ WebLib.onInit(FPUx86.init);
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Segx86 {
+
+    static ID = {
+        NULL:   0,          // "NULL"
+        CODE:   1,          // "CS"
+        DATA:   2,          // "DS", "ES", "FS", "GS"
+        STACK:  3,          // "SS"
+        TSS:    4,          // "TSS"
+        LDT:    5,          // "LDT"
+        VER:    6,          // "VER"
+        DBG:    7           // "DBG"
+    };
+
+    static CALLBREAK_SEL = 0x0001;
+
     /**
      * Segx86(cpu, sName)
      *
@@ -26335,19 +26349,6 @@ class Segx86 {
      }
      */
 }
-
-Segx86.ID = {
-    NULL:   0,          // "NULL"
-    CODE:   1,          // "CS"
-    DATA:   2,          // "DS", "ES", "FS", "GS"
-    STACK:  3,          // "SS"
-    TSS:    4,          // "TSS"
-    LDT:    5,          // "LDT"
-    VER:    6,          // "VER"
-    DBG:    7           // "DBG"
-};
-
-Segx86.CALLBREAK_SEL = 0x0001;
 
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2023 Jeff Parsons
@@ -41166,6 +41167,1118 @@ let Timer;
  */
 class ChipSet extends Component {
     /**
+     * Ports Overview
+     * --------------
+     *
+     * This module provides support for many of the following components (except where a separate component is noted).
+     * This list is taken from p.1-8 ("System Unit") of the IBM 5160 (PC XT) Technical Reference Manual (as revised
+     * April 1983), only because I didn't see a similar listing in the original 5150 Technical Reference.
+     *
+     *      Port(s)         Description
+     *      -------         -----------
+     *      000-00F         DMA Chip 8237A-5                                [see below]
+     *      020-021         Interrupt 8259A                                 [see below]
+     *      040-043         Timer 8253-5                                    [see below]
+     *      060-063         PPI 8255A-5                                     [see below]
+     *      080-083         DMA Page Registers                              [see below]
+     *          0Ax [1]     NMI Mask Register                               [see below]
+     *          0Cx         Reserved
+     *          0Ex         Reserved
+     *      200-20F         Game Control
+     *      210-217         Expansion Unit
+     *      220-24F         Reserved
+     *      278-27F         Reserved
+     *      2F0-2F7         Reserved
+     *      2F8-2FF         Asynchronous Communications (Secondary)         [see the SerialPort component]
+     *      300-31F         Prototype Card
+     *      320-32F         Hard Drive Controller (XTC)                     [see the HDC component]
+     *      378-37F         Printer
+     *      380-38C [2]     SDLC Communications
+     *      380-389 [2]     Binary Synchronous Communications (Secondary)
+     *      3A0-3A9         Binary Synchronous Communications (Primary)
+     *      3B0-3BF         IBM Monochrome Display/Printer                  [see the Video component]
+     *      3C0-3CF         Reserved
+     *      3D0-3DF         Color/Graphics (Motorola 6845)                  [see the Video component]
+     *      3EO-3E7         Reserved
+     *      3FO-3F7         Floppy Drive Controller                         [see the FDC component]
+     *      3F8-3FF         Asynchronous Communications (Primary)           [see the SerialPort component]
+     *
+     * [1] At power-on time, NMI is masked off, perhaps because models 5150 and 5160 also tie coprocessor
+     * (FPU) interrupts to NMI.  Suppressing NMI by default seems odd, because that would also suppress memory
+     * parity errors.  TODO: Determine whether "power-on time" refers to the initial power-on state of the
+     * NMI Mask Register or the state that the BIOS "POST" (Power-On Self-Test) sets.
+     *
+     * [2] These devices cannot be used together since their port addresses overlap.
+     *
+     *      MODEL_5170      Description
+     *      ----------      -----------
+     *          070 [3]     CMOS Address                                    ChipSet.CMOS.ADDR.PORT
+     *          071         CMOS Data                                       ChipSet.CMOS.DATA.PORT
+     *          0F0         FPU Coprocessor Clear Busy (output 0x00)
+     *          0F1         FPU Coprocessor Reset (output 0x00)
+     *      1F0-1F7         Hard Drive Controller (ATC)                     [see the HDC component]
+     *
+     * [3] Port 0x70 doubles as the NMI Mask Register: output a CMOS address with bit 7 clear to enable NMI
+     * or with bit 7 set to disable NMI (apparently the inverse of the older NMI Mask Register at port 0xA0).
+     * Also, apparently unlike previous models, the MODEL_5170 POST leaves NMI enabled.  And fortunately, the
+     * FPU coprocessor interrupt line is no longer tied to NMI (it uses IRQ 13).
+     */
+
+    /**
+     * Supported model numbers
+     *
+     * In general, when comparing this.model to "base" model numbers (ie, non-REV numbers), you should use
+     * (this.model|0), which truncates the current model number.
+     *
+     * Note that there were two 5150 motherboard revisions: the "REV A" 16Kb-64Kb motherboard and the
+     * "REV B" 64Kb-256Kb motherboard.  There may have been a manufacturing correlation between motherboard
+     * revisions ("REV A" and "REV B") and the ROM BIOS revisions shown below, but in general, we can't assume
+     * any correlation, because newer ROMs could be installed with either motherboard.
+     *
+     * I do know that, for "REV A" motherboards, the Apr 1984 5150 TechRef says that "To expand the memory
+     * of your system beyond 544K requires your IBM Personal Computer System Unit to have a BIOS ROM module
+     * dated 10/27/82 or later."  Which suggests that SW2[5] was not used until the REV3 5150 ROM BIOS.
+     *
+     * For now, we treat all our MODEL_5150 systems as 16Kb-64Kb motherboards; if you want a 64Kb-256Kb motherboard,
+     * then step up to a MODEL_5160 system.  We use a multiplier of 16 for 5150 LOWMEM values, and a multiplier
+     * of 64 for 5160 LOWMEM values.
+     */
+    static MODEL_4860               = 4860;     // PCjr
+    static MODEL_5150               = 5150;     // used in reference to the 1st 5150 ROM BIOS, dated Apr 24, 1981
+    static MODEL_5150_REV2          = 5150.2;   // used in reference to the 2nd 5150 ROM BIOS, dated Oct 19, 1981
+    static MODEL_5150_REV3          = 5150.3;   // used in reference to the 3rd 5150 ROM BIOS, dated Oct 27, 1982
+    static MODEL_5150_OTHER         = 5150.9;
+    static MODEL_5160               = 5160;     // used in reference to the 1st 5160 ROM BIOS, dated Nov 08, 1982
+    static MODEL_5160_REV2          = 5160.2;   // used in reference to the 1st 5160 ROM BIOS, dated Jan 10, 1986
+    static MODEL_5160_REV3          = 5160.3;   // used in reference to the 1st 5160 ROM BIOS, dated May 09, 1986
+    static MODEL_5160_OTHER         = 5160.9;
+    static MODEL_5170               = 5170;     // used in reference to the 1st 5170 ROM BIOS, dated Jan 10, 1984
+    static MODEL_5170_REV2          = 5170.2;   // used in reference to the 2nd 5170 ROM BIOS, dated Jun 10, 1985
+    static MODEL_5170_REV3          = 5170.3;   // used in reference to the 3rd 5170 ROM BIOS, dated Nov 15, 1985
+    static MODEL_5170_OTHER         = 5170.9;
+
+    /**
+     * Assorted non-IBM models (we don't put "IBM" in the IBM models, but non-IBM models should include the company name).
+     */
+    static MODEL_CDP_MPC1600        = 5150.101; // Columbia Data Products MPC 1600 ("Copyright Columbia Data Products 1983, ROM/BIOS Ver 4.34")
+    static MODEL_COMPAQ_PORTABLE    = 5150.102; // COMPAQ Portable (COMPAQ's first PC)
+    static MODEL_ATT_6300           = 5160.101; // AT&T Personal Computer 6300/Olivetti M24 ("COPYRIGHT (C) OLIVETTI 1984","04/03/86",v1.43)
+    static MODEL_ZENITH_Z150        = 5160.150; // Zenith Data Systems Z-150 ("08/11/88 (C)ZDS CORP")
+    static MODEL_COMPAQ_DESKPRO386  = 5180;     // COMPAQ DeskPro 386 (COMPAQ's first 80386-based PC); should be > MODEL_5170
+
+    /**
+     * Last but not least, a complete list of supported model strings, and corresponding internal model numbers.
+     */
+    static MODELS = {
+        "4860":         ChipSet.MODEL_4860,     // IBM PCjr
+        "5150":         ChipSet.MODEL_5150,     // IBM PC
+        "5160":         ChipSet.MODEL_5160,     // IBM PC XT
+        "5170":         ChipSet.MODEL_5170,     // IBM PC AT
+        "att6300":      ChipSet.MODEL_ATT_6300,
+        "mpc1600":      ChipSet.MODEL_CDP_MPC1600,
+        "z150":         ChipSet.MODEL_ZENITH_Z150,
+        "compaq":       ChipSet.MODEL_COMPAQ_PORTABLE,
+        "other":        ChipSet.MODEL_5150_OTHER,
+        "deskpro386":   ChipSet.MODEL_COMPAQ_DESKPRO386
+    };
+
+    static CONTROLS = {
+        SW1:    "sw1",
+        SW2:    "sw2",
+        SWDESC: "swdesc"
+    };
+
+    /**
+     * Values returned by getDIPVideoMonitor()
+     */
+    static MONITOR = {
+        NONE:               0,
+        TV:                 1,  // Composite monitor (lower resolution; no support)
+        COLOR:              2,  // Color Display (5153)
+        MONO:               3,  // Monochrome Display (5151)
+        EGACOLOR:           4,  // Enhanced Color Display (5154) in High-Res Mode
+        EGAEMULATION:       6,  // Enhanced Color Display (5154) in Emulation Mode
+        VGACOLOR:           7   // VGA Color Display
+    };
+
+    /**
+     *  8237A DMA Controller (DMAC) I/O ports
+     *
+     *  MODEL_5150 and up uses DMA channel 0 for memory refresh cycles and channel 2 for the FDC.
+     *
+     *  MODEL_5160 and up uses DMA channel 3 for HDC transfers (XTC only).
+     *
+     *  DMA0 refers to the original DMA controller found on all models, and DMA1 refers to the additional
+     *  controller found on MODEL_5170 and up; channel 4 on DMA1 is used to "cascade" channels 0-3 from DMA0,
+     *  so only channels 5-7 are available on DMA1.
+     *
+     *  For FDC DMA notes, refer to http://wiki.osdev.org/ISA_DMA
+     *  For general DMA notes, refer to http://www.freebsd.org/doc/en/books/developers-handbook/dma.html
+     *
+     *  TODO: Determine why the MODEL_5150 ROM BIOS sets the DMA channel 1 page register (port 0x83) to zero.
+     */
+    static DMA0 = {
+        INDEX:              0,
+        PORT: {
+            CH0_ADDR:       0x00,   // OUT: starting address        IN: current address
+            CH0_COUNT:      0x01,   // OUT: starting word count     IN: remaining word count
+            CH1_ADDR:       0x02,   // OUT: starting address        IN: current address
+            CH1_COUNT:      0x03,   // OUT: starting word count     IN: remaining word count
+            CH2_ADDR:       0x04,   // OUT: starting address        IN: current address
+            CH2_COUNT:      0x05,   // OUT: starting word count     IN: remaining word count
+            CH3_ADDR:       0x06,   // OUT: starting address        IN: current address
+            CH3_COUNT:      0x07,   // OUT: starting word count     IN: remaining word count
+            CMD_STATUS:     0x08,   // OUT: command register        IN: status register
+            REQUEST:        0x09,
+            MASK:           0x0A,
+            MODE:           0x0B,
+            RESET_FF:       0x0C,   // reset flip-flop
+            MASTER_CLEAR:   0x0D,   // OUT: master clear            IN: temporary register
+            MASK_CLEAR:     0x0E,   // TODO: Provide handlers
+            MASK_ALL:       0x0F,   // TODO: Provide handlers
+            CH2_PAGE:       0x81,   // OUT: DMA channel 2 page register
+            CH3_PAGE:       0x82,   // OUT: DMA channel 3 page register
+            CH1_PAGE:       0x83,   // OUT: DMA channel 1 page register
+            CH0_PAGE:       0x87    // OUT: DMA channel 0 page register (unusable; See "The Inside Out" book, p.246)
+        }
+    };
+
+    static DMA1 = {
+        INDEX:              1,
+        PORT: {
+            CH6_PAGE:       0x89,   // OUT: DMA channel 6 page register (MODEL_5170)
+            CH7_PAGE:       0x8A,   // OUT: DMA channel 7 page register (MODEL_5170)
+            CH5_PAGE:       0x8B,   // OUT: DMA channel 5 page register (MODEL_5170)
+            CH4_PAGE:       0x8F,   // OUT: DMA channel 4 page register (MODEL_5170; unusable; aka "Refresh" page register?)
+            CH4_ADDR:       0xC0,   // OUT: starting address        IN: current address
+            CH4_COUNT:      0xC2,   // OUT: starting word count     IN: remaining word count
+            CH5_ADDR:       0xC4,   // OUT: starting address        IN: current address
+            CH5_COUNT:      0xC6,   // OUT: starting word count     IN: remaining word count
+            CH6_ADDR:       0xC8,   // OUT: starting address        IN: current address
+            CH6_COUNT:      0xCA,   // OUT: starting word count     IN: remaining word count
+            CH7_ADDR:       0xCC,   // OUT: starting address        IN: current address
+            CH7_COUNT:      0xCE,   // OUT: starting word count     IN: remaining word count
+            CMD_STATUS:     0xD0,   // OUT: command register        IN: status register
+            REQUEST:        0xD2,
+            MASK:           0xD4,
+            MODE:           0xD6,
+            RESET_FF:       0xD8,   // reset flip-flop
+            MASTER_CLEAR:   0xDA,   // master clear
+            MASK_CLEAR:     0xDC,   // TODO: Provide handlers
+            MASK_ALL:       0xDE    // TODO: Provide handlers
+        }
+    };
+
+    static DMA_CMD = {
+        M2M_ENABLE:         0x01,
+        CH0HOLD_ENABLE:     0x02,
+        CTRL_DISABLE:       0x04,
+        COMP_TIMING:        0x08,
+        ROT_PRIORITY:       0x10,
+        EXT_WRITE_SEL:      0x20,
+        DREQ_ACTIVE_LO:     0x40,
+        DACK_ACTIVE_HI:     0x80
+    };
+
+    static DMA_STATUS = {
+        CH0_TC:             0x01,   // Channel 0 has reached Terminal Count (TC)
+        CH1_TC:             0x02,   // Channel 1 has reached Terminal Count (TC)
+        CH2_TC:             0x04,   // Channel 2 has reached Terminal Count (TC)
+        CH3_TC:             0x08,   // Channel 3 has reached Terminal Count (TC)
+        ALL_TC:             0x0f,   // all TC bits are cleared whenever DMA_STATUS is read
+        CH0_REQ:            0x10,   // Channel 0 DMA requested
+        CH1_REQ:            0x20,   // Channel 1 DMA requested
+        CH2_REQ:            0x40,   // Channel 2 DMA requested
+        CH3_REQ:            0x80    // Channel 3 DMA requested
+    };
+
+    static DMA_MASK = {
+        CHANNEL:            0x03,
+        CHANNEL_SET:        0x04
+    };
+
+    static DMA_MODE = {
+        CHANNEL:            0x03,   // bits 0-1 select 1 of 4 possible channels
+        TYPE:               0x0C,   // bits 2-3 select 1 of 3 valid (4 possible) transfer types
+        TYPE_VERIFY:        0x00,   // pseudo transfer (generates addresses, responds to EOP, but nothing is moved)
+        TYPE_WRITE:         0x04,   // write to memory (move data FROM an I/O device; eg, reading a sector from a disk)
+        TYPE_READ:          0x08,   // read from memory (move data TO an I/O device; eg, writing a sector to a disk)
+        AUTOINIT:           0x10,
+        DECREMENT:          0x20,   // clear for INCREMENT
+        MODE:               0xC0,   // bits 6-7 select 1 of 4 possible transfer modes
+        MODE_DEMAND:        0x00,
+        MODE_SINGLE:        0x40,
+        MODE_BLOCK:         0x80,
+        MODE_CASCADE:       0xC0
+    };
+
+    static DMA_REFRESH    = 0x00;   // DMA channel assigned to memory refresh
+    static DMA_FDC        = 0x02;   // DMA channel assigned to the Floppy Drive Controller (FDC)
+    static DMA_HDC        = 0x03;   // DMA channel assigned to the Hard Drive Controller (HDC; XTC only)
+
+    /**
+     * 8259A Programmable Interrupt Controller (PIC) I/O ports
+     *
+     * Internal registers:
+     *
+     *      ICW1    Initialization Command Word 1 (sent to port ChipSet.PIC_LO)
+     *      ICW2    Initialization Command Word 2 (sent to port ChipSet.PIC_HI)
+     *      ICW3    Initialization Command Word 3 (sent to port ChipSet.PIC_HI)
+     *      ICW4    Initialization Command Word 4 (sent to port ChipSet.PIC_HI)
+     *      IMR     Interrupt Mask Register
+     *      IRR     Interrupt Request Register
+     *      ISR     Interrupt Service Register
+     *      IRLow   (IR having lowest priority; IR+1 will have highest priority; default is 7)
+     *
+     * Note that ICW2 effectively contains the starting IDT vector number (ie, for IRQ 0),
+     * which must be multiplied by 4 to calculate the vector offset, since every vector is 4 bytes long.
+     *
+     * Also, since the low 3 bits of ICW2 are ignored in 8086/8088 mode (ie, they are effectively
+     * treated as zeros), this means that the starting IDT vector can only be a multiple of 8.
+     *
+     * So, if ICW2 is set to 0x08, the starting vector number (ie, for IRQ 0) will be 0x08, and the
+     * 4-byte address for the corresponding ISR will be located at offset 0x20 in the real-mode IDT.
+     *
+     * ICW4 is typically set to 0x09, indicating 8086 mode, non-automatic EOI, buffered/slave mode.
+     *
+     * TODO: Determine why the original ROM BIOS chose buffered/slave over buffered/master.
+     * Did it simply not matter in pre-AT systems with only one PIC, or am I misreading something?
+     *
+     * TODO: Consider support for level-triggered PIC interrupts, even though the original IBM PCs
+     * (up through MODEL_5170) used only edge-triggered interrupts.
+     */
+    static PIC0 = {                 // all models: the "master" PIC
+        INDEX:              0,
+        PORT_LO:            0x20,
+        PORT_HI:            0x21
+    };
+
+    static PIC1 = {                 // MODEL_5170 and up: the "slave" PIC
+        INDEX:              1,
+        PORT_LO:            0xA0,
+        PORT_HI:            0xA1
+    };
+
+    static PIC_LO = {               // ChipSet.PIC1.PORT_LO or ChipSet.PIC2.PORT_LO
+        ICW1:               0x10,   // set means ICW1
+        ICW1_ICW4:          0x01,   // ICW4 needed (otherwise ICW4 must be sent)
+        ICW1_SNGL:          0x02,   // single PIC (and therefore no ICW3; otherwise there is another "cascaded" PIC)
+        ICW1_ADI:           0x04,   // call address interval is 4 (otherwise 8; presumably ignored in 8086/8088 mode)
+        ICW1_LTIM:          0x08,   // level-triggered interrupt mode (otherwise edge-triggered mode, which is what PCs use)
+        OCW2:               0x00,   // bit 3 (PIC_LO.OCW3) and bit 4 (ChipSet.PIC_LO.ICW1) are clear in an OCW2 command byte
+        OCW2_IR_LVL:        0x07,
+        OCW2_OP_MASK:       0xE0,   // of the following valid OCW2 operations, the first 4 are EOI commands (all have ChipSet.PIC_LO.OCW2_EOI set)
+        OCW2_EOI:           0x20,   // non-specific EOI (end-of-interrupt)
+        OCW2_EOI_SPEC:      0x60,   // specific EOI
+        OCW2_EOI_ROT:       0xA0,   // rotate on non-specific EOI
+        OCW2_EOI_ROTSPEC:   0xE0,   // rotate on specific EOI
+        OCW2_SET_ROTAUTO:   0x80,   // set rotate in automatic EOI mode
+        OCW2_CLR_ROTAUTO:   0x00,   // clear rotate in automatic EOI mode
+        OCW2_SET_PRI:       0xC0,   // bits 0-2 specify the lowest priority interrupt
+        OCW3:               0x08,   // bit 3 (PIC_LO.OCW3) is set and bit 4 (PIC_LO.ICW1) clear in an OCW3 command byte (bit 7 should be clear, too)
+        OCW3_READ_IRR:      0x02,   // read IRR register
+        OCW3_READ_ISR:      0x03,   // read ISR register
+        OCW3_READ_CMD:      0x03,
+        OCW3_POLL_CMD:      0x04,   // poll
+        OCW3_SMM_RESET:     0x40,   // special mask mode: reset
+        OCW3_SMM_SET:       0x60,   // special mask mode: set
+        OCW3_SMM_CMD:       0x60
+    };
+
+    static PIC_HI = {               // ChipSet.PIC1.PORT_HI or ChipSet.PIC2.PORT_HI
+        ICW2_VECTOR:        0xF8,   // starting vector number (bits 0-2 are effectively treated as zeros in 8086/8088 mode)
+        ICW4_8086:          0x01,
+        ICW4_AUTO_EOI:      0x02,
+        ICW4_MASTER:        0x04,
+        ICW4_BUFFERED:      0x08,
+        ICW4_FULLY_NESTED:  0x10,
+        OCW1_IMR:           0xFF
+    };
+
+    /**
+     * The priorities of IRQs 0-7 are normally high to low, unless the master PIC has been reprogrammed.
+     * Also, if a slave PIC is present, the priorities of IRQs 8-15 fall between the priorities of IRQs 1 and 3.
+     *
+     * As the MODEL_5170 TechRef states:
+     *
+     *      "Interrupt requests are prioritized, with IRQ9 through IRQ12 and IRQ14 through IRQ15 having the
+     *      highest priority (IRQ9 is the highest) and IRQ3 through IRQ7 having the lowest priority (IRQ7 is
+     *      the lowest).
+     *
+     *      Interrupt 13 (IRQ.FPU) is used on the system board and is not available on the I/O channel.
+     *      Interrupt 8 (IRQ.RTC) is used for the real-time clock."
+     *
+     * This priority scheme is a byproduct of IRQ8 through IRQ15 (slave PIC interrupts) being tied to IRQ2 of
+     * the master PIC.  As a result, the two other system board interrupts, IRQ0 and IRQ1, continue to have the
+     * highest priority, by default.
+     */
+    static IRQ = {
+        TIMER0:             0x00,
+        KBD:                0x01,
+        VID:                0x02,   // EGA vertical retrace (arrives via IRQ 9 on MODEL_5170)
+        SLAVE:              0x02,   // MODEL_5170
+        COM2:               0x03,
+        COM1:               0x04,
+        XTC:                0x05,   // MODEL_5160 uses IRQ 5 for HDC (XTC version)
+        LPT2:               0x05,   // MODEL_5170 uses IRQ 5 for LPT2
+        FDC:                0x06,
+        LPT1:               0x07,
+        RTC:                0x08,   // MODEL_5170
+        IRQ2:               0x09,   // MODEL_5170
+        FPU:                0x0D,   // MODEL_5170
+        ATC1:               0x0E,   // MODEL_5170 uses IRQ 14 for primary ATC controller interrupts
+        ATC2:               0x0F    // MODEL_5170 *can* use IRQ 15 for secondary ATC controller interrupts
+    };
+
+    /**
+     * 8253 Programmable Interval Timer (PIT) I/O ports
+     *
+     * Although technically, a PIT provides 3 "counters" rather than 3 "timers", we have
+     * adopted IBM's TechRef nomenclature, which refers to the PIT's counters as TIMER0,
+     * TIMER1, and TIMER2.  For machines with a second PIT (eg, the DeskPro 386), we refer
+     * to those additional counters as TIMER3, TIMER4, and TIMER5.
+     *
+     * In addition, if there's a need to refer to a specific PIT, use PIT0 for the first PIT
+     * and PIT1 for the second.  This mirrors how we refer to multiple DMA controllers
+     * (eg, DMA0 and DMA1) and multiple PICs (eg, PIC0 and PIC1).
+     *
+     * This differs from COMPAQ's nomenclature, which used "Timer 1" to refer to the first
+     * PIT, and "Timer 2" for the second PIT, and then referred to "Counter 0", "Counter 1",
+     * and "Counter 2" within each PIT.
+     */
+    static PIT0 = {
+        PORT:               0x40,
+        INDEX:              0,
+        TIMER0:             0,      // used for time-of-day (prior to MODEL_5170)
+        TIMER1:             1,      // used for memory refresh
+        TIMER2:             2       // used for speaker tone generation
+    };
+
+    static PIT1 = {
+        PORT:               0x48,   // MODEL_COMPAQ_DESKPRO386 only
+        INDEX:              1,
+        TIMER3:             0,      // used for fail-safe clock
+        TIMER4:             1,      // N/A
+        TIMER5:             2       // used for refresher request extend/speed control
+    };
+
+    static PIT_CTRL = {
+        PORT1:              0x43,   // write-only control register (use the Read-Back command to get status)
+        PORT2:              0x4B,   // write-only control register (use the Read-Back command to get status)
+        BCD:                0x01,
+        MODE:               0x0E,
+        MODE0:              0x00,   // interrupt on Terminal Count (TC)
+        MODE1:              0x02,   // programmable one-shot
+        MODE2:              0x04,   // rate generator
+        MODE3:              0x06,   // square wave generator
+        MODE4:              0x08,   // software-triggered strobe
+        MODE5:              0x0A,   // hardware-triggered strobe
+        RW:                 0x30,
+        RW_LATCH:           0x00,
+        RW_LSB:             0x10,
+        RW_MSB:             0x20,
+        RW_BOTH:            0x30,
+        SC:                 0xC0,
+        SC_CTR0:            0x00,
+        SC_CTR1:            0x40,
+        SC_CTR2:            0x80,
+        SC_BACK:            0xC0,
+        SC_SHIFT:           6,
+        RB_CTR0:            0x02,
+        RB_CTR1:            0x04,
+        RB_CTR2:            0x08,
+        RB_STATUS:          0x10,   // if this bit is CLEAR, then latch the current status of the selected counter(s)
+        RB_COUNTS:          0x20,   // if this bit is CLEAR, then latch the current count(s) of the selected counter(s)
+        RB_NULL:            0x40,   // bit set in Read-Back status byte if the counter has not been "fully loaded" yet
+        RB_OUT:             0x80    // bit set in Read-Back status byte if fOUT is true
+    };
+
+    static TIMER_TICKS_PER_SEC = 1193181;
+
+    /**
+     * 8255A Programmable Peripheral Interface (PPI) I/O ports, for Cassette/Speaker/Keyboard/SW1/etc
+     *
+     * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI_A.PORT and PPI_C.PORT are INPUT ports
+     * and PPI_B.PORT is an OUTPUT port.
+     *
+     * However, the MODEL_5160 ROM BIOS initially writes 0x89 instead, making PPI_A.PORT an OUTPUT port.
+     * I'm guessing that's just part of some "diagnostic mode", because all it writes to PPI_A.PORT are a series
+     * of "checkpoint" values (ie, 0x01, 0x02, and 0x03) before updating PPI_CTRL.PORT with the usual 0x99.
+     */
+    static PPI_A = {                // this.bPPIA (port 0x60)
+        PORT:               0x60    // INPUT: keyboard scan code (PPI_B.CLEAR_KBD must be clear)
+    };
+
+    static PPI_B = {                // this.bPPIB (port 0x61)
+        PORT:               0x61,   // OUTPUT (although it has to be treated as INPUT, too; the keyboard interrupt handler reads it, OR's PPI_B.CLEAR_KBD, writes it, and then rewrites the original read value)
+        CLK_TIMER2:         0x01,   // ALL: set to enable clock to TIMER2
+        SPK_TIMER2:         0x02,   // ALL: set to connect output of TIMER2 to speaker (MODEL_5150: clear for cassette)
+        ENABLE_SW2:         0x04,   // MODEL_5150: set to enable SW2[1-4] through PPI_C.PORT, clear to enable SW2[5]; MODEL_5160: unused (there is no SW2 switch block on the MODEL_5160 motherboard)
+        CASS_MOTOR_OFF:     0x08,   // MODEL_5150: cassette motor off
+        ENABLE_SW_HI:       0x08,   // MODEL_5160: clear to read SW1[1-4], set to read SW1[5-8]
+        DISABLE_RW_MEM:     0x10,   // ALL: clear to enable RAM parity check, set to disable
+        DISABLE_IO_CHK:     0x20,   // ALL: clear to enable I/O channel check, set to disable
+        CLK_KBD:            0x40,   // ALL: clear to force keyboard clock low
+        CLEAR_KBD:          0x80    // ALL: clear to enable keyboard scan codes (MODEL_5150: set to enable SW1 through PPI_A.PORT)
+    };
+
+    static PPI_C = {                // this.bPPIC (port 0x62)
+        PORT:               0x62,   // INPUT (see below)
+        KBD_LATCH:          0x01,   // MODEL_4860 only (set if keyboard data latched)
+        NO_MODEM:           0x02,   // MODEL_4860 only (set if no Internal Model Card installed)
+        NO_DISKETTE:        0x04,   // MODEL_4860 only (set if no Diskette Drive Adapter installed)
+        NO_MEMEXP:          0x08,   // MODEL_4860 only (set if no 64Kb Memory Expansion installed)
+        SW:                 0x0F,   // MODEL_5150: SW2[1-4] or SW2[5], depending on whether PPI_B.ENABLE_SW2 is set or clear; MODEL_5160: SW1[1-4] or SW1[5-8], depending on whether PPI_B.ENABLE_SW_HI is clear or set
+        CASS_DATA_IN:       0x10,   // MODEL_4860 and MODEL_5150
+        TIMER2_OUT:         0x20,   // MODEL_4860 and up (timer 2 output)
+        KBD_DATA:           0x40,   // MODEL_4860 only: data from either the keyboard cable or the IR receiver
+        NO_KBD_CABLE:       0x80,   // MODEL_4860 only: (set if keyboard cable not connected)
+        IO_CHANNEL_CHK:     0x40,   // used by NMI handler to detect I/O channel errors
+        RW_PARITY_CHK:      0x80    // used by NMI handler to detect R/W memory parity errors
+    };
+
+    static PPI_CTRL = {             // this.bPPICtrl (port 0x63)
+        PORT:               0x63,   // OUTPUT: initialized to 0x99, defining PPI_A and PPI_C as INPUT and PPI_B as OUTPUT
+        A_IN:               0x10,
+        B_IN:               0x02,
+        C_IN_LO:            0x01,
+        C_IN_HI:            0x08,
+        B_MODE:             0x04,
+        A_MODE:             0x60
+    };
+
+    /**
+     * 8041 Keyboard Controller I/O ports (MODEL_ATT_6300)
+     *
+     * The AT&T 6300 uses an 8041 for its Keyboard Controller, which has the following ports:
+     *
+     *      Port    Description
+     *      ----    -----------
+     *      0x60    Keyboard Scan Code (input)
+     *      0x61    Keyboard Control Port (output)
+     *      0x64    Keyboard Status Port (input)
+     *
+     * And the Keyboard Control Port (0x61) has the following bit definitions:
+     *
+     *      0x01    Speaker gate to 8253 (counter 2)
+     *      0x02    Speaker data
+     *      0x0C    Not used
+     *      0x10    RAM Parity (NMI) Enable
+     *      0x20    I/O Channel (NMI) Enable
+     *      0x40    Keyboard Clock Reset
+     *      0x80    Reset Interrupt Pending
+     */
+
+    /**
+     * 8042 Keyboard Controller I/O ports (MODEL_5170)
+     *
+     * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI_A, although the BIOS also refers to it
+     * as "PORT_A: 8042 KEYBOARD SCAN/DIAG OUTPUTS").  This is the 8042's output buffer and should be read only when
+     * C8042.STATUS.OUTBUFF_FULL is set.
+     *
+     * Similarly, port 0x61 is designated C8042.RWREG rather than PPI_B; the BIOS also refers to it as "PORT_B: 8042
+     * READ WRITE REGISTER", but it is not otherwise discussed in the MODEL_5170 TechRef's 8042 documentation.
+     *
+     * There are brief references to bits 0 and 1 (C8042.RWREG.CLK_TIMER2 and C8042.RWREG.SPK_TIMER2), and the BIOS sets
+     * bits 2-7 to "DISABLE PARITY CHECKERS" (principally C8042.RWREG.DISABLE_NMI, which are bits 2 and 3); why the BIOS
+     * also sets bits 4-7 (or if those bits are even settable) is unclear, since it uses 11111100b rather than defined
+     * constants.
+     *
+     * The bottom line: on a MODEL_5170, port 0x61 is still used for speaker control and parity checking, so we use
+     * the same register (bPPIB) but install different I/O handlers.  It's also bi-directional: at one point, the BIOS
+     * reads C8042.RWREG.REFRESH_BIT (bit 4) to verify that it's alternating.
+     *
+     * PPI_C and PPI_CTRL don't seem to be documented or used by the MODEL_5170 BIOS, so I'm assuming they're obsolete.
+     *
+     * NOTE: For more information on the 8042 Controller, including information on undocumented commands, refer to the
+     * documents in /devices/pc/keyboard, as well as the following websites:
+     *
+     *      http://halicery.com/8042/8042_INTERN_TXT.htm
+     *      http://www.os2museum.com/wp/ibm-pcat-8042-keyboard-controller-commands/
+     */
+    static C8042 = {
+        DATA: {                     // this.b8042OutBuff (PPI_A on previous models, still referred to as "PORT A" by the MODEL_5170 BIOS)
+            PORT:           0x60,
+            CMD: {                  // this.b8042CmdData (C8042.DATA.CMD "data bytes" written to port 0x60, after writing a C8042.CMD byte to port 0x64)
+                INT_ENABLE: 0x01,   // generate an interrupt when the controller places data in the output buffer
+                SYS_FLAG:   0x04,   // this value is propagated to ChipSet.C8042.STATUS.SYS_FLAG
+                NO_INHIBIT: 0x08,   // disable inhibit function
+                NO_CLOCK:   0x10,   // disable keyboard by driving "clock" line low
+                PC_MODE:    0x20,
+                PC_COMPAT:  0x40    // generate IBM PC-compatible scan codes
+            },
+            SELF_TEST: {            // result of ChipSet.C8042.CMD.SELF_TEST command (0xAA)
+                OK:         0x55
+            },
+            INTF_TEST: {            // result of ChipSet.C8042.CMD.INTF_TEST command (0xAB)
+                OK:         0x00,   // no error
+                CLOCK_LO:   0x01,   // keyboard clock line stuck low
+                CLOCK_HI:   0x02,   // keyboard clock line stuck high
+                DATA_LO:    0x03,   // keyboard data line stuck low
+                DATA_HI:    0x04    // keyboard data line stuck high
+            }
+        },
+        INPORT: {                   // this.b8042InPort
+            COMPAQ_50MHZ:   0x01,   // 50Mhz system clock enabled (0=48Mhz); see COMPAQ 386/25 TechRef p2-106
+            UNDEFINED:      0x02,   // undefined
+            COMPAQ_NO80387: 0x04,   // 80387 coprocessor NOT installed; see COMPAQ 386/25 TechRef p2-106
+            COMPAQ_NOWEITEK:0x08,   // Weitek coprocessor NOT installed; see COMPAQ 386/25 TechRef p2-106
+            ENABLE_256KB:   0x10,   // enable 2nd 256Kb of system board RAM
+            COMPAQ_HISPEED: 0x10,   // high-speed enabled (0=AUTO, 1=HIGH); see COMPAQ 386/25 TechRef p2-106
+            MFG_OFF:        0x20,   // manufacturing jumper not installed
+            COMPAQ_DIP5OFF: 0x20,   // system board DIP switch #5 OFF (0=ON); see COMPAQ 386/25 TechRef p2-106
+            MONO:           0x40,   // monochrome monitor is primary display
+            COMPAQ_NONDUAL: 0x40,   // COMPAQ Dual-Mode monitor NOT installed; see COMPAQ 386/25 TechRef p2-106
+            KBD_UNLOCKED:   0x80    // keyboard not inhibited (in COMPAQ parlance: security lock is unlocked)
+        },
+        OUTPORT: {                  // this.b8042OutPort
+            NO_RESET:       0x01,   // set by default
+            A20_ON:         0x02,   // set by default
+            COMPAQ_SLOWD:   0x08,   // SL0WD* NOT asserted (refer to timer 2, counter 2); see COMPAQ 386/25 TechRef p2-105
+            OUTBUFF_FULL:   0x10,   // output buffer full
+            INBUFF_EMPTY:   0x20,   // input buffer empty
+            KBD_CLOCK:      0x40,   // keyboard clock (output)
+            KBD_DATA:       0x80    // keyboard data (output)
+        },
+        TESTPORT: {                 // generated "on the fly"
+            KBD_CLOCK:      0x01,   // keyboard clock (input)
+            KBD_DATA:       0x02    // keyboard data (input)
+        },
+        RWREG: {                    // this.bPPIB (since CLK_TIMER2 and SPK_TIMER2 are in both PPI_B and RWREG)
+            PORT:           0x61,
+            CLK_TIMER2:     0x01,   // set to enable clock to TIMER2 (R/W)
+            SPK_TIMER2:     0x02,   // set to connect output of TIMER2 to speaker (R/W)
+            COMPAQ_FSNMI:   0x04,   // set to disable RAM/FS NMI (R/W, DESKPRO386)
+            COMPAQ_IONMI:   0x08,   // set to disable IOCHK NMI (R/W, DESKPRO386)
+            DISABLE_NMI:    0x0C,   // set to disable IOCHK and RAM/FS NMI, clear to enable (R/W)
+            REFRESH_BIT:    0x10,   // 0 if RAM refresh occurring, 1 if RAM not in refresh cycle (R/O)
+            OUT_TIMER2:     0x20,   // state of TIMER2 output signal (R/O, DESKPRO386)
+            IOCHK_NMI:      0x40,   // IOCHK NMI (R/O); to reset, pulse bit 3 (0x08)
+            RAMFS_NMI:      0x80,   // RAM/FS (parity or fail-safe) NMI (R/O); to reset, pulse bit 2 (0x04)
+            NMI_ERROR:      0xC0
+        },
+        CMD: {                      // this.b8042InBuff (on write to port 0x64, interpret this as a CMD)
+            PORT:           0x64,
+            READ_CMD:       0x20,   // sends the current CMD byte (this.b8042CmdData) to C8042.DATA.PORT
+            WRITE_CMD:      0x60,   // followed by a command byte written to C8042.DATA.PORT (see C8042.DATA.CMD)
+            COMPAQ_SLOWD:   0xA3,   // enable system slow down; see COMPAQ 386/25 TechRef p2-111
+            COMPAQ_TOGGLE:  0xA4,   // toggle speed-control bit; see COMPAQ 386/25 TechRef p2-111
+            COMPAQ_SREAD2:  0xA5,   // special read of "port 2"; see COMPAQ 386/25 TechRef p2-111
+            SELF_TEST:      0xAA,   // self-test (C8042.DATA.SELF_TEST.OK is placed in the output buffer if no errors)
+            INTF_TEST:      0xAB,   // interface test
+            DIAG_DUMP:      0xAC,   // diagnostic dump
+            DISABLE_KBD:    0xAD,   // disable keyboard
+            ENABLE_KBD:     0xAE,   // enable keyboard
+            READ_INPORT:    0xC0,   // read input port and place data in output buffer (use only if output buffer empty)
+            READ_OUTPORT:   0xD0,   // read output port and place data in output buffer (use only if output buffer empty)
+            WRITE_OUTPORT:  0xD1,   // next byte written to C8042.DATA.PORT (port 0x60) is placed in the output port (see C8042.OUTPORT)
+            READ_TEST:      0xE0,
+            PULSE_OUTPORT:  0xF0    // this is the 1st of 16 commands (0xF0-0xFF) that pulse bits 0-3 of the output port
+        },
+        STATUS: {                   // this.b8042Status (on read from port 0x64)
+            PORT:           0x64,
+            OUTBUFF_FULL:   0x01,
+            INBUFF_FULL:    0x02,   // set if the controller has received but not yet read data from the input buffer (not normally set)
+            SYS_FLAG:       0x04,
+            CMD_FLAG:       0x08,   // set on write to C8042.CMD (port 0x64), clear on write to C8042.DATA (port 0x60)
+            NO_INHIBIT:     0x10,   // (in COMPAQ parlance: security lock not engaged)
+            XMT_TIMEOUT:    0x20,
+            RCV_TIMEOUT:    0x40,
+            PARITY_ERR:     0x80,   // last byte of data received had EVEN parity (ODD parity is normally expected)
+            OUTBUFF_DELAY:  0x100
+        }
+    };
+
+    /**
+     * MC146818A RTC/CMOS Ports (MODEL_5170)
+     *
+     * Write a CMOS address to ChipSet.CMOS.ADDR.PORT, then read/write data from/to ChipSet.CMOS.DATA.PORT.
+     *
+     * The ADDR port also controls NMI: write an address with bit 7 clear to enable NMI or set to disable NMI.
+     */
+    static CMOS = {
+        ADDR: {                     // this.bCMOSAddr
+            PORT:           0x70,
+            RTC_SEC:        0x00,
+            RTC_SEC_ALARM:  0x01,
+            RTC_MIN:        0x02,
+            RTC_MIN_ALARM:  0x03,
+            RTC_HOUR:       0x04,
+            RTC_HOUR_ALARM: 0x05,
+            RTC_WEEK_DAY:   0x06,
+            RTC_MONTH_DAY:  0x07,
+            RTC_MONTH:      0x08,
+            RTC_YEAR:       0x09,   // 2-digit year (eg, 0x82 for 1982 if BCD mode)
+            STATUSA:        0x0A,
+            STATUSB:        0x0B,
+            STATUSC:        0x0C,
+            STATUSD:        0x0D,
+            DIAG:           0x0E,
+            SHUTDOWN:       0x0F,
+            FDRIVE:         0x10,
+            HDRIVE:         0x12,   // bits 4-7 contain type of drive 0, bits 0-3 contain type of drive 1 (type 0 means none)
+            EQUIP:          0x14,
+            BASEMEM_LO:     0x15,
+            BASEMEM_HI:     0x16,   // the BASEMEM values indicate the total Kb of base memory, up to 0x280 (640Kb)
+            EXTMEM_LO:      0x17,
+            EXTMEM_HI:      0x18,   // the EXTMEM values indicate the total Kb of extended memory, up to 0x3C00 (15Mb)
+            EXTHDRIVE0:     0x19,   // if bits 4-7 of HDRIVE contains 15, then the type of drive 0 is stored here (16-255)
+            EXTHDRIVE1:     0x1A,   // if bits 0-3 of HDRIVE contains 15, then the type of drive 1 is stored here (16-255)
+            CHKSUM_HI:      0x2E,
+            CHKSUM_LO:      0x2F,   // CMOS bytes included in the checksum calculation: 0x10-0x2D
+            EXTMEM2_LO:     0x30,
+            EXTMEM2_HI:     0x31,
+            CENTURY_DATE:   0x32,   // 2-digit century value in BCD (eg, 0x19 for 20th century, 0x20 for 21st century)
+            BOOT_INFO:      0x33,   // 0x80 if 128Kb expansion memory installed, 0x40 if Setup Utility wants an initial setup message
+            MASK:           0x3F,
+            TOTAL:          0x40,
+            NMI_DISABLE:    0x80
+        },
+        DATA: {                     // this.abCMOSData
+            PORT:           0x71
+        },
+        STATUSA: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSA]
+            UIP:            0x80,   // bit 7: 1 indicates Update-In-Progress, 0 indicates date/time ready to read
+            DV:             0x70,   // bits 6-4 (DV2-DV0) are programmed to 010 to select a 32.768Khz time base
+            RS:             0x0F    // bits 3-0 (RS3-RS0) are programmed to 0110 to select a 976.562us interrupt rate
+        },
+        STATUSB: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSB]
+            SET:            0x80,   // bit 7: 1 to set any/all of the 14 time-bytes
+            PIE:            0x40,   // bit 6: 1 for Periodic Interrupt Enable
+            AIE:            0x20,   // bit 5: 1 for Alarm Interrupt Enable
+            UIE:            0x10,   // bit 4: 1 for Update Interrupt Enable
+            SQWE:           0x08,   // bit 3: 1 for Square Wave Enabled (as set by the STATUSA rate selection bits)
+            BINARY:         0x04,   // bit 2: 1 for binary Date Mode, 0 for BCD Date Mode
+            HOUR24:         0x02,   // bit 1: 1 for 24-hour mode, 0 for 12-hour mode
+            DST:            0x01    // bit 0: 1 for Daylight Savings Time enabled
+        },
+        STATUSC: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSC]
+            IRQF:           0x80,   // bit 7: 1 indicates one or more of the following bits (PF, AF, UF) are set
+            PF:             0x40,   // bit 6: 1 indicates Periodic Interrupt
+            AF:             0x20,   // bit 5: 1 indicates Alarm Interrupt
+            UF:             0x10,   // bit 4: 1 indicates Update Interrupt
+            RESERVED:       0x0F
+        },
+        STATUSD: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSD]
+            VRB:            0x80,   // bit 7: 1 indicates Valid RAM Bit (0 implies power was and/or is lost)
+            RESERVED:       0x7F
+        },
+        DIAG: {                     // abCMOSData[ChipSet.CMOS.ADDR.DIAG]
+            RTCFAIL:        0x80,   // bit 7: 1 indicates RTC lost power
+            CHKSUMFAIL:     0x40,   // bit 6: 1 indicates bad CMOS checksum
+            CONFIGFAIL:     0x20,   // bit 5: 1 indicates bad CMOS configuration info
+            MEMSIZEFAIL:    0x10,   // bit 4: 1 indicates memory size miscompare
+            HDRIVEFAIL:     0x08,   // bit 3: 1 indicates hard drive controller or drive init failure
+            TIMEFAIL:       0x04,   // bit 2: 1 indicates time failure
+            RESERVED:       0x03
+        },
+        FDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.FDRIVE]
+            D0_MASK:        0xF0,   // Drive 0 type in high nibble
+            D1_MASK:        0x0F,   // Drive 1 type in lower nibble
+            NONE:           0,      // no drive
+            /**
+             * There's at least one floppy drive type that IBM didn't bother defining a CMOS drive type for:
+             * single-sided drives that were only capable of storing 160Kb (or 180Kb when using 9 sectors/track).
+             * So, as you can see in getDIPFloppyDriveType(), we lump all standard diskette capacities <= 360Kb
+             * into the FD360 bucket.
+             */
+            FD360:          1,      // 5.25-inch double-sided double-density (DSDD 48TPI) drive: 40 tracks, 9 sectors/track, 360Kb max
+            FD1200:         2,      // 5.25-inch double-sided high-density (DSHD 96TPI) drive: 80 tracks, 15 sectors/track, 1200Kb max
+            FD720:          3,      // 3.5-inch drive capable of storing 80 tracks and up to 9 sectors/track, 720Kb max
+            FD1440:         4       // 3.5-inch drive capable of storing 80 tracks and up to 18 sectors/track, 1440Kb max
+        },
+        /**
+         * HDRIVE types are defined by table in the HDC component, which uses setCMOSDriveType() to update the CMOS
+         */
+        HDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.HDRIVE]
+            D0_MASK:        0xF0,   // Drive 0 type in high nibble
+            D1_MASK:        0x0F    // Drive 1 type in lower nibble
+        },
+        /**
+         * The CMOS equipment flags use the same format as the older PPI equipment flags
+         */
+        EQUIP: {                    // abCMOSData[ChipSet.CMOS.ADDR.EQUIP]
+            MONITOR:        ChipSet.PPI_SW.MONITOR,         // PPI_SW.MONITOR.MASK == 0x30
+            FPU:            ChipSet.PPI_SW.FPU,             // PPI_SW.FPU == 0x02
+            FDRIVE:         ChipSet.PPI_SW.FDRIVE           // PPI_SW.FDRIVE.IPL == 0x01 and PPI_SW.FDRIVE.MASK = 0xC0
+        }
+    };
+
+    /**
+     * DMA Page Registers
+     *
+     * The MODEL_5170 TechRef lists 0x80-0x9F as the range for DMA page registers, but that may be a bit
+     * overbroad.  There are a total of 8 (7 usable) DMA channels on the MODEL_5170, each of which has the
+     * following assigned DMA page registers:
+     *
+     *      Channel #   Page Reg
+     *      ---------   --------
+     *          0         0x87
+     *          1         0x83
+     *          2         0x81
+     *          3         0x82
+     *          4         0x8F (not usable; the 5170 TechRef refers to this as the "Refresh" page register)
+     *          5         0x8B
+     *          6         0x89
+     *          7         0x8A
+     *
+     * That leaves 0x80, 0x84, 0x85, 0x86, 0x88, 0x8C, 0x8D and 0x8E unaccounted for in the range 0x80-0x8F.
+     * (I'm saving the question of what, if anything, is available in the range 0x90-0x9F for another day.)
+     *
+     * As for port 0x80, the TechRef says:
+     *
+     *      "I/O address hex 080 is used as a diagnostic-checkpoint port or register.
+     *      This port corresponds to a read/write register in the DMA page register (74LS612)."
+     *
+     * so I used to have dedicated handlers and storage (bMFGData) for the register at port 0x80, but I've since
+     * appended it to abDMAPageSpare, an 8-element array that captures all I/O to the 8 unassigned (aka "spare")
+     * DMA page registers.  The 5170 BIOS uses 0x80 as a "checkpoint" register, and the DESKPRO386 uses 0x84 in a
+     * similar fashion.  The 5170 also contains "MFG_TST" code that uses other unassigned DMA page registers as
+     * scratch registers, which come in handy when RAM hasn't been tested/initialized yet.
+     *
+     * Here's our mapping of entries in the abDMAPageSpare array to the unassigned ("spare") DMA page registers:
+     *
+     *      Index #     Page Reg
+     *      --------    --------
+     *          0         0x84
+     *          1         0x85
+     *          2         0x86
+     *          3         0x88
+     *          4         0x8C
+     *          5         0x8D
+     *          6         0x8E
+     *          7         0x80
+     *
+     * The only reason port 0x80 is out of sequence (ie, at the end of the array, at index 7 instead of index 0) is
+     * because it was added the array later, and the entire array gets written to our save/restore data structures, so
+     * reordering the elements would be a bad idea.
+     */
+
+    /**
+     * NMI Mask Register (port 0xA0)
+     *
+     * On the MODEL_5150 and MODEL_5160, this is a write-only register, and the only valid bit is ENABLE.
+     *
+     * On the MODEL_4860, this is a read-write register; the following bit definitions apply to writes, whereas
+     * reads are defined as merely clearing the PCjr's keyboard NMI latch (which we maintain here in bit 0).
+     */
+    static NMI = {                  // this.bNMI
+        PORT:               0xA0,   //
+        ENABLE:             0x80,   // enables NMI
+        IRTEST:             0x40,   // enables 8253 timer 2 output into an IR diode on the IR receiver board
+        SELCLK1:            0x20,   // selects timer 0 output to be used as CLK input to timer 1
+        DISHRQ:             0x10,   // not implemented on the system board; for use with external bus-master devices
+        KBD_LATCH:          0x01,   // keyboard latch (we maintain it here for convenience; it gets propagated to PPI_C bit 0)
+        RESET:              0x00    // default value on reset (TODO: Is NMI really disabled by default on reset?)
+    };
+
+    /**
+     * FPU Coprocessor Control Registers (MODEL_5170)
+     */
+    static FPU = {                  // TODO: Define a variable for this?
+        PORT_CLEAR:         0xF0,   // clear the FPU's "busy" state
+        PORT_RESET:         0xF1    // reset the FPU
+    };
+
+    /**
+     * Switches Overview
+     * -----------------
+     *
+     * The conventions used for the sw1 and sw2 strings are that the left-most character represents DIP switch [1],
+     * the right-most character represents DIP switch [8], and "1" means the DIP switch is ON and "0" means it is OFF.
+     *
+     * Internally, we convert the above strings into binary values that the 8255A PPI returns, where DIP switch [1]
+     * is bit 0 and DIP switch [8] is bit 7, and 0 indicates the switch is ON and 1 indicates it is OFF.
+     *
+     * For reference, here's how the SW1 and SW2 switches correspond to the internal 8255A PPI bit values:
+     *
+     *      SW1[1]    (bit 0)     "0xxxxxxx" (1):  IPL,  "1xxxxxxx" (0):  No IPL
+     *      SW1[2]    (bit 1)     reserved on the 5150; OFF (1) if FPU installed in a 5160
+     *      SW1[3,4]  (bits 3-2)  "xx11xxxx" (00): 16Kb, "xx01xxxx" (10): 32Kb,  "xx10xxxx" (01): 48Kb,  "xx00xxxx" (11): 64Kb
+     *      SW1[5,6]  (bits 5-4)  "xxxx11xx" (00): none, "xxxx01xx" (10): tv,    "xxxx10xx" (01): color, "xxxx00xx" (11): mono
+     *      SW1[7,8]  (bits 7-6)  "xxxxxx11" (00): 1 FD, "xxxxxx01" (10): 2 FD,  "xxxxxx10" (01): 3 FD,  "xxxxxx00" (11): 4 FD
+     *
+     * Note: FD refers to floppy drive, and IPL refers to an "Initial Program Load" floppy drive.
+     *
+     *      SW2[1-5]    (bits 4-0)  "NNNxxxxx": number of 32Kb blocks of I/O expansion RAM present
+     *
+     * For example, sw1="01110011" indicates that all SW1 DIP switches are ON, except for SW1[1], SW1[5] and SW1[6],
+     * which are OFF.  Internally, the order of these bits must reversed (to 11001110) and then inverted (to 00110001)
+     * to yield the value that the 8255A PPI returns.  Reading the final value right-to-left, 00110001 indicates an
+     * IPL floppy drive, 1X of RAM (where X is 16Kb on a MODEL_5150 and 64Kb on a MODEL_5160), MDA, and 1 floppy drive.
+     *
+     * WARNING: It is possible to set SW1 to indicate more memory than the RAM component has been configured to provide.
+     * This is a configuration error which will cause the machine to crash after reporting a "201" error code (memory
+     * test failure), which is presumably what a real machine would do if it was similarly misconfigured.  Surprisingly,
+     * the BIOS forges ahead, setting SP to the top of the memory range indicated by SW1 (via INT 0x12), but the lack of
+     * a valid stack causes the system to crash after the next IRET.  The BIOS should have either halted or modified
+     * the actual memory size to match the results of the memory test.
+     *
+     * MODEL 5150 Switches
+     * -------------------
+     *
+     * PPI_SW bits are exposed via port PPI_A.
+     *
+     * MODEL 5160 Switches
+     * ------------------------
+     *
+     * PPI_SW bits 0-3 are exposed via PPI_C.SW if PPI_B.ENABLE_SW_HI is clear; bits 4-7 if PPI_B.ENABLE_SW_HI is set.
+     *
+     * AT&T 6300 Switches
+     * ------------------
+     *
+     * Based on ATT_PC_6300_Service_Manual.pdf, there are two 8-switch blocks, DIPSW-0 and DIPSW-1, where:
+     *
+     *      DIPSW-0[1-4] Total RAM
+     *      DIPSW-0[5] - ON if 8087 not installed, OFF if installed
+     *      DIPSW-0[6] - ON if 8250 ACE serial interface present, OFF if Z-8530 SCC interface present
+     *      DIPSW-0[7] - Not used
+     *      DIPSW-0[8] - Type of EPROM chip for ROM 1.21 or lower, or presence of RAM in bank 1 for ROM 1.43 or higher
+     *
+     * and:
+     *
+     *      DIPSW-1[1] - Floppy Type (ON for 48TPI, OFF for 96TPI)
+     *      DIPSW-1[2] - Floppy Speed (ON for slow startup, OFF for fast startup)
+     *      DIPSW-1[3] - HDU ROM (ON for indigenous, OFF for external)
+     *      DIPSW-1[4] - Not used (ROM 1.21 or lower) or Scroll Speed (ROM 1.43 or higher: ON for fast, OFF for slow)
+     *      DIPSW-1[5-6] - Display Type (11=EGA or none, 01=color 40x25, 10=color 80x25, 00=monochrome 80x25)
+     *      DIPSW-1[7-8] - Number of Floppy Drives (11=one, 01=two, 10=three, 00=four)
+     *
+     * For AT&T 6300 ROM 1.43 and up, DIPSW-0 supports the following RAM combinations:
+     *
+     *      0111xxx1: 128Kb on motherboard
+     *      1011xxx0: 256Kb on motherboard
+     *      1101xxx0: 256Kb on motherboard, 256Kb on expansion board (512Kb total)
+     *      1110xxx1: 512Kb on motherboard
+     *      0101xxx0: 256Kb on motherboard, 384Kb on expansion board (640Kb total)
+     *      0100xxx0: 640Kb on motherboard (128Kb bank 0, 512Kb bank 1)
+     *      0110xxx0: 640Kb on motherboard (512Kb bank 0, 128Kb bank 1)
+     *
+     * Inspection of the AT&T 6300 Plus ROM BIOS reveals that DIPSW-0[1-8] are obtained from bits 0-7
+     * of port 0x66 ("sys_conf_a") and DIPSW-1[1-8] are obtained from bits 0-7 of port 0x67 ("sys_conf_b").
+     */
+    static PPI_SW = {
+        FDRIVE: {
+            IPL:            0x01,   // MODEL_5150: IPL ("Initial Program Load") floppy drive attached; MODEL_5160: "Loop on POST"
+            ONE:            0x00,   // 1 floppy drive attached (or 0 drives if PPI_SW.FDRIVE_IPL is not set -- MODEL_5150 only)
+            TWO:            0x40,   // 2 floppy drives attached
+            THREE:          0x80,   // 3 floppy drives attached
+            FOUR:           0xC0,   // 4 floppy drives attached
+            MASK:           0xC0,
+            SHIFT:          6
+        },
+        FPU:                0x02,   // MODEL_5150: reserved; MODEL_5160: FPU coprocessor installed
+        MEMORY: {                   // MODEL_5150: "X" is 16Kb; MODEL_5160: "X" is 64Kb
+            X1:             0x00,   // 16Kb or 64Kb
+            X2:             0x04,   // 32Kb or 128Kb
+            X3:             0x08,   // 48Kb or 192Kb
+            X4:             0x0C,   // 64Kb or 256Kb
+            MASK:           0x0C,
+            SHIFT:          2
+        },
+        MONITOR: {
+            TV:             0x10,
+            COLOR:          0x20,
+            MONO:           0x30,
+            MASK:           0x30,
+            SHIFT:          4
+        }
+    };
+
+    /**
+     * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
+     * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
+     * implementations, we now get and set DIP switch values according to SW_TYPE, and rely on the
+     * tables that follow to define which DIP switch(es) correspond to each SW_TYPE.
+     *
+     * Not every model needs its own tables.  The getDIPSwitches() and setDIPSwitches() functions look first
+     * for an *exact* model match, then a "truncated" model match, and failing that, they fall back to the
+     * MODEL_5150 switch definitions.
+     */
+    static SW_TYPE = {
+        FLOPNUM:    1,
+        FLOPTYPE:   2,
+        FPU:        3,
+        MONITOR:    4,
+        LOWMEM:     5,
+        EXPMEM:     6
+    };
+
+    static SW_FLOPPY = {
+        MASK:       0xC0,
+        VALUES: {
+            1:      0x00,
+            2:      0x40,
+            3:      0x80,
+            4:      0xC0
+        },
+        LABEL: "Number of Floppy Drives"
+    };
+
+    static SW_FPU = {
+        MASK:       0x02,
+        VALUES: {
+            0:      0x00,       // 0 means an FPU is NOT installed
+            1:      0x02        // 1 means an FPU is installed
+        },
+        LABEL: "FPU"
+    };
+
+    static SW_MONITOR = {
+        MASK:       0x30,
+        VALUES: {
+            0:      0x00,
+            1:      0x10,
+            2:      0x20,
+            3:      0x30,
+            "none": 0x00,
+            "tv":   0x10,       // aka composite
+            "color":0x20,
+            "cga":  0x20,       // alias for color
+            "mda":  0x30,       // alias for mono
+            "mono": 0x30,
+            "ega":  0x00,
+            "vga":  0x00
+        },
+        LABEL: "Monitor Type"
+    };
+
+    static SW_MEMORY = {
+        MASK:       0x1F,       // technically, this mask should be 0x0F for ROM revisions prior to 5150_REV3, and 0x1F on 5150_REV3
+        VALUES: {
+            0:      0x00,
+            32:     0x01,
+            64:     0x02,
+            96:     0x03,
+            128:    0x04,
+            160:    0x05,
+            192:    0x06,
+            224:    0x07,
+            256:    0x08,
+            288:    0x09,
+            320:    0x0A,
+            352:    0x0B,
+            384:    0x0C,
+            416:    0x0D,
+            448:    0x0E,
+            480:    0x0F,
+            512:    0x10,
+            544:    0x11,
+            576:    0x12
+            /**
+             * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
+             * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
+             * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
+             * this is where we stop.
+             *
+             * TODO: A value larger than 0x12 usually comes from a misconfigured machine (ie, it forgot to leave SW2[5] ON).
+             * To compensate, when getDIPMemorySize() gets null back from its EXPMEM request, perhaps it should try truncating
+             * the DIP switch value.  However, that would introduce a machine-specific hack into a function that's supposed
+             * be machine-independent now.
+             */
+        },
+        LABEL: "Expansion Memory (32Kb Increments)"
+    };
+
+    static DIPSW = {
+        [ChipSet.MODEL_5150]: [
+            {
+                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
+                /**
+                 * Notes on the 8087 Math Coprocessor (FPU)
+                 *
+                 * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
+                 * "MUST BE ON (RESERVED FOR CO-PROCESSOR)" (p. 2-28), suggesting that the math coprocessor wasn't
+                 * quite ready for the initial release of the IBM PC.
+                 *
+                 * The April 1983 TechRef adds a section on the "IBM Personal Computer Math Coprocessor" (p. 1-33)
+                 * and makes it clearer that SW1[2] must be OFF when a math coprocessor is installed, but then it
+                 * muddies the waters in a new appendix of switch tables, where it erroneously claims that SW1[2]
+                 * must be ON when using a coprocessor (p. G-7).
+                 *
+                 * The April 1984 TechRef eliminates the confusion by eliminating the appendix (actually, it was
+                 * simply corrected and moved to the 1984 Guide to Operations; see p. 5-10).  Early magazine articles
+                 * discussing 8087 support also indicated that switch SW1[2] must OFF when a coprocessor is installed.
+                 *
+                 * While the August 1981 TechRef makes almost no mention of coprocessor support, the April 1984 TechRef
+                 * discusses it in a fair bit of detail, including the fact that 8087 exceptions generate an NMI,
+                 * despite Intel's warning in their iAPX 86,88 User's Manual, p. S-27, that "[t]he 8087 should not be
+                 * tied to the CPU's NMI (non-maskable interrupt) line."
+                 */
+                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
+                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x0C,
+                    VALUES: {
+                        16:     0x00,
+                        32:     0x04,
+                        48:     0x08,
+                        64:     0x0C
+                    },
+                    LABEL: "Base Memory (16Kb Increments)"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
+            }
+        ],
+        [ChipSet.MODEL_5160]: [
+            {
+                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
+                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
+                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x0C,
+                    VALUES: {
+                        64:     0x00,
+                        128:    0x04,
+                        192:    0x08,
+                        256:    0x0C
+                    },
+                    LABEL: "Base Memory (64Kb Increments)"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
+            }
+        ],
+        [ChipSet.MODEL_ATT_6300]: [
+            {
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x8F,
+                    VALUES: {
+                        128:    0x01,   // "0111xxx1"
+                        256:    0x82,   // "1011xxx0"
+                        512:    0x08,   // "1110xxx1"
+                        640:    0x8D    // "0100xxx0"
+                    },
+                    LABEL: "Base Memory (128Kb Increments)"
+                },
+                [ChipSet.SW_TYPE.FPU]: {
+                    MASK:       0x10,
+                    VALUES: {
+                        0:      0x00,
+                        1:      0x10
+                    },
+                    LABEL: "FPU"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.FLOPTYPE]: {
+                    MASK:       0x01,
+                    VALUES: {
+                        0:      0x00,
+                        1:      0x01
+                    },
+                    LABEL: "Floppy Type"
+                },
+                [ChipSet.SW_TYPE.FLOPNUM]: ChipSet.SW_FLOPPY,
+                [ChipSet.SW_TYPE.MONITOR]: ChipSet.SW_MONITOR
+            }
+        ]
+    };
+
+    /**
      * ChipSet(parmsChipSet)
      *
      * The ChipSet component has the following component-specific (parmsChipSet) properties:
@@ -41207,6 +42320,11 @@ class ChipSet extends Component {
         let bSwitches;
         this.aDIPSwitches = [];
 
+        this.aDMAControllerInit = [0, null, null, 0, new Array(4), 0];
+        this.aDMAChannelInit = [true, [0,0], [0,0], [0,0], [0,0]];
+        this.aPICInit = [0, new Array(4)];
+        this.aTimerInit = [[0,0], [0,0], [0,0], [0,0]];
+
         /**
          * SW1 describes the number of floppy drives, the amount of base memory, the primary monitor type,
          * and (on the MODEL_5160) whether or not a coprocessor is installed.  If no SW1 settings are provided,
@@ -41231,10 +42349,10 @@ class ChipSet extends Component {
                 aFloppyDrives = JSON.parse(aFloppyDrives);
             }
             if (aFloppyDrives && aFloppyDrives.length) this.aFloppyDrives = aFloppyDrives;
-            this.setDIPSwitches(ChipSet.SWITCH_TYPE.FLOPNUM, this.aFloppyDrives.length);
+            this.setDIPSwitches(ChipSet.SW_TYPE.FLOPNUM, this.aFloppyDrives.length);
 
             let sMonitor = parmsChipSet['monitor'] || (this.model < ChipSet.MODEL_5170? "mono" : "ega");
-            this.setDIPSwitches(ChipSet.SWITCH_TYPE.MONITOR, sMonitor);
+            this.setDIPSwitches(ChipSet.SW_TYPE.MONITOR, sMonitor);
         }
 
         /**
@@ -41319,7 +42437,7 @@ class ChipSet extends Component {
         this.cmp = cmp;
 
         this.fpuActive = null;
-        this.setDIPSwitches(ChipSet.SWITCH_TYPE.FPU, this.cmp.fpu? 1 : 0, true);
+        this.setDIPSwitches(ChipSet.SW_TYPE.FPU, this.cmp.fpu? 1 : 0, true);
 
         this.kbd = cmp.getMachineComponent("Keyboard");
 
@@ -42293,7 +43411,7 @@ class ChipSet extends Component {
                 aChannels: new Array(4)
             };
         }
-        let a = aState && aState.length >= 5? aState : ChipSet.aDMAControllerInit;
+        let a = aState && aState.length >= 5? aState : this.aDMAControllerInit;
         controller.bStatus = a[0];
         controller.bCmd = a[1];
         controller.bReq = a[2];
@@ -42326,7 +43444,7 @@ class ChipSet extends Component {
                 countCurrent: [0,0]
             };
         }
-        let a = aState && aState.length == 8? aState : ChipSet.aDMAChannelInit;
+        let a = aState && aState.length == 8? aState : this.aDMAChannelInit;
         channel.masked = a[0];
         channel.addrInit[0] = a[1][0]; channel.addrInit[1] = a[1][1];
         channel.countInit[0] = a[2][0];  channel.countInit[1] = a[2][1];
@@ -42432,7 +43550,7 @@ class ChipSet extends Component {
                 aICW:   [null,null,null,null]
             };
         }
-        let a = aState && aState.length == 8? aState : ChipSet.aPICInit;
+        let a = aState && aState.length == 8? aState : this.aPICInit;
         pic.port = port;
         pic.nIRQBase = iPIC << 3;
         pic.nDelay = a[0];
@@ -42489,7 +43607,7 @@ class ChipSet extends Component {
                 countLatched: [0,0]
             };
         }
-        let a = aState && aState.length >= 13? aState : ChipSet.aTimerInit;
+        let a = aState && aState.length >= 13? aState : this.aTimerInit;
         timer.countInit[0] = a[0][0]; timer.countInit[1] = a[0][1];
         timer.countStart[0] = a[1][0]; timer.countStart[1] = a[1][1];
         timer.countCurrent[0] = a[2][0]; timer.countCurrent[1] = a[2][1];
@@ -42674,7 +43792,7 @@ class ChipSet extends Component {
      */
     getDIPCoprocessor(fInit)
     {
-        return +this.getDIPSwitches(ChipSet.SWITCH_TYPE.FPU, fInit);
+        return +this.getDIPSwitches(ChipSet.SW_TYPE.FPU, fInit);
     }
 
     /**
@@ -42686,7 +43804,7 @@ class ChipSet extends Component {
      */
     getDIPFloppyDrives(fInit)
     {
-        return +this.getDIPSwitches(ChipSet.SWITCH_TYPE.FLOPNUM, fInit);
+        return +this.getDIPSwitches(ChipSet.SW_TYPE.FLOPNUM, fInit);
     }
 
     /**
@@ -42752,8 +43870,8 @@ class ChipSet extends Component {
      */
     getDIPMemorySize(fInit)
     {
-        let nKBLow = this.getDIPSwitches(ChipSet.SWITCH_TYPE.LOWMEM, fInit);
-        let nKBExp = this.getDIPSwitches(ChipSet.SWITCH_TYPE.EXPMEM, fInit);
+        let nKBLow = this.getDIPSwitches(ChipSet.SW_TYPE.LOWMEM, fInit);
+        let nKBExp = this.getDIPSwitches(ChipSet.SW_TYPE.EXPMEM, fInit);
         return +nKBLow + +nKBExp;
     }
 
@@ -42766,16 +43884,16 @@ class ChipSet extends Component {
      */
     setDIPMemorySize(nKB)
     {
-        let rangeKBLow = this.getDIPSwitchRange(ChipSet.SWITCH_TYPE.LOWMEM);
+        let rangeKBLow = this.getDIPSwitchRange(ChipSet.SW_TYPE.LOWMEM);
         if (nKB <= rangeKBLow[1]) {
-            if (this.setDIPSwitches(ChipSet.SWITCH_TYPE.LOWMEM, nKB) && this.setDIPSwitches(ChipSet.SWITCH_TYPE.EXPMEM, 0)) {
+            if (this.setDIPSwitches(ChipSet.SW_TYPE.LOWMEM, nKB) && this.setDIPSwitches(ChipSet.SW_TYPE.EXPMEM, 0)) {
                 return true;
             }
         }
-        let rangeKBExp = this.getDIPSwitchRange(ChipSet.SWITCH_TYPE.EXPMEM);
+        let rangeKBExp = this.getDIPSwitchRange(ChipSet.SW_TYPE.EXPMEM);
         if (nKB <= rangeKBLow[1] + rangeKBExp[1]) {
             nKB -= rangeKBLow[1];
-            if (this.setDIPSwitches(ChipSet.SWITCH_TYPE.LOWMEM, rangeKBLow[1]) && this.setDIPSwitches(ChipSet.SWITCH_TYPE.EXPMEM, nKB)) {
+            if (this.setDIPSwitches(ChipSet.SW_TYPE.LOWMEM, rangeKBLow[1]) && this.setDIPSwitches(ChipSet.SW_TYPE.EXPMEM, nKB)) {
                 return true;
             }
         }
@@ -42791,7 +43909,7 @@ class ChipSet extends Component {
      */
     getDIPVideoMonitor(fInit)
     {
-        return +this.getDIPSwitches(ChipSet.SWITCH_TYPE.MONITOR, fInit);
+        return +this.getDIPSwitches(ChipSet.SW_TYPE.MONITOR, fInit);
     }
 
     /**
@@ -46145,1303 +47263,193 @@ class ChipSet extends Component {
             chipset.updateDIPSwitchDescriptions();
         }
     }
-}
 
-/**
- * Ports Overview
- * --------------
- *
- * This module provides support for many of the following components (except where a separate component is noted).
- * This list is taken from p.1-8 ("System Unit") of the IBM 5160 (PC XT) Technical Reference Manual (as revised
- * April 1983), only because I didn't see a similar listing in the original 5150 Technical Reference.
- *
- *      Port(s)         Description
- *      -------         -----------
- *      000-00F         DMA Chip 8237A-5                                [see below]
- *      020-021         Interrupt 8259A                                 [see below]
- *      040-043         Timer 8253-5                                    [see below]
- *      060-063         PPI 8255A-5                                     [see below]
- *      080-083         DMA Page Registers                              [see below]
- *          0Ax [1]     NMI Mask Register                               [see below]
- *          0Cx         Reserved
- *          0Ex         Reserved
- *      200-20F         Game Control
- *      210-217         Expansion Unit
- *      220-24F         Reserved
- *      278-27F         Reserved
- *      2F0-2F7         Reserved
- *      2F8-2FF         Asynchronous Communications (Secondary)         [see the SerialPort component]
- *      300-31F         Prototype Card
- *      320-32F         Hard Drive Controller (XTC)                     [see the HDC component]
- *      378-37F         Printer
- *      380-38C [2]     SDLC Communications
- *      380-389 [2]     Binary Synchronous Communications (Secondary)
- *      3A0-3A9         Binary Synchronous Communications (Primary)
- *      3B0-3BF         IBM Monochrome Display/Printer                  [see the Video component]
- *      3C0-3CF         Reserved
- *      3D0-3DF         Color/Graphics (Motorola 6845)                  [see the Video component]
- *      3EO-3E7         Reserved
- *      3FO-3F7         Floppy Drive Controller                         [see the FDC component]
- *      3F8-3FF         Asynchronous Communications (Primary)           [see the SerialPort component]
- *
- * [1] At power-on time, NMI is masked off, perhaps because models 5150 and 5160 also tie coprocessor
- * (FPU) interrupts to NMI.  Suppressing NMI by default seems odd, because that would also suppress memory
- * parity errors.  TODO: Determine whether "power-on time" refers to the initial power-on state of the
- * NMI Mask Register or the state that the BIOS "POST" (Power-On Self-Test) sets.
- *
- * [2] These devices cannot be used together since their port addresses overlap.
- *
- *      MODEL_5170      Description
- *      ----------      -----------
- *          070 [3]     CMOS Address                                    ChipSet.CMOS.ADDR.PORT
- *          071         CMOS Data                                       ChipSet.CMOS.DATA.PORT
- *          0F0         FPU Coprocessor Clear Busy (output 0x00)
- *          0F1         FPU Coprocessor Reset (output 0x00)
- *      1F0-1F7         Hard Drive Controller (ATC)                     [see the HDC component]
- *
- * [3] Port 0x70 doubles as the NMI Mask Register: output a CMOS address with bit 7 clear to enable NMI
- * or with bit 7 set to disable NMI (apparently the inverse of the older NMI Mask Register at port 0xA0).
- * Also, apparently unlike previous models, the MODEL_5170 POST leaves NMI enabled.  And fortunately, the
- * FPU coprocessor interrupt line is no longer tied to NMI (it uses IRQ 13).
- */
-
-/**
- * Supported model numbers
- *
- * In general, when comparing this.model to "base" model numbers (ie, non-REV numbers), you should use
- * (this.model|0), which truncates the current model number.
- *
- * Note that there were two 5150 motherboard revisions: the "REV A" 16Kb-64Kb motherboard and the
- * "REV B" 64Kb-256Kb motherboard.  There may have been a manufacturing correlation between motherboard
- * revisions ("REV A" and "REV B") and the ROM BIOS revisions shown below, but in general, we can't assume
- * any correlation, because newer ROMs could be installed with either motherboard.
- *
- * I do know that, for "REV A" motherboards, the Apr 1984 5150 TechRef says that "To expand the memory
- * of your system beyond 544K requires your IBM Personal Computer System Unit to have a BIOS ROM module
- * dated 10/27/82 or later."  Which suggests that SW2[5] was not used until the REV3 5150 ROM BIOS.
- *
- * For now, we treat all our MODEL_5150 systems as 16Kb-64Kb motherboards; if you want a 64Kb-256Kb motherboard,
- * then step up to a MODEL_5160 system.  We use a multiplier of 16 for 5150 LOWMEM values, and a multiplier
- * of 64 for 5160 LOWMEM values.
- */
-ChipSet.MODEL_4860              = 4860;     // PCjr
-
-ChipSet.MODEL_5150              = 5150;     // used in reference to the 1st 5150 ROM BIOS, dated Apr 24, 1981
-ChipSet.MODEL_5150_REV2         = 5150.2;   // used in reference to the 2nd 5150 ROM BIOS, dated Oct 19, 1981
-ChipSet.MODEL_5150_REV3         = 5150.3;   // used in reference to the 3rd 5150 ROM BIOS, dated Oct 27, 1982
-ChipSet.MODEL_5150_OTHER        = 5150.9;
-
-ChipSet.MODEL_5160              = 5160;     // used in reference to the 1st 5160 ROM BIOS, dated Nov 08, 1982
-ChipSet.MODEL_5160_REV2         = 5160.2;   // used in reference to the 1st 5160 ROM BIOS, dated Jan 10, 1986
-ChipSet.MODEL_5160_REV3         = 5160.3;   // used in reference to the 1st 5160 ROM BIOS, dated May 09, 1986
-ChipSet.MODEL_5160_OTHER        = 5160.9;
-
-ChipSet.MODEL_5170              = 5170;     // used in reference to the 1st 5170 ROM BIOS, dated Jan 10, 1984
-ChipSet.MODEL_5170_REV2         = 5170.2;   // used in reference to the 2nd 5170 ROM BIOS, dated Jun 10, 1985
-ChipSet.MODEL_5170_REV3         = 5170.3;   // used in reference to the 3rd 5170 ROM BIOS, dated Nov 15, 1985
-ChipSet.MODEL_5170_OTHER        = 5170.9;
-
-/**
- * Assorted non-IBM models (we don't put "IBM" in the IBM models, but non-IBM models should include the company name).
- */
-ChipSet.MODEL_CDP_MPC1600       = 5150.101; // Columbia Data Products MPC 1600 ("Copyright Columbia Data Products 1983, ROM/BIOS Ver 4.34")
-ChipSet.MODEL_COMPAQ_PORTABLE   = 5150.102; // COMPAQ Portable (COMPAQ's first PC)
-
-ChipSet.MODEL_ATT_6300          = 5160.101; // AT&T Personal Computer 6300/Olivetti M24 ("COPYRIGHT (C) OLIVETTI 1984","04/03/86",v1.43)
-ChipSet.MODEL_ZENITH_Z150       = 5160.150; // Zenith Data Systems Z-150 ("08/11/88 (C)ZDS CORP")
-
-ChipSet.MODEL_COMPAQ_DESKPRO386 = 5180;     // COMPAQ DeskPro 386 (COMPAQ's first 80386-based PC); should be > MODEL_5170
-
-/**
- * Last but not least, a complete list of supported model strings, and corresponding internal model numbers.
- */
-ChipSet.MODELS = {
-    "4860":         ChipSet.MODEL_4860,     // IBM PCjr
-    "5150":         ChipSet.MODEL_5150,     // IBM PC
-    "5160":         ChipSet.MODEL_5160,     // IBM PC XT
-    "5170":         ChipSet.MODEL_5170,     // IBM PC AT
-    "att6300":      ChipSet.MODEL_ATT_6300,
-    "mpc1600":      ChipSet.MODEL_CDP_MPC1600,
-    "z150":         ChipSet.MODEL_ZENITH_Z150,
-    "compaq":       ChipSet.MODEL_COMPAQ_PORTABLE,
-    "other":        ChipSet.MODEL_5150_OTHER
-};
-
-if (DESKPRO386) {
-    ChipSet.MODELS["deskpro386"] = ChipSet.MODEL_COMPAQ_DESKPRO386;
-}
-
-ChipSet.CONTROLS = {
-    SW1:    "sw1",
-    SW2:    "sw2",
-    SWDESC: "swdesc"
-};
-
-/**
- * Values returned by ChipSet.getDIPVideoMonitor()
- */
-ChipSet.MONITOR = {
-    NONE:               0,
-    TV:                 1,  // Composite monitor (lower resolution; no support)
-    COLOR:              2,  // Color Display (5153)
-    MONO:               3,  // Monochrome Display (5151)
-    EGACOLOR:           4,  // Enhanced Color Display (5154) in High-Res Mode
-    EGAEMULATION:       6,  // Enhanced Color Display (5154) in Emulation Mode
-    VGACOLOR:           7   // VGA Color Display
-};
-
-/**
- *  8237A DMA Controller (DMAC) I/O ports
- *
- *  MODEL_5150 and up uses DMA channel 0 for memory refresh cycles and channel 2 for the FDC.
- *
- *  MODEL_5160 and up uses DMA channel 3 for HDC transfers (XTC only).
- *
- *  DMA0 refers to the original DMA controller found on all models, and DMA1 refers to the additional
- *  controller found on MODEL_5170 and up; channel 4 on DMA1 is used to "cascade" channels 0-3 from DMA0,
- *  so only channels 5-7 are available on DMA1.
- *
- *  For FDC DMA notes, refer to http://wiki.osdev.org/ISA_DMA
- *  For general DMA notes, refer to http://www.freebsd.org/doc/en/books/developers-handbook/dma.html
- *
- *  TODO: Determine why the MODEL_5150 ROM BIOS sets the DMA channel 1 page register (port 0x83) to zero.
- */
-ChipSet.DMA0 = {
-    INDEX:              0,
-    PORT: {
-        CH0_ADDR:       0x00,   // OUT: starting address        IN: current address
-        CH0_COUNT:      0x01,   // OUT: starting word count     IN: remaining word count
-        CH1_ADDR:       0x02,   // OUT: starting address        IN: current address
-        CH1_COUNT:      0x03,   // OUT: starting word count     IN: remaining word count
-        CH2_ADDR:       0x04,   // OUT: starting address        IN: current address
-        CH2_COUNT:      0x05,   // OUT: starting word count     IN: remaining word count
-        CH3_ADDR:       0x06,   // OUT: starting address        IN: current address
-        CH3_COUNT:      0x07,   // OUT: starting word count     IN: remaining word count
-        CMD_STATUS:     0x08,   // OUT: command register        IN: status register
-        REQUEST:        0x09,
-        MASK:           0x0A,
-        MODE:           0x0B,
-        RESET_FF:       0x0C,   // reset flip-flop
-        MASTER_CLEAR:   0x0D,   // OUT: master clear            IN: temporary register
-        MASK_CLEAR:     0x0E,   // TODO: Provide handlers
-        MASK_ALL:       0x0F,   // TODO: Provide handlers
-        CH2_PAGE:       0x81,   // OUT: DMA channel 2 page register
-        CH3_PAGE:       0x82,   // OUT: DMA channel 3 page register
-        CH1_PAGE:       0x83,   // OUT: DMA channel 1 page register
-        CH0_PAGE:       0x87    // OUT: DMA channel 0 page register (unusable; See "The Inside Out" book, p.246)
-    }
-};
-ChipSet.DMA1 = {
-    INDEX:              1,
-    PORT: {
-        CH6_PAGE:       0x89,   // OUT: DMA channel 6 page register (MODEL_5170)
-        CH7_PAGE:       0x8A,   // OUT: DMA channel 7 page register (MODEL_5170)
-        CH5_PAGE:       0x8B,   // OUT: DMA channel 5 page register (MODEL_5170)
-        CH4_PAGE:       0x8F,   // OUT: DMA channel 4 page register (MODEL_5170; unusable; aka "Refresh" page register?)
-        CH4_ADDR:       0xC0,   // OUT: starting address        IN: current address
-        CH4_COUNT:      0xC2,   // OUT: starting word count     IN: remaining word count
-        CH5_ADDR:       0xC4,   // OUT: starting address        IN: current address
-        CH5_COUNT:      0xC6,   // OUT: starting word count     IN: remaining word count
-        CH6_ADDR:       0xC8,   // OUT: starting address        IN: current address
-        CH6_COUNT:      0xCA,   // OUT: starting word count     IN: remaining word count
-        CH7_ADDR:       0xCC,   // OUT: starting address        IN: current address
-        CH7_COUNT:      0xCE,   // OUT: starting word count     IN: remaining word count
-        CMD_STATUS:     0xD0,   // OUT: command register        IN: status register
-        REQUEST:        0xD2,
-        MASK:           0xD4,
-        MODE:           0xD6,
-        RESET_FF:       0xD8,   // reset flip-flop
-        MASTER_CLEAR:   0xDA,   // master clear
-        MASK_CLEAR:     0xDC,   // TODO: Provide handlers
-        MASK_ALL:       0xDE    // TODO: Provide handlers
-    }
-};
-
-ChipSet.DMA_CMD = {
-    M2M_ENABLE:         0x01,
-    CH0HOLD_ENABLE:     0x02,
-    CTRL_DISABLE:       0x04,
-    COMP_TIMING:        0x08,
-    ROT_PRIORITY:       0x10,
-    EXT_WRITE_SEL:      0x20,
-    DREQ_ACTIVE_LO:     0x40,
-    DACK_ACTIVE_HI:     0x80
-};
-
-ChipSet.DMA_STATUS = {
-    CH0_TC:             0x01,   // Channel 0 has reached Terminal Count (TC)
-    CH1_TC:             0x02,   // Channel 1 has reached Terminal Count (TC)
-    CH2_TC:             0x04,   // Channel 2 has reached Terminal Count (TC)
-    CH3_TC:             0x08,   // Channel 3 has reached Terminal Count (TC)
-    ALL_TC:             0x0f,   // all TC bits are cleared whenever DMA_STATUS is read
-    CH0_REQ:            0x10,   // Channel 0 DMA requested
-    CH1_REQ:            0x20,   // Channel 1 DMA requested
-    CH2_REQ:            0x40,   // Channel 2 DMA requested
-    CH3_REQ:            0x80    // Channel 3 DMA requested
-};
-
-ChipSet.DMA_MASK = {
-    CHANNEL:            0x03,
-    CHANNEL_SET:        0x04
-};
-
-ChipSet.DMA_MODE = {
-    CHANNEL:            0x03,   // bits 0-1 select 1 of 4 possible channels
-    TYPE:               0x0C,   // bits 2-3 select 1 of 3 valid (4 possible) transfer types
-    TYPE_VERIFY:        0x00,   // pseudo transfer (generates addresses, responds to EOP, but nothing is moved)
-    TYPE_WRITE:         0x04,   // write to memory (move data FROM an I/O device; eg, reading a sector from a disk)
-    TYPE_READ:          0x08,   // read from memory (move data TO an I/O device; eg, writing a sector to a disk)
-    AUTOINIT:           0x10,
-    DECREMENT:          0x20,   // clear for INCREMENT
-    MODE:               0xC0,   // bits 6-7 select 1 of 4 possible transfer modes
-    MODE_DEMAND:        0x00,
-    MODE_SINGLE:        0x40,
-    MODE_BLOCK:         0x80,
-    MODE_CASCADE:       0xC0
-};
-
-ChipSet.DMA_REFRESH   = 0x00;   // DMA channel assigned to memory refresh
-ChipSet.DMA_FDC       = 0x02;   // DMA channel assigned to the Floppy Drive Controller (FDC)
-ChipSet.DMA_HDC       = 0x03;   // DMA channel assigned to the Hard Drive Controller (HDC; XTC only)
-
-/**
- * 8259A Programmable Interrupt Controller (PIC) I/O ports
- *
- * Internal registers:
- *
- *      ICW1    Initialization Command Word 1 (sent to port ChipSet.PIC_LO)
- *      ICW2    Initialization Command Word 2 (sent to port ChipSet.PIC_HI)
- *      ICW3    Initialization Command Word 3 (sent to port ChipSet.PIC_HI)
- *      ICW4    Initialization Command Word 4 (sent to port ChipSet.PIC_HI)
- *      IMR     Interrupt Mask Register
- *      IRR     Interrupt Request Register
- *      ISR     Interrupt Service Register
- *      IRLow   (IR having lowest priority; IR+1 will have highest priority; default is 7)
- *
- * Note that ICW2 effectively contains the starting IDT vector number (ie, for IRQ 0),
- * which must be multiplied by 4 to calculate the vector offset, since every vector is 4 bytes long.
- *
- * Also, since the low 3 bits of ICW2 are ignored in 8086/8088 mode (ie, they are effectively
- * treated as zeros), this means that the starting IDT vector can only be a multiple of 8.
- *
- * So, if ICW2 is set to 0x08, the starting vector number (ie, for IRQ 0) will be 0x08, and the
- * 4-byte address for the corresponding ISR will be located at offset 0x20 in the real-mode IDT.
- *
- * ICW4 is typically set to 0x09, indicating 8086 mode, non-automatic EOI, buffered/slave mode.
- *
- * TODO: Determine why the original ROM BIOS chose buffered/slave over buffered/master.
- * Did it simply not matter in pre-AT systems with only one PIC, or am I misreading something?
- *
- * TODO: Consider support for level-triggered PIC interrupts, even though the original IBM PCs
- * (up through MODEL_5170) used only edge-triggered interrupts.
- */
-ChipSet.PIC0 = {                // all models: the "master" PIC
-    INDEX:              0,
-    PORT_LO:            0x20,
-    PORT_HI:            0x21
-};
-
-ChipSet.PIC1 = {                // MODEL_5170 and up: the "slave" PIC
-    INDEX:              1,
-    PORT_LO:            0xA0,
-    PORT_HI:            0xA1
-};
-
-ChipSet.PIC_LO = {              // ChipSet.PIC1.PORT_LO or ChipSet.PIC2.PORT_LO
-    ICW1:               0x10,   // set means ICW1
-    ICW1_ICW4:          0x01,   // ICW4 needed (otherwise ICW4 must be sent)
-    ICW1_SNGL:          0x02,   // single PIC (and therefore no ICW3; otherwise there is another "cascaded" PIC)
-    ICW1_ADI:           0x04,   // call address interval is 4 (otherwise 8; presumably ignored in 8086/8088 mode)
-    ICW1_LTIM:          0x08,   // level-triggered interrupt mode (otherwise edge-triggered mode, which is what PCs use)
-    OCW2:               0x00,   // bit 3 (PIC_LO.OCW3) and bit 4 (ChipSet.PIC_LO.ICW1) are clear in an OCW2 command byte
-    OCW2_IR_LVL:        0x07,
-    OCW2_OP_MASK:       0xE0,   // of the following valid OCW2 operations, the first 4 are EOI commands (all have ChipSet.PIC_LO.OCW2_EOI set)
-    OCW2_EOI:           0x20,   // non-specific EOI (end-of-interrupt)
-    OCW2_EOI_SPEC:      0x60,   // specific EOI
-    OCW2_EOI_ROT:       0xA0,   // rotate on non-specific EOI
-    OCW2_EOI_ROTSPEC:   0xE0,   // rotate on specific EOI
-    OCW2_SET_ROTAUTO:   0x80,   // set rotate in automatic EOI mode
-    OCW2_CLR_ROTAUTO:   0x00,   // clear rotate in automatic EOI mode
-    OCW2_SET_PRI:       0xC0,   // bits 0-2 specify the lowest priority interrupt
-    OCW3:               0x08,   // bit 3 (PIC_LO.OCW3) is set and bit 4 (PIC_LO.ICW1) clear in an OCW3 command byte (bit 7 should be clear, too)
-    OCW3_READ_IRR:      0x02,   // read IRR register
-    OCW3_READ_ISR:      0x03,   // read ISR register
-    OCW3_READ_CMD:      0x03,
-    OCW3_POLL_CMD:      0x04,   // poll
-    OCW3_SMM_RESET:     0x40,   // special mask mode: reset
-    OCW3_SMM_SET:       0x60,   // special mask mode: set
-    OCW3_SMM_CMD:       0x60
-};
-
-ChipSet.PIC_HI = {              // ChipSet.PIC1.PORT_HI or ChipSet.PIC2.PORT_HI
-    ICW2_VECTOR:        0xF8,   // starting vector number (bits 0-2 are effectively treated as zeros in 8086/8088 mode)
-    ICW4_8086:          0x01,
-    ICW4_AUTO_EOI:      0x02,
-    ICW4_MASTER:        0x04,
-    ICW4_BUFFERED:      0x08,
-    ICW4_FULLY_NESTED:  0x10,
-    OCW1_IMR:           0xFF
-};
-
-/**
- * The priorities of IRQs 0-7 are normally high to low, unless the master PIC has been reprogrammed.
- * Also, if a slave PIC is present, the priorities of IRQs 8-15 fall between the priorities of IRQs 1 and 3.
- *
- * As the MODEL_5170 TechRef states:
- *
- *      "Interrupt requests are prioritized, with IRQ9 through IRQ12 and IRQ14 through IRQ15 having the
- *      highest priority (IRQ9 is the highest) and IRQ3 through IRQ7 having the lowest priority (IRQ7 is
- *      the lowest).
- *
- *      Interrupt 13 (IRQ.FPU) is used on the system board and is not available on the I/O channel.
- *      Interrupt 8 (IRQ.RTC) is used for the real-time clock."
- *
- * This priority scheme is a byproduct of IRQ8 through IRQ15 (slave PIC interrupts) being tied to IRQ2 of
- * the master PIC.  As a result, the two other system board interrupts, IRQ0 and IRQ1, continue to have the
- * highest priority, by default.
- */
-ChipSet.IRQ = {
-    TIMER0:             0x00,
-    KBD:                0x01,
-    VID:                0x02,   // EGA vertical retrace (arrives via IRQ 9 on MODEL_5170)
-    SLAVE:              0x02,   // MODEL_5170
-    COM2:               0x03,
-    COM1:               0x04,
-    XTC:                0x05,   // MODEL_5160 uses IRQ 5 for HDC (XTC version)
-    LPT2:               0x05,   // MODEL_5170 uses IRQ 5 for LPT2
-    FDC:                0x06,
-    LPT1:               0x07,
-    RTC:                0x08,   // MODEL_5170
-    IRQ2:               0x09,   // MODEL_5170
-    FPU:                0x0D,   // MODEL_5170
-    ATC1:               0x0E,   // MODEL_5170 uses IRQ 14 for primary ATC controller interrupts
-    ATC2:               0x0F    // MODEL_5170 *can* use IRQ 15 for secondary ATC controller interrupts
-};
-
-/**
- * 8253 Programmable Interval Timer (PIT) I/O ports
- *
- * Although technically, a PIT provides 3 "counters" rather than 3 "timers", we have
- * adopted IBM's TechRef nomenclature, which refers to the PIT's counters as TIMER0,
- * TIMER1, and TIMER2.  For machines with a second PIT (eg, the DeskPro 386), we refer
- * to those additional counters as TIMER3, TIMER4, and TIMER5.
- *
- * In addition, if there's a need to refer to a specific PIT, use PIT0 for the first PIT
- * and PIT1 for the second.  This mirrors how we refer to multiple DMA controllers
- * (eg, DMA0 and DMA1) and multiple PICs (eg, PIC0 and PIC1).
- *
- * This differs from COMPAQ's nomenclature, which used "Timer 1" to refer to the first
- * PIT, and "Timer 2" for the second PIT, and then referred to "Counter 0", "Counter 1",
- * and "Counter 2" within each PIT.
- */
-ChipSet.PIT0 = {
-    PORT:               0x40,
-    INDEX:              0,
-    TIMER0:             0,      // used for time-of-day (prior to MODEL_5170)
-    TIMER1:             1,      // used for memory refresh
-    TIMER2:             2       // used for speaker tone generation
-};
-
-ChipSet.PIT1 = {
-    PORT:               0x48,   // MODEL_COMPAQ_DESKPRO386 only
-    INDEX:              1,
-    TIMER3:             0,      // used for fail-safe clock
-    TIMER4:             1,      // N/A
-    TIMER5:             2       // used for refresher request extend/speed control
-};
-
-ChipSet.PIT_CTRL = {
-    PORT1:              0x43,   // write-only control register (use the Read-Back command to get status)
-    PORT2:              0x4B,   // write-only control register (use the Read-Back command to get status)
-    BCD:                0x01,
-    MODE:               0x0E,
-    MODE0:              0x00,   // interrupt on Terminal Count (TC)
-    MODE1:              0x02,   // programmable one-shot
-    MODE2:              0x04,   // rate generator
-    MODE3:              0x06,   // square wave generator
-    MODE4:              0x08,   // software-triggered strobe
-    MODE5:              0x0A,   // hardware-triggered strobe
-    RW:                 0x30,
-    RW_LATCH:           0x00,
-    RW_LSB:             0x10,
-    RW_MSB:             0x20,
-    RW_BOTH:            0x30,
-    SC:                 0xC0,
-    SC_CTR0:            0x00,
-    SC_CTR1:            0x40,
-    SC_CTR2:            0x80,
-    SC_BACK:            0xC0,
-    SC_SHIFT:           6,
-    RB_CTR0:            0x02,
-    RB_CTR1:            0x04,
-    RB_CTR2:            0x08,
-    RB_STATUS:          0x10,   // if this bit is CLEAR, then latch the current status of the selected counter(s)
-    RB_COUNTS:          0x20,   // if this bit is CLEAR, then latch the current count(s) of the selected counter(s)
-    RB_NULL:            0x40,   // bit set in Read-Back status byte if the counter has not been "fully loaded" yet
-    RB_OUT:             0x80    // bit set in Read-Back status byte if fOUT is true
-};
-
-ChipSet.TIMER_TICKS_PER_SEC = 1193181;
-
-/**
- * 8255A Programmable Peripheral Interface (PPI) I/O ports, for Cassette/Speaker/Keyboard/SW1/etc
- *
- * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI_A.PORT and PPI_C.PORT are INPUT ports
- * and PPI_B.PORT is an OUTPUT port.
- *
- * However, the MODEL_5160 ROM BIOS initially writes 0x89 instead, making PPI_A.PORT an OUTPUT port.
- * I'm guessing that's just part of some "diagnostic mode", because all it writes to PPI_A.PORT are a series
- * of "checkpoint" values (ie, 0x01, 0x02, and 0x03) before updating PPI_CTRL.PORT with the usual 0x99.
- */
-ChipSet.PPI_A = {               // this.bPPIA (port 0x60)
-    PORT:               0x60    // INPUT: keyboard scan code (PPI_B.CLEAR_KBD must be clear)
-};
-
-ChipSet.PPI_B = {               // this.bPPIB (port 0x61)
-    PORT:               0x61,   // OUTPUT (although it has to be treated as INPUT, too; the keyboard interrupt handler reads it, OR's PPI_B.CLEAR_KBD, writes it, and then rewrites the original read value)
-    CLK_TIMER2:         0x01,   // ALL: set to enable clock to TIMER2
-    SPK_TIMER2:         0x02,   // ALL: set to connect output of TIMER2 to speaker (MODEL_5150: clear for cassette)
-    ENABLE_SW2:         0x04,   // MODEL_5150: set to enable SW2[1-4] through PPI_C.PORT, clear to enable SW2[5]; MODEL_5160: unused (there is no SW2 switch block on the MODEL_5160 motherboard)
-    CASS_MOTOR_OFF:     0x08,   // MODEL_5150: cassette motor off
-    ENABLE_SW_HI:       0x08,   // MODEL_5160: clear to read SW1[1-4], set to read SW1[5-8]
-    DISABLE_RW_MEM:     0x10,   // ALL: clear to enable RAM parity check, set to disable
-    DISABLE_IO_CHK:     0x20,   // ALL: clear to enable I/O channel check, set to disable
-    CLK_KBD:            0x40,   // ALL: clear to force keyboard clock low
-    CLEAR_KBD:          0x80    // ALL: clear to enable keyboard scan codes (MODEL_5150: set to enable SW1 through PPI_A.PORT)
-};
-
-ChipSet.PPI_C = {               // this.bPPIC (port 0x62)
-    PORT:               0x62,   // INPUT (see below)
-    KBD_LATCH:          0x01,   // MODEL_4860 only (set if keyboard data latched)
-    NO_MODEM:           0x02,   // MODEL_4860 only (set if no Internal Model Card installed)
-    NO_DISKETTE:        0x04,   // MODEL_4860 only (set if no Diskette Drive Adapter installed)
-    NO_MEMEXP:          0x08,   // MODEL_4860 only (set if no 64Kb Memory Expansion installed)
-    SW:                 0x0F,   // MODEL_5150: SW2[1-4] or SW2[5], depending on whether PPI_B.ENABLE_SW2 is set or clear; MODEL_5160: SW1[1-4] or SW1[5-8], depending on whether PPI_B.ENABLE_SW_HI is clear or set
-    CASS_DATA_IN:       0x10,   // MODEL_4860 and MODEL_5150
-    TIMER2_OUT:         0x20,   // MODEL_4860 and up (timer 2 output)
-    KBD_DATA:           0x40,   // MODEL_4860 only: data from either the keyboard cable or the IR receiver
-    NO_KBD_CABLE:       0x80,   // MODEL_4860 only: (set if keyboard cable not connected)
-    IO_CHANNEL_CHK:     0x40,   // used by NMI handler to detect I/O channel errors
-    RW_PARITY_CHK:      0x80    // used by NMI handler to detect R/W memory parity errors
-};
-
-ChipSet.PPI_CTRL = {            // this.bPPICtrl (port 0x63)
-    PORT:               0x63,   // OUTPUT: initialized to 0x99, defining PPI_A and PPI_C as INPUT and PPI_B as OUTPUT
-    A_IN:               0x10,
-    B_IN:               0x02,
-    C_IN_LO:            0x01,
-    C_IN_HI:            0x08,
-    B_MODE:             0x04,
-    A_MODE:             0x60
-};
-
-/**
- * Switches Overview
- * -----------------
- *
- * The conventions used for the sw1 and sw2 strings are that the left-most character represents DIP switch [1],
- * the right-most character represents DIP switch [8], and "1" means the DIP switch is ON and "0" means it is OFF.
- *
- * Internally, we convert the above strings into binary values that the 8255A PPI returns, where DIP switch [1]
- * is bit 0 and DIP switch [8] is bit 7, and 0 indicates the switch is ON and 1 indicates it is OFF.
- *
- * For reference, here's how the SW1 and SW2 switches correspond to the internal 8255A PPI bit values:
- *
- *      SW1[1]    (bit 0)     "0xxxxxxx" (1):  IPL,  "1xxxxxxx" (0):  No IPL
- *      SW1[2]    (bit 1)     reserved on the 5150; OFF (1) if FPU installed in a 5160
- *      SW1[3,4]  (bits 3-2)  "xx11xxxx" (00): 16Kb, "xx01xxxx" (10): 32Kb,  "xx10xxxx" (01): 48Kb,  "xx00xxxx" (11): 64Kb
- *      SW1[5,6]  (bits 5-4)  "xxxx11xx" (00): none, "xxxx01xx" (10): tv,    "xxxx10xx" (01): color, "xxxx00xx" (11): mono
- *      SW1[7,8]  (bits 7-6)  "xxxxxx11" (00): 1 FD, "xxxxxx01" (10): 2 FD,  "xxxxxx10" (01): 3 FD,  "xxxxxx00" (11): 4 FD
- *
- * Note: FD refers to floppy drive, and IPL refers to an "Initial Program Load" floppy drive.
- *
- *      SW2[1-5]    (bits 4-0)  "NNNxxxxx": number of 32Kb blocks of I/O expansion RAM present
- *
- * For example, sw1="01110011" indicates that all SW1 DIP switches are ON, except for SW1[1], SW1[5] and SW1[6],
- * which are OFF.  Internally, the order of these bits must reversed (to 11001110) and then inverted (to 00110001)
- * to yield the value that the 8255A PPI returns.  Reading the final value right-to-left, 00110001 indicates an
- * IPL floppy drive, 1X of RAM (where X is 16Kb on a MODEL_5150 and 64Kb on a MODEL_5160), MDA, and 1 floppy drive.
- *
- * WARNING: It is possible to set SW1 to indicate more memory than the RAM component has been configured to provide.
- * This is a configuration error which will cause the machine to crash after reporting a "201" error code (memory
- * test failure), which is presumably what a real machine would do if it was similarly misconfigured.  Surprisingly,
- * the BIOS forges ahead, setting SP to the top of the memory range indicated by SW1 (via INT 0x12), but the lack of
- * a valid stack causes the system to crash after the next IRET.  The BIOS should have either halted or modified
- * the actual memory size to match the results of the memory test.
- *
- * MODEL 5150 Switches
- * -------------------
- *
- * PPI_SW bits are exposed via port PPI_A.
- *
- * MODEL 5160 Switches
- * ------------------------
- *
- * PPI_SW bits 0-3 are exposed via PPI_C.SW if PPI_B.ENABLE_SW_HI is clear; bits 4-7 if PPI_B.ENABLE_SW_HI is set.
- *
- * AT&T 6300 Switches
- * ------------------
- *
- * Based on ATT_PC_6300_Service_Manual.pdf, there are two 8-switch blocks, DIPSW-0 and DIPSW-1, where:
- *
- *      DIPSW-0[1-4] Total RAM
- *      DIPSW-0[5] - ON if 8087 not installed, OFF if installed
- *      DIPSW-0[6] - ON if 8250 ACE serial interface present, OFF if Z-8530 SCC interface present
- *      DIPSW-0[7] - Not used
- *      DIPSW-0[8] - Type of EPROM chip for ROM 1.21 or lower, or presence of RAM in bank 1 for ROM 1.43 or higher
- *
- * and:
- *
- *      DIPSW-1[1] - Floppy Type (ON for 48TPI, OFF for 96TPI)
- *      DIPSW-1[2] - Floppy Speed (ON for slow startup, OFF for fast startup)
- *      DIPSW-1[3] - HDU ROM (ON for indigenous, OFF for external)
- *      DIPSW-1[4] - Not used (ROM 1.21 or lower) or Scroll Speed (ROM 1.43 or higher: ON for fast, OFF for slow)
- *      DIPSW-1[5-6] - Display Type (11=EGA or none, 01=color 40x25, 10=color 80x25, 00=monochrome 80x25)
- *      DIPSW-1[7-8] - Number of Floppy Drives (11=one, 01=two, 10=three, 00=four)
- *
- * For AT&T 6300 ROM 1.43 and up, DIPSW-0 supports the following RAM combinations:
- *
- *      0111xxx1: 128Kb on motherboard
- *      1011xxx0: 256Kb on motherboard
- *      1101xxx0: 256Kb on motherboard, 256Kb on expansion board (512Kb total)
- *      1110xxx1: 512Kb on motherboard
- *      0101xxx0: 256Kb on motherboard, 384Kb on expansion board (640Kb total)
- *      0100xxx0: 640Kb on motherboard (128Kb bank 0, 512Kb bank 1)
- *      0110xxx0: 640Kb on motherboard (512Kb bank 0, 128Kb bank 1)
- *
- * Inspection of the AT&T 6300 Plus ROM BIOS reveals that DIPSW-0[1-8] are obtained from bits 0-7
- * of port 0x66 ("sys_conf_a") and DIPSW-1[1-8] are obtained from bits 0-7 of port 0x67 ("sys_conf_b").
- */
-
-ChipSet.PPI_SW = {
-    FDRIVE: {
-        IPL:            0x01,   // MODEL_5150: IPL ("Initial Program Load") floppy drive attached; MODEL_5160: "Loop on POST"
-        ONE:            0x00,   // 1 floppy drive attached (or 0 drives if PPI_SW.FDRIVE_IPL is not set -- MODEL_5150 only)
-        TWO:            0x40,   // 2 floppy drives attached
-        THREE:          0x80,   // 3 floppy drives attached
-        FOUR:           0xC0,   // 4 floppy drives attached
-        MASK:           0xC0,
-        SHIFT:          6
-    },
-    FPU:                0x02,   // MODEL_5150: reserved; MODEL_5160: FPU coprocessor installed
-    MEMORY: {                   // MODEL_5150: "X" is 16Kb; MODEL_5160: "X" is 64Kb
-        X1:             0x00,   // 16Kb or 64Kb
-        X2:             0x04,   // 32Kb or 128Kb
-        X3:             0x08,   // 48Kb or 192Kb
-        X4:             0x0C,   // 64Kb or 256Kb
-        MASK:           0x0C,
-        SHIFT:          2
-    },
-    MONITOR: {
-        TV:             0x10,
-        COLOR:          0x20,
-        MONO:           0x30,
-        MASK:           0x30,
-        SHIFT:          4
-    }
-};
-
-/**
- * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
- * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
- * implementations, we now get and set DIP switch values according to SWITCH_TYPE, and rely on the
- * tables that follow to define which DIP switch(es) correspond to each SWITCH_TYPE.
- *
- * Not every model needs its own tables.  The getDIPSwitches() and setDIPSwitches() functions look first
- * for an *exact* model match, then a "truncated" model match, and failing that, they fall back to the
- * MODEL_5150 switch definitions.
- */
-ChipSet.SWITCH_TYPE = {
-    FLOPNUM:    1,
-    FLOPTYPE:   2,
-    FPU:        3,
-    MONITOR:    4,
-    LOWMEM:     5,
-    EXPMEM:     6
-};
-
-ChipSet.DIPSW = {};
-ChipSet.DIPSW[ChipSet.MODEL_5150] = [{},{}];
-ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM] = {
-    MASK:       0xC0,
-    VALUES: {
-        1:      0x00,
-        2:      0x40,
-        3:      0x80,
-        4:      0xC0
-    },
-    LABEL: "Number of Floppy Drives"
-};
-/**
- * Notes on the 8087 Math Coprocessor (FPU)
- *
- * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
- * "MUST BE ON (RESERVED FOR CO-PROCESSOR)" (p. 2-28), suggesting that the math coprocessor wasn't
- * quite ready for the initial release of the IBM PC.
- *
- * The April 1983 TechRef adds a section on the "IBM Personal Computer Math Coprocessor" (p. 1-33)
- * and makes it clearer that SW1[2] must be OFF when a math coprocessor is installed, but then it
- * muddies the waters in a new appendix of switch tables, where it erroneously claims that SW1[2]
- * must be ON when using a coprocessor (p. G-7).
- *
- * The April 1984 TechRef eliminates the confusion by eliminating the appendix (actually, it was
- * simply corrected and moved to the 1984 Guide to Operations; see p. 5-10).  Early magazine articles
- * discussing 8087 support also indicated that switch SW1[2] must OFF when a coprocessor is installed.
- *
- * While the August 1981 TechRef makes almost no mention of coprocessor support, the April 1984 TechRef
- * discusses it in a fair bit of detail, including the fact that 8087 exceptions generate an NMI,
- * despite Intel's warning in their iAPX 86,88 User's Manual, p. S-27, that "[t]he 8087 should not be
- * tied to the CPU's NMI (non-maskable interrupt) line."
- */
-ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FPU] = {
-    MASK:       0x02,
-    VALUES: {
-        0:      0x00,   // 0 means an FPU is NOT installed
-        1:      0x02    // 1 means an FPU is installed
-    },
-    LABEL: "FPU"
-};
-ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.MONITOR] = {
-    MASK:       0x30,
-    VALUES: {
-        0:      0x00,
-        1:      0x10,
-        2:      0x20,
-        3:      0x30,
-        "none": 0x00,
-        "tv":   0x10,   // aka composite
-        "color":0x20,
-        "cga":  0x20,   // alias for color
-        "mda":  0x30,   // alias for mono
-        "mono": 0x30,
-        "ega":  0x00,
-        "vga":  0x00
-    },
-    LABEL: "Monitor Type"
-};
-ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.LOWMEM] = {
-    MASK:       0x0C,
-    VALUES: {
-        16:     0x00,
-        32:     0x04,
-        48:     0x08,
-        64:     0x0C
-    },
-    LABEL: "Base Memory (16Kb Increments)"
-};
-ChipSet.DIPSW[ChipSet.MODEL_5150][1][ChipSet.SWITCH_TYPE.EXPMEM] = {
-    MASK:       0x1F,   // technically, this mask should be 0x0F for ROM revisions prior to 5150_REV3, and 0x1F on 5150_REV3
-    VALUES: {
-        0:      0x00,
-        32:     0x01,
-        64:     0x02,
-        96:     0x03,
-        128:    0x04,
-        160:    0x05,
-        192:    0x06,
-        224:    0x07,
-        256:    0x08,
-        288:    0x09,
-        320:    0x0A,
-        352:    0x0B,
-        384:    0x0C,
-        416:    0x0D,
-        448:    0x0E,
-        480:    0x0F,
-        512:    0x10,
-        544:    0x11,
-        576:    0x12
-        /**
-         * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
-         * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
-         * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
-         * this is where we stop.
-         *
-         * TODO: A value larger than 0x12 usually comes from a misconfigured machine (ie, it forgot to leave SW2[5] ON).
-         * To compensate, when getDIPMemorySize() gets null back from its EXPMEM request, perhaps it should try truncating
-         * the DIP switch value.  However, that would introduce a machine-specific hack into a function that's supposed
-         * be machine-independent now.
-         */
-    },
-    LABEL: "Expansion Memory (32Kb Increments)"
-};
-
-ChipSet.DIPSW[ChipSet.MODEL_5160] = [{},{}];
-ChipSet.DIPSW[ChipSet.MODEL_5160][0][ChipSet.SWITCH_TYPE.FLOPNUM] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM];
-ChipSet.DIPSW[ChipSet.MODEL_5160][0][ChipSet.SWITCH_TYPE.FPU]     = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FPU];
-ChipSet.DIPSW[ChipSet.MODEL_5160][0][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.MONITOR];
-ChipSet.DIPSW[ChipSet.MODEL_5160][0][ChipSet.SWITCH_TYPE.LOWMEM]  = {
-    MASK:       0x0C,
-    VALUES: {
-        64:     0x00,
-        128:    0x04,
-        192:    0x08,
-        256:    0x0C
-    },
-    LABEL: "Base Memory (64Kb Increments)"
-};
-ChipSet.DIPSW[ChipSet.MODEL_5160][1][ChipSet.SWITCH_TYPE.EXPMEM]  = ChipSet.DIPSW[ChipSet.MODEL_5150][1][ChipSet.SWITCH_TYPE.EXPMEM];
-
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300] = [{},{}];
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][0][ChipSet.SWITCH_TYPE.LOWMEM] = {
-    MASK:       0x8F,
-    VALUES: {
-        128:    0x01,   // "0111xxx1"
-        256:    0x82,   // "1011xxx0"
-        512:    0x08,   // "1110xxx1"
-        640:    0x8D    // "0100xxx0"
-    },
-    LABEL: "Base Memory (128Kb Increments)"
-};
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][0][ChipSet.SWITCH_TYPE.FPU] = {
-    MASK:       0x10,
-    VALUES: {
-        0:      0x00,
-        1:      0x10
-    },
-    LABEL: "FPU"
-};
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPTYPE] = {
-    MASK:       0x01,
-    VALUES: {
-        0:      0x00,
-        1:      0x01
-    },
-    LABEL: "Floppy Type"
-};
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.FLOPNUM] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.FLOPNUM];
-ChipSet.DIPSW[ChipSet.MODEL_ATT_6300][1][ChipSet.SWITCH_TYPE.MONITOR] = ChipSet.DIPSW[ChipSet.MODEL_5150][0][ChipSet.SWITCH_TYPE.MONITOR];
-
-/**
- * 8041 Keyboard Controller I/O ports (MODEL_ATT_6300)
- *
- * The AT&T 6300 uses an 8041 for its Keyboard Controller, which has the following ports:
- *
- *      Port    Description
- *      ----    -----------
- *      0x60    Keyboard Scan Code (input)
- *      0x61    Keyboard Control Port (output)
- *      0x64    Keyboard Status Port (input)
- *
- * And the Keyboard Control Port (0x61) has the following bit definitions:
- *
- *      0x01    Speaker gate to 8253 (counter 2)
- *      0x02    Speaker data
- *      0x0C    Not used
- *      0x10    RAM Parity (NMI) Enable
- *      0x20    I/O Channel (NMI) Enable
- *      0x40    Keyboard Clock Reset
- *      0x80    Reset Interrupt Pending
- */
-
-/**
- * 8042 Keyboard Controller I/O ports (MODEL_5170)
- *
- * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI_A, although the BIOS also refers to it
- * as "PORT_A: 8042 KEYBOARD SCAN/DIAG OUTPUTS").  This is the 8042's output buffer and should be read only when
- * C8042.STATUS.OUTBUFF_FULL is set.
- *
- * Similarly, port 0x61 is designated C8042.RWREG rather than PPI_B; the BIOS also refers to it as "PORT_B: 8042
- * READ WRITE REGISTER", but it is not otherwise discussed in the MODEL_5170 TechRef's 8042 documentation.
- *
- * There are brief references to bits 0 and 1 (C8042.RWREG.CLK_TIMER2 and C8042.RWREG.SPK_TIMER2), and the BIOS sets
- * bits 2-7 to "DISABLE PARITY CHECKERS" (principally C8042.RWREG.DISABLE_NMI, which are bits 2 and 3); why the BIOS
- * also sets bits 4-7 (or if those bits are even settable) is unclear, since it uses 11111100b rather than defined
- * constants.
- *
- * The bottom line: on a MODEL_5170, port 0x61 is still used for speaker control and parity checking, so we use
- * the same register (bPPIB) but install different I/O handlers.  It's also bi-directional: at one point, the BIOS
- * reads C8042.RWREG.REFRESH_BIT (bit 4) to verify that it's alternating.
- *
- * PPI_C and PPI_CTRL don't seem to be documented or used by the MODEL_5170 BIOS, so I'm assuming they're obsolete.
- *
- * NOTE: For more information on the 8042 Controller, including information on undocumented commands, refer to the
- * documents in /devices/pc/keyboard, as well as the following websites:
- *
- *      http://halicery.com/8042/8042_INTERN_TXT.htm
- *      http://www.os2museum.com/wp/ibm-pcat-8042-keyboard-controller-commands/
- */
-ChipSet.C8042 = {
-    DATA: {                     // this.b8042OutBuff (PPI_A on previous models, still referred to as "PORT A" by the MODEL_5170 BIOS)
-        PORT:           0x60,
-        CMD: {                  // this.b8042CmdData (C8042.DATA.CMD "data bytes" written to port 0x60, after writing a C8042.CMD byte to port 0x64)
-            INT_ENABLE: 0x01,   // generate an interrupt when the controller places data in the output buffer
-            SYS_FLAG:   0x04,   // this value is propagated to ChipSet.C8042.STATUS.SYS_FLAG
-            NO_INHIBIT: 0x08,   // disable inhibit function
-            NO_CLOCK:   0x10,   // disable keyboard by driving "clock" line low
-            PC_MODE:    0x20,
-            PC_COMPAT:  0x40    // generate IBM PC-compatible scan codes
-        },
-        SELF_TEST: {            // result of ChipSet.C8042.CMD.SELF_TEST command (0xAA)
-            OK:         0x55
-        },
-        INTF_TEST: {            // result of ChipSet.C8042.CMD.INTF_TEST command (0xAB)
-            OK:         0x00,   // no error
-            CLOCK_LO:   0x01,   // keyboard clock line stuck low
-            CLOCK_HI:   0x02,   // keyboard clock line stuck high
-            DATA_LO:    0x03,   // keyboard data line stuck low
-            DATA_HI:    0x04    // keyboard data line stuck high
-        }
-    },
-    INPORT: {                   // this.b8042InPort
-        COMPAQ_50MHZ:   0x01,   // 50Mhz system clock enabled (0=48Mhz); see COMPAQ 386/25 TechRef p2-106
-        UNDEFINED:      0x02,   // undefined
-        COMPAQ_NO80387: 0x04,   // 80387 coprocessor NOT installed; see COMPAQ 386/25 TechRef p2-106
-        COMPAQ_NOWEITEK:0x08,   // Weitek coprocessor NOT installed; see COMPAQ 386/25 TechRef p2-106
-        ENABLE_256KB:   0x10,   // enable 2nd 256Kb of system board RAM
-        COMPAQ_HISPEED: 0x10,   // high-speed enabled (0=AUTO, 1=HIGH); see COMPAQ 386/25 TechRef p2-106
-        MFG_OFF:        0x20,   // manufacturing jumper not installed
-        COMPAQ_DIP5OFF: 0x20,   // system board DIP switch #5 OFF (0=ON); see COMPAQ 386/25 TechRef p2-106
-        MONO:           0x40,   // monochrome monitor is primary display
-        COMPAQ_NONDUAL: 0x40,   // COMPAQ Dual-Mode monitor NOT installed; see COMPAQ 386/25 TechRef p2-106
-        KBD_UNLOCKED:   0x80    // keyboard not inhibited (in COMPAQ parlance: security lock is unlocked)
-    },
-    OUTPORT: {                  // this.b8042OutPort
-        NO_RESET:       0x01,   // set by default
-        A20_ON:         0x02,   // set by default
-        COMPAQ_SLOWD:   0x08,   // SL0WD* NOT asserted (refer to timer 2, counter 2); see COMPAQ 386/25 TechRef p2-105
-        OUTBUFF_FULL:   0x10,   // output buffer full
-        INBUFF_EMPTY:   0x20,   // input buffer empty
-        KBD_CLOCK:      0x40,   // keyboard clock (output)
-        KBD_DATA:       0x80    // keyboard data (output)
-    },
-    TESTPORT: {                 // generated "on the fly"
-        KBD_CLOCK:      0x01,   // keyboard clock (input)
-        KBD_DATA:       0x02    // keyboard data (input)
-    },
-    RWREG: {                    // this.bPPIB (since CLK_TIMER2 and SPK_TIMER2 are in both PPI_B and RWREG)
-        PORT:           0x61,
-        CLK_TIMER2:     0x01,   // set to enable clock to TIMER2 (R/W)
-        SPK_TIMER2:     0x02,   // set to connect output of TIMER2 to speaker (R/W)
-        COMPAQ_FSNMI:   0x04,   // set to disable RAM/FS NMI (R/W, DESKPRO386)
-        COMPAQ_IONMI:   0x08,   // set to disable IOCHK NMI (R/W, DESKPRO386)
-        DISABLE_NMI:    0x0C,   // set to disable IOCHK and RAM/FS NMI, clear to enable (R/W)
-        REFRESH_BIT:    0x10,   // 0 if RAM refresh occurring, 1 if RAM not in refresh cycle (R/O)
-        OUT_TIMER2:     0x20,   // state of TIMER2 output signal (R/O, DESKPRO386)
-        IOCHK_NMI:      0x40,   // IOCHK NMI (R/O); to reset, pulse bit 3 (0x08)
-        RAMFS_NMI:      0x80,   // RAM/FS (parity or fail-safe) NMI (R/O); to reset, pulse bit 2 (0x04)
-        NMI_ERROR:      0xC0
-    },
-    CMD: {                      // this.b8042InBuff (on write to port 0x64, interpret this as a CMD)
-        PORT:           0x64,
-        READ_CMD:       0x20,   // sends the current CMD byte (this.b8042CmdData) to C8042.DATA.PORT
-        WRITE_CMD:      0x60,   // followed by a command byte written to C8042.DATA.PORT (see C8042.DATA.CMD)
-        COMPAQ_SLOWD:   0xA3,   // enable system slow down; see COMPAQ 386/25 TechRef p2-111
-        COMPAQ_TOGGLE:  0xA4,   // toggle speed-control bit; see COMPAQ 386/25 TechRef p2-111
-        COMPAQ_SREAD2:  0xA5,   // special read of "port 2"; see COMPAQ 386/25 TechRef p2-111
-        SELF_TEST:      0xAA,   // self-test (C8042.DATA.SELF_TEST.OK is placed in the output buffer if no errors)
-        INTF_TEST:      0xAB,   // interface test
-        DIAG_DUMP:      0xAC,   // diagnostic dump
-        DISABLE_KBD:    0xAD,   // disable keyboard
-        ENABLE_KBD:     0xAE,   // enable keyboard
-        READ_INPORT:    0xC0,   // read input port and place data in output buffer (use only if output buffer empty)
-        READ_OUTPORT:   0xD0,   // read output port and place data in output buffer (use only if output buffer empty)
-        WRITE_OUTPORT:  0xD1,   // next byte written to C8042.DATA.PORT (port 0x60) is placed in the output port (see C8042.OUTPORT)
-        READ_TEST:      0xE0,
-        PULSE_OUTPORT:  0xF0    // this is the 1st of 16 commands (0xF0-0xFF) that pulse bits 0-3 of the output port
-    },
-    STATUS: {                   // this.b8042Status (on read from port 0x64)
-        PORT:           0x64,
-        OUTBUFF_FULL:   0x01,
-        INBUFF_FULL:    0x02,   // set if the controller has received but not yet read data from the input buffer (not normally set)
-        SYS_FLAG:       0x04,
-        CMD_FLAG:       0x08,   // set on write to C8042.CMD (port 0x64), clear on write to C8042.DATA (port 0x60)
-        NO_INHIBIT:     0x10,   // (in COMPAQ parlance: security lock not engaged)
-        XMT_TIMEOUT:    0x20,
-        RCV_TIMEOUT:    0x40,
-        PARITY_ERR:     0x80,   // last byte of data received had EVEN parity (ODD parity is normally expected)
-        OUTBUFF_DELAY:  0x100
-    }
-};
-
-/**
- * MC146818A RTC/CMOS Ports (MODEL_5170)
- *
- * Write a CMOS address to ChipSet.CMOS.ADDR.PORT, then read/write data from/to ChipSet.CMOS.DATA.PORT.
- *
- * The ADDR port also controls NMI: write an address with bit 7 clear to enable NMI or set to disable NMI.
- */
-ChipSet.CMOS = {
-    ADDR: {                     // this.bCMOSAddr
-        PORT:           0x70,
-        RTC_SEC:        0x00,
-        RTC_SEC_ALARM:  0x01,
-        RTC_MIN:        0x02,
-        RTC_MIN_ALARM:  0x03,
-        RTC_HOUR:       0x04,
-        RTC_HOUR_ALARM: 0x05,
-        RTC_WEEK_DAY:   0x06,
-        RTC_MONTH_DAY:  0x07,
-        RTC_MONTH:      0x08,
-        RTC_YEAR:       0x09,   // 2-digit year (eg, 0x82 for 1982 if BCD mode)
-        STATUSA:        0x0A,
-        STATUSB:        0x0B,
-        STATUSC:        0x0C,
-        STATUSD:        0x0D,
-        DIAG:           0x0E,
-        SHUTDOWN:       0x0F,
-        FDRIVE:         0x10,
-        HDRIVE:         0x12,   // bits 4-7 contain type of drive 0, bits 0-3 contain type of drive 1 (type 0 means none)
-        EQUIP:          0x14,
-        BASEMEM_LO:     0x15,
-        BASEMEM_HI:     0x16,   // the BASEMEM values indicate the total Kb of base memory, up to 0x280 (640Kb)
-        EXTMEM_LO:      0x17,
-        EXTMEM_HI:      0x18,   // the EXTMEM values indicate the total Kb of extended memory, up to 0x3C00 (15Mb)
-        EXTHDRIVE0:     0x19,   // if bits 4-7 of HDRIVE contains 15, then the type of drive 0 is stored here (16-255)
-        EXTHDRIVE1:     0x1A,   // if bits 0-3 of HDRIVE contains 15, then the type of drive 1 is stored here (16-255)
-        CHKSUM_HI:      0x2E,
-        CHKSUM_LO:      0x2F,   // CMOS bytes included in the checksum calculation: 0x10-0x2D
-        EXTMEM2_LO:     0x30,
-        EXTMEM2_HI:     0x31,
-        CENTURY_DATE:   0x32,   // 2-digit century value in BCD (eg, 0x19 for 20th century, 0x20 for 21st century)
-        BOOT_INFO:      0x33,   // 0x80 if 128Kb expansion memory installed, 0x40 if Setup Utility wants an initial setup message
-        MASK:           0x3F,
-        TOTAL:          0x40,
-        NMI_DISABLE:    0x80
-    },
-    DATA: {                     // this.abCMOSData
-        PORT:           0x71
-    },
-    STATUSA: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSA]
-        UIP:            0x80,   // bit 7: 1 indicates Update-In-Progress, 0 indicates date/time ready to read
-        DV:             0x70,   // bits 6-4 (DV2-DV0) are programmed to 010 to select a 32.768Khz time base
-        RS:             0x0F    // bits 3-0 (RS3-RS0) are programmed to 0110 to select a 976.562us interrupt rate
-    },
-    STATUSB: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSB]
-        SET:            0x80,   // bit 7: 1 to set any/all of the 14 time-bytes
-        PIE:            0x40,   // bit 6: 1 for Periodic Interrupt Enable
-        AIE:            0x20,   // bit 5: 1 for Alarm Interrupt Enable
-        UIE:            0x10,   // bit 4: 1 for Update Interrupt Enable
-        SQWE:           0x08,   // bit 3: 1 for Square Wave Enabled (as set by the STATUSA rate selection bits)
-        BINARY:         0x04,   // bit 2: 1 for binary Date Mode, 0 for BCD Date Mode
-        HOUR24:         0x02,   // bit 1: 1 for 24-hour mode, 0 for 12-hour mode
-        DST:            0x01    // bit 0: 1 for Daylight Savings Time enabled
-    },
-    STATUSC: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSC]
-        IRQF:           0x80,   // bit 7: 1 indicates one or more of the following bits (PF, AF, UF) are set
-        PF:             0x40,   // bit 6: 1 indicates Periodic Interrupt
-        AF:             0x20,   // bit 5: 1 indicates Alarm Interrupt
-        UF:             0x10,   // bit 4: 1 indicates Update Interrupt
-        RESERVED:       0x0F
-    },
-    STATUSD: {                  // abCMOSData[ChipSet.CMOS.ADDR.STATUSD]
-        VRB:            0x80,   // bit 7: 1 indicates Valid RAM Bit (0 implies power was and/or is lost)
-        RESERVED:       0x7F
-    },
-    DIAG: {                     // abCMOSData[ChipSet.CMOS.ADDR.DIAG]
-        RTCFAIL:        0x80,   // bit 7: 1 indicates RTC lost power
-        CHKSUMFAIL:     0x40,   // bit 6: 1 indicates bad CMOS checksum
-        CONFIGFAIL:     0x20,   // bit 5: 1 indicates bad CMOS configuration info
-        MEMSIZEFAIL:    0x10,   // bit 4: 1 indicates memory size miscompare
-        HDRIVEFAIL:     0x08,   // bit 3: 1 indicates hard drive controller or drive init failure
-        TIMEFAIL:       0x04,   // bit 2: 1 indicates time failure
-        RESERVED:       0x03
-    },
-    FDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.FDRIVE]
-        D0_MASK:        0xF0,   // Drive 0 type in high nibble
-        D1_MASK:        0x0F,   // Drive 1 type in lower nibble
-        NONE:           0,      // no drive
-        /**
-         * There's at least one floppy drive type that IBM didn't bother defining a CMOS drive type for:
-         * single-sided drives that were only capable of storing 160Kb (or 180Kb when using 9 sectors/track).
-         * So, as you can see in getDIPFloppyDriveType(), we lump all standard diskette capacities <= 360Kb
-         * into the FD360 bucket.
-         */
-        FD360:          1,      // 5.25-inch double-sided double-density (DSDD 48TPI) drive: 40 tracks, 9 sectors/track, 360Kb max
-        FD1200:         2,      // 5.25-inch double-sided high-density (DSHD 96TPI) drive: 80 tracks, 15 sectors/track, 1200Kb max
-        FD720:          3,      // 3.5-inch drive capable of storing 80 tracks and up to 9 sectors/track, 720Kb max
-        FD1440:         4       // 3.5-inch drive capable of storing 80 tracks and up to 18 sectors/track, 1440Kb max
-    },
     /**
-     * HDRIVE types are defined by table in the HDC component, which uses setCMOSDriveType() to update the CMOS
+     * Port input notification tables, starting with the one that's common to all models (aPortInput)
      */
-    HDRIVE: {                   // abCMOSData[ChipSet.CMOS.ADDR.HDRIVE]
-        D0_MASK:        0xF0,   // Drive 0 type in high nibble
-        D1_MASK:        0x0F    // Drive 1 type in lower nibble
-    },
-    /**
-     * The CMOS equipment flags use the same format as the older PPI equipment flags
-     */
-    EQUIP: {                    // abCMOSData[ChipSet.CMOS.ADDR.EQUIP]
-        MONITOR:        ChipSet.PPI_SW.MONITOR,         // PPI_SW.MONITOR.MASK == 0x30
-        FPU:            ChipSet.PPI_SW.FPU,             // PPI_SW.FPU == 0x02
-        FDRIVE:         ChipSet.PPI_SW.FDRIVE           // PPI_SW.FDRIVE.IPL == 0x01 and PPI_SW.FDRIVE.MASK = 0xC0
-    }
-};
+    static aPortInput = {
+        0x20: /** @this {ChipSet} */ function inPort20(port, addrFrom) { return this.inPICLo(ChipSet.PIC0.INDEX, addrFrom); },
+        0x21: /** @this {ChipSet} */ function inPort21(port, addrFrom) { return this.inPICHi(ChipSet.PIC0.INDEX, addrFrom); },
+        0x40: /** @this {ChipSet} */ function inPort40(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, addrFrom); },
+        0x41: /** @this {ChipSet} */ function inPort41(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, addrFrom); },
+        0x42: /** @this {ChipSet} */ function inPort42(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, addrFrom); },
+        0x43: /** @this {ChipSet} */ function inPort43(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT0.INDEX, port, addrFrom); },
+    };
 
-/**
- * DMA Page Registers
- *
- * The MODEL_5170 TechRef lists 0x80-0x9F as the range for DMA page registers, but that may be a bit
- * overbroad.  There are a total of 8 (7 usable) DMA channels on the MODEL_5170, each of which has the
- * following assigned DMA page registers:
- *
- *      Channel #   Page Reg
- *      ---------   --------
- *          0         0x87
- *          1         0x83
- *          2         0x81
- *          3         0x82
- *          4         0x8F (not usable; the 5170 TechRef refers to this as the "Refresh" page register)
- *          5         0x8B
- *          6         0x89
- *          7         0x8A
- *
- * That leaves 0x80, 0x84, 0x85, 0x86, 0x88, 0x8C, 0x8D and 0x8E unaccounted for in the range 0x80-0x8F.
- * (I'm saving the question of what, if anything, is available in the range 0x90-0x9F for another day.)
- *
- * As for port 0x80, the TechRef says:
- *
- *      "I/O address hex 080 is used as a diagnostic-checkpoint port or register.
- *      This port corresponds to a read/write register in the DMA page register (74LS612)."
- *
- * so I used to have dedicated handlers and storage (bMFGData) for the register at port 0x80, but I've since
- * appended it to abDMAPageSpare, an 8-element array that captures all I/O to the 8 unassigned (aka "spare")
- * DMA page registers.  The 5170 BIOS uses 0x80 as a "checkpoint" register, and the DESKPRO386 uses 0x84 in a
- * similar fashion.  The 5170 also contains "MFG_TST" code that uses other unassigned DMA page registers as
- * scratch registers, which come in handy when RAM hasn't been tested/initialized yet.
- *
- * Here's our mapping of entries in the abDMAPageSpare array to the unassigned ("spare") DMA page registers:
- *
- *      Index #     Page Reg
- *      --------    --------
- *          0         0x84
- *          1         0x85
- *          2         0x86
- *          3         0x88
- *          4         0x8C
- *          5         0x8D
- *          6         0x8E
- *          7         0x80
- *
- * The only reason port 0x80 is out of sequence (ie, at the end of the array, at index 7 instead of index 0) is
- * because it was added the array later, and the entire array gets written to our save/restore data structures, so
- * reordering the elements would be a bad idea.
- */
+    static aPortInput4860 = {
+        0x60: ChipSet.prototype.inPPIA,
+        0x61: ChipSet.prototype.inPPIB,
+        0x62: ChipSet.prototype.inPPIC,
+        0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
+        0xA0: ChipSet.prototype.inNMI
+    };
 
-/**
- * NMI Mask Register (port 0xA0)
- *
- * On the MODEL_5150 and MODEL_5160, this is a write-only register, and the only valid bit is ENABLE.
- *
- * On the MODEL_4860, this is a read-write register; the following bit definitions apply to writes, whereas
- * reads are defined as merely clearing the PCjr's keyboard NMI latch (which we maintain here in bit 0).
- */
-ChipSet.NMI = {                 // this.bNMI
-    PORT:               0xA0,   //
-    ENABLE:             0x80,   // enables NMI
-    IRTEST:             0x40,   // enables 8253 timer 2 output into an IR diode on the IR receiver board
-    SELCLK1:            0x20,   // selects timer 0 output to be used as CLK input to timer 1
-    DISHRQ:             0x10,   // not implemented on the system board; for use with external bus-master devices
-    KBD_LATCH:          0x01,   // keyboard latch (we maintain it here for convenience; it gets propagated to PPI_C bit 0)
-    RESET:              0x00    // default value on reset (TODO: Is NMI really disabled by default on reset?)
-};
+    static aPortInput5150 = {
+        0x60: ChipSet.prototype.inPPIA,
+        0x61: ChipSet.prototype.inPPIB,
+        0x62: ChipSet.prototype.inPPIC,
+        0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
+    };
 
-/**
- * FPU Coprocessor Control Registers (MODEL_5170)
- */
-ChipSet.FPU = {                 // TODO: Define a variable for this?
-    PORT_CLEAR:         0xF0,   // clear the FPU's "busy" state
-    PORT_RESET:         0xF1    // reset the FPU
-};
+    static aPortInput5xxx = {
+        0x00: /** @this {ChipSet} */ function inPort00(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
+        0x01: /** @this {ChipSet} */ function inPort01(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
+        0x02: /** @this {ChipSet} */ function inPort02(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        0x03: /** @this {ChipSet} */ function inPort03(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        0x04: /** @this {ChipSet} */ function inPort04(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        0x05: /** @this {ChipSet} */ function inPort05(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        0x06: /** @this {ChipSet} */ function inPort06(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        0x07: /** @this {ChipSet} */ function inPort07(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        0x08: /** @this {ChipSet} */ function inPort08(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA0.INDEX, port, addrFrom); },
+        0x0D: /** @this {ChipSet} */ function inPort0D(port, addrFrom) { return this.inDMATemp(ChipSet.DMA0.INDEX, port, addrFrom); },
+        0x81: /** @this {ChipSet} */ function inPort81(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        0x82: /** @this {ChipSet} */ function inPort82(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        0x83: /** @this {ChipSet} */ function inPort83(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        0x87: /** @this {ChipSet} */ function inPort87(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 0, port, addrFrom); }
+    };
 
-ChipSet.aDMAControllerInit = [0, null, null, 0, new Array(4), 0];
+    static aPortInput5170 = {
+        0x60: ChipSet.prototype.in8042OutBuff,
+        0x61: ChipSet.prototype.in8042RWReg,
+        0x64: ChipSet.prototype.in8042Status,
+        0x70: ChipSet.prototype.inCMOSAddr,
+        0x71: ChipSet.prototype.inCMOSData,
+        0x80: /** @this {ChipSet} */ function inPort80(port, addrFrom) { return this.inDMAPageSpare(7, port, addrFrom); },
+        0x84: /** @this {ChipSet} */ function inPort84(port, addrFrom) { return this.inDMAPageSpare(0, port, addrFrom); },
+        0x85: /** @this {ChipSet} */ function inPort85(port, addrFrom) { return this.inDMAPageSpare(1, port, addrFrom); },
+        0x86: /** @this {ChipSet} */ function inPort86(port, addrFrom) { return this.inDMAPageSpare(2, port, addrFrom); },
+        0x88: /** @this {ChipSet} */ function inPort88(port, addrFrom) { return this.inDMAPageSpare(3, port, addrFrom); },
+        0x89: /** @this {ChipSet} */ function inPort89(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        0x8A: /** @this {ChipSet} */ function inPort8A(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        0x8B: /** @this {ChipSet} */ function inPort8B(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        0x8C: /** @this {ChipSet} */ function inPort8C(port, addrFrom) { return this.inDMAPageSpare(4, port, addrFrom); },
+        0x8D: /** @this {ChipSet} */ function inPort8D(port, addrFrom) { return this.inDMAPageSpare(5, port, addrFrom); },
+        0x8E: /** @this {ChipSet} */ function inPort8E(port, addrFrom) { return this.inDMAPageSpare(6, port, addrFrom); },
+        0x8F: /** @this {ChipSet} */ function inPort8F(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        0xA0: /** @this {ChipSet} */ function inPortA0(port, addrFrom) { return this.inPICLo(ChipSet.PIC1.INDEX, addrFrom); },
+        0xA1: /** @this {ChipSet} */ function inPortA1(port, addrFrom) { return this.inPICHi(ChipSet.PIC1.INDEX, addrFrom); },
+        0xC0: /** @this {ChipSet} */ function inPortC0(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        0xC2: /** @this {ChipSet} */ function inPortC2(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        0xC4: /** @this {ChipSet} */ function inPortC4(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        0xC6: /** @this {ChipSet} */ function inPortC6(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        0xC8: /** @this {ChipSet} */ function inPortC8(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        0xCA: /** @this {ChipSet} */ function inPortCA(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        0xCC: /** @this {ChipSet} */ function inPortCC(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        0xCE: /** @this {ChipSet} */ function inPortCE(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        0xD0: /** @this {ChipSet} */ function inPortD0(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA1.INDEX, port, addrFrom); },
+        0xDA: /** @this {ChipSet} */ function inPortDA(port, addrFrom) { return this.inDMATemp(ChipSet.DMA1.INDEX, port, addrFrom); }
+    };
 
-ChipSet.aDMAChannelInit = [true, [0,0], [0,0], [0,0], [0,0]];
+    static aPortInput6300 = {
+        0x60: ChipSet.prototype.in8041Kbd,
+        0x61: ChipSet.prototype.in8041Ctrl,
+        0x64: ChipSet.prototype.in8041Status,
+        0x66: /** @this {ChipSet} */ function inPort66(port, addrFrom) { return this.in6300DIPSwitches(0, port, addrFrom); },
+        0x67: /** @this {ChipSet} */ function inPort67(port, addrFrom) { return this.in6300DIPSwitches(1, port, addrFrom); }
+    };
 
-ChipSet.aPICInit = [0, new Array(4)];
-
-ChipSet.aTimerInit = [[0,0], [0,0], [0,0], [0,0]];
-
-/**
- * Port input notification tables, starting with the one that's common to all models (aPortInput)
- */
-ChipSet.aPortInput = {
-    0x20: /** @this {ChipSet} */ function inPort20(port, addrFrom) { return this.inPICLo(ChipSet.PIC0.INDEX, addrFrom); },
-    0x21: /** @this {ChipSet} */ function inPort21(port, addrFrom) { return this.inPICHi(ChipSet.PIC0.INDEX, addrFrom); },
-    0x40: /** @this {ChipSet} */ function inPort40(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, addrFrom); },
-    0x41: /** @this {ChipSet} */ function inPort41(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, addrFrom); },
-    0x42: /** @this {ChipSet} */ function inPort42(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, addrFrom); },
-    0x43: /** @this {ChipSet} */ function inPort43(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT0.INDEX, port, addrFrom); },
-};
-
-ChipSet.aPortInput4860 = {
-    0x60: ChipSet.prototype.inPPIA,
-    0x61: ChipSet.prototype.inPPIB,
-    0x62: ChipSet.prototype.inPPIC,
-    0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
-    0xA0: ChipSet.prototype.inNMI
-};
-
-ChipSet.aPortInput5150 = {
-    0x60: ChipSet.prototype.inPPIA,
-    0x61: ChipSet.prototype.inPPIB,
-    0x62: ChipSet.prototype.inPPIC,
-    0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
-};
-
-ChipSet.aPortInput5xxx = {
-    0x00: /** @this {ChipSet} */ function inPort00(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
-    0x01: /** @this {ChipSet} */ function inPort01(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
-    0x02: /** @this {ChipSet} */ function inPort02(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-    0x03: /** @this {ChipSet} */ function inPort03(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-    0x04: /** @this {ChipSet} */ function inPort04(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-    0x05: /** @this {ChipSet} */ function inPort05(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-    0x06: /** @this {ChipSet} */ function inPort06(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-    0x07: /** @this {ChipSet} */ function inPort07(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-    0x08: /** @this {ChipSet} */ function inPort08(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA0.INDEX, port, addrFrom); },
-    0x0D: /** @this {ChipSet} */ function inPort0D(port, addrFrom) { return this.inDMATemp(ChipSet.DMA0.INDEX, port, addrFrom); },
-    0x81: /** @this {ChipSet} */ function inPort81(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-    0x82: /** @this {ChipSet} */ function inPort82(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-    0x83: /** @this {ChipSet} */ function inPort83(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-    0x87: /** @this {ChipSet} */ function inPort87(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 0, port, addrFrom); }
-};
-
-ChipSet.aPortInput5170 = {
-    0x60: ChipSet.prototype.in8042OutBuff,
-    0x61: ChipSet.prototype.in8042RWReg,
-    0x64: ChipSet.prototype.in8042Status,
-    0x70: ChipSet.prototype.inCMOSAddr,
-    0x71: ChipSet.prototype.inCMOSData,
-    0x80: /** @this {ChipSet} */ function inPort80(port, addrFrom) { return this.inDMAPageSpare(7, port, addrFrom); },
-    0x84: /** @this {ChipSet} */ function inPort84(port, addrFrom) { return this.inDMAPageSpare(0, port, addrFrom); },
-    0x85: /** @this {ChipSet} */ function inPort85(port, addrFrom) { return this.inDMAPageSpare(1, port, addrFrom); },
-    0x86: /** @this {ChipSet} */ function inPort86(port, addrFrom) { return this.inDMAPageSpare(2, port, addrFrom); },
-    0x88: /** @this {ChipSet} */ function inPort88(port, addrFrom) { return this.inDMAPageSpare(3, port, addrFrom); },
-    0x89: /** @this {ChipSet} */ function inPort89(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-    0x8A: /** @this {ChipSet} */ function inPort8A(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-    0x8B: /** @this {ChipSet} */ function inPort8B(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
-    0x8C: /** @this {ChipSet} */ function inPort8C(port, addrFrom) { return this.inDMAPageSpare(4, port, addrFrom); },
-    0x8D: /** @this {ChipSet} */ function inPort8D(port, addrFrom) { return this.inDMAPageSpare(5, port, addrFrom); },
-    0x8E: /** @this {ChipSet} */ function inPort8E(port, addrFrom) { return this.inDMAPageSpare(6, port, addrFrom); },
-    0x8F: /** @this {ChipSet} */ function inPort8F(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-    0xA0: /** @this {ChipSet} */ function inPortA0(port, addrFrom) { return this.inPICLo(ChipSet.PIC1.INDEX, addrFrom); },
-    0xA1: /** @this {ChipSet} */ function inPortA1(port, addrFrom) { return this.inPICHi(ChipSet.PIC1.INDEX, addrFrom); },
-    0xC0: /** @this {ChipSet} */ function inPortC0(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-    0xC2: /** @this {ChipSet} */ function inPortC2(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-    0xC4: /** @this {ChipSet} */ function inPortC4(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
-    0xC6: /** @this {ChipSet} */ function inPortC6(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
-    0xC8: /** @this {ChipSet} */ function inPortC8(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-    0xCA: /** @this {ChipSet} */ function inPortCA(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-    0xCC: /** @this {ChipSet} */ function inPortCC(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-    0xCE: /** @this {ChipSet} */ function inPortCE(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-    0xD0: /** @this {ChipSet} */ function inPortD0(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA1.INDEX, port, addrFrom); },
-    0xDA: /** @this {ChipSet} */ function inPortDA(port, addrFrom) { return this.inDMATemp(ChipSet.DMA1.INDEX, port, addrFrom); }
-};
-
-ChipSet.aPortInput6300 = {
-    0x60: ChipSet.prototype.in8041Kbd,
-    0x61: ChipSet.prototype.in8041Ctrl,
-    0x64: ChipSet.prototype.in8041Status,
-    0x66: /** @this {ChipSet} */ function inPort66(port, addrFrom) { return this.in6300DIPSwitches(0, port, addrFrom); },
-    0x67: /** @this {ChipSet} */ function inPort67(port, addrFrom) { return this.in6300DIPSwitches(1, port, addrFrom); }
-};
-
-if (DESKPRO386) {
-    ChipSet.aPortInputDeskPro386 = {
+    static aPortInputDeskPro386 = {
         0x48: /** @this {ChipSet} */ function inPort48(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, addrFrom); },
         0x49: /** @this {ChipSet} */ function inPort49(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, addrFrom); },
         0x4A: /** @this {ChipSet} */ function inPort4A(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, addrFrom); },
         0x4B: /** @this {ChipSet} */ function inPort4B(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT1.INDEX, port, addrFrom); }
     };
-}
 
-/**
- * Port output notification tables, starting with the one that's common to all models (aPortOutput)
- */
-ChipSet.aPortOutput = {
-    0x20: /** @this {ChipSet} */ function outPort20(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC0.INDEX, bOut, addrFrom); },
-    0x21: /** @this {ChipSet} */ function outPort21(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC0.INDEX, bOut, addrFrom); },
-    0x40: /** @this {ChipSet} */ function outPort40(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, bOut, addrFrom); },
-    0x41: /** @this {ChipSet} */ function outPort41(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, bOut, addrFrom); },
-    0x42: /** @this {ChipSet} */ function outPort42(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, bOut, addrFrom); },
-    0x43: /** @this {ChipSet} */ function outPort43(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT0.INDEX, port, bOut, addrFrom); },
-};
+    /**
+     * Port output notification tables, starting with the one that's common to all models (aPortOutput)
+     */
+    static aPortOutput = {
+        0x20: /** @this {ChipSet} */ function outPort20(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC0.INDEX, bOut, addrFrom); },
+        0x21: /** @this {ChipSet} */ function outPort21(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC0.INDEX, bOut, addrFrom); },
+        0x40: /** @this {ChipSet} */ function outPort40(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, bOut, addrFrom); },
+        0x41: /** @this {ChipSet} */ function outPort41(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, bOut, addrFrom); },
+        0x42: /** @this {ChipSet} */ function outPort42(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, bOut, addrFrom); },
+        0x43: /** @this {ChipSet} */ function outPort43(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT0.INDEX, port, bOut, addrFrom); },
+    };
 
-ChipSet.aPortOutput4860 = {
-    0x10: ChipSet.prototype.outMFGTest,     // a manufacturing test port that we don't really care about
-    0x60: ChipSet.prototype.outPPIA,
-    0x61: ChipSet.prototype.outPPIB,
-    0x62: ChipSet.prototype.outPPIC,
-    0x63: ChipSet.prototype.outPPICtrl,
-    0xA0: ChipSet.prototype.outNMI
-};
+    static aPortOutput4860 = {
+        0x10: ChipSet.prototype.outMFGTest,     // a manufacturing test port that we don't really care about
+        0x60: ChipSet.prototype.outPPIA,
+        0x61: ChipSet.prototype.outPPIB,
+        0x62: ChipSet.prototype.outPPIC,
+        0x63: ChipSet.prototype.outPPICtrl,
+        0xA0: ChipSet.prototype.outNMI
+    };
 
-ChipSet.aPortOutput5150 = {
-    0x60: ChipSet.prototype.outPPIA,
-    0x61: ChipSet.prototype.outPPIB,
-    0x62: ChipSet.prototype.outPPIC,
-    0x63: ChipSet.prototype.outPPICtrl,
-    0xA0: ChipSet.prototype.outNMI
-};
+    static aPortOutput5150 = {
+        0x60: ChipSet.prototype.outPPIA,
+        0x61: ChipSet.prototype.outPPIB,
+        0x62: ChipSet.prototype.outPPIC,
+        0x63: ChipSet.prototype.outPPICtrl,
+        0xA0: ChipSet.prototype.outNMI
+    };
 
-ChipSet.aPortOutput5xxx = {
-    0x00: /** @this {ChipSet} */ function outPort00(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
-    0x01: /** @this {ChipSet} */ function outPort01(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
-    0x02: /** @this {ChipSet} */ function outPort02(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-    0x03: /** @this {ChipSet} */ function outPort03(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-    0x04: /** @this {ChipSet} */ function outPort04(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-    0x05: /** @this {ChipSet} */ function outPort05(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-    0x06: /** @this {ChipSet} */ function outPort06(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-    0x07: /** @this {ChipSet} */ function outPort07(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-    0x08: /** @this {ChipSet} */ function outPort08(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x09: /** @this {ChipSet} */ function outPort09(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x0A: /** @this {ChipSet} */ function outPort0A(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x0B: /** @this {ChipSet} */ function outPort0B(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x0C: /** @this {ChipSet} */ function outPort0C(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x0D: /** @this {ChipSet} */ function outPort0D(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-    0x81: /** @this {ChipSet} */ function outPort81(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-    0x82: /** @this {ChipSet} */ function outPort82(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-    0x83: /** @this {ChipSet} */ function outPort83(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-    0x87: /** @this {ChipSet} */ function outPort87(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); }
-};
+    static aPortOutput5xxx = {
+        0x00: /** @this {ChipSet} */ function outPort00(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
+        0x01: /** @this {ChipSet} */ function outPort01(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
+        0x02: /** @this {ChipSet} */ function outPort02(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        0x03: /** @this {ChipSet} */ function outPort03(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        0x04: /** @this {ChipSet} */ function outPort04(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        0x05: /** @this {ChipSet} */ function outPort05(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        0x06: /** @this {ChipSet} */ function outPort06(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        0x07: /** @this {ChipSet} */ function outPort07(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        0x08: /** @this {ChipSet} */ function outPort08(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x09: /** @this {ChipSet} */ function outPort09(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x0A: /** @this {ChipSet} */ function outPort0A(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x0B: /** @this {ChipSet} */ function outPort0B(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x0C: /** @this {ChipSet} */ function outPort0C(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x0D: /** @this {ChipSet} */ function outPort0D(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        0x81: /** @this {ChipSet} */ function outPort81(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        0x82: /** @this {ChipSet} */ function outPort82(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        0x83: /** @this {ChipSet} */ function outPort83(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        0x87: /** @this {ChipSet} */ function outPort87(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); }
+    };
 
-ChipSet.aPortOutput5170 = {
-    0x60: ChipSet.prototype.out8042InBuffData,
-    0x61: ChipSet.prototype.out8042RWReg,
-    0x64: ChipSet.prototype.out8042InBuffCmd,
-    0x70: ChipSet.prototype.outCMOSAddr,
-    0x71: ChipSet.prototype.outCMOSData,
-    0x80: /** @this {ChipSet} */ function outPort80(port, bOut, addrFrom) { this.outDMAPageSpare(7, port, bOut, addrFrom); },
-    0x84: /** @this {ChipSet} */ function outPort84(port, bOut, addrFrom) { this.outDMAPageSpare(0, port, bOut, addrFrom); },
-    0x85: /** @this {ChipSet} */ function outPort85(port, bOut, addrFrom) { this.outDMAPageSpare(1, port, bOut, addrFrom); },
-    0x86: /** @this {ChipSet} */ function outPort86(port, bOut, addrFrom) { this.outDMAPageSpare(2, port, bOut, addrFrom); },
-    0x88: /** @this {ChipSet} */ function outPort88(port, bOut, addrFrom) { this.outDMAPageSpare(3, port, bOut, addrFrom); },
-    0x89: /** @this {ChipSet} */ function outPort89(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-    0x8A: /** @this {ChipSet} */ function outPort8A(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-    0x8B: /** @this {ChipSet} */ function outPort8B(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
-    0x8C: /** @this {ChipSet} */ function outPort8C(port, bOut, addrFrom) { this.outDMAPageSpare(4, port, bOut, addrFrom); },
-    0x8D: /** @this {ChipSet} */ function outPort8D(port, bOut, addrFrom) { this.outDMAPageSpare(5, port, bOut, addrFrom); },
-    0x8E: /** @this {ChipSet} */ function outPort8E(port, bOut, addrFrom) { this.outDMAPageSpare(6, port, bOut, addrFrom); },
-    0x8F: /** @this {ChipSet} */ function outPort8F(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-    0xA0: /** @this {ChipSet} */ function outPortA0(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC1.INDEX, bOut, addrFrom); },
-    0xA1: /** @this {ChipSet} */ function outPortA1(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC1.INDEX, bOut, addrFrom); },
-    0xC0: /** @this {ChipSet} */ function outPortC0(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-    0xC2: /** @this {ChipSet} */ function outPortC2(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-    0xC4: /** @this {ChipSet} */ function outPortC4(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
-    0xC6: /** @this {ChipSet} */ function outPortC6(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
-    0xC8: /** @this {ChipSet} */ function outPortC8(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-    0xCA: /** @this {ChipSet} */ function outPortCA(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-    0xCC: /** @this {ChipSet} */ function outPortCC(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-    0xCE: /** @this {ChipSet} */ function outPortCE(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-    0xD0: /** @this {ChipSet} */ function outPortD0(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xD2: /** @this {ChipSet} */ function outPortD2(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xD4: /** @this {ChipSet} */ function outPortD4(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xD6: /** @this {ChipSet} */ function outPortD6(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xD8: /** @this {ChipSet} */ function outPortD8(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xDA: /** @this {ChipSet} */ function outPortDA(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-    0xF0: ChipSet.prototype.outFPUClear,
-    0xF1: ChipSet.prototype.outFPUReset
-};
+    static aPortOutput5170 = {
+        0x60: ChipSet.prototype.out8042InBuffData,
+        0x61: ChipSet.prototype.out8042RWReg,
+        0x64: ChipSet.prototype.out8042InBuffCmd,
+        0x70: ChipSet.prototype.outCMOSAddr,
+        0x71: ChipSet.prototype.outCMOSData,
+        0x80: /** @this {ChipSet} */ function outPort80(port, bOut, addrFrom) { this.outDMAPageSpare(7, port, bOut, addrFrom); },
+        0x84: /** @this {ChipSet} */ function outPort84(port, bOut, addrFrom) { this.outDMAPageSpare(0, port, bOut, addrFrom); },
+        0x85: /** @this {ChipSet} */ function outPort85(port, bOut, addrFrom) { this.outDMAPageSpare(1, port, bOut, addrFrom); },
+        0x86: /** @this {ChipSet} */ function outPort86(port, bOut, addrFrom) { this.outDMAPageSpare(2, port, bOut, addrFrom); },
+        0x88: /** @this {ChipSet} */ function outPort88(port, bOut, addrFrom) { this.outDMAPageSpare(3, port, bOut, addrFrom); },
+        0x89: /** @this {ChipSet} */ function outPort89(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        0x8A: /** @this {ChipSet} */ function outPort8A(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        0x8B: /** @this {ChipSet} */ function outPort8B(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        0x8C: /** @this {ChipSet} */ function outPort8C(port, bOut, addrFrom) { this.outDMAPageSpare(4, port, bOut, addrFrom); },
+        0x8D: /** @this {ChipSet} */ function outPort8D(port, bOut, addrFrom) { this.outDMAPageSpare(5, port, bOut, addrFrom); },
+        0x8E: /** @this {ChipSet} */ function outPort8E(port, bOut, addrFrom) { this.outDMAPageSpare(6, port, bOut, addrFrom); },
+        0x8F: /** @this {ChipSet} */ function outPort8F(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
+        0xA0: /** @this {ChipSet} */ function outPortA0(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC1.INDEX, bOut, addrFrom); },
+        0xA1: /** @this {ChipSet} */ function outPortA1(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC1.INDEX, bOut, addrFrom); },
+        0xC0: /** @this {ChipSet} */ function outPortC0(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
+        0xC2: /** @this {ChipSet} */ function outPortC2(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
+        0xC4: /** @this {ChipSet} */ function outPortC4(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        0xC6: /** @this {ChipSet} */ function outPortC6(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        0xC8: /** @this {ChipSet} */ function outPortC8(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        0xCA: /** @this {ChipSet} */ function outPortCA(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        0xCC: /** @this {ChipSet} */ function outPortCC(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        0xCE: /** @this {ChipSet} */ function outPortCE(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        0xD0: /** @this {ChipSet} */ function outPortD0(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xD2: /** @this {ChipSet} */ function outPortD2(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xD4: /** @this {ChipSet} */ function outPortD4(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xD6: /** @this {ChipSet} */ function outPortD6(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xD8: /** @this {ChipSet} */ function outPortD8(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xDA: /** @this {ChipSet} */ function outPortDA(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        0xF0: ChipSet.prototype.outFPUClear,
+        0xF1: ChipSet.prototype.outFPUReset
+    };
 
-ChipSet.aPortOutput6300 = {
-    0x60: ChipSet.prototype.out8041Kbd,
-    0x61: ChipSet.prototype.out8041Ctrl,
-    0xA0: ChipSet.prototype.outNMI
-};
+    static aPortOutput6300 = {
+        0x60: ChipSet.prototype.out8041Kbd,
+        0x61: ChipSet.prototype.out8041Ctrl,
+        0xA0: ChipSet.prototype.outNMI
+    };
 
-if (DESKPRO386) {
-    ChipSet.aPortOutputDeskPro386 = {
+    static aPortOutputDeskPro386 = {
         0x48: /** @this {ChipSet} */ function outPort48(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, bOut, addrFrom); },
         0x49: /** @this {ChipSet} */ function outPort49(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, bOut, addrFrom); },
         0x4A: /** @this {ChipSet} */ function outPort4A(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, bOut, addrFrom); },
@@ -47461,8 +47469,262 @@ WebLib.onInit(ChipSet.init);
 /**
  * @class ROMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
+ *
+ * NOTE: There's currently no need for this component to have a reset() function, since once the ROM data
+ * is loaded, it can't be changed, so there's nothing to reinitialize.
+ *
+ * OK, well, I take that back, because the Debugger, if installed, has the ability to modify ROM contents,
+ * so in that case, having a reset() function that restores the original ROM data might be useful; then again,
+ * it might not, depending on what you're trying to debug.
+ *
+ * If we do add reset(), then we'll want to change copyROM() to hang onto the original ROM data; currently,
+ * we release it after copying it into the read-only memory allocated via bus.addMemory().
  */
 class ROMx86 extends Component {
+    /**
+     * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
+     * found in the original IBM PC ROM BIOS listing.
+     */
+    static BIOS = {
+        RS232_BASE:     0x400,              // ADDRESSES OF RS232 ADAPTERS (4 words)
+        PRINTER_BASE:   0x408,              // ADDRESSES OF PRINTERS (4 words)
+        EQUIP_FLAG: {                       // INSTALLED HARDWARE (word)
+            ADDR:       0x410,
+            NUM_PRINT:      0xC000,         // NUMBER OF PRINTERS ATTACHED
+            GAME_CTRL:      0x1000,         // GAME I/O ATTACHED
+            NUM_RS232:      0x0E00,         // NUMBER OF RS232 CARDS ATTACHED
+            NUM_DRIVES:     0x00C0,         // NUMBER OF DISKETTE DRIVES (00=1, 01=2, 10=3, 11=4) ONLY IF IPL_DRIVE SET
+            VIDEO_MODE:     0x0030,         // INITIAL VIDEO MODE (00=UNUSED, 01=40X25 COLOR, 10=80X25 COLOR, 11=80X25 MONO)
+            RAM_SIZE:       0x000C,         // PLANAR RAM SIZE (00=16K,01=32K,10=48K,11=64K)
+            IPL_DRIVE:      0x0001          // IPL (Initial Program Load) FROM DISKETTE (ie, diskette drives exist)
+        },
+        MFG_TEST:       0x412,              // INITIALIZATION FLAG (byte)
+        MEMORY_SIZE:    0x413,              // MEMORY SIZE IN K BYTES (word)
+        IO_RAM_SIZE:    0x415,              // PC: MEMORY IN I/O CHANNEL (word)
+        MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
+        COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
+        COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
+        /**
+         * KEYBOARD DATA AREAS
+         */
+        KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
+            ADDR:       0x417,              //
+            INS_STATE:      0x80,           // INSERT STATE IS ACTIVE
+            CAPS_STATE:     0x40,           // CAPS LOCK STATE HAS BEEN TOGGLED
+            NUM_STATE:      0x20,           // NUM LOCK STATE HAS BEEN TOGGLED
+            SCROLL_STATE:   0x10,           // SCROLL LOCK STATE HAS BEEN TOGGLED
+            ALT_SHIFT:      0x08,           // ALTERNATE SHIFT KEY DEPRESSED
+            CTL_SHIFT:      0x04,           // CONTROL SHIFT KEY DEPRESSED
+            LEFT_SHIFT:     0x02,           // LEFT SHIFT KEY DEPRESSED
+            RIGHT_SHIFT:    0x01            // RIGHT SHIFT KEY DEPRESSED
+        },
+        KB_FLAG_1: {                        // SECOND BYTE OF KEYBOARD STATUS (byte)
+            ADDR:       0x418,              //
+            INS_SHIFT:      0x80,           // INSERT KEY IS DEPRESSED
+            CAPS_SHIFT:     0x40,           // CAPS LOCK KEY IS DEPRESSED
+            NUM_SHIFT:      0x20,           // NUM LOCK KEY IS DEPRESSED
+            SCROLL_SHIFT:   0x10,           // SCROLL LOCK KEY IS DEPRESSED
+            HOLD_STATE:     0x08            // SUSPEND KEY HAS BEEN TOGGLED
+        },
+        ALT_INPUT:      0x419,              // STORAGE FOR ALTERNATE KEYPAD ENTRY (byte)
+        BUFFER_HEAD:    0x41A,              // POINTER TO HEAD OF KEYBOARD BUFFER (word)
+        BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
+        KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
+        KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
+        /**
+         * DISKETTE DATA AREAS
+         */
+        SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
+            ADDR:       0x43E,              //
+                                            //      BIT 3-0 = DRIVE 3-0 NEEDS RECAL BEFORE
+                                            //      NEXT SEEK IF BIT IS = 0
+            INT_FLAG:       0x80,           // INTERRUPT OCCURRENCE FLAG
+        },
+        MOTOR_STATUS:   0x43F,              // MOTOR STATUS (byte)
+                                            //      BIT 3-0 = DRIVE 3-0 IS CURRENTLY RUNNING
+                                            //      BIT 7 = CURRENT OPERATION IS A WRITE, REQUIRES DELAY
+        MOTOR_COUNT:    0x440,              // TIME OUT COUNTER FOR DRIVE TURN OFF
+                                            //      37 == TWO SECONDS OF COUNTS FOR MOTOR TURN OFF
+        DISKETTE_STATUS: {                  // SINGLE BYTE OF RETURN CODE INFO FOR STATUS
+            ADDR:       0x441,
+            TIME_OUT:       0x80,           // ATTACHMENT FAILED TO RESPOND
+            BAD_SEEK:       0x40,           // SEEK OPERATION FAILED
+            BAD_NEC:        0x20,           // NEC CONTROLLER HAS FAILED
+            BAD_CRC:        0x10,           // BAD CRC ON DISKETTE READ
+            DMA_BOUNDARY:   0x09,           // ATTEMPT TO DMA ACROSS 64K BOUNDARY
+            BAD_DMA:        0x08,           // DMA OVERRUN ON OPERATION
+            RECORD_NOT_FND: 0x04,           // REQUESTED SECTOR NOT FOUND
+            WRITE_PROTECT:  0x03,           // WRITE ATTEMPTED ON WRITE PROT DISK
+            BAD_ADDR_MARK:  0x02,           // ADDRESS MARK NOT FOUND
+            BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
+        },
+        NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
+        /**
+         * VIDEO DISPLAY DATA AREA
+         */
+        CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
+        CRT_COLS:       0x44A,              // NUMBER OF COLUMNS ON SCREEN (word)
+        CRT_LEN:        0x44C,              // LENGTH OF REGEN IN BYTES (word)
+        CRT_START:      0x44E,              // STARTING ADDRESS IN REGEN BUFFER (word)
+        CURSOR_POSN:    0x450,              // CURSOR FOR EACH OF UP TO 8 PAGES (8 words)
+        CURSOR_MODE:    0x460,              // CURRENT CURSOR MODE SETTING (word)
+        ACTIVE_PAGE:    0x462,              // CURRENT PAGE BEING DISPLAYED (byte)
+        ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
+        CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
+        CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
+        /**
+         * CASSETTE DATA AREA
+         */
+        EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
+        CRC_REG:        0x469,              // PC: CRC REGISTER (word)
+        LAST_VAL:       0x46B,              // PC: LAST INPUT VALUE (byte)
+        IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
+        IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
+        INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
+        /**
+         * TIMER DATA AREA
+         */
+        TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
+        TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
+        TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
+        /**
+         * SYSTEM DATA AREA
+         */
+        BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
+        /**
+         * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
+         */
+        RESET_FLAG: {
+            ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
+            WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
+        },
+        /**
+         * FIXED DISK DATA AREAS
+         */
+        DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
+        HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
+        CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
+        PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
+        /**
+         * TIME-OUT VARIABLES
+         */
+        PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
+        RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
+        /**
+         * ADDITIONAL KEYBOARD DATA AREA
+         */
+        BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
+        BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
+        /**
+         * EGA/PGA DISPLAY WORK AREA
+         */
+        ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
+        POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
+        INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
+        /**
+         * INFO BITS:
+         *
+         *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
+         *      0x60: 256K OF VRAM
+         *      0x40: 192K OF VRAM
+         *      0x20: 128K OF VRAM
+         *      0x10: RESERVED
+         *      0x08: EGA ACTIVE MONITOR (0), EGA NOT ACTIVE (1)
+         *      0x04: WAIT FOR DISPLAY ENABLE (1)
+         *      0x02: EGA HAS A MONOCHROME ATTACHED
+         *      0x01: SET C_TYPE EMULATE ACTIVE (0)
+         */
+        INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
+        /**
+         *     40:88  byte  PCjr: third keyboard status byte
+         *                  EGA feature bit switches, emulated on VGA
+         *
+         *         |7|6|5|4|3|2|1|0| EGA feature bit switches (EGA+)
+         *          | | | | | | | `-- EGA SW1 config (1=off)
+         *          | | | | | | `--- EGA SW2 config (1=off)
+         *          | | | | | `---- EGA SW3 config (1=off)
+         *          | | | | `----- EGA SW4 config (1=off)
+         *          | | | `------ Input FEAT0 (ISR0 bit 5) after output on FCR0
+         *          | | `------- Input FEAT0 (ISR0 bit 6) after output on FCR0
+         *          | `-------- Input FEAT1 (ISR0 bit 5) after output on FCR1
+         *          `--------- Input FEAT1 (ISR0 bit 6) after output on FCR1
+         *
+         *     40:89  byte  Video display data area (MCGA and VGA)
+         *
+         *         |7|6|5|4|3|2|1|0| Video display data area (MCGA and VGA)
+         *          | | | | | | | `-- 1=VGA is active
+         *          | | | | | | `--- 1=gray scale is enabled
+         *          | | | | | `---- 1=using monochrome monitor
+         *          | | | | `----- 1=default palette loading is disabled
+         *          | | | `------ see table below
+         *          | | `------- reserved
+         *          | `--------  1=display switching enabled
+         *          `--------- alphanumeric scan lines (see table below)
+         *
+         *           Bit7    Bit4   Scan Lines
+         *             0       0    350 line mode
+         *             0       1    400 line mode
+         *             1       0    200 line mode
+         *             1       1    reserved
+         */
+        /**
+         * ADDITIONAL MEDIA DATA
+         */
+        LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
+        HF_STATUS:      0x48C,              // PC AT: STATUS REGISTER (byte)
+        HF_ERROR:       0x48D,              // PC AT: ERROR REGISTER (byte)
+        HF_INT_FLAG:    0x48E,              // PC AT: FIXED DISK INTERRUPT FLAG (byte)
+        HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
+        DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
+        DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
+        /**
+         * ADDITIONAL KEYBOARD FLAGS
+         */
+        KB_FLAG_3: {
+            ADDR:       0x496,              // PC AT: KEYBOARD MODE STATE AND TYPE FLAGS (byte)
+            LC_E1:          0b00000001,     // LAST CODE WAS THE E1 HIDDEN CODE
+            LC_E0:          0b00000010,     // LAST CODE WAS THE E0 HIDDEN CODE
+            R_CTL_SHIFT:    0b00000100,     // RIGHT CTL KEY DOWN
+            R_ALT_SHIFT:    0b00001000,     // RIGHT ALT KEY DOWN
+            GRAPH_ON:       0b00001000,     // ALT GRAPHICS KEY DOWN (WT ONLY)
+            KBX:            0b00010000,     // ENHANCED KEYBOARD INSTALLED
+            SET_NUM_LK:     0b00100000,     // FORCE NUM LOCK IF READ ID AND KBX
+            LC_AB:          0b01000000,     // LAST CHARACTER WAS FIRST ID CHARACTER
+            RD_ID:          0b10000000      // DOING A READ ID (MUST BE BIT0)
+        },
+        KB_FLAG_2: {
+            ADDR:       0x497,              // PC AT: KEYBOARD LED FLAGS (byte)
+            KB_LEDS:        0b00000111,     // KEYBOARD LED STATE BITS
+            SCROLL_LOCK:    0b00000001,     // SCROLL LOCK INDICATOR
+            NUM_LOCK:       0b00000010,     // NUM LOCK INDICATOR
+            CAPS_LOCK:      0b00000100,     // CAPS LOCK INDICATOR
+            KB_FA:          0b00010000,     // ACKNOWLEDGMENT RECEIVED
+            KB_FE:          0b00100000,     // RESEND RECEIVED FLAG
+            KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
+            KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
+        },
+        /**
+         * REAL TIME CLOCK DATA AREA
+         */
+        USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
+        USER_FLAG_SEG:  0x49A,              // PC AT: SEGMENT ADDRESS OF USER WAIT FLAG (word)
+        RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
+        RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
+        RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
+        /**
+         * AREA FOR NETWORK ADAPTER
+         */
+        NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
+        /**
+         * EGA/PGA PALETTE POINTER
+         */
+        SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
+        /**
+         * DATA AREA - PRINT SCREEN
+         */
+        STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
+    };
+
     /**
      * ROMx86(parmsROM)
      *
@@ -47862,263 +48124,6 @@ class ROMx86 extends Component {
 }
 
 /**
- * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
- * found in the original IBM PC ROM BIOS listing.
- */
-ROMx86.BIOS = {
-    RS232_BASE:     0x400,              // ADDRESSES OF RS232 ADAPTERS (4 words)
-    PRINTER_BASE:   0x408,              // ADDRESSES OF PRINTERS (4 words)
-    EQUIP_FLAG: {                       // INSTALLED HARDWARE (word)
-        ADDR:       0x410,
-        NUM_PRINT:      0xC000,         // NUMBER OF PRINTERS ATTACHED
-        GAME_CTRL:      0x1000,         // GAME I/O ATTACHED
-        NUM_RS232:      0x0E00,         // NUMBER OF RS232 CARDS ATTACHED
-        NUM_DRIVES:     0x00C0,         // NUMBER OF DISKETTE DRIVES (00=1, 01=2, 10=3, 11=4) ONLY IF IPL_DRIVE SET
-        VIDEO_MODE:     0x0030,         // INITIAL VIDEO MODE (00=UNUSED, 01=40X25 COLOR, 10=80X25 COLOR, 11=80X25 MONO)
-        RAM_SIZE:       0x000C,         // PLANAR RAM SIZE (00=16K,01=32K,10=48K,11=64K)
-        IPL_DRIVE:      0x0001          // IPL (Initial Program Load) FROM DISKETTE (ie, diskette drives exist)
-    },
-    MFG_TEST:       0x412,              // INITIALIZATION FLAG (byte)
-    MEMORY_SIZE:    0x413,              // MEMORY SIZE IN K BYTES (word)
-    IO_RAM_SIZE:    0x415,              // PC: MEMORY IN I/O CHANNEL (word)
-    MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
-    COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
-    COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
-    /**
-     * KEYBOARD DATA AREAS
-     */
-    KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
-        ADDR:       0x417,              //
-        INS_STATE:      0x80,           // INSERT STATE IS ACTIVE
-        CAPS_STATE:     0x40,           // CAPS LOCK STATE HAS BEEN TOGGLED
-        NUM_STATE:      0x20,           // NUM LOCK STATE HAS BEEN TOGGLED
-        SCROLL_STATE:   0x10,           // SCROLL LOCK STATE HAS BEEN TOGGLED
-        ALT_SHIFT:      0x08,           // ALTERNATE SHIFT KEY DEPRESSED
-        CTL_SHIFT:      0x04,           // CONTROL SHIFT KEY DEPRESSED
-        LEFT_SHIFT:     0x02,           // LEFT SHIFT KEY DEPRESSED
-        RIGHT_SHIFT:    0x01            // RIGHT SHIFT KEY DEPRESSED
-    },
-    KB_FLAG_1: {                        // SECOND BYTE OF KEYBOARD STATUS (byte)
-        ADDR:       0x418,              //
-        INS_SHIFT:      0x80,           // INSERT KEY IS DEPRESSED
-        CAPS_SHIFT:     0x40,           // CAPS LOCK KEY IS DEPRESSED
-        NUM_SHIFT:      0x20,           // NUM LOCK KEY IS DEPRESSED
-        SCROLL_SHIFT:   0x10,           // SCROLL LOCK KEY IS DEPRESSED
-        HOLD_STATE:     0x08            // SUSPEND KEY HAS BEEN TOGGLED
-    },
-    ALT_INPUT:      0x419,              // STORAGE FOR ALTERNATE KEYPAD ENTRY (byte)
-    BUFFER_HEAD:    0x41A,              // POINTER TO HEAD OF KEYBOARD BUFFER (word)
-    BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
-    KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
-    KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
-    /**
-     * DISKETTE DATA AREAS
-     */
-    SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
-        ADDR:       0x43E,              //
-                                        //      BIT 3-0 = DRIVE 3-0 NEEDS RECAL BEFORE
-                                        //      NEXT SEEK IF BIT IS = 0
-        INT_FLAG:       0x80,           // INTERRUPT OCCURRENCE FLAG
-    },
-    MOTOR_STATUS:   0x43F,              // MOTOR STATUS (byte)
-                                        //      BIT 3-0 = DRIVE 3-0 IS CURRENTLY RUNNING
-                                        //      BIT 7 = CURRENT OPERATION IS A WRITE, REQUIRES DELAY
-    MOTOR_COUNT:    0x440,              // TIME OUT COUNTER FOR DRIVE TURN OFF
-                                        //      37 == TWO SECONDS OF COUNTS FOR MOTOR TURN OFF
-    DISKETTE_STATUS: {                  // SINGLE BYTE OF RETURN CODE INFO FOR STATUS
-        ADDR:       0x441,
-        TIME_OUT:       0x80,           // ATTACHMENT FAILED TO RESPOND
-        BAD_SEEK:       0x40,           // SEEK OPERATION FAILED
-        BAD_NEC:        0x20,           // NEC CONTROLLER HAS FAILED
-        BAD_CRC:        0x10,           // BAD CRC ON DISKETTE READ
-        DMA_BOUNDARY:   0x09,           // ATTEMPT TO DMA ACROSS 64K BOUNDARY
-        BAD_DMA:        0x08,           // DMA OVERRUN ON OPERATION
-        RECORD_NOT_FND: 0x04,           // REQUESTED SECTOR NOT FOUND
-        WRITE_PROTECT:  0x03,           // WRITE ATTEMPTED ON WRITE PROT DISK
-        BAD_ADDR_MARK:  0x02,           // ADDRESS MARK NOT FOUND
-        BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
-    },
-    NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
-    /**
-     * VIDEO DISPLAY DATA AREA
-     */
-    CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
-    CRT_COLS:       0x44A,              // NUMBER OF COLUMNS ON SCREEN (word)
-    CRT_LEN:        0x44C,              // LENGTH OF REGEN IN BYTES (word)
-    CRT_START:      0x44E,              // STARTING ADDRESS IN REGEN BUFFER (word)
-    CURSOR_POSN:    0x450,              // CURSOR FOR EACH OF UP TO 8 PAGES (8 words)
-    CURSOR_MODE:    0x460,              // CURRENT CURSOR MODE SETTING (word)
-    ACTIVE_PAGE:    0x462,              // CURRENT PAGE BEING DISPLAYED (byte)
-    ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
-    CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
-    CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
-    /**
-     * CASSETTE DATA AREA
-     */
-    EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
-    CRC_REG:        0x469,              // PC: CRC REGISTER (word)
-    LAST_VAL:       0x46B,              // PC: LAST INPUT VALUE (byte)
-    IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
-    IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
-    INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
-    /**
-     * TIMER DATA AREA
-     */
-    TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
-    TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
-    TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
-    /**
-     * SYSTEM DATA AREA
-     */
-    BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
-    /**
-     * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
-     */
-    RESET_FLAG: {
-        ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
-        WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
-    },
-    /**
-     * FIXED DISK DATA AREAS
-     */
-    DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
-    HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
-    CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
-    PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
-    /**
-     * TIME-OUT VARIABLES
-     */
-    PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
-    RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
-    /**
-     * ADDITIONAL KEYBOARD DATA AREA
-     */
-    BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
-    BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
-    /**
-     * EGA/PGA DISPLAY WORK AREA
-     */
-    ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
-    POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
-    INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
-    /**
-     * INFO BITS:
-     *
-     *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
-     *      0x60: 256K OF VRAM
-     *      0x40: 192K OF VRAM
-     *      0x20: 128K OF VRAM
-     *      0x10: RESERVED
-     *      0x08: EGA ACTIVE MONITOR (0), EGA NOT ACTIVE (1)
-     *      0x04: WAIT FOR DISPLAY ENABLE (1)
-     *      0x02: EGA HAS A MONOCHROME ATTACHED
-     *      0x01: SET C_TYPE EMULATE ACTIVE (0)
-     */
-    INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
-    /**
-     *     40:88  byte  PCjr: third keyboard status byte
-     *                  EGA feature bit switches, emulated on VGA
-     *
-     *         |7|6|5|4|3|2|1|0| EGA feature bit switches (EGA+)
-     *          | | | | | | | `-- EGA SW1 config (1=off)
-     *          | | | | | | `--- EGA SW2 config (1=off)
-     *          | | | | | `---- EGA SW3 config (1=off)
-     *          | | | | `----- EGA SW4 config (1=off)
-     *          | | | `------ Input FEAT0 (ISR0 bit 5) after output on FCR0
-     *          | | `------- Input FEAT0 (ISR0 bit 6) after output on FCR0
-     *          | `-------- Input FEAT1 (ISR0 bit 5) after output on FCR1
-     *          `--------- Input FEAT1 (ISR0 bit 6) after output on FCR1
-     *
-     *     40:89  byte  Video display data area (MCGA and VGA)
-     *
-     *         |7|6|5|4|3|2|1|0| Video display data area (MCGA and VGA)
-     *          | | | | | | | `-- 1=VGA is active
-     *          | | | | | | `--- 1=gray scale is enabled
-     *          | | | | | `---- 1=using monochrome monitor
-     *          | | | | `----- 1=default palette loading is disabled
-     *          | | | `------ see table below
-     *          | | `------- reserved
-     *          | `--------  1=display switching enabled
-     *          `--------- alphanumeric scan lines (see table below)
-     *
-     *           Bit7    Bit4   Scan Lines
-     *             0       0    350 line mode
-     *             0       1    400 line mode
-     *             1       0    200 line mode
-     *             1       1    reserved
-     */
-    /**
-     * ADDITIONAL MEDIA DATA
-     */
-    LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
-    HF_STATUS:      0x48C,              // PC AT: STATUS REGISTER (byte)
-    HF_ERROR:       0x48D,              // PC AT: ERROR REGISTER (byte)
-    HF_INT_FLAG:    0x48E,              // PC AT: FIXED DISK INTERRUPT FLAG (byte)
-    HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
-    DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
-    DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
-    /**
-     * ADDITIONAL KEYBOARD FLAGS
-     */
-    KB_FLAG_3: {
-        ADDR:       0x496,              // PC AT: KEYBOARD MODE STATE AND TYPE FLAGS (byte)
-        LC_E1:          0b00000001,     // LAST CODE WAS THE E1 HIDDEN CODE
-        LC_E0:          0b00000010,     // LAST CODE WAS THE E0 HIDDEN CODE
-        R_CTL_SHIFT:    0b00000100,     // RIGHT CTL KEY DOWN
-        R_ALT_SHIFT:    0b00001000,     // RIGHT ALT KEY DOWN
-        GRAPH_ON:       0b00001000,     // ALT GRAPHICS KEY DOWN (WT ONLY)
-        KBX:            0b00010000,     // ENHANCED KEYBOARD INSTALLED
-        SET_NUM_LK:     0b00100000,     // FORCE NUM LOCK IF READ ID AND KBX
-        LC_AB:          0b01000000,     // LAST CHARACTER WAS FIRST ID CHARACTER
-        RD_ID:          0b10000000      // DOING A READ ID (MUST BE BIT0)
-    },
-    KB_FLAG_2: {
-        ADDR:       0x497,              // PC AT: KEYBOARD LED FLAGS (byte)
-        KB_LEDS:        0b00000111,     // KEYBOARD LED STATE BITS
-        SCROLL_LOCK:    0b00000001,     // SCROLL LOCK INDICATOR
-        NUM_LOCK:       0b00000010,     // NUM LOCK INDICATOR
-        CAPS_LOCK:      0b00000100,     // CAPS LOCK INDICATOR
-        KB_FA:          0b00010000,     // ACKNOWLEDGMENT RECEIVED
-        KB_FE:          0b00100000,     // RESEND RECEIVED FLAG
-        KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
-        KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
-    },
-    /**
-     * REAL TIME CLOCK DATA AREA
-     */
-    USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
-    USER_FLAG_SEG:  0x49A,              // PC AT: SEGMENT ADDRESS OF USER WAIT FLAG (word)
-    RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
-    RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
-    RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
-    /**
-     * AREA FOR NETWORK ADAPTER
-     */
-    NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
-    /**
-     * EGA/PGA PALETTE POINTER
-     */
-    SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
-    /**
-     * DATA AREA - PRINT SCREEN
-     */
-    STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
-};
-
-/**
- * NOTE: There's currently no need for this component to have a reset() function, since
- * once the ROM data is loaded, it can't be changed, so there's nothing to reinitialize.
- *
- * OK, well, I take that back, because the Debugger, if installed, has the ability to modify
- * ROM contents, so in that case, having a reset() function that restores the original ROM data
- * might be useful; then again, it might not, depending on what you're trying to debug.
- *
- * If we do add reset(), then we'll want to change copyROM() to hang onto the original
- * ROM data; currently, we release it after copying it into the read-only memory allocated
- * via bus.addMemory().
- */
-
-/**
  * Initialize all the ROM modules on the page.
  */
 WebLib.onInit(ROMx86.init);
@@ -48447,10 +48452,104 @@ class RAMx86 extends Component {
 }
 
 /**
- * class CompaqController
+ * @class CompaqController
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CompaqController extends Controller {
+
+    static ADDR       = 0x80C00000|0;
+    static MAP_SRC    = 0x00FE0000;
+    static MAP_DST    = 0x000E0000;
+    static MAP_SIZE   = 0x00020000;
+
+    /**
+     * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
+     *
+     * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
+     * at %FE0000; it simply becomes addressable at %0E0000 as well, displacing any ROMs that used to be
+     * addressable at %0E0000 through %0FFFFF.
+     */
+    static MAPPINGS = {
+        UNMAPPED:   0x0001,         // is this bit is CLEAR, the last 128Kb (at 0x00FE0000) is mapped to 0x000E0000
+        READWRITE:  0x0002,         // if this bit is CLEAR, the last 128Kb (at 0x00FE0000) is read-only (ie, write-protected)
+        RESERVED:   0xFFFC,         // the remaining 6 bits are reserved and should always be SET
+        DEFAULT:    0xFFFF          // our default settings (no mapping, no write-protection)
+    };
+
+    /**
+     * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
+     *
+     * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
+     *
+     *      SW1-7   SW1-8   Bit5    Bit4    Amount (of base memory provided by the COMPAQ 32-bit memory board)
+     *      -----   -----   ----    ----    ------
+     *        ON      ON      0       0     640Kb
+     *        ON      OFF     0       1     Invalid
+     *        OFF     ON      1       0     512Kb
+     *        OFF     OFF     1       1     256Kb
+     *
+     * Other SW1 switches include:
+     *
+     *      SW1-1:  ON enables fail-safe timer
+     *      SW1-2:  ON indicates 80387 coprocessor installed
+     *      SW1-3:  ON sets memory from 0xC00000 to 0xFFFFFF (between 12 and 16 megabytes) non-cacheable
+     *      SW1-4:  ON selects AUTO system speed (OFF selects HIGH system speed)
+     *      SW1-5:  RESERVED (however, the system can read its state; see below)
+     *      SW1-6:  COMPAQ Dual-Mode Monitor or Color Monitor (OFF selects Monochrome monitor other than COMPAQ)
+     *
+     * While SW1-7 and SW1-8 are connected to this memory-mapped register, other SW1 DIP switches are accessible
+     * through the 8042 Keyboard Controller's KBC.INPORT register, as follows:
+     *
+     *      SW1-1:  TODO: Determine
+     *      SW1-2:  ChipSet.KC8042.INPORT.COMPAQ_NO80387 clear if ON, set (0x04) if OFF
+     *      SW1-3:  TODO: Determine
+     *      SW1-4:  ChipSet.KC8042.INPORT.COMPAQ_HISPEED clear if ON, set (0x10) if OFF
+     *      SW1-5:  ChipSet.KC8042.INPORT.COMPAQ_DIP5OFF clear if ON, set (0x20) if OFF
+     *      SW1-6:  ChipSet.KC8042.INPORT.COMPAQ_NONDUAL clear if ON, set (0x40) if OFF
+     */
+    static SETTINGS = {
+        B0_PARITY:  0x0001,         // parity OK in byte 0
+        B1_PARITY:  0x0002,         // parity OK in byte 1
+        B2_PARITY:  0x0004,         // parity OK in byte 2
+        B3_PARITY:  0x0008,         // parity OK in byte 3
+        BASE_640KB: 0x0000,         // SW1-7,8: ON  ON   Bits 5,4: 00
+        BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
+        BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
+        BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
+        /**
+         * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
+         * but setting it results in memory configuration errors; review.
+         */
+        ADDED_1MB:  0x0040,
+        /**
+         * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
+         */
+        PIGGYBACK:  0x0080,
+        SYS_4MB:    0x0100,         // 4Mb on system board
+        SYS_1MB:    0x0200,         // 1Mb on system board
+        SYS_NONE:   0x0300,         // no memory on system board
+        MODA_4MB:   0x0400,         // 4Mb on module A board
+        MODA_1MB:   0x0800,         // 1Mb on module A board
+        MODA_NONE:  0x0C00,         // no memory on module A board
+        MODB_4MB:   0x1000,         // 4Mb on module B board
+        MODB_1MB:   0x2000,         // 1Mb on module B board
+        MODB_NONE:  0x3000,         // no memory on module B board
+        MODC_4MB:   0x4000,         // 4Mb on module C board
+        MODC_1MB:   0x8000,         // 1Mb on module C board
+        MODC_NONE:  0xC000,         // no memory on module C board
+        /**
+         * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
+         */
+        DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
+    };
+
+    static RAMSETUP = {
+        SETUP:      0x000F,
+        CACHE:      0x0040,
+        RESERVED:   0xFFB0,
+        DEFAULT:    0x0002          // our default settings (ie, 2Mb, cache disabled)
+    };
+
     /**
      * CompaqController(ram)
      *
@@ -48496,6 +48595,9 @@ class CompaqController extends Controller {
         this.wSettings = CompaqController.SETTINGS.DEFAULT;
         this.wRAMSetup = CompaqController.RAMSETUP.DEFAULT;
         this.aBlocksDst = null;
+
+        this.buffer = [null, 0];
+        this.access = [CompaqController.readByte, CompaqController.writeByte];
     }
 
     /**
@@ -48604,7 +48706,7 @@ class CompaqController extends Controller {
      */
     getMemoryAccess()
     {
-        return CompaqController.ACCESS;
+        return this.access;
     }
 
     /**
@@ -48616,7 +48718,7 @@ class CompaqController extends Controller {
      */
     getMemoryBuffer(addr)
     {
-        return CompaqController.BUFFER;
+        return this.buffer;
     }
 
     /**
@@ -48667,102 +48769,6 @@ class CompaqController extends Controller {
         }
     }
 }
-
-CompaqController.ADDR       = 0x80C00000|0;
-CompaqController.MAP_SRC    = 0x00FE0000;
-CompaqController.MAP_DST    = 0x000E0000;
-CompaqController.MAP_SIZE   = 0x00020000;
-
-/**
- * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
- *
- * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
- * at %FE0000; it simply becomes addressable at %0E0000 as well, displacing any ROMs that used to be
- * addressable at %0E0000 through %0FFFFF.
- */
-CompaqController.MAPPINGS = {
-    UNMAPPED:   0x0001,             // is this bit is CLEAR, the last 128Kb (at 0x00FE0000) is mapped to 0x000E0000
-    READWRITE:  0x0002,             // if this bit is CLEAR, the last 128Kb (at 0x00FE0000) is read-only (ie, write-protected)
-    RESERVED:   0xFFFC,             // the remaining 6 bits are reserved and should always be SET
-    DEFAULT:    0xFFFF              // our default settings (no mapping, no write-protection)
-};
-
-/**
- * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
- *
- * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
- *
- *      SW1-7   SW1-8   Bit5    Bit4    Amount (of base memory provided by the COMPAQ 32-bit memory board)
- *      -----   -----   ----    ----    ------
- *        ON      ON      0       0     640Kb
- *        ON      OFF     0       1     Invalid
- *        OFF     ON      1       0     512Kb
- *        OFF     OFF     1       1     256Kb
- *
- * Other SW1 switches include:
- *
- *      SW1-1:  ON enables fail-safe timer
- *      SW1-2:  ON indicates 80387 coprocessor installed
- *      SW1-3:  ON sets memory from 0xC00000 to 0xFFFFFF (between 12 and 16 megabytes) non-cacheable
- *      SW1-4:  ON selects AUTO system speed (OFF selects HIGH system speed)
- *      SW1-5:  RESERVED (however, the system can read its state; see below)
- *      SW1-6:  COMPAQ Dual-Mode Monitor or Color Monitor (OFF selects Monochrome monitor other than COMPAQ)
- *
- * While SW1-7 and SW1-8 are connected to this memory-mapped register, other SW1 DIP switches are accessible
- * through the 8042 Keyboard Controller's KBC.INPORT register, as follows:
- *
- *      SW1-1:  TODO: Determine
- *      SW1-2:  ChipSet.KC8042.INPORT.COMPAQ_NO80387 clear if ON, set (0x04) if OFF
- *      SW1-3:  TODO: Determine
- *      SW1-4:  ChipSet.KC8042.INPORT.COMPAQ_HISPEED clear if ON, set (0x10) if OFF
- *      SW1-5:  ChipSet.KC8042.INPORT.COMPAQ_DIP5OFF clear if ON, set (0x20) if OFF
- *      SW1-6:  ChipSet.KC8042.INPORT.COMPAQ_NONDUAL clear if ON, set (0x40) if OFF
- */
-CompaqController.SETTINGS = {
-    B0_PARITY:  0x0001,         // parity OK in byte 0
-    B1_PARITY:  0x0002,         // parity OK in byte 1
-    B2_PARITY:  0x0004,         // parity OK in byte 2
-    B3_PARITY:  0x0008,         // parity OK in byte 3
-    BASE_640KB: 0x0000,         // SW1-7,8: ON  ON   Bits 5,4: 00
-    BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
-    BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
-    BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
-    /**
-     * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
-     * but setting it results in memory configuration errors; review.
-     */
-    ADDED_1MB:  0x0040,
-    /**
-     * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
-     */
-    PIGGYBACK:  0x0080,
-    SYS_4MB:    0x0100,         // 4Mb on system board
-    SYS_1MB:    0x0200,         // 1Mb on system board
-    SYS_NONE:   0x0300,         // no memory on system board
-    MODA_4MB:   0x0400,         // 4Mb on module A board
-    MODA_1MB:   0x0800,         // 1Mb on module A board
-    MODA_NONE:  0x0C00,         // no memory on module A board
-    MODB_4MB:   0x1000,         // 4Mb on module B board
-    MODB_1MB:   0x2000,         // 1Mb on module B board
-    MODB_NONE:  0x3000,         // no memory on module B board
-    MODC_4MB:   0x4000,         // 4Mb on module C board
-    MODC_1MB:   0x8000,         // 1Mb on module C board
-    MODC_NONE:  0xC000,         // no memory on module C board
-    /**
-     * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
-     */
-    DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
-};
-
-CompaqController.RAMSETUP = {
-    SETUP:      0x000F,
-    CACHE:      0x0040,
-    RESERVED:   0xFFB0,
-    DEFAULT:    0x0002          // our default settings (ie, 2Mb, cache disabled)
-};
-
-CompaqController.BUFFER = [null, 0];
-CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte];
 
 /**
  * Initialize all the RAM modules on the page.
@@ -61180,6 +61186,142 @@ WebLib.onInit(ParallelPort.init);
  */
 class SerialPort extends Component {
     /**
+     * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
+     *
+     * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
+     * values should be used for the corresponding baud rates.  Rates above 9600 are discouraged by the IBM Tech Ref,
+     * but rates as high as 128000 are listed on the NS8250A data sheet.
+     *
+     *      Divisor     Rate        Percent Error
+     *      0x0900      50
+     *      0x0600      75
+     *      0x0417      110         0.026%
+     *      0x0359      134.5       0.058%
+     *      0x0300      150
+     *      0x0180      300
+     *      0x00C0      600
+     *      0x0060      1200
+     *      0x0040      1800
+     *      0x003A      2000        0.69%
+     *      0x0030      2400
+     *      0x0020      3600
+     *      0x0018      4800
+     *      0x0010      7200
+     *      0x000C      9600
+     *      0x0006      19200
+     *      0x0003      38400
+     *      0x0002      56000       2.86%
+     *      0x0001      128000
+     */
+    static DLL = {REG: 0};          // Divisor Latch LSB (only when SerialPort.LCR.DLAB is set)
+    static THR = {REG: 0};          // Transmitter Holding Register (write)
+    static DL_DEFAULT = 0x180;      // we select an arbitrary default Divisor Latch equivalent to 300 baud
+
+    /**
+     * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
+     */
+    static RBR = {REG: 0};          // (read)
+
+    /**
+     * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
+     */
+    static IER = {
+        REG:            1,          // Interrupt Enable Register
+        RBR_AVAIL:      0x01,
+        THR_EMPTY:      0x02,
+        LSR_DELTA:      0x04,
+        MSR_DELTA:      0x08,
+        UNUSED:         0xF0        // always zero
+    };
+
+    static DLM = {REG: 1};          // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
+
+    /**
+     * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
+     *
+     * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
+     */
+    static IIR = {
+        REG:            2,          // Interrupt ID Register (read-only)
+        NO_INT:         0x01,
+        INT_LSR:        0x06,       // Line Status (highest priority: Overrun error, Parity error, Framing error, or Break Interrupt)
+        INT_RBR:        0x04,       // Receiver Data Available
+        INT_THR:        0x02,       // Transmitter Holding Register Empty
+        INT_MSR:        0x00,       // Modem Status Register (lowest priority: Clear To Send, Data Set Ready, Ring Indicator, or Data Carrier Detect)
+        INT_BITS:       0x06,
+        UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
+    };
+
+    /**
+     * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
+     */
+    static LCR = {
+        REG:            3,          // Line Control Register
+        DATA_5BITS:     0x00,
+        DATA_6BITS:     0x01,
+        DATA_7BITS:     0x02,
+        DATA_8BITS:     0x03,
+        STOP_BITS:      0x04,       // clear: 1 stop bit; set: 1.5 stop bits for LCR_DATA_5BITS, 2 stop bits for all other data lengths
+        PARITY_BIT:     0x08,       // if set, a parity bit is inserted/expected between the last data bit and the first stop bit; no parity bit if clear
+        PARITY_EVEN:    0x10,       // if set, even parity is selected (ie, the parity bit insures an even number of set bits); if clear, odd parity
+        PARITY_STICK:   0x20,       // if set, parity bit is transmitted inverted; if clear, parity bit is transmitted normally
+        BREAK:          0x40,       // if set, serial output (SOUT) signal is forced to logical 0 for the duration
+        DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
+    };
+
+    /**
+     * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
+     */
+    static MCR = {
+        REG:            4,          // Modem Control Register
+        DTR:            0x01,       // when set, DTR goes high, indicating ready to establish link (looped back to DSR in loop-back mode)
+        RTS:            0x02,       // when set, RTS goes high, indicating ready to exchange data (looped back to CTS in loop-back mode)
+        OUT1:           0x04,       // when set, OUT1 goes high (looped back to RI in loop-back mode)
+        OUT2:           0x08,       // when set, OUT2 goes high (looped back to RLSD in loop-back mode); must also be set for most UARTs to enable interrupts (but not ours)
+        LOOPBACK:       0x10,       // when set, enables loop-back mode
+        UNUSED:         0xE0        // always zero
+    };
+
+    /**
+     * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
+     *
+     * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
+     * I have calls it TEMT instead of TSRE, and claims that it is set whenever BOTH the THR and TSR are empty, and clear
+     * whenever EITHER the THR or TSR contain data.
+     */
+    static LSR = {
+        REG:            5,          // Line Status Register
+        DR:             0x01,       // Data Ready (set when new data in RBR.REG; cleared when RBR.REG read)
+        OE:             0x02,       // Overrun Error (set when new data arrives in RBR.REG before previous data read; cleared when LSR.REG read)
+        PE:             0x04,       // Parity Error (set when new data has incorrect parity; cleared when LSR.REG read)
+        FE:             0x08,       // Framing Error (set when new data has invalid stop bit; cleared when LSR.REG read)
+        BI:             0x10,       // Break Interrupt (set when new data exceeded normal transmission time; cleared LSR.REG when read)
+        THRE:           0x20,       // Transmitter Holding Register Empty (set when UART ready to accept new data; cleared when THR.REG written)
+        TSRE:           0x40,       // Transmitter Shift Register Empty (set when the TSR is empty; cleared when the THR is transferred to the TSR)
+        UNUSED:         0x80        // always zero
+    };
+
+    /**
+     * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
+     */
+    static MSR = {
+        REG:            6,          // Modem Status Register
+        DCTS:           0x01,       // when set, CTS (Clear To Send) has changed since last read
+        DDSR:           0x02,       // when set, DSR (Data Set Ready) has changed since last read
+        TERI:           0x04,       // when set, TERI (Trailing Edge Ring Indicator) indicates RI has changed from 1 to 0
+        DRLSD:          0x08,       // when set, RLSD (Received Line Signal Detector) has changed
+        CTS:            0x10,       // when set, the modem or data set is ready to exchange data (complement of the Clear To Send input signal)
+        DSR:            0x20,       // when set, the modem or data set is ready to establish link (complement of the Data Set Ready input signal)
+        RI:             0x40,       // complement of the RI (Ring Indicator) input
+        RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
+    };
+
+    /**
+     * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
+     */
+    static SCR = {REG: 7};
+
+    /**
      * SerialPort(parms)
      *
      * The SerialPort component has the following component-specific (parms) properties:
@@ -62163,166 +62305,30 @@ class SerialPort extends Component {
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }
+
+    /**
+     * Port input notification table
+     */
+    static aPortInput = {
+        0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
+        0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
+        0x2: SerialPort.prototype.inIIR,
+        0x3: SerialPort.prototype.inLCR,
+        0x4: SerialPort.prototype.inMCR,
+        0x5: SerialPort.prototype.inLSR,
+        0x6: SerialPort.prototype.inMSR
+    };
+
+    /**
+     * Port output notification table
+     */
+    static aPortOutput = {
+        0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
+        0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
+        0x3: SerialPort.prototype.outLCR,
+        0x4: SerialPort.prototype.outMCR
+    };
 }
-
-/**
- * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
- *
- * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
- * values should be used for the corresponding baud rates.  Rates above 9600 are discouraged by the IBM Tech Ref,
- * but rates as high as 128000 are listed on the NS8250A data sheet.
- *
- *      Divisor     Rate        Percent Error
- *      0x0900      50
- *      0x0600      75
- *      0x0417      110         0.026%
- *      0x0359      134.5       0.058%
- *      0x0300      150
- *      0x0180      300
- *      0x00C0      600
- *      0x0060      1200
- *      0x0040      1800
- *      0x003A      2000        0.69%
- *      0x0030      2400
- *      0x0020      3600
- *      0x0018      4800
- *      0x0010      7200
- *      0x000C      9600
- *      0x0006      19200
- *      0x0003      38400
- *      0x0002      56000       2.86%
- *      0x0001      128000
- */
-SerialPort.DLL = {REG: 0};      // Divisor Latch LSB (only when SerialPort.LCR.DLAB is set)
-SerialPort.THR = {REG: 0};      // Transmitter Holding Register (write)
-SerialPort.DL_DEFAULT = 0x180;  // we select an arbitrary default Divisor Latch equivalent to 300 baud
-
-/**
- * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
- */
-SerialPort.RBR = {REG: 0};      // (read)
-
-/**
- * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
- */
-SerialPort.IER = {
-    REG:            1,          // Interrupt Enable Register
-    RBR_AVAIL:      0x01,
-    THR_EMPTY:      0x02,
-    LSR_DELTA:      0x04,
-    MSR_DELTA:      0x08,
-    UNUSED:         0xF0        // always zero
-};
-
-SerialPort.DLM = {REG: 1};      // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
-
-/**
- * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
- *
- * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
- */
-SerialPort.IIR = {
-    REG:            2,          // Interrupt ID Register (read-only)
-    NO_INT:         0x01,
-    INT_LSR:        0x06,       // Line Status (highest priority: Overrun error, Parity error, Framing error, or Break Interrupt)
-    INT_RBR:        0x04,       // Receiver Data Available
-    INT_THR:        0x02,       // Transmitter Holding Register Empty
-    INT_MSR:        0x00,       // Modem Status Register (lowest priority: Clear To Send, Data Set Ready, Ring Indicator, or Data Carrier Detect)
-    INT_BITS:       0x06,
-    UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
-};
-
-/**
- * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
- */
-SerialPort.LCR = {
-    REG:            3,          // Line Control Register
-    DATA_5BITS:     0x00,
-    DATA_6BITS:     0x01,
-    DATA_7BITS:     0x02,
-    DATA_8BITS:     0x03,
-    STOP_BITS:      0x04,       // clear: 1 stop bit; set: 1.5 stop bits for LCR_DATA_5BITS, 2 stop bits for all other data lengths
-    PARITY_BIT:     0x08,       // if set, a parity bit is inserted/expected between the last data bit and the first stop bit; no parity bit if clear
-    PARITY_EVEN:    0x10,       // if set, even parity is selected (ie, the parity bit insures an even number of set bits); if clear, odd parity
-    PARITY_STICK:   0x20,       // if set, parity bit is transmitted inverted; if clear, parity bit is transmitted normally
-    BREAK:          0x40,       // if set, serial output (SOUT) signal is forced to logical 0 for the duration
-    DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
-};
-
-/**
- * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
- */
-SerialPort.MCR = {
-    REG:            4,          // Modem Control Register
-    DTR:            0x01,       // when set, DTR goes high, indicating ready to establish link (looped back to DSR in loop-back mode)
-    RTS:            0x02,       // when set, RTS goes high, indicating ready to exchange data (looped back to CTS in loop-back mode)
-    OUT1:           0x04,       // when set, OUT1 goes high (looped back to RI in loop-back mode)
-    OUT2:           0x08,       // when set, OUT2 goes high (looped back to RLSD in loop-back mode); must also be set for most UARTs to enable interrupts (but not ours)
-    LOOPBACK:       0x10,       // when set, enables loop-back mode
-    UNUSED:         0xE0        // always zero
-};
-
-/**
- * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
- *
- * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
- * I have calls it TEMT instead of TSRE, and claims that it is set whenever BOTH the THR and TSR are empty, and clear
- * whenever EITHER the THR or TSR contain data.
- */
-SerialPort.LSR = {
-    REG:            5,          // Line Status Register
-    DR:             0x01,       // Data Ready (set when new data in RBR.REG; cleared when RBR.REG read)
-    OE:             0x02,       // Overrun Error (set when new data arrives in RBR.REG before previous data read; cleared when LSR.REG read)
-    PE:             0x04,       // Parity Error (set when new data has incorrect parity; cleared when LSR.REG read)
-    FE:             0x08,       // Framing Error (set when new data has invalid stop bit; cleared when LSR.REG read)
-    BI:             0x10,       // Break Interrupt (set when new data exceeded normal transmission time; cleared LSR.REG when read)
-    THRE:           0x20,       // Transmitter Holding Register Empty (set when UART ready to accept new data; cleared when THR.REG written)
-    TSRE:           0x40,       // Transmitter Shift Register Empty (set when the TSR is empty; cleared when the THR is transferred to the TSR)
-    UNUSED:         0x80        // always zero
-};
-
-/**
- * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
- */
-SerialPort.MSR = {
-    REG:            6,          // Modem Status Register
-    DCTS:           0x01,       // when set, CTS (Clear To Send) has changed since last read
-    DDSR:           0x02,       // when set, DSR (Data Set Ready) has changed since last read
-    TERI:           0x04,       // when set, TERI (Trailing Edge Ring Indicator) indicates RI has changed from 1 to 0
-    DRLSD:          0x08,       // when set, RLSD (Received Line Signal Detector) has changed
-    CTS:            0x10,       // when set, the modem or data set is ready to exchange data (complement of the Clear To Send input signal)
-    DSR:            0x20,       // when set, the modem or data set is ready to establish link (complement of the Data Set Ready input signal)
-    RI:             0x40,       // complement of the RI (Ring Indicator) input
-    RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
-};
-
-/**
- * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
- */
-SerialPort.SCR = {REG: 7};
-
-/**
- * Port input notification table
- */
-SerialPort.aPortInput = {
-    0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
-    0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
-    0x2: SerialPort.prototype.inIIR,
-    0x3: SerialPort.prototype.inLCR,
-    0x4: SerialPort.prototype.inMCR,
-    0x5: SerialPort.prototype.inLSR,
-    0x6: SerialPort.prototype.inMSR
-};
-
-/**
- * Port output notification table
- */
-SerialPort.aPortOutput = {
-    0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
-    0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
-    0x3: SerialPort.prototype.outLCR,
-    0x4: SerialPort.prototype.outMCR
-};
 
 /**
  * Initialize every SerialPort module on the page.

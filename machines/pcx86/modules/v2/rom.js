@@ -18,8 +18,262 @@ import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./defines.js";
 /**
  * @class ROMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
+ *
+ * NOTE: There's currently no need for this component to have a reset() function, since once the ROM data
+ * is loaded, it can't be changed, so there's nothing to reinitialize.
+ *
+ * OK, well, I take that back, because the Debugger, if installed, has the ability to modify ROM contents,
+ * so in that case, having a reset() function that restores the original ROM data might be useful; then again,
+ * it might not, depending on what you're trying to debug.
+ *
+ * If we do add reset(), then we'll want to change copyROM() to hang onto the original ROM data; currently,
+ * we release it after copying it into the read-only memory allocated via bus.addMemory().
  */
 export default class ROMx86 extends Component {
+    /**
+     * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
+     * found in the original IBM PC ROM BIOS listing.
+     */
+    static BIOS = {
+        RS232_BASE:     0x400,              // ADDRESSES OF RS232 ADAPTERS (4 words)
+        PRINTER_BASE:   0x408,              // ADDRESSES OF PRINTERS (4 words)
+        EQUIP_FLAG: {                       // INSTALLED HARDWARE (word)
+            ADDR:       0x410,
+            NUM_PRINT:      0xC000,         // NUMBER OF PRINTERS ATTACHED
+            GAME_CTRL:      0x1000,         // GAME I/O ATTACHED
+            NUM_RS232:      0x0E00,         // NUMBER OF RS232 CARDS ATTACHED
+            NUM_DRIVES:     0x00C0,         // NUMBER OF DISKETTE DRIVES (00=1, 01=2, 10=3, 11=4) ONLY IF IPL_DRIVE SET
+            VIDEO_MODE:     0x0030,         // INITIAL VIDEO MODE (00=UNUSED, 01=40X25 COLOR, 10=80X25 COLOR, 11=80X25 MONO)
+            RAM_SIZE:       0x000C,         // PLANAR RAM SIZE (00=16K,01=32K,10=48K,11=64K)
+            IPL_DRIVE:      0x0001          // IPL (Initial Program Load) FROM DISKETTE (ie, diskette drives exist)
+        },
+        MFG_TEST:       0x412,              // INITIALIZATION FLAG (byte)
+        MEMORY_SIZE:    0x413,              // MEMORY SIZE IN K BYTES (word)
+        IO_RAM_SIZE:    0x415,              // PC: MEMORY IN I/O CHANNEL (word)
+        MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
+        COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
+        COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
+        /**
+         * KEYBOARD DATA AREAS
+         */
+        KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
+            ADDR:       0x417,              //
+            INS_STATE:      0x80,           // INSERT STATE IS ACTIVE
+            CAPS_STATE:     0x40,           // CAPS LOCK STATE HAS BEEN TOGGLED
+            NUM_STATE:      0x20,           // NUM LOCK STATE HAS BEEN TOGGLED
+            SCROLL_STATE:   0x10,           // SCROLL LOCK STATE HAS BEEN TOGGLED
+            ALT_SHIFT:      0x08,           // ALTERNATE SHIFT KEY DEPRESSED
+            CTL_SHIFT:      0x04,           // CONTROL SHIFT KEY DEPRESSED
+            LEFT_SHIFT:     0x02,           // LEFT SHIFT KEY DEPRESSED
+            RIGHT_SHIFT:    0x01            // RIGHT SHIFT KEY DEPRESSED
+        },
+        KB_FLAG_1: {                        // SECOND BYTE OF KEYBOARD STATUS (byte)
+            ADDR:       0x418,              //
+            INS_SHIFT:      0x80,           // INSERT KEY IS DEPRESSED
+            CAPS_SHIFT:     0x40,           // CAPS LOCK KEY IS DEPRESSED
+            NUM_SHIFT:      0x20,           // NUM LOCK KEY IS DEPRESSED
+            SCROLL_SHIFT:   0x10,           // SCROLL LOCK KEY IS DEPRESSED
+            HOLD_STATE:     0x08            // SUSPEND KEY HAS BEEN TOGGLED
+        },
+        ALT_INPUT:      0x419,              // STORAGE FOR ALTERNATE KEYPAD ENTRY (byte)
+        BUFFER_HEAD:    0x41A,              // POINTER TO HEAD OF KEYBOARD BUFFER (word)
+        BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
+        KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
+        KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
+        /**
+         * DISKETTE DATA AREAS
+         */
+        SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
+            ADDR:       0x43E,              //
+                                            //      BIT 3-0 = DRIVE 3-0 NEEDS RECAL BEFORE
+                                            //      NEXT SEEK IF BIT IS = 0
+            INT_FLAG:       0x80,           // INTERRUPT OCCURRENCE FLAG
+        },
+        MOTOR_STATUS:   0x43F,              // MOTOR STATUS (byte)
+                                            //      BIT 3-0 = DRIVE 3-0 IS CURRENTLY RUNNING
+                                            //      BIT 7 = CURRENT OPERATION IS A WRITE, REQUIRES DELAY
+        MOTOR_COUNT:    0x440,              // TIME OUT COUNTER FOR DRIVE TURN OFF
+                                            //      37 == TWO SECONDS OF COUNTS FOR MOTOR TURN OFF
+        DISKETTE_STATUS: {                  // SINGLE BYTE OF RETURN CODE INFO FOR STATUS
+            ADDR:       0x441,
+            TIME_OUT:       0x80,           // ATTACHMENT FAILED TO RESPOND
+            BAD_SEEK:       0x40,           // SEEK OPERATION FAILED
+            BAD_NEC:        0x20,           // NEC CONTROLLER HAS FAILED
+            BAD_CRC:        0x10,           // BAD CRC ON DISKETTE READ
+            DMA_BOUNDARY:   0x09,           // ATTEMPT TO DMA ACROSS 64K BOUNDARY
+            BAD_DMA:        0x08,           // DMA OVERRUN ON OPERATION
+            RECORD_NOT_FND: 0x04,           // REQUESTED SECTOR NOT FOUND
+            WRITE_PROTECT:  0x03,           // WRITE ATTEMPTED ON WRITE PROT DISK
+            BAD_ADDR_MARK:  0x02,           // ADDRESS MARK NOT FOUND
+            BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
+        },
+        NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
+        /**
+         * VIDEO DISPLAY DATA AREA
+         */
+        CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
+        CRT_COLS:       0x44A,              // NUMBER OF COLUMNS ON SCREEN (word)
+        CRT_LEN:        0x44C,              // LENGTH OF REGEN IN BYTES (word)
+        CRT_START:      0x44E,              // STARTING ADDRESS IN REGEN BUFFER (word)
+        CURSOR_POSN:    0x450,              // CURSOR FOR EACH OF UP TO 8 PAGES (8 words)
+        CURSOR_MODE:    0x460,              // CURRENT CURSOR MODE SETTING (word)
+        ACTIVE_PAGE:    0x462,              // CURRENT PAGE BEING DISPLAYED (byte)
+        ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
+        CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
+        CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
+        /**
+         * CASSETTE DATA AREA
+         */
+        EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
+        CRC_REG:        0x469,              // PC: CRC REGISTER (word)
+        LAST_VAL:       0x46B,              // PC: LAST INPUT VALUE (byte)
+        IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
+        IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
+        INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
+        /**
+         * TIMER DATA AREA
+         */
+        TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
+        TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
+        TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
+        /**
+         * SYSTEM DATA AREA
+         */
+        BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
+        /**
+         * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
+         */
+        RESET_FLAG: {
+            ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
+            WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
+        },
+        /**
+         * FIXED DISK DATA AREAS
+         */
+        DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
+        HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
+        CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
+        PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
+        /**
+         * TIME-OUT VARIABLES
+         */
+        PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
+        RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
+        /**
+         * ADDITIONAL KEYBOARD DATA AREA
+         */
+        BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
+        BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
+        /**
+         * EGA/PGA DISPLAY WORK AREA
+         */
+        ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
+        POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
+        INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
+        /**
+         * INFO BITS:
+         *
+         *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
+         *      0x60: 256K OF VRAM
+         *      0x40: 192K OF VRAM
+         *      0x20: 128K OF VRAM
+         *      0x10: RESERVED
+         *      0x08: EGA ACTIVE MONITOR (0), EGA NOT ACTIVE (1)
+         *      0x04: WAIT FOR DISPLAY ENABLE (1)
+         *      0x02: EGA HAS A MONOCHROME ATTACHED
+         *      0x01: SET C_TYPE EMULATE ACTIVE (0)
+         */
+        INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
+        /**
+         *     40:88  byte  PCjr: third keyboard status byte
+         *                  EGA feature bit switches, emulated on VGA
+         *
+         *         |7|6|5|4|3|2|1|0| EGA feature bit switches (EGA+)
+         *          | | | | | | | `-- EGA SW1 config (1=off)
+         *          | | | | | | `--- EGA SW2 config (1=off)
+         *          | | | | | `---- EGA SW3 config (1=off)
+         *          | | | | `----- EGA SW4 config (1=off)
+         *          | | | `------ Input FEAT0 (ISR0 bit 5) after output on FCR0
+         *          | | `------- Input FEAT0 (ISR0 bit 6) after output on FCR0
+         *          | `-------- Input FEAT1 (ISR0 bit 5) after output on FCR1
+         *          `--------- Input FEAT1 (ISR0 bit 6) after output on FCR1
+         *
+         *     40:89  byte  Video display data area (MCGA and VGA)
+         *
+         *         |7|6|5|4|3|2|1|0| Video display data area (MCGA and VGA)
+         *          | | | | | | | `-- 1=VGA is active
+         *          | | | | | | `--- 1=gray scale is enabled
+         *          | | | | | `---- 1=using monochrome monitor
+         *          | | | | `----- 1=default palette loading is disabled
+         *          | | | `------ see table below
+         *          | | `------- reserved
+         *          | `--------  1=display switching enabled
+         *          `--------- alphanumeric scan lines (see table below)
+         *
+         *           Bit7    Bit4   Scan Lines
+         *             0       0    350 line mode
+         *             0       1    400 line mode
+         *             1       0    200 line mode
+         *             1       1    reserved
+         */
+        /**
+         * ADDITIONAL MEDIA DATA
+         */
+        LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
+        HF_STATUS:      0x48C,              // PC AT: STATUS REGISTER (byte)
+        HF_ERROR:       0x48D,              // PC AT: ERROR REGISTER (byte)
+        HF_INT_FLAG:    0x48E,              // PC AT: FIXED DISK INTERRUPT FLAG (byte)
+        HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
+        DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
+        DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
+        /**
+         * ADDITIONAL KEYBOARD FLAGS
+         */
+        KB_FLAG_3: {
+            ADDR:       0x496,              // PC AT: KEYBOARD MODE STATE AND TYPE FLAGS (byte)
+            LC_E1:          0b00000001,     // LAST CODE WAS THE E1 HIDDEN CODE
+            LC_E0:          0b00000010,     // LAST CODE WAS THE E0 HIDDEN CODE
+            R_CTL_SHIFT:    0b00000100,     // RIGHT CTL KEY DOWN
+            R_ALT_SHIFT:    0b00001000,     // RIGHT ALT KEY DOWN
+            GRAPH_ON:       0b00001000,     // ALT GRAPHICS KEY DOWN (WT ONLY)
+            KBX:            0b00010000,     // ENHANCED KEYBOARD INSTALLED
+            SET_NUM_LK:     0b00100000,     // FORCE NUM LOCK IF READ ID AND KBX
+            LC_AB:          0b01000000,     // LAST CHARACTER WAS FIRST ID CHARACTER
+            RD_ID:          0b10000000      // DOING A READ ID (MUST BE BIT0)
+        },
+        KB_FLAG_2: {
+            ADDR:       0x497,              // PC AT: KEYBOARD LED FLAGS (byte)
+            KB_LEDS:        0b00000111,     // KEYBOARD LED STATE BITS
+            SCROLL_LOCK:    0b00000001,     // SCROLL LOCK INDICATOR
+            NUM_LOCK:       0b00000010,     // NUM LOCK INDICATOR
+            CAPS_LOCK:      0b00000100,     // CAPS LOCK INDICATOR
+            KB_FA:          0b00010000,     // ACKNOWLEDGMENT RECEIVED
+            KB_FE:          0b00100000,     // RESEND RECEIVED FLAG
+            KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
+            KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
+        },
+        /**
+         * REAL TIME CLOCK DATA AREA
+         */
+        USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
+        USER_FLAG_SEG:  0x49A,              // PC AT: SEGMENT ADDRESS OF USER WAIT FLAG (word)
+        RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
+        RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
+        RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
+        /**
+         * AREA FOR NETWORK ADAPTER
+         */
+        NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
+        /**
+         * EGA/PGA PALETTE POINTER
+         */
+        SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
+        /**
+         * DATA AREA - PRINT SCREEN
+         */
+        STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
+    };
+
     /**
      * ROMx86(parmsROM)
      *
@@ -417,263 +671,6 @@ export default class ROMx86 extends Component {
         }
     }
 }
-
-/**
- * ROM BIOS Data Area (RBDA) definitions, in physical address form, using the same CAPITALIZED names
- * found in the original IBM PC ROM BIOS listing.
- */
-ROMx86.BIOS = {
-    RS232_BASE:     0x400,              // ADDRESSES OF RS232 ADAPTERS (4 words)
-    PRINTER_BASE:   0x408,              // ADDRESSES OF PRINTERS (4 words)
-    EQUIP_FLAG: {                       // INSTALLED HARDWARE (word)
-        ADDR:       0x410,
-        NUM_PRINT:      0xC000,         // NUMBER OF PRINTERS ATTACHED
-        GAME_CTRL:      0x1000,         // GAME I/O ATTACHED
-        NUM_RS232:      0x0E00,         // NUMBER OF RS232 CARDS ATTACHED
-        NUM_DRIVES:     0x00C0,         // NUMBER OF DISKETTE DRIVES (00=1, 01=2, 10=3, 11=4) ONLY IF IPL_DRIVE SET
-        VIDEO_MODE:     0x0030,         // INITIAL VIDEO MODE (00=UNUSED, 01=40X25 COLOR, 10=80X25 COLOR, 11=80X25 MONO)
-        RAM_SIZE:       0x000C,         // PLANAR RAM SIZE (00=16K,01=32K,10=48K,11=64K)
-        IPL_DRIVE:      0x0001          // IPL (Initial Program Load) FROM DISKETTE (ie, diskette drives exist)
-    },
-    MFG_TEST:       0x412,              // INITIALIZATION FLAG (byte)
-    MEMORY_SIZE:    0x413,              // MEMORY SIZE IN K BYTES (word)
-    IO_RAM_SIZE:    0x415,              // PC: MEMORY IN I/O CHANNEL (word)
-    MFG_ERR_FLAG:   0x415,              // PC AT: SCRATCHPAD FOR MANUFACTURING ERROR CODES (2 bytes)
-    COMPAQ_PREV_SC: 0x415,              // COMPAQ DESKPRO 386: PREVIOUS SCAN CODE (byte)
-    COMPAQ_KEYCLICK:0x416,              // COMPAQ DESKPRO 386: KEYCLICK LOUDNESS (byte)
-    /**
-     * KEYBOARD DATA AREAS
-     */
-    KB_FLAG: {                          // FIRST BYTE OF KEYBOARD STATUS (byte)
-        ADDR:       0x417,              //
-        INS_STATE:      0x80,           // INSERT STATE IS ACTIVE
-        CAPS_STATE:     0x40,           // CAPS LOCK STATE HAS BEEN TOGGLED
-        NUM_STATE:      0x20,           // NUM LOCK STATE HAS BEEN TOGGLED
-        SCROLL_STATE:   0x10,           // SCROLL LOCK STATE HAS BEEN TOGGLED
-        ALT_SHIFT:      0x08,           // ALTERNATE SHIFT KEY DEPRESSED
-        CTL_SHIFT:      0x04,           // CONTROL SHIFT KEY DEPRESSED
-        LEFT_SHIFT:     0x02,           // LEFT SHIFT KEY DEPRESSED
-        RIGHT_SHIFT:    0x01            // RIGHT SHIFT KEY DEPRESSED
-    },
-    KB_FLAG_1: {                        // SECOND BYTE OF KEYBOARD STATUS (byte)
-        ADDR:       0x418,              //
-        INS_SHIFT:      0x80,           // INSERT KEY IS DEPRESSED
-        CAPS_SHIFT:     0x40,           // CAPS LOCK KEY IS DEPRESSED
-        NUM_SHIFT:      0x20,           // NUM LOCK KEY IS DEPRESSED
-        SCROLL_SHIFT:   0x10,           // SCROLL LOCK KEY IS DEPRESSED
-        HOLD_STATE:     0x08            // SUSPEND KEY HAS BEEN TOGGLED
-    },
-    ALT_INPUT:      0x419,              // STORAGE FOR ALTERNATE KEYPAD ENTRY (byte)
-    BUFFER_HEAD:    0x41A,              // POINTER TO HEAD OF KEYBOARD BUFFER (word)
-    BUFFER_TAIL:    0x41C,              // POINTER TO TAIL OF KEYBOARD BUFFER (word)
-    KB_BUFFER:      0x41E,              // ROOM FOR 15 ENTRIES (16 words)
-    KB_BUFFER_END:  0x43E,              // HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
-    /**
-     * DISKETTE DATA AREAS
-     */
-    SEEK_STATUS: {                      // DRIVE RECALIBRATION STATUS (byte)
-        ADDR:       0x43E,              //
-                                        //      BIT 3-0 = DRIVE 3-0 NEEDS RECAL BEFORE
-                                        //      NEXT SEEK IF BIT IS = 0
-        INT_FLAG:       0x80,           // INTERRUPT OCCURRENCE FLAG
-    },
-    MOTOR_STATUS:   0x43F,              // MOTOR STATUS (byte)
-                                        //      BIT 3-0 = DRIVE 3-0 IS CURRENTLY RUNNING
-                                        //      BIT 7 = CURRENT OPERATION IS A WRITE, REQUIRES DELAY
-    MOTOR_COUNT:    0x440,              // TIME OUT COUNTER FOR DRIVE TURN OFF
-                                        //      37 == TWO SECONDS OF COUNTS FOR MOTOR TURN OFF
-    DISKETTE_STATUS: {                  // SINGLE BYTE OF RETURN CODE INFO FOR STATUS
-        ADDR:       0x441,
-        TIME_OUT:       0x80,           // ATTACHMENT FAILED TO RESPOND
-        BAD_SEEK:       0x40,           // SEEK OPERATION FAILED
-        BAD_NEC:        0x20,           // NEC CONTROLLER HAS FAILED
-        BAD_CRC:        0x10,           // BAD CRC ON DISKETTE READ
-        DMA_BOUNDARY:   0x09,           // ATTEMPT TO DMA ACROSS 64K BOUNDARY
-        BAD_DMA:        0x08,           // DMA OVERRUN ON OPERATION
-        RECORD_NOT_FND: 0x04,           // REQUESTED SECTOR NOT FOUND
-        WRITE_PROTECT:  0x03,           // WRITE ATTEMPTED ON WRITE PROT DISK
-        BAD_ADDR_MARK:  0x02,           // ADDRESS MARK NOT FOUND
-        BAD_CMD:        0x01            // BAD COMMAND PASSED TO DISKETTE I/O
-    },
-    NEC_STATUS:     0x442,              // STATUS BYTES FROM NEC (7 bytes)
-    /**
-     * VIDEO DISPLAY DATA AREA
-     */
-    CRT_MODE:       0x449,              // CURRENT CRT MODE (byte)
-    CRT_COLS:       0x44A,              // NUMBER OF COLUMNS ON SCREEN (word)
-    CRT_LEN:        0x44C,              // LENGTH OF REGEN IN BYTES (word)
-    CRT_START:      0x44E,              // STARTING ADDRESS IN REGEN BUFFER (word)
-    CURSOR_POSN:    0x450,              // CURSOR FOR EACH OF UP TO 8 PAGES (8 words)
-    CURSOR_MODE:    0x460,              // CURRENT CURSOR MODE SETTING (word)
-    ACTIVE_PAGE:    0x462,              // CURRENT PAGE BEING DISPLAYED (byte)
-    ADDR_6845:      0x463,              // BASE ADDRESS FOR ACTIVE DISPLAY CARD (word)
-    CRT_MODE_SET:   0x465,              // CURRENT SETTING OF THE 3X8 REGISTER (byte)
-    CRT_PALLETTE:   0x466,              // CURRENT PALLETTE SETTING COLOR CARD (byte)
-    /**
-     * CASSETTE DATA AREA
-     */
-    EDGE_CNT:       0x467,              // PC: TIME COUNT AT DATA EDGE (word)
-    CRC_REG:        0x469,              // PC: CRC REGISTER (word)
-    LAST_VAL:       0x46B,              // PC: LAST INPUT VALUE (byte)
-    IO_ROM_INIT:    0x467,              // PC AT: POINTER TO ROM INITIALIZATION ROUTINE
-    IO_ROM_SEG:     0x469,              // PC AT: POINTER TO I/O ROM SEGMENT
-    INTR_FLAG:      0x46B,              // PC AT: FLAG INDICATING AN INTERRUPT HAPPENED
-    /**
-     * TIMER DATA AREA
-     */
-    TIMER_LOW:      0x46C,              // LOW WORD OF TIMER COUNT (word)
-    TIMER_HIGH:     0x46E,              // HIGH WORD OF TIMER COUNT (word)
-    TIMER_OFL:      0x470,              // TIMER HAS ROLLED OVER SINCE LAST READ (byte)
-    /**
-     * SYSTEM DATA AREA
-     */
-    BIOS_BREAK:     0x471,              // BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED (byte)
-    /**
-     * RESET_FLAG is the traditional end of the RBDA, as originally defined by the IBM PC
-     */
-    RESET_FLAG: {
-        ADDR:       0x472,              // SET TO 0x1234 IF KEYBOARD RESET UNDERWAY (word)
-        WARMBOOT:       0x1234          // this value indicates a "warm boot", bypassing memory tests
-    },
-    /**
-     * FIXED DISK DATA AREAS
-     */
-    DISK_STATUS1:   0x474,              // PC AT: FIXED DISK STATUS (byte)
-    HF_NUM:         0x475,              // PC AT: COUNT OF FIXED DISK DRIVES (byte)
-    CONTROL_BYTE:   0x476,              // PC AT: HEAD CONTROL BYTE (byte)
-    PORT_OFF:       0x477,              // PC AT: RESERVED (PORT OFFSET) (byte)
-    /**
-     * TIME-OUT VARIABLES
-     */
-    PRINT_TIM_OUT:  0x478,              // PC AT: TIME OUT COUNTERS FOR PRINTER RESPONSE (4 bytes)
-    RS232_TIM_OUT:  0x47C,              // PC AT: TIME OUT COUNTERS FOR RS232 RESPONSE (4 bytes)
-    /**
-     * ADDITIONAL KEYBOARD DATA AREA
-     */
-    BUFFER_START:   0x480,              // PC AT: OFFSET OF KEYBOARD BUFFER START WITHIN SEGMENT 40H
-    BUFFER_END:     0x482,              // PC AT: OFFSET OF END OF BUFFER
-    /**
-     * EGA/PGA DISPLAY WORK AREA
-     */
-    ROWS:           0x484,              // PC AT: ROWS ON THE ACTIVE SCREEN (LESS 1) (byte)
-    POINTS:         0x485,              // PC AT: BYTES PER CHARACTER (word)
-    INFO:           0x487,              // PC AT: MODE OPTIONS (byte)
-    /**
-     * INFO BITS:
-     *
-     *      0x80: HIGH BIT OF MODE SET, CLEAR/NOT CLEAR REGEN
-     *      0x60: 256K OF VRAM
-     *      0x40: 192K OF VRAM
-     *      0x20: 128K OF VRAM
-     *      0x10: RESERVED
-     *      0x08: EGA ACTIVE MONITOR (0), EGA NOT ACTIVE (1)
-     *      0x04: WAIT FOR DISPLAY ENABLE (1)
-     *      0x02: EGA HAS A MONOCHROME ATTACHED
-     *      0x01: SET C_TYPE EMULATE ACTIVE (0)
-     */
-    INFO_3:         0x488,              // PC AT: FEATURE BIT SWITCHES (1 byte, plus 2 reserved bytes)
-    /**
-     *     40:88  byte  PCjr: third keyboard status byte
-     *                  EGA feature bit switches, emulated on VGA
-     *
-     *         |7|6|5|4|3|2|1|0| EGA feature bit switches (EGA+)
-     *          | | | | | | | `-- EGA SW1 config (1=off)
-     *          | | | | | | `--- EGA SW2 config (1=off)
-     *          | | | | | `---- EGA SW3 config (1=off)
-     *          | | | | `----- EGA SW4 config (1=off)
-     *          | | | `------ Input FEAT0 (ISR0 bit 5) after output on FCR0
-     *          | | `------- Input FEAT0 (ISR0 bit 6) after output on FCR0
-     *          | `-------- Input FEAT1 (ISR0 bit 5) after output on FCR1
-     *          `--------- Input FEAT1 (ISR0 bit 6) after output on FCR1
-     *
-     *     40:89  byte  Video display data area (MCGA and VGA)
-     *
-     *         |7|6|5|4|3|2|1|0| Video display data area (MCGA and VGA)
-     *          | | | | | | | `-- 1=VGA is active
-     *          | | | | | | `--- 1=gray scale is enabled
-     *          | | | | | `---- 1=using monochrome monitor
-     *          | | | | `----- 1=default palette loading is disabled
-     *          | | | `------ see table below
-     *          | | `------- reserved
-     *          | `--------  1=display switching enabled
-     *          `--------- alphanumeric scan lines (see table below)
-     *
-     *           Bit7    Bit4   Scan Lines
-     *             0       0    350 line mode
-     *             0       1    400 line mode
-     *             1       0    200 line mode
-     *             1       1    reserved
-     */
-    /**
-     * ADDITIONAL MEDIA DATA
-     */
-    LASTRATE:       0x48B,              // PC AT: LAST DISKETTE DATA RATE SELECTED (byte)
-    HF_STATUS:      0x48C,              // PC AT: STATUS REGISTER (byte)
-    HF_ERROR:       0x48D,              // PC AT: ERROR REGISTER (byte)
-    HF_INT_FLAG:    0x48E,              // PC AT: FIXED DISK INTERRUPT FLAG (byte)
-    HF_CNTRL:       0x48F,              // PC AT: COMBO FIXED DISK/DISKETTE CARD BIT 0=1 (byte)
-    DSK_STATE:      0x490,              // PC AT: DRIVE 0/1 MEDIA/OPERATION STATES (4 bytes)
-    DSK_TRK:        0x494,              // PC AT: DRIVE 0/1 PRESENT CYLINDER (2 bytes)
-    /**
-     * ADDITIONAL KEYBOARD FLAGS
-     */
-    KB_FLAG_3: {
-        ADDR:       0x496,              // PC AT: KEYBOARD MODE STATE AND TYPE FLAGS (byte)
-        LC_E1:          0b00000001,     // LAST CODE WAS THE E1 HIDDEN CODE
-        LC_E0:          0b00000010,     // LAST CODE WAS THE E0 HIDDEN CODE
-        R_CTL_SHIFT:    0b00000100,     // RIGHT CTL KEY DOWN
-        R_ALT_SHIFT:    0b00001000,     // RIGHT ALT KEY DOWN
-        GRAPH_ON:       0b00001000,     // ALT GRAPHICS KEY DOWN (WT ONLY)
-        KBX:            0b00010000,     // ENHANCED KEYBOARD INSTALLED
-        SET_NUM_LK:     0b00100000,     // FORCE NUM LOCK IF READ ID AND KBX
-        LC_AB:          0b01000000,     // LAST CHARACTER WAS FIRST ID CHARACTER
-        RD_ID:          0b10000000      // DOING A READ ID (MUST BE BIT0)
-    },
-    KB_FLAG_2: {
-        ADDR:       0x497,              // PC AT: KEYBOARD LED FLAGS (byte)
-        KB_LEDS:        0b00000111,     // KEYBOARD LED STATE BITS
-        SCROLL_LOCK:    0b00000001,     // SCROLL LOCK INDICATOR
-        NUM_LOCK:       0b00000010,     // NUM LOCK INDICATOR
-        CAPS_LOCK:      0b00000100,     // CAPS LOCK INDICATOR
-        KB_FA:          0b00010000,     // ACKNOWLEDGMENT RECEIVED
-        KB_FE:          0b00100000,     // RESEND RECEIVED FLAG
-        KB_PR_LED:      0b01000000,     // MODE INDICATOR UPDATE
-        KB_ERR:         0b10000000      // KEYBOARD TRANSMIT ERROR FLAG
-    },
-    /**
-     * REAL TIME CLOCK DATA AREA
-     */
-    USER_FLAG:      0x498,              // PC AT: OFFSET ADDRESS OF USERS WAIT FLAG (word)
-    USER_FLAG_SEG:  0x49A,              // PC AT: SEGMENT ADDRESS OF USER WAIT FLAG (word)
-    RTC_LOW:        0x49C,              // PC AT: LOW WORD OF USER WAIT FLAG (word)
-    RTC_HIGH:       0x49E,              // PC AT: HIGH WORD OF USER WAIT FLAG (word)
-    RTC_WAIT_FLAG:  0x4A0,              // PC AT: WAIT ACTIVE FLAG (01=BUSY, 80=POSTED, 00=POST ACKNOWLEDGED) (byte)
-    /**
-     * AREA FOR NETWORK ADAPTER
-     */
-    NET:            0x4A1,              // PC AT: RESERVED FOR NETWORK ADAPTERS (7 bytes)
-    /**
-     * EGA/PGA PALETTE POINTER
-     */
-    SAVE_PTR:       0x4A8,              // PC AT: POINTER TO EGA PARAMETER CONTROL BLOCK (2 words)
-    /**
-     * DATA AREA - PRINT SCREEN
-     */
-    STATUS_BYTE:    0x500               // PRINT SCREEN STATUS BYTE (00=READY/OK, 01=BUSY, FF=ERROR) (byte)
-};
-
-/**
- * NOTE: There's currently no need for this component to have a reset() function, since
- * once the ROM data is loaded, it can't be changed, so there's nothing to reinitialize.
- *
- * OK, well, I take that back, because the Debugger, if installed, has the ability to modify
- * ROM contents, so in that case, having a reset() function that restores the original ROM data
- * might be useful; then again, it might not, depending on what you're trying to debug.
- *
- * If we do add reset(), then we'll want to change copyROM() to hang onto the original
- * ROM data; currently, we release it after copying it into the read-only memory allocated
- * via bus.addMemory().
- */
 
 /**
  * Initialize all the ROM modules on the page.

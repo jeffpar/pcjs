@@ -37,6 +37,142 @@ import { APPCLASS, RS232 } from "./defines.js";
  */
 export default class SerialPort extends Component {
     /**
+     * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
+     *
+     * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
+     * values should be used for the corresponding baud rates.  Rates above 9600 are discouraged by the IBM Tech Ref,
+     * but rates as high as 128000 are listed on the NS8250A data sheet.
+     *
+     *      Divisor     Rate        Percent Error
+     *      0x0900      50
+     *      0x0600      75
+     *      0x0417      110         0.026%
+     *      0x0359      134.5       0.058%
+     *      0x0300      150
+     *      0x0180      300
+     *      0x00C0      600
+     *      0x0060      1200
+     *      0x0040      1800
+     *      0x003A      2000        0.69%
+     *      0x0030      2400
+     *      0x0020      3600
+     *      0x0018      4800
+     *      0x0010      7200
+     *      0x000C      9600
+     *      0x0006      19200
+     *      0x0003      38400
+     *      0x0002      56000       2.86%
+     *      0x0001      128000
+     */
+    static DLL = {REG: 0};          // Divisor Latch LSB (only when SerialPort.LCR.DLAB is set)
+    static THR = {REG: 0};          // Transmitter Holding Register (write)
+    static DL_DEFAULT = 0x180;      // we select an arbitrary default Divisor Latch equivalent to 300 baud
+
+    /**
+     * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
+     */
+    static RBR = {REG: 0};          // (read)
+
+    /**
+     * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
+     */
+    static IER = {
+        REG:            1,          // Interrupt Enable Register
+        RBR_AVAIL:      0x01,
+        THR_EMPTY:      0x02,
+        LSR_DELTA:      0x04,
+        MSR_DELTA:      0x08,
+        UNUSED:         0xF0        // always zero
+    };
+
+    static DLM = {REG: 1};          // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
+
+    /**
+     * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
+     *
+     * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
+     */
+    static IIR = {
+        REG:            2,          // Interrupt ID Register (read-only)
+        NO_INT:         0x01,
+        INT_LSR:        0x06,       // Line Status (highest priority: Overrun error, Parity error, Framing error, or Break Interrupt)
+        INT_RBR:        0x04,       // Receiver Data Available
+        INT_THR:        0x02,       // Transmitter Holding Register Empty
+        INT_MSR:        0x00,       // Modem Status Register (lowest priority: Clear To Send, Data Set Ready, Ring Indicator, or Data Carrier Detect)
+        INT_BITS:       0x06,
+        UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
+    };
+
+    /**
+     * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
+     */
+    static LCR = {
+        REG:            3,          // Line Control Register
+        DATA_5BITS:     0x00,
+        DATA_6BITS:     0x01,
+        DATA_7BITS:     0x02,
+        DATA_8BITS:     0x03,
+        STOP_BITS:      0x04,       // clear: 1 stop bit; set: 1.5 stop bits for LCR_DATA_5BITS, 2 stop bits for all other data lengths
+        PARITY_BIT:     0x08,       // if set, a parity bit is inserted/expected between the last data bit and the first stop bit; no parity bit if clear
+        PARITY_EVEN:    0x10,       // if set, even parity is selected (ie, the parity bit insures an even number of set bits); if clear, odd parity
+        PARITY_STICK:   0x20,       // if set, parity bit is transmitted inverted; if clear, parity bit is transmitted normally
+        BREAK:          0x40,       // if set, serial output (SOUT) signal is forced to logical 0 for the duration
+        DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
+    };
+
+    /**
+     * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
+     */
+    static MCR = {
+        REG:            4,          // Modem Control Register
+        DTR:            0x01,       // when set, DTR goes high, indicating ready to establish link (looped back to DSR in loop-back mode)
+        RTS:            0x02,       // when set, RTS goes high, indicating ready to exchange data (looped back to CTS in loop-back mode)
+        OUT1:           0x04,       // when set, OUT1 goes high (looped back to RI in loop-back mode)
+        OUT2:           0x08,       // when set, OUT2 goes high (looped back to RLSD in loop-back mode); must also be set for most UARTs to enable interrupts (but not ours)
+        LOOPBACK:       0x10,       // when set, enables loop-back mode
+        UNUSED:         0xE0        // always zero
+    };
+
+    /**
+     * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
+     *
+     * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
+     * I have calls it TEMT instead of TSRE, and claims that it is set whenever BOTH the THR and TSR are empty, and clear
+     * whenever EITHER the THR or TSR contain data.
+     */
+    static LSR = {
+        REG:            5,          // Line Status Register
+        DR:             0x01,       // Data Ready (set when new data in RBR.REG; cleared when RBR.REG read)
+        OE:             0x02,       // Overrun Error (set when new data arrives in RBR.REG before previous data read; cleared when LSR.REG read)
+        PE:             0x04,       // Parity Error (set when new data has incorrect parity; cleared when LSR.REG read)
+        FE:             0x08,       // Framing Error (set when new data has invalid stop bit; cleared when LSR.REG read)
+        BI:             0x10,       // Break Interrupt (set when new data exceeded normal transmission time; cleared LSR.REG when read)
+        THRE:           0x20,       // Transmitter Holding Register Empty (set when UART ready to accept new data; cleared when THR.REG written)
+        TSRE:           0x40,       // Transmitter Shift Register Empty (set when the TSR is empty; cleared when the THR is transferred to the TSR)
+        UNUSED:         0x80        // always zero
+    };
+
+    /**
+     * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
+     */
+    static MSR = {
+        REG:            6,          // Modem Status Register
+        DCTS:           0x01,       // when set, CTS (Clear To Send) has changed since last read
+        DDSR:           0x02,       // when set, DSR (Data Set Ready) has changed since last read
+        TERI:           0x04,       // when set, TERI (Trailing Edge Ring Indicator) indicates RI has changed from 1 to 0
+        DRLSD:          0x08,       // when set, RLSD (Received Line Signal Detector) has changed
+        CTS:            0x10,       // when set, the modem or data set is ready to exchange data (complement of the Clear To Send input signal)
+        DSR:            0x20,       // when set, the modem or data set is ready to establish link (complement of the Data Set Ready input signal)
+        RI:             0x40,       // complement of the RI (Ring Indicator) input
+        RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
+    };
+
+    /**
+     * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
+     */
+    static SCR = {REG: 7};
+
+    /**
      * SerialPort(parms)
      *
      * The SerialPort component has the following component-specific (parms) properties:
@@ -1020,166 +1156,30 @@ export default class SerialPort extends Component {
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }
+
+    /**
+     * Port input notification table
+     */
+    static aPortInput = {
+        0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
+        0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
+        0x2: SerialPort.prototype.inIIR,
+        0x3: SerialPort.prototype.inLCR,
+        0x4: SerialPort.prototype.inMCR,
+        0x5: SerialPort.prototype.inLSR,
+        0x6: SerialPort.prototype.inMSR
+    };
+
+    /**
+     * Port output notification table
+     */
+    static aPortOutput = {
+        0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
+        0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
+        0x3: SerialPort.prototype.outLCR,
+        0x4: SerialPort.prototype.outMCR
+    };
 }
-
-/**
- * 8250 I/O register offsets (add these to a I/O base address to obtain an I/O port address)
- *
- * NOTE: DLL.REG and DLM.REG form a 16-bit divisor into a clock input frequency of 1.8432Mhz.  The following
- * values should be used for the corresponding baud rates.  Rates above 9600 are discouraged by the IBM Tech Ref,
- * but rates as high as 128000 are listed on the NS8250A data sheet.
- *
- *      Divisor     Rate        Percent Error
- *      0x0900      50
- *      0x0600      75
- *      0x0417      110         0.026%
- *      0x0359      134.5       0.058%
- *      0x0300      150
- *      0x0180      300
- *      0x00C0      600
- *      0x0060      1200
- *      0x0040      1800
- *      0x003A      2000        0.69%
- *      0x0030      2400
- *      0x0020      3600
- *      0x0018      4800
- *      0x0010      7200
- *      0x000C      9600
- *      0x0006      19200
- *      0x0003      38400
- *      0x0002      56000       2.86%
- *      0x0001      128000
- */
-SerialPort.DLL = {REG: 0};      // Divisor Latch LSB (only when SerialPort.LCR.DLAB is set)
-SerialPort.THR = {REG: 0};      // Transmitter Holding Register (write)
-SerialPort.DL_DEFAULT = 0x180;  // we select an arbitrary default Divisor Latch equivalent to 300 baud
-
-/**
- * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
- */
-SerialPort.RBR = {REG: 0};      // (read)
-
-/**
- * Interrupt Enable Register (IER.REG, offset 1; eg, 0x3F9 or 0x2F9)
- */
-SerialPort.IER = {
-    REG:            1,          // Interrupt Enable Register
-    RBR_AVAIL:      0x01,
-    THR_EMPTY:      0x02,
-    LSR_DELTA:      0x04,
-    MSR_DELTA:      0x08,
-    UNUSED:         0xF0        // always zero
-};
-
-SerialPort.DLM = {REG: 1};      // Divisor Latch MSB (only when SerialPort.LCR.DLAB is set)
-
-/**
- * Interrupt ID Register (IIR.REG, offset 2; eg, 0x3FA or 0x2FA)
- *
- * All interrupt conditions cleared by reading the corresponding register (or, in the case of IIR.INT_THR, writing a new value to THR.REG)
- */
-SerialPort.IIR = {
-    REG:            2,          // Interrupt ID Register (read-only)
-    NO_INT:         0x01,
-    INT_LSR:        0x06,       // Line Status (highest priority: Overrun error, Parity error, Framing error, or Break Interrupt)
-    INT_RBR:        0x04,       // Receiver Data Available
-    INT_THR:        0x02,       // Transmitter Holding Register Empty
-    INT_MSR:        0x00,       // Modem Status Register (lowest priority: Clear To Send, Data Set Ready, Ring Indicator, or Data Carrier Detect)
-    INT_BITS:       0x06,
-    UNUSED:         0xF8        // always zero (the ROM BIOS relies on these bits "floating to 1" when no SerialPort is present)
-};
-
-/**
- * Line Control Register (LCR.REG, offset 3; eg, 0x3FB or 0x2FB)
- */
-SerialPort.LCR = {
-    REG:            3,          // Line Control Register
-    DATA_5BITS:     0x00,
-    DATA_6BITS:     0x01,
-    DATA_7BITS:     0x02,
-    DATA_8BITS:     0x03,
-    STOP_BITS:      0x04,       // clear: 1 stop bit; set: 1.5 stop bits for LCR_DATA_5BITS, 2 stop bits for all other data lengths
-    PARITY_BIT:     0x08,       // if set, a parity bit is inserted/expected between the last data bit and the first stop bit; no parity bit if clear
-    PARITY_EVEN:    0x10,       // if set, even parity is selected (ie, the parity bit insures an even number of set bits); if clear, odd parity
-    PARITY_STICK:   0x20,       // if set, parity bit is transmitted inverted; if clear, parity bit is transmitted normally
-    BREAK:          0x40,       // if set, serial output (SOUT) signal is forced to logical 0 for the duration
-    DLAB:           0x80        // Divisor Latch Access Bit; if set, DLL.REG and DLM.REG can be read or written
-};
-
-/**
- * Modem Control Register (MCR.REG, offset 4; eg, 0x3FC or 0x2FC)
- */
-SerialPort.MCR = {
-    REG:            4,          // Modem Control Register
-    DTR:            0x01,       // when set, DTR goes high, indicating ready to establish link (looped back to DSR in loop-back mode)
-    RTS:            0x02,       // when set, RTS goes high, indicating ready to exchange data (looped back to CTS in loop-back mode)
-    OUT1:           0x04,       // when set, OUT1 goes high (looped back to RI in loop-back mode)
-    OUT2:           0x08,       // when set, OUT2 goes high (looped back to RLSD in loop-back mode); must also be set for most UARTs to enable interrupts (but not ours)
-    LOOPBACK:       0x10,       // when set, enables loop-back mode
-    UNUSED:         0xE0        // always zero
-};
-
-/**
- * Line Status Register (LSR.REG, offset 5; eg, 0x3FD or 0x2FD)
- *
- * NOTE: I've seen different specs for the LSR_TSRE.  I'm following the IBM Tech Ref's lead here, but the data sheet
- * I have calls it TEMT instead of TSRE, and claims that it is set whenever BOTH the THR and TSR are empty, and clear
- * whenever EITHER the THR or TSR contain data.
- */
-SerialPort.LSR = {
-    REG:            5,          // Line Status Register
-    DR:             0x01,       // Data Ready (set when new data in RBR.REG; cleared when RBR.REG read)
-    OE:             0x02,       // Overrun Error (set when new data arrives in RBR.REG before previous data read; cleared when LSR.REG read)
-    PE:             0x04,       // Parity Error (set when new data has incorrect parity; cleared when LSR.REG read)
-    FE:             0x08,       // Framing Error (set when new data has invalid stop bit; cleared when LSR.REG read)
-    BI:             0x10,       // Break Interrupt (set when new data exceeded normal transmission time; cleared LSR.REG when read)
-    THRE:           0x20,       // Transmitter Holding Register Empty (set when UART ready to accept new data; cleared when THR.REG written)
-    TSRE:           0x40,       // Transmitter Shift Register Empty (set when the TSR is empty; cleared when the THR is transferred to the TSR)
-    UNUSED:         0x80        // always zero
-};
-
-/**
- * Modem Status Register (MSR.REG, offset 6; eg, 0x3FE or 0x2FE)
- */
-SerialPort.MSR = {
-    REG:            6,          // Modem Status Register
-    DCTS:           0x01,       // when set, CTS (Clear To Send) has changed since last read
-    DDSR:           0x02,       // when set, DSR (Data Set Ready) has changed since last read
-    TERI:           0x04,       // when set, TERI (Trailing Edge Ring Indicator) indicates RI has changed from 1 to 0
-    DRLSD:          0x08,       // when set, RLSD (Received Line Signal Detector) has changed
-    CTS:            0x10,       // when set, the modem or data set is ready to exchange data (complement of the Clear To Send input signal)
-    DSR:            0x20,       // when set, the modem or data set is ready to establish link (complement of the Data Set Ready input signal)
-    RI:             0x40,       // complement of the RI (Ring Indicator) input
-    RLSD:           0x80        // complement of the RLSD (Received Line Signal Detect) input
-};
-
-/**
- * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
- */
-SerialPort.SCR = {REG: 7};
-
-/**
- * Port input notification table
- */
-SerialPort.aPortInput = {
-    0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
-    0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
-    0x2: SerialPort.prototype.inIIR,
-    0x3: SerialPort.prototype.inLCR,
-    0x4: SerialPort.prototype.inMCR,
-    0x5: SerialPort.prototype.inLSR,
-    0x6: SerialPort.prototype.inMSR
-};
-
-/**
- * Port output notification table
- */
-SerialPort.aPortOutput = {
-    0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
-    0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
-    0x3: SerialPort.prototype.outLCR,
-    0x4: SerialPort.prototype.outMCR
-};
 
 /**
  * Initialize every SerialPort module on the page.

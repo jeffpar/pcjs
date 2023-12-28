@@ -337,10 +337,104 @@ export default class RAMx86 extends Component {
 }
 
 /**
- * class CompaqController
+ * @class CompaqController
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CompaqController extends Controller {
+
+    static ADDR       = 0x80C00000|0;
+    static MAP_SRC    = 0x00FE0000;
+    static MAP_DST    = 0x000E0000;
+    static MAP_SIZE   = 0x00020000;
+
+    /**
+     * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
+     *
+     * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
+     * at %FE0000; it simply becomes addressable at %0E0000 as well, displacing any ROMs that used to be
+     * addressable at %0E0000 through %0FFFFF.
+     */
+    static MAPPINGS = {
+        UNMAPPED:   0x0001,         // is this bit is CLEAR, the last 128Kb (at 0x00FE0000) is mapped to 0x000E0000
+        READWRITE:  0x0002,         // if this bit is CLEAR, the last 128Kb (at 0x00FE0000) is read-only (ie, write-protected)
+        RESERVED:   0xFFFC,         // the remaining 6 bits are reserved and should always be SET
+        DEFAULT:    0xFFFF          // our default settings (no mapping, no write-protection)
+    };
+
+    /**
+     * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
+     *
+     * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
+     *
+     *      SW1-7   SW1-8   Bit5    Bit4    Amount (of base memory provided by the COMPAQ 32-bit memory board)
+     *      -----   -----   ----    ----    ------
+     *        ON      ON      0       0     640Kb
+     *        ON      OFF     0       1     Invalid
+     *        OFF     ON      1       0     512Kb
+     *        OFF     OFF     1       1     256Kb
+     *
+     * Other SW1 switches include:
+     *
+     *      SW1-1:  ON enables fail-safe timer
+     *      SW1-2:  ON indicates 80387 coprocessor installed
+     *      SW1-3:  ON sets memory from 0xC00000 to 0xFFFFFF (between 12 and 16 megabytes) non-cacheable
+     *      SW1-4:  ON selects AUTO system speed (OFF selects HIGH system speed)
+     *      SW1-5:  RESERVED (however, the system can read its state; see below)
+     *      SW1-6:  COMPAQ Dual-Mode Monitor or Color Monitor (OFF selects Monochrome monitor other than COMPAQ)
+     *
+     * While SW1-7 and SW1-8 are connected to this memory-mapped register, other SW1 DIP switches are accessible
+     * through the 8042 Keyboard Controller's KBC.INPORT register, as follows:
+     *
+     *      SW1-1:  TODO: Determine
+     *      SW1-2:  ChipSet.KC8042.INPORT.COMPAQ_NO80387 clear if ON, set (0x04) if OFF
+     *      SW1-3:  TODO: Determine
+     *      SW1-4:  ChipSet.KC8042.INPORT.COMPAQ_HISPEED clear if ON, set (0x10) if OFF
+     *      SW1-5:  ChipSet.KC8042.INPORT.COMPAQ_DIP5OFF clear if ON, set (0x20) if OFF
+     *      SW1-6:  ChipSet.KC8042.INPORT.COMPAQ_NONDUAL clear if ON, set (0x40) if OFF
+     */
+    static SETTINGS = {
+        B0_PARITY:  0x0001,         // parity OK in byte 0
+        B1_PARITY:  0x0002,         // parity OK in byte 1
+        B2_PARITY:  0x0004,         // parity OK in byte 2
+        B3_PARITY:  0x0008,         // parity OK in byte 3
+        BASE_640KB: 0x0000,         // SW1-7,8: ON  ON   Bits 5,4: 00
+        BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
+        BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
+        BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
+        /**
+         * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
+         * but setting it results in memory configuration errors; review.
+         */
+        ADDED_1MB:  0x0040,
+        /**
+         * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
+         */
+        PIGGYBACK:  0x0080,
+        SYS_4MB:    0x0100,         // 4Mb on system board
+        SYS_1MB:    0x0200,         // 1Mb on system board
+        SYS_NONE:   0x0300,         // no memory on system board
+        MODA_4MB:   0x0400,         // 4Mb on module A board
+        MODA_1MB:   0x0800,         // 1Mb on module A board
+        MODA_NONE:  0x0C00,         // no memory on module A board
+        MODB_4MB:   0x1000,         // 4Mb on module B board
+        MODB_1MB:   0x2000,         // 1Mb on module B board
+        MODB_NONE:  0x3000,         // no memory on module B board
+        MODC_4MB:   0x4000,         // 4Mb on module C board
+        MODC_1MB:   0x8000,         // 1Mb on module C board
+        MODC_NONE:  0xC000,         // no memory on module C board
+        /**
+         * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
+         */
+        DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
+    };
+
+    static RAMSETUP = {
+        SETUP:      0x000F,
+        CACHE:      0x0040,
+        RESERVED:   0xFFB0,
+        DEFAULT:    0x0002          // our default settings (ie, 2Mb, cache disabled)
+    };
+
     /**
      * CompaqController(ram)
      *
@@ -386,6 +480,9 @@ class CompaqController extends Controller {
         this.wSettings = CompaqController.SETTINGS.DEFAULT;
         this.wRAMSetup = CompaqController.RAMSETUP.DEFAULT;
         this.aBlocksDst = null;
+
+        this.buffer = [null, 0];
+        this.access = [CompaqController.readByte, CompaqController.writeByte];
     }
 
     /**
@@ -494,7 +591,7 @@ class CompaqController extends Controller {
      */
     getMemoryAccess()
     {
-        return CompaqController.ACCESS;
+        return this.access;
     }
 
     /**
@@ -506,7 +603,7 @@ class CompaqController extends Controller {
      */
     getMemoryBuffer(addr)
     {
-        return CompaqController.BUFFER;
+        return this.buffer;
     }
 
     /**
@@ -557,102 +654,6 @@ class CompaqController extends Controller {
         }
     }
 }
-
-CompaqController.ADDR       = 0x80C00000|0;
-CompaqController.MAP_SRC    = 0x00FE0000;
-CompaqController.MAP_DST    = 0x000E0000;
-CompaqController.MAP_SIZE   = 0x00020000;
-
-/**
- * Bit definitions for the 16-bit write-only memory-mapping register (wMappings)
- *
- * NOTE: Although COMPAQ says the memory at %FE0000 is "relocated", it actually remains addressable
- * at %FE0000; it simply becomes addressable at %0E0000 as well, displacing any ROMs that used to be
- * addressable at %0E0000 through %0FFFFF.
- */
-CompaqController.MAPPINGS = {
-    UNMAPPED:   0x0001,             // is this bit is CLEAR, the last 128Kb (at 0x00FE0000) is mapped to 0x000E0000
-    READWRITE:  0x0002,             // if this bit is CLEAR, the last 128Kb (at 0x00FE0000) is read-only (ie, write-protected)
-    RESERVED:   0xFFFC,             // the remaining 6 bits are reserved and should always be SET
-    DEFAULT:    0xFFFF              // our default settings (no mapping, no write-protection)
-};
-
-/**
- * Bit definitions for the 16-bit read-only settings/diagnostics register (wSettings)
- *
- * SW1-7 and SW1-8 are mapped to bits 5 and 4 of wSettings, respectively, as follows:
- *
- *      SW1-7   SW1-8   Bit5    Bit4    Amount (of base memory provided by the COMPAQ 32-bit memory board)
- *      -----   -----   ----    ----    ------
- *        ON      ON      0       0     640Kb
- *        ON      OFF     0       1     Invalid
- *        OFF     ON      1       0     512Kb
- *        OFF     OFF     1       1     256Kb
- *
- * Other SW1 switches include:
- *
- *      SW1-1:  ON enables fail-safe timer
- *      SW1-2:  ON indicates 80387 coprocessor installed
- *      SW1-3:  ON sets memory from 0xC00000 to 0xFFFFFF (between 12 and 16 megabytes) non-cacheable
- *      SW1-4:  ON selects AUTO system speed (OFF selects HIGH system speed)
- *      SW1-5:  RESERVED (however, the system can read its state; see below)
- *      SW1-6:  COMPAQ Dual-Mode Monitor or Color Monitor (OFF selects Monochrome monitor other than COMPAQ)
- *
- * While SW1-7 and SW1-8 are connected to this memory-mapped register, other SW1 DIP switches are accessible
- * through the 8042 Keyboard Controller's KBC.INPORT register, as follows:
- *
- *      SW1-1:  TODO: Determine
- *      SW1-2:  ChipSet.KC8042.INPORT.COMPAQ_NO80387 clear if ON, set (0x04) if OFF
- *      SW1-3:  TODO: Determine
- *      SW1-4:  ChipSet.KC8042.INPORT.COMPAQ_HISPEED clear if ON, set (0x10) if OFF
- *      SW1-5:  ChipSet.KC8042.INPORT.COMPAQ_DIP5OFF clear if ON, set (0x20) if OFF
- *      SW1-6:  ChipSet.KC8042.INPORT.COMPAQ_NONDUAL clear if ON, set (0x40) if OFF
- */
-CompaqController.SETTINGS = {
-    B0_PARITY:  0x0001,         // parity OK in byte 0
-    B1_PARITY:  0x0002,         // parity OK in byte 1
-    B2_PARITY:  0x0004,         // parity OK in byte 2
-    B3_PARITY:  0x0008,         // parity OK in byte 3
-    BASE_640KB: 0x0000,         // SW1-7,8: ON  ON   Bits 5,4: 00
-    BASE_ERROR: 0x0010,         // SW1-7,8: ON  OFF  Bits 5,4: 01
-    BASE_512KB: 0x0020,         // SW1-7,8: OFF ON   Bits 5,4: 10
-    BASE_256KB: 0x0030,         // SW1-7,8: OFF OFF  Bits 5,4: 11
-    /**
-     * TODO: The DeskPro 386/25 TechRef says bit 6 (0x40) is always set,
-     * but setting it results in memory configuration errors; review.
-     */
-    ADDED_1MB:  0x0040,
-    /**
-     * TODO: The DeskPro 386/25 TechRef says bit 7 (0x80) is always clear; review.
-     */
-    PIGGYBACK:  0x0080,
-    SYS_4MB:    0x0100,         // 4Mb on system board
-    SYS_1MB:    0x0200,         // 1Mb on system board
-    SYS_NONE:   0x0300,         // no memory on system board
-    MODA_4MB:   0x0400,         // 4Mb on module A board
-    MODA_1MB:   0x0800,         // 1Mb on module A board
-    MODA_NONE:  0x0C00,         // no memory on module A board
-    MODB_4MB:   0x1000,         // 4Mb on module B board
-    MODB_1MB:   0x2000,         // 1Mb on module B board
-    MODB_NONE:  0x3000,         // no memory on module B board
-    MODC_4MB:   0x4000,         // 4Mb on module C board
-    MODC_1MB:   0x8000,         // 1Mb on module C board
-    MODC_NONE:  0xC000,         // no memory on module C board
-    /**
-     * NOTE: It doesn't seem to matter to the ROM whether I set any of bits 8-15 or not....
-     */
-    DEFAULT:    0x0A0F          // our default settings (ie, parity OK, 640Kb base memory, 1Mb system memory, 1Mb module A memory)
-};
-
-CompaqController.RAMSETUP = {
-    SETUP:      0x000F,
-    CACHE:      0x0040,
-    RESERVED:   0xFFB0,
-    DEFAULT:    0x0002          // our default settings (ie, 2Mb, cache disabled)
-};
-
-CompaqController.BUFFER = [null, 0];
-CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte];
 
 /**
  * Initialize all the RAM modules on the page.

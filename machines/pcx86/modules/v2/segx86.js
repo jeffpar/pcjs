@@ -30,6 +30,20 @@ import { DEBUG, DEBUGGER, I386 } from "./defines.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Segx86 {
+
+    static ID = {
+        NULL:   0,          // "NULL"
+        CODE:   1,          // "CS"
+        DATA:   2,          // "DS", "ES", "FS", "GS"
+        STACK:  3,          // "SS"
+        TSS:    4,          // "TSS"
+        LDT:    5,          // "LDT"
+        VER:    6,          // "VER"
+        DBG:    7           // "DBG"
+    };
+
+    static CALLBREAK_SEL = 0x0001;
+
     /**
      * Segx86(cpu, sName)
      *
@@ -1680,16 +1694,3 @@ export default class Segx86 {
      }
      */
 }
-
-Segx86.ID = {
-    NULL:   0,          // "NULL"
-    CODE:   1,          // "CS"
-    DATA:   2,          // "DS", "ES", "FS", "GS"
-    STACK:  3,          // "SS"
-    TSS:    4,          // "TSS"
-    LDT:    5,          // "LDT"
-    VER:    6,          // "VER"
-    DBG:    7           // "DBG"
-};
-
-Segx86.CALLBREAK_SEL = 0x0001;
