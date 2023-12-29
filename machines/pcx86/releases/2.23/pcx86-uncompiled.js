@@ -15282,6 +15282,11 @@ let TimeLog;
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CPU extends Component {
+
+    static YIELDS_PER_SECOND = 60;
+
+    static BUTTONS = ["power", "reset"];
+
     /**
      * CPU(parmsCPU, nCyclesDefault)
      *
@@ -16689,10 +16694,6 @@ class CPU extends Component {
     }
 }
 
-CPU.YIELDS_PER_SECOND = 60;
-
-CPU.BUTTONS = ["power", "reset"];
-
 /**
  * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2023 Jeff Parsons
  */
@@ -16702,6 +16703,22 @@ CPU.BUTTONS = ["power", "reset"];
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CPUx86 extends CPU {
+
+    /**
+     * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
+     * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
+     * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
+     * instead of breaking all the longs we prefetch into bytes, we simply store the longs as-is into
+     * every 4th element of the queue (the queue is a sparse array).
+     */
+    static PFLEN = 16;                  // 16 generates a 16-byte prefetch queue consisting of 4 32-bit entries
+    static PFINFO = {
+        LENGTH:     CPUx86.PFLEN,
+        IP_MASK:    ((CPUx86.PFLEN - 1) & ~0x3)
+    };
+
+    static PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
+
     /**
      * CPUx86(parmsCPU)
      *
@@ -21299,22 +21316,6 @@ class CPUx86 extends CPU {
         }
     }
 }
-
-if (PREFETCH) {
-    /**
-     * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
-     * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
-     * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
-     * instead of breaking all the longs we prefetch into bytes, we simply store the longs as-is into
-     * every 4th element of the queue (the queue is a sparse array).
-     */
-    CPUx86.PFINFO = {
-        LENGTH:     16              // 16 generates a 16-byte prefetch queue consisting of 4 32-bit entries
-    };
-    CPUx86.PFINFO.IP_MASK = ((CPUx86.PFINFO.LENGTH - 1) & ~0x3);
-}
-
-CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
 
 /**
  * Initialize every CPU module on the page
@@ -66306,6 +66307,251 @@ let DriveInfo;
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class FDC extends Component {
+
+    static DEFAULT_DRIVE_NAME = "Floppy Drive";
+
+    static TERMS = {
+        C:   "C",       // Cylinder Number
+        D:   "D",       // Data (eg, pattern to be written to a sector)
+        H:   "H",       // Head Address
+        R:   "R",       // Record (ie, sector number to be read or written)
+        N:   "N",       // Number (ie, number of data bytes to write)
+        DS:  "DS",      // Drive Select
+        SC:  "SC",      // Sectors per Cylinder
+        DTL: "DTL",     // Data Length
+        EOT: "EOT",     // End of Track
+        GPL: "GPL",     // Gap Length
+        HLT: "HLT",     // Head Load Time
+        NCN: "NCN",     // New Cylinder Number
+        PCN: "PCN",     // Present Cylinder Number
+        SRT: "SRT",     // Stepping Rate
+        ST0: "ST0",     // Status Register 0
+        ST1: "ST1",     // Status Register 1
+        ST2: "ST2",     // Status Register 2
+        ST3: "ST3"      // Status Register 3
+    };
+
+    /**
+     * FDC Digital Output Register (DOR) (0x3F2, write-only)
+     *
+     * NOTE: Reportedly, a drive's MOTOR had to be ON before the drive could be selected; however, outFDCOutput() no
+     * longer verifies that.  Also, motor start time for original drives was 500ms, but we make no attempt to simulate that.
+     *
+     * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", this port is called the Digital Output Register
+     * or DOR.  It uses the same bit definitions as the original FDC Output Register, except that only two diskette drives
+     * are supported, hence bit 1 is always 0 (ie, FDC.REG_OUTPUT.DS2 and FDC.REG_OUTPUT.DS3 are not supported) and bits
+     * 6 and 7 are unused (FDC.REG_OUTPUT.MOTOR_D2 and FDC.REG_OUTPUT.MOTOR_D3 are not supported).
+     */
+    static REG_OUTPUT = {
+        PORT:      0x3F2,
+        DS:         0x03,   // drive select bits
+        DS0:        0x00,
+        DS1:        0x01,
+        DS2:        0x02,   // reserved on the MODEL_5170
+        DS3:        0x03,   // reserved on the MODEL_5170
+        ENABLE:     0x04,   // clearing this bit resets the FDC
+        INT_ENABLE: 0x08,   // enables both FDC and DMA (Channel 2) interrupt requests (IRQ 6)
+        MOTOR_D0:   0x10,
+        MOTOR_D1:   0x20,
+        MOTOR_D2:   0x40,   // reserved on the MODEL_5170
+        MOTOR_D3:   0x80    // reserved on the MODEL_5170
+    };
+
+    /**
+     * FDC Main Status Register (0x3F4, read-only)
+     *
+     * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", bits 2 and 3 are reserved, since that adapter
+     * supported a maximum of two diskette drives.
+     */
+    static REG_STATUS = {
+        PORT:      0x3F4,
+        BUSY_A:     0x01,
+        BUSY_B:     0x02,
+        BUSY_C:     0x04,   // reserved on the MODEL_5170
+        BUSY_D:     0x08,   // reserved on the MODEL_5170
+        BUSY:       0x10,   // a read or write command is in progress
+        NON_DMA:    0x20,   // FDC is in non-DMA mode
+        READ_DATA:  0x40,   // transfer is from FDC Data Register to processor (if clear, then transfer is from processor to the FDC Data Register)
+        RQM:        0x80    // indicates FDC Data Register is ready to send or receive data to or from the processor (Request for Master)
+    };
+
+    /**
+     * FDC Data Register (0x3F5, read-write)
+     */
+    static REG_DATA = {
+        PORT:      0x3F5,
+        /**
+         * FDC Commands
+         *
+         * NOTE: FDC command bytes need to be masked with FDC.REG_DATA.CMD.MASK before comparing to the values below, since a
+         * number of commands use the following additional bits as follows:
+         *
+         *      SK (0x20): Skip Deleted Data Address Mark
+         *      MF (0x40): Modified Frequency Modulation (as opposed to FM or Frequency Modulation)
+         *      MT (0x80): multi-track operation (ie, data processed under both head 0 and head 1)
+         *
+         * We don't support MT (Multi-Track) operations at this time, and the MF and SK designations cannot be supported as long
+         * as our diskette images contain only the original data bytes without any formatting information.
+         */
+        CMD: {
+            READ_TRACK:     0x02,
+            SPECIFY:        0x03,
+            SENSE_DRIVE:    0x04,
+            WRITE_DATA:     0x05,
+            READ_DATA:      0x06,
+            RECALIBRATE:    0x07,
+            SENSE_INT:      0x08,           // this command is used to clear the FDC interrupt following the clearing/setting of FDC.REG_OUTPUT.ENABLE
+            WRITE_DEL_DATA: 0x09,
+            READ_ID:        0x0A,
+            READ_DEL_DATA:  0x0C,
+            FORMAT_TRACK:   0x0D,
+            SEEK:           0x0F,
+            SCAN_EQUAL:     0x11,
+            SCAN_LO_EQUAL:  0x19,
+            SCAN_HI_EQUAL:  0x1D,
+            MASK:           0x1F,
+            SK:             0x20,           // SK (Skip Deleted Data Address Mark)
+            MF:             0x40,           // MF (Modified Frequency Modulation)
+            MT:             0x80            // MT (Multi-Track; ie, data under both heads will be processed)
+        },
+        /**
+         * FDC status/error results, generally assigned according to the corresponding ST0, ST1, ST2 or ST3 status bit.
+         *
+         * TODO: Determine when EQUIP_CHECK is *really* set; also, "77 step pulses" sounds suspiciously like a typo (it's not 79?)
+         */
+        RES: {
+            NONE:           0x00000000,     // ST0 (IC): Normal termination of command (NT)
+            NOT_READY:      0x00000008,     // ST0 (NR): When the FDD is in the not-ready state and a read or write command is issued, this flag is set; if a read or write command is issued to side 1 of a single sided drive, then this flag is set
+            EQUIP_CHECK:    0x00000010,     // ST0 (EC): If a fault signal is received from the FDD, or if the track 0 signal fails to occur after 77 step pulses (recalibrate command), then this flag is set
+            SEEK_END:       0x00000020,     // ST0 (SE): When the FDC completes the Seek command, this flag is set to 1 (high)
+            INCOMPLETE:     0x00000040,     // ST0 (IC): Abnormal termination of command (AT); execution of command was started, but was not successfully completed
+            RESET:          0x000000C0,     // ST0 (IC): Abnormal termination because during command execution the ready signal from the drive changed state
+            INVALID:        0x00000080,     // ST0 (IC): Invalid command issue (IC); command which was issued was never started
+            ST0:            0x000000FF,
+            NO_ID_MARK:     0x00000100,     // ST1 (MA): If the FDC cannot detect the ID Address Mark, this flag is set; at the same time, the MD (Missing Address Mark in Data Field) of Status Register 2 is set
+            NOT_WRITABLE:   0x00000200,     // ST1 (NW): During Execution of a Write Data, Write Deleted Data, or Format a Cylinder command, if the FDC detects a write protect signal from the FDD, then this flag is set
+            NO_DATA:        0x00000400,     // ST1 (ND): FDC cannot find specified sector (or specified ID if READ_ID command)
+            DMA_OVERRUN:    0x00001000,     // ST1 (OR): If the FDC is not serviced by the main systems during data transfers within a certain time interval, this flag is set
+            CRC_ERROR:      0x00002000,     // ST1 (DE): When the FDC detects a CRC error in either the ID field or the data field, this flag is set
+            END_OF_CYL:     0x00008000,     // ST1 (EN): When the FDC tries to access a sector beyond the final sector of a cylinder, this flag is set
+            ST1:            0x0000FF00,
+            NO_DATA_MARK:   0x00010000,     // ST2 (MD): When data is read from the medium, if the FDC cannot find a Data Address Mark or Deleted Data Address Mark, then this flag is set
+            BAD_CYL:        0x00020000,     // ST2 (BC): This bit is related to the ND bit, and when the contents of C on the medium are different from that stored in the ID Register, and the content of C is FF, then this flag is set
+            SCAN_FAILED:    0x00040000,     // ST2 (SN): During execution of the Scan command, if the FDC cannot find a sector on the cylinder which meets the condition, then this flag is set
+            SCAN_EQUAL:     0x00080000,     // ST2 (SH): During execution of the Scan command, if the condition of "equal" is satisfied, this flag is set
+            WRONG_CYL:      0x00100000,     // ST2 (WC): This bit is related to the ND bit, and when the contents of C on the medium are different from that stored in the ID Register, this flag is set
+            DATA_FIELD:     0x00200000,     // ST2 (DD): If the FDC detects a CRC error in the data, then this flag is set
+            STRL_MARK:      0x00400000,     // ST2 (CM): During execution of the Read Data or Scan command, if the FDC encounters a sector which contains a Deleted Data Address Mark, this flag is set
+            ST2:            0x00FF0000,
+            DRIVE:          0x03000000,     // ST3 (Ux): Status of the "Drive Select" signals from the diskette drive
+            HEAD:           0x04000000,     // ST3 (HD): Status of the "Side Select" signal from the diskette drive
+            TWOSIDE:        0x08000000,     // ST3 (TS): Status of the "Two Side" signal from the diskette drive
+            TRACK0:         0x10000000,     // ST3 (T0): Status of the "Track 0" signal from the diskette drive
+            READY:          0x20000000,     // ST3 (RY): Status of the "Ready" signal from the diskette drive
+            WRITEPROT:      0x40000000,     // ST3 (WP): Status of the "Write Protect" signal from the diskette drive
+            FAULT:          0x80000000|0,   // ST3 (FT): Status of the "Fault" signal from the diskette drive
+            ST3:            0xFF000000|0
+        }
+    };
+
+    /**
+     * FDC "Fixed Disk" Register (0x3F6, write-only)
+     *
+     * Since this register's functions are all specific to the Hard Drive Controller, see the HDC component for details.
+     * The fact that this HDC register is in the middle of the FDC I/O port range is an oddity of the "HFCOMBO" controller.
+     */
+
+    /**
+     * FDC Digital Input Register (0x3F7, read-only, MODEL_5170 only)
+     *
+     * Bit 7 indicates a diskette change (the MODEL_5170 introduced change-line support).  Bits 0-6 are for the selected
+     * hard drive, so this port must be shared with the HDC; bits 0-6 are valid for 50 microseconds after a write to the
+     * Drive Head Register.
+     */
+    static REG_INPUT = {
+        PORT:      0x3F7,
+        DS0:        0x01,   // Drive Select 0
+        DS1:        0x02,   // Drive Select 1
+        HS0:        0x04,   // Head Select 0
+        HS1:        0x08,   // Head Select 1
+        HS2:        0x10,   // Head Select 2
+        HS3:        0x20,   // Head Select 3
+        WRITE_GATE: 0x40,   // Write Gate
+        DISK_CHANGE:0x80    // Diskette Change
+    };
+
+    /**
+     * FDC Diskette Control Register (0x3F7, write-only, MODEL_5170 only)
+     *
+     * Only bits 0-1 are used; bits 2-7 are reserved.
+     */
+    static REG_CONTROL = {
+        PORT:      0x3F7,
+        RATE500K:   0x00,   // 500,000 bps
+        RATE300K:   0x02,   // 300,000 bps
+        RATE250K:   0x01,   // 250,000 bps
+        RATEUNUSED: 0x03
+    };
+
+    /**
+     * FDC Command Sequences
+     *
+     * For each command, cbReq indicates the total number of bytes in the command request sequence,
+     * including the first (command) byte; cbRes indicates total number of bytes in the response sequence.
+     */
+    static CMDS = {
+        READ_TRACK:   "READ TRACK",
+        SPECIFY:      "SPECIFY",
+        SENSE_DRIVE:  "SENSE DRIVE",
+        WRITE_DATA:   "WRITE DATA",
+        READ_DATA:    "READ DATA",
+        RECALIBRATE:  "RECALIBRATE",
+        SENSE_INT:    "SENSE INTERRUPT",
+        READ_ID:      "READ ID",
+        FORMAT:       "FORMAT",
+        SEEK:         "SEEK"
+    };
+
+    static aCmdInfo = {
+        0x02: {cbReq: 9, cbRes: 7, name: FDC.CMDS.READ_TRACK},
+        0x03: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SPECIFY},
+        0x04: {cbReq: 2, cbRes: 1, name: FDC.CMDS.SENSE_DRIVE},
+        0x05: {cbReq: 9, cbRes: 7, name: FDC.CMDS.WRITE_DATA},
+        0x06: {cbReq: 9, cbRes: 7, name: FDC.CMDS.READ_DATA},
+        0x07: {cbReq: 2, cbRes: 0, name: FDC.CMDS.RECALIBRATE},
+        0x08: {cbReq: 1, cbRes: 2, name: FDC.CMDS.SENSE_INT},
+        0x0A: {cbReq: 2, cbRes: 7, name: FDC.CMDS.READ_ID},
+        0x0D: {cbReq: 6, cbRes: 7, name: FDC.CMDS.FORMAT},
+        0x0F: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SEEK}
+    };
+
+    static {
+        /**
+         * Port input notification table
+         *
+         * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
+         * way out and always emulating it.  So, consider an FDC parameter to disable that feature for stricter compatibility.
+         */
+        FDC.aPortInput = {
+            0x3F1: FDC.prototype.inFDCDiagnostic,
+            0x3F4: FDC.prototype.inFDCStatus,
+            0x3F5: FDC.prototype.inFDCData,
+            0x3F7: FDC.prototype.inFDCInput
+        };
+
+        /**
+         * Port output notification table
+         *
+         * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
+         * way out and always emulating it.  So, consider an FDC parameter to disable that feature for stricter compatibility.
+         */
+        FDC.aPortOutput = {
+            0x3F2: FDC.prototype.outFDCOutput,
+            0x3F5: FDC.prototype.outFDCData,
+            0x3F7: FDC.prototype.outFDCControl
+        };
+    }
+
     /**
      * FDC(parmsFDC)
      *
@@ -69313,256 +69559,6 @@ class FDC extends Component {
     }
 }
 
-FDC.DEFAULT_DRIVE_NAME = "Floppy Drive";
-
-if (DEBUG) {
-    FDC.TERMS = {
-        C:   "C",       // Cylinder Number
-        D:   "D",       // Data (eg, pattern to be written to a sector)
-        H:   "H",       // Head Address
-        R:   "R",       // Record (ie, sector number to be read or written)
-        N:   "N",       // Number (ie, number of data bytes to write)
-        DS:  "DS",      // Drive Select
-        SC:  "SC",      // Sectors per Cylinder
-        DTL: "DTL",     // Data Length
-        EOT: "EOT",     // End of Track
-        GPL: "GPL",     // Gap Length
-        HLT: "HLT",     // Head Load Time
-        NCN: "NCN",     // New Cylinder Number
-        PCN: "PCN",     // Present Cylinder Number
-        SRT: "SRT",     // Stepping Rate
-        ST0: "ST0",     // Status Register 0
-        ST1: "ST1",     // Status Register 1
-        ST2: "ST2",     // Status Register 2
-        ST3: "ST3"      // Status Register 3
-    };
-} else {
-    FDC.TERMS = {};
-}
-
-/**
- * FDC Digital Output Register (DOR) (0x3F2, write-only)
- *
- * NOTE: Reportedly, a drive's MOTOR had to be ON before the drive could be selected; however, outFDCOutput() no
- * longer verifies that.  Also, motor start time for original drives was 500ms, but we make no attempt to simulate that.
- *
- * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", this port is called the Digital Output Register
- * or DOR.  It uses the same bit definitions as the original FDC Output Register, except that only two diskette drives
- * are supported, hence bit 1 is always 0 (ie, FDC.REG_OUTPUT.DS2 and FDC.REG_OUTPUT.DS3 are not supported) and bits
- * 6 and 7 are unused (FDC.REG_OUTPUT.MOTOR_D2 and FDC.REG_OUTPUT.MOTOR_D3 are not supported).
- */
-FDC.REG_OUTPUT = {
-    PORT:      0x3F2,
-    DS:         0x03,   // drive select bits
-    DS0:        0x00,
-    DS1:        0x01,
-    DS2:        0x02,   // reserved on the MODEL_5170
-    DS3:        0x03,   // reserved on the MODEL_5170
-    ENABLE:     0x04,   // clearing this bit resets the FDC
-    INT_ENABLE: 0x08,   // enables both FDC and DMA (Channel 2) interrupt requests (IRQ 6)
-    MOTOR_D0:   0x10,
-    MOTOR_D1:   0x20,
-    MOTOR_D2:   0x40,   // reserved on the MODEL_5170
-    MOTOR_D3:   0x80    // reserved on the MODEL_5170
-};
-
-/**
- * FDC Main Status Register (0x3F4, read-only)
- *
- * On the MODEL_5170 "PC AT Fixed Disk and Diskette Drive Adapter", bits 2 and 3 are reserved, since that adapter
- * supported a maximum of two diskette drives.
- */
-FDC.REG_STATUS = {
-    PORT:      0x3F4,
-    BUSY_A:     0x01,
-    BUSY_B:     0x02,
-    BUSY_C:     0x04,   // reserved on the MODEL_5170
-    BUSY_D:     0x08,   // reserved on the MODEL_5170
-    BUSY:       0x10,   // a read or write command is in progress
-    NON_DMA:    0x20,   // FDC is in non-DMA mode
-    READ_DATA:  0x40,   // transfer is from FDC Data Register to processor (if clear, then transfer is from processor to the FDC Data Register)
-    RQM:        0x80    // indicates FDC Data Register is ready to send or receive data to or from the processor (Request for Master)
-};
-
-/**
- * FDC Data Register (0x3F5, read-write)
- */
-FDC.REG_DATA = {
-    PORT:      0x3F5,
-    /**
-     * FDC Commands
-     *
-     * NOTE: FDC command bytes need to be masked with FDC.REG_DATA.CMD.MASK before comparing to the values below, since a
-     * number of commands use the following additional bits as follows:
-     *
-     *      SK (0x20): Skip Deleted Data Address Mark
-     *      MF (0x40): Modified Frequency Modulation (as opposed to FM or Frequency Modulation)
-     *      MT (0x80): multi-track operation (ie, data processed under both head 0 and head 1)
-     *
-     * We don't support MT (Multi-Track) operations at this time, and the MF and SK designations cannot be supported as long
-     * as our diskette images contain only the original data bytes without any formatting information.
-     */
-    CMD: {
-        READ_TRACK:     0x02,
-        SPECIFY:        0x03,
-        SENSE_DRIVE:    0x04,
-        WRITE_DATA:     0x05,
-        READ_DATA:      0x06,
-        RECALIBRATE:    0x07,
-        SENSE_INT:      0x08,           // this command is used to clear the FDC interrupt following the clearing/setting of FDC.REG_OUTPUT.ENABLE
-        WRITE_DEL_DATA: 0x09,
-        READ_ID:        0x0A,
-        READ_DEL_DATA:  0x0C,
-        FORMAT_TRACK:   0x0D,
-        SEEK:           0x0F,
-        SCAN_EQUAL:     0x11,
-        SCAN_LO_EQUAL:  0x19,
-        SCAN_HI_EQUAL:  0x1D,
-        MASK:           0x1F,
-        SK:             0x20,           // SK (Skip Deleted Data Address Mark)
-        MF:             0x40,           // MF (Modified Frequency Modulation)
-        MT:             0x80            // MT (Multi-Track; ie, data under both heads will be processed)
-    },
-    /**
-     * FDC status/error results, generally assigned according to the corresponding ST0, ST1, ST2 or ST3 status bit.
-     *
-     * TODO: Determine when EQUIP_CHECK is *really* set; also, "77 step pulses" sounds suspiciously like a typo (it's not 79?)
-     */
-    RES: {
-        NONE:           0x00000000,     // ST0 (IC): Normal termination of command (NT)
-        NOT_READY:      0x00000008,     // ST0 (NR): When the FDD is in the not-ready state and a read or write command is issued, this flag is set; if a read or write command is issued to side 1 of a single sided drive, then this flag is set
-        EQUIP_CHECK:    0x00000010,     // ST0 (EC): If a fault signal is received from the FDD, or if the track 0 signal fails to occur after 77 step pulses (recalibrate command), then this flag is set
-        SEEK_END:       0x00000020,     // ST0 (SE): When the FDC completes the Seek command, this flag is set to 1 (high)
-        INCOMPLETE:     0x00000040,     // ST0 (IC): Abnormal termination of command (AT); execution of command was started, but was not successfully completed
-        RESET:          0x000000C0,     // ST0 (IC): Abnormal termination because during command execution the ready signal from the drive changed state
-        INVALID:        0x00000080,     // ST0 (IC): Invalid command issue (IC); command which was issued was never started
-        ST0:            0x000000FF,
-        NO_ID_MARK:     0x00000100,     // ST1 (MA): If the FDC cannot detect the ID Address Mark, this flag is set; at the same time, the MD (Missing Address Mark in Data Field) of Status Register 2 is set
-        NOT_WRITABLE:   0x00000200,     // ST1 (NW): During Execution of a Write Data, Write Deleted Data, or Format a Cylinder command, if the FDC detects a write protect signal from the FDD, then this flag is set
-        NO_DATA:        0x00000400,     // ST1 (ND): FDC cannot find specified sector (or specified ID if READ_ID command)
-        DMA_OVERRUN:    0x00001000,     // ST1 (OR): If the FDC is not serviced by the main systems during data transfers within a certain time interval, this flag is set
-        CRC_ERROR:      0x00002000,     // ST1 (DE): When the FDC detects a CRC error in either the ID field or the data field, this flag is set
-        END_OF_CYL:     0x00008000,     // ST1 (EN): When the FDC tries to access a sector beyond the final sector of a cylinder, this flag is set
-        ST1:            0x0000FF00,
-        NO_DATA_MARK:   0x00010000,     // ST2 (MD): When data is read from the medium, if the FDC cannot find a Data Address Mark or Deleted Data Address Mark, then this flag is set
-        BAD_CYL:        0x00020000,     // ST2 (BC): This bit is related to the ND bit, and when the contents of C on the medium are different from that stored in the ID Register, and the content of C is FF, then this flag is set
-        SCAN_FAILED:    0x00040000,     // ST2 (SN): During execution of the Scan command, if the FDC cannot find a sector on the cylinder which meets the condition, then this flag is set
-        SCAN_EQUAL:     0x00080000,     // ST2 (SH): During execution of the Scan command, if the condition of "equal" is satisfied, this flag is set
-        WRONG_CYL:      0x00100000,     // ST2 (WC): This bit is related to the ND bit, and when the contents of C on the medium are different from that stored in the ID Register, this flag is set
-        DATA_FIELD:     0x00200000,     // ST2 (DD): If the FDC detects a CRC error in the data, then this flag is set
-        STRL_MARK:      0x00400000,     // ST2 (CM): During execution of the Read Data or Scan command, if the FDC encounters a sector which contains a Deleted Data Address Mark, this flag is set
-        ST2:            0x00FF0000,
-        DRIVE:          0x03000000,     // ST3 (Ux): Status of the "Drive Select" signals from the diskette drive
-        HEAD:           0x04000000,     // ST3 (HD): Status of the "Side Select" signal from the diskette drive
-        TWOSIDE:        0x08000000,     // ST3 (TS): Status of the "Two Side" signal from the diskette drive
-        TRACK0:         0x10000000,     // ST3 (T0): Status of the "Track 0" signal from the diskette drive
-        READY:          0x20000000,     // ST3 (RY): Status of the "Ready" signal from the diskette drive
-        WRITEPROT:      0x40000000,     // ST3 (WP): Status of the "Write Protect" signal from the diskette drive
-        FAULT:          0x80000000|0,   // ST3 (FT): Status of the "Fault" signal from the diskette drive
-        ST3:            0xFF000000|0
-    }
-};
-
-/**
- * FDC "Fixed Disk" Register (0x3F6, write-only)
- *
- * Since this register's functions are all specific to the Hard Drive Controller, see the HDC component for details.
- * The fact that this HDC register is in the middle of the FDC I/O port range is an oddity of the "HFCOMBO" controller.
- */
-
-/**
- * FDC Digital Input Register (0x3F7, read-only, MODEL_5170 only)
- *
- * Bit 7 indicates a diskette change (the MODEL_5170 introduced change-line support).  Bits 0-6 are for the selected
- * hard drive, so this port must be shared with the HDC; bits 0-6 are valid for 50 microseconds after a write to the
- * Drive Head Register.
- */
-FDC.REG_INPUT = {
-    PORT:      0x3F7,
-    DS0:        0x01,   // Drive Select 0
-    DS1:        0x02,   // Drive Select 1
-    HS0:        0x04,   // Head Select 0
-    HS1:        0x08,   // Head Select 1
-    HS2:        0x10,   // Head Select 2
-    HS3:        0x20,   // Head Select 3
-    WRITE_GATE: 0x40,   // Write Gate
-    DISK_CHANGE:0x80    // Diskette Change
-};
-
-/**
- * FDC Diskette Control Register (0x3F7, write-only, MODEL_5170 only)
- *
- * Only bits 0-1 are used; bits 2-7 are reserved.
- */
-FDC.REG_CONTROL = {
-    PORT:      0x3F7,
-    RATE500K:   0x00,   // 500,000 bps
-    RATE300K:   0x02,   // 300,000 bps
-    RATE250K:   0x01,   // 250,000 bps
-    RATEUNUSED: 0x03
-};
-
-/**
- * FDC Command Sequences
- *
- * For each command, cbReq indicates the total number of bytes in the command request sequence,
- * including the first (command) byte; cbRes indicates total number of bytes in the response sequence.
- */
-if (DEBUG) {
-    FDC.CMDS = {
-        READ_TRACK:   "READ TRACK",
-        SPECIFY:      "SPECIFY",
-        SENSE_DRIVE:  "SENSE DRIVE",
-        WRITE_DATA:   "WRITE DATA",
-        READ_DATA:    "READ DATA",
-        RECALIBRATE:  "RECALIBRATE",
-        SENSE_INT:    "SENSE INTERRUPT",
-        READ_ID:      "READ ID",
-        FORMAT:       "FORMAT",
-        SEEK:         "SEEK"
-    };
-} else {
-    FDC.CMDS = {};
-}
-
-FDC.aCmdInfo = {
-    0x02: {cbReq: 9, cbRes: 7, name: FDC.CMDS.READ_TRACK},
-    0x03: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SPECIFY},
-    0x04: {cbReq: 2, cbRes: 1, name: FDC.CMDS.SENSE_DRIVE},
-    0x05: {cbReq: 9, cbRes: 7, name: FDC.CMDS.WRITE_DATA},
-    0x06: {cbReq: 9, cbRes: 7, name: FDC.CMDS.READ_DATA},
-    0x07: {cbReq: 2, cbRes: 0, name: FDC.CMDS.RECALIBRATE},
-    0x08: {cbReq: 1, cbRes: 2, name: FDC.CMDS.SENSE_INT},
-    0x0A: {cbReq: 2, cbRes: 7, name: FDC.CMDS.READ_ID},
-    0x0D: {cbReq: 6, cbRes: 7, name: FDC.CMDS.FORMAT},
-    0x0F: {cbReq: 3, cbRes: 0, name: FDC.CMDS.SEEK}
-};
-
-/**
- * Port input notification table
- *
- * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
- * way out and always emulating it.  So, consider an FDC parameter to disable that feature for stricter compatibility.
- */
-FDC.aPortInput = {
-    0x3F1: FDC.prototype.inFDCDiagnostic,
-    0x3F4: FDC.prototype.inFDCStatus,
-    0x3F5: FDC.prototype.inFDCData,
-    0x3F7: FDC.prototype.inFDCInput
-};
-
-/**
- * Port output notification table
- *
- * TODO: Even though port 0x3F7 was not present on controllers prior to MODEL_5170, I'm taking the easy
- * way out and always emulating it.  So, consider an FDC parameter to disable that feature for stricter compatibility.
- */
-FDC.aPortOutput = {
-    0x3F2: FDC.prototype.outFDCOutput,
-    0x3F5: FDC.prototype.outFDCData,
-    0x3F7: FDC.prototype.outFDCControl
-};
-
 /**
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
@@ -69584,6 +69580,529 @@ let Drive;
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class HDC extends Component {
+
+    /**
+     * HDC defaults, in case drive parameters weren't specified
+     */
+    static DEFAULT_DRIVE_NAME = "Hard Drive";
+
+    /**
+     * ATC (AT Controller) Registers
+     *
+     * The "IBM Personal Computer AT Fixed Disk and Diskette Drive Adapter", aka the HFCOMBO card, contains what we refer
+     * to here as the ATC (AT Controller).  Even though that card contains both Fixed Disk and Diskette Drive controllers,
+     * this component (HDC) still deals only with the "Fixed Disk" portion.  Fortunately, the "Diskette Drive Adapter"
+     * portion of the card is compatible with the existing FDC component, so that component continues to be responsible
+     * for all diskette operations.
+     *
+     * ATC ports default to their primary addresses; secondary port addresses are 0x80 lower (e.g., 0x170 instead of 0x1F0).
+     *
+     * It's important to know that the MODEL_5170 BIOS has a special relationship with the "Combo Hard File/Diskette
+     * (HFCOMBO) Card" (see @F000:144C).  Initially, the ChipSet component intercepted reads for HFCOMBO's STATUS port
+     * and returned the BUSY bit clear to reduce boot time; however, it turned out that was also a prerequisite for the
+     * BIOS to write test patterns to the CYLLO port (0x1F4) and set the "DUAL" bit (bit 0) of the "HFCNTRL" byte at 40:8Fh
+     * if those CYLLO operations succeeded (now that the HDC is "ATC-aware", the ChipSet port intercepts have been removed).
+     *
+     * Without the "DUAL" bit set, when it came time later to report the diskette drive type, the "DISK_TYPE" function
+     * (@F000:273D) would branch to one of two almost-identical blocks of code -- specifically, a block that disallowed
+     * diskette drive types >= 2 (ChipSet.CMOS.FDRIVE.FD360) instead of >= 3 (ChipSet.CMOS.FDRIVE.FD1200).
+     *
+     * In other words, the "Fixed Disk" portion of the HFCOMBO controller has to be present and operational if the user
+     * wants to use high-capacity (80-track) diskettes with "Diskette Drive" portion of the controller.  This may not be
+     * immediately obvious to anyone creating a 5170 machine configuration with the FDC component but no HDC component.
+     *
+     * TODO: Investigate what a MODEL_5170 can do, if anything, with diskettes if an "HFCOMBO card" was NOT installed;
+     * e.g., was there Diskette-only Controller that could be installed, and if so, did it support high-capacity diskette
+     * drives?  Also, consider making the FDC component able to detect when the HDC is missing and provide the same minimal
+     * HFCOMBO port intercepts that ChipSet once provided (this is not a requirement, just a usability improvement).
+     *
+     * UPDATE: I later discovered that newer (ie, REV2 and REV3) 5170 ROMs are even less happy when no HDC is installed,
+     * *unless* an undocumented FDC "DIAGNOSTIC" register (port 0x3F1) provides a "MULTIPLE DATA RATE" response, bypassing
+     * the HDC port tests described above.  This may also imply that those newer 5170 revisions are incompatible with FD360
+     * diskette drives, because if none of the "MULTIPLE DATA RATE" tests succeed, a "601-Diskette Error" always occurs.
+     */
+    static ATC = {
+        DATA:   {                   // no register (read-write)
+            PORT1:      0x1F0,      // data port address for primary interface
+            PORT2:      0x170       // data port address for secondary interface
+        },
+        DIAG:   {                   // this.regError (read-only)
+            PORT1:      0x1F1,
+            PORT2:      0x171,
+            NO_ERROR:    0x01,
+            CTRL_ERROR:  0x02,
+            SEC_ERROR:   0x03,
+            ECC_ERROR:   0x04,
+            PROC_ERROR:  0x05
+        },
+        ERROR: {                    // this.regError (read-only)
+            PORT1:      0x1F1,
+            PORT2:      0x171,
+            NONE:        0x00,
+            NO_DAM:      0x01,      // Data Address Mark (DAM) not found
+            NO_TRK0:     0x02,      // Track 0 not detected
+            CMD_ABORT:   0x04,      // Aborted Command
+            NO_CHS:      0x10,      // ID field with the specified C:H:S not found
+            ECC_ERR:     0x40,      // Data ECC Error
+            BAD_BLOCK:   0x80       // Bad Block Detect
+        },
+        WPREC:  {                   // this.regWPreC (write-only)
+            PORT1:      0x1F1,
+            PORT2:      0x171
+        },
+        SECCNT: {                   // this.regSecCnt (read-write; 0 implies a 256-sector request)
+            PORT1:      0x1F2,
+            PORT2:      0x172,
+            PACKET_CD:   0x01,      // for PACKET command, bit 0 set upon transfer of packet command
+            PACKET_IO:   0x02       // for PACKET command, bit 1 set upon transfer of packet response
+        },
+        SECNUM: {                   // this.regSecNum (read-write)
+            PORT1:      0x1F3,
+            PORT2:      0x173
+        },
+        CYLLO:  {                   // this.regCylLo (read-write; all 8 bits are used)
+            PORT1:      0x1F4,
+            PORT2:      0x174
+        },
+        CYLHI:  {                   // this.regCylHi (read-write; only bits 0-1 are used, for a total of 10 bits, or 1024 max cylinders)
+            PORT1:      0x1F5,
+            PORT2:      0x175,
+            MASK:        0x03
+        },
+        DRVHD:  {                   // this.regDrvHd (read-write)
+            PORT1:      0x1F6,
+            PORT2:      0x176,
+            HEAD_MASK:   0x0F,      // set this to the max number of heads before issuing a SET PARAMETERS command
+            DRIVE_MASK:  0x10,
+            SET_MASK:    0xE0,
+            SET_BITS:    0xA0       // for whatever reason, these bits must always be set
+        },
+        STATUS: {                   // this.regStatus (read-only; reading clears IRQ.ATC1 or IRQ.ATC2 as appropriate)
+            PORT1:      0x1F7,
+            PORT2:      0x177,
+            ERROR:       0x01,      // set when the previous command ended in an error; one or more bits are set in the ERROR register (the next command to the controller resets the ERROR bit)
+            INDEX:       0x02,      // set once for every revolution of the disk
+            CORRECTED:   0x04,
+            DATA_REQ:    0x08,      // indicates that "the sector buffer requires servicing during a Read or Write command. If either bit 7 (BUSY) or this bit is active, a command is being executed. Upon receipt of any command, this bit is reset."
+            SEEK_OK:     0x10,      // seek operation complete
+            WFAULT:      0x20,      // write fault
+            READY:       0x40,      // if this is set (along with the SEEK_OK bit), the drive is ready to read/write/seek again
+            BUSY:        0x80       // if this is set, no other STATUS bits are valid
+        },
+        COMMAND: {                  // this.regCommand (write-only)
+            PORT1:      0x1F7,
+            PORT2:      0x177,
+            NO_RETRY:    0x01,      // optional bit for READ_DATA, WRITE_DATA, and READ_VERF commands
+            WITH_ECC:    0x02,      // optional bit for READ_DATA and WRITE_DATA commands
+            STEP_RATE:   0x0F,      // optional bits for stepping rate used with RESTORE and SEEK commands
+                                    // (low nibble x 500us equals stepping rate, except for 0, which corresponds to 35us)
+            /**
+             * The following 8 commands comprised the original PC AT (ATA) command set.  You may see other later command
+             * set definitions that show "mandatory" commands, such as READ_MULT (0xC4) or WRITE_MULT (0xC5), but those didn't
+             * exist until the introduction of later interface enhancements (e.g., ATA-1, ATA-2, IDE, EIDE, ATAPI, etc).
+             */
+            RESTORE:     0x10,      // aka RECALIBRATE
+            READ_DATA:   0x20,      // also supports NO_RETRY and/or WITH_ECC
+            WRITE_DATA:  0x30,      // also supports NO_RETRY and/or WITH_ECC
+            READ_VERF:   0x40,      // also supports NO_RETRY
+            FORMAT_TRK:  0x50,      // TODO
+            SEEK:        0x70,      //
+            DIAGNOSE:    0x90,      //
+            SETPARMS:    0x91,      //
+            /**
+             * Additional commands go here.  As for when these commands were introduced, I may try to include
+             * that information parenthetically, but I'm not going to pretend this is in any way authoritative.
+             */
+            RESET:       0x08,      // Device Reset (ATAPI)
+            PACKET:      0xA0,      // Packet Request (ATAPI)
+            IDPACKET:    0xA1,      // Identify Packet Device (ATAPI)
+            IDDEVICE:    0xEC       // Identify Device (ATA-1)
+        },
+        FDR: {                      // this.regFDR
+            PORT1:      0x3F6,
+            PORT2:      0x376,
+            INT_DISABLE: 0x02,      // a logical 0 enables fixed disk interrupts
+            RESET:       0x04,      // a logical 1 enables reset fixed disk function
+            HS3:         0x08,      // a logical 1 enables head select 3 (a logical 0 enables reduced write current)
+            RESERVED:    0xF1
+        },
+        /**
+         * Much of the following IDENTIFY structure information came from a Seagate ATA Reference Manual,
+         * 36111-001, Rev. C, dated 21 May 1993 (111-1c.pdf), a specification which I believe later became known
+         * as ATA-1.
+         *
+         * All words are stored little-endian; also note some definitions of CUR_CAPACITY define it as two
+         * 16-bit words, since as a 32-bit dword, it would be misaligned if the structure began on a dword boundary
+         * (and, of course, if it did NOT begin on a dword boundary, then LBA_CAPACITY would be misaligned).
+         * Alignment considerations are of no great concern on Intel platforms, however.
+         */
+        IDENTIFY: {
+            CONFIG: {                   // WORD: GENERAL_CONFIG
+                OFFSET:         0x00,
+                ATA_RESERVED:   0x0001, // always clear (ATA reserved)
+                HARD_SECTORED:  0x0002, // set if hard sectored
+                SOFT_SECTORED:  0x0004, // set if soft sectored
+                NOT_MFM:        0x0008, // set if not MFM encoded
+                HDSW_15MS:      0x0010, // set if head switch time > 15usec
+                SPINDLE_OPT:    0x0020, // set if spindle motor control option implemented
+                FIXED:          0x0040, // set if fixed drive
+                REMOVABLE:      0x0080, // set if removable cartridge drive
+                RATE_5MBIT:     0x0100, // set if disk transfer rate <= 5Mbit/sec
+                RATE_10MBIT:    0x0200, // set if disk transfer rate <= 10Mbit/sec and > 5Mbit/sec
+                RATE_FASTER:    0x0400, // set if disk transfer rate > 10Mbit/sec
+                ROT_TOLERANCE:  0x0800, // set if rotational speed tolerance is > 0.5%
+                STROBE_OPT:     0x1000, // set if data strobe offset option available
+                TRACK_OPT:      0x2000, // set if track offset option available
+                FMT_TOLERANCE:  0x4000, // set if format speed tolerance gap required
+                NM_RESERVED:    0x8000  // always clear (reserved for non-magnetic drives)
+            },
+            CYLS:               0x02,   // WORD: number of physical cylinders
+            CONFIG2:            0x04,   // WORD: SPECIFIC_CONFIG
+            HEADS:              0x06,   // WORD: number of physical heads
+            TRACK_BYTES:        0x08,   // WORD: bytes per track
+            SECBYTES:           0x0A,   // WORD: bytes per sector
+            SECTORS:            0x0C,   // WORD: sectors per track
+                                        // (reserved words at 0x0E, 0x10, and 0x12)
+            SERIAL_NUMBER:      0x14,   // CHAR: 20 ASCII characters
+            BUFFER_TYPE:        0x28,   // WORD: 0=unspecified, 1=single, 2=dual, 3=caching
+            BUFFER_SIZE:        0x2A,   // WORD: 512-byte increments
+            ECC_BYTES:          0x2C,   // WORD: number of ECC bytes on read/write long commands
+            FIRMWARE_REV:       0x2E,   // CHAR: 8 ASCII characters
+            MODEL_NUMBER:       0x36,   // CHAR: 40 ASCII characters
+            MAX_MULTISEC:       0x5E,   // BYTE: if non-zero, number of transferable sectors per interrupt
+                                        // (reserved byte at 0x5F)
+            DWORD_IO:           0x60,   // WORD: 0x0001 if double-word I/O supported, 0x0000 if not
+                                        // (reserved byte at 0x62)
+            CAPABILITY:         0x63,   // BYTE: bit0=DMA, bit1=LBA, bit2=IORDYsw, bit3=IORDYsup
+                                        // (reserved word at 0x64; reserved byte at 0x66)
+            PIO_TIMING:         0x67,   // BYTE: 0=slow, 1=medium, 2=fast
+                                        // (reserved byte at 0x68)
+            DMA_TIMING:         0x69,   // BYTE: 0=slow, 1=medium, 2=fast
+            NEXT5_VALID:        0x6A,   // WORD: bit0=1 if next 5 words are valid, 0 if not
+            CUR_CYLS:           0x6C,   // WORD: number of logical cylinders
+            CUR_HEADS:          0x6E,   // WORD: number of logical heads
+            CUR_SECTORS:        0x70,   // WORD: number of logical sectors per track
+            CUR_CAPACITY:       0x72,   // LONG: logical capacity in sectors
+            MULTISECT:          0x76,   // BYTE: current multiple sector count
+            MULTISECT_VALID:    0x77,   // BYTE: bit0=1 if MULTSECT is valid, 0 if not
+            LBA_CAPACITY:       0x78,   // LONG: total number of sectors
+            DMA_SINGLE:         0x7C,   // BYTE
+            DMA_SINGLE_ACTIVE:  0x7D,   // BYTE
+            DMA_MULTI:          0x7E,   // BYTE
+            DMA_MULTI_ACTIVE:   0x7F,   // BYTE
+            /**
+             * The rest of this 512-byte structure (words 64 through 255) was reserved at the time of the ATA-1 spec,
+             * so I will not delve any deeper into this structure now.
+             *
+             * Further details can be found at:
+             *
+             *      https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/ata/ns-ata-_identify_device_data
+             *      https://chromium.googlesource.com/chromiumos/third_party/u-boot-next/+/master/include/ata.h
+             *
+             * Regrettably, those more modern documents don't bother mentioning at what point any fields were added
+             * to the specification, and they treat some of the early obsolete fields as too old to warrant any explanation,
+             * calling them simply "Retired" or "Obsolete".  Not particularly helpful to anyone who cares about history.
+             */
+        },
+        PACKET: {
+            COMMAND: {
+                TEST_UNIT:      0x00,   // Test Unit Ready
+                REQ_SENSE:      0x03,   // Request Sense
+                INQUIRY:        0x12,   // Inquiry
+                READ:           0x28,   // Read
+                SEEK:           0x2B,   // Seek
+                READ_TOC:       0x43,   // Read TOC (Table of Contents), PMA (Program Memory Area), and ATIP (Absolute Time in Pre-Groove)
+                PLAY_AUDIO:     0x45,   // Play Audio
+                MODE_SENSE:     0x5A    // Mode Sense
+            },
+            /**
+             * Finding a succinct list of all the (SCSI) Page Codes in old ATAPI/SCSI specs is surprisingly hard,
+             * but there is a nice summary on Wikipedia (https://en.wikipedia.org/wiki/SCSI_mode_page).  For details
+             * on Page Code contents, check out the ANSI X3.304-1997 spec (e.g., page 72 for Page Code 0x2A).
+             */
+            PAGECODE: {
+                RW_ERRREC:      0x01,   // Read-Write Error Recovery Page
+                CD_STATUS:      0x2A    // CD Capabilities and Mechanical Status Page
+            },
+            ADR: {                      // ADR Q sub-channel values (0x4-0xF reserved)
+                NONE:           0x0,
+                CUR_POS:        0x1,
+                MEDIA_CAT_NO:   0x2,
+                ISRC:           0x3
+            },
+            CONTROL: {                  // CONTROL Q sub-channel values
+                DATA_TRACK:     0x4
+            }
+        }
+    };
+
+    /**
+     * XTC (XT Controller) Registers
+     */
+    static XTC = {
+        /**
+         * XTC Data Register (0x320, read-write)
+         *
+         * Writes to this register are discussed below; see HDC Commands.
+         *
+         * Reads from this register after a command has been executed retrieve a "status byte",
+         * which must NOT be confused with the Status Register (see below).  This data "status byte"
+         * contains only two bits of interest: XTC.DATA.STATUS.ERROR and XTC.DATA.STATUS.UNIT.
+         */
+        DATA: {
+            PORT:          0x320,   // port address
+            STATUS: {
+                OK:         0x00,   // no error
+                ERROR:      0x02,   // error occurred during command execution
+                UNIT:       0x20    // logical unit number of the drive
+            },
+            /**
+             * XTC Commands, as issued to XTC_DATA
+             *
+             * Commands are multi-byte sequences sent to XTC_DATA, starting with a XTC_DATA.CMD byte,
+             * and followed by 5 more bytes, for a total of 6 bytes, which collectively are called a
+             * Device Control Block (DCB).  Not all commands use all 6 bytes, but all 6 bytes must be present;
+             * unused bytes are simply ignored.
+             *
+             *      XTC_DATA.CMD    (3-bit class code, 5-bit operation code)
+             *      XTC_DATA.HEAD   (1-bit drive number, 5-bit head number)
+             *      XTC_DATA.CLSEC  (upper bits of 10-bit cylinder number, 6-bit sector number)
+             *      XTC_DATA.CH     (lower bits of 10-bit cylinder number)
+             *      XTC_DATA.COUNT  (8-bit interleave or block count)
+             *      XTC_DATA.CTRL   (8-bit control field)
+             *
+             * One command, HDC.XTC.DATA.CMD.INIT_DRIVE, must include 8 additional bytes following the DCB:
+             *
+             *      maximum number of cylinders (high)
+             *      maximum number of cylinders (low)
+             *      maximum number of heads
+             *      start reduced write current cylinder (high)
+             *      start reduced write current cylinder (low)
+             *      start write precompensation cylinder (high)
+             *      start write precompensation cylinder (low)
+             *      maximum ECC data burst length
+             *
+             * Note that the 3 word values above are stored in "big-endian" format (high byte followed by low byte),
+             * rather than the "little-endian" format (low byte followed by high byte) you typically find on Intel machines.
+             */
+            CMD: {
+                TEST_READY:     0x00,       // Test Drive Ready
+                RECALIBRATE:    0x01,       // Recalibrate
+                REQ_SENSE:      0x03,       // Request Sense Status
+                FORMAT_DRIVE:   0x04,       // Format Drive
+                READ_VERF:      0x05,       // Read Verify
+                FORMAT_TRK:     0x06,       // Format Track
+                FORMAT_BAD:     0x07,       // Format Bad Track
+                READ_DATA:      0x08,       // Read
+                WRITE_DATA:     0x0A,       // Write
+                SEEK:           0x0B,       // Seek
+                INIT_DRIVE:     0x0C,       // Initialize Drive Characteristics
+                READ_ECC_BURST: 0x0D,       // Read ECC Burst Error Length
+                READ_BUFFER:    0x0E,       // Read Data from Sector Buffer
+                WRITE_BUFFER:   0x0F,       // Write Data to Sector Buffer
+                RAM_DIAGNOSTIC: 0xE0,       // RAM Diagnostic
+                DRV_DIAGNOSTIC: 0xE3,       // HDC BIOS: CHK_DRV_CMD
+                CTL_DIAGNOSTIC: 0xE4,       // HDC BIOS: CNTLR_DIAG_CMD
+                READ_LONG:      0xE5,       // HDC BIOS: RD_LONG_CMD
+                WRITE_LONG:     0xE6        // HDC BIOS: WR_LONG_CMD
+            },
+            ERR: {
+                /**
+                 * HDC error conditions, as returned in byte 0 of the (4) bytes returned by the Request Sense Status command
+                 */
+                NONE:           0x00,
+                NO_INDEX:       0x01,       // no index signal detected
+                SEEK_INCOMPLETE:0x02,       // no seek-complete signal
+                WRITE_FAULT:    0x03,
+                NOT_READY:      0x04,       // after the controller selected the drive, the drive did not respond with a ready signal
+                NO_TRACK:       0x06,       // after stepping the max number of cylinders, the controller did not receive the track 00 signal from the drive
+                STILL_SEEKING:  0x08,
+                ECC_ID_ERROR:   0x10,
+                ECC_DATA_ERROR: 0x11,
+                NO_ADDR_MARK:   0x12,
+                NO_SECTOR:      0x14,
+                BAD_SEEK:       0x15,       // seek error: the cylinder and/or head address did not compare with the expected target address
+                ECC_CORRECTABLE:0x18,       // correctable data error
+                BAD_TRACK:      0x19,
+                BAD_CMD:        0x20,
+                BAD_DISK_ADDR:  0x21,
+                RAM:            0x30,
+                CHECKSUM:       0x31,
+                POLYNOMIAL:     0x32,
+                MASK:           0x3F
+            },
+            SENSE: {
+                ADDR_VALID:     0x80
+            }
+        },
+        /**
+         * XTC Status Register (0x321, read-only)
+         *
+         * WARNING: The IBM Technical Reference Manual *badly* confuses the XTC_DATA "status byte" (above)
+         * that the controller sends following an HDC.XTC.DATA.CMD operation with the Status Register (below).
+         * In fact, it's so badly confused that it completely fails to document any of the Status Register
+         * bits below; I'm forced to guess at their meanings from the HDC BIOS listing.
+         */
+        STATUS: {
+            PORT:          0x321,   // port address
+            NONE:           0x00,
+            REQ:            0x01,   // HDC BIOS: request bit
+            IOMODE:         0x02,   // HDC BIOS: mode bit (GUESS: set whenever XTC_DATA contains a response?)
+            BUS:            0x04,   // HDC BIOS: command/data bit (GUESS: set whenever XTC_DATA ready for request?)
+            BUSY:           0x08,   // HDC BIOS: busy bit
+            INTERRUPT:      0x20    // HDC BIOS: interrupt bit
+        }
+    };
+
+    /**
+     * XTC Config Register (0x322, read-only)
+     *
+     * This register is used to read HDC card switch settings that defined the "Drive Type" for
+     * drives 0 and 1.  SW[1],SW[2] (for drive 0) and SW[3],SW[4] (for drive 1) are set as follows:
+     *
+     *      ON,  ON     Drive Type 0   (306 cylinders, 2 heads)
+     *      ON,  OFF    Drive Type 1   (375 cylinders, 8 heads)
+     *      OFF, ON     Drive Type 2   (306 cylinders, 6 heads)
+     *      OFF, OFF    Drive Type 3   (306 cylinders, 4 heads)
+     */
+
+    /**
+     * HDC Command Sequences
+     *
+     * Unlike the FDC, all the HDC commands have fixed-length command request sequences (well, OK, except for
+     * HDC.XTC.DATA.CMD.INIT_DRIVE) and fixed-length response sequences (well, OK, except for HDC.XTC.DATA.CMD.REQ_SENSE),
+     * so a table of byte-lengths isn't much use, but having names for all the commands is still handy for debugging.
+     */
+    static aATACommands = {
+        0x08: "Device Reset",           // ATAPI
+        0x10: "Restore (Recalibrate)",  // ATA
+        0x20: "Read",                   // ATA
+        0x30: "Write",                  // ATA
+        0x40: "Read Verify",            // ATA
+        0x50: "Format Track",           // ATA
+        0x70: "Seek",                   // ATA
+        0x90: "Diagnose",               // ATA
+        0x91: "Set Parameters",         // ATA
+        0xA0: "Packet Request",         // ATAPI
+        0xA1: "Identify Packet Device", // ATAPI
+        0xEC: "Identify Device"         // ATA-1
+    };
+
+    static aATAPICommands = {
+        [HDC.ATC.PACKET.COMMAND.TEST_UNIT]:     "Test Unit Ready",
+        [HDC.ATC.PACKET.COMMAND.REQ_SENSE]:     "Request Sense",
+        [HDC.ATC.PACKET.COMMAND.INQUIRY]:       "Inquiry",
+        [HDC.ATC.PACKET.COMMAND.READ]:          "Read",
+        [HDC.ATC.PACKET.COMMAND.SEEK]:          "Seek",
+        [HDC.ATC.PACKET.COMMAND.READ_TOC]:      "Read TOC",
+        [HDC.ATC.PACKET.COMMAND.PLAY_AUDIO]:    "Play Audio",
+        [HDC.ATC.PACKET.COMMAND.MODE_SENSE]:    "Mode Sense",
+    };
+
+    static aXTACommands = {
+        0x00: "Test Drive Ready",
+        0x01: "Recalibrate",
+        0x03: "Request Sense Status",
+        0x04: "Format Drive",
+        0x05: "Read Verify",
+        0x06: "Format Track",
+        0x07: "Format Bad Track",
+        0x08: "Read",
+        0x0A: "Write",
+        0x0B: "Seek",
+        0x0C: "Initialize Drive Characteristics",
+        0x0D: "Read ECC Burst Error Length",
+        0x0E: "Read Data from Sector Buffer",
+        0x0F: "Write Data to Sector Buffer",
+        0xE0: "RAM Diagnostic",
+        0xE3: "Drive Diagnostic",
+        0xE4: "Controller Diagnostic",
+        0xE5: "Read Long",
+        0xE6: "Write Long"
+    };
+
+    static {
+        /**
+         * Port input notification tables
+         */
+        HDC.aXTCPortInput = {
+            0x320:  HDC.prototype.inXTCData,
+            0x321:  HDC.prototype.inXTCStatus,
+            0x322:  HDC.prototype.inXTCConfig
+        };
+
+        /**
+         * For future reference, the REV2 and REV3 PC AT ROM BIOS also refer to a "FIXED DISK DIAGNOSTIC REGISTER" at
+         * port 0x5F7, but I have no documentation on it, and failure to respond is non-fatal.  See the discussion of the
+         * FDC diagnostic register in inFDCDiagnostic() for more details.
+         */
+        HDC.aATCPortInputPrimary = {
+            0x1F0:  HDC.prototype.inATCData,
+            0x1F1:  HDC.prototype.inATCError,
+            0x1F2:  HDC.prototype.inATCSecCnt,
+            0x1F3:  HDC.prototype.inATCSecNum,
+            0x1F4:  HDC.prototype.inATCCylLo,
+            0x1F5:  HDC.prototype.inATCCylHi,
+            0x1F6:  HDC.prototype.inATCDrvHd,
+            0x1F7:  HDC.prototype.inATCStatus
+        };
+
+        HDC.aATCPortInputSecondary = {
+            0x170:  HDC.prototype.inATCData,
+            0x171:  HDC.prototype.inATCError,
+            0x172:  HDC.prototype.inATCSecCnt,
+            0x173:  HDC.prototype.inATCSecNum,
+            0x174:  HDC.prototype.inATCCylLo,
+            0x175:  HDC.prototype.inATCCylHi,
+            0x176:  HDC.prototype.inATCDrvHd,
+            0x177:  HDC.prototype.inATCStatus
+        };
+
+        /**
+         * Port output notification tables
+         */
+        HDC.aXTCPortOutput = {
+            0x320:  HDC.prototype.outXTCData,
+            0x321:  HDC.prototype.outXTCReset,
+            0x322:  HDC.prototype.outXTCPulse,
+            0x323:  HDC.prototype.outXTCPattern,
+            /**
+             * The PC XT Fixed Disk BIOS includes some additional "housekeeping" that it performs
+             * not only on port 0x323 but also on three additional ports, at increments of 4 (see all
+             * references to "RESET INT/DMA MASK" in the Fixed Disk BIOS).  It's not clear to me if
+             * those ports refer to additional HDC controllers, and I haven't seen other references to
+             * them, but in any case, they represent a lot of "I/O noise" that we simply squelch here.
+             */
+            0x327:  HDC.prototype.outXTCNoise,
+            0x32B:  HDC.prototype.outXTCNoise,
+            0x32F:  HDC.prototype.outXTCNoise
+        };
+
+        HDC.aATCPortOutputPrimary = {
+            0x1F0:  HDC.prototype.outATCData,
+            0x1F1:  HDC.prototype.outATCWPreC,
+            0x1F2:  HDC.prototype.outATCSecCnt,
+            0x1F3:  HDC.prototype.outATCSecNum,
+            0x1F4:  HDC.prototype.outATCCylLo,
+            0x1F5:  HDC.prototype.outATCCylHi,
+            0x1F6:  HDC.prototype.outATCDrvHd,
+            0x1F7:  HDC.prototype.outATCCommand,
+            0x3F6:  HDC.prototype.outATCFDR
+        };
+
+        HDC.aATCPortOutputSecondary = {
+            0x170:  HDC.prototype.outATCData,
+            0x171:  HDC.prototype.outATCWPreC,
+            0x172:  HDC.prototype.outATCSecCnt,
+            0x173:  HDC.prototype.outATCSecNum,
+            0x174:  HDC.prototype.outATCCylLo,
+            0x175:  HDC.prototype.outATCCylHi,
+            0x176:  HDC.prototype.outATCDrvHd,
+            0x177:  HDC.prototype.outATCCommand,
+            0x376:  HDC.prototype.outATCFDR
+        };
+    }
+
     /**
      * HDC(parmsHDC)
      *
@@ -72696,528 +73215,6 @@ class HDC extends Component {
         }
     }
 }
-
-/**
- * HDC defaults, in case drive parameters weren't specified
- */
-HDC.DEFAULT_DRIVE_NAME = "Hard Drive";
-
-/**
- * ATC (AT Controller) Registers
- *
- * The "IBM Personal Computer AT Fixed Disk and Diskette Drive Adapter", aka the HFCOMBO card, contains what we refer
- * to here as the ATC (AT Controller).  Even though that card contains both Fixed Disk and Diskette Drive controllers,
- * this component (HDC) still deals only with the "Fixed Disk" portion.  Fortunately, the "Diskette Drive Adapter"
- * portion of the card is compatible with the existing FDC component, so that component continues to be responsible
- * for all diskette operations.
- *
- * ATC ports default to their primary addresses; secondary port addresses are 0x80 lower (e.g., 0x170 instead of 0x1F0).
- *
- * It's important to know that the MODEL_5170 BIOS has a special relationship with the "Combo Hard File/Diskette
- * (HFCOMBO) Card" (see @F000:144C).  Initially, the ChipSet component intercepted reads for HFCOMBO's STATUS port
- * and returned the BUSY bit clear to reduce boot time; however, it turned out that was also a prerequisite for the
- * BIOS to write test patterns to the CYLLO port (0x1F4) and set the "DUAL" bit (bit 0) of the "HFCNTRL" byte at 40:8Fh
- * if those CYLLO operations succeeded (now that the HDC is "ATC-aware", the ChipSet port intercepts have been removed).
- *
- * Without the "DUAL" bit set, when it came time later to report the diskette drive type, the "DISK_TYPE" function
- * (@F000:273D) would branch to one of two almost-identical blocks of code -- specifically, a block that disallowed
- * diskette drive types >= 2 (ChipSet.CMOS.FDRIVE.FD360) instead of >= 3 (ChipSet.CMOS.FDRIVE.FD1200).
- *
- * In other words, the "Fixed Disk" portion of the HFCOMBO controller has to be present and operational if the user
- * wants to use high-capacity (80-track) diskettes with "Diskette Drive" portion of the controller.  This may not be
- * immediately obvious to anyone creating a 5170 machine configuration with the FDC component but no HDC component.
- *
- * TODO: Investigate what a MODEL_5170 can do, if anything, with diskettes if an "HFCOMBO card" was NOT installed;
- * e.g., was there Diskette-only Controller that could be installed, and if so, did it support high-capacity diskette
- * drives?  Also, consider making the FDC component able to detect when the HDC is missing and provide the same minimal
- * HFCOMBO port intercepts that ChipSet once provided (this is not a requirement, just a usability improvement).
- *
- * UPDATE: I later discovered that newer (ie, REV2 and REV3) 5170 ROMs are even less happy when no HDC is installed,
- * *unless* an undocumented FDC "DIAGNOSTIC" register (port 0x3F1) provides a "MULTIPLE DATA RATE" response, bypassing
- * the HDC port tests described above.  This may also imply that those newer 5170 revisions are incompatible with FD360
- * diskette drives, because if none of the "MULTIPLE DATA RATE" tests succeed, a "601-Diskette Error" always occurs.
- */
-HDC.ATC = {
-    DATA:   {                   // no register (read-write)
-        PORT1:      0x1F0,      // data port address for primary interface
-        PORT2:      0x170       // data port address for secondary interface
-    },
-    DIAG:   {                   // this.regError (read-only)
-        PORT1:      0x1F1,
-        PORT2:      0x171,
-        NO_ERROR:    0x01,
-        CTRL_ERROR:  0x02,
-        SEC_ERROR:   0x03,
-        ECC_ERROR:   0x04,
-        PROC_ERROR:  0x05
-    },
-    ERROR: {                    // this.regError (read-only)
-        PORT1:      0x1F1,
-        PORT2:      0x171,
-        NONE:        0x00,
-        NO_DAM:      0x01,      // Data Address Mark (DAM) not found
-        NO_TRK0:     0x02,      // Track 0 not detected
-        CMD_ABORT:   0x04,      // Aborted Command
-        NO_CHS:      0x10,      // ID field with the specified C:H:S not found
-        ECC_ERR:     0x40,      // Data ECC Error
-        BAD_BLOCK:   0x80       // Bad Block Detect
-    },
-    WPREC:  {                   // this.regWPreC (write-only)
-        PORT1:      0x1F1,
-        PORT2:      0x171
-    },
-    SECCNT: {                   // this.regSecCnt (read-write; 0 implies a 256-sector request)
-        PORT1:      0x1F2,
-        PORT2:      0x172,
-        PACKET_CD:   0x01,      // for PACKET command, bit 0 set upon transfer of packet command
-        PACKET_IO:   0x02       // for PACKET command, bit 1 set upon transfer of packet response
-    },
-    SECNUM: {                   // this.regSecNum (read-write)
-        PORT1:      0x1F3,
-        PORT2:      0x173
-    },
-    CYLLO:  {                   // this.regCylLo (read-write; all 8 bits are used)
-        PORT1:      0x1F4,
-        PORT2:      0x174
-    },
-    CYLHI:  {                   // this.regCylHi (read-write; only bits 0-1 are used, for a total of 10 bits, or 1024 max cylinders)
-        PORT1:      0x1F5,
-        PORT2:      0x175,
-        MASK:        0x03
-    },
-    DRVHD:  {                   // this.regDrvHd (read-write)
-        PORT1:      0x1F6,
-        PORT2:      0x176,
-        HEAD_MASK:   0x0F,      // set this to the max number of heads before issuing a SET PARAMETERS command
-        DRIVE_MASK:  0x10,
-        SET_MASK:    0xE0,
-        SET_BITS:    0xA0       // for whatever reason, these bits must always be set
-    },
-    STATUS: {                   // this.regStatus (read-only; reading clears IRQ.ATC1 or IRQ.ATC2 as appropriate)
-        PORT1:      0x1F7,
-        PORT2:      0x177,
-        ERROR:       0x01,      // set when the previous command ended in an error; one or more bits are set in the ERROR register (the next command to the controller resets the ERROR bit)
-        INDEX:       0x02,      // set once for every revolution of the disk
-        CORRECTED:   0x04,
-        DATA_REQ:    0x08,      // indicates that "the sector buffer requires servicing during a Read or Write command. If either bit 7 (BUSY) or this bit is active, a command is being executed. Upon receipt of any command, this bit is reset."
-        SEEK_OK:     0x10,      // seek operation complete
-        WFAULT:      0x20,      // write fault
-        READY:       0x40,      // if this is set (along with the SEEK_OK bit), the drive is ready to read/write/seek again
-        BUSY:        0x80       // if this is set, no other STATUS bits are valid
-    },
-    COMMAND: {                  // this.regCommand (write-only)
-        PORT1:      0x1F7,
-        PORT2:      0x177,
-        NO_RETRY:    0x01,      // optional bit for READ_DATA, WRITE_DATA, and READ_VERF commands
-        WITH_ECC:    0x02,      // optional bit for READ_DATA and WRITE_DATA commands
-        STEP_RATE:   0x0F,      // optional bits for stepping rate used with RESTORE and SEEK commands
-                                // (low nibble x 500us equals stepping rate, except for 0, which corresponds to 35us)
-        /**
-         * The following 8 commands comprised the original PC AT (ATA) command set.  You may see other later command
-         * set definitions that show "mandatory" commands, such as READ_MULT (0xC4) or WRITE_MULT (0xC5), but those didn't
-         * exist until the introduction of later interface enhancements (e.g., ATA-1, ATA-2, IDE, EIDE, ATAPI, etc).
-         */
-        RESTORE:     0x10,      // aka RECALIBRATE
-        READ_DATA:   0x20,      // also supports NO_RETRY and/or WITH_ECC
-        WRITE_DATA:  0x30,      // also supports NO_RETRY and/or WITH_ECC
-        READ_VERF:   0x40,      // also supports NO_RETRY
-        FORMAT_TRK:  0x50,      // TODO
-        SEEK:        0x70,      //
-        DIAGNOSE:    0x90,      //
-        SETPARMS:    0x91,      //
-        /**
-         * Additional commands go here.  As for when these commands were introduced, I may try to include
-         * that information parenthetically, but I'm not going to pretend this is in any way authoritative.
-         */
-        RESET:       0x08,      // Device Reset (ATAPI)
-        PACKET:      0xA0,      // Packet Request (ATAPI)
-        IDPACKET:    0xA1,      // Identify Packet Device (ATAPI)
-        IDDEVICE:    0xEC       // Identify Device (ATA-1)
-    },
-    FDR: {                      // this.regFDR
-        PORT1:      0x3F6,
-        PORT2:      0x376,
-        INT_DISABLE: 0x02,      // a logical 0 enables fixed disk interrupts
-        RESET:       0x04,      // a logical 1 enables reset fixed disk function
-        HS3:         0x08,      // a logical 1 enables head select 3 (a logical 0 enables reduced write current)
-        RESERVED:    0xF1
-    }
-};
-
-/**
- * Much of the following IDENTIFY structure information came from a Seagate ATA Reference Manual,
- * 36111-001, Rev. C, dated 21 May 1993 (111-1c.pdf), a specification which I believe later became known
- * as ATA-1.
- *
- * All words are stored little-endian; also note some definitions of CUR_CAPACITY define it as two
- * 16-bit words, since as a 32-bit dword, it would be misaligned if the structure began on a dword boundary
- * (and, of course, if it did NOT begin on a dword boundary, then LBA_CAPACITY would be misaligned).
- * Alignment considerations are of no great concern on Intel platforms, however.
- */
-HDC.ATC.IDENTIFY = {
-    CONFIG: {                   // WORD: GENERAL_CONFIG
-        OFFSET:         0x00,
-        ATA_RESERVED:   0x0001, // always clear (ATA reserved)
-        HARD_SECTORED:  0x0002, // set if hard sectored
-        SOFT_SECTORED:  0x0004, // set if soft sectored
-        NOT_MFM:        0x0008, // set if not MFM encoded
-        HDSW_15MS:      0x0010, // set if head switch time > 15usec
-        SPINDLE_OPT:    0x0020, // set if spindle motor control option implemented
-        FIXED:          0x0040, // set if fixed drive
-        REMOVABLE:      0x0080, // set if removable cartridge drive
-        RATE_5MBIT:     0x0100, // set if disk transfer rate <= 5Mbit/sec
-        RATE_10MBIT:    0x0200, // set if disk transfer rate <= 10Mbit/sec and > 5Mbit/sec
-        RATE_FASTER:    0x0400, // set if disk transfer rate > 10Mbit/sec
-        ROT_TOLERANCE:  0x0800, // set if rotational speed tolerance is > 0.5%
-        STROBE_OPT:     0x1000, // set if data strobe offset option available
-        TRACK_OPT:      0x2000, // set if track offset option available
-        FMT_TOLERANCE:  0x4000, // set if format speed tolerance gap required
-        NM_RESERVED:    0x8000  // always clear (reserved for non-magnetic drives)
-    },
-    CYLS:               0x02,   // WORD: number of physical cylinders
-    CONFIG2:            0x04,   // WORD: SPECIFIC_CONFIG
-    HEADS:              0x06,   // WORD: number of physical heads
-    TRACK_BYTES:        0x08,   // WORD: bytes per track
-    SECBYTES:           0x0A,   // WORD: bytes per sector
-    SECTORS:            0x0C,   // WORD: sectors per track
-                                // (reserved words at 0x0E, 0x10, and 0x12)
-    SERIAL_NUMBER:      0x14,   // CHAR: 20 ASCII characters
-    BUFFER_TYPE:        0x28,   // WORD: 0=unspecified, 1=single, 2=dual, 3=caching
-    BUFFER_SIZE:        0x2A,   // WORD: 512-byte increments
-    ECC_BYTES:          0x2C,   // WORD: number of ECC bytes on read/write long commands
-    FIRMWARE_REV:       0x2E,   // CHAR: 8 ASCII characters
-    MODEL_NUMBER:       0x36,   // CHAR: 40 ASCII characters
-    MAX_MULTISEC:       0x5E,   // BYTE: if non-zero, number of transferable sectors per interrupt
-                                // (reserved byte at 0x5F)
-    DWORD_IO:           0x60,   // WORD: 0x0001 if double-word I/O supported, 0x0000 if not
-                                // (reserved byte at 0x62)
-    CAPABILITY:         0x63,   // BYTE: bit0=DMA, bit1=LBA, bit2=IORDYsw, bit3=IORDYsup
-                                // (reserved word at 0x64; reserved byte at 0x66)
-    PIO_TIMING:         0x67,   // BYTE: 0=slow, 1=medium, 2=fast
-                                // (reserved byte at 0x68)
-    DMA_TIMING:         0x69,   // BYTE: 0=slow, 1=medium, 2=fast
-    NEXT5_VALID:        0x6A,   // WORD: bit0=1 if next 5 words are valid, 0 if not
-    CUR_CYLS:           0x6C,   // WORD: number of logical cylinders
-    CUR_HEADS:          0x6E,   // WORD: number of logical heads
-    CUR_SECTORS:        0x70,   // WORD: number of logical sectors per track
-    CUR_CAPACITY:       0x72,   // LONG: logical capacity in sectors
-    MULTISECT:          0x76,   // BYTE: current multiple sector count
-    MULTISECT_VALID:    0x77,   // BYTE: bit0=1 if MULTSECT is valid, 0 if not
-    LBA_CAPACITY:       0x78,   // LONG: total number of sectors
-    DMA_SINGLE:         0x7C,   // BYTE
-    DMA_SINGLE_ACTIVE:  0x7D,   // BYTE
-    DMA_MULTI:          0x7E,   // BYTE
-    DMA_MULTI_ACTIVE:   0x7F,   // BYTE
-    /**
-     * The rest of this 512-byte structure (words 64 through 255) was reserved at the time of the ATA-1 spec,
-     * so I will not delve any deeper into this structure now.
-     *
-     * Further details can be found at:
-     *
-     *      https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/content/ata/ns-ata-_identify_device_data
-     *      https://chromium.googlesource.com/chromiumos/third_party/u-boot-next/+/master/include/ata.h
-     *
-     * Regrettably, those more modern documents don't bother mentioning at what point any fields were added
-     * to the specification, and they treat some of the early obsolete fields as too old to warrant any explanation,
-     * calling them simply "Retired" or "Obsolete".  Not particularly helpful to anyone who cares about history.
-     */
-};
-
-HDC.ATC.PACKET = {
-    COMMAND: {
-        TEST_UNIT:      0x00,   // Test Unit Ready
-        REQ_SENSE:      0x03,   // Request Sense
-        INQUIRY:        0x12,   // Inquiry
-        READ:           0x28,   // Read
-        SEEK:           0x2B,   // Seek
-        READ_TOC:       0x43,   // Read TOC (Table of Contents), PMA (Program Memory Area), and ATIP (Absolute Time in Pre-Groove)
-        PLAY_AUDIO:     0x45,   // Play Audio
-        MODE_SENSE:     0x5A    // Mode Sense
-    },
-    /**
-     * Finding a succinct list of all the (SCSI) Page Codes in old ATAPI/SCSI specs is surprisingly hard,
-     * but there is a nice summary on Wikipedia (https://en.wikipedia.org/wiki/SCSI_mode_page).  For details
-     * on Page Code contents, check out the ANSI X3.304-1997 spec (e.g., page 72 for Page Code 0x2A).
-     */
-    PAGECODE: {
-        RW_ERRREC:      0x01,   // Read-Write Error Recovery Page
-        CD_STATUS:      0x2A    // CD Capabilities and Mechanical Status Page
-    },
-    ADR: {                      // ADR Q sub-channel values (0x4-0xF reserved)
-        NONE:           0x0,
-        CUR_POS:        0x1,
-        MEDIA_CAT_NO:   0x2,
-        ISRC:           0x3
-    },
-    CONTROL: {                  // CONTROL Q sub-channel values
-        DATA_TRACK:     0x4
-    }
-};
-
-/**
- * XTC (XT Controller) Registers
- */
-HDC.XTC = {
-    /**
-     * XTC Data Register (0x320, read-write)
-     *
-     * Writes to this register are discussed below; see HDC Commands.
-     *
-     * Reads from this register after a command has been executed retrieve a "status byte",
-     * which must NOT be confused with the Status Register (see below).  This data "status byte"
-     * contains only two bits of interest: XTC.DATA.STATUS.ERROR and XTC.DATA.STATUS.UNIT.
-     */
-    DATA: {
-        PORT:          0x320,   // port address
-        STATUS: {
-            OK:         0x00,   // no error
-            ERROR:      0x02,   // error occurred during command execution
-            UNIT:       0x20    // logical unit number of the drive
-        },
-        /**
-         * XTC Commands, as issued to XTC_DATA
-         *
-         * Commands are multi-byte sequences sent to XTC_DATA, starting with a XTC_DATA.CMD byte,
-         * and followed by 5 more bytes, for a total of 6 bytes, which collectively are called a
-         * Device Control Block (DCB).  Not all commands use all 6 bytes, but all 6 bytes must be present;
-         * unused bytes are simply ignored.
-         *
-         *      XTC_DATA.CMD    (3-bit class code, 5-bit operation code)
-         *      XTC_DATA.HEAD   (1-bit drive number, 5-bit head number)
-         *      XTC_DATA.CLSEC  (upper bits of 10-bit cylinder number, 6-bit sector number)
-         *      XTC_DATA.CH     (lower bits of 10-bit cylinder number)
-         *      XTC_DATA.COUNT  (8-bit interleave or block count)
-         *      XTC_DATA.CTRL   (8-bit control field)
-         *
-         * One command, HDC.XTC.DATA.CMD.INIT_DRIVE, must include 8 additional bytes following the DCB:
-         *
-         *      maximum number of cylinders (high)
-         *      maximum number of cylinders (low)
-         *      maximum number of heads
-         *      start reduced write current cylinder (high)
-         *      start reduced write current cylinder (low)
-         *      start write precompensation cylinder (high)
-         *      start write precompensation cylinder (low)
-         *      maximum ECC data burst length
-         *
-         * Note that the 3 word values above are stored in "big-endian" format (high byte followed by low byte),
-         * rather than the "little-endian" format (low byte followed by high byte) you typically find on Intel machines.
-         */
-        CMD: {
-            TEST_READY:     0x00,       // Test Drive Ready
-            RECALIBRATE:    0x01,       // Recalibrate
-            REQ_SENSE:      0x03,       // Request Sense Status
-            FORMAT_DRIVE:   0x04,       // Format Drive
-            READ_VERF:      0x05,       // Read Verify
-            FORMAT_TRK:     0x06,       // Format Track
-            FORMAT_BAD:     0x07,       // Format Bad Track
-            READ_DATA:      0x08,       // Read
-            WRITE_DATA:     0x0A,       // Write
-            SEEK:           0x0B,       // Seek
-            INIT_DRIVE:     0x0C,       // Initialize Drive Characteristics
-            READ_ECC_BURST: 0x0D,       // Read ECC Burst Error Length
-            READ_BUFFER:    0x0E,       // Read Data from Sector Buffer
-            WRITE_BUFFER:   0x0F,       // Write Data to Sector Buffer
-            RAM_DIAGNOSTIC: 0xE0,       // RAM Diagnostic
-            DRV_DIAGNOSTIC: 0xE3,       // HDC BIOS: CHK_DRV_CMD
-            CTL_DIAGNOSTIC: 0xE4,       // HDC BIOS: CNTLR_DIAG_CMD
-            READ_LONG:      0xE5,       // HDC BIOS: RD_LONG_CMD
-            WRITE_LONG:     0xE6        // HDC BIOS: WR_LONG_CMD
-        },
-        ERR: {
-            /**
-             * HDC error conditions, as returned in byte 0 of the (4) bytes returned by the Request Sense Status command
-             */
-            NONE:           0x00,
-            NO_INDEX:       0x01,       // no index signal detected
-            SEEK_INCOMPLETE:0x02,       // no seek-complete signal
-            WRITE_FAULT:    0x03,
-            NOT_READY:      0x04,       // after the controller selected the drive, the drive did not respond with a ready signal
-            NO_TRACK:       0x06,       // after stepping the max number of cylinders, the controller did not receive the track 00 signal from the drive
-            STILL_SEEKING:  0x08,
-            ECC_ID_ERROR:   0x10,
-            ECC_DATA_ERROR: 0x11,
-            NO_ADDR_MARK:   0x12,
-            NO_SECTOR:      0x14,
-            BAD_SEEK:       0x15,       // seek error: the cylinder and/or head address did not compare with the expected target address
-            ECC_CORRECTABLE:0x18,       // correctable data error
-            BAD_TRACK:      0x19,
-            BAD_CMD:        0x20,
-            BAD_DISK_ADDR:  0x21,
-            RAM:            0x30,
-            CHECKSUM:       0x31,
-            POLYNOMIAL:     0x32,
-            MASK:           0x3F
-        },
-        SENSE: {
-            ADDR_VALID:     0x80
-        }
-    },
-    /**
-     * XTC Status Register (0x321, read-only)
-     *
-     * WARNING: The IBM Technical Reference Manual *badly* confuses the XTC_DATA "status byte" (above)
-     * that the controller sends following an HDC.XTC.DATA.CMD operation with the Status Register (below).
-     * In fact, it's so badly confused that it completely fails to document any of the Status Register
-     * bits below; I'm forced to guess at their meanings from the HDC BIOS listing.
-     */
-    STATUS: {
-        PORT:          0x321,   // port address
-        NONE:           0x00,
-        REQ:            0x01,   // HDC BIOS: request bit
-        IOMODE:         0x02,   // HDC BIOS: mode bit (GUESS: set whenever XTC_DATA contains a response?)
-        BUS:            0x04,   // HDC BIOS: command/data bit (GUESS: set whenever XTC_DATA ready for request?)
-        BUSY:           0x08,   // HDC BIOS: busy bit
-        INTERRUPT:      0x20    // HDC BIOS: interrupt bit
-    }
-};
-
-/**
- * XTC Config Register (0x322, read-only)
- *
- * This register is used to read HDC card switch settings that defined the "Drive Type" for
- * drives 0 and 1.  SW[1],SW[2] (for drive 0) and SW[3],SW[4] (for drive 1) are set as follows:
- *
- *      ON,  ON     Drive Type 0   (306 cylinders, 2 heads)
- *      ON,  OFF    Drive Type 1   (375 cylinders, 8 heads)
- *      OFF, ON     Drive Type 2   (306 cylinders, 6 heads)
- *      OFF, OFF    Drive Type 3   (306 cylinders, 4 heads)
- */
-
-/**
- * HDC Command Sequences
- *
- * Unlike the FDC, all the HDC commands have fixed-length command request sequences (well, OK, except for
- * HDC.XTC.DATA.CMD.INIT_DRIVE) and fixed-length response sequences (well, OK, except for HDC.XTC.DATA.CMD.REQ_SENSE),
- * so a table of byte-lengths isn't much use, but having names for all the commands is still handy for debugging.
- */
-HDC.aATACommands = {
-    0x08: "Device Reset",           // ATAPI
-    0x10: "Restore (Recalibrate)",  // ATA
-    0x20: "Read",                   // ATA
-    0x30: "Write",                  // ATA
-    0x40: "Read Verify",            // ATA
-    0x50: "Format Track",           // ATA
-    0x70: "Seek",                   // ATA
-    0x90: "Diagnose",               // ATA
-    0x91: "Set Parameters",         // ATA
-    0xA0: "Packet Request",         // ATAPI
-    0xA1: "Identify Packet Device", // ATAPI
-    0xEC: "Identify Device"         // ATA-1
-};
-
-HDC.aATAPICommands = {
-    [HDC.ATC.PACKET.COMMAND.TEST_UNIT]:     "Test Unit Ready",
-    [HDC.ATC.PACKET.COMMAND.REQ_SENSE]:     "Request Sense",
-    [HDC.ATC.PACKET.COMMAND.INQUIRY]:       "Inquiry",
-    [HDC.ATC.PACKET.COMMAND.READ]:          "Read",
-    [HDC.ATC.PACKET.COMMAND.SEEK]:          "Seek",
-    [HDC.ATC.PACKET.COMMAND.READ_TOC]:      "Read TOC",
-    [HDC.ATC.PACKET.COMMAND.PLAY_AUDIO]:    "Play Audio",
-    [HDC.ATC.PACKET.COMMAND.MODE_SENSE]:    "Mode Sense",
-};
-
-HDC.aXTACommands = {
-    0x00: "Test Drive Ready",
-    0x01: "Recalibrate",
-    0x03: "Request Sense Status",
-    0x04: "Format Drive",
-    0x05: "Read Verify",
-    0x06: "Format Track",
-    0x07: "Format Bad Track",
-    0x08: "Read",
-    0x0A: "Write",
-    0x0B: "Seek",
-    0x0C: "Initialize Drive Characteristics",
-    0x0D: "Read ECC Burst Error Length",
-    0x0E: "Read Data from Sector Buffer",
-    0x0F: "Write Data to Sector Buffer",
-    0xE0: "RAM Diagnostic",
-    0xE3: "Drive Diagnostic",
-    0xE4: "Controller Diagnostic",
-    0xE5: "Read Long",
-    0xE6: "Write Long"
-};
-
-/**
- * Port input notification tables
- */
-HDC.aXTCPortInput = {
-    0x320:  HDC.prototype.inXTCData,
-    0x321:  HDC.prototype.inXTCStatus,
-    0x322:  HDC.prototype.inXTCConfig
-};
-
-/**
- * For future reference, the REV2 and REV3 PC AT ROM BIOS also refer to a "FIXED DISK DIAGNOSTIC REGISTER" at
- * port 0x5F7, but I have no documentation on it, and failure to respond is non-fatal.  See the discussion of the
- * FDC diagnostic register in inFDCDiagnostic() for more details.
- */
-HDC.aATCPortInputPrimary = {
-    0x1F0:  HDC.prototype.inATCData,
-    0x1F1:  HDC.prototype.inATCError,
-    0x1F2:  HDC.prototype.inATCSecCnt,
-    0x1F3:  HDC.prototype.inATCSecNum,
-    0x1F4:  HDC.prototype.inATCCylLo,
-    0x1F5:  HDC.prototype.inATCCylHi,
-    0x1F6:  HDC.prototype.inATCDrvHd,
-    0x1F7:  HDC.prototype.inATCStatus
-};
-
-HDC.aATCPortInputSecondary = {
-    0x170:  HDC.prototype.inATCData,
-    0x171:  HDC.prototype.inATCError,
-    0x172:  HDC.prototype.inATCSecCnt,
-    0x173:  HDC.prototype.inATCSecNum,
-    0x174:  HDC.prototype.inATCCylLo,
-    0x175:  HDC.prototype.inATCCylHi,
-    0x176:  HDC.prototype.inATCDrvHd,
-    0x177:  HDC.prototype.inATCStatus
-};
-
-/**
- * Port output notification tables
- */
-HDC.aXTCPortOutput = {
-    0x320:  HDC.prototype.outXTCData,
-    0x321:  HDC.prototype.outXTCReset,
-    0x322:  HDC.prototype.outXTCPulse,
-    0x323:  HDC.prototype.outXTCPattern,
-    /**
-     * The PC XT Fixed Disk BIOS includes some additional "housekeeping" that it performs
-     * not only on port 0x323 but also on three additional ports, at increments of 4 (see all
-     * references to "RESET INT/DMA MASK" in the Fixed Disk BIOS).  It's not clear to me if
-     * those ports refer to additional HDC controllers, and I haven't seen other references to
-     * them, but in any case, they represent a lot of "I/O noise" that we simply squelch here.
-     */
-    0x327:  HDC.prototype.outXTCNoise,
-    0x32B:  HDC.prototype.outXTCNoise,
-    0x32F:  HDC.prototype.outXTCNoise
-};
-
-HDC.aATCPortOutputPrimary = {
-    0x1F0:  HDC.prototype.outATCData,
-    0x1F1:  HDC.prototype.outATCWPreC,
-    0x1F2:  HDC.prototype.outATCSecCnt,
-    0x1F3:  HDC.prototype.outATCSecNum,
-    0x1F4:  HDC.prototype.outATCCylLo,
-    0x1F5:  HDC.prototype.outATCCylHi,
-    0x1F6:  HDC.prototype.outATCDrvHd,
-    0x1F7:  HDC.prototype.outATCCommand,
-    0x3F6:  HDC.prototype.outATCFDR
-};
-
-HDC.aATCPortOutputSecondary = {
-    0x170:  HDC.prototype.outATCData,
-    0x171:  HDC.prototype.outATCWPreC,
-    0x172:  HDC.prototype.outATCSecCnt,
-    0x173:  HDC.prototype.outATCSecNum,
-    0x174:  HDC.prototype.outATCCylLo,
-    0x175:  HDC.prototype.outATCCylHi,
-    0x176:  HDC.prototype.outATCDrvHd,
-    0x177:  HDC.prototype.outATCCommand,
-    0x376:  HDC.prototype.outATCFDR
-};
 
 /**
  * Initialize every Hard Drive Controller (HDC) module on the page.
@@ -82884,6 +82881,28 @@ if (DEBUGGER) {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Computer extends Component {
+
+    static STATE_FAILSAFE  = "failsafe";
+    static STATE_VALIDATE  = "validate";
+    static STATE_TIMESTAMP = "timestamp";
+    static STATE_VERSION   = "version";
+    static STATE_HOSTURL   = "url";
+    static STATE_BROWSER   = "browser";
+    static STATE_USERID    = "user";
+
+    /**
+     * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
+     * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
+     * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
+     */
+    static RESUME_REPOWER  = -1;    // resume without changing any state (for internal use only)
+    static RESUME_NONE     =  0;    // default (no resume)
+    static RESUME_AUTO     =  1;    // automatically save/restore state
+    static RESUME_PROMPT   =  2;    // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
+    static RESUME_DELETE   =  3;    // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
+
+    static UPDATES_PER_SECOND = 2;
+
     /**
      * Computer(parmsComputer, parmsMachine, fSuspended)
      *
@@ -84760,27 +84779,6 @@ class Computer extends Component {
         }
     }
 }
-
-Computer.STATE_FAILSAFE  = "failsafe";
-Computer.STATE_VALIDATE  = "validate";
-Computer.STATE_TIMESTAMP = "timestamp";
-Computer.STATE_VERSION   = "version";
-Computer.STATE_HOSTURL   = "url";
-Computer.STATE_BROWSER   = "browser";
-Computer.STATE_USERID    = "user";
-
-/**
- * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
- * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
- * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
- */
-Computer.RESUME_REPOWER  = -1;  // resume without changing any state (for internal use only)
-Computer.RESUME_NONE     =  0;  // default (no resume)
-Computer.RESUME_AUTO     =  1;  // automatically save/restore state
-Computer.RESUME_PROMPT   =  2;  // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
-Computer.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
-
-Computer.UPDATES_PER_SECOND = 2;
 
 /**
  * Initialize every Computer on the page.

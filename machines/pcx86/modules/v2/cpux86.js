@@ -23,6 +23,22 @@ import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBL
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class CPUx86 extends CPU {
+
+    /**
+     * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
+     * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
+     * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
+     * instead of breaking all the longs we prefetch into bytes, we simply store the longs as-is into
+     * every 4th element of the queue (the queue is a sparse array).
+     */
+    static PFLEN = 16;                  // 16 generates a 16-byte prefetch queue consisting of 4 32-bit entries
+    static PFINFO = {
+        LENGTH:     CPUx86.PFLEN,
+        IP_MASK:    ((CPUx86.PFLEN - 1) & ~0x3)
+    };
+
+    static PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
+
     /**
      * CPUx86(parmsCPU)
      *
@@ -4620,22 +4636,6 @@ export default class CPUx86 extends CPU {
         }
     }
 }
-
-if (PREFETCH) {
-    /**
-     * NOTE: CPUx86.PFINFO.LENGTH must be set to a power of two, so that LENGTH - 1 will form a mask
-     * (IP_MASK) we can use to create a sliding prefetch window of LENGTH bytes.  We also zero the low
-     * 2 bits of IP_MASK so that the sliding window always starts on a 32-bit (long) boundary.  Finally,
-     * instead of breaking all the longs we prefetch into bytes, we simply store the longs as-is into
-     * every 4th element of the queue (the queue is a sparse array).
-     */
-    CPUx86.PFINFO = {
-        LENGTH:     16              // 16 generates a 16-byte prefetch queue consisting of 4 32-bit entries
-    };
-    CPUx86.PFINFO.IP_MASK = ((CPUx86.PFINFO.LENGTH - 1) & ~0x3);
-}
-
-CPUx86.PAGEBLOCKS_CACHE = 512;      // TODO: This seems adequate for 4Mb of RAM, but it should be dynamically reconfigured
 
 /**
  * Initialize every CPU module on the page

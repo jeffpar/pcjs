@@ -32,6 +32,11 @@ import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class CPU extends Component {
+
+    static YIELDS_PER_SECOND = 60;
+
+    static BUTTONS = ["power", "reset"];
+
     /**
      * CPU(parmsCPU, nCyclesDefault)
      *
@@ -1438,7 +1443,3 @@ export default class CPU extends Component {
         this.updateCPU();
     }
 }
-
-CPU.YIELDS_PER_SECOND = 60;
-
-CPU.BUTTONS = ["power", "reset"];

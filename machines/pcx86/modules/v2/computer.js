@@ -23,6 +23,28 @@ import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, MAXDEBUG, PRE
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Computer extends Component {
+
+    static STATE_FAILSAFE  = "failsafe";
+    static STATE_VALIDATE  = "validate";
+    static STATE_TIMESTAMP = "timestamp";
+    static STATE_VERSION   = "version";
+    static STATE_HOSTURL   = "url";
+    static STATE_BROWSER   = "browser";
+    static STATE_USERID    = "user";
+
+    /**
+     * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
+     * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
+     * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
+     */
+    static RESUME_REPOWER  = -1;    // resume without changing any state (for internal use only)
+    static RESUME_NONE     =  0;    // default (no resume)
+    static RESUME_AUTO     =  1;    // automatically save/restore state
+    static RESUME_PROMPT   =  2;    // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
+    static RESUME_DELETE   =  3;    // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
+
+    static UPDATES_PER_SECOND = 2;
+
     /**
      * Computer(parmsComputer, parmsMachine, fSuspended)
      *
@@ -1899,27 +1921,6 @@ export default class Computer extends Component {
         }
     }
 }
-
-Computer.STATE_FAILSAFE  = "failsafe";
-Computer.STATE_VALIDATE  = "validate";
-Computer.STATE_TIMESTAMP = "timestamp";
-Computer.STATE_VERSION   = "version";
-Computer.STATE_HOSTURL   = "url";
-Computer.STATE_BROWSER   = "browser";
-Computer.STATE_USERID    = "user";
-
-/**
- * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
- * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
- * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
- */
-Computer.RESUME_REPOWER  = -1;  // resume without changing any state (for internal use only)
-Computer.RESUME_NONE     =  0;  // default (no resume)
-Computer.RESUME_AUTO     =  1;  // automatically save/restore state
-Computer.RESUME_PROMPT   =  2;  // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
-Computer.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
-
-Computer.UPDATES_PER_SECOND = 2;
 
 /**
  * Initialize every Computer on the page.
