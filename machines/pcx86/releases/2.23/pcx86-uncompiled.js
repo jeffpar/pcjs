@@ -41303,6 +41303,304 @@ class ChipSet extends Component {
     };
 
     /**
+     * Switches Overview
+     * -----------------
+     *
+     * The conventions used for the sw1 and sw2 strings are that the left-most character represents DIP switch [1],
+     * the right-most character represents DIP switch [8], and "1" means the DIP switch is ON and "0" means it is OFF.
+     *
+     * Internally, we convert the above strings into binary values that the 8255A PPI returns, where DIP switch [1]
+     * is bit 0 and DIP switch [8] is bit 7, and 0 indicates the switch is ON and 1 indicates it is OFF.
+     *
+     * For reference, here's how the SW1 and SW2 switches correspond to the internal 8255A PPI bit values:
+     *
+     *      SW1[1]    (bit 0)     "0xxxxxxx" (1):  IPL,  "1xxxxxxx" (0):  No IPL
+     *      SW1[2]    (bit 1)     reserved on the 5150; OFF (1) if FPU installed in a 5160
+     *      SW1[3,4]  (bits 3-2)  "xx11xxxx" (00): 16Kb, "xx01xxxx" (10): 32Kb,  "xx10xxxx" (01): 48Kb,  "xx00xxxx" (11): 64Kb
+     *      SW1[5,6]  (bits 5-4)  "xxxx11xx" (00): none, "xxxx01xx" (10): tv,    "xxxx10xx" (01): color, "xxxx00xx" (11): mono
+     *      SW1[7,8]  (bits 7-6)  "xxxxxx11" (00): 1 FD, "xxxxxx01" (10): 2 FD,  "xxxxxx10" (01): 3 FD,  "xxxxxx00" (11): 4 FD
+     *
+     * Note: FD refers to floppy drive, and IPL refers to an "Initial Program Load" floppy drive.
+     *
+     *      SW2[1-5]    (bits 4-0)  "NNNxxxxx": number of 32Kb blocks of I/O expansion RAM present
+     *
+     * For example, sw1="01110011" indicates that all SW1 DIP switches are ON, except for SW1[1], SW1[5] and SW1[6],
+     * which are OFF.  Internally, the order of these bits must reversed (to 11001110) and then inverted (to 00110001)
+     * to yield the value that the 8255A PPI returns.  Reading the final value right-to-left, 00110001 indicates an
+     * IPL floppy drive, 1X of RAM (where X is 16Kb on a MODEL_5150 and 64Kb on a MODEL_5160), MDA, and 1 floppy drive.
+     *
+     * WARNING: It is possible to set SW1 to indicate more memory than the RAM component has been configured to provide.
+     * This is a configuration error which will cause the machine to crash after reporting a "201" error code (memory
+     * test failure), which is presumably what a real machine would do if it was similarly misconfigured.  Surprisingly,
+     * the BIOS forges ahead, setting SP to the top of the memory range indicated by SW1 (via INT 0x12), but the lack of
+     * a valid stack causes the system to crash after the next IRET.  The BIOS should have either halted or modified
+     * the actual memory size to match the results of the memory test.
+     *
+     * MODEL 5150 Switches
+     * -------------------
+     *
+     * PPI_SW bits are exposed via port PPI_A.
+     *
+     * MODEL 5160 Switches
+     * ------------------------
+     *
+     * PPI_SW bits 0-3 are exposed via PPI_C.SW if PPI_B.ENABLE_SW_HI is clear; bits 4-7 if PPI_B.ENABLE_SW_HI is set.
+     *
+     * AT&T 6300 Switches
+     * ------------------
+     *
+     * Based on ATT_PC_6300_Service_Manual.pdf, there are two 8-switch blocks, DIPSW-0 and DIPSW-1, where:
+     *
+     *      DIPSW-0[1-4] Total RAM
+     *      DIPSW-0[5] - ON if 8087 not installed, OFF if installed
+     *      DIPSW-0[6] - ON if 8250 ACE serial interface present, OFF if Z-8530 SCC interface present
+     *      DIPSW-0[7] - Not used
+     *      DIPSW-0[8] - Type of EPROM chip for ROM 1.21 or lower, or presence of RAM in bank 1 for ROM 1.43 or higher
+     *
+     * and:
+     *
+     *      DIPSW-1[1] - Floppy Type (ON for 48TPI, OFF for 96TPI)
+     *      DIPSW-1[2] - Floppy Speed (ON for slow startup, OFF for fast startup)
+     *      DIPSW-1[3] - HDU ROM (ON for indigenous, OFF for external)
+     *      DIPSW-1[4] - Not used (ROM 1.21 or lower) or Scroll Speed (ROM 1.43 or higher: ON for fast, OFF for slow)
+     *      DIPSW-1[5-6] - Display Type (11=EGA or none, 01=color 40x25, 10=color 80x25, 00=monochrome 80x25)
+     *      DIPSW-1[7-8] - Number of Floppy Drives (11=one, 01=two, 10=three, 00=four)
+     *
+     * For AT&T 6300 ROM 1.43 and up, DIPSW-0 supports the following RAM combinations:
+     *
+     *      0111xxx1: 128Kb on motherboard
+     *      1011xxx0: 256Kb on motherboard
+     *      1101xxx0: 256Kb on motherboard, 256Kb on expansion board (512Kb total)
+     *      1110xxx1: 512Kb on motherboard
+     *      0101xxx0: 256Kb on motherboard, 384Kb on expansion board (640Kb total)
+     *      0100xxx0: 640Kb on motherboard (128Kb bank 0, 512Kb bank 1)
+     *      0110xxx0: 640Kb on motherboard (512Kb bank 0, 128Kb bank 1)
+     *
+     * Inspection of the AT&T 6300 Plus ROM BIOS reveals that DIPSW-0[1-8] are obtained from bits 0-7
+     * of port 0x66 ("sys_conf_a") and DIPSW-1[1-8] are obtained from bits 0-7 of port 0x67 ("sys_conf_b").
+     */
+    static PPI_SW = {
+        FDRIVE: {
+            IPL:            0x01,   // MODEL_5150: IPL ("Initial Program Load") floppy drive attached; MODEL_5160: "Loop on POST"
+            ONE:            0x00,   // 1 floppy drive attached (or 0 drives if PPI_SW.FDRIVE_IPL is not set -- MODEL_5150 only)
+            TWO:            0x40,   // 2 floppy drives attached
+            THREE:          0x80,   // 3 floppy drives attached
+            FOUR:           0xC0,   // 4 floppy drives attached
+            MASK:           0xC0,
+            SHIFT:          6
+        },
+        FPU:                0x02,   // MODEL_5150: reserved; MODEL_5160: FPU coprocessor installed
+        MEMORY: {                   // MODEL_5150: "X" is 16Kb; MODEL_5160: "X" is 64Kb
+            X1:             0x00,   // 16Kb or 64Kb
+            X2:             0x04,   // 32Kb or 128Kb
+            X3:             0x08,   // 48Kb or 192Kb
+            X4:             0x0C,   // 64Kb or 256Kb
+            MASK:           0x0C,
+            SHIFT:          2
+        },
+        MONITOR: {
+            TV:             0x10,
+            COLOR:          0x20,
+            MONO:           0x30,
+            MASK:           0x30,
+            SHIFT:          4
+        }
+    };
+
+    /**
+     * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
+     * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
+     * implementations, we now get and set DIP switch values according to SW_TYPE, and rely on the
+     * tables that follow to define which DIP switch(es) correspond to each SW_TYPE.
+     *
+     * Not every model needs its own tables.  The getDIPSwitches() and setDIPSwitches() functions look first
+     * for an *exact* model match, then a "truncated" model match, and failing that, they fall back to the
+     * MODEL_5150 switch definitions.
+     */
+    static SW_TYPE = {
+        FLOPNUM:    1,
+        FLOPTYPE:   2,
+        FPU:        3,
+        MONITOR:    4,
+        LOWMEM:     5,
+        EXPMEM:     6
+    };
+
+    static SW_FLOPPY = {
+        MASK:       0xC0,
+        VALUES: {
+            1:      0x00,
+            2:      0x40,
+            3:      0x80,
+            4:      0xC0
+        },
+        LABEL: "Number of Floppy Drives"
+    };
+
+    static SW_FPU = {
+        MASK:       0x02,
+        VALUES: {
+            0:      0x00,       // 0 means an FPU is NOT installed
+            1:      0x02        // 1 means an FPU is installed
+        },
+        LABEL: "FPU"
+    };
+
+    static SW_MONITOR = {
+        MASK:       0x30,
+        VALUES: {
+            0:      0x00,
+            1:      0x10,
+            2:      0x20,
+            3:      0x30,
+            "none": 0x00,
+            "tv":   0x10,       // aka composite
+            "color":0x20,
+            "cga":  0x20,       // alias for color
+            "mda":  0x30,       // alias for mono
+            "mono": 0x30,
+            "ega":  0x00,
+            "vga":  0x00
+        },
+        LABEL: "Monitor Type"
+    };
+
+    static SW_MEMORY = {
+        MASK:       0x1F,       // technically, this mask should be 0x0F for ROM revisions prior to 5150_REV3, and 0x1F on 5150_REV3
+        VALUES: {
+            0:      0x00,
+            32:     0x01,
+            64:     0x02,
+            96:     0x03,
+            128:    0x04,
+            160:    0x05,
+            192:    0x06,
+            224:    0x07,
+            256:    0x08,
+            288:    0x09,
+            320:    0x0A,
+            352:    0x0B,
+            384:    0x0C,
+            416:    0x0D,
+            448:    0x0E,
+            480:    0x0F,
+            512:    0x10,
+            544:    0x11,
+            576:    0x12
+            /**
+             * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
+             * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
+             * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
+             * this is where we stop.
+             *
+             * TODO: A value larger than 0x12 usually comes from a misconfigured machine (ie, it forgot to leave SW2[5] ON).
+             * To compensate, when getDIPMemorySize() gets null back from its EXPMEM request, perhaps it should try truncating
+             * the DIP switch value.  However, that would introduce a machine-specific hack into a function that's supposed
+             * be machine-independent now.
+             */
+        },
+        LABEL: "Expansion Memory (32Kb Increments)"
+    };
+
+    static DIPSW = {
+        [ChipSet.MODEL_5150]: [
+            {
+                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
+                /**
+                 * Notes on the 8087 Math Coprocessor (FPU)
+                 *
+                 * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
+                 * "MUST BE ON (RESERVED FOR CO-PROCESSOR)" (p. 2-28), suggesting that the math coprocessor wasn't
+                 * quite ready for the initial release of the IBM PC.
+                 *
+                 * The April 1983 TechRef adds a section on the "IBM Personal Computer Math Coprocessor" (p. 1-33)
+                 * and makes it clearer that SW1[2] must be OFF when a math coprocessor is installed, but then it
+                 * muddies the waters in a new appendix of switch tables, where it erroneously claims that SW1[2]
+                 * must be ON when using a coprocessor (p. G-7).
+                 *
+                 * The April 1984 TechRef eliminates the confusion by eliminating the appendix (actually, it was
+                 * simply corrected and moved to the 1984 Guide to Operations; see p. 5-10).  Early magazine articles
+                 * discussing 8087 support also indicated that switch SW1[2] must OFF when a coprocessor is installed.
+                 *
+                 * While the August 1981 TechRef makes almost no mention of coprocessor support, the April 1984 TechRef
+                 * discusses it in a fair bit of detail, including the fact that 8087 exceptions generate an NMI,
+                 * despite Intel's warning in their iAPX 86,88 User's Manual, p. S-27, that "[t]he 8087 should not be
+                 * tied to the CPU's NMI (non-maskable interrupt) line."
+                 */
+                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
+                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x0C,
+                    VALUES: {
+                        16:     0x00,
+                        32:     0x04,
+                        48:     0x08,
+                        64:     0x0C
+                    },
+                    LABEL: "Base Memory (16Kb Increments)"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
+            }
+        ],
+        [ChipSet.MODEL_5160]: [
+            {
+                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
+                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
+                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x0C,
+                    VALUES: {
+                        64:     0x00,
+                        128:    0x04,
+                        192:    0x08,
+                        256:    0x0C
+                    },
+                    LABEL: "Base Memory (64Kb Increments)"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
+            }
+        ],
+        [ChipSet.MODEL_ATT_6300]: [
+            {
+                [ChipSet.SW_TYPE.LOWMEM]: {
+                    MASK:       0x8F,
+                    VALUES: {
+                        128:    0x01,   // "0111xxx1"
+                        256:    0x82,   // "1011xxx0"
+                        512:    0x08,   // "1110xxx1"
+                        640:    0x8D    // "0100xxx0"
+                    },
+                    LABEL: "Base Memory (128Kb Increments)"
+                },
+                [ChipSet.SW_TYPE.FPU]: {
+                    MASK:       0x10,
+                    VALUES: {
+                        0:      0x00,
+                        1:      0x10
+                    },
+                    LABEL: "FPU"
+                }
+            },
+            {
+                [ChipSet.SW_TYPE.FLOPTYPE]: {
+                    MASK:       0x01,
+                    VALUES: {
+                        0:      0x00,
+                        1:      0x01
+                    },
+                    LABEL: "Floppy Type"
+                },
+                [ChipSet.SW_TYPE.FLOPNUM]: ChipSet.SW_FLOPPY,
+                [ChipSet.SW_TYPE.MONITOR]: ChipSet.SW_MONITOR
+            }
+        ]
+    };
+
+    /**
      *  8237A DMA Controller (DMAC) I/O ports
      *
      *  MODEL_5150 and up uses DMA channel 0 for memory refresh cycles and channel 2 for the FDC.
@@ -41979,304 +42277,6 @@ class ChipSet extends Component {
     static FPU = {                  // TODO: Define a variable for this?
         PORT_CLEAR:         0xF0,   // clear the FPU's "busy" state
         PORT_RESET:         0xF1    // reset the FPU
-    };
-
-    /**
-     * Switches Overview
-     * -----------------
-     *
-     * The conventions used for the sw1 and sw2 strings are that the left-most character represents DIP switch [1],
-     * the right-most character represents DIP switch [8], and "1" means the DIP switch is ON and "0" means it is OFF.
-     *
-     * Internally, we convert the above strings into binary values that the 8255A PPI returns, where DIP switch [1]
-     * is bit 0 and DIP switch [8] is bit 7, and 0 indicates the switch is ON and 1 indicates it is OFF.
-     *
-     * For reference, here's how the SW1 and SW2 switches correspond to the internal 8255A PPI bit values:
-     *
-     *      SW1[1]    (bit 0)     "0xxxxxxx" (1):  IPL,  "1xxxxxxx" (0):  No IPL
-     *      SW1[2]    (bit 1)     reserved on the 5150; OFF (1) if FPU installed in a 5160
-     *      SW1[3,4]  (bits 3-2)  "xx11xxxx" (00): 16Kb, "xx01xxxx" (10): 32Kb,  "xx10xxxx" (01): 48Kb,  "xx00xxxx" (11): 64Kb
-     *      SW1[5,6]  (bits 5-4)  "xxxx11xx" (00): none, "xxxx01xx" (10): tv,    "xxxx10xx" (01): color, "xxxx00xx" (11): mono
-     *      SW1[7,8]  (bits 7-6)  "xxxxxx11" (00): 1 FD, "xxxxxx01" (10): 2 FD,  "xxxxxx10" (01): 3 FD,  "xxxxxx00" (11): 4 FD
-     *
-     * Note: FD refers to floppy drive, and IPL refers to an "Initial Program Load" floppy drive.
-     *
-     *      SW2[1-5]    (bits 4-0)  "NNNxxxxx": number of 32Kb blocks of I/O expansion RAM present
-     *
-     * For example, sw1="01110011" indicates that all SW1 DIP switches are ON, except for SW1[1], SW1[5] and SW1[6],
-     * which are OFF.  Internally, the order of these bits must reversed (to 11001110) and then inverted (to 00110001)
-     * to yield the value that the 8255A PPI returns.  Reading the final value right-to-left, 00110001 indicates an
-     * IPL floppy drive, 1X of RAM (where X is 16Kb on a MODEL_5150 and 64Kb on a MODEL_5160), MDA, and 1 floppy drive.
-     *
-     * WARNING: It is possible to set SW1 to indicate more memory than the RAM component has been configured to provide.
-     * This is a configuration error which will cause the machine to crash after reporting a "201" error code (memory
-     * test failure), which is presumably what a real machine would do if it was similarly misconfigured.  Surprisingly,
-     * the BIOS forges ahead, setting SP to the top of the memory range indicated by SW1 (via INT 0x12), but the lack of
-     * a valid stack causes the system to crash after the next IRET.  The BIOS should have either halted or modified
-     * the actual memory size to match the results of the memory test.
-     *
-     * MODEL 5150 Switches
-     * -------------------
-     *
-     * PPI_SW bits are exposed via port PPI_A.
-     *
-     * MODEL 5160 Switches
-     * ------------------------
-     *
-     * PPI_SW bits 0-3 are exposed via PPI_C.SW if PPI_B.ENABLE_SW_HI is clear; bits 4-7 if PPI_B.ENABLE_SW_HI is set.
-     *
-     * AT&T 6300 Switches
-     * ------------------
-     *
-     * Based on ATT_PC_6300_Service_Manual.pdf, there are two 8-switch blocks, DIPSW-0 and DIPSW-1, where:
-     *
-     *      DIPSW-0[1-4] Total RAM
-     *      DIPSW-0[5] - ON if 8087 not installed, OFF if installed
-     *      DIPSW-0[6] - ON if 8250 ACE serial interface present, OFF if Z-8530 SCC interface present
-     *      DIPSW-0[7] - Not used
-     *      DIPSW-0[8] - Type of EPROM chip for ROM 1.21 or lower, or presence of RAM in bank 1 for ROM 1.43 or higher
-     *
-     * and:
-     *
-     *      DIPSW-1[1] - Floppy Type (ON for 48TPI, OFF for 96TPI)
-     *      DIPSW-1[2] - Floppy Speed (ON for slow startup, OFF for fast startup)
-     *      DIPSW-1[3] - HDU ROM (ON for indigenous, OFF for external)
-     *      DIPSW-1[4] - Not used (ROM 1.21 or lower) or Scroll Speed (ROM 1.43 or higher: ON for fast, OFF for slow)
-     *      DIPSW-1[5-6] - Display Type (11=EGA or none, 01=color 40x25, 10=color 80x25, 00=monochrome 80x25)
-     *      DIPSW-1[7-8] - Number of Floppy Drives (11=one, 01=two, 10=three, 00=four)
-     *
-     * For AT&T 6300 ROM 1.43 and up, DIPSW-0 supports the following RAM combinations:
-     *
-     *      0111xxx1: 128Kb on motherboard
-     *      1011xxx0: 256Kb on motherboard
-     *      1101xxx0: 256Kb on motherboard, 256Kb on expansion board (512Kb total)
-     *      1110xxx1: 512Kb on motherboard
-     *      0101xxx0: 256Kb on motherboard, 384Kb on expansion board (640Kb total)
-     *      0100xxx0: 640Kb on motherboard (128Kb bank 0, 512Kb bank 1)
-     *      0110xxx0: 640Kb on motherboard (512Kb bank 0, 128Kb bank 1)
-     *
-     * Inspection of the AT&T 6300 Plus ROM BIOS reveals that DIPSW-0[1-8] are obtained from bits 0-7
-     * of port 0x66 ("sys_conf_a") and DIPSW-1[1-8] are obtained from bits 0-7 of port 0x67 ("sys_conf_b").
-     */
-    static PPI_SW = {
-        FDRIVE: {
-            IPL:            0x01,   // MODEL_5150: IPL ("Initial Program Load") floppy drive attached; MODEL_5160: "Loop on POST"
-            ONE:            0x00,   // 1 floppy drive attached (or 0 drives if PPI_SW.FDRIVE_IPL is not set -- MODEL_5150 only)
-            TWO:            0x40,   // 2 floppy drives attached
-            THREE:          0x80,   // 3 floppy drives attached
-            FOUR:           0xC0,   // 4 floppy drives attached
-            MASK:           0xC0,
-            SHIFT:          6
-        },
-        FPU:                0x02,   // MODEL_5150: reserved; MODEL_5160: FPU coprocessor installed
-        MEMORY: {                   // MODEL_5150: "X" is 16Kb; MODEL_5160: "X" is 64Kb
-            X1:             0x00,   // 16Kb or 64Kb
-            X2:             0x04,   // 32Kb or 128Kb
-            X3:             0x08,   // 48Kb or 192Kb
-            X4:             0x0C,   // 64Kb or 256Kb
-            MASK:           0x0C,
-            SHIFT:          2
-        },
-        MONITOR: {
-            TV:             0x10,
-            COLOR:          0x20,
-            MONO:           0x30,
-            MASK:           0x30,
-            SHIFT:          4
-        }
-    };
-
-    /**
-     * Some models have completely different DIP switch implementations from the MODEL_5150, which, being
-     * the first IBM PC, was the model that we, um, modeled our DIP switch support on.  So, to support other
-     * implementations, we now get and set DIP switch values according to SW_TYPE, and rely on the
-     * tables that follow to define which DIP switch(es) correspond to each SW_TYPE.
-     *
-     * Not every model needs its own tables.  The getDIPSwitches() and setDIPSwitches() functions look first
-     * for an *exact* model match, then a "truncated" model match, and failing that, they fall back to the
-     * MODEL_5150 switch definitions.
-     */
-    static SW_TYPE = {
-        FLOPNUM:    1,
-        FLOPTYPE:   2,
-        FPU:        3,
-        MONITOR:    4,
-        LOWMEM:     5,
-        EXPMEM:     6
-    };
-
-    static SW_FLOPPY = {
-        MASK:       0xC0,
-        VALUES: {
-            1:      0x00,
-            2:      0x40,
-            3:      0x80,
-            4:      0xC0
-        },
-        LABEL: "Number of Floppy Drives"
-    };
-
-    static SW_FPU = {
-        MASK:       0x02,
-        VALUES: {
-            0:      0x00,       // 0 means an FPU is NOT installed
-            1:      0x02        // 1 means an FPU is installed
-        },
-        LABEL: "FPU"
-    };
-
-    static SW_MONITOR = {
-        MASK:       0x30,
-        VALUES: {
-            0:      0x00,
-            1:      0x10,
-            2:      0x20,
-            3:      0x30,
-            "none": 0x00,
-            "tv":   0x10,       // aka composite
-            "color":0x20,
-            "cga":  0x20,       // alias for color
-            "mda":  0x30,       // alias for mono
-            "mono": 0x30,
-            "ega":  0x00,
-            "vga":  0x00
-        },
-        LABEL: "Monitor Type"
-    };
-
-    static SW_MEMORY = {
-        MASK:       0x1F,       // technically, this mask should be 0x0F for ROM revisions prior to 5150_REV3, and 0x1F on 5150_REV3
-        VALUES: {
-            0:      0x00,
-            32:     0x01,
-            64:     0x02,
-            96:     0x03,
-            128:    0x04,
-            160:    0x05,
-            192:    0x06,
-            224:    0x07,
-            256:    0x08,
-            288:    0x09,
-            320:    0x0A,
-            352:    0x0B,
-            384:    0x0C,
-            416:    0x0D,
-            448:    0x0E,
-            480:    0x0F,
-            512:    0x10,
-            544:    0x11,
-            576:    0x12
-            /**
-             * Obviously, more bit combinations are possible here (up to 0x1F), but assuming a minimum of 64Kb already on
-             * the motherboard, any amount of expansion memory above 576Kb would break the 640Kb barrier.  Yes, if you used
-             * only MDA or CGA video cards, you could go as high as 704Kb in a real system.  But in our happy little world,
-             * this is where we stop.
-             *
-             * TODO: A value larger than 0x12 usually comes from a misconfigured machine (ie, it forgot to leave SW2[5] ON).
-             * To compensate, when getDIPMemorySize() gets null back from its EXPMEM request, perhaps it should try truncating
-             * the DIP switch value.  However, that would introduce a machine-specific hack into a function that's supposed
-             * be machine-independent now.
-             */
-        },
-        LABEL: "Expansion Memory (32Kb Increments)"
-    };
-
-    static DIPSW = {
-        [ChipSet.MODEL_5150]: [
-            {
-                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
-                /**
-                 * Notes on the 8087 Math Coprocessor (FPU)
-                 *
-                 * The August 1981 Technical Reference Manual lists SW1[2] as "RESERVED" and also says that SW1[2]
-                 * "MUST BE ON (RESERVED FOR CO-PROCESSOR)" (p. 2-28), suggesting that the math coprocessor wasn't
-                 * quite ready for the initial release of the IBM PC.
-                 *
-                 * The April 1983 TechRef adds a section on the "IBM Personal Computer Math Coprocessor" (p. 1-33)
-                 * and makes it clearer that SW1[2] must be OFF when a math coprocessor is installed, but then it
-                 * muddies the waters in a new appendix of switch tables, where it erroneously claims that SW1[2]
-                 * must be ON when using a coprocessor (p. G-7).
-                 *
-                 * The April 1984 TechRef eliminates the confusion by eliminating the appendix (actually, it was
-                 * simply corrected and moved to the 1984 Guide to Operations; see p. 5-10).  Early magazine articles
-                 * discussing 8087 support also indicated that switch SW1[2] must OFF when a coprocessor is installed.
-                 *
-                 * While the August 1981 TechRef makes almost no mention of coprocessor support, the April 1984 TechRef
-                 * discusses it in a fair bit of detail, including the fact that 8087 exceptions generate an NMI,
-                 * despite Intel's warning in their iAPX 86,88 User's Manual, p. S-27, that "[t]he 8087 should not be
-                 * tied to the CPU's NMI (non-maskable interrupt) line."
-                 */
-                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
-                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
-                [ChipSet.SW_TYPE.LOWMEM]: {
-                    MASK:       0x0C,
-                    VALUES: {
-                        16:     0x00,
-                        32:     0x04,
-                        48:     0x08,
-                        64:     0x0C
-                    },
-                    LABEL: "Base Memory (16Kb Increments)"
-                }
-            },
-            {
-                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
-            }
-        ],
-        [ChipSet.MODEL_5160]: [
-            {
-                [ChipSet.SW_TYPE.FLOPNUM]:  ChipSet.SW_FLOPPY,
-                [ChipSet.SW_TYPE.FPU]:      ChipSet.SW_FPU,
-                [ChipSet.SW_TYPE.MONITOR]:  ChipSet.SW_MONITOR,
-                [ChipSet.SW_TYPE.LOWMEM]: {
-                    MASK:       0x0C,
-                    VALUES: {
-                        64:     0x00,
-                        128:    0x04,
-                        192:    0x08,
-                        256:    0x0C
-                    },
-                    LABEL: "Base Memory (64Kb Increments)"
-                }
-            },
-            {
-                [ChipSet.SW_TYPE.EXPMEM]:   ChipSet.SW_MEMORY
-            }
-        ],
-        [ChipSet.MODEL_ATT_6300]: [
-            {
-                [ChipSet.SW_TYPE.LOWMEM]: {
-                    MASK:       0x8F,
-                    VALUES: {
-                        128:    0x01,   // "0111xxx1"
-                        256:    0x82,   // "1011xxx0"
-                        512:    0x08,   // "1110xxx1"
-                        640:    0x8D    // "0100xxx0"
-                    },
-                    LABEL: "Base Memory (128Kb Increments)"
-                },
-                [ChipSet.SW_TYPE.FPU]: {
-                    MASK:       0x10,
-                    VALUES: {
-                        0:      0x00,
-                        1:      0x10
-                    },
-                    LABEL: "FPU"
-                }
-            },
-            {
-                [ChipSet.SW_TYPE.FLOPTYPE]: {
-                    MASK:       0x01,
-                    VALUES: {
-                        0:      0x00,
-                        1:      0x01
-                    },
-                    LABEL: "Floppy Type"
-                },
-                [ChipSet.SW_TYPE.FLOPNUM]: ChipSet.SW_FLOPPY,
-                [ChipSet.SW_TYPE.MONITOR]: ChipSet.SW_MONITOR
-            }
-        ]
     };
 
     /**
