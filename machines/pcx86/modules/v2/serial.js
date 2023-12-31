@@ -172,6 +172,31 @@ export default class SerialPort extends Component {
      */
     static SCR = {REG: 7};
 
+    static {
+        /**
+         * Port input notification table
+         */
+        SerialPort.aPortInput = {
+            0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
+            0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
+            0x2: SerialPort.prototype.inIIR,
+            0x3: SerialPort.prototype.inLCR,
+            0x4: SerialPort.prototype.inMCR,
+            0x5: SerialPort.prototype.inLSR,
+            0x6: SerialPort.prototype.inMSR
+        };
+
+        /**
+         * Port output notification table
+         */
+        SerialPort.aPortOutput = {
+            0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
+            0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
+            0x3: SerialPort.prototype.outLCR,
+            0x4: SerialPort.prototype.outMCR
+        };
+    }
+
     /**
      * SerialPort(parms)
      *
@@ -1156,29 +1181,6 @@ export default class SerialPort extends Component {
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }
-
-    /**
-     * Port input notification table
-     */
-    static aPortInput = {
-        0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
-        0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
-        0x2: SerialPort.prototype.inIIR,
-        0x3: SerialPort.prototype.inLCR,
-        0x4: SerialPort.prototype.inMCR,
-        0x5: SerialPort.prototype.inLSR,
-        0x6: SerialPort.prototype.inMSR
-    };
-
-    /**
-     * Port output notification table
-     */
-    static aPortOutput = {
-        0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
-        0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
-        0x3: SerialPort.prototype.outLCR,
-        0x4: SerialPort.prototype.outMCR
-    };
 }
 
 /**

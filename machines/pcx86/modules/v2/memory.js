@@ -34,6 +34,11 @@ var littleEndian = (TYPEDARRAYS? (function() {
  */
 export default class Memoryx86 {
     /**
+     * Last used block ID (used for debugging only)
+     */
+    static idBlock = 0;
+
+    /**
      * Basic memory types
      *
      * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
@@ -1675,11 +1680,6 @@ export default class Memoryx86 {
         return dw;
     }
 }
-
-/**
- * Last used block ID (used for debugging only)
- */
-Memoryx86.idBlock = 0;
 
 /**
  * This is the effective definition of afnNone, but we need not fully define it, because setAccess() uses these

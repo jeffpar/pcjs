@@ -48,6 +48,36 @@ import { APPCLASS, DEBUG } from "./defines.js";
  */
 export default class FPUx86 extends Component {
     /**
+     * Class constants
+     *
+     * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
+     */
+
+    /** @type {number} */
+    static regL2T = Math.log(10) / Math.LN2;        // log2(10) (use Math.log2() if we ever switch to ES6)
+
+    /** @type {number} */
+    static regL2E = Math.LOG2E;                     // log2(e)
+
+    /** @type {number} */
+    static regPI  = Math.PI;                        // pi
+
+    /** @type {number} */
+    static regLG2 = Math.log(2) / Math.LN10;        // log10(2) (use Math.log10() if we ever switch to ES6)
+
+    /** @type {number} */
+    static regLN2 = Math.LN2;                       // log(2)
+
+    /** @type {number} */
+    static MAX_INT16 = 0x8000;
+
+    /** @type {number} */
+    static MAX_INT32 = 0x80000000;
+
+    /** @type {number} */
+    static MAX_INT64 = Math.pow(2, 63);
+
+    /**
      * FPUx86(parmsFPU)
      *
      * The FPUx86 class uses the following (parmsFPU) properties:
@@ -3190,37 +3220,6 @@ FPUx86.FYL2XP1 = function()
 {
     if (this.setST(1, this.getST(1) * Math.log(this.getST(0) + 1.0) / Math.LN2)) this.popValue();
 };
-
-/**
- * Class constants
- *
- * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
- */
-
-/** @const */
-FPUx86.regL2T = Math.log(10) / Math.LN2;        // log2(10) (use Math.log2() if we ever switch to ES6)
-
-/** @const */
-FPUx86.regL2E = Math.LOG2E;                     // log2(e)
-
-/** @const */
-FPUx86.regPI  = Math.PI;                        // pi
-
-/** @const */
-FPUx86.regLG2 = Math.log(2) / Math.LN10;        // log10(2) (use Math.log10() if we ever switch to ES6)
-
-/** @const */
-FPUx86.regLN2 = Math.LN2;                       // log(2)
-
-/** @const */
-FPUx86.MAX_INT16 = 0x8000;
-
-/** @const */
-FPUx86.MAX_INT32 = 0x80000000;
-
-/** @const */
-FPUx86.MAX_INT64 = Math.pow(2, 63);
-
 
 /**
  * FPU operation lookup table (be sure to keep the following table in sync with Debugger.aaaOpFPUDescs).

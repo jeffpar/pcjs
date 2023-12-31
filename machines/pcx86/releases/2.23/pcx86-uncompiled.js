@@ -10932,6 +10932,62 @@ class HTMLLED {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Panel extends Component {
+
+    static COLOR = {
+        BLACK:  "#000000",
+        RED:    "#ff0000",
+        BLUE:   "#0000ff",
+        GREEN:  "#00ff00"
+    };
+
+    static STATE = {
+        NONE:   Panel.COLOR.BLACK,
+        WRITE:  Panel.COLOR.RED,
+        READ:   Panel.COLOR.GREEN,
+        SEEK:   Panel.COLOR.BLUE
+    };
+
+    /**
+     * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
+     * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
+     * stretch the live images to fit.
+     */
+    static LIVECANVAS = {
+        CX:         1280,
+        CY:         720,
+        FONT:       {
+            CY:     18,
+            FACE:   "Monaco, Lucida Console, Courier New"
+        }
+    };
+
+    static LIVEMEM = {
+        CX: (Panel.LIVECANVAS.CX * 3) >> 2,
+        CY: (Panel.LIVECANVAS.CY)
+    };
+
+    static LIVEREGS = {
+        CX:     (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
+        CY:     (Panel.LIVECANVAS.CY),
+        COLOR:  "black"
+    };
+
+    static LIVEDUMP = {
+        CX: (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
+        CY: (Panel.LIVECANVAS.CY >> 1)
+    };
+
+    /**
+     * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
+     */
+    static REGION = {
+        MASK:           0x7fff,
+        BTMOD_SHIFT:    15,
+        TYPE_SHIFT:     16
+    };
+
+    static UPDATES_PER_SECOND = 10;
+
     /**
      * Panel(parmsPanel)
      *
@@ -11759,61 +11815,6 @@ class Panel extends Component {
         }
     }
 }
-
-Panel.COLOR = {
-    BLACK:  "#000000",
-    RED:    "#ff0000",
-    BLUE:   "#0000ff",
-    GREEN:  "#00ff00"
-};
-
-Panel.STATE = {
-    NONE:   Panel.COLOR.BLACK,
-    WRITE:  Panel.COLOR.RED,
-    READ:   Panel.COLOR.GREEN,
-    SEEK:   Panel.COLOR.BLUE
-};
-
-/**
- * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
- * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
- * stretch the live images to fit.
- */
-Panel.LIVECANVAS = {
-    CX:         1280,
-    CY:         720,
-    FONT:       {
-        CY:     18,
-        FACE:   "Monaco, Lucida Console, Courier New"
-    }
-};
-
-Panel.LIVEMEM = {
-    CX: (Panel.LIVECANVAS.CX * 3) >> 2,
-    CY: (Panel.LIVECANVAS.CY)
-};
-
-Panel.LIVEREGS = {
-    CX:     (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
-    CY:     (Panel.LIVECANVAS.CY),
-    COLOR:  "black"
-};
-
-Panel.LIVEDUMP = {
-    CX: (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
-    CY: (Panel.LIVECANVAS.CY >> 1)
-};
-
-/**
- * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
- */
-Panel.REGION = {
-    MASK:           0x7fff,
-    BTMOD_SHIFT:    15,
-    TYPE_SHIFT:     16
-};
-
-Panel.UPDATES_PER_SECOND = 10;
 
 /**
  * Initialize every Panel module on the page.
@@ -13541,6 +13542,11 @@ var littleEndian = (TYPEDARRAYS? (function() {
  */
 class Memoryx86 {
     /**
+     * Last used block ID (used for debugging only)
+     */
+    static idBlock = 0;
+
+    /**
      * Basic memory types
      *
      * RAM is the most conventional memory type, providing full read/write capability to x86-compatible (ie,
@@ -15182,11 +15188,6 @@ class Memoryx86 {
         return dw;
     }
 }
-
-/**
- * Last used block ID (used for debugging only)
- */
-Memoryx86.idBlock = 0;
 
 /**
  * This is the effective definition of afnNone, but we need not fully define it, because setAccess() uses these
@@ -21360,6 +21361,36 @@ WebLib.onInit(CPUx86.init);
  */
 class FPUx86 extends Component {
     /**
+     * Class constants
+     *
+     * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
+     */
+
+    /** @type {number} */
+    static regL2T = Math.log(10) / Math.LN2;        // log2(10) (use Math.log2() if we ever switch to ES6)
+
+    /** @type {number} */
+    static regL2E = Math.LOG2E;                     // log2(e)
+
+    /** @type {number} */
+    static regPI  = Math.PI;                        // pi
+
+    /** @type {number} */
+    static regLG2 = Math.log(2) / Math.LN10;        // log10(2) (use Math.log10() if we ever switch to ES6)
+
+    /** @type {number} */
+    static regLN2 = Math.LN2;                       // log(2)
+
+    /** @type {number} */
+    static MAX_INT16 = 0x8000;
+
+    /** @type {number} */
+    static MAX_INT32 = 0x80000000;
+
+    /** @type {number} */
+    static MAX_INT64 = Math.pow(2, 63);
+
+    /**
      * FPUx86(parmsFPU)
      *
      * The FPUx86 class uses the following (parmsFPU) properties:
@@ -24502,37 +24533,6 @@ FPUx86.FYL2XP1 = function()
 {
     if (this.setST(1, this.getST(1) * Math.log(this.getST(0) + 1.0) / Math.LN2)) this.popValue();
 };
-
-/**
- * Class constants
- *
- * TODO: When loading any of the following 5 constants, the 80287XL and newer coprocessors apply rounding control.
- */
-
-/** @const */
-FPUx86.regL2T = Math.log(10) / Math.LN2;        // log2(10) (use Math.log2() if we ever switch to ES6)
-
-/** @const */
-FPUx86.regL2E = Math.LOG2E;                     // log2(e)
-
-/** @const */
-FPUx86.regPI  = Math.PI;                        // pi
-
-/** @const */
-FPUx86.regLG2 = Math.log(2) / Math.LN10;        // log10(2) (use Math.log10() if we ever switch to ES6)
-
-/** @const */
-FPUx86.regLN2 = Math.LN2;                       // log(2)
-
-/** @const */
-FPUx86.MAX_INT16 = 0x8000;
-
-/** @const */
-FPUx86.MAX_INT32 = 0x80000000;
-
-/** @const */
-FPUx86.MAX_INT64 = Math.pow(2, 63);
-
 
 /**
  * FPU operation lookup table (be sure to keep the following table in sync with Debugger.aaaOpFPUDescs).
@@ -48785,6 +48785,935 @@ WebLib.onInit(RAMx86.init);
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Keyboardx86 extends Component {
+
+    /**
+     * Supported keyboard models (the first entry is the default if the specified model isn't recognized)
+     */
+    static MODELS = ["US83", "US84", "US101"];
+
+    /**
+     * Commands that can be sent to the Keyboard via the 8042; see receiveCmd()
+     *
+     * Aside from the commands listed below, 0xEF-0xF2 and 0xF7-0xFD are expressly documented as NOPs; ie:
+     *
+     *      These commands are reserved and are effectively no-operation or NOP. The system does not use these codes.
+     *      If sent, the keyboard will acknowledge the command and continue in its prior scanning state. No other
+     *      operation will occur.
+     *
+     * However, IBM's documentation is silent with regard to 0x00-0xEC.  It's likely that most if not all of those
+     * commands are NOPs as well.
+     *
+     * @enum {number}
+     */
+    static CMD = {
+        /**
+         * RESET (0xFF)
+         *
+         * The system issues a RESET command to start a program reset and a keyboard internal self-test. The keyboard
+         * acknowledges the command with an 'acknowledge' signal (ACK) and ensures the system accepts the ACK before
+         * executing the command. The system signals acceptance of the ACK by raising the clock and data for a minimum
+         * of 500 microseconds. The keyboard is disabled from the time it receives the RESET command until the ACK is
+         * accepted or until another command overrides the previous one. Following acceptance of the ACK, the keyboard
+         * begins the reset operation, which is similar to a power-on reset. The keyboard clears the output buffer and
+         * sets up default values for typematic and delay rates.
+         */
+        RESET:      0xFF,
+
+        /**
+         * RESEND (0xFE)
+         *
+         * The system can send this command when it detects an error in any transmission from the keyboard. It can be
+         * sent only after a keyboard transmission and before the system enables the interface to allow the next keyboard
+         * output. Upon receipt of RESEND, the keyboard sends the previous output again unless the previous output was
+         * RESEND. In this case, the keyboard will resend the last byte before the RESEND command.
+         */
+        RESEND:     0xFE,
+
+        /**
+         * SET DEFAULT (0xF6)
+         *
+         * The SET DEFAULT command resets all conditions to the power-on default state. The keyboard responds with ACK,
+         * clears its output buffer, sets default conditions, and continues scanning (only if the keyboard was previously
+         * enabled).
+         */
+        DEF_ON:     0xF6,
+
+        /**
+         * DEFAULT DISABLE (0xF5)
+         *
+         * This command is similar to SET DEFAULT, except the keyboard stops scanning and awaits further instructions.
+         */
+        DEF_OFF:    0xF5,
+
+        /**
+         * ENABLE (0xF4)
+         *
+         * Upon receipt of this command, the keyboard responds with ACK, clears its output buffer, and starts scanning.
+         */
+        ENABLE:     0xF4,
+
+        /**
+         * SET TYPEMATIC RATE/DELAY (0xF3)
+         *
+         * The system issues this command, followed by a parameter, to change the typematic rate and delay. The typematic
+         * rate and delay parameters are determined by the value of the byte following the command. Bits 6 and 5 serve as
+         * the delay parameter and bits 4,3,2, 1, and 0 (the least-significant bit) are the rate parameter. Bit 7, the
+         * most-significant bit, is always 0. The delay is equal to 1 plus the binary value of bits 6 and 5 multiplied by
+         * 250 milliseconds ±20%.
+         */
+        SET_RATE:   0xF3,
+
+        /**
+         * ECHO (0xEE)
+         *
+         * ECHO is a diagnostic aid. When the keyboard receives this command, it issues a 0xEE response and continues
+         * scanning if the keyboard was previously enabled.
+         */
+        ECHO:       0xEE,
+
+        /**
+         * SET/RESET MODE INDICATORS (0xED)
+         *
+         * Three mode indicators on the keyboard are accessible to the system. The keyboard activates or deactivates
+         * these indicators when it receives a valid command from the system. They can be activated or deactivated in
+         * any combination.
+         *
+         * The system remembers the previous state of an indicator so that its setting does not change when a command
+         * sequence is issued to change the state of another indicator.
+         *
+         * A SET/RESET MODE INDICATORS command consists of 2 bytes. The first is the command byte and has the following
+         * bit setup:
+         *
+         *      11101101 - 0xED
+         *
+         * The second byte is an option byte. It has a list of the indicators to be acted upon. The bit assignments for
+         * this option byte are as follows:
+         *
+         *      Bit         Indicator
+         *      ---         ---------
+         *       0          Scroll Lock Indicator
+         *       1          Num Lock Indicator
+         *       2          Caps Lock Indicator
+         *      3-7         Reserved (must be 0's)
+         *
+         * NOTE: Bit 7 is the most-significant bit; bit 0 is the least-significant.
+         *
+         * The keyboard will respond to the set/reset mode indicators command with an ACK, discontinue scanning, and wait
+         * for the option byte. The keyboard will respond to the option byte with an ACK, set the indicators, and continue
+         * scanning if the keyboard was previously enabled. If another command is received in place of the option byte,
+         * execution of the function of the SET/RESET MODE INDICATORS command is stopped with no change to the indicator
+         * states, and the new command is processed. Then scanning is resumed.
+         */
+        SET_LEDS:   0xED
+    };
+
+    /**
+     * Command responses returned to the Keyboard via the 8042; see receiveCmd()
+     *
+     * @enum {number}
+     */
+    static CMDRES = {
+        /**
+         * OVERRUN (0x00)
+         *
+         * An overrun character is placed in position 17 of the keyboard buffer, overlaying the last code if the
+         * buffer becomes full. The code is sent to the system as an overrun when it reaches the top of the buffer.
+         */
+        OVERRUN:    0x00,
+
+        LOAD_TEST:  0x65,   // undocumented "LOAD MANUFACTURING TEST REQUEST" response code
+
+        /**
+         * BAT Completion Code (0xAA)
+         *
+         * Following satisfactory completion of the BAT, the keyboard sends 0xAA. 0xFC (or any other code)
+         * means the keyboard microprocessor check failed.
+         */
+        BAT_OK:     0xAA,
+
+        /**
+         * ECHO Response (0xEE)
+         *
+         * This is sent in response to an ECHO command (also 0xEE) from the system.
+         */
+        ECHO:       0xEE,
+
+        /**
+         * BREAK CODE PREFIX (0xF0)
+         *
+         * This code is sent as the first byte of a 2-byte sequence to indicate the release of a key.
+         */
+        BREAK_PREF: 0xF0,
+
+        /**
+         * ACK (0xFA)
+         *
+         * The keyboard issues an ACK response to any valid input other than an ECHO or RESEND command.
+         * If the keyboard is interrupted while sending ACK, it will discard ACK and accept and respond
+         * to the new command.
+         */
+        ACK:        0xFA,
+
+        /**
+         * BASIC ASSURANCE TEST FAILURE (0xFC)
+         */
+        BAT_FAIL:   0xFC,   // TODO: Verify this response code (is this just for older 83-key keyboards?)
+
+        /**
+         * DIAGNOSTIC FAILURE (0xFD)
+         *
+         * The keyboard periodically tests the sense amplifier and sends a diagnostic failure code if it detects
+         * any problems. If a failure occurs during BAT, the keyboard stops scanning and waits for a system command
+         * or power-down to restart. If a failure is reported after scanning is enabled, scanning continues.
+         */
+        DIAG_FAIL:  0xFD,
+
+        /**
+         * RESEND (0xFE)
+         *
+         * The keyboard issues a RESEND command following receipt of an invalid input, or any input with incorrect parity.
+         * If the system sends nothing to the keyboard, no response is required.
+         */
+        RESEND:     0xFE,
+
+        BUFF_FULL:  0xFF    // TODO: Verify this response code (is this just for older 83-key keyboards?)
+    };
+
+    static LIMIT = {
+        MAX_SCANCODES: 20   // TODO: Verify this limit for newer keyboards (84-key and up)
+    };
+
+    static INJECTION = {
+        NONE:       0,
+        ON_START:   1,
+        ON_INPUT:   2
+    };
+
+    static SIMCODE = {
+        BS:               Keys.KEYCODE.BS          + Keys.KEYCODE.ONDOWN,
+        TAB:              Keys.KEYCODE.TAB         + Keys.KEYCODE.ONDOWN,
+        SHIFT:            Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN,
+        RSHIFT:           Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN + Keys.KEYCODE.ONRIGHT,
+        CTRL:             Keys.KEYCODE.CTRL        + Keys.KEYCODE.ONDOWN,
+        ALT:              Keys.KEYCODE.ALT         + Keys.KEYCODE.ONDOWN,
+        RALT:             Keys.KEYCODE.ALT         + Keys.KEYCODE.ONDOWN + Keys.KEYCODE.ONRIGHT,
+        CAPS_LOCK:        Keys.KEYCODE.CAPS_LOCK   + Keys.KEYCODE.ONDOWN,
+        ESC:              Keys.KEYCODE.ESC         + Keys.KEYCODE.ONDOWN,
+        /**
+         * It seems that a recent change to Safari on iOS (first noticed in iOS 9.1) treats SPACE
+         * differently now, at least with regard to <textarea> controls, and possibly only readonly
+         * or hidden controls, like the hidden <textarea> we overlay on the Video <canvas> element.
+         *
+         * Whatever the exact criteria are, Safari on iOS now performs SPACE's default behavior
+         * after the onkeydown event but before the onkeypress event.  So we must now process SPACE
+         * as an ONDOWN key, so that we can call preventDefault() and properly simulate the key at
+         * the time the key goes down.
+         */
+        SPACE:            Keys.KEYCODE.SPACE       + Keys.KEYCODE.ONDOWN,
+        F1:               Keys.KEYCODE.F1          + Keys.KEYCODE.ONDOWN,
+        F2:               Keys.KEYCODE.F2          + Keys.KEYCODE.ONDOWN,
+        F3:               Keys.KEYCODE.F3          + Keys.KEYCODE.ONDOWN,
+        F4:               Keys.KEYCODE.F4          + Keys.KEYCODE.ONDOWN,
+        F5:               Keys.KEYCODE.F5          + Keys.KEYCODE.ONDOWN,
+        F6:               Keys.KEYCODE.F6          + Keys.KEYCODE.ONDOWN,
+        F7:               Keys.KEYCODE.F7          + Keys.KEYCODE.ONDOWN,
+        F8:               Keys.KEYCODE.F8          + Keys.KEYCODE.ONDOWN,
+        F9:               Keys.KEYCODE.F9          + Keys.KEYCODE.ONDOWN,
+        F10:              Keys.KEYCODE.F10         + Keys.KEYCODE.ONDOWN,
+        F11:              Keys.KEYCODE.F11         + Keys.KEYCODE.ONDOWN,
+        F12:              Keys.KEYCODE.F12         + Keys.KEYCODE.ONDOWN,
+        NUM_LOCK:         Keys.KEYCODE.NUM_LOCK    + Keys.KEYCODE.ONDOWN,
+        SCROLL_LOCK:      Keys.KEYCODE.SCROLL_LOCK + Keys.KEYCODE.ONDOWN,
+        PRTSC:            Keys.KEYCODE.PRTSC       + Keys.KEYCODE.ONDOWN,
+        HOME:             Keys.KEYCODE.HOME        + Keys.KEYCODE.ONDOWN,
+        UP:               Keys.KEYCODE.UP          + Keys.KEYCODE.ONDOWN,
+        PGUP:             Keys.KEYCODE.PGUP        + Keys.KEYCODE.ONDOWN,
+        LEFT:             Keys.KEYCODE.LEFT        + Keys.KEYCODE.ONDOWN,
+        NUM_INS:          Keys.KEYCODE.NUM_INS     + Keys.KEYCODE.ONDOWN,
+        NUM_END:          Keys.KEYCODE.NUM_END     + Keys.KEYCODE.ONDOWN,
+        NUM_DOWN:         Keys.KEYCODE.NUM_DOWN    + Keys.KEYCODE.ONDOWN,
+        NUM_PGDN:         Keys.KEYCODE.NUM_PGDN    + Keys.KEYCODE.ONDOWN,
+        NUM_LEFT:         Keys.KEYCODE.NUM_LEFT    + Keys.KEYCODE.ONDOWN,
+        NUM_CENTER:       Keys.KEYCODE.NUM_CENTER  + Keys.KEYCODE.ONDOWN,
+        NUM_RIGHT:        Keys.KEYCODE.NUM_RIGHT   + Keys.KEYCODE.ONDOWN,
+        NUM_HOME:         Keys.KEYCODE.NUM_HOME    + Keys.KEYCODE.ONDOWN,
+        NUM_UP:           Keys.KEYCODE.NUM_UP      + Keys.KEYCODE.ONDOWN,
+        NUM_PGUP:         Keys.KEYCODE.NUM_PGUP    + Keys.KEYCODE.ONDOWN,
+        NUM_ADD:          Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.ONDOWN,
+        NUM_SUB:          Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.ONDOWN,
+        NUM_DEL:          Keys.KEYCODE.NUM_DEL     + Keys.KEYCODE.ONDOWN,
+        RIGHT:            Keys.KEYCODE.RIGHT       + Keys.KEYCODE.ONDOWN,
+        END:              Keys.KEYCODE.END         + Keys.KEYCODE.ONDOWN,
+        DOWN:             Keys.KEYCODE.DOWN        + Keys.KEYCODE.ONDOWN,
+        PGDN:             Keys.KEYCODE.PGDN        + Keys.KEYCODE.ONDOWN,
+        INS:              Keys.KEYCODE.INS         + Keys.KEYCODE.ONDOWN,
+        DEL:              Keys.KEYCODE.DEL         + Keys.KEYCODE.ONDOWN,
+        CMD:              Keys.KEYCODE.CMD         + Keys.KEYCODE.ONDOWN,
+        RCMD:             Keys.KEYCODE.RCMD        + Keys.KEYCODE.ONDOWN,
+        FF_CMD:           Keys.KEYCODE.FF_CMD      + Keys.KEYCODE.ONDOWN,
+        CTRL_A:           Keys.ASCII.CTRL_A        + Keys.KEYCODE.FAKE,
+        CTRL_B:           Keys.ASCII.CTRL_B        + Keys.KEYCODE.FAKE,
+        CTRL_C:           Keys.ASCII.CTRL_C        + Keys.KEYCODE.FAKE,
+        CTRL_D:           Keys.ASCII.CTRL_D        + Keys.KEYCODE.FAKE,
+        CTRL_E:           Keys.ASCII.CTRL_E        + Keys.KEYCODE.FAKE,
+        CTRL_F:           Keys.ASCII.CTRL_F        + Keys.KEYCODE.FAKE,
+        CTRL_G:           Keys.ASCII.CTRL_G        + Keys.KEYCODE.FAKE,
+        CTRL_H:           Keys.ASCII.CTRL_H        + Keys.KEYCODE.FAKE,
+        CTRL_I:           Keys.ASCII.CTRL_I        + Keys.KEYCODE.FAKE,
+        CTRL_J:           Keys.ASCII.CTRL_J        + Keys.KEYCODE.FAKE,
+        CTRL_K:           Keys.ASCII.CTRL_K        + Keys.KEYCODE.FAKE,
+        CTRL_L:           Keys.ASCII.CTRL_L        + Keys.KEYCODE.FAKE,
+        CTRL_M:           Keys.ASCII.CTRL_M        + Keys.KEYCODE.FAKE,
+        CTRL_N:           Keys.ASCII.CTRL_N        + Keys.KEYCODE.FAKE,
+        CTRL_O:           Keys.ASCII.CTRL_O        + Keys.KEYCODE.FAKE,
+        CTRL_P:           Keys.ASCII.CTRL_P        + Keys.KEYCODE.FAKE,
+        CTRL_Q:           Keys.ASCII.CTRL_Q        + Keys.KEYCODE.FAKE,
+        CTRL_R:           Keys.ASCII.CTRL_R        + Keys.KEYCODE.FAKE,
+        CTRL_S:           Keys.ASCII.CTRL_S        + Keys.KEYCODE.FAKE,
+        CTRL_T:           Keys.ASCII.CTRL_T        + Keys.KEYCODE.FAKE,
+        CTRL_U:           Keys.ASCII.CTRL_U        + Keys.KEYCODE.FAKE,
+        CTRL_V:           Keys.ASCII.CTRL_V        + Keys.KEYCODE.FAKE,
+        CTRL_W:           Keys.ASCII.CTRL_W        + Keys.KEYCODE.FAKE,
+        CTRL_X:           Keys.ASCII.CTRL_X        + Keys.KEYCODE.FAKE,
+        CTRL_Y:           Keys.ASCII.CTRL_Y        + Keys.KEYCODE.FAKE,
+        CTRL_Z:           Keys.ASCII.CTRL_Z        + Keys.KEYCODE.FAKE,
+        SYS_REQ:          Keys.KEYCODE.ESC         + Keys.KEYCODE.FAKE,
+        CTRL_PAUSE:       Keys.KEYCODE.NUM_LOCK    + Keys.KEYCODE.FAKE,
+        CTRL_BREAK:       Keys.KEYCODE.SCROLL_LOCK + Keys.KEYCODE.FAKE,
+        CTRL_ALT_DEL:     Keys.KEYCODE.DEL         + Keys.KEYCODE.FAKE,
+        CTRL_ALT_INS:     Keys.KEYCODE.INS         + Keys.KEYCODE.FAKE,
+        CTRL_ALT_ADD:     Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.FAKE,
+        CTRL_ALT_SUB:     Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.FAKE,
+        CTRL_ALT_ENTER:   Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE,
+        CTRL_ALT_SYS_REQ: Keys.KEYCODE.PRTSC       + Keys.KEYCODE.FAKE,
+        SHIFT_TAB:        Keys.KEYCODE.TAB         + Keys.KEYCODE.FAKE
+    };
+
+    /**
+     * Scan code constants
+     */
+    static SCANCODE = {
+        /* 0x01 */ ESC:         1,
+        /* 0x02 */ ONE:         2,
+        /* 0x03 */ TWO:         3,
+        /* 0x04 */ THREE:       4,
+        /* 0x05 */ FOUR:        5,
+        /* 0x06 */ FIVE:        6,
+        /* 0x07 */ SIX:         7,
+        /* 0x08 */ SEVEN:       8,
+        /* 0x09 */ EIGHT:       9,
+        /* 0x0A */ NINE:        10,
+        /* 0x0B */ ZERO:        11,
+        /* 0x0C */ DASH:        12,
+        /* 0x0D */ EQUALS:      13,
+        /* 0x0E */ BS:          14,
+        /* 0x0F */ TAB:         15,
+        /* 0x10 */ Q:           16,
+        /* 0x11 */ W:           17,
+        /* 0x12 */ E:           18,
+        /* 0x13 */ R:           19,
+        /* 0x14 */ T:           20,
+        /* 0x15 */ Y:           21,
+        /* 0x16 */ U:           22,
+        /* 0x17 */ I:           23,
+        /* 0x18 */ O:           24,
+        /* 0x19 */ P:           25,
+        /* 0x1A */ LBRACK:      26,
+        /* 0x1B */ RBRACK:      27,
+        /* 0x1C */ ENTER:       28,
+        /* 0x1D */ CTRL:        29,
+        /* 0x1E */ A:           30,
+        /* 0x1F */ S:           31,
+        /* 0x20 */ D:           32,
+        /* 0x21 */ F:           33,
+        /* 0x22 */ G:           34,
+        /* 0x23 */ H:           35,
+        /* 0x24 */ J:           36,
+        /* 0x25 */ K:           37,
+        /* 0x26 */ L:           38,
+        /* 0x27 */ SEMI:        39,
+        /* 0x28 */ QUOTE:       40,
+        /* 0x29 */ BQUOTE:      41,
+        /* 0x2A */ SHIFT:       42,
+        /* 0x2B */ BSLASH:      43,
+        /* 0x2C */ Z:           44,
+        /* 0x2D */ X:           45,
+        /* 0x2E */ C:           46,
+        /* 0x2F */ V:           47,
+        /* 0x30 */ B:           48,
+        /* 0x31 */ N:           49,
+        /* 0x32 */ M:           50,
+        /* 0x33 */ COMMA:       51,
+        /* 0x34 */ PERIOD:      52,
+        /* 0x35 */ SLASH:       53,
+        /* 0x36 */ RSHIFT:      54,
+        /* 0x37 */ PRTSC:       55,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
+        /* 0x38 */ ALT:         56,
+        /* 0x39 */ SPACE:       57,
+        /* 0x3A */ CAPS_LOCK:   58,
+        /* 0x3B */ F1:          59,
+        /* 0x3C */ F2:          60,
+        /* 0x3D */ F3:          61,
+        /* 0x3E */ F4:          62,
+        /* 0x3F */ F5:          63,
+        /* 0x40 */ F6:          64,
+        /* 0x41 */ F7:          65,
+        /* 0x42 */ F8:          66,
+        /* 0x43 */ F9:          67,
+        /* 0x44 */ F10:         68,
+        /* 0x45 */ NUM_LOCK:    69,
+        /* 0x46 */ SCROLL_LOCK: 70,
+        /* 0x47 */ NUM_HOME:    71,
+        /* 0x48 */ NUM_UP:      72,
+        /* 0x49 */ NUM_PGUP:    73,
+        /* 0x4A */ NUM_SUB:     74,
+        /* 0x4B */ NUM_LEFT:    75,
+        /* 0x4C */ NUM_CENTER:  76,
+        /* 0x4D */ NUM_RIGHT:   77,
+        /* 0x4E */ NUM_ADD:     78,
+        /* 0x4F */ NUM_END:     79,
+        /* 0x50 */ NUM_DOWN:    80,
+        /* 0x51 */ NUM_PGDN:    81,
+        /* 0x52 */ NUM_INS:     82,
+        /* 0x53 */ NUM_DEL:     83,
+        /* 0x54 */ SYS_REQ:     84,         // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
+        /* 0x54 */ PAUSE:       84,         // 101-key keyboard only
+        /* 0x57 */ F11:         87,
+        /* 0x58 */ F12:         88,
+        /* 0x5B */ WIN:         91,         // aka CMD
+        /* 0x5C */ RWIN:        92,
+        /* 0x5D */ MENU:        93,         // aka CMD + ONRIGHT
+        /* 0x7F */ MAKE:        127,
+        /* 0x80 */ BREAK:       128,
+        /* 0xE0 */ EXTEND1:     224,
+        /* 0xE1 */ EXTEND2:     225
+    };
+
+    /**
+     * These internal "shift key" states are used to indicate BOTH the physical shift-key states (in bitsState)
+     * and the simulated shift-key states (in bitsStateSim).  The LOCK keys are problematic in both cases: the
+     * browsers give us no way to query the LOCK key states, so we can only infer them, and because they are "soft"
+     * locks, the machine's notion of their state is subject to change at any time as well.  Granted, the IBM PC
+     * ROM BIOS will store its LOCK states in the ROM BIOS Data Area (@0040:0017), but that's just a BIOS convention.
+     *
+     * Also, because this is purely for internal use, don't make the mistake of thinking that these bits have any
+     * connection to the ROM BIOS bits @0040:0017 (they don't).  We emulate hardware, not ROMs.
+     *
+     * TODO: Consider taking notice of the ROM BIOS Data Area state anyway, even though I'd rather remain ROM-agnostic;
+     * at the very least, it would help us keep our LOCK LEDs in sync with the machine's LOCK states.  However, the LED
+     * issue will be largely moot (at least for MODEL_5170 machines) once we add support for PC AT keyboard LED commands.
+     *
+     * Note that right-hand state bits are equal to the left-hand bits shifted right 1 bit; makes sense, "right"? ;-)
+     *
+     * @enum {number}
+     */
+    static STATE = {
+        RSHIFT:         0x0001,
+        SHIFT:          0x0002,
+        SHIFTS:         0x0003,
+        RCTRL:          0x0004,             // 101-key keyboard only
+        CTRL:           0x0008,
+        CTRLS:          0x000C,
+        RALT:           0x0010,             // 101-key keyboard only
+        ALT:            0x0020,
+        ALTS:           0x0030,
+        RCMD:           0x0040,             // 101-key keyboard only
+        CMD:            0x0080,             // 101-key keyboard only
+        CMDS:           0x00C0,
+        ALL_RIGHT:      0x0055,             // RSHIFT | RCTRL | RALT | RCMD
+        ALL_MODIFIERS:  0x00FF,             // SHIFT | RSHIFT | CTRL | RCTRL | ALT | RALT | CMD | RCMD
+        INSERT:         0x0100,             // TODO: Placeholder (we currently have no notion of any "insert" states)
+        CAPS_LOCK:      0x0200,
+        NUM_LOCK:       0x0400,
+        SCROLL_LOCK:    0x0800,
+        ALL_LOCKS:      0x0E00              // CAPS_LOCK | NUM_LOCK | SCROLL_LOCK
+    };
+
+    /**
+     * Maps KEYCODES of modifier keys to their corresponding (default) STATES bit above.
+     */
+    static MODIFIERS = {
+        [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+        [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+        [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+        [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+        [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+        [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+        [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+        [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD
+    };
+
+    /**
+     * Maps KEYCODES of all modifier and lock keys to their corresponding (default) STATES bit above.
+     */
+    static KEYSTATES = {
+        [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
+        [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
+        [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
+        [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
+        [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
+        [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
+        [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
+        [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD,
+        [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.STATE.CAPS_LOCK,
+        [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.STATE.NUM_LOCK,
+        [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.STATE.SCROLL_LOCK
+    };
+
+    /**
+     * Maps CLICKCODE (string) to SIMCODE (number).
+     *
+     * NOTE: Unlike SOFTCODES, CLICKCODES are upper-case and use underscores instead of dashes, so that this
+     * and other components can reference them using "dot" property syntax; using upper-case merely adheres to
+     * our convention for constants.  setBinding() will automatically convert any incoming CLICKCODE bindings
+     * that use lower-case and dashes to upper-case and underscores before performing property lookup.
+     */
+    static CLICKCODES = {
+        'TAB':              Keyboardx86.SIMCODE.TAB,
+        'ESC':              Keyboardx86.SIMCODE.ESC,
+        'F1':               Keyboardx86.SIMCODE.F1,
+        'F2':               Keyboardx86.SIMCODE.F2,
+        'F3':               Keyboardx86.SIMCODE.F3,
+        'F4':               Keyboardx86.SIMCODE.F4,
+        'F5':               Keyboardx86.SIMCODE.F5,
+        'F6':               Keyboardx86.SIMCODE.F6,
+        'F7':               Keyboardx86.SIMCODE.F7,
+        'F8':               Keyboardx86.SIMCODE.F8,
+        'F9':               Keyboardx86.SIMCODE.F9,
+        'F10':              Keyboardx86.SIMCODE.F10,
+        'LEFT':             Keyboardx86.SIMCODE.LEFT,
+        'UP':               Keyboardx86.SIMCODE.UP,
+        'RIGHT':            Keyboardx86.SIMCODE.RIGHT,
+        'DOWN':             Keyboardx86.SIMCODE.DOWN,
+        'NUM_HOME':         Keyboardx86.SIMCODE.HOME,
+        'NUM_END':          Keyboardx86.SIMCODE.END,
+        'NUM_PGUP':         Keyboardx86.SIMCODE.PGUP,
+        'NUM_PGDN':         Keyboardx86.SIMCODE.PGDN,
+        'ALT':              Keyboardx86.SIMCODE.ALT,
+        'SYS_REQ':          Keyboardx86.SIMCODE.SYS_REQ,
+        /**
+         * These bindings are for convenience (common key combinations that can be bound to a single control)
+         */
+        'CTRL_C':           Keyboardx86.SIMCODE.CTRL_C,
+        'CTRL_PAUSE':       Keyboardx86.SIMCODE.CTRL_PAUSE,
+        'CTRL_BREAK':       Keyboardx86.SIMCODE.CTRL_BREAK,
+        'CTRL_ALT_DEL':     Keyboardx86.SIMCODE.CTRL_ALT_DEL,
+        'CTRL_ALT_INS':     Keyboardx86.SIMCODE.CTRL_ALT_INS,
+        'CTRL_ALT_ADD':     Keyboardx86.SIMCODE.CTRL_ALT_ADD,
+        'CTRL_ALT_SUB':     Keyboardx86.SIMCODE.CTRL_ALT_SUB,
+        'CTRL_ALT_ENTER':   Keyboardx86.SIMCODE.CTRL_ALT_ENTER,
+        'CTRL_ALT_SYS_REQ': Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ,
+        'SHIFT_TAB':        Keyboardx86.SIMCODE.SHIFT_TAB
+    };
+
+    /**
+     * Maps SOFTCODE (string) to SIMCODE (number) -- which may be the same as KEYCODE for ASCII keys.
+     *
+     * We define identifiers for all possible keys, based on their primary (unshifted) character or function.
+     * This also serves as a definition of all supported keys, making it possible to create full-featured
+     * "soft keyboards".
+     *
+     * One exception to the (unshifted) rule above is 'prtsc': on the original IBM 83-key and 84-key keyboards,
+     * its primary (unshifted) character was '*', but on 101-key keyboards, it became a separate key ('prtsc',
+     * now labeled "Print Screen"), as did the num-pad '*' ('num-mul'), so 'prtsc' seems worthy of an exception
+     * to the rule.
+     *
+     * On 83-key and 84-key keyboards, 'ctrl'+'num-lock' triggered a "pause" operation and 'ctrl'+'scroll-lock'
+     * triggered a "break" operation.
+     *
+     * On 101-key keyboards, IBM decided to move both those special operations to a new 'pause' ("Pause/Break")
+     * key, near the new dedicated 'prtsc' ("Print Screen/SysRq") key -- and to drop the "e" from "Sys Req".
+     * Those keys behave as follows:
+     *
+     *      When 'pause' is pressed alone, it generates 0xe1 0x1d 0x45 0xe1 0x9d 0xc5 on make (nothing on break),
+     *      which essentially simulates the make-and-break of the 'ctrl' and 'num-lock' keys (ignoring the 0xe1),
+     *      triggering a "pause" operation.
+     *
+     *      When 'pause' is pressed with 'ctrl', it generates 0xe0 0x46 0xe0 0xc6 on make (nothing on break) and
+     *      does not repeat, which essentially simulates the make-and-break of 'scroll-lock', which, in conjunction
+     *      with the separate make-and-break of 'ctrl', triggers a "break" operation.
+     *
+     *      When 'prtsc' is pressed alone, it generates 0xe0 0x2a 0xe0 0x37, simulating the make of both 'shift'
+     *      and 'prtsc'; when pressed with 'shift' or 'ctrl', it generates only 0xe0 0x37; and when pressed with
+     *      'alt', it generates only 0x54 (to simulate 'sys-req').
+     *
+     * TODO: Implement the above behaviors, whenever we get around to actually supporting 101-key keyboards.
+     *
+     * All key identifiers must be quotable using single-quotes, because that's how components.xsl will encode them
+     * *inside* the "data-value" attribute of the corresponding HTML control.  Which, in turn, is why the single-quote
+     * key is defined as 'quote' rather than "'".  Similarly, if there was unshifted "double-quote" key, it could
+     * not be called '"', because components.xsl quotes the *entire* "data-value" attribute using double-quotes.
+     *
+     * The (commented) numbering of keys below is purely for my own reference.  Two keys are deliberately numbered 84,
+     * reflecting the fact that the 'sys-req' key was added to the 84-key keyboard but later dropped from the 101-key
+     * keyboard (as a stand-alone key, that is).
+     *
+     * With the introduction of the PC AT and the 84-key keyboard, IBM developed a new key numbering scheme and
+     * key code generation; the 8042 keyboard controller would then convert those key codes into the PC scan codes
+     * defined by the older 83-key keyboard.  That's a layer of complexity we currently bypass; instead, we continue
+     * to convert browser key codes directly into PC scan codes, which is what our 8042 controller implementation
+     * assumes we're doing.
+     */
+    static SOFTCODES = {
+        /*  1 */    'esc':          Keyboardx86.SIMCODE.ESC,
+        /*  2 */    '1':            Keys.ASCII['1'],
+        /*  3 */    '2':            Keys.ASCII['2'],
+        /*  4 */    '3':            Keys.ASCII['3'],
+        /*  5 */    '4':            Keys.ASCII['4'],
+        /*  6 */    '5':            Keys.ASCII['5'],
+        /*  7 */    '6':            Keys.ASCII['6'],
+        /*  8 */    '7':            Keys.ASCII['7'],
+        /*  9 */    '8':            Keys.ASCII['8'],
+        /* 10 */    '9':            Keys.ASCII['9'],
+        /* 11 */    '0':            Keys.ASCII['0'],
+        /* 12 */    '-':            Keys.ASCII['-'],
+        /* 13 */    '=':            Keys.ASCII['='],
+        /* 43 */    'bslash':       Keys.ASCII['\\'],               // listed before 'bs' so that injectKeys() doesn't mismatch
+        /* 14 */    'bs':           Keyboardx86.SIMCODE.BS,
+        /* 15 */    'tab':          Keyboardx86.SIMCODE.TAB,
+        /* 16 */    'q':            Keys.ASCII.q,
+        /* 17 */    'w':            Keys.ASCII.w,
+        /* 18 */    'e':            Keys.ASCII.e,
+        /* 19 */    'r':            Keys.ASCII.r,
+        /* 20 */    't':            Keys.ASCII.t,
+        /* 21 */    'y':            Keys.ASCII.y,
+        /* 22 */    'u':            Keys.ASCII.u,
+        /* 23 */    'i':            Keys.ASCII.i,
+        /* 24 */    'o':            Keys.ASCII.o,
+        /* 25 */    'p':            Keys.ASCII.p,
+        /* 26 */    '[':            Keys.ASCII['['],
+        /* 27 */    ']':            Keys.ASCII[']'],
+        /* 28 */    'enter':        Keys.KEYCODE.CR,
+        /* 29 */    'ctrl':         Keyboardx86.SIMCODE.CTRL,
+        /* 30 */    'a':            Keys.ASCII.a,
+        /* 31 */    's':            Keys.ASCII.s,
+        /* 32 */    'd':            Keys.ASCII.d,
+        /* 33 */    'f':            Keys.ASCII.f,
+        /* 34 */    'g':            Keys.ASCII.g,
+        /* 35 */    'h':            Keys.ASCII.h,
+        /* 36 */    'j':            Keys.ASCII.j,
+        /* 37 */    'k':            Keys.ASCII.k,
+        /* 38 */    'l':            Keys.ASCII.l,
+        /* 39 */    ';':            Keys.ASCII[';'],
+        /* 40 */    'quote':        Keys.ASCII["'"],                // formerly "squote"
+        /* 41 */    '`':            Keys.ASCII['`'],                // formerly "bquote"
+        /* 42 */    'shift':        Keyboardx86.SIMCODE.SHIFT,           // formerly "lshift"
+        /* 43 */    '\\':           Keys.ASCII['\\'],               // formerly "bslash"
+        /* 44 */    'z':            Keys.ASCII.z,
+        /* 45 */    'x':            Keys.ASCII.x,
+        /* 46 */    'c':            Keys.ASCII.c,
+        /* 47 */    'v':            Keys.ASCII.v,
+        /* 48 */    'b':            Keys.ASCII.b,
+        /* 49 */    'n':            Keys.ASCII.n,
+        /* 50 */    'm':            Keys.ASCII.m,
+        /* 51 */    ',':            Keys.ASCII[','],
+        /* 52 */    '.':            Keys.ASCII['.'],
+        /* 53 */    '/':            Keys.ASCII['/'],
+        /* 54 */    'right-shift':  Keyboardx86.SIMCODE.RSHIFT,        // formerly "rshift"
+        /* 55 */    'prtsc':        Keyboardx86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
+        /* 56 */    'alt':          Keyboardx86.SIMCODE.ALT,
+        /* 57 */    'space':        Keyboardx86.SIMCODE.SPACE,
+        /* 58 */    'caps-lock':    Keyboardx86.SIMCODE.CAPS_LOCK,
+        /* 68 */    'f10':          Keyboardx86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
+        /* 59 */    'f1':           Keyboardx86.SIMCODE.F1,
+        /* 60 */    'f2':           Keyboardx86.SIMCODE.F2,
+        /* 61 */    'f3':           Keyboardx86.SIMCODE.F3,
+        /* 62 */    'f4':           Keyboardx86.SIMCODE.F4,
+        /* 63 */    'f5':           Keyboardx86.SIMCODE.F5,
+        /* 64 */    'f6':           Keyboardx86.SIMCODE.F6,
+        /* 65 */    'f7':           Keyboardx86.SIMCODE.F7,
+        /* 66 */    'f8':           Keyboardx86.SIMCODE.F8,
+        /* 67 */    'f9':           Keyboardx86.SIMCODE.F9,
+        /* 69 */    'num-lock':     Keyboardx86.SIMCODE.NUM_LOCK,
+        /* 70 */    'scroll-lock':  Keyboardx86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
+
+        /**
+         * Yes, distinguishing keys 71 through 83 with the 'num-' prefix seems like overkill, but it was
+         * intended to be future-proofing, for the day when we might eventually add support for 101-key keyboards,
+         * because they have their own dedicated non-numeric-keypad versions of these keys (in other words, they
+         * account for most of the bloat on the 101-key keyboard, a trend that more modern keyboards have gradually
+         * been reversing).
+         *
+         * To offset 'num-' prefix overkill, injectKeys() allows SOFTCODES to be used with or without the prefix,
+         * on the theory that key injection users won't really care precisely which version of the key is used.
+         */
+
+        /* 71 */    'num-home':     Keyboardx86.SIMCODE.HOME,          // formerly "home"
+        /* 72 */    'num-up':       Keyboardx86.SIMCODE.UP,            // formerly "up-arrow"
+        /* 73 */    'num-pgup':     Keyboardx86.SIMCODE.PGUP,          // formerly "page-up"
+        /* 74 */    'num-sub':      Keyboardx86.SIMCODE.NUM_SUB,       // formerly "num-minus"
+        /* 75 */    'num-left':     Keyboardx86.SIMCODE.LEFT,          // formerly "left-arrow"
+        /* 76 */    'num-center':   Keyboardx86.SIMCODE.NUM_CENTER,    // formerly "center"
+        /* 77 */    'num-right':    Keyboardx86.SIMCODE.RIGHT,         // formerly "right-arrow"
+        /* 78 */    'num-add':      Keyboardx86.SIMCODE.NUM_ADD,       // formerly "num-plus"
+        /* 79 */    'num-end':      Keyboardx86.SIMCODE.END,           // formerly "end"
+        /* 80 */    'num-down':     Keyboardx86.SIMCODE.DOWN,          // formerly "down-arrow"
+        /* 81 */    'num-pgdn':     Keyboardx86.SIMCODE.PGDN,          // formerly "page-down"
+        /* 82 */    'num-ins':      Keyboardx86.SIMCODE.INS,           // formerly "ins"
+        /* 83 */    'num-del':      Keyboardx86.SIMCODE.DEL,           // formerly "del"
+        /* 84 */    'sys-req':      Keyboardx86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
+
+        /**
+         * If I ever add 101-key keyboard support (and it's not clear that I will), then the following entries
+         * will have to be converted to SIMCODE indexes, and each SIMCODE index will need an entry in the SIMCODES
+         * table that defines the appropriate SCANCODE(S); as this component has evolved, SOFTCODES are no longer
+         * mapped directly to SCANCODES.
+         */
+
+    //  /* 84 */    'pause':        Keyboardx86.SCANCODE.PAUSE,        // 101-key keyboard only
+    //  /* 85 */    'f11':          Keyboardx86.SCANCODE.F11,
+    //  /* 86 */    'f12':          Keyboardx86.SCANCODE.F12,
+    //  /* 87 */    'num-enter':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ENTER << 8),
+    //  /* 88 */    'right-ctrl':   Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.CTRL << 8),
+    //  /* 89 */    'num-div':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.SLASH << 8),
+    //  /* 90 */    'num-mul':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.PRTSC << 8),
+    //  /* 91 */    'right-alt':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ALT << 8),
+    //  /* 92 */    'home':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_HOME << 8),
+    //  /* 93 */    'up':           Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_UP << 8),
+    //  /* 94 */    'pgup':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGUP << 8),
+    //  /* 95 */    'left':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_LEFT << 8),
+    //  /* 96 */    'right':        Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_RIGHT << 8),
+    //  /* 97 */    'end':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_END << 8),
+    //  /* 98 */    'down':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DOWN << 8),
+    //  /* 99 */    'pgdn':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGDN << 8),
+    //  /*100 */    'ins':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_INS << 8),
+    //  /*101 */    'del':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DEL << 8),
+
+    //  /*102 */    'win':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.WIN << 8),
+    //  /*103 */    'right-win':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.RWIN << 8),
+    //  /*104 */    'menu':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.MENU << 8)
+    };
+
+    /**
+     * Maps "soft-key" definitions (above) of shift/modifier keys to their corresponding (default) STATES bit.
+     */
+    static LEDSTATES = {
+        'caps-lock':    Keyboardx86.STATE.CAPS_LOCK,
+        'num-lock':     Keyboardx86.STATE.NUM_LOCK,
+        'scroll-lock':  Keyboardx86.STATE.SCROLL_LOCK
+    };
+
+    /**
+     * Maps SIMCODE (number) to SCANCODE (number(s)).
+     *
+     * This array is used by simulateKey() to lookup a given SIMCODE and convert it to a SCANCODE
+     * (lower byte), plus any required shift key SCANCODES (upper bytes).
+     *
+     * Using keyCodes from keyPress events proved to be more robust than using keyCodes from keyDown and
+     * keyUp events, in part because of differences in the way browsers generate the keyDown and keyUp events.
+     * For example, Safari on iOS devices will not generate up/down events for shift keys, and for other keys,
+     * the up/down events are usually generated after the actual press is complete, and in rapid succession.
+     *
+     * The other problem (which is more of a problem with keyboards like the C1P than any IBM keyboards) is
+     * that the shift/modifier state for a character on the "source" keyboard may not match the shift/modifier
+     * state for the same character on the "target" keyboard.  And since this code is inherited from C1Pjs,
+     * we've inherited the same solution: simulateKey() has the ability to "undo" any states in bitsState
+     * that conflict with the state(s) required for the character in question.
+     */
+    static SIMCODES = {
+        [Keyboardx86.SIMCODE.ESC]:          Keyboardx86.SCANCODE.ESC,
+        [Keys.ASCII['1']]:                  Keyboardx86.SCANCODE.ONE,
+        [Keys.ASCII['!']]:                  Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['2']]:                  Keyboardx86.SCANCODE.TWO,
+        [Keys.ASCII['@']]:                  Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['3']]:                  Keyboardx86.SCANCODE.THREE,
+        [Keys.ASCII['#']]:                  Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['4']]:                  Keyboardx86.SCANCODE.FOUR,
+        [Keys.ASCII['$']]:                  Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['5']]:                  Keyboardx86.SCANCODE.FIVE,
+        [Keys.ASCII['%']]:                  Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['6']]:                  Keyboardx86.SCANCODE.SIX,
+        [Keys.ASCII['^']]:                  Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['7']]:                  Keyboardx86.SCANCODE.SEVEN,
+        [Keys.ASCII['&']]:                  Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['8']]:                  Keyboardx86.SCANCODE.EIGHT,
+        [Keys.ASCII['*']]:                  Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['9']]:                  Keyboardx86.SCANCODE.NINE,
+        [Keys.ASCII['(']]:                  Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['0']]:                  Keyboardx86.SCANCODE.ZERO,
+        [Keys.ASCII[')']]:                  Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['-']]:                  Keyboardx86.SCANCODE.DASH,
+        [Keys.ASCII['_']]:                  Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['=']]:                  Keyboardx86.SCANCODE.EQUALS,
+        [Keys.ASCII['+']]:                  Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keyboardx86.SIMCODE.BS]:           Keyboardx86.SCANCODE.BS,
+        [Keyboardx86.SIMCODE.TAB]:          Keyboardx86.SCANCODE.TAB,
+        [Keys.ASCII.q]:                     Keyboardx86.SCANCODE.Q,
+        [Keys.ASCII.Q]:                     Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.w]:                     Keyboardx86.SCANCODE.W,
+        [Keys.ASCII.W]:                     Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.e]:                     Keyboardx86.SCANCODE.E,
+        [Keys.ASCII.E]:                     Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.r]:                     Keyboardx86.SCANCODE.R,
+        [Keys.ASCII.R]:                     Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.t]:                     Keyboardx86.SCANCODE.T,
+        [Keys.ASCII.T]:                     Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.y]:                     Keyboardx86.SCANCODE.Y,
+        [Keys.ASCII.Y]:                     Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.u]:                     Keyboardx86.SCANCODE.U,
+        [Keys.ASCII.U]:                     Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.i]:                     Keyboardx86.SCANCODE.I,
+        [Keys.ASCII.I]:                     Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.o]:                     Keyboardx86.SCANCODE.O,
+        [Keys.ASCII.O]:                     Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.p]:                     Keyboardx86.SCANCODE.P,
+        [Keys.ASCII.P]:                     Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['[']]:                  Keyboardx86.SCANCODE.LBRACK,
+        [Keys.ASCII['{']]:                  Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII[']']]:                  Keyboardx86.SCANCODE.RBRACK,
+        [Keys.ASCII['}']]:                  Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.KEYCODE.CR]:                  Keyboardx86.SCANCODE.ENTER,
+        [Keyboardx86.SIMCODE.CTRL]:         Keyboardx86.SCANCODE.CTRL,
+        [Keys.ASCII.a]:                     Keyboardx86.SCANCODE.A,
+        [Keys.ASCII.A]:                     Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.s]:                     Keyboardx86.SCANCODE.S,
+        [Keys.ASCII.S]:                     Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.d]:                     Keyboardx86.SCANCODE.D,
+        [Keys.ASCII.D]:                     Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.f]:                     Keyboardx86.SCANCODE.F,
+        [Keys.ASCII.F]:                     Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.g]:                     Keyboardx86.SCANCODE.G,
+        [Keys.ASCII.G]:                     Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.h]:                     Keyboardx86.SCANCODE.H,
+        [Keys.ASCII.H]:                     Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.j]:                     Keyboardx86.SCANCODE.J,
+        [Keys.ASCII.J]:                     Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.k]:                     Keyboardx86.SCANCODE.K,
+        [Keys.ASCII.K]:                     Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.l]:                     Keyboardx86.SCANCODE.L,
+        [Keys.ASCII.L]:                     Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII[';']]:                  Keyboardx86.SCANCODE.SEMI,
+        [Keys.ASCII[':']]:                  Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII["'"]]:                  Keyboardx86.SCANCODE.QUOTE,
+        [Keys.ASCII['"']]:                  Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['`']]:                  Keyboardx86.SCANCODE.BQUOTE,
+        [Keys.ASCII['~']]:                  Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keyboardx86.SIMCODE.SHIFT]:        Keyboardx86.SCANCODE.SHIFT,
+        [Keys.ASCII['\\']]:                 Keyboardx86.SCANCODE.BSLASH,
+        [Keys.ASCII['|']]:                  Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.z]:                     Keyboardx86.SCANCODE.Z,
+        [Keys.ASCII.Z]:                     Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.x]:                     Keyboardx86.SCANCODE.X,
+        [Keys.ASCII.X]:                     Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.c]:                     Keyboardx86.SCANCODE.C,
+        [Keys.ASCII.C]:                     Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.v]:                     Keyboardx86.SCANCODE.V,
+        [Keys.ASCII.V]:                     Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.b]:                     Keyboardx86.SCANCODE.B,
+        [Keys.ASCII.B]:                     Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.n]:                     Keyboardx86.SCANCODE.N,
+        [Keys.ASCII.N]:                     Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII.m]:                     Keyboardx86.SCANCODE.M,
+        [Keys.ASCII.M]:                     Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII[',']]:                  Keyboardx86.SCANCODE.COMMA,
+        [Keys.ASCII['<']]:                  Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['.']]:                  Keyboardx86.SCANCODE.PERIOD,
+        [Keys.ASCII['>']]:                  Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keys.ASCII['/']]:                  Keyboardx86.SCANCODE.SLASH,
+        [Keys.ASCII['?']]:                  Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
+        [Keyboardx86.SIMCODE.RSHIFT]:       Keyboardx86.SCANCODE.RSHIFT,
+        [Keyboardx86.SIMCODE.PRTSC]:        Keyboardx86.SCANCODE.PRTSC,
+        [Keyboardx86.SIMCODE.ALT]:          Keyboardx86.SCANCODE.ALT,
+        [Keyboardx86.SIMCODE.RALT]:         Keyboardx86.SCANCODE.ALT,
+        [Keyboardx86.SIMCODE.SPACE]:        Keyboardx86.SCANCODE.SPACE,
+        [Keyboardx86.SIMCODE.CAPS_LOCK]:    Keyboardx86.SCANCODE.CAPS_LOCK,
+        [Keyboardx86.SIMCODE.F1]:           Keyboardx86.SCANCODE.F1,
+        [Keyboardx86.SIMCODE.F2]:           Keyboardx86.SCANCODE.F2,
+        [Keyboardx86.SIMCODE.F3]:           Keyboardx86.SCANCODE.F3,
+        [Keyboardx86.SIMCODE.F4]:           Keyboardx86.SCANCODE.F4,
+        [Keyboardx86.SIMCODE.F5]:           Keyboardx86.SCANCODE.F5,
+        [Keyboardx86.SIMCODE.F6]:           Keyboardx86.SCANCODE.F6,
+        [Keyboardx86.SIMCODE.F7]:           Keyboardx86.SCANCODE.F7,
+        [Keyboardx86.SIMCODE.F8]:           Keyboardx86.SCANCODE.F8,
+        [Keyboardx86.SIMCODE.F9]:           Keyboardx86.SCANCODE.F9,
+        [Keyboardx86.SIMCODE.F10]:          Keyboardx86.SCANCODE.F10,
+        [Keyboardx86.SIMCODE.NUM_LOCK]:     Keyboardx86.SCANCODE.NUM_LOCK,
+        [Keyboardx86.SIMCODE.SCROLL_LOCK]:  Keyboardx86.SCANCODE.SCROLL_LOCK,
+        [Keyboardx86.SIMCODE.HOME]:         Keyboardx86.SCANCODE.NUM_HOME,
+        [Keyboardx86.SIMCODE.NUM_HOME]:     Keyboardx86.SCANCODE.NUM_HOME,
+        [Keyboardx86.SIMCODE.UP]:           Keyboardx86.SCANCODE.NUM_UP,
+        [Keyboardx86.SIMCODE.NUM_UP]:       Keyboardx86.SCANCODE.NUM_UP,
+        [Keyboardx86.SIMCODE.PGUP]:         Keyboardx86.SCANCODE.NUM_PGUP,
+        [Keyboardx86.SIMCODE.NUM_PGUP]:     Keyboardx86.SCANCODE.NUM_PGUP,
+        [Keyboardx86.SIMCODE.LEFT]:         Keyboardx86.SCANCODE.NUM_LEFT,
+        [Keyboardx86.SIMCODE.NUM_LEFT]:     Keyboardx86.SCANCODE.NUM_LEFT,
+        [Keyboardx86.SIMCODE.NUM_CENTER]:   Keyboardx86.SCANCODE.NUM_CENTER,
+        [Keyboardx86.SIMCODE.RIGHT]:        Keyboardx86.SCANCODE.NUM_RIGHT,
+        [Keyboardx86.SIMCODE.NUM_RIGHT]:    Keyboardx86.SCANCODE.NUM_RIGHT,
+        [Keyboardx86.SIMCODE.END]:          Keyboardx86.SCANCODE.NUM_END,
+        [Keyboardx86.SIMCODE.NUM_END]:      Keyboardx86.SCANCODE.NUM_END,
+        [Keyboardx86.SIMCODE.DOWN]:         Keyboardx86.SCANCODE.NUM_DOWN,
+        [Keyboardx86.SIMCODE.NUM_DOWN]:     Keyboardx86.SCANCODE.NUM_DOWN,
+        [Keyboardx86.SIMCODE.PGDN]:         Keyboardx86.SCANCODE.NUM_PGDN,
+        [Keyboardx86.SIMCODE.NUM_PGDN]:     Keyboardx86.SCANCODE.NUM_PGDN,
+        [Keyboardx86.SIMCODE.INS]:          Keyboardx86.SCANCODE.NUM_INS,
+        [Keyboardx86.SIMCODE.NUM_INS]:      Keyboardx86.SCANCODE.NUM_INS,
+        [Keyboardx86.SIMCODE.NUM_ADD]:      Keyboardx86.SCANCODE.NUM_ADD,
+        [Keyboardx86.SIMCODE.NUM_SUB]:      Keyboardx86.SCANCODE.NUM_SUB,
+        [Keyboardx86.SIMCODE.DEL]:          Keyboardx86.SCANCODE.NUM_DEL,
+        [Keyboardx86.SIMCODE.NUM_DEL]:      Keyboardx86.SCANCODE.NUM_DEL,
+
+        /**
+         * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
+         * which also existed on the 84-key keyboard), which ALSO means that these keys essentially did not exist
+         * for a MODEL_5150 or MODEL_5160 machine, because those machines could use only 83-key keyboards.  Remember
+         * that IBM machines and IBM keyboards are our reference point here, so while there were undoubtedly 5150/5160
+         * clones that could use newer keyboards, as well as 3rd-party keyboards that could work with older machines,
+         * support for non-IBM configurations is left for another day.
+         *
+         * TODO: The only relevance of newer keyboards to older machines is the fact that you're probably using a newer
+         * keyboard with your browser, which raises the question of what to do with newer keys that older machines
+         * wouldn't understand.  I don't attempt to filter out any of the entries below based on machine model, but that
+         * would seem like a wise thing to do.
+         *
+         * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
+         * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
+         */
+        [Keyboardx86.SIMCODE.SYS_REQ]:      Keyboardx86.SCANCODE.SYS_REQ,
+        [Keyboardx86.SIMCODE.F11]:          Keyboardx86.SCANCODE.F11,
+        [Keyboardx86.SIMCODE.F12]:          Keyboardx86.SCANCODE.F12,
+        [Keyboardx86.SIMCODE.CMD]:          Keyboardx86.SCANCODE.WIN,
+        [Keyboardx86.SIMCODE.RCMD]:         Keyboardx86.SCANCODE.MENU,
+        [Keyboardx86.SIMCODE.FF_CMD]:       Keyboardx86.SCANCODE.WIN,
+
+        [Keyboardx86.SIMCODE.SHIFT_TAB]:    Keyboardx86.SCANCODE.TAB | (Keyboardx86.SCANCODE.SHIFT << 8),
+
+        [Keyboardx86.SIMCODE.CTRL_A]:       Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_B]:       Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_C]:       Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_D]:       Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_E]:       Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_F]:       Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_G]:       Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_H]:       Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_I]:       Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_J]:       Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_K]:       Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_L]:       Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_M]:       Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_N]:       Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_O]:       Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_P]:       Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_Q]:       Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_R]:       Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_S]:       Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_T]:       Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_U]:       Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_V]:       Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_W]:       Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_X]:       Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_Y]:       Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_Z]:       Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
+        [Keyboardx86.SIMCODE.CTRL_BREAK]:   Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
+
+        [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:     Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+        [Keyboardx86.SIMCODE.CTRL_ALT_INS]:     Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+        [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:     Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+        [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:     Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+        [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:   Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
+        [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]: Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16)
+    };
+
     /**
      * Keyboardx86(parmsKbd)
      *
@@ -51065,934 +51994,6 @@ class Keyboardx86 extends Component {
         }
     }
 }
-
-/**
- * Supported keyboard models (the first entry is the default if the specified model isn't recognized)
- */
-Keyboardx86.MODELS = ["US83", "US84", "US101"];
-
-Keyboardx86.SIMCODE = {
-    BS:               Keys.KEYCODE.BS          + Keys.KEYCODE.ONDOWN,
-    TAB:              Keys.KEYCODE.TAB         + Keys.KEYCODE.ONDOWN,
-    SHIFT:            Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN,
-    RSHIFT:           Keys.KEYCODE.SHIFT       + Keys.KEYCODE.ONDOWN + Keys.KEYCODE.ONRIGHT,
-    CTRL:             Keys.KEYCODE.CTRL        + Keys.KEYCODE.ONDOWN,
-    ALT:              Keys.KEYCODE.ALT         + Keys.KEYCODE.ONDOWN,
-    RALT:             Keys.KEYCODE.ALT         + Keys.KEYCODE.ONDOWN + Keys.KEYCODE.ONRIGHT,
-    CAPS_LOCK:        Keys.KEYCODE.CAPS_LOCK   + Keys.KEYCODE.ONDOWN,
-    ESC:              Keys.KEYCODE.ESC         + Keys.KEYCODE.ONDOWN,
-    /**
-     * It seems that a recent change to Safari on iOS (first noticed in iOS 9.1) treats SPACE
-     * differently now, at least with regard to <textarea> controls, and possibly only readonly
-     * or hidden controls, like the hidden <textarea> we overlay on the Video <canvas> element.
-     *
-     * Whatever the exact criteria are, Safari on iOS now performs SPACE's default behavior
-     * after the onkeydown event but before the onkeypress event.  So we must now process SPACE
-     * as an ONDOWN key, so that we can call preventDefault() and properly simulate the key at
-     * the time the key goes down.
-     */
-    SPACE:            Keys.KEYCODE.SPACE       + Keys.KEYCODE.ONDOWN,
-    F1:               Keys.KEYCODE.F1          + Keys.KEYCODE.ONDOWN,
-    F2:               Keys.KEYCODE.F2          + Keys.KEYCODE.ONDOWN,
-    F3:               Keys.KEYCODE.F3          + Keys.KEYCODE.ONDOWN,
-    F4:               Keys.KEYCODE.F4          + Keys.KEYCODE.ONDOWN,
-    F5:               Keys.KEYCODE.F5          + Keys.KEYCODE.ONDOWN,
-    F6:               Keys.KEYCODE.F6          + Keys.KEYCODE.ONDOWN,
-    F7:               Keys.KEYCODE.F7          + Keys.KEYCODE.ONDOWN,
-    F8:               Keys.KEYCODE.F8          + Keys.KEYCODE.ONDOWN,
-    F9:               Keys.KEYCODE.F9          + Keys.KEYCODE.ONDOWN,
-    F10:              Keys.KEYCODE.F10         + Keys.KEYCODE.ONDOWN,
-    F11:              Keys.KEYCODE.F11         + Keys.KEYCODE.ONDOWN,
-    F12:              Keys.KEYCODE.F12         + Keys.KEYCODE.ONDOWN,
-    NUM_LOCK:         Keys.KEYCODE.NUM_LOCK    + Keys.KEYCODE.ONDOWN,
-    SCROLL_LOCK:      Keys.KEYCODE.SCROLL_LOCK + Keys.KEYCODE.ONDOWN,
-    PRTSC:            Keys.KEYCODE.PRTSC       + Keys.KEYCODE.ONDOWN,
-    HOME:             Keys.KEYCODE.HOME        + Keys.KEYCODE.ONDOWN,
-    UP:               Keys.KEYCODE.UP          + Keys.KEYCODE.ONDOWN,
-    PGUP:             Keys.KEYCODE.PGUP        + Keys.KEYCODE.ONDOWN,
-    LEFT:             Keys.KEYCODE.LEFT        + Keys.KEYCODE.ONDOWN,
-    NUM_INS:          Keys.KEYCODE.NUM_INS     + Keys.KEYCODE.ONDOWN,
-    NUM_END:          Keys.KEYCODE.NUM_END     + Keys.KEYCODE.ONDOWN,
-    NUM_DOWN:         Keys.KEYCODE.NUM_DOWN    + Keys.KEYCODE.ONDOWN,
-    NUM_PGDN:         Keys.KEYCODE.NUM_PGDN    + Keys.KEYCODE.ONDOWN,
-    NUM_LEFT:         Keys.KEYCODE.NUM_LEFT    + Keys.KEYCODE.ONDOWN,
-    NUM_CENTER:       Keys.KEYCODE.NUM_CENTER  + Keys.KEYCODE.ONDOWN,
-    NUM_RIGHT:        Keys.KEYCODE.NUM_RIGHT   + Keys.KEYCODE.ONDOWN,
-    NUM_HOME:         Keys.KEYCODE.NUM_HOME    + Keys.KEYCODE.ONDOWN,
-    NUM_UP:           Keys.KEYCODE.NUM_UP      + Keys.KEYCODE.ONDOWN,
-    NUM_PGUP:         Keys.KEYCODE.NUM_PGUP    + Keys.KEYCODE.ONDOWN,
-    NUM_ADD:          Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.ONDOWN,
-    NUM_SUB:          Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.ONDOWN,
-    NUM_DEL:          Keys.KEYCODE.NUM_DEL     + Keys.KEYCODE.ONDOWN,
-    RIGHT:            Keys.KEYCODE.RIGHT       + Keys.KEYCODE.ONDOWN,
-    END:              Keys.KEYCODE.END         + Keys.KEYCODE.ONDOWN,
-    DOWN:             Keys.KEYCODE.DOWN        + Keys.KEYCODE.ONDOWN,
-    PGDN:             Keys.KEYCODE.PGDN        + Keys.KEYCODE.ONDOWN,
-    INS:              Keys.KEYCODE.INS         + Keys.KEYCODE.ONDOWN,
-    DEL:              Keys.KEYCODE.DEL         + Keys.KEYCODE.ONDOWN,
-    CMD:              Keys.KEYCODE.CMD         + Keys.KEYCODE.ONDOWN,
-    RCMD:             Keys.KEYCODE.RCMD        + Keys.KEYCODE.ONDOWN,
-    FF_CMD:           Keys.KEYCODE.FF_CMD      + Keys.KEYCODE.ONDOWN,
-    CTRL_A:           Keys.ASCII.CTRL_A        + Keys.KEYCODE.FAKE,
-    CTRL_B:           Keys.ASCII.CTRL_B        + Keys.KEYCODE.FAKE,
-    CTRL_C:           Keys.ASCII.CTRL_C        + Keys.KEYCODE.FAKE,
-    CTRL_D:           Keys.ASCII.CTRL_D        + Keys.KEYCODE.FAKE,
-    CTRL_E:           Keys.ASCII.CTRL_E        + Keys.KEYCODE.FAKE,
-    CTRL_F:           Keys.ASCII.CTRL_F        + Keys.KEYCODE.FAKE,
-    CTRL_G:           Keys.ASCII.CTRL_G        + Keys.KEYCODE.FAKE,
-    CTRL_H:           Keys.ASCII.CTRL_H        + Keys.KEYCODE.FAKE,
-    CTRL_I:           Keys.ASCII.CTRL_I        + Keys.KEYCODE.FAKE,
-    CTRL_J:           Keys.ASCII.CTRL_J        + Keys.KEYCODE.FAKE,
-    CTRL_K:           Keys.ASCII.CTRL_K        + Keys.KEYCODE.FAKE,
-    CTRL_L:           Keys.ASCII.CTRL_L        + Keys.KEYCODE.FAKE,
-    CTRL_M:           Keys.ASCII.CTRL_M        + Keys.KEYCODE.FAKE,
-    CTRL_N:           Keys.ASCII.CTRL_N        + Keys.KEYCODE.FAKE,
-    CTRL_O:           Keys.ASCII.CTRL_O        + Keys.KEYCODE.FAKE,
-    CTRL_P:           Keys.ASCII.CTRL_P        + Keys.KEYCODE.FAKE,
-    CTRL_Q:           Keys.ASCII.CTRL_Q        + Keys.KEYCODE.FAKE,
-    CTRL_R:           Keys.ASCII.CTRL_R        + Keys.KEYCODE.FAKE,
-    CTRL_S:           Keys.ASCII.CTRL_S        + Keys.KEYCODE.FAKE,
-    CTRL_T:           Keys.ASCII.CTRL_T        + Keys.KEYCODE.FAKE,
-    CTRL_U:           Keys.ASCII.CTRL_U        + Keys.KEYCODE.FAKE,
-    CTRL_V:           Keys.ASCII.CTRL_V        + Keys.KEYCODE.FAKE,
-    CTRL_W:           Keys.ASCII.CTRL_W        + Keys.KEYCODE.FAKE,
-    CTRL_X:           Keys.ASCII.CTRL_X        + Keys.KEYCODE.FAKE,
-    CTRL_Y:           Keys.ASCII.CTRL_Y        + Keys.KEYCODE.FAKE,
-    CTRL_Z:           Keys.ASCII.CTRL_Z        + Keys.KEYCODE.FAKE,
-    SYS_REQ:          Keys.KEYCODE.ESC         + Keys.KEYCODE.FAKE,
-    CTRL_PAUSE:       Keys.KEYCODE.NUM_LOCK    + Keys.KEYCODE.FAKE,
-    CTRL_BREAK:       Keys.KEYCODE.SCROLL_LOCK + Keys.KEYCODE.FAKE,
-    CTRL_ALT_DEL:     Keys.KEYCODE.DEL         + Keys.KEYCODE.FAKE,
-    CTRL_ALT_INS:     Keys.KEYCODE.INS         + Keys.KEYCODE.FAKE,
-    CTRL_ALT_ADD:     Keys.KEYCODE.NUM_ADD     + Keys.KEYCODE.FAKE,
-    CTRL_ALT_SUB:     Keys.KEYCODE.NUM_SUB     + Keys.KEYCODE.FAKE,
-    CTRL_ALT_ENTER:   Keys.KEYCODE.NUM_CR      + Keys.KEYCODE.FAKE,
-    CTRL_ALT_SYS_REQ: Keys.KEYCODE.PRTSC       + Keys.KEYCODE.FAKE,
-    SHIFT_TAB:        Keys.KEYCODE.TAB         + Keys.KEYCODE.FAKE
-};
-
-/**
- * Scan code constants
- */
-Keyboardx86.SCANCODE = {
-    /* 0x01 */ ESC:         1,
-    /* 0x02 */ ONE:         2,
-    /* 0x03 */ TWO:         3,
-    /* 0x04 */ THREE:       4,
-    /* 0x05 */ FOUR:        5,
-    /* 0x06 */ FIVE:        6,
-    /* 0x07 */ SIX:         7,
-    /* 0x08 */ SEVEN:       8,
-    /* 0x09 */ EIGHT:       9,
-    /* 0x0A */ NINE:        10,
-    /* 0x0B */ ZERO:        11,
-    /* 0x0C */ DASH:        12,
-    /* 0x0D */ EQUALS:      13,
-    /* 0x0E */ BS:          14,
-    /* 0x0F */ TAB:         15,
-    /* 0x10 */ Q:           16,
-    /* 0x11 */ W:           17,
-    /* 0x12 */ E:           18,
-    /* 0x13 */ R:           19,
-    /* 0x14 */ T:           20,
-    /* 0x15 */ Y:           21,
-    /* 0x16 */ U:           22,
-    /* 0x17 */ I:           23,
-    /* 0x18 */ O:           24,
-    /* 0x19 */ P:           25,
-    /* 0x1A */ LBRACK:      26,
-    /* 0x1B */ RBRACK:      27,
-    /* 0x1C */ ENTER:       28,
-    /* 0x1D */ CTRL:        29,
-    /* 0x1E */ A:           30,
-    /* 0x1F */ S:           31,
-    /* 0x20 */ D:           32,
-    /* 0x21 */ F:           33,
-    /* 0x22 */ G:           34,
-    /* 0x23 */ H:           35,
-    /* 0x24 */ J:           36,
-    /* 0x25 */ K:           37,
-    /* 0x26 */ L:           38,
-    /* 0x27 */ SEMI:        39,
-    /* 0x28 */ QUOTE:       40,
-    /* 0x29 */ BQUOTE:      41,
-    /* 0x2A */ SHIFT:       42,
-    /* 0x2B */ BSLASH:      43,
-    /* 0x2C */ Z:           44,
-    /* 0x2D */ X:           45,
-    /* 0x2E */ C:           46,
-    /* 0x2F */ V:           47,
-    /* 0x30 */ B:           48,
-    /* 0x31 */ N:           49,
-    /* 0x32 */ M:           50,
-    /* 0x33 */ COMMA:       51,
-    /* 0x34 */ PERIOD:      52,
-    /* 0x35 */ SLASH:       53,
-    /* 0x36 */ RSHIFT:      54,
-    /* 0x37 */ PRTSC:       55,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
-    /* 0x38 */ ALT:         56,
-    /* 0x39 */ SPACE:       57,
-    /* 0x3A */ CAPS_LOCK:   58,
-    /* 0x3B */ F1:          59,
-    /* 0x3C */ F2:          60,
-    /* 0x3D */ F3:          61,
-    /* 0x3E */ F4:          62,
-    /* 0x3F */ F5:          63,
-    /* 0x40 */ F6:          64,
-    /* 0x41 */ F7:          65,
-    /* 0x42 */ F8:          66,
-    /* 0x43 */ F9:          67,
-    /* 0x44 */ F10:         68,
-    /* 0x45 */ NUM_LOCK:    69,
-    /* 0x46 */ SCROLL_LOCK: 70,
-    /* 0x47 */ NUM_HOME:    71,
-    /* 0x48 */ NUM_UP:      72,
-    /* 0x49 */ NUM_PGUP:    73,
-    /* 0x4A */ NUM_SUB:     74,
-    /* 0x4B */ NUM_LEFT:    75,
-    /* 0x4C */ NUM_CENTER:  76,
-    /* 0x4D */ NUM_RIGHT:   77,
-    /* 0x4E */ NUM_ADD:     78,
-    /* 0x4F */ NUM_END:     79,
-    /* 0x50 */ NUM_DOWN:    80,
-    /* 0x51 */ NUM_PGDN:    81,
-    /* 0x52 */ NUM_INS:     82,
-    /* 0x53 */ NUM_DEL:     83,
-    /* 0x54 */ SYS_REQ:     84,         // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
-    /* 0x54 */ PAUSE:       84,         // 101-key keyboard only
-    /* 0x57 */ F11:         87,
-    /* 0x58 */ F12:         88,
-    /* 0x5B */ WIN:         91,         // aka CMD
-    /* 0x5C */ RWIN:        92,
-    /* 0x5D */ MENU:        93,         // aka CMD + ONRIGHT
-    /* 0x7F */ MAKE:        127,
-    /* 0x80 */ BREAK:       128,
-    /* 0xE0 */ EXTEND1:     224,
-    /* 0xE1 */ EXTEND2:     225
-};
-
-/**
- * These internal "shift key" states are used to indicate BOTH the physical shift-key states (in bitsState)
- * and the simulated shift-key states (in bitsStateSim).  The LOCK keys are problematic in both cases: the
- * browsers give us no way to query the LOCK key states, so we can only infer them, and because they are "soft"
- * locks, the machine's notion of their state is subject to change at any time as well.  Granted, the IBM PC
- * ROM BIOS will store its LOCK states in the ROM BIOS Data Area (@0040:0017), but that's just a BIOS convention.
- *
- * Also, because this is purely for internal use, don't make the mistake of thinking that these bits have any
- * connection to the ROM BIOS bits @0040:0017 (they don't).  We emulate hardware, not ROMs.
- *
- * TODO: Consider taking notice of the ROM BIOS Data Area state anyway, even though I'd rather remain ROM-agnostic;
- * at the very least, it would help us keep our LOCK LEDs in sync with the machine's LOCK states.  However, the LED
- * issue will be largely moot (at least for MODEL_5170 machines) once we add support for PC AT keyboard LED commands.
- *
- * Note that right-hand state bits are equal to the left-hand bits shifted right 1 bit; makes sense, "right"? ;-)
- *
- * @enum {number}
- */
-Keyboardx86.STATE = {
-    RSHIFT:         0x0001,
-    SHIFT:          0x0002,
-    SHIFTS:         0x0003,
-    RCTRL:          0x0004,             // 101-key keyboard only
-    CTRL:           0x0008,
-    CTRLS:          0x000C,
-    RALT:           0x0010,             // 101-key keyboard only
-    ALT:            0x0020,
-    ALTS:           0x0030,
-    RCMD:           0x0040,             // 101-key keyboard only
-    CMD:            0x0080,             // 101-key keyboard only
-    CMDS:           0x00C0,
-    ALL_RIGHT:      0x0055,             // RSHIFT | RCTRL | RALT | RCMD
-    ALL_MODIFIERS:  0x00FF,             // SHIFT | RSHIFT | CTRL | RCTRL | ALT | RALT | CMD | RCMD
-    INSERT:         0x0100,             // TODO: Placeholder (we currently have no notion of any "insert" states)
-    CAPS_LOCK:      0x0200,
-    NUM_LOCK:       0x0400,
-    SCROLL_LOCK:    0x0800,
-    ALL_LOCKS:      0x0E00              // CAPS_LOCK | NUM_LOCK | SCROLL_LOCK
-};
-
-/**
- * Maps KEYCODES of modifier keys to their corresponding (default) STATES bit above.
- */
-Keyboardx86.MODIFIERS = {
-    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
-    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
-    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
-    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
-    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
-    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
-    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
-    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD
-};
-
-/**
- * Maps KEYCODES of all modifier and lock keys to their corresponding (default) STATES bit above.
- */
-Keyboardx86.KEYSTATES = {
-    [Keyboardx86.SIMCODE.RSHIFT]:      Keyboardx86.STATE.RSHIFT,
-    [Keyboardx86.SIMCODE.SHIFT]:       Keyboardx86.STATE.SHIFT,
-    [Keyboardx86.SIMCODE.CTRL]:        Keyboardx86.STATE.CTRL,
-    [Keyboardx86.SIMCODE.ALT]:         Keyboardx86.STATE.ALT,
-    [Keyboardx86.SIMCODE.RALT]:        Keyboardx86.STATE.ALT,
-    [Keyboardx86.SIMCODE.CMD]:         Keyboardx86.STATE.CMD,
-    [Keyboardx86.SIMCODE.RCMD]:        Keyboardx86.STATE.RCMD,
-    [Keyboardx86.SIMCODE.FF_CMD]:      Keyboardx86.STATE.CMD,
-    [Keyboardx86.SIMCODE.CAPS_LOCK]:   Keyboardx86.STATE.CAPS_LOCK,
-    [Keyboardx86.SIMCODE.NUM_LOCK]:    Keyboardx86.STATE.NUM_LOCK,
-    [Keyboardx86.SIMCODE.SCROLL_LOCK]: Keyboardx86.STATE.SCROLL_LOCK
-};
-
-/**
- * Maps CLICKCODE (string) to SIMCODE (number).
- *
- * NOTE: Unlike SOFTCODES, CLICKCODES are upper-case and use underscores instead of dashes, so that this
- * and other components can reference them using "dot" property syntax; using upper-case merely adheres to
- * our convention for constants.  setBinding() will automatically convert any incoming CLICKCODE bindings
- * that use lower-case and dashes to upper-case and underscores before performing property lookup.
- */
-Keyboardx86.CLICKCODES = {
-    'TAB':              Keyboardx86.SIMCODE.TAB,
-    'ESC':              Keyboardx86.SIMCODE.ESC,
-    'F1':               Keyboardx86.SIMCODE.F1,
-    'F2':               Keyboardx86.SIMCODE.F2,
-    'F3':               Keyboardx86.SIMCODE.F3,
-    'F4':               Keyboardx86.SIMCODE.F4,
-    'F5':               Keyboardx86.SIMCODE.F5,
-    'F6':               Keyboardx86.SIMCODE.F6,
-    'F7':               Keyboardx86.SIMCODE.F7,
-    'F8':               Keyboardx86.SIMCODE.F8,
-    'F9':               Keyboardx86.SIMCODE.F9,
-    'F10':              Keyboardx86.SIMCODE.F10,
-    'LEFT':             Keyboardx86.SIMCODE.LEFT,
-    'UP':               Keyboardx86.SIMCODE.UP,
-    'RIGHT':            Keyboardx86.SIMCODE.RIGHT,
-    'DOWN':             Keyboardx86.SIMCODE.DOWN,
-    'NUM_HOME':         Keyboardx86.SIMCODE.HOME,
-    'NUM_END':          Keyboardx86.SIMCODE.END,
-    'NUM_PGUP':         Keyboardx86.SIMCODE.PGUP,
-    'NUM_PGDN':         Keyboardx86.SIMCODE.PGDN,
-    'ALT':              Keyboardx86.SIMCODE.ALT,
-    'SYS_REQ':          Keyboardx86.SIMCODE.SYS_REQ,
-    /**
-     * These bindings are for convenience (common key combinations that can be bound to a single control)
-     */
-    'CTRL_C':           Keyboardx86.SIMCODE.CTRL_C,
-    'CTRL_PAUSE':       Keyboardx86.SIMCODE.CTRL_PAUSE,
-    'CTRL_BREAK':       Keyboardx86.SIMCODE.CTRL_BREAK,
-    'CTRL_ALT_DEL':     Keyboardx86.SIMCODE.CTRL_ALT_DEL,
-    'CTRL_ALT_INS':     Keyboardx86.SIMCODE.CTRL_ALT_INS,
-    'CTRL_ALT_ADD':     Keyboardx86.SIMCODE.CTRL_ALT_ADD,
-    'CTRL_ALT_SUB':     Keyboardx86.SIMCODE.CTRL_ALT_SUB,
-    'CTRL_ALT_ENTER':   Keyboardx86.SIMCODE.CTRL_ALT_ENTER,
-    'CTRL_ALT_SYS_REQ': Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ,
-    'SHIFT_TAB':        Keyboardx86.SIMCODE.SHIFT_TAB
-};
-
-/**
- * Maps SOFTCODE (string) to SIMCODE (number) -- which may be the same as KEYCODE for ASCII keys.
- *
- * We define identifiers for all possible keys, based on their primary (unshifted) character or function.
- * This also serves as a definition of all supported keys, making it possible to create full-featured
- * "soft keyboards".
- *
- * One exception to the (unshifted) rule above is 'prtsc': on the original IBM 83-key and 84-key keyboards,
- * its primary (unshifted) character was '*', but on 101-key keyboards, it became a separate key ('prtsc',
- * now labeled "Print Screen"), as did the num-pad '*' ('num-mul'), so 'prtsc' seems worthy of an exception
- * to the rule.
- *
- * On 83-key and 84-key keyboards, 'ctrl'+'num-lock' triggered a "pause" operation and 'ctrl'+'scroll-lock'
- * triggered a "break" operation.
- *
- * On 101-key keyboards, IBM decided to move both those special operations to a new 'pause' ("Pause/Break")
- * key, near the new dedicated 'prtsc' ("Print Screen/SysRq") key -- and to drop the "e" from "Sys Req".
- * Those keys behave as follows:
- *
- *      When 'pause' is pressed alone, it generates 0xe1 0x1d 0x45 0xe1 0x9d 0xc5 on make (nothing on break),
- *      which essentially simulates the make-and-break of the 'ctrl' and 'num-lock' keys (ignoring the 0xe1),
- *      triggering a "pause" operation.
- *
- *      When 'pause' is pressed with 'ctrl', it generates 0xe0 0x46 0xe0 0xc6 on make (nothing on break) and
- *      does not repeat, which essentially simulates the make-and-break of 'scroll-lock', which, in conjunction
- *      with the separate make-and-break of 'ctrl', triggers a "break" operation.
- *
- *      When 'prtsc' is pressed alone, it generates 0xe0 0x2a 0xe0 0x37, simulating the make of both 'shift'
- *      and 'prtsc'; when pressed with 'shift' or 'ctrl', it generates only 0xe0 0x37; and when pressed with
- *      'alt', it generates only 0x54 (to simulate 'sys-req').
- *
- * TODO: Implement the above behaviors, whenever we get around to actually supporting 101-key keyboards.
- *
- * All key identifiers must be quotable using single-quotes, because that's how components.xsl will encode them
- * *inside* the "data-value" attribute of the corresponding HTML control.  Which, in turn, is why the single-quote
- * key is defined as 'quote' rather than "'".  Similarly, if there was unshifted "double-quote" key, it could
- * not be called '"', because components.xsl quotes the *entire* "data-value" attribute using double-quotes.
- *
- * The (commented) numbering of keys below is purely for my own reference.  Two keys are deliberately numbered 84,
- * reflecting the fact that the 'sys-req' key was added to the 84-key keyboard but later dropped from the 101-key
- * keyboard (as a stand-alone key, that is).
- *
- * With the introduction of the PC AT and the 84-key keyboard, IBM developed a new key numbering scheme and
- * key code generation; the 8042 keyboard controller would then convert those key codes into the PC scan codes
- * defined by the older 83-key keyboard.  That's a layer of complexity we currently bypass; instead, we continue
- * to convert browser key codes directly into PC scan codes, which is what our 8042 controller implementation
- * assumes we're doing.
- */
-Keyboardx86.SOFTCODES = {
-    /*  1 */    'esc':          Keyboardx86.SIMCODE.ESC,
-    /*  2 */    '1':            Keys.ASCII['1'],
-    /*  3 */    '2':            Keys.ASCII['2'],
-    /*  4 */    '3':            Keys.ASCII['3'],
-    /*  5 */    '4':            Keys.ASCII['4'],
-    /*  6 */    '5':            Keys.ASCII['5'],
-    /*  7 */    '6':            Keys.ASCII['6'],
-    /*  8 */    '7':            Keys.ASCII['7'],
-    /*  9 */    '8':            Keys.ASCII['8'],
-    /* 10 */    '9':            Keys.ASCII['9'],
-    /* 11 */    '0':            Keys.ASCII['0'],
-    /* 12 */    '-':            Keys.ASCII['-'],
-    /* 13 */    '=':            Keys.ASCII['='],
-    /* 43 */    'bslash':       Keys.ASCII['\\'],               // listed before 'bs' so that injectKeys() doesn't mismatch
-    /* 14 */    'bs':           Keyboardx86.SIMCODE.BS,
-    /* 15 */    'tab':          Keyboardx86.SIMCODE.TAB,
-    /* 16 */    'q':            Keys.ASCII.q,
-    /* 17 */    'w':            Keys.ASCII.w,
-    /* 18 */    'e':            Keys.ASCII.e,
-    /* 19 */    'r':            Keys.ASCII.r,
-    /* 20 */    't':            Keys.ASCII.t,
-    /* 21 */    'y':            Keys.ASCII.y,
-    /* 22 */    'u':            Keys.ASCII.u,
-    /* 23 */    'i':            Keys.ASCII.i,
-    /* 24 */    'o':            Keys.ASCII.o,
-    /* 25 */    'p':            Keys.ASCII.p,
-    /* 26 */    '[':            Keys.ASCII['['],
-    /* 27 */    ']':            Keys.ASCII[']'],
-    /* 28 */    'enter':        Keys.KEYCODE.CR,
-    /* 29 */    'ctrl':         Keyboardx86.SIMCODE.CTRL,
-    /* 30 */    'a':            Keys.ASCII.a,
-    /* 31 */    's':            Keys.ASCII.s,
-    /* 32 */    'd':            Keys.ASCII.d,
-    /* 33 */    'f':            Keys.ASCII.f,
-    /* 34 */    'g':            Keys.ASCII.g,
-    /* 35 */    'h':            Keys.ASCII.h,
-    /* 36 */    'j':            Keys.ASCII.j,
-    /* 37 */    'k':            Keys.ASCII.k,
-    /* 38 */    'l':            Keys.ASCII.l,
-    /* 39 */    ';':            Keys.ASCII[';'],
-    /* 40 */    'quote':        Keys.ASCII["'"],                // formerly "squote"
-    /* 41 */    '`':            Keys.ASCII['`'],                // formerly "bquote"
-    /* 42 */    'shift':        Keyboardx86.SIMCODE.SHIFT,           // formerly "lshift"
-    /* 43 */    '\\':           Keys.ASCII['\\'],               // formerly "bslash"
-    /* 44 */    'z':            Keys.ASCII.z,
-    /* 45 */    'x':            Keys.ASCII.x,
-    /* 46 */    'c':            Keys.ASCII.c,
-    /* 47 */    'v':            Keys.ASCII.v,
-    /* 48 */    'b':            Keys.ASCII.b,
-    /* 49 */    'n':            Keys.ASCII.n,
-    /* 50 */    'm':            Keys.ASCII.m,
-    /* 51 */    ',':            Keys.ASCII[','],
-    /* 52 */    '.':            Keys.ASCII['.'],
-    /* 53 */    '/':            Keys.ASCII['/'],
-    /* 54 */    'right-shift':  Keyboardx86.SIMCODE.RSHIFT,        // formerly "rshift"
-    /* 55 */    'prtsc':        Keyboardx86.SIMCODE.PRTSC,         // unshifted '*'; becomes dedicated 'Print Screen' key on 101-key keyboards
-    /* 56 */    'alt':          Keyboardx86.SIMCODE.ALT,
-    /* 57 */    'space':        Keyboardx86.SIMCODE.SPACE,
-    /* 58 */    'caps-lock':    Keyboardx86.SIMCODE.CAPS_LOCK,
-    /* 68 */    'f10':          Keyboardx86.SIMCODE.F10,           // listed before 'f1' so that injectKeys() doesn't mismatch
-    /* 59 */    'f1':           Keyboardx86.SIMCODE.F1,
-    /* 60 */    'f2':           Keyboardx86.SIMCODE.F2,
-    /* 61 */    'f3':           Keyboardx86.SIMCODE.F3,
-    /* 62 */    'f4':           Keyboardx86.SIMCODE.F4,
-    /* 63 */    'f5':           Keyboardx86.SIMCODE.F5,
-    /* 64 */    'f6':           Keyboardx86.SIMCODE.F6,
-    /* 65 */    'f7':           Keyboardx86.SIMCODE.F7,
-    /* 66 */    'f8':           Keyboardx86.SIMCODE.F8,
-    /* 67 */    'f9':           Keyboardx86.SIMCODE.F9,
-    /* 69 */    'num-lock':     Keyboardx86.SIMCODE.NUM_LOCK,
-    /* 70 */    'scroll-lock':  Keyboardx86.SIMCODE.SCROLL_LOCK,   // TODO: 0xe046 on 101-key keyboards?
-
-    /**
-     * Yes, distinguishing keys 71 through 83 with the 'num-' prefix seems like overkill, but it was
-     * intended to be future-proofing, for the day when we might eventually add support for 101-key keyboards,
-     * because they have their own dedicated non-numeric-keypad versions of these keys (in other words, they
-     * account for most of the bloat on the 101-key keyboard, a trend that more modern keyboards have gradually
-     * been reversing).
-     *
-     * To offset 'num-' prefix overkill, injectKeys() allows SOFTCODES to be used with or without the prefix,
-     * on the theory that key injection users won't really care precisely which version of the key is used.
-     */
-
-    /* 71 */    'num-home':     Keyboardx86.SIMCODE.HOME,          // formerly "home"
-    /* 72 */    'num-up':       Keyboardx86.SIMCODE.UP,            // formerly "up-arrow"
-    /* 73 */    'num-pgup':     Keyboardx86.SIMCODE.PGUP,          // formerly "page-up"
-    /* 74 */    'num-sub':      Keyboardx86.SIMCODE.NUM_SUB,       // formerly "num-minus"
-    /* 75 */    'num-left':     Keyboardx86.SIMCODE.LEFT,          // formerly "left-arrow"
-    /* 76 */    'num-center':   Keyboardx86.SIMCODE.NUM_CENTER,    // formerly "center"
-    /* 77 */    'num-right':    Keyboardx86.SIMCODE.RIGHT,         // formerly "right-arrow"
-    /* 78 */    'num-add':      Keyboardx86.SIMCODE.NUM_ADD,       // formerly "num-plus"
-    /* 79 */    'num-end':      Keyboardx86.SIMCODE.END,           // formerly "end"
-    /* 80 */    'num-down':     Keyboardx86.SIMCODE.DOWN,          // formerly "down-arrow"
-    /* 81 */    'num-pgdn':     Keyboardx86.SIMCODE.PGDN,          // formerly "page-down"
-    /* 82 */    'num-ins':      Keyboardx86.SIMCODE.INS,           // formerly "ins"
-    /* 83 */    'num-del':      Keyboardx86.SIMCODE.DEL,           // formerly "del"
-    /* 84 */    'sys-req':      Keyboardx86.SIMCODE.SYS_REQ        // 84-key keyboard only (simulated with 'alt'+'prtsc' on 101-key keyboards)
-
-    /**
-     * If I ever add 101-key keyboard support (and it's not clear that I will), then the following entries
-     * will have to be converted to SIMCODE indexes, and each SIMCODE index will need an entry in the SIMCODES
-     * table that defines the appropriate SCANCODE(S); as this component has evolved, SOFTCODES are no longer
-     * mapped directly to SCANCODES.
-     */
-
-//  /* 84 */    'pause':        Keyboardx86.SCANCODE.PAUSE,        // 101-key keyboard only
-//  /* 85 */    'f11':          Keyboardx86.SCANCODE.F11,
-//  /* 86 */    'f12':          Keyboardx86.SCANCODE.F12,
-//  /* 87 */    'num-enter':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ENTER << 8),
-//  /* 88 */    'right-ctrl':   Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.CTRL << 8),
-//  /* 89 */    'num-div':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.SLASH << 8),
-//  /* 90 */    'num-mul':      Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.PRTSC << 8),
-//  /* 91 */    'right-alt':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.ALT << 8),
-//  /* 92 */    'home':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_HOME << 8),
-//  /* 93 */    'up':           Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_UP << 8),
-//  /* 94 */    'pgup':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGUP << 8),
-//  /* 95 */    'left':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_LEFT << 8),
-//  /* 96 */    'right':        Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_RIGHT << 8),
-//  /* 97 */    'end':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_END << 8),
-//  /* 98 */    'down':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DOWN << 8),
-//  /* 99 */    'pgdn':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_PGDN << 8),
-//  /*100 */    'ins':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_INS << 8),
-//  /*101 */    'del':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.NUM_DEL << 8),
-
-//  /*102 */    'win':          Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.WIN << 8),
-//  /*103 */    'right-win':    Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.RWIN << 8),
-//  /*104 */    'menu':         Keyboardx86.SCANCODE.EXTEND1 | (Keyboardx86.SCANCODE.MENU << 8)
-};
-
-/**
- * Maps "soft-key" definitions (above) of shift/modifier keys to their corresponding (default) STATES bit.
- */
-Keyboardx86.LEDSTATES = {
-    'caps-lock':    Keyboardx86.STATE.CAPS_LOCK,
-    'num-lock':     Keyboardx86.STATE.NUM_LOCK,
-    'scroll-lock':  Keyboardx86.STATE.SCROLL_LOCK
-};
-
-/**
- * Maps SIMCODE (number) to SCANCODE (number(s)).
- *
- * This array is used by simulateKey() to lookup a given SIMCODE and convert it to a SCANCODE
- * (lower byte), plus any required shift key SCANCODES (upper bytes).
- *
- * Using keyCodes from keyPress events proved to be more robust than using keyCodes from keyDown and
- * keyUp events, in part because of differences in the way browsers generate the keyDown and keyUp events.
- * For example, Safari on iOS devices will not generate up/down events for shift keys, and for other keys,
- * the up/down events are usually generated after the actual press is complete, and in rapid succession.
- *
- * The other problem (which is more of a problem with keyboards like the C1P than any IBM keyboards) is
- * that the shift/modifier state for a character on the "source" keyboard may not match the shift/modifier
- * state for the same character on the "target" keyboard.  And since this code is inherited from C1Pjs,
- * we've inherited the same solution: simulateKey() has the ability to "undo" any states in bitsState
- * that conflict with the state(s) required for the character in question.
- */
-Keyboardx86.SIMCODES = {
-    [Keyboardx86.SIMCODE.ESC]:          Keyboardx86.SCANCODE.ESC,
-    [Keys.ASCII['1']]:                  Keyboardx86.SCANCODE.ONE,
-    [Keys.ASCII['!']]:                  Keyboardx86.SCANCODE.ONE    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['2']]:                  Keyboardx86.SCANCODE.TWO,
-    [Keys.ASCII['@']]:                  Keyboardx86.SCANCODE.TWO    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['3']]:                  Keyboardx86.SCANCODE.THREE,
-    [Keys.ASCII['#']]:                  Keyboardx86.SCANCODE.THREE  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['4']]:                  Keyboardx86.SCANCODE.FOUR,
-    [Keys.ASCII['$']]:                  Keyboardx86.SCANCODE.FOUR   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['5']]:                  Keyboardx86.SCANCODE.FIVE,
-    [Keys.ASCII['%']]:                  Keyboardx86.SCANCODE.FIVE   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['6']]:                  Keyboardx86.SCANCODE.SIX,
-    [Keys.ASCII['^']]:                  Keyboardx86.SCANCODE.SIX    | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['7']]:                  Keyboardx86.SCANCODE.SEVEN,
-    [Keys.ASCII['&']]:                  Keyboardx86.SCANCODE.SEVEN  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['8']]:                  Keyboardx86.SCANCODE.EIGHT,
-    [Keys.ASCII['*']]:                  Keyboardx86.SCANCODE.EIGHT  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['9']]:                  Keyboardx86.SCANCODE.NINE,
-    [Keys.ASCII['(']]:                  Keyboardx86.SCANCODE.NINE   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['0']]:                  Keyboardx86.SCANCODE.ZERO,
-    [Keys.ASCII[')']]:                  Keyboardx86.SCANCODE.ZERO   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['-']]:                  Keyboardx86.SCANCODE.DASH,
-    [Keys.ASCII['_']]:                  Keyboardx86.SCANCODE.DASH   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['=']]:                  Keyboardx86.SCANCODE.EQUALS,
-    [Keys.ASCII['+']]:                  Keyboardx86.SCANCODE.EQUALS | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.BS]:           Keyboardx86.SCANCODE.BS,
-    [Keyboardx86.SIMCODE.TAB]:          Keyboardx86.SCANCODE.TAB,
-    [Keys.ASCII.q]:                     Keyboardx86.SCANCODE.Q,
-    [Keys.ASCII.Q]:                     Keyboardx86.SCANCODE.Q      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.w]:                     Keyboardx86.SCANCODE.W,
-    [Keys.ASCII.W]:                     Keyboardx86.SCANCODE.W      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.e]:                     Keyboardx86.SCANCODE.E,
-    [Keys.ASCII.E]:                     Keyboardx86.SCANCODE.E      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.r]:                     Keyboardx86.SCANCODE.R,
-    [Keys.ASCII.R]:                     Keyboardx86.SCANCODE.R      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.t]:                     Keyboardx86.SCANCODE.T,
-    [Keys.ASCII.T]:                     Keyboardx86.SCANCODE.T      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.y]:                     Keyboardx86.SCANCODE.Y,
-    [Keys.ASCII.Y]:                     Keyboardx86.SCANCODE.Y      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.u]:                     Keyboardx86.SCANCODE.U,
-    [Keys.ASCII.U]:                     Keyboardx86.SCANCODE.U      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.i]:                     Keyboardx86.SCANCODE.I,
-    [Keys.ASCII.I]:                     Keyboardx86.SCANCODE.I      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.o]:                     Keyboardx86.SCANCODE.O,
-    [Keys.ASCII.O]:                     Keyboardx86.SCANCODE.O      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.p]:                     Keyboardx86.SCANCODE.P,
-    [Keys.ASCII.P]:                     Keyboardx86.SCANCODE.P      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['[']]:                  Keyboardx86.SCANCODE.LBRACK,
-    [Keys.ASCII['{']]:                  Keyboardx86.SCANCODE.LBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[']']]:                  Keyboardx86.SCANCODE.RBRACK,
-    [Keys.ASCII['}']]:                  Keyboardx86.SCANCODE.RBRACK | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.KEYCODE.CR]:                  Keyboardx86.SCANCODE.ENTER,
-    [Keyboardx86.SIMCODE.CTRL]:         Keyboardx86.SCANCODE.CTRL,
-    [Keys.ASCII.a]:                     Keyboardx86.SCANCODE.A,
-    [Keys.ASCII.A]:                     Keyboardx86.SCANCODE.A      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.s]:                     Keyboardx86.SCANCODE.S,
-    [Keys.ASCII.S]:                     Keyboardx86.SCANCODE.S      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.d]:                     Keyboardx86.SCANCODE.D,
-    [Keys.ASCII.D]:                     Keyboardx86.SCANCODE.D      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.f]:                     Keyboardx86.SCANCODE.F,
-    [Keys.ASCII.F]:                     Keyboardx86.SCANCODE.F      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.g]:                     Keyboardx86.SCANCODE.G,
-    [Keys.ASCII.G]:                     Keyboardx86.SCANCODE.G      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.h]:                     Keyboardx86.SCANCODE.H,
-    [Keys.ASCII.H]:                     Keyboardx86.SCANCODE.H      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.j]:                     Keyboardx86.SCANCODE.J,
-    [Keys.ASCII.J]:                     Keyboardx86.SCANCODE.J      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.k]:                     Keyboardx86.SCANCODE.K,
-    [Keys.ASCII.K]:                     Keyboardx86.SCANCODE.K      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.l]:                     Keyboardx86.SCANCODE.L,
-    [Keys.ASCII.L]:                     Keyboardx86.SCANCODE.L      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[';']]:                  Keyboardx86.SCANCODE.SEMI,
-    [Keys.ASCII[':']]:                  Keyboardx86.SCANCODE.SEMI   | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII["'"]]:                  Keyboardx86.SCANCODE.QUOTE,
-    [Keys.ASCII['"']]:                  Keyboardx86.SCANCODE.QUOTE  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['`']]:                  Keyboardx86.SCANCODE.BQUOTE,
-    [Keys.ASCII['~']]:                  Keyboardx86.SCANCODE.BQUOTE | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.SHIFT]:        Keyboardx86.SCANCODE.SHIFT,
-    [Keys.ASCII['\\']]:                 Keyboardx86.SCANCODE.BSLASH,
-    [Keys.ASCII['|']]:                  Keyboardx86.SCANCODE.BSLASH | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.z]:                     Keyboardx86.SCANCODE.Z,
-    [Keys.ASCII.Z]:                     Keyboardx86.SCANCODE.Z      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.x]:                     Keyboardx86.SCANCODE.X,
-    [Keys.ASCII.X]:                     Keyboardx86.SCANCODE.X      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.c]:                     Keyboardx86.SCANCODE.C,
-    [Keys.ASCII.C]:                     Keyboardx86.SCANCODE.C      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.v]:                     Keyboardx86.SCANCODE.V,
-    [Keys.ASCII.V]:                     Keyboardx86.SCANCODE.V      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.b]:                     Keyboardx86.SCANCODE.B,
-    [Keys.ASCII.B]:                     Keyboardx86.SCANCODE.B      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.n]:                     Keyboardx86.SCANCODE.N,
-    [Keys.ASCII.N]:                     Keyboardx86.SCANCODE.N      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII.m]:                     Keyboardx86.SCANCODE.M,
-    [Keys.ASCII.M]:                     Keyboardx86.SCANCODE.M      | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII[',']]:                  Keyboardx86.SCANCODE.COMMA,
-    [Keys.ASCII['<']]:                  Keyboardx86.SCANCODE.COMMA  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['.']]:                  Keyboardx86.SCANCODE.PERIOD,
-    [Keys.ASCII['>']]:                  Keyboardx86.SCANCODE.PERIOD | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keys.ASCII['/']]:                  Keyboardx86.SCANCODE.SLASH,
-    [Keys.ASCII['?']]:                  Keyboardx86.SCANCODE.SLASH  | (Keyboardx86.SCANCODE.SHIFT << 8),
-    [Keyboardx86.SIMCODE.RSHIFT]:       Keyboardx86.SCANCODE.RSHIFT,
-    [Keyboardx86.SIMCODE.PRTSC]:        Keyboardx86.SCANCODE.PRTSC,
-    [Keyboardx86.SIMCODE.ALT]:          Keyboardx86.SCANCODE.ALT,
-    [Keyboardx86.SIMCODE.RALT]:         Keyboardx86.SCANCODE.ALT,
-    [Keyboardx86.SIMCODE.SPACE]:        Keyboardx86.SCANCODE.SPACE,
-    [Keyboardx86.SIMCODE.CAPS_LOCK]:    Keyboardx86.SCANCODE.CAPS_LOCK,
-    [Keyboardx86.SIMCODE.F1]:           Keyboardx86.SCANCODE.F1,
-    [Keyboardx86.SIMCODE.F2]:           Keyboardx86.SCANCODE.F2,
-    [Keyboardx86.SIMCODE.F3]:           Keyboardx86.SCANCODE.F3,
-    [Keyboardx86.SIMCODE.F4]:           Keyboardx86.SCANCODE.F4,
-    [Keyboardx86.SIMCODE.F5]:           Keyboardx86.SCANCODE.F5,
-    [Keyboardx86.SIMCODE.F6]:           Keyboardx86.SCANCODE.F6,
-    [Keyboardx86.SIMCODE.F7]:           Keyboardx86.SCANCODE.F7,
-    [Keyboardx86.SIMCODE.F8]:           Keyboardx86.SCANCODE.F8,
-    [Keyboardx86.SIMCODE.F9]:           Keyboardx86.SCANCODE.F9,
-    [Keyboardx86.SIMCODE.F10]:          Keyboardx86.SCANCODE.F10,
-    [Keyboardx86.SIMCODE.NUM_LOCK]:     Keyboardx86.SCANCODE.NUM_LOCK,
-    [Keyboardx86.SIMCODE.SCROLL_LOCK]:  Keyboardx86.SCANCODE.SCROLL_LOCK,
-    [Keyboardx86.SIMCODE.HOME]:         Keyboardx86.SCANCODE.NUM_HOME,
-    [Keyboardx86.SIMCODE.NUM_HOME]:     Keyboardx86.SCANCODE.NUM_HOME,
-    [Keyboardx86.SIMCODE.UP]:           Keyboardx86.SCANCODE.NUM_UP,
-    [Keyboardx86.SIMCODE.NUM_UP]:       Keyboardx86.SCANCODE.NUM_UP,
-    [Keyboardx86.SIMCODE.PGUP]:         Keyboardx86.SCANCODE.NUM_PGUP,
-    [Keyboardx86.SIMCODE.NUM_PGUP]:     Keyboardx86.SCANCODE.NUM_PGUP,
-    [Keyboardx86.SIMCODE.LEFT]:         Keyboardx86.SCANCODE.NUM_LEFT,
-    [Keyboardx86.SIMCODE.NUM_LEFT]:     Keyboardx86.SCANCODE.NUM_LEFT,
-    [Keyboardx86.SIMCODE.NUM_CENTER]:   Keyboardx86.SCANCODE.NUM_CENTER,
-    [Keyboardx86.SIMCODE.RIGHT]:        Keyboardx86.SCANCODE.NUM_RIGHT,
-    [Keyboardx86.SIMCODE.NUM_RIGHT]:    Keyboardx86.SCANCODE.NUM_RIGHT,
-    [Keyboardx86.SIMCODE.END]:          Keyboardx86.SCANCODE.NUM_END,
-    [Keyboardx86.SIMCODE.NUM_END]:      Keyboardx86.SCANCODE.NUM_END,
-    [Keyboardx86.SIMCODE.DOWN]:         Keyboardx86.SCANCODE.NUM_DOWN,
-    [Keyboardx86.SIMCODE.NUM_DOWN]:     Keyboardx86.SCANCODE.NUM_DOWN,
-    [Keyboardx86.SIMCODE.PGDN]:         Keyboardx86.SCANCODE.NUM_PGDN,
-    [Keyboardx86.SIMCODE.NUM_PGDN]:     Keyboardx86.SCANCODE.NUM_PGDN,
-    [Keyboardx86.SIMCODE.INS]:          Keyboardx86.SCANCODE.NUM_INS,
-    [Keyboardx86.SIMCODE.NUM_INS]:      Keyboardx86.SCANCODE.NUM_INS,
-    [Keyboardx86.SIMCODE.NUM_ADD]:      Keyboardx86.SCANCODE.NUM_ADD,
-    [Keyboardx86.SIMCODE.NUM_SUB]:      Keyboardx86.SCANCODE.NUM_SUB,
-    [Keyboardx86.SIMCODE.DEL]:          Keyboardx86.SCANCODE.NUM_DEL,
-    [Keyboardx86.SIMCODE.NUM_DEL]:      Keyboardx86.SCANCODE.NUM_DEL,
-
-    /**
-     * The next 6 entries are for keys that existed only on 101-key keyboards (well, except for SYS_REQ,
-     * which also existed on the 84-key keyboard), which ALSO means that these keys essentially did not exist
-     * for a MODEL_5150 or MODEL_5160 machine, because those machines could use only 83-key keyboards.  Remember
-     * that IBM machines and IBM keyboards are our reference point here, so while there were undoubtedly 5150/5160
-     * clones that could use newer keyboards, as well as 3rd-party keyboards that could work with older machines,
-     * support for non-IBM configurations is left for another day.
-     *
-     * TODO: The only relevance of newer keyboards to older machines is the fact that you're probably using a newer
-     * keyboard with your browser, which raises the question of what to do with newer keys that older machines
-     * wouldn't understand.  I don't attempt to filter out any of the entries below based on machine model, but that
-     * would seem like a wise thing to do.
-     *
-     * TODO: Add entries for 'num-mul', 'num-div', 'num-enter', the stand-alone arrow keys, etc, AND at the same time,
-     * make sure that keys with multi-byte sequences (eg, 0xe0 0x1c) work properly.
-     */
-    [Keyboardx86.SIMCODE.SYS_REQ]:      Keyboardx86.SCANCODE.SYS_REQ,
-    [Keyboardx86.SIMCODE.F11]:          Keyboardx86.SCANCODE.F11,
-    [Keyboardx86.SIMCODE.F12]:          Keyboardx86.SCANCODE.F12,
-    [Keyboardx86.SIMCODE.CMD]:          Keyboardx86.SCANCODE.WIN,
-    [Keyboardx86.SIMCODE.RCMD]:         Keyboardx86.SCANCODE.MENU,
-    [Keyboardx86.SIMCODE.FF_CMD]:       Keyboardx86.SCANCODE.WIN,
-
-    [Keyboardx86.SIMCODE.SHIFT_TAB]:    Keyboardx86.SCANCODE.TAB | (Keyboardx86.SCANCODE.SHIFT << 8),
-
-    [Keyboardx86.SIMCODE.CTRL_A]:       Keyboardx86.SCANCODE.A           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_B]:       Keyboardx86.SCANCODE.B           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_C]:       Keyboardx86.SCANCODE.C           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_D]:       Keyboardx86.SCANCODE.D           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_E]:       Keyboardx86.SCANCODE.E           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_F]:       Keyboardx86.SCANCODE.F           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_G]:       Keyboardx86.SCANCODE.G           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_H]:       Keyboardx86.SCANCODE.H           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_I]:       Keyboardx86.SCANCODE.I           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_J]:       Keyboardx86.SCANCODE.J           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_K]:       Keyboardx86.SCANCODE.K           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_L]:       Keyboardx86.SCANCODE.L           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_M]:       Keyboardx86.SCANCODE.M           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_N]:       Keyboardx86.SCANCODE.N           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_O]:       Keyboardx86.SCANCODE.O           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_P]:       Keyboardx86.SCANCODE.P           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Q]:       Keyboardx86.SCANCODE.Q           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_R]:       Keyboardx86.SCANCODE.R           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_S]:       Keyboardx86.SCANCODE.S           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_T]:       Keyboardx86.SCANCODE.T           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_U]:       Keyboardx86.SCANCODE.U           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_V]:       Keyboardx86.SCANCODE.V           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_W]:       Keyboardx86.SCANCODE.W           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_X]:       Keyboardx86.SCANCODE.X           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Y]:       Keyboardx86.SCANCODE.Y           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_Z]:       Keyboardx86.SCANCODE.Z           | (Keyboardx86.SCANCODE.CTRL << 8),
-    [Keyboardx86.SIMCODE.CTRL_BREAK]:   Keyboardx86.SCANCODE.SCROLL_LOCK | (Keyboardx86.SCANCODE.CTRL << 8),
-
-    [Keyboardx86.SIMCODE.CTRL_ALT_DEL]:     Keyboardx86.SCANCODE.NUM_DEL | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_INS]:     Keyboardx86.SCANCODE.NUM_INS | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_ADD]:     Keyboardx86.SCANCODE.NUM_ADD | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_SUB]:     Keyboardx86.SCANCODE.NUM_SUB | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_ENTER]:   Keyboardx86.SCANCODE.ENTER   | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16),
-    [Keyboardx86.SIMCODE.CTRL_ALT_SYS_REQ]: Keyboardx86.SCANCODE.SYS_REQ | (Keyboardx86.SCANCODE.CTRL << 8) | (Keyboardx86.SCANCODE.ALT << 16)
-};
-
-/**
- * Commands that can be sent to the Keyboard via the 8042; see receiveCmd()
- *
- * Aside from the commands listed below, 0xEF-0xF2 and 0xF7-0xFD are expressly documented as NOPs; ie:
- *
- *      These commands are reserved and are effectively no-operation or NOP. The system does not use these codes.
- *      If sent, the keyboard will acknowledge the command and continue in its prior scanning state. No other
- *      operation will occur.
- *
- * However, IBM's documentation is silent with regard to 0x00-0xEC.  It's likely that most if not all of those
- * commands are NOPs as well.
- *
- * @enum {number}
- */
-Keyboardx86.CMD = {
-    /**
-     * RESET (0xFF)
-     *
-     * The system issues a RESET command to start a program reset and a keyboard internal self-test. The keyboard
-     * acknowledges the command with an 'acknowledge' signal (ACK) and ensures the system accepts the ACK before
-     * executing the command. The system signals acceptance of the ACK by raising the clock and data for a minimum
-     * of 500 microseconds. The keyboard is disabled from the time it receives the RESET command until the ACK is
-     * accepted or until another command overrides the previous one. Following acceptance of the ACK, the keyboard
-     * begins the reset operation, which is similar to a power-on reset. The keyboard clears the output buffer and
-     * sets up default values for typematic and delay rates.
-     */
-    RESET:      0xFF,
-
-    /**
-     * RESEND (0xFE)
-     *
-     * The system can send this command when it detects an error in any transmission from the keyboard. It can be
-     * sent only after a keyboard transmission and before the system enables the interface to allow the next keyboard
-     * output. Upon receipt of RESEND, the keyboard sends the previous output again unless the previous output was
-     * RESEND. In this case, the keyboard will resend the last byte before the RESEND command.
-     */
-    RESEND:     0xFE,
-
-    /**
-     * SET DEFAULT (0xF6)
-     *
-     * The SET DEFAULT command resets all conditions to the power-on default state. The keyboard responds with ACK,
-     * clears its output buffer, sets default conditions, and continues scanning (only if the keyboard was previously
-     * enabled).
-     */
-    DEF_ON:     0xF6,
-
-    /**
-     * DEFAULT DISABLE (0xF5)
-     *
-     * This command is similar to SET DEFAULT, except the keyboard stops scanning and awaits further instructions.
-     */
-    DEF_OFF:    0xF5,
-
-    /**
-     * ENABLE (0xF4)
-     *
-     * Upon receipt of this command, the keyboard responds with ACK, clears its output buffer, and starts scanning.
-     */
-    ENABLE:     0xF4,
-
-    /**
-     * SET TYPEMATIC RATE/DELAY (0xF3)
-     *
-     * The system issues this command, followed by a parameter, to change the typematic rate and delay. The typematic
-     * rate and delay parameters are determined by the value of the byte following the command. Bits 6 and 5 serve as
-     * the delay parameter and bits 4,3,2, 1, and 0 (the least-significant bit) are the rate parameter. Bit 7, the
-     * most-significant bit, is always 0. The delay is equal to 1 plus the binary value of bits 6 and 5 multiplied by
-     * 250 milliseconds ±20%.
-     */
-    SET_RATE:   0xF3,
-
-    /**
-     * ECHO (0xEE)
-     *
-     * ECHO is a diagnostic aid. When the keyboard receives this command, it issues a 0xEE response and continues
-     * scanning if the keyboard was previously enabled.
-     */
-    ECHO:       0xEE,
-
-    /**
-     * SET/RESET MODE INDICATORS (0xED)
-     *
-     * Three mode indicators on the keyboard are accessible to the system. The keyboard activates or deactivates
-     * these indicators when it receives a valid command from the system. They can be activated or deactivated in
-     * any combination.
-     *
-     * The system remembers the previous state of an indicator so that its setting does not change when a command
-     * sequence is issued to change the state of another indicator.
-     *
-     * A SET/RESET MODE INDICATORS command consists of 2 bytes. The first is the command byte and has the following
-     * bit setup:
-     *
-     *      11101101 - 0xED
-     *
-     * The second byte is an option byte. It has a list of the indicators to be acted upon. The bit assignments for
-     * this option byte are as follows:
-     *
-     *      Bit         Indicator
-     *      ---         ---------
-     *       0          Scroll Lock Indicator
-     *       1          Num Lock Indicator
-     *       2          Caps Lock Indicator
-     *      3-7         Reserved (must be 0's)
-     *
-     * NOTE: Bit 7 is the most-significant bit; bit 0 is the least-significant.
-     *
-     * The keyboard will respond to the set/reset mode indicators command with an ACK, discontinue scanning, and wait
-     * for the option byte. The keyboard will respond to the option byte with an ACK, set the indicators, and continue
-     * scanning if the keyboard was previously enabled. If another command is received in place of the option byte,
-     * execution of the function of the SET/RESET MODE INDICATORS command is stopped with no change to the indicator
-     * states, and the new command is processed. Then scanning is resumed.
-     */
-    SET_LEDS:   0xED
-};
-
-/**
- * Command responses returned to the Keyboard via the 8042; see receiveCmd()
- *
- * @enum {number}
- */
-Keyboardx86.CMDRES = {
-    /**
-     * OVERRUN (0x00)
-     *
-     * An overrun character is placed in position 17 of the keyboard buffer, overlaying the last code if the
-     * buffer becomes full. The code is sent to the system as an overrun when it reaches the top of the buffer.
-     */
-    OVERRUN:    0x00,
-
-    LOAD_TEST:  0x65,   // undocumented "LOAD MANUFACTURING TEST REQUEST" response code
-
-    /**
-     * BAT Completion Code (0xAA)
-     *
-     * Following satisfactory completion of the BAT, the keyboard sends 0xAA. 0xFC (or any other code)
-     * means the keyboard microprocessor check failed.
-     */
-    BAT_OK:     0xAA,
-
-    /**
-     * ECHO Response (0xEE)
-     *
-     * This is sent in response to an ECHO command (also 0xEE) from the system.
-     */
-    ECHO:       0xEE,
-
-    /**
-     * BREAK CODE PREFIX (0xF0)
-     *
-     * This code is sent as the first byte of a 2-byte sequence to indicate the release of a key.
-     */
-    BREAK_PREF: 0xF0,
-
-    /**
-     * ACK (0xFA)
-     *
-     * The keyboard issues an ACK response to any valid input other than an ECHO or RESEND command.
-     * If the keyboard is interrupted while sending ACK, it will discard ACK and accept and respond
-     * to the new command.
-     */
-    ACK:        0xFA,
-
-    /**
-     * BASIC ASSURANCE TEST FAILURE (0xFC)
-     */
-    BAT_FAIL:   0xFC,   // TODO: Verify this response code (is this just for older 83-key keyboards?)
-
-    /**
-     * DIAGNOSTIC FAILURE (0xFD)
-     *
-     * The keyboard periodically tests the sense amplifier and sends a diagnostic failure code if it detects
-     * any problems. If a failure occurs during BAT, the keyboard stops scanning and waits for a system command
-     * or power-down to restart. If a failure is reported after scanning is enabled, scanning continues.
-     */
-    DIAG_FAIL:  0xFD,
-
-    /**
-     * RESEND (0xFE)
-     *
-     * The keyboard issues a RESEND command following receipt of an invalid input, or any input with incorrect parity.
-     * If the system sends nothing to the keyboard, no response is required.
-     */
-    RESEND:     0xFE,
-
-    BUFF_FULL:  0xFF    // TODO: Verify this response code (is this just for older 83-key keyboards?)
-};
-
-Keyboardx86.LIMIT = {
-    MAX_SCANCODES: 20   // TODO: Verify this limit for newer keyboards (84-key and up)
-};
-
-Keyboardx86.INJECTION = {
-    NONE:       0,
-    ON_START:   1,
-    ON_INPUT:   2
-};
 
 /**
  * Initialize every Keyboard module on the page.
@@ -60665,6 +60666,89 @@ WebLib.onInit(Videox86.init);
  */
 class ParallelPort extends Component {
     /**
+     * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       2              // 0x01 (DATA 1)
+     *       1       3              // 0x02 (DATA 2)
+     *       2       4              // 0x04 (DATA 3)
+     *       3       5              // 0x08 (DATA 4)
+     *       4       6              // 0x10 (DATA 5)
+     *       5       7              // 0x20 (DATA 6)
+     *       6       8              // 0x40 (DATA 7)
+     *       7       9              // 0x80 (DATA 8)
+     */
+    static DATA = {                 // (read/write)
+        REG:        0
+    };
+
+    /**
+     * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       -              // 0x01 (always set on MDA printer port)
+     *       1       -              // 0x02 (always set on MDA printer port)
+     *       2       -              // 0x04 (always set on MDA printer port)
+     *       3       !15            // 0x08 (Error)
+     *       4       13             // 0x10 (Select)
+     *       5       12             // 0x20 (Out of Paper)
+     *       6       !10            // 0x40 (Acknowledged)
+     *       7       11             // 0x80 (Busy; eg, printer off-line or operation in progress)
+     */
+    static STATUS = {               // (read)
+        REG:        1,
+        ALWAYS_SET: 0x07,           // (always set on MDA printer port)
+        NERR:       0x08,           // when this bit is clear, I/O error (inverted by the ROM BIOS INT 17h Status function)
+        SELECT:     0x10,           // when this bit is set, printer selected
+        PAPER:      0x20,           // when this bit is set, out of paper
+        NACK:       0x40,           // when this bit is clear, data acknowledged (and optionally, interrupt requested; inverted by the ROM BIOS INT 17h Status function)
+        NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
+    };
+
+    /**
+     * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       !1             // 0x01 (read input data)
+     *       1      !14             // 0x02 (automatically feed paper one line)
+     *       2       16             // 0x04
+     *       3      !17             // 0x08
+     *
+     * Additionally, bit 4 is the IRQ ENABLE bit, which allows interrupts when pin 10 transitions high to low.
+     */
+    static CONTROL = {              // (read/write)
+        REG:        2,
+        NSTROBE:    0x01,           // !Strobe
+        NAUTOFEED:  0x02,           // !Auto feed
+        INIT:       0x04,           // Initialize printer
+        NSELECT:    0x08,           // !Select input
+        IRQ_ENABLE: 0x10,           // set to enable interrupts (when printer clears NACK)
+        ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
+    };
+
+    static {
+        /**
+         * Port input notification table
+         */
+        ParallelPort.aPortInput = {
+            0x0: ParallelPort.prototype.inData,
+            0x1: ParallelPort.prototype.inStatus,
+            0x2: ParallelPort.prototype.inControl
+        };
+
+        /**
+         * Port output notification table
+         */
+        ParallelPort.aPortOutput = {
+            0x0: ParallelPort.prototype.outData,
+            0x2: ParallelPort.prototype.outControl
+        };
+    }
+
+    /**
      * ParallelPort(parmsParallel)
      *
      * The ParallelPort component has the following component-specific (parmsParallel) properties:
@@ -61076,87 +61160,6 @@ class ParallelPort extends Component {
 }
 
 /**
- * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       2              // 0x01 (DATA 1)
- *       1       3              // 0x02 (DATA 2)
- *       2       4              // 0x04 (DATA 3)
- *       3       5              // 0x08 (DATA 4)
- *       4       6              // 0x10 (DATA 5)
- *       5       7              // 0x20 (DATA 6)
- *       6       8              // 0x40 (DATA 7)
- *       7       9              // 0x80 (DATA 8)
- */
-ParallelPort.DATA = {           // (read/write)
-    REG:        0
-};
-
-/**
- * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       -              // 0x01 (always set on MDA printer port)
- *       1       -              // 0x02 (always set on MDA printer port)
- *       2       -              // 0x04 (always set on MDA printer port)
- *       3       !15            // 0x08 (Error)
- *       4       13             // 0x10 (Select)
- *       5       12             // 0x20 (Out of Paper)
- *       6       !10            // 0x40 (Acknowledged)
- *       7       11             // 0x80 (Busy; eg, printer off-line or operation in progress)
- */
-ParallelPort.STATUS = {         // (read)
-    REG:        1,
-    ALWAYS_SET: 0x07,           // (always set on MDA printer port)
-    NERR:       0x08,           // when this bit is clear, I/O error (inverted by the ROM BIOS INT 17h Status function)
-    SELECT:     0x10,           // when this bit is set, printer selected
-    PAPER:      0x20,           // when this bit is set, out of paper
-    NACK:       0x40,           // when this bit is clear, data acknowledged (and optionally, interrupt requested; inverted by the ROM BIOS INT 17h Status function)
-    NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
-};
-
-/**
- * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       !1             // 0x01 (read input data)
- *       1      !14             // 0x02 (automatically feed paper one line)
- *       2       16             // 0x04
- *       3      !17             // 0x08
- *
- * Additionally, bit 4 is the IRQ ENABLE bit, which allows interrupts when pin 10 transitions high to low.
- */
-ParallelPort.CONTROL = {        // (read/write)
-    REG:        2,
-    NSTROBE:    0x01,           // !Strobe
-    NAUTOFEED:  0x02,           // !Auto feed
-    INIT:       0x04,           // Initialize printer
-    NSELECT:    0x08,           // !Select input
-    IRQ_ENABLE: 0x10,           // set to enable interrupts (when printer clears NACK)
-    ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
-};
-
-/**
- * Port input notification table
- */
-ParallelPort.aPortInput = {
-    0x0: ParallelPort.prototype.inData,
-    0x1: ParallelPort.prototype.inStatus,
-    0x2: ParallelPort.prototype.inControl
-};
-
-/**
- * Port output notification table
- */
-ParallelPort.aPortOutput = {
-    0x0: ParallelPort.prototype.outData,
-    0x2: ParallelPort.prototype.outControl
-};
-
-/**
  * Initialize every ParallelPort module on the page.
  */
 WebLib.onInit(ParallelPort.init);
@@ -61321,6 +61324,31 @@ class SerialPort extends Component {
      * Scratch Register (SCR.REG, offset 7; eg, 0x3FF or 0x2FF)
      */
     static SCR = {REG: 7};
+
+    static {
+        /**
+         * Port input notification table
+         */
+        SerialPort.aPortInput = {
+            0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
+            0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
+            0x2: SerialPort.prototype.inIIR,
+            0x3: SerialPort.prototype.inLCR,
+            0x4: SerialPort.prototype.inMCR,
+            0x5: SerialPort.prototype.inLSR,
+            0x6: SerialPort.prototype.inMSR
+        };
+
+        /**
+         * Port output notification table
+         */
+        SerialPort.aPortOutput = {
+            0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
+            0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
+            0x3: SerialPort.prototype.outLCR,
+            0x4: SerialPort.prototype.outMCR
+        };
+    }
 
     /**
      * SerialPort(parms)
@@ -62306,29 +62334,6 @@ class SerialPort extends Component {
             Component.bindComponentControls(serial, eSerial, APPCLASS);
         }
     }
-
-    /**
-     * Port input notification table
-     */
-    static aPortInput = {
-        0x0: SerialPort.prototype.inRBR,    // or DLL if DLAB set
-        0x1: SerialPort.prototype.inIER,    // or DLM if DLAB set
-        0x2: SerialPort.prototype.inIIR,
-        0x3: SerialPort.prototype.inLCR,
-        0x4: SerialPort.prototype.inMCR,
-        0x5: SerialPort.prototype.inLSR,
-        0x6: SerialPort.prototype.inMSR
-    };
-
-    /**
-     * Port output notification table
-     */
-    static aPortOutput = {
-        0x0: SerialPort.prototype.outTHR,   // or DLL if DLAB set
-        0x1: SerialPort.prototype.outIER,   // or DLM if DLAB set
-        0x3: SerialPort.prototype.outLCR,
-        0x4: SerialPort.prototype.outMCR
-    };
 }
 
 /**

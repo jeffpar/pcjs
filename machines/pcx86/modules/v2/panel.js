@@ -230,6 +230,62 @@ class HTMLLED {
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Panel extends Component {
+
+    static COLOR = {
+        BLACK:  "#000000",
+        RED:    "#ff0000",
+        BLUE:   "#0000ff",
+        GREEN:  "#00ff00"
+    };
+
+    static STATE = {
+        NONE:   Panel.COLOR.BLACK,
+        WRITE:  Panel.COLOR.RED,
+        READ:   Panel.COLOR.GREEN,
+        SEEK:   Panel.COLOR.BLUE
+    };
+
+    /**
+     * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
+     * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
+     * stretch the live images to fit.
+     */
+    static LIVECANVAS = {
+        CX:         1280,
+        CY:         720,
+        FONT:       {
+            CY:     18,
+            FACE:   "Monaco, Lucida Console, Courier New"
+        }
+    };
+
+    static LIVEMEM = {
+        CX: (Panel.LIVECANVAS.CX * 3) >> 2,
+        CY: (Panel.LIVECANVAS.CY)
+    };
+
+    static LIVEREGS = {
+        CX:     (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
+        CY:     (Panel.LIVECANVAS.CY),
+        COLOR:  "black"
+    };
+
+    static LIVEDUMP = {
+        CX: (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
+        CY: (Panel.LIVECANVAS.CY >> 1)
+    };
+
+    /**
+     * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
+     */
+    static REGION = {
+        MASK:           0x7fff,
+        BTMOD_SHIFT:    15,
+        TYPE_SHIFT:     16
+    };
+
+    static UPDATES_PER_SECOND = 10;
+
     /**
      * Panel(parmsPanel)
      *
@@ -1057,61 +1113,6 @@ export default class Panel extends Component {
         }
     }
 }
-
-Panel.COLOR = {
-    BLACK:  "#000000",
-    RED:    "#ff0000",
-    BLUE:   "#0000ff",
-    GREEN:  "#00ff00"
-};
-
-Panel.STATE = {
-    NONE:   Panel.COLOR.BLACK,
-    WRITE:  Panel.COLOR.RED,
-    READ:   Panel.COLOR.GREEN,
-    SEEK:   Panel.COLOR.BLUE
-};
-
-/**
- * The "Live" canvases that we create internally have the following fixed dimensions, to make drawing
- * simpler.  We then render, via drawImage(), these canvases onto the supplied canvas, which will automatically
- * stretch the live images to fit.
- */
-Panel.LIVECANVAS = {
-    CX:         1280,
-    CY:         720,
-    FONT:       {
-        CY:     18,
-        FACE:   "Monaco, Lucida Console, Courier New"
-    }
-};
-
-Panel.LIVEMEM = {
-    CX: (Panel.LIVECANVAS.CX * 3) >> 2,
-    CY: (Panel.LIVECANVAS.CY)
-};
-
-Panel.LIVEREGS = {
-    CX:     (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
-    CY:     (Panel.LIVECANVAS.CY),
-    COLOR:  "black"
-};
-
-Panel.LIVEDUMP = {
-    CX: (Panel.LIVECANVAS.CX - Panel.LIVEMEM.CX),
-    CY: (Panel.LIVECANVAS.CY >> 1)
-};
-
-/**
- * findRegions() records block numbers in bits 0-14, a BackTrack "mod" bit in bit 15, and the block type at bit 16.
- */
-Panel.REGION = {
-    MASK:           0x7fff,
-    BTMOD_SHIFT:    15,
-    TYPE_SHIFT:     16
-};
-
-Panel.UPDATES_PER_SECOND = 10;
 
 /**
  * Initialize every Panel module on the page.
