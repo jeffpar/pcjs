@@ -3,6 +3,7 @@ layout: page
 title: Microsoft Windows 1.01
 permalink: /software/pcx86/sys/windows/1.01/ega/
 redirect_from:
+  - /devices/pc/machine/5160/ega/640kb/win101/
   - /disks/pcx86/windows/1.01/
   - /disks/pc/windows/1.01/
   - /software/pcx86/sys/windows/1.01/
