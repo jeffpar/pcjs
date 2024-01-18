@@ -117,7 +117,7 @@ export default class CharSet {
     }
 }
 
-/*
+/**
  * Table to convert CP437 characters to Unicode.
  *
  * Refer to: https://en.wikipedia.org/wiki/Code_page_437

@@ -12987,7 +12987,7 @@ class CPUx86 extends CPU {
     }
 }
 
-/*
+/**
  * CPU model numbers (supported)
  */
 CPUx86.MODEL_8086 =      8086;
@@ -12997,7 +12997,7 @@ CPUx86.MODEL_80188 =     80188;
 CPUx86.MODEL_80286 =     80286;
 CPUx86.MODEL_80386 =     80386;
 
-/*
+/**
  * 80386 CPU stepping identifiers (supported)
  */
 CPUx86.STEPPING_80386_A0 =  (80386+0xA0);       // we have very little information about this stepping...
@@ -13010,9 +13010,9 @@ CPUx86.STEPPING_80386_D0 =  (80386+0xD0);       // we don't have any detailed in
 CPUx86.STEPPING_80386_D1 =  (80386+0xD1);
 CPUx86.STEPPING_80386_D2 =  (80386+0xD2);
 
-/*
- * This constant is used to mark points in the code where the physical address being returned
- * is invalid and should not be used.
+/**
+ * This constant is used to mark points in the code where the address (either physical or
+ * linear) being returned is invalid and should not be used.
  *
  * This value is also used to indicate non-existent EA address calculations, which are usually
  * detected with "regEA === ADDR_INVALID" and "regEAWrite === ADDR_INVALID" tests.  Which means
@@ -13027,9 +13027,9 @@ CPUx86.STEPPING_80386_D2 =  (80386+0xD2);
  * certain that this file is included BEFORE the first reference to any of these properties, that
  * automatic inlining will no longer occur.
  */
-CPUx86.ADDR_INVALID =  -1;
+CPUx86.ADDR_INVALID =  0x100000000;
 
-/*
+/**
  * Processor Exception Interrupts
  *
  * Of the following exceptions, all are designed to be restartable, except for 0x08 and 0x09 (and 0x0D
@@ -13072,7 +13072,7 @@ CPUx86.EXCEPTION = {
     MF_FAULT:   0x10    // Math Fault; see ESC or WAIT              (#MF: fault, no error code)
 };
 
-/*
+/**
  * Processor Status flag definitions (stored in regPS)
  */
 CPUx86.PS = {
@@ -13099,7 +13099,7 @@ CPUx86.PS = {
 };
 
 CPUx86.CR0 = {
-    /*
+    /**
      * Machine Status Word (MSW) bit definitions
      */
     MSW: {
@@ -13168,7 +13168,7 @@ CPUx86.DESC = {         // Descriptor Table Entry
             MASK:                       0x1F00,
             SEG:                        0x1000,
             NONSEG:                     0x0F00,
-            /*
+            /**
              * The following bits apply only when SEG is set
              */
             CODE:                       0x0800,     // set for CODE, clear for DATA
@@ -13177,12 +13177,12 @@ CPUx86.DESC = {         // Descriptor Table Entry
             WRITABLE:                   0x0200,     // DATA: set if writable, clear if read-only
             CONFORMING:                 0x0400,     // CODE: set if conforming, clear if not
             EXPDOWN:                    0x0400,     // DATA: set if expand-down, clear if not
-            /*
+            /**
              * Assorted bits that apply only within NONSEG values
              */
             TSS_BUSY:                   0x0200,
             NONSEG_386:                 0x0800,     // 80386 and up
-            /*
+            /**
              * The following are all the possible (valid) types (well, except for the variations
              * of DATA and CODE where the ACCESSED bit (0x0100) may also be set)
              */
@@ -13219,7 +13219,7 @@ CPUx86.DESC = {         // Descriptor Table Entry
         OFFSET:     0x6,
         LIMIT1619:                      0x000F,
         AVAIL:                          0x0010,     // NOTE: set in various descriptors in OS/2
-        /*
+        /**
          * The BIG bit is known as the D bit for code segments; when set, all addresses and operands
          * in that code segment are assumed to be 32-bit.
          *
@@ -13317,7 +13317,7 @@ CPUx86.ERRCODE = {
 };
 
 CPUx86.RESULT = {
-    /*
+    /**
      * Flags were originally computed using 16-bit result registers:
      *
      *      CF: resultZeroCarry & resultSize (ie, 0x100 or 0x10000)
@@ -13390,7 +13390,7 @@ CPUx86.RESULT = {
     NOTCF:      0x3E        // all result flags EXCEPT carry are cached
 };
 
-/*
+/**
  * Bit values for opFlags, which are all reset to zero prior to each instruction
  */
 CPUx86.OPFLAG = {
@@ -13411,7 +13411,7 @@ CPUx86.OPFLAG = {
     REPSEG:     0x4000      // an instruction is being repeated with a segment prefix (used for 8086/8088 "feature" simulation)
 };
 
-/*
+/**
  * Bit values for intFlags
  */
 CPUx86.INTFLAG = {
@@ -13423,7 +13423,7 @@ CPUx86.INTFLAG = {
     DEBUGGER:   0x10        // debugger checks enabled
 };
 
-/*
+/**
  * Common opcodes (and/or any opcodes we need to refer to explicitly)
  */
 CPUx86.OPCODE = {
@@ -13495,7 +13495,7 @@ CPUx86.OPCODE = {
     UD2:        0x0B0F      // UD2 (invalid opcode "guaranteed" to generate UD_FAULT on all post-8086 processors)
 };
 
-/*
+/**
  * Floating Point Unit (FPU), aka Numeric Data Processor (NDP), aka Numeric Processor Extension (NPX), aka Coprocessor definitions
  */
 CPUx86.FPU = {
@@ -13550,7 +13550,7 @@ CPUx86.FPU = {
         EMPTY:  0x3,
         MASK:   0x3
     }
-    /*
+    /**
         C3 C2 C1 C0     Condition Code (CC) values following an Examine
         0  0  0  0      Valid, positive unnormalized (+Unnormal)
         0  0  0  1      Invalid, positive, exponent=0 (+NaN)
@@ -13811,7 +13811,7 @@ CPUx86.CYCLES_80286 = {
     nOpCyclesXLAT:              5
 };
 
-/*
+/**
  * TODO: All 80386 cycle counts are based on 80286 counts until I have time to hand-generate an 80386-specific table;
  * the values below are used by selected 32-bit opcode handlers only.
  */
@@ -13825,7 +13825,7 @@ CPUx86.CYCLES_80386 = {
     nEACyclesBaseIndexDispExtra:1
 };
 
-/*
+/**
  * These PS flags are always stored directly in regPS for the 8086/8088, hence the
  * "direct" designation; other processors must adjust these bits accordingly.  The final
  * adjusted value is stored in PS_DIRECT (ie, 80286 and up also include PS.IOPL.MASK and
@@ -13833,25 +13833,25 @@ CPUx86.CYCLES_80386 = {
  */
 CPUx86.PS_DIRECT_8086 = (CPUx86.PS.TF | CPUx86.PS.IF | CPUx86.PS.DF);
 
-/*
+/**
  * These are the default "always set" PS bits for the 8086/8088; other processors must
  * adjust these bits accordingly.  The final adjusted value is stored in PS_SET.
  */
 CPUx86.PS_SET_8086 = (CPUx86.PS.BIT1 | CPUx86.PS.IOPL.MASK | CPUx86.PS.NT | CPUx86.PS.BIT15);
 
-/*
+/**
  * These PS arithmetic and logical flags may be "cached" across several result registers;
  * whether or not they're currently cached depends on the RESULT bits in resultType.
  */
 CPUx86.PS_CACHED = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CPUx86.PS.SF | CPUx86.PS.OF);
 
-/*
+/**
  * PS_SAHF is a subset of the arithmetic flags, and refers only to those flags that the
  * SAHF and LAHF "8080 legacy" opcodes affect.
  */
 CPUx86.PS_SAHF = (CPUx86.PS.CF | CPUx86.PS.PF | CPUx86.PS.AF | CPUx86.PS.ZF | CPUx86.PS.SF);
 
-/*
+/**
  * Before we zero opFlags, we first see if any of the following PREFIX bits were set.  If any were set,
  * they are OR'ed into opPrefixes; otherwise, opPrefixes is zeroed as well.  This gives prefix-conscious
  * instructions like LODS, MOVS, STOS, CMPS, etc, a way of determining which prefixes, if any, immediately

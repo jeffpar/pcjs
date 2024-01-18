@@ -135,13 +135,13 @@ X86.fnARPL = function(dst, src)
 X86.fnBOUND = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Generate UD_FAULT (INT 0x06: Invalid Opcode) if src is not a memory operand.
          */
         X86.opInvalid.call(this);
         return dst;
     }
-    /*
+    /**
      * Note that BOUND performs signed comparisons, so we must transform all arguments into signed values.
      */
     let wIndex = dst;
@@ -154,7 +154,7 @@ X86.fnBOUND = function(dst, src)
     }
     this.nStepCycles -= this.cycleCounts.nOpCyclesBound;
     if (wIndex < wLower || wIndex > wUpper) {
-        /*
+        /**
          * The INT 0x05 handler must be called with CS:IP pointing to the BOUND instruction.
          *
          * TODO: Determine the cycle cost when a BOUND exception is triggered, over and above nCyclesBound,
@@ -332,7 +332,7 @@ X86.fnBTMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBT.call(this, dst, src);
     }
-    /*
+    /**
      * TODO: Consider a worker function that performs the following block of code for: BT, BTC, BTR, and BTS.
      * It's somewhat inconvenient, because it needs to provide two results: an updated src AND an updated dst.
      *
@@ -341,7 +341,7 @@ X86.fnBTMem = function(dst, src)
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -349,7 +349,7 @@ X86.fnBTMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -376,13 +376,13 @@ X86.fnBTCMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTC.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -390,7 +390,7 @@ X86.fnBTCMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -416,13 +416,13 @@ X86.fnBTRMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTR.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -430,7 +430,7 @@ X86.fnBTRMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -456,13 +456,13 @@ X86.fnBTSMem = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnBTS.call(this, dst, src);
     }
-    /*
+    /**
      * src is usually positive BUT can also be negative (as the IA32 spec says: "The offset operand then selects
      * a bit position within the range −231 to 231 − 1 for a register offset and 0 to 31 for an immediate offset.")
      */
     let max = this.sizeData << 3;
     if (src >= max || src < -max) {
-        /*
+        /**
          * Now we need to divide src by 16 or 32, according to the OPERAND size, which means shifting it right
          * by either 4 or 5 bits.  That gives us a short or long INDEX, which we then multiply by the OPERAND size
          * to obtain to the corresponding short or long OFFSET that we must add to the original EA offset.
@@ -470,7 +470,7 @@ X86.fnBTSMem = function(dst, src)
         let i = src >> (this.sizeData == 2? 4 : 5);
         dst = this.getEAWord(this.segEA, this.offEA + i * this.sizeData);
     }
-    /*
+    /**
      * Now we convert src from a bit index to a bit mask.
      */
     src = 1 << (src & (this.sizeData == 2? 0xf : 0x1f));
@@ -510,7 +510,7 @@ X86.fnCALLFdw = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         return X86.fnGRPUndefined.call(this, dst, src);
     }
-    /*
+    /**
      * Originally, we would snapshot regLSP into opLSP because helpCALLF() could trigger a segment fault,
      * but additionally, the stack segment could trigger either a segment fault or a page fault; indeed,
      * any operation that performs multiple stack modifications must take this precaution and snapshot regLSP.
@@ -601,7 +601,7 @@ X86.fnDECw = function(dst, src)
  */
 X86.fnDIVb = function(dst, src)
 {
-    /*
+    /**
      * Detect zero divisor
      */
     if (!dst) {
@@ -609,7 +609,7 @@ X86.fnDIVb = function(dst, src)
         return dst;
     }
 
-    /*
+    /**
      * Detect too-small divisor (quotient overflow)
      */
     let result = ((src = this.regEAX & 0xffff) / dst);
@@ -637,14 +637,14 @@ X86.fnDIVb = function(dst, src)
 X86.fnDIVw = function(dst, src)
 {
     if (this.sizeData == 2) {
-        /*
+        /**
          * Detect zero divisor
          */
         if (!dst) {
             X86.helpDIVOverflow.call(this);
             return dst;
         }
-        /*
+        /**
          * Detect too-small divisor (quotient overflow)
          *
          * WARNING: We CANNOT simply do "src = (this.regEDX << 16) | this.regEAX", because if bit 15 of DX
@@ -703,7 +703,7 @@ X86.fnESC = function(dst, src)
  */
 X86.fnGRPFault = function(dst, src)
 {
-    /*
+    /**
      * This should NEVER be called on 8086/8088 CPUs, and yet we preset some of the handlers in aOpGrpPOPw,
      * aOpGrp4b, and aOpGrp4w to call it.  initProcessor() DOES patch aOpGrp4b[0x07] and aOpGrp4w[0x07] to
      * fnGRPInvalid, but that's it.
@@ -757,7 +757,7 @@ X86.fnGRPUndefined = function(dst, src)
  */
 X86.fnIDIVb = function(dst, src)
 {
-    /*
+    /**
      * Detect zero divisor
      */
     if (!dst) {
@@ -765,13 +765,13 @@ X86.fnIDIVb = function(dst, src)
         return dst;
     }
 
-    /*
+    /**
      * Detect too-small divisor (quotient overflow)
      */
     let div = ((dst << 24) >> 24);
     let result = ((src = (this.regEAX << 16) >> 16) / div)|0;
 
-    /*
+    /**
      * Note the following difference, from "AP-186: Introduction to the 80186 Microprocessor, March 1983":
      *
      *      "The 8086 will cause a divide error whenever the absolute value of the quotient is greater then 7FFFH
@@ -804,7 +804,7 @@ X86.fnIDIVb = function(dst, src)
 X86.fnIDIVw = function(dst, src)
 {
     if (this.sizeData == 2) {
-        /*
+        /**
          * Detect zero divisor
          */
         if (!dst) {
@@ -812,13 +812,13 @@ X86.fnIDIVw = function(dst, src)
             return dst;
         }
 
-        /*
+        /**
          * Detect too-small divisor (quotient overflow)
          */
         let div = ((dst << 16) >> 16);
         let result = ((src = (this.regEDX << 16) | (this.regEAX & 0xffff)) / div)|0;
 
-        /*
+        /**
          * Note the following difference, from "AP-186: Introduction to the 80186 Microprocessor, March 1983":
          *
          *      "The 8086 will cause a divide error whenever the absolute value of the quotient is greater then 7FFFH
@@ -870,13 +870,13 @@ X86.fnIDIVw = function(dst, src)
  */
 X86.fnIMUL8 = function(dst, src)
 {
-    /*
+    /**
      * NOTE: getIPDisp() already sign-extends the dst parameter, so fnIMULrw() needlessly sign-extends it again;
      * a small price to pay for a common function.
      */
     let result = X86.fnIMULrw.call(this, this.getIPDisp(), src);
 
-    /*
+    /**
      * NOTE: The above function already accounted for the 80386 cycle count, so we are simply accounting for the
      * increased time on an 80286; the 80186/80188 have even larger values, but we'll worry about that another day.
      */
@@ -912,7 +912,7 @@ X86.fnIMULn = function(dst, src)
         result = X86.fnIMULrd.call(this, dst, src);
     }
 
-    /*
+    /**
      * NOTE: The above functions already accounted for 80386 cycle counts, so we are simply accounting for the
      * increased time on an 80286; the 80186/80188 have even larger values, but we'll worry about that another day.
      */
@@ -1043,7 +1043,7 @@ X86.fnIMULw = function(dst, src)
  */
 X86.fnIMULrw = function(dst, src)
 {
-    /*
+    /**
      * Unlike fnIMULrd() below, we can use normal JavaScript multiplication, because there's no danger of
      * overflowing the floating-point result and losing accuracy in the bottom 16 bits.
      */
@@ -1071,7 +1071,7 @@ X86.fnIMULrw = function(dst, src)
  */
 X86.fnIMULrd = function(dst, src)
 {
-    /*
+    /**
      * The following code works, but I've stopped using it because it produces different results from an actual CPU
      * when overflow occurs; the bottom 32 bits of the result are still supposed to be accurate.
      *
@@ -1178,7 +1178,7 @@ X86.fnJMPFdw = function(dst, src)
 X86.fnLAR = function(dst, src)
 {
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
@@ -1227,27 +1227,26 @@ X86.fnLDS = function(dst, src)
  */
 X86.fnLEA = function(dst, src)
 {
-    /*
-     * TODO: Until I bite the bullet and choose a truly invalid value for X86.ADDR_INVALID (eg, null),
-     * this code must be disabled, because otherwise an instruction like "LEA ECX,[EAX-1]" will fail when
-     * EAX is zero.  And we can't have that.
-     *
+    /**
+     * This code was disabled when X86.ADDR_INVALID was -1, because otherwise a perfectly valid instruction
+     * like "LEA ECX,[EAX-1]" would fail when EAX was zero; now that X86.ADDR_INVALID is defined as a number
+     * outside the 32-bit range (ie, 0x100000000), it can be re-enabled.
+     */
     if (this.regEA === X86.ADDR_INVALID) {
-        //
-        // TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
-        // form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
-        // at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
-        // that (undocumented) behavior.
-        //
-        // And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
-        // (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
-        //
+        /**
+         * TODO: After reading http://www.os2museum.com/wp/undocumented-8086-opcodes/, it seems that this
+         * form of LEA (eg, "LEA AX,DX") simply returns the last calculated EA.  Since we always reset regEA
+         * at the start of a new instruction, we would need to preserve the previous EA if we want to mimic
+         * that (undocumented) behavior.
+         *
+         * And for completeness, we would have to extend EA tracking beyond the usual ModRM instructions
+         * (eg, XLAT, instructions that modify the stack pointer, and string instructions).  Anything else?
+         */
         X86.opUndefined.call(this);
         return dst;
     }
-    */
     this.nStepCycles -= this.cycleCounts.nOpCyclesLEA;
-    /*
+    /**
      * To properly deal with instructions such as:
      *
      *      #0467:10F8 678D0480         LEA      AX,[EAX+EAX*4]
@@ -1316,18 +1315,18 @@ X86.fnLFS = function(dst, src)
  */
 X86.fnLGDT = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (this.regEA === X86.ADDR_INVALID || I386 && (this.regPS & X86.PS.VM)) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * Hopefully it won't hurt to always fetch a 32-bit base address (even on an 80286), which we then
          * mask appropriately.
          */
         this.addrGDT = this.getLong(this.regEA + 2) & (this.maskData | (this.maskData << 8));
-        /*
+        /**
          * An idiosyncrasy of our ModRM decoders is that, if the OPERAND size is 32 bits, then it will have
          * fetched a 32-bit dst operand; we mask off those extra bits now.
          */
@@ -1378,18 +1377,18 @@ X86.fnLGS = function(dst, src)
  */
 X86.fnLIDT = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (this.regEA === X86.ADDR_INVALID || I386 && (this.regPS & X86.PS.VM)) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * Hopefully it won't hurt to always fetch a 32-bit base address (even on an 80286), which we then
          * mask appropriately.
          */
         this.addrIDT = this.getLong(this.regEA + 2) & (this.maskData | (this.maskData << 8));
-        /*
+        /**
          * An idiosyncrasy of our ModRM decoders is that, if the OPERAND size is 32 bits, then it will have
          * fetched a 32-bit dst operand; we mask off those extra bits now.
          */
@@ -1431,7 +1430,7 @@ X86.fnLLDT = function(dst, src)
  */
 X86.fnLMSW = function(dst, src)
 {
-    /*
+    /**
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM)) {
@@ -1454,11 +1453,11 @@ X86.fnLMSW = function(dst, src)
  */
 X86.fnLSL = function(dst, src)
 {
-    /*
+    /**
      * TODO: Is this an invalid operation if regEAWrite is set?  dst is required to be a register.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
@@ -1542,7 +1541,7 @@ X86.fnMOV = function(dst, src)
  */
 X86.fnMOVXb = function(dst, src)
 {
-    /*
+    /**
      * The ModRegByte handlers update the registers in the 1st column, but we need to update those in the 2nd column.
      *
      *      000:    AL      ->      000:    AX
@@ -1653,7 +1652,7 @@ X86.fnMOVsrw = function(dst, src)
         }
         break;
     }
-    /*
+    /**
      * We could just return src, but nStepCycles needs to be updated, too.
      */
     return X86.fnMOV.call(this, dst, src);
@@ -1704,7 +1703,7 @@ X86.fnMOVwsr = function(dst, src)
         break;
     }
 
-    /*
+    /**
      * When a 32-bit OPERAND size is in effect, segment register writes via opMOVwsr() must write 32 bits
      * (zero-extended) if the destination is a register, but only 16 bits if the destination is memory,
      * hence the setDataSize(2) below.
@@ -1714,7 +1713,7 @@ X86.fnMOVwsr = function(dst, src)
     if (this.regEAWrite !== X86.ADDR_INVALID) {
         this.setDataSize(2);
     }
-    /*
+    /**
      * We could just return src, but nStepCycles needs to be updated, too.
      */
     return X86.fnMOV.call(this, dst, src);
@@ -1801,7 +1800,7 @@ X86.fnMULw = function(dst, src)
         X86.fnMUL32.call(this, dst, this.regEAX);
         if (this.stepping == X86.STEPPING_80386_B1) {
             if (this.regEAX == 0x0417A000 && dst == 0x00000081) {
-                /*
+                /**
                  * Normally, the result should be 0x20FE7A000 (ie, regMDHi should be 0x2).
                  * I'm not sure what a typical B1 stepping failure looked like, so I'll set regMDHi to 0.
                  *
@@ -1941,12 +1940,12 @@ X86.fnPUSHw = function(dst, src)
 {
     let w = dst;
     if (this.opFlags & X86.OPFLAG.PUSHSP) {
-        /*
+        /**
          * This is the one case where must actually modify dst, so that the ModRM function will
          * not put a stale value back into the SP register.
          */
         dst = (dst - 2) & 0xffff;
-        /*
+        /**
          * And on the 8086/8088, the value we just calculated also happens to be the value that must
          * be pushed.
          */
@@ -1954,7 +1953,7 @@ X86.fnPUSHw = function(dst, src)
     }
     this.pushWord(w);
     this.nStepCycles -= (this.regEA === X86.ADDR_INVALID? this.cycleCounts.nOpCyclesPushReg : this.cycleCounts.nOpCyclesPushMem);
-    /*
+    /**
      * The PUSH is the only write that needs to occur; dst was the source operand and does not need to be rewritten.
      */
     this.opFlags |= X86.OPFLAG.NOWRITE;
@@ -2027,7 +2026,7 @@ X86.fnRCLd = function(dst, src)
     let count = src & this.nShiftCountMask;     // this 32-bit-only function could mask with 0x1f directly
     if (count) {
         let carry = this.getCarry();
-        /*
+        /**
          * JavaScript Alert: much like a post-8086 Intel CPU, JavaScript shift counts are mod 32,
          * so "dst >>> 32" is equivalent to "dst >>> 0", which doesn't shift any bits at all.  To
          * compensate, we shift one bit less than the maximum, and then shift one bit farther.
@@ -2105,7 +2104,7 @@ X86.fnRCRd = function(dst, src)
     let count = src & this.nShiftCountMask;     // this 32-bit-only function could mask with 0x1f directly
     if (count) {
         let carry = this.getCarry();
-        /*
+        /**
          * JavaScript Alert: much like a post-8086 Intel CPU, JavaScript shift counts are mod 32,
          * so "dst << 32" is equivalent to "dst << 0", which doesn't shift any bits at all.  To
          * compensate, we shift one bit less than the maximum, and then shift one bit farther.
@@ -2575,7 +2574,7 @@ X86.fnSGDT = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * We don't need to set the first word of the operand, because the ModRM group decoder that calls us
          * does that automatically with the value we return (dst).
          */
@@ -2584,7 +2583,7 @@ X86.fnSGDT = function(dst, src)
 
         let addr = this.addrGDT;
         if (this.model == X86.MODEL_80286) {
-            /*
+            /**
              * We previously left the 6th byte of the target operand "undefined".  But it turns out we have to set
              * it to *something*, because there's processor detection in PC-DOS 7.0 (at least in the SETUP portion)
              * that looks like this:
@@ -2617,7 +2616,7 @@ X86.fnSGDT = function(dst, src)
             addr |= (0xff000000|0);
         }
         else if (this.model >= X86.MODEL_80386) {
-            /*
+            /**
              * The 80386 added another wrinkle: Intel's documentation claimed that the 6th byte is either set to zero
              * or the high byte of the BASE field, depending on the OPERAND size; from the "INTEL 80386 PROGRAMMER'S
              * REFERENCE MANUAL 1986":
@@ -2631,7 +2630,7 @@ X86.fnSGDT = function(dst, src)
              * OPERAND size, not when using a 32-bit OPERAND size).
              */
             if (this.sizeData == 2) {
-                /*
+                /**
                  * Thanks to Michal Necasek, we now know that the: "386 in reality does not pay attention to the operand
                  * size (despite Intel's claims to the contrary). In fact Windows 3.11/Win32s relies on it -- at least in
                  * some configurations, it will execute SGDT in 16-bit code and will crash if all 6 bytes aren't stored."
@@ -2641,7 +2640,7 @@ X86.fnSGDT = function(dst, src)
                  *      addr &= 0x00ffffff;
                  */
             } else {
-                /*
+                /**
                  * When the OPERAND size is 4, our ModRM group decoder will call setLong(dst) rather than setShort(dst);
                  * we could fix that by calling setDataSize(2), but it seems safer/simpler to set the high bits (16-31)
                  * of dst to match the low bits (0-15) of addr, so that the caller will harmlessly rewrite what we are
@@ -2902,13 +2901,13 @@ X86.fnSIDT = function(dst, src)
     if (this.regEA === X86.ADDR_INVALID) {
         X86.opInvalid.call(this);
     } else {
-        /*
+        /**
          * We don't need to set the first word of the operand, because the ModRM group decoder that calls us
          * does that automatically with the value we return (dst).
          */
         dst = this.addrIDTLimit - this.addrIDT;
         this.assert(!(dst & ~0xffff));
-        /*
+        /**
          * As with SGDT, the 6th byte is technically "undefined" on an 80286, but we now set it to 0xFF, for the
          * same reasons discussed in SGDT (above).
          */
@@ -2918,7 +2917,7 @@ X86.fnSIDT = function(dst, src)
         }
         else if (this.model >= X86.MODEL_80386) {
             if (this.sizeData == 2) {
-                /*
+                /**
                  * Based on the SGDT information above, we no longer mask the 6th byte when the OPERAND size is 2.
                  *
                  *      addr &= 0x00ffffff;
@@ -3097,18 +3096,18 @@ X86.fnTESTw = function(dst, src)
 X86.fnVERR = function(dst, src)
 {
     this.opFlags |= X86.OPFLAG.NOWRITE;
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
     if (this.segVER.load(dst) !== X86.ADDR_INVALID) {
-        /*
+        /**
          * Verify that this is a readable segment; that is, of these four combinations (code+readable,
          * code+nonreadable, data+writable, date+nonwritable), make sure we're not the second combination.
          */
         if ((this.segVER.acc & (X86.DESC.ACC.TYPE.READABLE | X86.DESC.ACC.TYPE.CODE)) != X86.DESC.ACC.TYPE.CODE) {
-            /*
+            /**
              * For VERR, if the code segment is readable and conforming, the descriptor privilege level
              * (DPL) can be any value.
              *
@@ -3140,17 +3139,17 @@ X86.fnVERR = function(dst, src)
 X86.fnVERW = function(dst, src)
 {
     this.opFlags |= X86.OPFLAG.NOWRITE;
-    /*
+    /**
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      */
     this.nStepCycles -= (14 + (this.regEA === X86.ADDR_INVALID? 0 : 2));
     if (this.segVER.load(dst) !== X86.ADDR_INVALID) {
-        /*
+        /**
          * Verify that this is a writable data segment
          */
         if ((this.segVER.acc & (X86.DESC.ACC.TYPE.WRITABLE | X86.DESC.ACC.TYPE.CODE)) == X86.DESC.ACC.TYPE.WRITABLE) {
-            /*
+            /**
              * DPL must be greater than or equal to (have less or the same privilege as) both the current
              * privilege level and the selector's RPL.
              */
@@ -3204,7 +3203,7 @@ X86.fnIBTS = function(dst, src)
  */
 X86.fnXBTS = function(dst, src)
 {
-    /*
+    /**
      * Shift src right by the bit offset in [E]AX, then apply a mask equal to the number of bits in CL,
      * then mask the resulting bit string with the current OPERAND size.
      */
@@ -3238,7 +3237,7 @@ X86.fnXBTS = function(dst, src)
 X86.fnXCHGrb = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Decode which register was src
          */
         this.assert(!(dst & ~0xff));            // confirm that dst contains only 8 bits
@@ -3272,7 +3271,7 @@ X86.fnXCHGrb = function(dst, src)
         }
         this.nStepCycles -= this.cycleCounts.nOpCyclesXchgRR;
     } else {
-        /*
+        /**
          * This is a case where the ModRM decoder that's calling us didn't know it should have set regEAWrite,
          * so we compensate by updating regEAWrite.  However, setEAWord() has since been changed to revalidate
          * the write using segEA:offEA, so updating regEAWrite here isn't strictly necessary.
@@ -3303,7 +3302,7 @@ X86.fnXCHGrb = function(dst, src)
 X86.fnXCHGrw = function(dst, src)
 {
     if (this.regEA === X86.ADDR_INVALID) {
-        /*
+        /**
          * Decode which register was src
          */
         this.assert(!(dst & ~this.maskData));   // confirm that dst contains only 16 or 32 bits
@@ -3337,7 +3336,7 @@ X86.fnXCHGrw = function(dst, src)
         }
         this.nStepCycles -= this.cycleCounts.nOpCyclesXchgRR;
     } else {
-        /*
+        /**
          * This is a case where the ModRM decoder that's calling us didn't know it should have set regEAWrite,
          * so we compensate by updating regEAWrite.  However, setEAWord() has since been changed to revalidate
          * the write using segEA:offEA, so updating regEAWrite here isn't strictly necessary.

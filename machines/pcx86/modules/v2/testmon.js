@@ -11,7 +11,7 @@ import Keys from "../../../modules/v2/keys.js";
 import StrLib from "../../../modules/v2/strlib.js";
 import { APPNAME, APPVERSION, DEBUG } from "./defines.js";
 
-/*
+/**
  * Overview
  * --------
  *
@@ -54,7 +54,7 @@ export default class TestMonitor {
     constructor()
     {
         if (DEBUG) console.log("TestMonitor()");
-        /*
+        /**
          * Operations are added to the following queue by addOperation(), which ensures that as soon as it
          * transitions from empty to non-empty, a timeout handler is established to begin draining the queue.
          *
@@ -106,7 +106,7 @@ export default class TestMonitor {
         let commandParts = commandLine.split(' ');
         let command = commandParts[0];
 
-        /*
+        /**
          * Check for a matching command in the current "test suite" category.
          */
         let fExists = false;
@@ -118,7 +118,7 @@ export default class TestMonitor {
         let op, mode;
         if (typeof command == "string") {
             op = command;
-            /*
+            /**
              * If you don't want any special op processing (eg, for-loop), then use an explicit 'op' property.
              */
             if (this.addForLoop(op)) return true;
@@ -324,7 +324,7 @@ export default class TestMonitor {
                     let suite = this.tests[category];
                     let prompt = suite[TestMonitor.MODE.PROMPT];
                     if (prompt) {
-                        /*
+                        /**
                          * The 'prompt' property is allowed to contain a string or array of strings.
                          */
                         if (typeof prompt == "string") {
@@ -393,7 +393,7 @@ export default class TestMonitor {
         } else if (this.mode == TestMonitor.MODE.TERMINAL) {
             this.sendOutput(data);
         } else {
-            /*
+            /**
              * TODO: This is where we need to collect the response to any commands we have issued.
              */
             // this.sendOutput(data);

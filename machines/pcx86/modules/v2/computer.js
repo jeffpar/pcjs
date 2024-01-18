@@ -23,6 +23,28 @@ import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, MAXDEBUG, PRE
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Computer extends Component {
+
+    static STATE_FAILSAFE  = "failsafe";
+    static STATE_VALIDATE  = "validate";
+    static STATE_TIMESTAMP = "timestamp";
+    static STATE_VERSION   = "version";
+    static STATE_HOSTURL   = "url";
+    static STATE_BROWSER   = "browser";
+    static STATE_USERID    = "user";
+
+    /**
+     * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
+     * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
+     * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
+     */
+    static RESUME_REPOWER  = -1;    // resume without changing any state (for internal use only)
+    static RESUME_NONE     =  0;    // default (no resume)
+    static RESUME_AUTO     =  1;    // automatically save/restore state
+    static RESUME_PROMPT   =  2;    // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
+    static RESUME_DELETE   =  3;    // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
+
+    static UPDATES_PER_SECOND = 2;
+
     /**
      * Computer(parmsComputer, parmsMachine, fSuspended)
      *
@@ -90,13 +112,13 @@ export default class Computer extends Component {
         this.nDiagnostics = +this.getMachineParm('diagnostics', parmsComputer);
         if (!(this.nDiagnostics >= 0 && this.nDiagnostics <= 2)) this.nDiagnostics = 1;
 
-        /*
+        /**
          * nPowerChange is 0 while the power state is stable, 1 while power is transitioning
          * to "on", and -1 while power is transitioning to "off".
          */
         this.nPowerChange = 0;
 
-        /*
+        /**
          * TODO: Deprecate 'buswidth' (it should have always used camelCase)
          */
         this.nBusWidth = parmsComputer['busWidth'] || parmsComputer['buswidth'];
@@ -108,14 +130,14 @@ export default class Computer extends Component {
 
         this.url = this.getMachineParm('url') || "";
 
-        /*
+        /**
          * Generate a random number x (where 0 <= x < 1), add 0.1 so that it's guaranteed to be
          * non-zero, convert to base 36, and chop off the leading digit and "decimal" point.
          */
         this.sMachineID = (Math.random() + 0.1).toString(36).substr(2,12);
         this.sUserID = this.queryUserID();
 
-        /*
+        /**
          * Find the appropriate CPU (and Debugger and Control Panel, if any)
          *
          * CLOSURE COMPILER TIP: To override the type of a right-hand expression (as we need to do here,
@@ -128,7 +150,7 @@ export default class Computer extends Component {
             return;
         }
 
-        /*
+        /**
          * We now record whether or not the machine was originally configured with an FPU (this.fpu),
          * but even when not, we still initialize an FPU, so that the machine can be dynamically reconfigured.
          */
@@ -137,7 +159,7 @@ export default class Computer extends Component {
 
         this.dbg = /** @type {Debuggerx86} */ (Component.getComponentByType("Debugger", this.id));
 
-        /*
+        /**
          * Enumerate all the Video components for diagnostic displays, focus changes, and updateStatus() calls.
          */
         this.aVideo = [];
@@ -145,16 +167,17 @@ export default class Computer extends Component {
             this.aVideo.push(video);
         }
 
-        /*
+        /**
          * Initialize the Bus component
          */
         this.bus = new Busx86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
-        /*
+        /**
          * Iterate through all the components and override their notice() and print() methods
          * so that their output can be rerouted to a Diagnostic Display or Control Panel, if any.
          */
-        let iComponent, component;
+        let iComponent;
+        let component;
         let aComponents = Component.getComponents(this.id);
 
         this.panel = /** @type {Panel} */ (Component.getComponentByType("Panel", this.id));
@@ -182,7 +205,7 @@ export default class Computer extends Component {
 
         if (MAXDEBUG) this.printf(MESSAGE.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
-        /*
+        /**
          * Iterate through all the components again and call their initBus() handler, if any
          */
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
@@ -190,7 +213,7 @@ export default class Computer extends Component {
             if (component.initBus) component.initBus(this, this.bus, this.cpu, this.dbg);
         }
 
-        /*
+        /**
          * This timer replaces the CPU's old dedicated STATUS_UPDATES_PER_SECOND logic; periodic updateStatus()
          * calls are now our own responsibility.
          */
@@ -201,7 +224,7 @@ export default class Computer extends Component {
         let sStatePath = null;
         let sResume = this.getMachineParm('resume');
         if (sResume !== undefined) {
-            /*
+            /**
              * Decide whether the 'resume' property is a number or the path of a state file to resume.
              */
             if (sResume.length > 1) {
@@ -211,7 +234,7 @@ export default class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * The Computer 'state' property allows a state file to be specified independent of the 'resume' feature;
          * previously, you could only use 'resume' to load a state file -- which we still support, but loading a state
          * file that way prevents the machine's state from being saved, since we always resume from the 'resume' file.
@@ -247,7 +270,7 @@ export default class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * If sStatePath is set, we must use it.  But if there's no sStatePath AND resume is set,
          * then we have the option of resuming from a server-side state, assuming a valid USERID.
          */
@@ -271,7 +294,7 @@ export default class Computer extends Component {
 
         if (!this.bindings["power"]) this.fAutoPower = true;
 
-        /*
+        /**
          * Power on the computer, giving every component the opportunity to reset or restore itself.
          */
         if (!fSuspended && this.fAutoPower) this.wait(this.powerOn);
@@ -302,7 +325,7 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        /*
+                        /**
                          * By default, the Video textarea overlay has opacity and lineHeight styles set to "0"
                          * to make the overall textarea and its blinking caret invisible (respectively), so in order
                          * to use it as a diagnostic display, we must temporarily set both those styles to "1".
@@ -330,18 +353,18 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        /*
+                        /**
                          * Return the Video textarea overlay's opacity and lineHeight styles to their original values.
                          */
                         control.style.opacity = "0";
                         control.style.lineHeight = "0";
-                        /*
+                        /**
                          * Setting lineHeight in IE isn't sufficient to hide the caret; we must also set fontSize to "0",
                          * and we make the change IE-specific because it can have weird side-effects in other browsers (eg,
                          * it makes Safari on iOS over-zoom whenever the textarea receives focus).
                          */
                         if (WebLib.isUserAgent("MSIE")) control.style.fontSize = "0";
-                        /*
+                        /**
                          * We no longer clear the text, to give the user/system a chance to copy it to the clipboard.
                          *
                          *      control.value = "";
@@ -374,7 +397,7 @@ export default class Computer extends Component {
     {
         if (this.cDiagnosticScreens) {
             if (this.nDiagnostics == 1) {
-                /*
+                /**
                  * If non-prompting diagnostic output is enabled, immediately advance the
                  * state to completion and wait briefly before continuing with donePowerOn();
                  * this allows the user to pause the machine (by tapping a shift key) if desired.
@@ -392,7 +415,7 @@ export default class Computer extends Component {
                 this.printf(MESSAGE.NONE, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
-                /*
+                /**
                  * When notifyKbdEvent() is called, it will call setReady(true), ending the wait().
                  */
                 this.setReady(false);
@@ -536,7 +559,7 @@ export default class Computer extends Component {
         let value = WebLib.getURLParm(sParm);
         if (value) {
             try {
-                /*
+                /**
                  * Ideally, we could simply use strings as-is, but unfortunately, we need to convert all
                  * supported escape sequences to their underlying characters, and using eval() is the simplest
                  * way to deal with them; eg:
@@ -734,7 +757,7 @@ export default class Computer extends Component {
         }
         else if (resume > Computer.RESUME_NONE) {
             if (stateComputer.load(this.sStateData)) {
-                /*
+                /**
                  * Since we're resuming something (either a predefined state or a state from localStorage), let's
                  * create a "failsafe" checkpoint in localStorage, and destroy it at the end of a successful powerOn().
                  * Which means, of course, that if a previous "failsafe" checkpoint already exists, something bad
@@ -744,12 +767,12 @@ export default class Computer extends Component {
 
                 if (this.stateFailSafe.load()) {
                     if (resume != Computer.RESUME_AUTO && this.powerReport(stateComputer)) {
-                        /*
+                        /**
                          * Prompt the user; if they decline to restore, the state will be removed.
                          */
                         resume = Computer.RESUME_PROMPT;
                     }
-                    /*
+                    /**
                      * To ensure that the set() below succeeds, we need to call unload(), otherwise it may fail
                      * with a "read only" error (eg, "TypeError: Cannot assign to read only property 'timestamp'").
                      */
@@ -769,7 +792,7 @@ export default class Computer extends Component {
                             if (sCode == UserAPI.CODE.OK) {
                                 stateComputer.load(/** @type {string} */ (sData));
                             } else {
-                                /*
+                                /**
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
@@ -778,7 +801,7 @@ export default class Computer extends Component {
                                 } else {
                                     this.printf(MESSAGE.DEBUG, "%s: %s\n", sCode, sData);
                                 }
-                                /*
+                                /**
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the
                                  * server-side state.
                                  */
@@ -792,7 +815,7 @@ export default class Computer extends Component {
                             }
                         }
                     }
-                    /*
+                    /**
                      * If the load/parse was successful, and it was from localStorage (not sStateData),
                      * then we should to try verify that localStorage snapshot is current.  One reason it may
                      * NOT be current is if localStorage was full and we got a quota error during the last
@@ -800,13 +823,13 @@ export default class Computer extends Component {
                      */
                     if (fValidate) this.validateState(fRestore? stateComputer : null);
                 } else {
-                    /*
+                    /**
                      * RESUME_PROMPT indicates we should delete the state if they clicked Cancel to confirm() above.
                      */
                     if (resume == Computer.RESUME_PROMPT) stateComputer.clear();
                 }
             } else {
-                /*
+                /**
                  * If there's no state, then there should also be no validation timestamp; if there is, then once again,
                  * we're probably dealing with a quota error.
                  */
@@ -816,7 +839,7 @@ export default class Computer extends Component {
             delete this.stateComputer;
         }
 
-        /*
+        /**
          * Start powering all components, including any data they may need to restore their state;
          * we restore power to the CPU last.
          */
@@ -832,7 +855,7 @@ export default class Computer extends Component {
             }
         }
 
-        /*
+        /**
          * Assuming this is not a repower, we must perform another wait, because some components may
          * have marked themselves as "not ready" again (eg, the FDC component, if the restore forced it
          * to mount one or more additional disk images).
@@ -868,7 +891,7 @@ export default class Computer extends Component {
                 if (fRestore) {
                     data = stateComputer.get(component.id);
                     if (!data) {
-                        /*
+                        /**
                          * This is a hack that makes it possible for a machine whose ID has been
                          * supplemented with a hyphenated numeric suffix to find object IDs in states
                          * created from a machine without such a suffix.
@@ -884,7 +907,7 @@ export default class Computer extends Component {
                     }
                 }
 
-                /*
+                /**
                  * State.get() will return whatever was originally passed to State.set() (eg, an
                  * Object or a string), but components are supposed to store only Objects, so if a
                  * string comes back, something went wrong.  By explicitly eliminating "string" data,
@@ -894,7 +917,7 @@ export default class Computer extends Component {
                  */
                 if (typeof data === "string") data = null;
 
-                /*
+                /**
                  * If computer is null, this is simply a repower notification, which most components
                  * don't do anything with.  Exceptions include: CPU (since it may be halted) and Video
                  * (since its screen may be "turned off").
@@ -903,7 +926,7 @@ export default class Computer extends Component {
 
                     if (!this.flags.unloading) {
                         this.printf(MESSAGE.NOTICE, "Unable to restore hardware state\n");
-                        /*
+                        /**
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
                          * prevent any new state from being created, and then force a reload, which will
@@ -917,7 +940,7 @@ export default class Computer extends Component {
                             this.resume = Computer.RESUME_NONE;
                             WebLib.reloadPage();
                         } else {
-                            /*
+                            /**
                              * In all other cases, we set fRestoreError, which should trigger a call to
                              * powerReport() and then delete the offending state.
                              */
@@ -925,12 +948,12 @@ export default class Computer extends Component {
                         }
                     }
 
-                    /*
+                    /**
                      * Any failure triggers an automatic to call powerUp() again, without any state,
                      * in the hopes that the component can recover by performing a reset.
                      */
                     component.powerUp(null);
-                    /*
+                    /**
                      * We also disable the rest of the restore operation, because it's not clear
                      * the remaining state information can be trusted;  the machine is already in an
                      * inconsistent state, so we're not likely to make things worse, and the only
@@ -979,19 +1002,19 @@ export default class Computer extends Component {
 
         this.flags.powered = true;
 
-        /*
+        /**
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to power the CPU;
          * the CPU should begin executing immediately, unless a debugger is attached.
          */
         if (this.cpu) {
-            /*
+            /**
              * TODO: Do we not care about the return value here? (ie, is checking fRestoreError sufficient)?
              */
             this.powerRestore(this.cpu, stateComputer, fRepower, fRestore);
             this.cpu.autoStart();
         }
 
-        /*
+        /**
          * If the state was bad, offer to report it and then delete it.  Deleting may be moot, since invariably a new
          * state will be created on powerOff() before the next powerOn(), but it seems like good paranoia all the same.
          */
@@ -1019,7 +1042,7 @@ export default class Computer extends Component {
     checkPower()
     {
         if (this.flags.unloading) {
-            /*
+            /**
              * We happen to know that we're currently only called by the CPU's onClickRun() function, so
              * if the unloading flag is set, then we've somehow gotten into a weird state where the machine
              * thinks it's being (or has been) unloaded by the browser, but in fact, it has not.
@@ -1149,7 +1172,7 @@ export default class Computer extends Component {
         stateComputer.set(Computer.STATE_HOSTURL, WebLib.getHostURL());
         stateComputer.set(Computer.STATE_BROWSER, WebLib.getUserAgent());
 
-        /*
+        /**
          * Always power the CPU "down" first, just to help insure it doesn't ask other components to do anything
          * after they're no longer ready.
          */
@@ -1187,7 +1210,7 @@ export default class Computer extends Component {
                     }
                     if (!stateValidate.store() || !stateComputer.store()) {
                         sState = null;
-                        /*
+                        /**
                          * New behavior as of v1.13.2:  if it appears that localStorage is full, we blow it ALL away.
                          * Dedicated server-side storage is the only way we'll ever be able to reliably preserve a
                          * particular machine's state.  Historically, attempting to limp along with whatever localStorage
@@ -1197,7 +1220,7 @@ export default class Computer extends Component {
                     }
                 }
                 else {
-                    /*
+                    /**
                      * I used to ALWAYS clear (ie, delete) any associated computer state, but now I do this only if the
                      * current machine is "resumable", because there are situations where I have two configurations
                      * for the same machine -- one resumable and one not -- and I don't want the latter throwing away the
@@ -1338,21 +1361,21 @@ export default class Computer extends Component {
             };
             return true;
 
-        /*
+        /**
          * Technically, this binding should now be called "saveState", to clearly distinguish it from
          * the "Save Machine" control that's normally bound to the savePC() function in save.js.  Saving
          * an entire machine includes everything needed to start/restore the machine; eg, the machine
          * XML configuration file(s) *and* the JSON-encoded machine state.
          */
         case "save":
-            /*
+            /**
              * Since this feature depends on the server supporting the PCjs User API (see userapi.js),
              * and since pcjs.org is no longer running a Node web server, we disable the feature for that
              * particular host.
              */
             if (StrLib.endsWith(WebLib.getHostName(), "pcjs.org")) {
                 if (DEBUG) this.printf(MESSAGE.LOG, "Remote user API not available\n");
-                /*
+                /**
                  * We could also simply hide the control; eg:
                  *
                  *      control.style.display = "none";
@@ -1366,7 +1389,7 @@ export default class Computer extends Component {
             control.onclick = function onClickSave() {
                 let sUserID = computer.queryUserID(true);
                 if (sUserID) {
-                    /*
+                    /**
                      * I modified the test to include a check for sStatePath so that I could save new states
                      * for machines with existing states; otherwise, I'd have no (easy) way of capturing and
                      * updating their state.  Making the machine (even temporarily) resumable would have been
@@ -1381,7 +1404,7 @@ export default class Computer extends Component {
                         computer.printf(MESSAGE.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
-                /*
+                /**
                  * This seemed like a handy alternative, but it turned out to be a no-go, at least for large states:
                  *
                  *      let sState = computer.powerOff(true);
@@ -1428,7 +1451,7 @@ export default class Computer extends Component {
             sUserID = WebLib.getLocalStorageItem(Computer.STATE_USERID);
             if (sUserID !== undefined) {
                 if (!sUserID && fPrompt) {
-                    /*
+                    /**
                      * NOTE: Warning the user here that "Save" operations are not currently supported by pcjs.org is
                      * merely a precaution, because ordinarily, setBinding() should have already determined if we are
                      * running from pcjs.org and disabled any "Save" button.
@@ -1507,7 +1530,7 @@ export default class Computer extends Component {
      */
     saveServerState(sUserID, sState)
     {
-        /*
+        /**
          * We must pass fSync == true, because (as I understand it) browsers will blow off any async
          * requests when a page is being closed.  Since our request is synchronous, storeServerState()
          * should also return a result, but there's not much we can do with it, since browsers ALSO
@@ -1545,7 +1568,7 @@ export default class Computer extends Component {
     storeServerState(sUserID, sState, fSync)
     {
         if (DEBUG) this.printf("%s for store: %s\n", Computer.STATE_USERID, sUserID);
-        /*
+        /**
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
          * and whether or not it matters if we do an async request (currently, we're not, to try to ensure the request goes through).
          */
@@ -1601,19 +1624,19 @@ export default class Computer extends Component {
      */
     onReset()
     {
-        /*
+        /**
          * I'm going to start with the presumption that it makes little sense for an "unpowered" computer to be "reset";
          * ditto if the power state is currently being changed.
          */
         if (!this.flags.powered || this.nPowerChange) return;
 
-        /*
+        /**
          * Whether or not we autoStart on reset should depend at least in part on whether we were running originally.
          */
         if (this.cpu) {
             this.cpu.flags.autoStart = this.cpu.flags.running;
         }
-        /*
+        /**
          * If this is a "resumable" machine (and it's not using a predefined state), then we overload the reset
          * operation to offer an explicit "save or discard" option first.  This is currently the only UI we offer to
          * discard a machine's state, including any disk changes.  The traditional "reset" operation is still available
@@ -1623,13 +1646,13 @@ export default class Computer extends Component {
          * wants to clutter the UI with confusing options. ;-)
          */
         if (this.resume && !this.sResumePath) {
-            /*
+            /**
              * I used to bypass the prompt if this.resume == Computer.RESUME_AUTO, setting fSave to true automatically,
              * but that gives the user no means of resetting a resumable machine that contains errors in its resume state.
              */
             let fSave = (/* this.resume == Computer.RESUME_AUTO || */ this.flags.unloading || !Component.confirmUser("Click OK to reset this machine and discard all disk modifications."));
             this.powerOff(fSave, true);
-            /*
+            /**
              * Forcing the page to reload is an expedient option, but ugly. It's preferable to call powerOn()
              * and rely on all the components to reset themselves to their default state.  The components with
              * the greatest burden here are FDC and HDC, which must rely on the fReload flag to determine whether
@@ -1694,18 +1717,19 @@ export default class Computer extends Component {
     updateFocus(fScroll)
     {
         if (globals.browser && this.aVideo.length) {
-            /*
+            /**
              * This seems to be recommended work-around to prevent the browser from scrolling the focused element
              * into view.  The CPU is not a visual component, so when the CPU wants to set focus, the primary intent
              * is to ensure that keyboard input is fielded properly.
              */
-            let x = 0, y = 0;
+            let x = 0;
+            let y = 0;
             if (!fScroll) {
                 x = globals.window.scrollX;
                 y = globals.window.scrollY;
             }
 
-            /*
+            /**
              * TODO: We need a mechanism to determine the "active" display, instead of hard-coding this to aVideo[0].
              */
             this.aVideo[0].setFocus(fScroll);
@@ -1738,7 +1762,7 @@ export default class Computer extends Component {
       */
     updateStatus(fForce)
     {
-        /*
+        /**
          * fForce is generally set to true whenever the CPU is transitioning to/from a running state, in which case
          * cpu.updateStatus() will definitely want to hide/show register contents; however, at other times, when the
          * CPU is running, constantly updating the DOM controls too frequently can adversely impact overall performance.
@@ -1749,7 +1773,7 @@ export default class Computer extends Component {
          */
         if (this.cpu) this.cpu.updateStatus(fForce);
         if (this.panel) this.panel.updateStatus(fForce);
-        /*
+        /**
          * When called by our own timer for relatively infrequent DOM (see Computer.UPDATES_PER_SECOND), fForce is
          * explicitly set to false, and in those cases, we should avoid performing screen updates, because it may
          * subtly interfere with the Video component's normal refresh rate.
@@ -1785,7 +1809,7 @@ export default class Computer extends Component {
                 let eComputer = aeComputers[iComputer];
                 let parmsComputer = Component.getComponentParms(eComputer);
 
-                /*
+                /**
                  * We set fSuspended in the Computer constructor because we want to "power up" the
                  * computer ourselves, after any/all bindings are in place.
                  */
@@ -1793,14 +1817,14 @@ export default class Computer extends Component {
 
                 if (DEBUG) computer.printf("onInit(%b)\n", computer.flags.powered);
 
-                /*
+                /**
                  * Bind any "power", "reset" and "save" buttons.  An "erase" button was also considered,
                  * but "reset" now provides a way to force the machine to start from scratch again, so "erase"
                  * may be redundant now.
                  */
                 Component.bindComponentControls(computer, eComputer, APPCLASS);
 
-                /*
+                /**
                  * Power on the computer, giving every component the opportunity to reset or restore itself.
                  */
                 if (computer.fAutoPower) computer.wait(computer.powerOn);
@@ -1826,7 +1850,7 @@ export default class Computer extends Component {
             let computer = /** @type {Computer} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
 
-                /*
+                /**
                  * Clear new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = false;
@@ -1834,7 +1858,7 @@ export default class Computer extends Component {
                 if (DEBUG) computer.printf("onShow(%b,%b)\n", computer.flags.initDone, computer.flags.powered);
 
                 if (computer.flags.initDone && !computer.flags.powered) {
-                    /*
+                    /**
                      * Repower the computer, notifying every component to continue running as-is.
                      */
                     computer.powerOn(Computer.RESUME_REPOWER);
@@ -1878,7 +1902,7 @@ export default class Computer extends Component {
             let computer = /** @type {Computer} */ (Component.getComponentByType("Computer", parmsComputer['id']));
             if (computer) {
 
-                /*
+                /**
                  * Set new flag that Component functions (eg, notice()) should check before alerting the user.
                  */
                 computer.flags.unloading = true;
@@ -1898,28 +1922,7 @@ export default class Computer extends Component {
     }
 }
 
-Computer.STATE_FAILSAFE  = "failsafe";
-Computer.STATE_VALIDATE  = "validate";
-Computer.STATE_TIMESTAMP = "timestamp";
-Computer.STATE_VERSION   = "version";
-Computer.STATE_HOSTURL   = "url";
-Computer.STATE_BROWSER   = "browser";
-Computer.STATE_USERID    = "user";
-
-/*
- * The following constants define all the resume options.  Negative values (eg, RESUME_REPOWER) are for
- * internal use only, and RESUME_DELETE is not documented (it provides a way of deleting ALL saved states
- * whenever a resume is declined).  As a result, the only "end-user" values are 0, 1 and 2.
- */
-Computer.RESUME_REPOWER  = -1;  // resume without changing any state (for internal use only)
-Computer.RESUME_NONE     =  0;  // default (no resume)
-Computer.RESUME_AUTO     =  1;  // automatically save/restore state
-Computer.RESUME_PROMPT   =  2;  // automatically save but conditionally restore (WARNING: if restore is declined, any state is discarded)
-Computer.RESUME_DELETE   =  3;  // same as RESUME_PROMPT but discards ALL machines states whenever ANY machine restore is declined (undocumented)
-
-Computer.UPDATES_PER_SECOND = 2;
-
-/*
+/**
  * Initialize every Computer on the page.
  */
 WebLib.onInit(Computer.init);

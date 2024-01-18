@@ -32,6 +32,11 @@ import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class CPU extends Component {
+
+    static YIELDS_PER_SECOND = 60;
+
+    static BUTTONS = ["power", "reset"];
+
     /**
      * CPU(parmsCPU, nCyclesDefault)
      *
@@ -74,7 +79,7 @@ export default class CPU extends Component {
         this.nBaseCyclesPerSecond = nCycles;
         this.msPerYield = Math.round(1000 / CPU.YIELDS_PER_SECOND);
 
-        /*
+        /**
          * nTargetMultiplier replaces the old "speed" variable (0, 1, 2) and eliminates the need for
          * the constants (SPEED_SLOW, SPEED_FAST and SPEED_MAX).  The UI simply doubles the target multiplier
          * until we've exceeded the host's speed limit (ie, the current value is unable to reach the target),
@@ -84,18 +89,18 @@ export default class CPU extends Component {
         this.mhzBase = Math.round(this.nBaseCyclesPerSecond / 10000) / 100;
         this.mhzCurrent = this.mhzTarget = this.mhzBase * this.nTargetMultiplier;
 
-        /*
+        /**
          * We add a number of flags to those initialized by Component.
          */
         this.flags.starting = this.flags.running = this.flags.yield = false;
         this.flags.autoStart = parmsCPU['autoStart'];
 
-        /*
+        /**
          * TODO: Add some UI for displayLiveRegs (either an XML property, or a UI checkbox, or both)
          */
         this.flags.displayLiveRegs = false;
 
-        /*
+        /**
          * Get checksum parameters, if any. runCPU() behavior is not affected until fChecksum
          * is true, which won't happen until resetChecksum() is called with nCyclesChecksumInterval
          * ("csInterval") set to a positive value.
@@ -110,7 +115,7 @@ export default class CPU extends Component {
         this.nCyclesChecksumInterval = parmsCPU["csInterval"];
         this.nCyclesChecksumStop = parmsCPU["csStop"];
 
-        /*
+        /**
          * Array of countdown timers managed by addTimer() and setTimer().
          *
          * See also: getMSCycles(), getBurstCycles(), saveTimers(), restoreTimers(), and updateTimers()
@@ -184,7 +189,7 @@ export default class CPU extends Component {
         this.fpuActive = null;
         this.fpu = cmp.getMachineComponent("FPU", false);
 
-        /*
+        /**
          * Attach the ChipSet component to the CPU so that it can obtain the IDT vector number
          * of pending hardware interrupts in response to the ChipSet's updateINTR() notifications.
          *
@@ -192,7 +197,7 @@ export default class CPU extends Component {
          */
         this.chipset = cmp.getMachineComponent("ChipSet");
 
-        /*
+        /**
          * We've already saved the parmsCPU 'autoStart' setting, but there may be a machine (or URL) override.
          */
         this.flags.autoStart = cmp.getMachineBoolean('autoStart', this.flags.autoStart);
@@ -264,7 +269,7 @@ export default class CPU extends Component {
                 if (!this.restore(data)) return false;
                 this.resetChecksum();
             }
-            /*
+            /**
              * Give the Debugger a chance to do/print something once we've powered up
              */
             if (DEBUGGER && this.dbg) {
@@ -273,7 +278,7 @@ export default class CPU extends Component {
                 this.printf(MESSAGE.NONE, "No debugger detected\n");
             }
         }
-        /*
+        /**
          * The Computer component (which is responsible for all powerDown and powerUp notifications)
          * is now responsible for managing a component's fPowered flag, not us.
          *
@@ -293,7 +298,7 @@ export default class CPU extends Component {
      */
     powerDown(fSave, fShutdown)
     {
-        /*
+        /**
          * The Computer component (which is responsible for all powerDown and powerUp notifications)
          * is now responsible for managing a component's fPowered flag, not us.
          *
@@ -315,7 +320,7 @@ export default class CPU extends Component {
         if (this.flags.running) {
             return true;
         }
-        /*
+        /**
          * Start running automatically on power-up, assuming there's no Debugger.
          */
         if (this.flags.autoStart || this.flags.autoStart == null && !this.dbg) {
@@ -382,7 +387,7 @@ export default class CPU extends Component {
         if (this.flags.checksum) {
             this.nChecksum = 0;
             this.nCyclesChecksumNext = this.nCyclesChecksumStart - this.nTotalCycles;
-            /*
+            /**
              *  this.nCyclesChecksumNext = this.nCyclesChecksumStart + this.nCyclesChecksumInterval -
              *      (this.nTotalCycles % this.nCyclesChecksumInterval);
              */
@@ -405,7 +410,7 @@ export default class CPU extends Component {
     updateChecksum(nCycles)
     {
         if (this.flags.checksum) {
-            /*
+            /**
              * Get a 32-bit summation of the current CPU state and add it to our running 32-bit checksum
              */
             let fDisplay = false;
@@ -465,7 +470,7 @@ export default class CPU extends Component {
             } else {
                 sVal = "--------".substr(0, cch);
             }
-            /*
+            /**
              * TODO: Determine if this test actually avoids any redrawing when a register hasn't changed, and/or if
              * we should maintain our own (numeric) cache of displayed register values (to avoid creating these temporary
              * string values that will have to garbage-collected), and/or if this is actually slower, and/or if I'm being
@@ -493,7 +498,7 @@ export default class CPU extends Component {
         switch (sBinding) {
         case "power":
         case "reset":
-            /*
+            /**
              * The "power" and "reset" buttons are functions of the entire computer, not just the CPU,
              * but it's not always convenient to stick a power button in the Computer component definition,
              * so we record those bindings here and pass them on to the Computer component in initBus().
@@ -507,7 +512,7 @@ export default class CPU extends Component {
             control.onclick = function onClickRun() {
                 let fRunning = cpu.flags.running;
                 if (!cpu.cmp || !cpu.cmp.checkPower()) return;
-                /*
+                /**
                  * We snapped the CPU's running flag before calling checkPower() because there are rare (REPOWER)
                  * situations where checkPower() will have started the CPU as well.  So toggle the CPU state ONLY
                  * if the running flag remains unchanged.
@@ -557,7 +562,7 @@ export default class CPU extends Component {
         if (this.flags.running) {
             let delta = this.nStepCycles - nCycles;
             if (delta > 0) {
-                /*
+                /**
                  * NOTE: If the delta is negative, we would actually be increasing nStepCycles and nBurstCycles.
                  * Which used to be OK, but now that we have CPU timers that calculate and rely upon maximum bursts,
                  * this can no longer be allowed.  TODO: Determine if there are any, um, negative side-effects on
@@ -631,7 +636,7 @@ export default class CPU extends Component {
     {
         let nCycles = this.nTotalCycles + this.nRunCycles + this.nBurstCycles - this.nStepCycles;
         if (fScaled && this.nTargetMultiplier > 1 && this.mhzCurrent > this.mhzBase) {
-            /*
+            /**
              * We could scale the current cycle count by the current speed (this.mhzCurrent); eg:
              *
              *      nCycles = Math.round(nCycles / (this.mhzCurrent / this.mhzBase));
@@ -745,7 +750,7 @@ export default class CPU extends Component {
     {
         let fSuccess = true;
         if (nMultiplier !== undefined) {
-            /*
+            /**
              * If we haven't reached 90% (0.9) of the current target speed, revert to the default multiplier.
              */
             if (this.mhzCurrent > 0 && this.mhzCurrent < this.mhzTarget * 0.9) {
@@ -808,7 +813,7 @@ export default class CPU extends Component {
             this.msStartRun = this.msStartThisRun;
         }
 
-        /*
+        /**
          * Try to detect situations where the browser may have throttled us, such as when the user switches
          * to a different tab; in those situations, Chrome and Safari may restrict setTimeout() callbacks
          * to roughly one per second.
@@ -837,7 +842,7 @@ export default class CPU extends Component {
             msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
                 this.msStartRun += msDelta;
-                /*
+                /**
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
                  * in case, I make absolutely sure it cannot happen, since doing so could result in negative
                  * speed calculations.
@@ -867,7 +872,7 @@ export default class CPU extends Component {
 
         let msYield = this.msPerYield;
         if (this.nCyclesThisRun) {
-            /*
+            /**
              * Normally, we would assume we executed a full quota of work over msPerYield, but since the CPU
              * now has the option of calling yieldCPU(), that might not be true.  If nCyclesThisRun is correct, then
              * the ratio of nCyclesThisRun/nCyclesPerYield should represent the percentage of work we performed,
@@ -879,7 +884,7 @@ export default class CPU extends Component {
         let msElapsedThisRun = this.msEndThisRun - this.msStartThisRun;
         let msRemainsThisRun = msYield - msElapsedThisRun;
 
-        /*
+        /**
          * We could pass only "this run" results to calcSpeed():
          *
          *      nCycles = this.nCyclesThisRun;
@@ -897,7 +902,7 @@ export default class CPU extends Component {
         this.calcSpeed(nCycles, msElapsed);
 
         if (msRemainsThisRun < 0) {
-            /*
+            /**
              * Try "throwing out" the effects of large anomalies, by moving the overall run start time up;
              * ordinarily, this should only happen when the someone is using an external Debugger or some other
              * tool or feature that is interfering with our overall execution.
@@ -905,7 +910,7 @@ export default class CPU extends Component {
             if (msRemainsThisRun < -1000) {
                 this.msStartRun -= msRemainsThisRun;
             }
-            /*
+            /**
              * If the last burst took MORE time than we allotted (ie, it's taking more than 1 second to simulate
              * nBaseCyclesPerSecond), all we can do is yield for as little time as possible (ie, 0ms) and hope
              * that the simulation is at least usable.
@@ -917,7 +922,7 @@ export default class CPU extends Component {
         }
 
         if (DEBUG) {
-            /*
+            /**
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
@@ -1050,7 +1055,7 @@ export default class CPU extends Component {
             let timer = this.findTimer(state[0]);
             if (timer) {
                 timer[1] = state[1];
-                /*
+                /**
                  * When restoring from a new state (ie, when state[3] is true), the theory was we could use
                  * state[2] as-is, but in reality, overriding a component's timeout value is problematic, especially
                  * if a component wants to start using a new value (ie, we don't want an old value trumping it).
@@ -1071,7 +1076,7 @@ export default class CPU extends Component {
         let aTimerStates = [];
         for (let iTimer = 0; iTimer < this.aTimers.length; iTimer++) {
             let timer = this.aTimers[iTimer];
-            /*
+            /**
              * We now push a 4th element (true) to indicate that this is a new timer state, where timer[2] is
              * a tri-state value (positive for milliseconds, negative for cycles, zero for none); previously, it
              * was negative (-1) for none or else some number of milliseconds.
@@ -1109,7 +1114,7 @@ export default class CPU extends Component {
             let timer = this.aTimers[iTimer];
             if (fReset || timer[1] < 0) {
                 nCycles = ms > 0? this.getMSCycles(ms) : -ms;
-                /*
+                /**
                  * If the CPU is currently executing a burst of cycles, the number of cycles it has executed in
                  * that burst so far must NOT be charged against the cycle timeout we're about to set.  The simplest
                  * way to resolve that is to immediately call endBurst() and bias the cycle timeout by the number
@@ -1217,7 +1222,7 @@ export default class CPU extends Component {
         let msRunStart = 0, msRunStop = 0, nRunCycles = 0;
         if (DEBUG) msRunStart = Component.getTime();
 
-        /*
+        /**
          *  calcStartTime() initializes the cycle counter and timestamp for this runCPU() invocation.
          */
         this.calcStartTime();
@@ -1225,7 +1230,7 @@ export default class CPU extends Component {
         try {
             this.flags.yield = false;
             do {
-                /*
+                /**
                  * getBurstCycles() tells us how many cycles to execute as a burst.  The answer will always
                  * be less than getCurrentCyclesPerSecond(), because at the very least, our own timer fires more than
                  * once per second.
@@ -1237,7 +1242,7 @@ export default class CPU extends Component {
                     nCycles = this.chipset.getTimerCycleLimit(0, nCycles);
                     nCycles = this.chipset.getRTCCycleLimit(nCycles);
                 }
-                /*
+                /**
                  * Execute the burst.
                  */
                 try {
@@ -1246,7 +1251,7 @@ export default class CPU extends Component {
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
                     if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
-                    /*
+                    /**
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
                      * of fnGRPUndefined()), the browser may hang because we're failing to yield often enough.
@@ -1256,7 +1261,7 @@ export default class CPU extends Component {
                      */
                 }
 
-                /*
+                /**
                  * Terminate the burst, returning the number of cycles that stepCPU() actually ran.  If this
                  * returns zero, then presumably someone already called endBurst(), such as stopCPU(), and already
                  * took care of all the timers.
@@ -1312,7 +1317,7 @@ export default class CPU extends Component {
             clearTimeout(this.idRunTimeout);
             this.idRunTimeout = 0;
         }
-        /*
+        /**
          *  setSpeed() without a speed parameter leaves the selected speed in place, but also resets the
          *  cycle counter and timestamp for the current series of runCPU() calls, and calculates the maximum number
          *  of cycles for each burst based on the last known effective CPU speed.
@@ -1430,7 +1435,7 @@ export default class CPU extends Component {
     yieldCPU()
     {
         this.flags.yield = true;
-        /*
+        /**
          * The Debugger calls yieldCPU() after every message() to ensure browser responsiveness, but it looks
          * odd for those messages to show CPU state changes but for the CPU's own status display to not (ditto
          * for the Video display), so I've added this call to try to keep things looking synchronized.
@@ -1438,7 +1443,3 @@ export default class CPU extends Component {
         this.updateCPU();
     }
 }
-
-CPU.YIELDS_PER_SECOND = 60;
-
-CPU.BUTTONS = ["power", "reset"];

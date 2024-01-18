@@ -172,7 +172,7 @@ X86.helpDIV32 = function(dstLo, dstHi, src)
 X86.helpIDIV32 = function(dstLo, dstHi, src)
 {
     let bNegLo = 0, bNegHi = 0;
-    /*
+    /**
      *      dividend    divisor       quotient    remainder
      *        (dst)      (src)          (lo)         (hi)
      *      --------    -------       --------    ---------
@@ -227,7 +227,7 @@ X86.helpLoadCR0 = function(l)
     this.regCR0 = l | X86.CR0.ON;
     this.setProtMode();
     if (this.regCR0 & X86.CR0.PG) {
-        /*
+        /**
          * TODO: Determine if setting X86.CR0.PG when already set should really act as a flush;
          * I'm not currently worried about it, because I'm assuming CR0 is not rewritten that often.
          */
@@ -248,7 +248,7 @@ X86.helpLoadCR0 = function(l)
 X86.helpLoadCR3 = function(l)
 {
     this.regCR3 = l;
-    /*
+    /**
      * Normal use of regCR3 involves adding a 0-4K (12-bit) offset to obtain a page directory entry,
      * so let's ensure that the low 12 bits of regCR3 are always zero.
      */
@@ -438,7 +438,7 @@ X86.helpSRCxx = function()
  */
 X86.helpCALLF = function(off, sel)
 {
-    /*
+    /**
      * Since we always push the return address AFTER calling setCSIP(), and since either push could trigger
      * a fault (eg, segment fault, page fault, etc), we must not only snapshot regSS and regLSP, but also regCS,
      * so that helpFault() can always make CALLF restartable.
@@ -449,7 +449,7 @@ X86.helpCALLF = function(off, sel)
     let oldIP = this.getIP();
     let oldSize = (I386? this.sizeData : 2);
     if (this.setCSIP(off, sel, true) != null) {
-        /*
+        /**
          * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
          * into the 2 lower bytes, and leave the 2 upper bytes untouched; at least, that's the case for all other
          * segment register writes, so we assume this case is no different.  Hence, the hard-coded size of 2.
@@ -476,14 +476,14 @@ X86.helpCALLF = function(off, sel)
  */
 X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
 {
-    /*
+    /**
      * TODO: We assess the cycle cost up front, because otherwise, if loadIDT() fails, no cost may be assessed.
      */
     this.nStepCycles -= this.cycleCounts.nOpCyclesInt + nCycles;
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    /*
+    /**
      * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
      * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
      * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
@@ -531,7 +531,7 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     }
     let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
-        /*
+        /**
          * TODO: Determine if we should use pushData() instead of pushWord() for oldCS and nError, to deal with
          * the same 32-bit 80386 compatibility issue that helpCALLF(), opPUSHCS(), et al must deal with; namely, that
          * 32-bit segment register writes (and, reportedly, 32-bit error codes) don't modify the upper 16 bits.
@@ -563,7 +563,7 @@ X86.helpIRET = function()
 
     if ((this.regCR0 & X86.CR0.MSW.PE) && (this.regPS & (X86.PS.NT | X86.PS.VM)) == X86.PS.NT) {
         let addrNew = this.segTSS.base;
-        /*
+        /**
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          * TODO: Update switchTS() to assess a cycle cost; currently, all we assess is what's shown above.
          */
@@ -578,7 +578,7 @@ X86.helpIRET = function()
 
         if (I386) {
             if (this.regPS & X86.PS.VM) {
-                /*
+                /**
                  * On the 80386, in V86-mode, RF is the only defined EFLAGS bit above bit 15 that may be changed by IRETD.
                  * This is less restrictive than POPFD, which cannot change ANY bits above bit 15; see opPOPF() for details.
                  */
@@ -586,12 +586,12 @@ X86.helpIRET = function()
             }
             else {
                 if (newPS & X86.PS.VM) {
-                    /*
+                    /**
                      * As noted in loadDesc8(), where the V86-mode frame we're about to pop was originally pushed,
                      * these frames ALWAYS contain 32-bit values, so make sure that sizeData reflects that.
                      */
                     this.assert(!!(this.regCR0 & X86.CR0.MSW.PE) && this.sizeData == 4);
-                    /*
+                    /**
                      * We have to assume that a full V86-mode interrupt frame was on the protected-mode stack; namely:
                      *
                      *      low:    EIP
@@ -656,7 +656,7 @@ X86.helpRETF = function(n)
     if (n) this.setSP(this.getSP() + n);            // TODO: optimize
 
     if (this.setCSIP(newIP, newCS, false)) {        // returns true if a stack switch occurred
-        /*
+        /**
          * Fool me once, shame on... whatever.  If setCSIP() indicates a stack switch occurred,
          * make sure we're in protected mode, because automatic stack switches can't occur in real mode.
          */
@@ -664,7 +664,7 @@ X86.helpRETF = function(n)
 
         if (n) this.setSP(this.getSP() + n);        // TODO: optimize
 
-        /*
+        /**
          * As per Intel documentation: "If any of [the DS or ES] registers refer to segments whose DPL is
          * less than the new CPL (excluding conforming code segments), the segment register is loaded with
          * the null selector."
@@ -693,7 +693,7 @@ X86.helpRETF = function(n)
  */
 X86.helpDIVOverflow = function()
 {
-    /*
+    /**
      * Divide error exceptions are traps on the 8086 and faults on later processors.  I question the value of that
      * change, because it implies that someone might actually want to restart a failing divide.  The only reasonable
      * explanation I can see for the change is to enable the exception handler to accurately record the address of
@@ -757,7 +757,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     let fDispatch = false;
 
     if (!this.flags.complete) {
-        /*
+        /**
          * Prior to each new burst of instructions, stepCPU() sets fComplete to true, and the only (normal) way
          * for fComplete to become false is through stopCPU(), which isn't ordinarily called, except by the Debugger.
          */
@@ -768,7 +768,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
         fDispatch = true;
 
         if (this.nFault < 0) {
-            /*
+            /**
              * Single-fault (error code is passed through, and the responsible instruction is restartable.
              *
              * TODO: The following opCS/opLIP/opSS/opLSP checks are primarily required for 80386-based machines
@@ -781,7 +781,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
              */
             if (this.opCS != -1) {
                 if (this.opCS !== this.segCS.sel) {
-                    /*
+                    /**
                      * HACK: We slam the RPL into this.segCS.cpl to ensure that loading the original CS segment doesn't
                      * fail.  For example, if we faulted in the middle of a ring transition that loaded CS with a higher
                      * privilege (lower CPL) code segment, then our attempt here to reload the lower privilege (higher CPL)
@@ -811,14 +811,14 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
             }
         }
         else if (this.nFault != X86.EXCEPTION.DF_FAULT) {
-            /*
+            /**
              * Double-fault (error code is always zero, and the responsible instruction is not restartable).
              */
             nError = 0;
             nFault = X86.EXCEPTION.DF_FAULT;
         }
         else {
-            /*
+            /**
              * This is a triple-fault (usually referred to in Intel literature as a "shutdown", but it's actually a
              * "reset").  There's nothing to "dispatch" in this case, but we still want to let helpCheckFault() see
              * the triple-fault.  However, regardless what helpCheckFault() returns, we must leave via "throw -1",
@@ -834,7 +834,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     }
 
     if (X86.helpCheckFault.call(this, nFault, nError, fHalt) || nFault < 0) {
-        /*
+        /**
          * If this is a fault that would normally be dispatched BUT helpCheckFault() wants us to halt,
          * then we throw a bogus fault number (-1), simply to interrupt the current instruction in exactly
          * the same way that a dispatched fault would interrupt it.
@@ -847,13 +847,13 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
         this.nFault = nFault;
         X86.helpINT.call(this, nFault, nError, 0, nCycles);
 
-        /*
+        /**
          * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
          * so now we slip the new regLIP into opLIP, effectively turning their action into a no-op.
          */
         this.opLIP = this.regLIP;
 
-        /*
+        /**
          * X86.OPFLAG.FAULT flag is used by selected opcodes to provide an early exit, restore register(s),
          * or whatever is needed to help ensure instruction restartability; there is currently no general
          * mechanism for snapping and restoring all registers for any instruction that might fault.
@@ -869,7 +869,7 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
             this.opFlags |= X86.OPFLAG.FAULT;
         }
 
-        /*
+        /**
          * Since this fault is likely being issued in the context of an instruction that hasn't finished
          * executing, if we don't do anything to interrupt that execution (eg, throw a JavaScript exception),
          * then we would need to shut off all further reads/writes for the current instruction.
@@ -932,7 +932,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
 
     let bOpcode = this.probeAddr(this.regLIP);
 
-    /*
+    /**
      * OS/2 1.0 uses an INT3 (0xCC) opcode in conjunction with an invalid IDT to trigger a triple-fault
      * reset and return to real-mode, and these resets happen quite frequently during boot; for example,
      * OS/2 startup messages are displayed using a series of INT 0x10 BIOS calls for each character, and
@@ -949,7 +949,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         fHalt = false;
     }
 
-    /*
+    /**
      * There are a number of V86-mode exceptions we don't need to know about.  For starters, Windows 3.00
      * (and other versions of enhanced-mode Windows) use an ARPL to switch out of V86-mode, so we can ignore
      * those UD_FAULTs.
@@ -976,7 +976,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
     }
     // else if (DEBUG && nFault == X86.EXCEPTION.GP_FAULT && fHalt === undefined) fHalt = true;
 
-    /*
+    /**
      * If fHalt has been explicitly set to false, we also take that as a cue to disable fault messages
      * (which you can override by turning on CPU messages).
      */
@@ -984,7 +984,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         bitsMessage |= MESSAGE.CPU;
     }
 
-    /*
+    /**
      * Similarly, the PC AT ROM BIOS deliberately generates a couple of GP faults as part of the POST
      * (Power-On Self Test); we don't want to ignore those, but we don't want to halt on them either.  We
      * detect those faults by virtue of the LIP being in the range 0x0F0000 to 0x0FFFFF.
@@ -997,7 +997,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         fHalt = false;
     }
 
-    /*
+    /**
      * However, the foregoing notwithstanding, if MESSAGE.HALT is enabled along with all the other required
      * MESSAGE bits, then we want to halt regardless.
      */
@@ -1015,7 +1015,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
         if (DEBUGGER && this.dbg) {
             this.printf((fHalt? MESSAGE.PROGRESS : bitsMessage) + MESSAGE.ADDR, "%s\n", sMessage);
             if (fHalt) {
-                /*
+                /**
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
                  * this allows a fault to be dispatched when you single-step over a faulting instruction; you can
                  * then continue single-stepping into the fault handler, or start running again.
@@ -1027,7 +1027,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
                 this.dbg.stopCPU();
             }
         } else {
-            /*
+            /**
              * If there's no Debugger, then messageEnabled() must have returned false, which means that fHalt must
              * be true.  Which means we should shut the machine down.
              */

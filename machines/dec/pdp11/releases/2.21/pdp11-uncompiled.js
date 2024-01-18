@@ -5,14 +5,14 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.XX";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.xx";              // this @define is overridden with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
  *
  * @define {boolean}
  */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler
 
 /**
  * @define {string}
@@ -32,7 +32,7 @@ const CSSCLASS = "pcjs";
  *
  * @define {boolean}
  */
-const DEBUG = true;                     // this @define is overridden by the Closure Compiler (to false) to remove DEBUG-only code
+const DEBUG = true;
 
 /**
  * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
@@ -47,7 +47,7 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  *
  * @define {boolean}
  */
-var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+var DEBUGGER = true;
 
 /**
  * @define {string}
@@ -55,17 +55,20 @@ var DEBUGGER = true;                    // this @define is overridden by the Clo
 const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
 /**
- * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
- * true to manually to enable any hyper-aggressive DEBUG checks.
+ * MAXDEBUG can be set to true to enable MAXDEBUG-only code (ie, hyper-aggressive DEBUG checks that should only be
+ * enabled in special cases); it always overridden with false in the Closure Compiler release.
  *
  * @define {boolean}
  */
-const MAXDEBUG = false;                 // this @define is overridden by the Closure Compiler (to false) to remove MAXDEBUG-only code
+const MAXDEBUG = false;
 
 /**
+ * PRIVATE can be set to true to enable PRIVATE-only code (ie, code that should never be enabled in a public release);
+ * it always overridden with false in the Closure Compiler release.
+ *
  * @define {boolean}
  */
-const PRIVATE = false;                  // this @define is overridden by the Closure Compiler (to false) to enable PRIVATE code
+const PRIVATE = false;
 
 /*
  * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
@@ -113,9 +116,11 @@ const RS232 = {
 };
 
 /**
+ * SITEURL is the URL of the web server; it is replaced by the Closure Compiler (eg, "https://www.pcjs.org")
+ *
  * @define {string}
  */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+const SITEURL = "http://localhost:8088";
 
 /**
  * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
@@ -2011,7 +2016,7 @@ class StrLib {
     /**
      * toHex(n, cch, fPrefix)
      *
-     * Converts an integer to hex, with the specified number of digits (default of 4 or 8, max of 9).
+     * Converts an integer to hex, with the specified number of digits (default of 2/4/8, max of 9).
      *
      * You might be tempted to use the built-in n.toString(16) instead, but it doesn't zero-pad and it
      * doesn't properly convert negative values; for example, if n is -2147483647, then n.toString(16)
@@ -2026,7 +2031,7 @@ class StrLib {
      *      s = s.substr(0, cch).toUpperCase();
      *
      * @param {number|*} n (supports integers up to 36 bits now)
-     * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
+     * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of 2/4/8/9)
      * @param {boolean} [fPrefix]
      * @returns {string} the hex representation of n
      */
@@ -2035,7 +2040,9 @@ class StrLib {
         if (!cch) {
             // cch = Math.ceil(Math.log(Math.abs(n) + 1) / Math.log(16)) || 1;
             let v = Math.abs(n);
-            if (v <= 0xffff) {
+            if (v <= 0xff) {
+                cch = 2;
+            } else if (v <= 0xffff) {
                 cch = 4;
             } else if (v <= 0xffffffff) {
                 cch = 8;

@@ -11,7 +11,7 @@ import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import { DEBUG, DEBUGGER, I386 } from "./defines.js";
 
-/*
+/**
  * NOTE: The protected-mode support in this module was initially added for 80286 support, and is
  * currently being upgraded for 80386 support.  In a perfect world, all 80386-related support would
  * be disabled/skipped whenever the processor is merely an 80286.  And in fact, that's the case
@@ -30,6 +30,20 @@ import { DEBUG, DEBUGGER, I386 } from "./defines.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class Segx86 {
+
+    static ID = {
+        NULL:   0,          // "NULL"
+        CODE:   1,          // "CS"
+        DATA:   2,          // "DS", "ES", "FS", "GS"
+        STACK:  3,          // "SS"
+        TSS:    4,          // "TSS"
+        LDT:    5,          // "LDT"
+        VER:    6,          // "VER"
+        DBG:    7           // "DBG"
+    };
+
+    static CALLBREAK_SEL = 0x0001;
+
     /**
      * Segx86(cpu, sName)
      *
@@ -59,14 +73,14 @@ export default class Segx86 {
         this.checkReadV86 = this.checkReadWriteReal;
         this.checkWriteV86 = this.checkReadWriteReal;
 
-        /*
+        /**
          * Preallocated object for "probed" segment loads
          */
         this.probe = {
             sel: -1, base: 0, limit: 0, acc: 0, type: 0, ext: 0, addrDesc: X86.ADDR_INVALID
         };
 
-        /*
+        /**
          * The following properties are used for CODE segments only (ie, segCS); if the process of loading
          * CS also requires a stack switch, then fStackSwitch will be set to true; additionally, if the stack
          * switch was the result of a CALL (ie, fCall is true) and one or more (up to 32) parameters are on
@@ -148,7 +162,7 @@ export default class Segx86 {
     loadReal(sel, fProbe)
     {
         this.sel = sel & 0xffff;
-        /*
+        /**
          * Loading a new value into a segment register in real-mode alters ONLY the selector and the base;
          * all other attributes (eg, limit, operand size, address size, etc) are unchanged.  If you run any
          * code that switches to protected-mode, loads a 32-bit code segment, and then switches back to
@@ -187,7 +201,7 @@ export default class Segx86 {
         let addrDTLimit;
         let cpu = this.cpu;
 
-        /*
+        /**
          * Some instructions (eg, CALLF) load a 32-bit value for the selector, while others (eg, LDS) do not;
          * however, in ALL cases, only the low 16 bits are significant.
          */
@@ -200,7 +214,7 @@ export default class Segx86 {
             addrDT = cpu.segLDT.base;
             addrDTLimit = (addrDT + cpu.segLDT.limit)|0;
         }
-        /*
+        /**
          * The ROM BIOS POST executes some test code in protected-mode without properly initializing the LDT,
          * which has no bearing on the ROM's own code, because it never loads any LDT selectors, but if at the same
          * time our Debugger attempts to validate a selector in one of its breakpoints, that could cause some grief.
@@ -210,7 +224,7 @@ export default class Segx86 {
         if (addrDT) {
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
             if ((addrDTLimit - addrDesc)|0 >= 7) {
-                /*
+                /**
                  * TODO: This is the first of many steps toward accurately counting cycles in protected mode;
                  * I simply noted that "POP segreg" takes 5 cycles in real mode and 20 in protected mode, so I'm
                  * starting with a 15-cycle difference.  Obviously the difference will vary with the instruction,
@@ -237,7 +251,7 @@ export default class Segx86 {
     loadIDTReal(nIDT, nBytes = 0)
     {
         let cpu = this.cpu;
-        /*
+        /**
          * NOTE: The COMPAQ DeskPro 386 ROM loads the IDTR for the real-mode IDT with a limit of 0xffff instead
          * of the normal 0x3ff.  A limit higher than 0x3ff is OK, since all real-mode IDT entries are 4 bytes, and
          * there's no way to issue an interrupt with a vector > 0xff.  Just something to be aware of.
@@ -250,7 +264,7 @@ export default class Segx86 {
             }
         }
 
-        /*
+        /**
          * Intel documentation for INT/INTO under "REAL ADDRESS MODE EXCEPTIONS" says:
          *
          *      "[T]he 80286 will shut down if the SP = 1, 3, or 5 before executing the INT or INTO instruction--due to lack of stack space"
@@ -319,7 +333,7 @@ export default class Segx86 {
      */
     checkReadWriteReal(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -343,7 +357,7 @@ export default class Segx86 {
      */
     checkReadProt(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -363,7 +377,7 @@ export default class Segx86 {
      */
     checkReadProtDown(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -397,7 +411,7 @@ export default class Segx86 {
      */
     checkWriteProt(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -417,7 +431,7 @@ export default class Segx86 {
      */
     checkWriteProtDown(off, cb)
     {
-        /*
+        /**
          * Since off could be a 32-bit value with the sign bit (bit 31) set, we must convert
          * it to an unsigned value using ">>>"; offMax was already converted at segment load time.
          */
@@ -451,7 +465,7 @@ export default class Segx86 {
      */
     checkReadDebugger(off, cb)
     {
-        /*
+        /**
          * The Debugger doesn't have separate "check" interfaces for real and protected mode,
          * since it's not performance-critical.  If addrDesc is invalid, then we assume real mode.
          *
@@ -477,7 +491,7 @@ export default class Segx86 {
      */
     checkWriteDebugger(off, cb)
     {
-        /*
+        /**
          * The Debugger doesn't have separate "check" interfaces for real and protected mode,
          * since it's not performance-critical.  If addrDesc is invalid, then we assume real mode.
          *
@@ -517,7 +531,7 @@ export default class Segx86 {
         let addrDT = (sel & X86.SEL.LDT)? this.cpu.segLDT.base : this.cpu.addrGDT;
         this.addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
 
-        /*
+        /**
          * NOTE: This code must take care to leave the mode of the TSS, LDT, and VER segment registers alone;
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
@@ -557,7 +571,7 @@ export default class Segx86 {
         this.ext = 0;
         this.addrDesc = addrDesc;
 
-        /*
+        /**
          * NOTE: This code must take care to leave the mode of the TSS, LDT, and VER segment registers alone;
          * in particular, we must not allow a real-mode LOADALL to modify their mode, because the rest of PCx86
          * assumes that their mode will never change (they were allocated with fProt set to true).
@@ -603,7 +617,7 @@ export default class Segx86 {
     {
         let cpu = this.cpu;
 
-        /*
+        /**
          * If the previous load was a successful "probed" load of the same segment, then we simply load
          * up all the cached descriptor values from the probe and return.
          */
@@ -621,15 +635,16 @@ export default class Segx86 {
             return this.base;
         }
 
-        /*
+        /**
          * Any other load, probed or otherwise, should "flush" the probe cache, by setting probe.sel to -1.
          */
         this.probe.sel = -1;
 
-        /*
+        /**
          * Load the descriptor from memory.
          */
-        let limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET), limitOrig;
+        let limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET);
+        let limitOrig;
         let acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
         let type = (acc & X86.DESC.ACC.TYPE.MASK);
         let base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
@@ -651,14 +666,14 @@ export default class Segx86 {
 
         case Segx86.ID.CODE:
 
-            /*
+            /**
              * NOTE: Since we are Segx86.ID.CODE, we can use this.cpl instead of the more convoluted
              * this.cpu.segCS.cpl.
              */
             fCall = this.fCall;
             this.fStackSwitch = false;
 
-            /*
+            /**
              * This special bit of code is currently used only by the Debugger, when it needs to inject
              * a 16:32 callback address into the machine that it can intercept calls to.  We call these
              * "call break" addresses, because they're essentially breakpoints that only operate when
@@ -691,7 +706,7 @@ export default class Segx86 {
             sizeGate = -1;
 
             if (!selMasked) {
-                /*
+                /**
                  * selMasked is really the descriptor table offset, and a zero offset is fine for the IDT,
                  * and it's probably fine for the LDT, but it's definitely NOT fine for the GDT, because
                  * that's a reference to the null selector.  A null selector is allowed in DS, ES, FS, or GS,
@@ -705,7 +720,7 @@ export default class Segx86 {
             }
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
-                /*
+                /**
                  * There are three basic ways to load a new code segment (ignoring special cases like LOADALL):
                  *
                  *      1) CALLF (fCall is true)
@@ -719,7 +734,7 @@ export default class Segx86 {
                     sizeGate = 0;
                 }
                 else if (fCall !== false) {
-                    /*
+                    /**
                      * We deal with CALLF/JMPF first.  We've already ascertained that the selector type is a
                      * segment, not a gate, so the next important distinction is CONFORMING vs. non-CONFORMING.
                      *
@@ -742,14 +757,14 @@ export default class Segx86 {
                     }
                 }
                 else {
-                    /*
+                    /**
                      * We deal with RETF next.  For starters, we must verify that RPL >= CPL.  Moreover, if
                      * RPL > CPL, then we have a privilege level change that requires a stack switch, assuming
                      * the stack selector is acceptable.
                      */
                     if (rpl >= this.cpl) {
                         if (rpl > this.cpl) {
-                            /*
+                            /**
                              * TODO: See if we can defer calling setSS() and setSP() until AFTER the final checks
                              * below, because if, for example, the new CS is not PRESENT, we must generate a fault,
                              * which in turn must restore the original stack, which means helpRETF() must snapshot
@@ -810,7 +825,7 @@ export default class Segx86 {
             if (sizeGate > 0 && !(acc & X86.DESC.ACC.PRESENT)) sizeGate = 0;
 
             if (sizeGate > 0) {
-                /*
+                /**
                  * Note that since GATE_INT/GATE_TRAP descriptors should appear in the IDT only, that means sel
                  * will actually be nIDT * 8, which means the rpl will always be zero; additionally, the nWords
                  * portion of ACC should always be zero, but that's really dependent on the descriptor being properly
@@ -819,13 +834,13 @@ export default class Segx86 {
                 cplOld = this.cpl;
                 fIDT = (addrDesc == cpu.addrIDT + sel);
 
-                /*
+                /**
                  * Software interrupts (where fIDT is true and cpu.nFault < 0) require an additional test:
                  * if DPL < CPL, then we must fall into the GP_FAULT code at the end of this case.
                  */
                 if (rpl <= dpl && (!fIDT || cpu.nFault >= 0 || cplOld <= dpl))  {
 
-                    /*
+                    /**
                      * For gates, there is no "base" and "limit", but rather "selector" and "offset"; the selector
                      * is located where the first 16 bits of base are normally stored, and the offset comes from the
                      * original limit and ext fields.
@@ -840,13 +855,13 @@ export default class Segx86 {
                     let selStack = 0, offStack = 0;
                     cplNew = (selCode & X86.SEL.RPL);
 
-                    /*
+                    /**
                      * If a stack switch is required, we must perform "probed" loads of both the new selCode
                      * and selStack segments, so that if either probe fails, a fault will be generated while the
                      * old code segment is still loaded.
                      */
                     if (cplNew < cplOld) {
-                        /*
+                        /**
                          * Intel pseudo-code suggests that selStack should be "probed" before selCode, but it also
                          * implies that we need to have the DPL of selCode in order to select the correct selStack,
                          * so who knows...?
@@ -854,7 +869,7 @@ export default class Segx86 {
                         if (this.loadProt(selCode, true) === X86.ADDR_INVALID) {
                             return X86.ADDR_INVALID;
                         }
-                        /*
+                        /**
                          * Intel pseudo-code suggests that the TSS stack pointer offset is based on the DPL of selCode
                          * rather than the RPL of selCode.  TODO: Check for instances where DPL and RPL of selCode differ,
                          * and then figure out which should really be used.
@@ -869,7 +884,7 @@ export default class Segx86 {
                         }
                         selStack = cpu.getShort(addrTSS + offSP + lenSP);
 
-                        /*
+                        /**
                          * Intel pseudo-code indicates at least FIVE discrete selStack tests that could trigger
                          * a TS_FAULT at this point:
                          *
@@ -887,14 +902,14 @@ export default class Segx86 {
                         if (cpu.segSS.loadProt(selStack, true) === X86.ADDR_INVALID) {
                             return X86.ADDR_INVALID;
                         }
-                        /*
+                        /**
                          * Both probes succeeded, so we can proceed with "normal" loads for both selCode and
                          * selStack (which should automatically use the values cached by the "probed" loads above).
                          */
                         offStack = (lenSP == 2)? cpu.getShort(addrTSS + offSP) : cpu.getLong(addrTSS + offSP);
                     }
 
-                    /*
+                    /**
                      * Now that we're past all the probes, it should be safe to clear all flags that need clearing.
                      */
                     let regPS = cpu.regPS;
@@ -903,7 +918,7 @@ export default class Segx86 {
                         cpu.setProtMode(true, false);
                     }
 
-                    /*
+                    /**
                      * TODO: Consider whether we can skip this loadProt() call if this.sel already contains selCode
                      * (and the previous mode matches, which might require we cache the mode in the Segx86 object, too).
                      */
@@ -938,7 +953,7 @@ export default class Segx86 {
                         cpu.setSP(offStack);
 
                         if (regPS & X86.PS.VM) {
-                            /*
+                            /**
                              * Frames coming from V86-mode ALWAYS contain 32-bit values, and look like this:
                              *
                              *      low:    EIP
@@ -986,7 +1001,7 @@ export default class Segx86 {
 
         case Segx86.ID.DATA:
             if (selMasked) {
-                /*
+                /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
                  *      Fault 0x0B (0x002C) on opcode 0x8E at 3190:3A05 (%112625)
@@ -1025,7 +1040,7 @@ export default class Segx86 {
                     X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;
                 }
-                /*
+                /**
                  * TODO: This would be a good place to perform some additional access rights checks, too.
                  */
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
@@ -1052,7 +1067,7 @@ export default class Segx86 {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }
-            /*
+            /**
              * For more efficient IOPM lookups, we cache the starting linear address in segTSS.addrIOPM, and the
              * last valid address in segTSS.addrIOPMLimit.
              */
@@ -1063,7 +1078,7 @@ export default class Segx86 {
             break;
 
         case Segx86.ID.VER:
-            /*
+            /**
              * For LSL, we must support any descriptor marked X86.DESC.ACC.TYPE.SEG, as well as TSS and LDT descriptors.
              */
             if (!(type & X86.DESC.ACC.TYPE.SEG) && type > X86.DESC.ACC.TYPE.TSS286_BUSY && type != X86.DESC.ACC.TYPE.TSS386 && type != X86.DESC.ACC.TYPE.TSS386_BUSY) {
@@ -1072,7 +1087,7 @@ export default class Segx86 {
             break;
 
         default:
-            /*
+            /**
              * The only other cases are:
               *
               *     Segx86.ID.NULL, Segx86.ID.LDT, and Segx86.ID.DBG
@@ -1099,7 +1114,7 @@ export default class Segx86 {
             this.type = type;
             this.ext = ext;
             this.addrDesc = addrDesc;
-            /*
+            /**
              * A quick recap of what updateMode(fLoad=true, fProt=true, fV86=false) actually updates:
              *
              *      cpl
@@ -1159,14 +1174,14 @@ export default class Segx86 {
         let addrOld = cpu.segTSS.base;
 
         if (!fNest) {
-            /*
+            /**
              * TODO: Verify that it is (always) correct to require that the BUSY bit be currently set.
              */
             if (!(cpu.segTSS.type & X86.DESC.ACC.TYPE.TSS_BUSY)) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, selNew & X86.ERRCODE.SELMASK);
                 return false;
             }
-            /*
+            /**
              * TODO: Should I be more paranoid about writing our cached ACC value back into the descriptor?
              */
             cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc &= ~X86.DESC.ACC.TYPE.TSS_BUSY);
@@ -1189,16 +1204,17 @@ export default class Segx86 {
             cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc |= X86.DESC.ACC.TYPE.TSS_BUSY);
         }
 
-        /*
+        /**
          * Now that we're done checking the TSS_BUSY bit in the TYPE field (which is a subset of the ACC field),
          * sync any changes made above in the ACC field to the TYPE field.
          */
         cpu.segTSS.type = (cpu.segTSS.type & ~X86.DESC.ACC.TYPE.TSS_BUSY) | (cpu.segTSS.acc & X86.DESC.ACC.TYPE.TSS_BUSY);
 
-        /*
+        /**
          * Update the old TSS
          */
-        let offSS, offSP;
+        let offSS;
+        let offSP;
         if (cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286 || cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286_BUSY) {
             cpu.setShort(addrOld + X86.TSS286.TASK_IP, cpu.getIP());
             cpu.setShort(addrOld + X86.TSS286.TASK_PS, cpu.getPS());
@@ -1214,7 +1230,7 @@ export default class Segx86 {
             cpu.setShort(addrOld + X86.TSS286.TASK_CS, cpu.segCS.sel);
             cpu.setShort(addrOld + X86.TSS286.TASK_SS, cpu.segSS.sel);
             cpu.setShort(addrOld + X86.TSS286.TASK_DS, cpu.segDS.sel);
-            /*
+            /**
              * Reload all registers from the new TSS; it's important to reload the LDTR sooner
              * rather than later, so that as segment registers are reloaded, any LDT selectors will
              * will be located in the correct table.
@@ -1258,14 +1274,14 @@ export default class Segx86 {
             cpu.setLong(addrOld + X86.TSS386.TASK_SS,  cpu.segSS.sel);
             cpu.setLong(addrOld + X86.TSS386.TASK_DS,  cpu.segDS.sel);
 
-            /*
+            /**
              * segFS and segGS exist only on 80386 machines
              */
             cpu.assert(I386 && cpu.model >= X86.MODEL_80386);
             cpu.setLong(addrOld + X86.TSS386.TASK_FS,  cpu.segFS.sel);
             cpu.setLong(addrOld + X86.TSS386.TASK_GS,  cpu.segGS.sel);
 
-            /*
+            /**
              * Reload all registers from the new TSS; it's important to reload the LDTR sooner
              * rather than later, so that as segment registers are reloaded, any LDT selectors will
              * will be located in the correct table.
@@ -1284,7 +1300,7 @@ export default class Segx86 {
             cpu.segES.load(cpu.getShort(addrNew + X86.TSS386.TASK_ES));
             cpu.segDS.load(cpu.getShort(addrNew + X86.TSS386.TASK_DS));
 
-            /*
+            /**
              * segFS and segGS exist only on 80386 machines
              */
             cpu.assert(I386 && cpu.model >= X86.MODEL_80386);
@@ -1302,7 +1318,7 @@ export default class Segx86 {
             cpu.setSP(cpu.getLong(addrNew + offSP));
         }
 
-        /*
+        /**
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          */
         if (fNest) cpu.setShort(addrNew + X86.TSS286.PREV_TSS, selOld);
@@ -1415,7 +1431,7 @@ export default class Segx86 {
             fProt = !!(this.cpu.regCR0 & X86.CR0.MSW.PE);
         }
 
-        /*
+        /**
          * The fExpDown property is used for STACK segments only (ie, segSS); we want to make it easier for
          * setSS() to set stack lower and upper limits, which requires knowing whether or not the segment is
          * marked as EXPDOWN.
@@ -1436,7 +1452,7 @@ export default class Segx86 {
                 this.load = this.loadV86;
                 this.checkRead = this.checkReadV86;
                 this.checkWrite = this.checkWriteV86;
-                /*
+                /**
                  * One important feature of V86-mode (as compared to real-mode) are that other segment attributes
                  * (eg, limit, operand size, address size, etc) ARE updated, whereas in real-mode, segment attributes
                  * remain set to whatever was in effect in protected-mode.
@@ -1451,7 +1467,7 @@ export default class Segx86 {
                 return;
             }
 
-            /*
+            /**
              * TODO: For null GDT selectors, should we rely on the descriptor being invalid, or should we assume that
              * the null descriptor might contain uninitialized (or other) data?  I'm assuming the latter, hence the
              * following null selector test.  However, if we're not going to consult the descriptor, is there anything
@@ -1463,19 +1479,19 @@ export default class Segx86 {
 
             }
             else if (this.type & X86.DESC.ACC.TYPE.SEG) {
-                /*
+                /**
                  * If the READABLE bit of CODE_READABLE is not set, then disallow reads.
                  */
                 if ((this.type & X86.DESC.ACC.TYPE.CODE_READABLE) == X86.DESC.ACC.TYPE.CODE_EXECONLY) {
                     this.checkRead = this.checkReadProtDisallowed;
                 }
-                /*
+                /**
                  * If the CODE bit is set, or the the WRITABLE bit is not set, then disallow writes.
                  */
                 if ((this.type & X86.DESC.ACC.TYPE.CODE) || !(this.type & X86.DESC.ACC.TYPE.WRITABLE)) {
                     this.checkWrite = this.checkWriteProtDisallowed;
                 }
-                /*
+                /**
                  * If the CODE bit is not set *and* the EXPDOWN bit is set, then invert the limit check.
                  */
                 if ((this.type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.EXPDOWN)) == X86.DESC.ACC.TYPE.EXPDOWN) {
@@ -1484,7 +1500,7 @@ export default class Segx86 {
                     this.fExpDown = true;
                 }
                 if (fLoad && this.id < Segx86.ID.VER) {
-                    /*
+                    /**
                      * We must update the descriptor's ACCESSED bit whenever the segment is "accessed" (ie,
                      * loaded); unlike the ACCESSED and DIRTY bits in PTEs, a descriptor ACCESSED bit is only
                      * updated on loads, not on every memory access.
@@ -1501,7 +1517,7 @@ export default class Segx86 {
                     if ((this.sel & ~X86.SEL.RPL) && this.addrDesc !== X86.ADDR_INVALID) {
                         let addrType = this.addrDesc + X86.DESC.ACC.TYPE.OFFSET;
                         let bType = this.cpu.getByte(addrType);
-                        /*
+                        /**
                          * This code used to ALWAYS call setByte(), but that's a waste of time if ACCESSED is already
                          * set.  TODO: It would also be nice if we could simply use the cached type value, and eliminate
                          * the getByte() call; that seems a bit risky, but I think we should still try it someday.
@@ -1513,11 +1529,11 @@ export default class Segx86 {
                 }
             }
 
-            /*
+            /**
              * TODO: For non-SEG descriptors, are there other checks or functions we should establish?
              */
 
-            /*
+            /**
              * Any update to the following properties must occur only on segment loads, not simply when
              * we're updating segment registers as part of a mode change.
              */
@@ -1536,7 +1552,7 @@ export default class Segx86 {
             }
             return;
         }
-        /*
+        /**
          * One important feature of real-mode (as compared to V86-mode) are that other segment attributes
          * (eg, limit, operand size, address size, etc) are NOT updated, enabling features like "big real-mode"
          * (aka "unreal mode"), which is used by system software like HIMEM.SYS to access extended memory from
@@ -1571,7 +1587,7 @@ export default class Segx86 {
                 if (this.id == Segx86.ID.CODE) sDPL += " cpl=" + this.cpl;
                 dbg.printf(MESSAGE.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
-            /*
+            /**
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
              * EXT field of descriptors, even when the processor is an 80286; eg, the EXT field below has been set to 0x000F:
              *
@@ -1616,7 +1632,7 @@ export default class Segx86 {
 
             if ((addrDTLimit - addrDesc)|0 >= 7) {
 
-                /*
+                /**
                  * Load the descriptor from memory using probeAddr().
                  */
                 let limit = cpu.probeAddr(addrDesc + X86.DESC.LIMIT.OFFSET, 2);
@@ -1678,16 +1694,3 @@ export default class Segx86 {
      }
      */
 }
-
-Segx86.ID = {
-    NULL:   0,          // "NULL"
-    CODE:   1,          // "CS"
-    DATA:   2,          // "DS", "ES", "FS", "GS"
-    STACK:  3,          // "SS"
-    TSS:    4,          // "TSS"
-    LDT:    5,          // "LDT"
-    VER:    6,          // "VER"
-    DBG:    7           // "DBG"
-};
-
-Segx86.CALLBREAK_SEL = 0x0001;

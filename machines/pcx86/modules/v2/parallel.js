@@ -34,6 +34,89 @@ import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./defines.js";
  */
 export default class ParallelPort extends Component {
     /**
+     * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       2              // 0x01 (DATA 1)
+     *       1       3              // 0x02 (DATA 2)
+     *       2       4              // 0x04 (DATA 3)
+     *       3       5              // 0x08 (DATA 4)
+     *       4       6              // 0x10 (DATA 5)
+     *       5       7              // 0x20 (DATA 6)
+     *       6       8              // 0x40 (DATA 7)
+     *       7       9              // 0x80 (DATA 8)
+     */
+    static DATA = {                 // (read/write)
+        REG:        0
+    };
+
+    /**
+     * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       -              // 0x01 (always set on MDA printer port)
+     *       1       -              // 0x02 (always set on MDA printer port)
+     *       2       -              // 0x04 (always set on MDA printer port)
+     *       3       !15            // 0x08 (Error)
+     *       4       13             // 0x10 (Select)
+     *       5       12             // 0x20 (Out of Paper)
+     *       6       !10            // 0x40 (Acknowledged)
+     *       7       11             // 0x80 (Busy; eg, printer off-line or operation in progress)
+     */
+    static STATUS = {               // (read)
+        REG:        1,
+        ALWAYS_SET: 0x07,           // (always set on MDA printer port)
+        NERR:       0x08,           // when this bit is clear, I/O error (inverted by the ROM BIOS INT 17h Status function)
+        SELECT:     0x10,           // when this bit is set, printer selected
+        PAPER:      0x20,           // when this bit is set, out of paper
+        NACK:       0x40,           // when this bit is clear, data acknowledged (and optionally, interrupt requested; inverted by the ROM BIOS INT 17h Status function)
+        NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
+    };
+
+    /**
+     * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
+     *
+     *      Bit     Pin
+     *      ---     ---
+     *       0       !1             // 0x01 (read input data)
+     *       1      !14             // 0x02 (automatically feed paper one line)
+     *       2       16             // 0x04
+     *       3      !17             // 0x08
+     *
+     * Additionally, bit 4 is the IRQ ENABLE bit, which allows interrupts when pin 10 transitions high to low.
+     */
+    static CONTROL = {              // (read/write)
+        REG:        2,
+        NSTROBE:    0x01,           // !Strobe
+        NAUTOFEED:  0x02,           // !Auto feed
+        INIT:       0x04,           // Initialize printer
+        NSELECT:    0x08,           // !Select input
+        IRQ_ENABLE: 0x10,           // set to enable interrupts (when printer clears NACK)
+        ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
+    };
+
+    static {
+        /**
+         * Port input notification table
+         */
+        ParallelPort.aPortInput = {
+            0x0: ParallelPort.prototype.inData,
+            0x1: ParallelPort.prototype.inStatus,
+            0x2: ParallelPort.prototype.inControl
+        };
+
+        /**
+         * Port output notification table
+         */
+        ParallelPort.aPortOutput = {
+            0x0: ParallelPort.prototype.outData,
+            0x2: ParallelPort.prototype.outControl
+        };
+    }
+
+    /**
      * ParallelPort(parmsParallel)
      *
      * The ParallelPort component has the following component-specific (parmsParallel) properties:
@@ -98,7 +181,7 @@ export default class ParallelPort extends Component {
         if (sBinding == "console") {
             this.consoleBuffer = "";
         } else {
-            /*
+            /**
              * If the ParallelPort wants to bind to a control (eg, "print") in a DIFFERENT component (eg, "Panel"),
              * then it specifies the name of that control with the 'binding' property.  The ParallelPort constructor
              * will then call bindExternalControl(), which looks up the control, and then passes it to our own
@@ -384,7 +467,7 @@ export default class ParallelPort extends Component {
                 this.controlBuffer.value = this.controlBuffer.value.slice(0, -1);
             }
             else {
-                /*
+                /**
                  * If we assume that the printer being used was the original IBM 80 CPS Matrix Printer,
                  * characters 0x80-0x9F mirror control codes 0x00-0x1F, and characters 0xA0-0xDF are various
                  * block shapes, sort of in the spirit of the line-drawing characters 0xC0-0xDF defined by
@@ -444,88 +527,7 @@ export default class ParallelPort extends Component {
     }
 }
 
-/*
- * The "Data Register" is an input/output register at offset 0 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       2              // 0x01 (DATA 1)
- *       1       3              // 0x02 (DATA 2)
- *       2       4              // 0x04 (DATA 3)
- *       3       5              // 0x08 (DATA 4)
- *       4       6              // 0x10 (DATA 5)
- *       5       7              // 0x20 (DATA 6)
- *       6       8              // 0x40 (DATA 7)
- *       7       9              // 0x80 (DATA 8)
- */
-ParallelPort.DATA = {           // (read/write)
-    REG:        0
-};
-
-/*
- * The "Status Register" is an input register at offset 1 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       -              // 0x01 (always set on MDA printer port)
- *       1       -              // 0x02 (always set on MDA printer port)
- *       2       -              // 0x04 (always set on MDA printer port)
- *       3       !15            // 0x08 (Error)
- *       4       13             // 0x10 (Select)
- *       5       12             // 0x20 (Out of Paper)
- *       6       !10            // 0x40 (Acknowledged)
- *       7       11             // 0x80 (Busy; eg, printer off-line or operation in progress)
- */
-ParallelPort.STATUS = {         // (read)
-    REG:        1,
-    ALWAYS_SET: 0x07,           // (always set on MDA printer port)
-    NERR:       0x08,           // when this bit is clear, I/O error (inverted by the ROM BIOS INT 17h Status function)
-    SELECT:     0x10,           // when this bit is set, printer selected
-    PAPER:      0x20,           // when this bit is set, out of paper
-    NACK:       0x40,           // when this bit is clear, data acknowledged (and optionally, interrupt requested; inverted by the ROM BIOS INT 17h Status function)
-    NBUSY:      0x80            // when this bit is clear, printer busy (TODO: Is this really inverted? https://www.seasip.info/VintagePC/mda.htm doesn't show it that way; perhaps it's simply that the signal from the printer is typically inverted)
-};
-
-/*
- * The "Control Register" is an input/output register at offset 2 from portBase.  The bit-to-pin mappings are:
- *
- *      Bit     Pin
- *      ---     ---
- *       0       !1             // 0x01 (read input data)
- *       1      !14             // 0x02 (automatically feed paper one line)
- *       2       16             // 0x04
- *       3      !17             // 0x08
- *
- * Additionally, bit 4 is the IRQ ENABLE bit, which allows interrupts when pin 10 transitions high to low.
- */
-ParallelPort.CONTROL = {        // (read/write)
-    REG:        2,
-    NSTROBE:    0x01,           // !Strobe
-    NAUTOFEED:  0x02,           // !Auto feed
-    INIT:       0x04,           // Initialize printer
-    NSELECT:    0x08,           // !Select input
-    IRQ_ENABLE: 0x10,           // set to enable interrupts (when printer clears NACK)
-    ALWAYS_SET: 0xE0            // (always set on MDA printer port when reading)
-};
-
-/*
- * Port input notification table
- */
-ParallelPort.aPortInput = {
-    0x0: ParallelPort.prototype.inData,
-    0x1: ParallelPort.prototype.inStatus,
-    0x2: ParallelPort.prototype.inControl
-};
-
-/*
- * Port output notification table
- */
-ParallelPort.aPortOutput = {
-    0x0: ParallelPort.prototype.outData,
-    0x2: ParallelPort.prototype.outControl
-};
-
-/*
+/**
  * Initialize every ParallelPort module on the page.
  */
 WebLib.onInit(ParallelPort.init);

@@ -233,6 +233,41 @@ import { BACKTRACK, DEBUG, SYMBOLS } from "./defines.js";
  */
 export default class Disk extends Component {
     /**
+     * Sector object "public" properties.
+     */
+    static SECTOR = {
+        CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
+        HEAD:       'h',                // head number (0-based) [formerly iHead]
+        ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
+        LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
+        DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
+        FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
+        FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
+        PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
+        /**
+         * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
+         * hence the longer, more meaningful IDs.
+         */
+        DATA_CRC:   'dataCRC',
+        DATA_ERROR: 'dataError',
+        DATA_MARK:  'dataMark',
+        HEAD_CRC:   'headCRC',
+        HEAD_ERROR: 'headError'
+    };
+
+    /**
+     * The default number of milliseconds to wait before writing a dirty sector back to a remote disk image
+     *
+     * @const {number}
+     */
+    static REMOTE_WRITE_DELAY = 2000;   // 2-second delay
+
+    /**
+     * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
+     */
+    static nDisks = 0;
+
+    /**
      * Disk(controller, drive, mode)
      *
      * Disk contents are stored as an array (diskData) of cylinders, each of which is an array of
@@ -2152,42 +2187,7 @@ export default class Disk extends Component {
 }
 
 /**
- * Sector object "public" properties.
- */
-Disk.SECTOR = {
-    CYLINDER:   'c',                // cylinder number (0-based) [formerly iCylinder]
-    HEAD:       'h',                // head number (0-based) [formerly iHead]
-    ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
-    LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
-    DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-    FILE_INDEX: 'f',                // "extended" JSON disk images only [formerly file]
-    FILE_OFFSET:'o',                // "extended" JSON disk images only [formerly offFile]
-    PATTERN:    'pattern',          // deprecated (no longer used in external images, still used internally)
-    /**
-     * The following properties occur very infrequently (and usually only in copy-protected or damaged disk images),
-     * hence the longer, more meaningful IDs.
-     */
-    DATA_CRC:   'dataCRC',
-    DATA_ERROR: 'dataError',
-    DATA_MARK:  'dataMark',
-    HEAD_CRC:   'headCRC',
-    HEAD_ERROR: 'headError'
-};
-
-/**
- * The default number of milliseconds to wait before writing a dirty sector back to a remote disk image
- *
- * @const {number}
- */
-Disk.REMOTE_WRITE_DELAY = 2000;     // 2-second delay
-
-/**
- * A global disk count, used to form unique Disk component IDs (totally optional; for debugging purposes only)
- */
-Disk.nDisks = 0;
-
-/**
- * class FileInfo
+ * @class FileInfo
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class FileInfo {

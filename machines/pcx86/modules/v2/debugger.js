@@ -3706,6 +3706,13 @@ export default class Debuggerx86 extends DbgLib {
                 dbgAddr.nDebugState = this.getLong(dbgAddr);
                 this.incAddr(dbgAddr, -2);
                 this.setTempBreakpoint(dbgAddr);
+                /**
+                 * We also set the CPU's debugCheck flag, to guarantee that the CPU will start calling
+                 * checkInstruction(); note that we don't bother with a corresponding setDebugCheck(false)
+                 * when the last VxD breakpoint is removed, because debugCheck is automatically updated
+                 * at the start of every burst.
+                 */
+                this.cpu.setDebugCheck(true);
             }
             if (this.vectorHalt) {
                 let i = this.findVectorBP(vector);
@@ -4138,11 +4145,11 @@ export default class Debuggerx86 extends DbgLib {
             }
             break;
         case Debuggerx86.TYPE_SBYTE:
-            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24, dbgAddr.fData32? 8: 4);
+            sOperand = StrLib.toHex((this.getByte(dbgAddr, 1) << 24) >> 24);
             break;
         case Debuggerx86.TYPE_WORD:
             if (dbgAddr.fData32) {
-                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4));
+                sOperand = StrLib.toHex(this.getLong(dbgAddr, 4), 8);
                 break;
             }
             /* falls through */
@@ -5719,7 +5726,7 @@ export default class Debuggerx86 extends DbgLib {
                 let nDelta, sDelta, s;
                 if (aSymbol[0]) {
                     sDelta = "";
-                    nDelta = dbgAddr.off - aSymbol[1];
+                    nDelta = (dbgAddr.off >>> 0) - aSymbol[1];
                     if (nDelta) sDelta = " + " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[0] + " (" + this.toHexOffset(aSymbol[1], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);
@@ -5727,7 +5734,7 @@ export default class Debuggerx86 extends DbgLib {
                 }
                 if (aSymbol.length > 4 && aSymbol[4]) {
                     sDelta = "";
-                    nDelta = aSymbol[5] - dbgAddr.off;
+                    nDelta = aSymbol[5] - (dbgAddr.off >>> 0);
                     if (nDelta) sDelta = " - " + StrLib.toHex(nDelta, 0, true);
                     s = aSymbol[4] + " (" + this.toHexOffset(aSymbol[5], dbgAddr.sel) + ')' + sDelta;
                     if (fPrint) this.printf("%s\n", s);

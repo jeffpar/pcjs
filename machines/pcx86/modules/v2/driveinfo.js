@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-/*
+/**
  * Starting with the IBM PC XT, the ROM defined a "Fixed Disk Parameter Table" (FD_TBL) that contained 16 bytes
  * at the following offsets for each of 4 drive types (see IBM 5160 Tech Ref, April 1983, p. A-94):
  *
@@ -89,7 +89,7 @@
  * understanding of Kb and Mb; I never use KiB or MiB.
  */
 
-/*
+/**
  * Drive type tables differed across IBM controller models (XTC drive types don't match ATC drive types) and across OEMs
  * (e.g., COMPAQ drive types only match a few IBM drive types), so you must use iDeviceType to index the correct table type
  * inside both DRIVE_CTRLS and DRIVE_TYPES.
@@ -97,7 +97,7 @@
 const DRIVE_CTRLS = ["XT", "AT", "COMPAQ"];
 
 const DRIVE_TYPES = [
-    /*
+    /**
      * DRIVE_TYPES[0] is for the IBM PC XT (XTC) controller.
      */
     {
@@ -106,7 +106,7 @@ const DRIVE_TYPES = [
          2: [ 306,  6],         // 15Mb (15.24Mb: 306*6*17*512 or 15,980,544 bytes)
          3: [ 306,  4]          // 10Mb (10.16Mb: 306*4*17*512 or 10,653,696 bytes) (default XTC drive type: 3)
     },
-    /*
+    /**
      * DRIVE_TYPES[1] is for the IBM PC AT (ATC) controller.
      */
     {
@@ -125,7 +125,7 @@ const DRIVE_TYPES = [
         12: [ 855,  7],         //  52,093,440  49.68
         13: [ 306,  8],         //  21,307,392  20.32
         14: [ 733,  7],         //  44,660,224  42.59
-        /*
+        /**
          * Since the remaining drive types are > 15, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [ 612,  4],         //  21,307,392  20.32
@@ -137,7 +137,7 @@ const DRIVE_TYPES = [
         22: [ 733,  5],         //  31,900,160  30.42
         23: [ 306,  4]          //  10,653,696  10.16
     },
-    /*
+    /**
      * DRIVE_TYPES[2] is for the COMPAQ DeskPro (ATC) controller.
      *
      * NOTE: According to COMPAQ, drive type 25 (0x19) must be used with their 130Mb drive when using MS-DOS 3.1
@@ -160,7 +160,7 @@ const DRIVE_TYPES = [
         12: [ 925,  9],         //  925   9  17  512    72,460,800   69.10
         13: [ 612,  8],         //  612   8  17  512    42,614,784   40.64
         14: [ 980,  4],         //  980   4  17  512    34,119,680   32.54
-        /*
+        /**
          * Since the remaining drive types are > 15, they must be stored in either EXTHDRIVE0 or EXTHDRIVE1 CMOS bytes (0x19 or 0x1A)
          */
         16: [ 612,  4],         //  612   4  17  512    21,307,392   20.32  (same as IBM)
