@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}
@@ -149,7 +149,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -206,7 +206,7 @@ Messages.Categories = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -764,7 +764,7 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -824,7 +824,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -847,7 +847,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
  */
 
 class Str {
@@ -1598,7 +1598,7 @@ Str.format = new Format();
 Str.sprintf = Str.format.sprintf.bind(Str.format);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -1841,7 +1841,7 @@ class Usr {
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -3022,7 +3022,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -4488,7 +4488,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -4504,7 +4504,7 @@ const APPNAME = "C1Pjs";        // this @define is the default application name 
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -4610,7 +4610,7 @@ class C1PPanel extends Component {
 Web.onInit(C1PPanel.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -8491,7 +8491,7 @@ class C1PCPU extends Component {
 Web.onInit(C1PCPU.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -8712,7 +8712,7 @@ class C1PROM extends Component {
 Web.onInit(C1PROM.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -8784,7 +8784,7 @@ class C1PRAM extends Component {
 Web.onInit(C1PRAM.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -9866,7 +9866,7 @@ class C1PKeyboard extends Component {
 Web.onInit(C1PKeyboard.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/video.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -10489,7 +10489,7 @@ class C1PVideo extends Component {
 Web.onInit(C1PVideo.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -10950,7 +10950,7 @@ C1PSerialPort.AUTOLOAD_6502  = 2;
 Web.onInit(C1PSerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/disk.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -12194,7 +12194,7 @@ class C1PDiskController extends Component {
 Web.onInit(C1PDiskController.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -14385,7 +14385,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -14706,7 +14706,7 @@ class C1PComputer extends Component {
 Web.onInit(C1PComputer.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
  */
 
 /*

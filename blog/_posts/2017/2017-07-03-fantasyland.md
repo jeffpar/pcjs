@@ -122,7 +122,7 @@ exactly what I've done "below the fold".
 ### Transcript of the EGATEST Build Process (as of July 3, 2017)
 
     PCx86 v1.35.2
-    Copyright © 2012-2017 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     License: MIT <https://www.pcjs.org/LICENSE.txt>
     Loading /machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5.......
     Loading /machines/pcx86/ibm/5160/rom/basic/BASIC110.json5.......

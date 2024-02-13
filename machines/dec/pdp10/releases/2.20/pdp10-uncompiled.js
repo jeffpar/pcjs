@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}
@@ -149,7 +149,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -206,7 +206,7 @@ Messages.Categories = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -764,7 +764,7 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -824,7 +824,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -847,7 +847,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/userapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -889,7 +889,7 @@ const UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/keys.js (C) 2012-2024 Jeff Parsons
  */
 
 const Keys = {
@@ -1206,7 +1206,7 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
  */
 
 class Str {
@@ -1957,7 +1957,7 @@ Str.format = new Format();
 Str.sprintf = Str.format.sprintf.bind(Str.format);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -2200,7 +2200,7 @@ class Usr {
 Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -3381,7 +3381,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/component.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -4847,7 +4847,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/dbglib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -6200,7 +6200,7 @@ DbgLib.EVENTS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -6427,7 +6427,7 @@ const PDP10 = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2024 Jeff Parsons
  */
 
 Messages.CPU        = 0x00000002;
@@ -6486,7 +6486,7 @@ Messages.Categories["computer"] = Messages.COMPUTER;
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -7698,7 +7698,7 @@ PanelPDP10.SWITCH = {
 Web.onInit(PanelPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -8400,7 +8400,7 @@ BusPDP10.ERROR = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/device.js (C) 2012-2024 Jeff Parsons
  */
 
 class DevicePDP10 extends Component {
@@ -8534,7 +8534,7 @@ class DevicePDP10 extends Component {
 Web.onInit(DevicePDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/memory.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -9042,7 +9042,7 @@ MemoryPDP10.afnChecked = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -10249,7 +10249,7 @@ CPUPDP10.YIELDS_PER_STATUS      = 15;           // every 15 yields (ie, twice pe
 CPUPDP10.BUTTONS = ["power", "reset"];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/cpustate.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -11195,7 +11195,7 @@ class CPUStatePDP10 extends CPUPDP10 {
 Web.onInit(CPUStatePDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/cpuops.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -18830,7 +18830,7 @@ PDP10.aOpIO_KA10 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -23122,7 +23122,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 class ROMPDP10 extends Component {
@@ -23424,7 +23424,7 @@ class ROMPDP10 extends Component {
 Web.onInit(ROMPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 class RAMPDP10 extends Component {
@@ -23721,7 +23721,7 @@ class RAMPDP10 extends Component {
 Web.onInit(RAMPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -24347,7 +24347,7 @@ class SerialPortPDP10 extends Component {
 Web.onInit(SerialPortPDP10.init);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/macro10.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/macro10.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -26392,7 +26392,7 @@ Macro10.MACRO_OP = {
 };
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
  */
 
 class ComputerPDP10 extends Component {
@@ -28028,7 +28028,7 @@ Web.onShow(ComputerPDP10.show);
 Web.onExit(ComputerPDP10.exit);
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2024 Jeff Parsons
  */
 
 class State {
@@ -28391,7 +28391,7 @@ class State {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
  */
 
 /*

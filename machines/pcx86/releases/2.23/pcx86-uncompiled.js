@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -154,7 +154,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -211,7 +211,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -790,7 +790,7 @@ class Format {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/databuffer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/databuffer.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1151,7 +1151,7 @@ class DataBuffer {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1390,7 +1390,7 @@ DiskAPI.ATTR = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1450,7 +1450,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -1473,7 +1473,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1515,7 +1515,7 @@ const UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2024 Jeff Parsons
  */
 
 const Keys = {
@@ -1832,7 +1832,7 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, size: number, attr: number, date: Date, data: *, files: (Array|null) }} */
@@ -1976,7 +1976,7 @@ if (!globals.pcjs['files']) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -2731,7 +2731,7 @@ StrLib.format = new Format();
 StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -2981,7 +2981,7 @@ class UsrLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -4193,7 +4193,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -5667,7 +5667,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/jsonlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/jsonlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -5836,7 +5836,7 @@ class JSONLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -5962,7 +5962,7 @@ if (DEBUG) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -6044,7 +6044,7 @@ MESSAGE.NAMES['key']        = MESSAGE.KEY;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86.js (C) 2012-2024 Jeff Parsons
  */
 
 const X86 = {
@@ -6927,7 +6927,7 @@ X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/charset.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/charset.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -7098,7 +7098,7 @@ CharSet.CP437 = [
 // ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/driveinfo.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/driveinfo.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -7294,7 +7294,7 @@ const DRIVE_TYPES = [
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/errors.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/errors.js (C) 2012-2024 Jeff Parsons
  */
 
 const Errors = {
@@ -7318,7 +7318,7 @@ const Errors = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/interrupts.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/interrupts.js (C) 2012-2024 Jeff Parsons
  */
 
 const Interrupts = {
@@ -10722,7 +10722,7 @@ Interrupts.VxD = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ iBlock: number, cBlocks: number, type: number }} */
@@ -11822,7 +11822,7 @@ class Panel extends Component {
 WebLib.onInit(Panel.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/bus.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<number> }} */
@@ -13517,7 +13517,7 @@ class Busx86 extends Component {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/memory.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -15272,7 +15272,7 @@ if (TYPEDARRAYS) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ nCycles: number, nCyclesTotal: number, msDuration: number, msLag: number, msBegin: number }} */
@@ -16696,7 +16696,7 @@ class CPU extends Component {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -21324,7 +21324,7 @@ class CPUx86 extends CPU {
 WebLib.onInit(CPUx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -24664,7 +24664,7 @@ FPUx86.afnPreserveExceptions = [
 WebLib.onInit(FPUx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -26352,7 +26352,7 @@ class Segx86 {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -29724,7 +29724,7 @@ X86.fnXORw = function(dst, src)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86help.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86help.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -30775,7 +30775,7 @@ X86.zeroSeg = function(seg)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86mods.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86mods.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -34809,7 +34809,7 @@ X86.modSIB = function(mod)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86ops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86ops.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -39400,7 +39400,7 @@ X86.aOpGrp4w = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86op0f.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86op0f.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -41156,7 +41156,7 @@ X86.aOpGrp8 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/chipset.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/chipset.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ countInit: Array.<number>, countStart: Array.<number>, countCurrent: Array.<number>, countLatched: Array.<number>, bcd: number, mode: number, rw: number, countIndex: number, countBytes: number, fOUT: boolean, fCountLatched: boolean, fCounting: boolean, nCyclesStart: number, bStatus: number, fStatusLatched: boolean }} */
@@ -47500,7 +47500,7 @@ class ChipSet extends Component {
 WebLib.onInit(ChipSet.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -48166,7 +48166,7 @@ class ROMx86 extends Component {
 WebLib.onInit(ROMx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -48813,7 +48813,7 @@ class CompaqController extends Controller {
 WebLib.onInit(RAMx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/keyboard.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -52037,7 +52037,7 @@ class Keyboardx86 extends Component {
 WebLib.onInit(Keyboardx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -60680,7 +60680,7 @@ class Videox86 extends Component {
 WebLib.onInit(Videox86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -61201,7 +61201,7 @@ class ParallelPort extends Component {
 WebLib.onInit(ParallelPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -62378,7 +62378,7 @@ class SerialPort extends Component {
 WebLib.onInit(SerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -62694,7 +62694,7 @@ class TestController extends Component {
 WebLib.onInit(TestController.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -63145,7 +63145,7 @@ TestMonitor.COMMANDS = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/mouse.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/mouse.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -64096,7 +64096,7 @@ Mouse.aBusOutput = {
 WebLib.onInit(Mouse.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -66273,7 +66273,7 @@ class FileInfo {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -69606,7 +69606,7 @@ class FDC extends Component {
 WebLib.onInit(FDC.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/hdc.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/hdc.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string, type: number, size: number, mode: string }} */
@@ -73263,7 +73263,7 @@ class HDC extends Component {
 WebLib.onInit(HDC.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -74619,7 +74619,7 @@ DbgLib.EVENTS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
@@ -82914,7 +82914,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -84829,7 +84829,7 @@ WebLib.onShow(Computer.show);
 WebLib.onExit(Computer.exit);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -85196,7 +85196,7 @@ class State {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -85939,7 +85939,7 @@ globals.window['sendEvent']    = WebLib.doPageEvent;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/save.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/save.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
