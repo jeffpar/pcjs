@@ -371,7 +371,7 @@ gulp.task("copyright", function(done) {
      * it would also be nice if we could avoid rewriting ANY file that contains no matches, because Gulp's default behavior
      * seems to be rewrite EVERYTHING, at least when we're doing these sorts of "in place" operations.
      */
-    return gulp.src(["gulpfile.js", "machines/**/*.js", "software/**/*.js", "tools/**/*.js", "**/*.md", "_layouts/*.html"], {base: baseDir})
+    return gulp.src(["gulpfile.js", "LICENSE.txt", "machines/**/*.js", "software/**/*.js", "tools/**/*.js", "**/*.md", "_layouts/*.html"], {base: baseDir})
         .pipe(gulpReplace(/(Copyright[ \S]+?)( Jeff Parsons)( +201\d-)[0-9]+/gi, '$1$3' + pkg.year + '$2', {skipBinary: true}))
         .pipe(gulpReplace(/(Copyright|\u00A9)( +201\d-)[0-9]+(.*?Jeff Parsons|.*?twitter_username)/gi, '$1$2' + pkg.year + '$3', {skipBinary: true}))
         .pipe(gulp.dest(baseDir));

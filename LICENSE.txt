@@ -6,7 +6,7 @@ and website <https://www.pcjs.org>, excluding all programs, images and
 documentation produced by other parties and which have been included in PCjs
 solely for archival/demonstration purposes.
 
-Copyright (c) 2012-2023 Jeff Parsons
+Copyright (c) 2012-2024 Jeff Parsons
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
