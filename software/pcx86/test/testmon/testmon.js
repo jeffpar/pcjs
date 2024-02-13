@@ -2,7 +2,7 @@
 /**
  * @fileoverview Node-based Test Monitor
  * @author <a href="mailto:Jeff@pcjs.org">Jeff Parsons</a>
- * @copyright © 2012-2018 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */

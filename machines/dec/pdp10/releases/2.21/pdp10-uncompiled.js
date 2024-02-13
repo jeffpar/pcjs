@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}

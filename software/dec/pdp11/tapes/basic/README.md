@@ -163,7 +163,7 @@ The problem with PDPjs was that it wasn't generating a trap to vector 000004 whe
 After fixing that, I verified with the PDPjs Debugger that the memory sizing code was working properly:
 
 	PDPjs v1.30.1
-	Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+	Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
 	License: MIT <https://www.pcjs.org/LICENSE.txt>
 	Portions adapted from the PDP-11/70 Emulator v1.4 by Paul Nankervis <paulnank@hotmail.com>
 	bus: 00016Kb RAM at 000000

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Implements VT100 video hardware
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -462,7 +462,7 @@ export default class VT100Video extends Monitor {
          */
         if (VT100Video.MAXDEBUG && !this.test) {
             /*
-             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
+             * Build a test image in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
              * operation is selected) through 24, checking aLineData for a matching row number, and converting the
              * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"

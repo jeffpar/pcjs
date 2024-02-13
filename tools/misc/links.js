@@ -2,7 +2,7 @@
 /**
  * @fileoverview Node command-line link validation tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2020 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.

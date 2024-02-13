@@ -1,7 +1,7 @@
 /**
  * @fileoverview PCjs Explorer UI
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -9,6 +9,11 @@
  * TODO: Convert this code to a class and load it as a "module" instead of as a "script".
  */
 
+/**
+ * pcjsGetURLVars()
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsGetURLVars()
 {
     var vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
@@ -17,11 +22,21 @@ function pcjsGetURLVars()
     return vars;
 }
 
+/**
+ * pcjsOnClick(element, event)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsOnClick(element, event)
 {
     element.href += window.location.search;
 }
 
+/**
+ * pcjsExplorerClick(element, event)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerClick(element, event)
 {
     if (event) event.stopPropagation();
@@ -34,6 +49,11 @@ function pcjsExplorerClick(element, event)
     }
 }
 
+/**
+ * pcjsExplorerExpand(path, altPath, prefix)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerExpand(path, altPath, prefix)
 {
     var expansions = 0;
@@ -68,6 +88,11 @@ function pcjsExplorerExpand(path, altPath, prefix)
     return expansions;
 }
 
+/**
+ * pcjsExplorerExpandAll(element, event, fExpand)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerExpandAll(element, event, fExpand)
 {
     if (event) event.preventDefault();
@@ -75,6 +100,11 @@ function pcjsExplorerExpandAll(element, event, fExpand)
     elements.forEach((element) => { pcjsExplorerClick(element); });
 }
 
+/**
+ * pcjsExplorerSurprise()
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerSurprise()
 {
     var elements = document.querySelectorAll(".pcjs-explorer-item");
@@ -82,6 +112,11 @@ function pcjsExplorerSurprise()
     if (element && element.children) window.location.href = element.children[0].href;
 }
 
+/**
+ * pcjsExplorerView(element, event)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerView(element, event)
 {
     event.preventDefault();
@@ -93,6 +128,11 @@ function pcjsExplorerView(element, event)
     }
 }
 
+/**
+ * pcjsExplorerInit()
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
 function pcjsExplorerInit()
 {
     let path = window.location.pathname;

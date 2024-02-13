@@ -2,7 +2,7 @@
 /**
  * @fileoverview Tool for converting hand-transcribed ti57rawbits.txt to ti57raw.bin
  * @author <a href="mailto:Jeff@pcjs.org">Jeff Parsons</a>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @suppress {missingProperties}
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.

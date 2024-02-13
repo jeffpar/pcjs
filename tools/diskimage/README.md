@@ -114,7 +114,7 @@ Here's an example of `--zip` in action:
     diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
 
     DiskImage v3.00
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     Options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
     reading: /Volumes/PCSIG_13B/BBS/DISK0042.ZIP
 

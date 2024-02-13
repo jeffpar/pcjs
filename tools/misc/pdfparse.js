@@ -2,7 +2,7 @@
 /**
  * @fileoverview Node command-line PDF parsing tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2020 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -101,7 +101,7 @@ function renderSheet(pageData)
     let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
         normalizeWhitespace: true,      // replaces all occurrences of whitespace with standard spaces (0x20); default is false
         disableCombineTextItems: true   // do not attempt to combine same line TextItems; default false
-    }
+    };
 
     return pageData.getTextContent(render_options).then(function(textContent) {
         if (argv['page'] && pageData.pageNumber != argv['page']) return "";
@@ -235,7 +235,7 @@ function renderPage(pageData)
     let render_options = {              // documentation at https://mozilla.github.io/pdf.js/
         normalizeWhitespace: true,      // replaces all occurrences of whitespace with standard spaces (0x20); default is false
         disableCombineTextItems: true   // do not attempt to combine same line TextItems; default false
-    }
+    };
 
     return pageData.getTextContent(render_options).then(function(textContent) {
         if (argv['page'] && pageData.pageNumber != argv['page']) return "";
@@ -252,9 +252,13 @@ function renderPage(pageData)
          * The ordinary top-down flow of text data inside PDFs means this is generally already true, but this
          * will guarantee it, ensuring we can safely insert the subs into the rows at the appropriate points.
          */
-        rows.sort((a, b) => {a[0][2] > b[0][2]? -1 : (a[0][2] < b[0][2]? 1 : 0)});
+        rows.sort((a, b) => {
+            a[0][2] > b[0][2]? -1 : (a[0][2] < b[0][2]? 1 : 0);
+        });
         subs.splice(subs.length - 1, 1);
-        subs.sort((a, b) => {a[2] > b[2]? -1 : (a[2] < b[2]? 1 : 0)});
+        subs.sort((a, b) => {
+            a[2] > b[2]? -1 : (a[2] < b[2]? 1 : 0);
+        });
 
         let csv = "", j = 0;
         for (let i = 0; i < rows.length; i++) {

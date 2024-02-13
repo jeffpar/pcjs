@@ -1,7 +1,7 @@
 /**
  * @fileoverview This file generates PCjs 8086 mode-byte decoders
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -253,7 +253,13 @@ else {
     }
 }
 
-function genSIB(sib) {
+/**
+ * genSIB(sib)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function genSIB(sib)
+{
     var scale = (sib >> 6);
     var index = (sib >> 3) & 0x7;
     var base = (sib & 0x7);
@@ -279,7 +285,13 @@ function genSIB(sib) {
     print("    }" + (sib < 255? "," : ""));
 }
 
-function genMode(a, d, w, mrm, sGroup, sRO) {
+/**
+ * genMode(a, d, w, mrm, sGroup, sRO)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function genMode(a, d, w, mrm, sGroup, sRO)
+{
     var mod = (mrm >> 6);
     var reg = (mrm >> 3) & 0x7;
     var r_m = (mrm & 0x7);
@@ -994,8 +1006,9 @@ function genMode(a, d, w, mrm, sGroup, sRO) {
                         print("        this.setEA" + aSize[w] + "(this.regEAWrite, " + sTemp + ");");
                     }
                 }
-                if (nCycles !== null)
+                if (nCycles !== null) {
                     print("        this.nStepCycles -= " + nCycles + ";");
+                }
             }
         }
         else if (sModRegGet) {
@@ -1133,8 +1146,9 @@ function genMode(a, d, w, mrm, sGroup, sRO) {
                     }
                 }
             }
-            if (nCycles !== null)
+            if (nCycles !== null) {
                 print("        this.nStepCycles -= " + nCycles + ";");
+            }
         }
         else if (sModRegGet && sRegGet) {
             if (!d) {
@@ -1195,7 +1209,13 @@ function genMode(a, d, w, mrm, sGroup, sRO) {
     return sOpMod;
 }
 
-function genEAFunc(sFuncName, sFuncBody) {
+/**
+ * genEAFunc(sFuncName, sFuncBody)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function genEAFunc(sFuncName, sFuncBody)
+{
     if (sEAFuncs.indexOf(sFuncName) < 0) {
         sEAFuncs += "    /**\n";
         sEAFuncs += "     * @this {X86CPU}\n";
@@ -1207,24 +1227,54 @@ function genEAFunc(sFuncName, sFuncBody) {
     }
 }
 
-function toMod(d, mod) {
+/**
+ * toMod(d, mod)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function toMod(d, mod)
+{
     return toBin(mod, 2) + " (" + (d? "src" : "dst") + ":" + aMOD[mod] + ")";
 }
 
-function toReg(d, w, reg, sGroup) {
+/**
+ * toReg(d, w, reg, sGroup)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function toReg(d, w, reg, sGroup)
+{
     return toBin(reg, 3) + " (" + (sGroup? "afnGrp[" + reg + "]" : (d? "dst" : "src") + ":" + aREG[w][reg]) + ")";
 }
 
-function toRM(a, mod, w, r_m) {
+/**
+ * toRM(a, mod, w, r_m)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function toRM(a, mod, w, r_m)
+{
     return toBin(r_m, 3) + " (" + aRM[a][mod][mod < 3? 0 : w][r_m] + ")";
 }
 
-function toBin(v, len) {
+/**
+ * toBin(v, len)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function toBin(v, len)
+{
     var s = "0000000000000000" + v.toString(2);
     return s.slice(s.length - (len === undefined? 8 : (len < 16? len : 16)));
 }
 
-function toHex(v, len) {
+/**
+ * toHex(v, len)
+ *
+ * Added this nifty comment block (davidw would be proud)
+ */
+function toHex(v, len)
+{
     var s = "00000000" + v.toString(16);
     return s.slice(s.length - (len === undefined? 4 : (len < 8? len : 8))).toUpperCase();
 }

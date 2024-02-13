@@ -88,7 +88,7 @@ const VERSION = "3.00";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * The following globals CANNOT be overridden.
@@ -6861,8 +6861,38 @@ Monitor.CLASSES["Monitor"] = Monitor;
  * @copyright https://www.pcjs.org/machines/modules/v3/time.js (C) 2012-2023 Jeff Parsons
  */
 
-/** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
-let Timer;
+/**
+ * Timer objects
+ *
+ * addTimer() and setTimer() create and manage Timer objects that are used for operations that must
+ * occur after a certain amount of "real time" has elapsed (eg, key/button events that need to be timed-out
+ * after a predefined period).
+ *
+ * These functions are preferred over JavaScript's setTimeout(), because our timers convert "real time"
+ * into cycle countdowns, which are effectively paused whenever cycle generation is paused (eg, when the
+ * user stops the emulation).  Moreover, setTimeout() handlers only run after run() yields, which may be
+ * too granular for certain devices (eg, when a serial port tries to simulate interrupts at high baud rates).
+ *
+ * WARNING: If you need to set the 'cyclesPerSecond' TimeConfig property below 60Hz, then 1) you will want
+ * to also set 'cyclesMinimum' to an equally low value, since the default minimum may not suffice, and 2) any
+ * timers configured to fire at a faster rate will not be able to; for example, if the machine is configured
+ * for 1Hz, then a 60Hz timer will only be able to fire at most 1Hz as well.  In practice, this shouldn't be
+ * an issue, as long as the timer is firing at least as frequently as any other work being performed.
+ *
+ * addClock() should be used for devices that are cycle-driven (ie, that need to be "clocked") rather than
+ * time-driven; devices using addClock() must define startClock(), stopClock(), and getClock() functions.
+ *
+ * Finally, addAnimation() should be used by any device that wants to perform high-speed animations (normally
+ * 60Hz); a separate 60Hz timer could be used as well, but using an addAnimation() callback imposes slightly less
+ * overhead, since the duration is fixed.  Also, certain types of updates may benefit from the automatic yield
+ * (eg, DOM updates), but you should avoid making expensive updates at such a high frequency.
+ *
+ * @typedef {Object} Timer
+ * @property {string} id
+ * @property {function()} callBack
+ * @property {number} msAuto
+ * @property {number} nCyclesLeft
+ */
 
 /** @typedef {{ cyclesMinimum: (number|undefined), cyclesMaximum: (number|undefined), cyclesPerSecond: (number|undefined), updatesPerSecond: (number|undefined), timeLock: (boolean|undefined) }} */
 let TimeConfig;
@@ -20008,7 +20038,7 @@ class VT100Video extends Monitor {
          */
         if (VT100Video.MAXDEBUG && !this.test) {
             /*
-             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
+             * Build a test image in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
              * operation is selected) through 24, checking aLineData for a matching row number, and converting the
              * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"

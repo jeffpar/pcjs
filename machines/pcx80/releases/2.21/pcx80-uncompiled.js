@@ -5,7 +5,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "2.xx";              // this @define is overridden with the version in machines.json
+const APPVERSION = "2.21";              // this @define is overridden with the version in machines.json
 
 /**
  * COMPILED is false by default; overridden with true in the Closure Compiler release.
@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}
