@@ -30,7 +30,7 @@ export default class FileLib {
      */
     static getLocalPath(sFile)
     {
-        /*
+        /**
          * In addition to disk server paths, we had to add /machines (for diskette config files), /software
          * (for Markdown files containing supplementary copy-protection disk data), and /tools (for everything else).
          */

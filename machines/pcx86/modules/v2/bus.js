@@ -418,7 +418,7 @@ export default class Busx86 extends Component {
              */
             this.cpu.flushPageBlocks();
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
-                let kb = (size / 1024)|0;
+                let kb = Math.round(size / 1024);
                 let sb = kb? (kb + "Kb") : (size + " bytes");
                 this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, Memoryx86.TYPE.NAMES[type], addr);
             }

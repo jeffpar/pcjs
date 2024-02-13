@@ -153,7 +153,7 @@ export default class Structure {
         this._buf = buf;
         this._bufOffset = offset;
         this._maxOffset = offset + length;
-        /*
+        /**
          * The buffer may be partially valid, and the caller may only access those fields that are valid,
          * so we perform a similar bounds check in getField() instead.
          *
@@ -193,7 +193,7 @@ export default class Structure {
             v = this._littleEndian? this._buf.readInt32LE(off) : this._buf.readInt32BE(off);
             break;
         case Structure.INT64:
-            /*
+            /**
              * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
              * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
              */
@@ -211,7 +211,7 @@ export default class Structure {
             v = this._littleEndian? this._buf.readUInt32LE(off) : this._buf.readUInt32BE(off);
             break;
         case Structure.UINT64:
-            /*
+            /**
              * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
              * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
              */
