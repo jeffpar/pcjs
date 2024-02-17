@@ -1,7 +1,7 @@
 /**
  * @fileoverview File I/O Library
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -30,7 +30,7 @@ export default class FileLib {
      */
     static getLocalPath(sFile)
     {
-        /*
+        /**
          * In addition to disk server paths, we had to add /machines (for diskette config files), /software
          * (for Markdown files containing supplementary copy-protection disk data), and /tools (for everything else).
          */

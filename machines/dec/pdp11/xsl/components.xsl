@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2023 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
+<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2024 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
 <!DOCTYPE xsl:stylesheet [
 	<!ENTITY nbsp "&#160;"> <!ENTITY ne "&#8800;"> <!ENTITY le "&#8804;"> <!ENTITY ge "&#8805;">
 ]>
@@ -256,7 +256,7 @@
 				</xsl:choose>
 				<xsl:if test="$APPCLASS = 'pcx86'"><div class="{$CSSCLASS}-reference">[<a href="#" onclick="savePC('{$machine}'); return false;">Save Machine</a>]</div></xsl:if>
 				<div class="{$CSSCLASS}-copyright">
-					<a href="{$SITEURL}" target="_blank"><xsl:value-of select="$APPNAME"/></a> v<xsl:value-of select="$APPVERSION"/> © 2012-2023 <a href="https://github.com/jeffpar" target="_blank">Jeff Parsons</a>
+					<a href="{$SITEURL}" target="_blank"><xsl:value-of select="$APPNAME"/></a> v<xsl:value-of select="$APPVERSION"/> © 2012-2024 <a href="https://github.com/jeffpar" target="_blank">Jeff Parsons</a>
 				</div>
 				<div style="clear:both"> </div>
 			</xsl:if>

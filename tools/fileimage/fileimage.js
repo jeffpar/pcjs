@@ -2,7 +2,7 @@
 /**
  * @fileoverview Command-line utility for JSON file conversion
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -51,7 +51,7 @@ class FileImage {
         this.buf = null;
         this.addrLoad = null;
         this.addrExec = null;
-        /*
+        /**
          * TODO: Decide what to do with this usage info; we can't use it as a default, because it
          * causes outputFile() to ignore this.buf indiscriminately (ie, it breaks non-JSON output modes).
          */
@@ -145,7 +145,7 @@ class FileImage {
         let matchLine;
         let re = /^( [0-9 ]{8}|)([0-7]{6})[: ]+([0-7]+)[ ]*([0-7']+|)[ ]+([0-7']+|)[ ]+(.*)$/gm;
         while ((matchLine = re.exec(sListing))) {
-            /*
+            /**
              * matchLine[1]: line # (optional)
              * matchLine[2]: address
              * matchLine[3]: 6-digit opcode or 3-digit data
@@ -193,7 +193,7 @@ class FileImage {
                 ab = this.parseListing(buf);
             }
             else if (buf.match(/^[{[/]/)) {
-                /*
+                /**
                  * Treat the incoming string data as JSON data.
                  */
                 let json;
@@ -258,7 +258,7 @@ class FileImage {
                 }
             }
             else {
-                /*
+                /**
                  * Treat the string as a series of hex byte values, separated by whitespace.
                  */
                 let as = buf.split(/\s+/);
@@ -269,7 +269,7 @@ class FileImage {
                     ab.push(b);
                 }
             }
-            /*
+            /**
              * If we didn't recognize the data, then simply return, leaving this.buf undefined.
              */
             if (!ab.length) return;
@@ -391,7 +391,7 @@ class FileImage {
 
         for (let cb = 0, off = offDump; cb < lenDump; cb += cbItem, off += cbItem) {
 
-            /*
+            /**
              * WARNING: Whenever the following condition arises, you probably have a non-dword-granular
              * file, and you should have requested a byte-granular dump instead.
              */
@@ -443,7 +443,7 @@ class FileImage {
      */
     loadMap(sMapFile, done)
     {
-        /*
+        /**
          * The HEX format doesn't support MAP files, because old HEX clients expect an Array of bytes,
          * not an Object.  For all other (JSON) formats, we assume that the JSON is "unwrapped" at this point,
          * and so even if loadMap() doesn't find a map file, it will still wrap the resulting JSON with braces.
@@ -463,7 +463,7 @@ class FileImage {
                 fs.readFile(sMapFile, {encoding: "utf8"}, function(err, str) {
                     let sMapData = null;
                     if (err) {
-                        /*
+                        /**
                          * This isn't really an error (map files are optional), although it might be helpful to display
                          * a warning.  In any case, this is also why the first done() callback below always passes null for
                          * the Error parameter.
@@ -474,7 +474,7 @@ class FileImage {
                     else {
                         // printf("add this to obj.json:\n%s\n", str);
 
-                        /*
+                        /**
                          * Parse MAP data into a set of properties; for example, if the .map file contains:
                          *
                          *           0320   =   HF_PORT
@@ -765,7 +765,7 @@ class FileImage {
                 diskLib.printError(err);
             }
         } else {
-            /*
+            /**
              * We'll dump JSON but not a raw buffer; we could add an option to "stringify"
              * buffers, but if that's what the caller wants, they should use "--format=json".
              */

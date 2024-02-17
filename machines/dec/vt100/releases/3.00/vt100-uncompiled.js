@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -88,7 +88,7 @@ const VERSION = "3.00";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * The following globals CANNOT be overridden.
@@ -198,7 +198,7 @@ Defines.CLASSES["Defines"] = Defines;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -292,7 +292,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -871,7 +871,7 @@ class Format {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/stdlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/stdlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1477,7 +1477,7 @@ class StdLib extends Defines {
 StdLib.CLASSES["StdLib"] = StdLib;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/stdio.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1645,7 +1645,7 @@ StdIO.PrintTime = null;
 StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/webio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/webio.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string }} */
@@ -3314,7 +3314,7 @@ WebIO.LocalStorage = {
 WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/device.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
@@ -3846,7 +3846,7 @@ class Device extends WebIO {
 Device.CLASSES["Device"] = Device;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/input.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/input.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
@@ -5275,7 +5275,7 @@ Input.KEYCODEMOD = {
 Input.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/led.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/led.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -6394,7 +6394,7 @@ LED.SYMBOL_SEGMENTS = {
 LED.CLASSES["LED"] = LED;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/monitor.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/monitor.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ monitorWidth: number, monitorHeight: number }} */
@@ -6858,11 +6858,41 @@ Monitor.BINDING = {
 Monitor.CLASSES["Monitor"] = Monitor;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/time.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/time.js (C) 2012-2024 Jeff Parsons
  */
 
-/** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
-let Timer;
+/**
+ * Timer objects
+ *
+ * addTimer() and setTimer() create and manage Timer objects that are used for operations that must
+ * occur after a certain amount of "real time" has elapsed (eg, key/button events that need to be timed-out
+ * after a predefined period).
+ *
+ * These functions are preferred over JavaScript's setTimeout(), because our timers convert "real time"
+ * into cycle countdowns, which are effectively paused whenever cycle generation is paused (eg, when the
+ * user stops the emulation).  Moreover, setTimeout() handlers only run after run() yields, which may be
+ * too granular for certain devices (eg, when a serial port tries to simulate interrupts at high baud rates).
+ *
+ * WARNING: If you need to set the 'cyclesPerSecond' TimeConfig property below 60Hz, then 1) you will want
+ * to also set 'cyclesMinimum' to an equally low value, since the default minimum may not suffice, and 2) any
+ * timers configured to fire at a faster rate will not be able to; for example, if the machine is configured
+ * for 1Hz, then a 60Hz timer will only be able to fire at most 1Hz as well.  In practice, this shouldn't be
+ * an issue, as long as the timer is firing at least as frequently as any other work being performed.
+ *
+ * addClock() should be used for devices that are cycle-driven (ie, that need to be "clocked") rather than
+ * time-driven; devices using addClock() must define startClock(), stopClock(), and getClock() functions.
+ *
+ * Finally, addAnimation() should be used by any device that wants to perform high-speed animations (normally
+ * 60Hz); a separate 60Hz timer could be used as well, but using an addAnimation() callback imposes slightly less
+ * overhead, since the duration is fixed.  Also, certain types of updates may benefit from the automatic yield
+ * (eg, DOM updates), but you should avoid making expensive updates at such a high frequency.
+ *
+ * @typedef {Object} Timer
+ * @property {string} id
+ * @property {function()} callBack
+ * @property {number} msAuto
+ * @property {number} nCyclesLeft
+ */
 
 /** @typedef {{ cyclesMinimum: (number|undefined), cyclesMaximum: (number|undefined), cyclesPerSecond: (number|undefined), updatesPerSecond: (number|undefined), timeLock: (boolean|undefined) }} */
 let TimeConfig;
@@ -7899,7 +7929,7 @@ Time.BINDING = {
 Time.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/bus.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8749,7 +8779,7 @@ Bus.TYPE = {
 Bus.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/memory.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9806,7 +9836,7 @@ Memory.TYPE = {
 Memory.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/ports.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/ports.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -10003,7 +10033,7 @@ class Ports extends Memory {
 Ports.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -10048,7 +10078,7 @@ class RAM extends Memory {
 RAM.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -10274,7 +10304,7 @@ ROM.BINDING = {
 ROM.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addrReset: number }} */
@@ -10428,7 +10458,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
@@ -13158,7 +13188,7 @@ class Debugger extends Device {
 // Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/modules/v3/cpux80.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/modules/v3/cpux80.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -17170,7 +17200,7 @@ CPUx80.OPCODE = {
 CPUx80.CLASSES["CPUx80"] = CPUx80;
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx80/modules/v3/dbgx80.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx80/modules/v3/dbgx80.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -17759,7 +17789,7 @@ Dbgx80.aaOpDescs = [
 Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/chips.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/chips.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -18421,7 +18451,7 @@ VT100Chips.IOTABLE = {
 VT100Chips.CLASSES["VT100Chips"] = VT100Chips;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/keyboard.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ model: number }} */
@@ -18976,7 +19006,7 @@ VT100Keyboard.IOTABLE = {
 VT100Keyboard.CLASSES["VT100Keyboard"] = VT100Keyboard;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/serial.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -19561,7 +19591,7 @@ VT100Serial.IOTABLE = {
 VT100Serial.CLASSES["VT100Serial"] = VT100Serial;
 
 /**
- * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/dec/vt100/modules/v3/video.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */
@@ -20008,7 +20038,7 @@ class VT100Video extends Monitor {
          */
         if (VT100Video.MAXDEBUG && !this.test) {
             /*
-             * Build a test iamge in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
+             * Build a test image in the VT100 frame buffer; we'll mimic the "SET-UP A" image, since it uses
              * all the font variations.  The process involves iterating over 0-based row numbers -2 (or -5 if 50Hz
              * operation is selected) through 24, checking aLineData for a matching row number, and converting the
              * corresponding string(s) to appropriate byte values.  Negative row numbers correspond to "fill lines"
@@ -20363,7 +20393,7 @@ VT100Video.VT100 = {
 VT100Video.CLASSES["VT100Video"] = VT100Video;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/machine.js (C) 2012-2024 Jeff Parsons
  */
 
 /**

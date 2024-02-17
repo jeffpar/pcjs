@@ -1,7 +1,7 @@
 /**
  * @fileoverview BASIC File Conversion Library
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -387,7 +387,7 @@ export default class BASFile {
         let token = null;                               // null will signal end of tokens for the line
         let v = this.readU8();
         if (v) {
-            /*
+            /**
              * The original code failed to account for programs that include IBM PC drawing characters
              * inside strings or comments or DATA statements, and those characters can be (almost) any 8-bit
              * value, which is why we must track the "quote" and "comment" and "data" states of the text
@@ -428,7 +428,7 @@ export default class BASFile {
                     token = this.readS16().toString();
                     break;
                 case 0x1D:
-                    /*
+                    /**
                      * BASICA likes to display "0.1" simply as ".1"; I'm not sure that's worth worrying about.
                      *
                      * At the moment, all we do is trim trailing zeros and trailing decimal points.  It also seems
@@ -478,7 +478,7 @@ export default class BASFile {
                     } else if (v == 0x0A) {
                         token = "";                     // and we'll ignore embedded LFs
                     } else {
-                        /*
+                        /**
                          * I've seen DATA statements with embedded non-ASCII characters, so at this point,
                          * we pretty much have to encode anything else as raw text.  But first, we must un-read
                          * any extra byte we fetched above.
@@ -498,7 +498,7 @@ export default class BASFile {
                         }
                     }
                 }
-                /*
+                /**
                  * There are some additional whitespace "rules" that BASIC appears to follow, such as an implied space
                  * between PRINT (0x91) and other non-quote/non-colon tokens (otherwise statements like "PRINT CHR$(29)"
                  * become "PRINTCHR$(29)") and an implied space between number tokens and alphabetic tokens.
@@ -526,7 +526,7 @@ export default class BASFile {
      */
     static normalize(db, assumeText)
     {
-        /*
+        /**
          * Either the caller tells us the data is text, or we make sure the first 4 bytes look like text.
          */
         if (assumeText || CharSet.isText(db.toString("utf-8", 0, 4))) {
@@ -599,17 +599,17 @@ export default class BASFile {
 
         this.off = 0;
 
-        /*
+        /**
          * If the first byte is 0xFE, then this is a protected GW-BASIC program,
          * which we transform into an unprotected (but still tokenized) stream.
          */
         this.db = BASFile.unprotect(this.db);
 
-        /*
+        /**
          * If the first byte is 0xFF, then this is a tokenized GW-BASIC program.
          */
         if (this.readU8() != 0xFF) {
-            /*
+            /**
              * This does not appear to be a tokenized BASIC program, so there's nothing to do UNLESS
              * character set transformation was requested, too.
              */
@@ -620,7 +620,7 @@ export default class BASFile {
         else {
             let s = "";
             while (!this.eof()) {
-                /*
+                /**
                  * Every line in the file begins with two 16-bit values: the offset of the *next* line,
                  * and the line number of the *current* line.  The offset can be used as a sanity check
                  * (eg, for file integrity) but we're not going to bother; all we check for here is

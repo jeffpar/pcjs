@@ -2,7 +2,7 @@
 /**
  * @fileoverview PCjs command-line string replacement tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -103,7 +103,7 @@ function replaceArgs(sArgs)
         sFormat += fmt;
         if (sList) sList += ", ";
         sList += arg;
-    }
+    };
     for (let j = 0; j < aArgs.length; j++) {
         let arg = aArgs[j];
         if (arg[0] == '"' && arg[arg.length-1] == '"' || arg[0] == "'" && arg[arg.length-1] == "'") {

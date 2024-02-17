@@ -1,7 +1,7 @@
 /**
  * @fileoverview Basic definitions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -93,7 +93,7 @@ const VERSION = "3.00";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * The following globals CANNOT be overridden.

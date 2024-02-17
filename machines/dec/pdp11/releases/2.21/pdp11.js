@@ -1,41 +1,41 @@
 (function(){/*
- https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/message.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/device.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpustate.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpuops.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/pc11.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/drive.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/rk11.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/rl11.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/rx11.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/dec/pdp11/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/message.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/bus.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/device.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/memory.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpustate.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/cpuops.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/keyboard.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/pc11.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/disk.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/drive.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/rk11.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/rl11.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/rx11.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/dec/pdp11/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2024 Jeff Parsons
 */
 var k;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function ba(a){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];if(b)return b.call(a);if("number"==typeof a.length)return{next:aa(a)};throw Error(String(a)+" is not an iterable or ArrayLike");}function ca(a){if(!(a instanceof Array)){a=ba(a);for(var b,c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}
 var da="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},ea="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){if(a==Array.prototype||a==Object.prototype)return a;a[b]=c.value;return a};
@@ -386,7 +386,7 @@ Sk,Y],45056:[19,Sk,Y],49152:[15,Sk,Y],53248:[17,Sk,Y],57344:[94,Sk,Y]},65024:{20
 2816:[67,Y],2880:[1,Y],2944:[77,Y],3008:[97,Y],3072:[73,Y],3136:[71,Y],3200:[6,Y],3264:[4,Y],3328:[58,Qk],3392:[60,Y],3456:[65,Y],3520:[96,Y],35328:[40,Y],35392:[50,Y],35456:[54,Y],35520:[52,Y],35584:[68,Y],35648:[2,Y],35712:[78,Y],35776:[98,Y],35840:[74,Y],35904:[72,Y],35968:[7,Y],36032:[5,Y],36096:[66,Y],36160:[59,Y],36224:[64,Y],36288:[61,Y]},65528:{128:[76,Tk],152:[108,Pk]},65535:{0:[55],1:[99],2:[75],3:[26],4:[109],5:[70],6:[110],7:[111],160:[69],161:[31],162:[41],163:[33],164:[45],165:[36],
 166:[43],167:[35],168:[38],169:[32],170:[42],171:[34],172:[46],173:[37],174:[44],175:[30],176:[69],177:[80],178:[88],179:[82],180:[92],181:[85],182:[90],183:[84],184:[87],185:[81],186:[89],187:[83],188:[93],189:[86],190:[91],191:[79]}},Lk=[0],dk=[58,60,65,96,110,100,101,102,103,104,105],ek=[108,59,64],yk=1E3,Bk=">> ";xb(function(){for(var a=Sb("pdp11","debugger"),b=0;b<a.length;b++){var c=a[b],d=Tb(c);d=new Vj(d);Rb(d,c)}});
 function gl(a,b,c){F.call(this,"Computer",a,67108864);this.flags.ia=!1;this.S=null;hl(this,b);this.O=Ae(this,"autoPower",a,6);this.v=0;this.V=+a.busWidth||+a.buswidth;this.K=this.D=this.L=null;this.I=this.U=!1;this.F=this.A=null;this.T=this.P=this.R=!1;this.url=Ae(this,"url")||"";(Math.random()+.1).toString(36);this.j=il(this);if(this.i=Wb("CPU",this.id)){this.H=Wb("Debugger",this.id);this.G=new ld({id:this.fb+".bus",busWidth:this.V},this.i,this.H);var d=Ub(this.id);if(this.C=(this.B=Wb("Panel",this.id))&&
-this.B.J.print)for(b=0;b<d.length;b++){var e=d[b];e.print=this.B.print}this.u(0,"%s v%s\n%s\n%s\n","PDPjs","2.21","Copyright \u00a9 2012-2023 Jeff Parsons <Jeff@pcjs.org>","License: MIT <https://www.pcjs.org/LICENSE.txt>");this.u(0,"Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");for(b=0;b<d.length;b++)e=d[b],e.za&&e.za(this,this.G,this.i,this.H);b=null;e=Ae(this,"resume",a);void 0!==e&&(1<e.length?b=this.D=e:this.g=parseInt(e,10));e=!1;d=Ae(this,
+this.B.J.print)for(b=0;b<d.length;b++){var e=d[b];e.print=this.B.print}this.u(0,"%s v%s\n%s\n%s\n","PDPjs","2.21","Copyright \u00a9 2012-2024 Jeff Parsons <Jeff@pcjs.org>","License: MIT <https://www.pcjs.org/LICENSE.txt>");this.u(0,"Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");for(b=0;b<d.length;b++)e=d[b],e.za&&e.za(this,this.G,this.i,this.H);b=null;e=Ae(this,"resume",a);void 0!==e&&(1<e.length?b=this.D=e:this.g=parseInt(e,10));e=!1;d=Ae(this,
 "state");d||(e=!0,d=a.state);d&&(this.L=b=d,e||(this.I=!0,this.g=jl),this.g&&(this.F=new Dc(this,"2.21"),this.F.load()?b=null:delete this.F));!b&&this.g&&(b=kl(this))&&(this.I=!0);if(b){var f=this;fb(b,null,!0,function(g,h,l){l?(f.D=null,f.I=!1,f.u(274877906944,"Unable to load machine state from server (error %d%s)\n",l,h?": "+Za(h):"")):(f.K=h,f.U=!0);G(f)})}else G(this);this.J.power||(this.O=!0);!c&&this.O&&this.wait(this.lc)}else C("Unable to find CPU component")}u(gl,F);
 function hl(a,b){if(!b){var c,d=w.resources;if("object"==typeof d&&(c=d.parms))try{b=eval("("+c+")")}catch(e){C(e.message+" ("+c+")")}}a.S=b}function Ae(a,b,c,d){var e=b.toLowerCase();e=tb(b)||tb(e);var f=w.resources;void 0===e&&a.S&&(e=a.S[b]);void 0===e&&c&&(e=c[b]);void 0===e&&"object"==typeof f&&f[b]&&(e=b);void 0===e&&(e=void 0);if("string"==typeof e&&d)switch(d){case 4:e=+e;isNaN(e)&&(e=0);break;case 6:e="true"==e}return e}k=gl.prototype;
 k.wait=function(a,b){for(var c=this,d=Ub(this.id),e=0;e<=d.length;e++){var f=e<d.length?d[e]:this;if(!gc(f)){gc(f,function(){c.wait(a,b)});return}}a.call(this,b)};function ll(a,b){var c=new Dc(a,"2.21",ml);if(c.load()&&nl(c)){var d=c.get(ol),e=b?b.get(ol):"unknown";d!=e&&(a.u(274877906944,"Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n",d,e),b||c.clear())}}

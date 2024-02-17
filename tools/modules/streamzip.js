@@ -31,7 +31,7 @@ import {LegacyArc, LegacyZip} from './legacyzip.js';
  * @class StreamZip
  */
 export default class StreamZip extends events.EventEmitter {
-    /*
+    /**
      * Public class fields
      */
     static TYPE_ARC = 1;
@@ -206,7 +206,7 @@ export default class StreamZip extends events.EventEmitter {
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
 
-    /*
+    /**
      * Private instance fields
      *
      * Most of the StreamZip instance data is private, but instead of prefixing everything with '#', explicitly
@@ -214,7 +214,7 @@ export default class StreamZip extends events.EventEmitter {
      */
     #entries;
 
-    /*
+    /**
      * Most of the instance methods are private as well, but again, in the interest of simplicity, we'll just
      * explicitly mark each public method in its comment header (wouldn't it be nice if all methods and properties
      * in JavaScript classes could default to private unless explicitly declared public?)
@@ -240,7 +240,7 @@ export default class StreamZip extends events.EventEmitter {
         this.textDecoder = config.nameEncoding? new TextDecoder(config.nameEncoding) : null;
         this.printfDebug = config.printfDebug || function() {};
 
-        /*
+        /**
          * Don't automatically call open() if the caller has provided a buffer, because in that case,
          * all the initial reads are synchronous, and so the caller won't have a chance to set up its
          * event handlers before we start emitting events.
@@ -537,7 +537,7 @@ export default class StreamZip extends events.EventEmitter {
             while (this.op.entriesLeft != 0) {
                 let entry = new ArcEntry(this, this.config.holdErrors);
                 if (!entry.getArcHeader(buffer, bufferPos, bufferAvail)) {
-                    /*
+                    /**
                      * Too many ARC files are padded with garbage to enable this sanity check....
                      *
                      *  if (this.entryTotal + 2 < this.fileSize) {
@@ -770,7 +770,7 @@ export default class StreamZip extends events.EventEmitter {
                 return dst;
             }
         }
-        /*
+        /**
          * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
          * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
          * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
@@ -788,14 +788,14 @@ export default class StreamZip extends events.EventEmitter {
                 if (this.arcType != StreamZip.TYPE_ARC || !this.password) {
                     attempts = 0;               // only one attempt for the normal case
                 } else {
-                    /*
+                    /**
                      * TODO: decryption of password-protected files is limited to ARC archives, because
                      * the ARC implementation is simple and I haven't looked into how PKZIP implemented it yet.
                      */
                     for (let off = 0; off < src.length; off++) {
                         src.writeUInt8(src.readUInt8(off) ^ this.password.charCodeAt(off % this.password.length), off);
                     }
-                    /*
+                    /**
                      * ARC file headers don't have a "flags" field, but we still include a flags field in the entry object,
                      * and we borrow the "ENC" flag from the ZIP file header definition to track whether this particular file
                      * was encrypted.
@@ -869,7 +869,7 @@ export default class StreamZip extends events.EventEmitter {
                 entry.error("expected " + entry.size + " bytes, received " + dst.length + " (method " + entry.method + ")");
             }
             else {
-                /*
+                /**
                  * If the sizes didn't match, then it's pretty much a given that the CRCs won't match either,
                  * so let's cut down on unnecessary errors.
                  */
@@ -914,19 +914,19 @@ export default class StreamZip extends events.EventEmitter {
             return callback(new Error('entry is not file'), entry);
         }
         if (this.arcType == StreamZip.TYPE_ARC) {
-            /*
+            /**
              * ARC files contain only one set of file headers, which we have already read,
              * so all we have to do is return the entry.
              */
             callback(null, entry);
         }
         else {
-            /*
+            /**
              * ZIP files have both central directory entries (which were used to create the list
              * of entries) and local directory entries, which is what we read now.
              */
             if (this.buffer) {
-                /*
+                /**
                  * If we're using a buffer, we can simply use the buffer's data as the local header.
                  */
                 let err = null;
@@ -1196,7 +1196,7 @@ export default class StreamZip extends events.EventEmitter {
             n: (time >> 5) & 0x3f,
             s: (time & 0x1f) << 1
         };
-        /*
+        /**
          * date/time validation follows (although each part of the date/time is stored
          * in a limited number of bits, those bits can still contain out-of-bounds values).
          *
@@ -1485,7 +1485,7 @@ class ArcEntry extends Entry
     // eslint-disable-next-line require-jsdoc
     getArcHeader(data, offset, length)
     {
-        /*
+        /**
          * Normally, the final header in an ARC will contain at least 2 bytes (ARC_SIG followed
          * by ARC_END), but if we don't even have 2 bytes, give up now.
          */
@@ -1493,14 +1493,14 @@ class ArcEntry extends Entry
             return false;
         }
         StreamZip.ArcHeader.setData(data, offset, length);
-        /*
+        /**
          * verifyField() will throw an exception if 1) 'signature' does not match the specified
          * value in the field definition, or 2) 'type' does not match *any* of the values listed
          * in the field definition.
          */
         StreamZip.ArcHeader.verifyField("signature", "ARC_SIG");
         this.type = StreamZip.ArcHeader.verifyField("type");
-        /*
+        /**
          * Since we can't know ahead of time how many headers are present in an ARC file, we rely on this
          * function returning false as soon as it encounters an ARC_END header.
          */
@@ -1785,7 +1785,7 @@ class FileWindowBuffer
         this.checkOp();
         this.avail = 0;
         if (shift && shift < this.buffer.length) {
-            /*
+            /**
              * Copy all the bytes in this.buffer from shift onward to this.buffer at offset 0.
              */
             this.avail = this.buffer.copy(this.buffer, 0, shift);

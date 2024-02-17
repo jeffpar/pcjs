@@ -148,7 +148,7 @@ process that a web browser would perform, and then connects *stdin* and *stdout*
 Here's a sample run, from a macOS Terminal window:
 
     PDPjs v2.20
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     License: MIT <https://www.pcjs.org/LICENSE.txt>
     Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>
     PC11: Loaded tape "BOOTSTRAP-16KB" (28 bytes)

@@ -1,0 +1,51 @@
+
+{
+  "machine": {
+    "id": "scp",
+    "type": "pcx86"
+  },
+  "computer": {
+    "id": "scp-64k",
+    "name": "SCP"
+  },
+  "ram": [
+    {
+      "id": "ramLow",
+      "addr": "0x00000",
+      "size": "0x10000"
+    }
+  ],
+  "rom": [
+    {
+      "id": "romMonitor",
+      "addr": "0xff800",
+      "file": "/machines/pcx86/scp/rom/MON86.json5"
+    }
+  ],
+  "cpu": {
+    "id": "cpu8086",
+    "name": "",
+    "model": 8086,
+    "cycles": 4000000,
+    "autoStart": true
+  },
+  "fdc": {
+    "id": "fdc",
+    "name": "",
+    "model": "4FDC",
+    "diskettes": "/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json"
+  },
+  "chipset": {
+    "id": "chipset",
+    "name": "",
+    "model": 100,
+    "sw1": "11101100",
+    "sw2": "00000000",
+    "@note": "The above switch settings indicate base port address 0xF0 and ROM enabled at 0xFF800"
+  },
+  "debugger": {
+    "id": "debugger",
+    "name": "",
+    "messages": ""
+  }
+}

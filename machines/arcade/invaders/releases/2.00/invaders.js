@@ -1,25 +1,25 @@
 (function(){/*
- https://www.pcjs.org/modules/v3/defs.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/numio.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/webio.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/device.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/input.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/led.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/monitor.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/time.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/bus.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/memory.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/ports.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/ram.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/rom.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/cpu.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/debugger.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/cpux80.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/dbgx80.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/ports.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/video.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/defs.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/numio.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/webio.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/device.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/input.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/led.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/monitor.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/time.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/bus.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/memory.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/ports.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/ram.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/rom.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/cpu.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/debugger.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/cpux80.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/dbgx80.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/ports.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/video.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/modules/v3/machine.js (C) 2012-2024 Jeff Parsons
 */
 var f;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function ba(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}
 var ca="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},ea="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){if(a==Array.prototype||a==Object.prototype)return a;a[b]=c.value;return a};

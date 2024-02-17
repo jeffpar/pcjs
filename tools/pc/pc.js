@@ -2,7 +2,7 @@
 /**
  * @fileoverview Implements the PCjs machine command-line interface
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -82,7 +82,7 @@ export default class PC extends PCJSLib {
     diskIndexCache = null; diskIndexKeys = [];
     fileIndexCache = null; fileIndexKeys = [];
 
-    /*
+    /**
      * Each entry in drives[] is a driveInfo object, created by newDrive().
      */
     drives = [];
@@ -242,7 +242,7 @@ export default class PC extends PCJSLib {
      */
     setDebugMode(nEvent, dataEvent)
     {
-        /*
+        /**
          * Once the user has been sufficiently trained, we no longer display the helpful "training" messages.
          */
         let message = this.training > 0 && !dataEvent;
@@ -275,7 +275,7 @@ export default class PC extends PCJSLib {
     convertXML(xml, idAttrs = '@')
     {
         let machine = {};
-        /*
+        /**
          * Walk the XML tree and add all the objects to the root of the machine object.
          */
         let addXML = function(xml, xid, obj, oid) {
@@ -301,7 +301,7 @@ export default class PC extends PCJSLib {
             }
             for (let key in xml) {
                 if (key == idAttrs) {
-                    /*
+                    /**
                      * Our XSL files include rules for providing default IDs, so we do, too...
                      */
                     if (!xml[key]['id']) {
@@ -342,7 +342,7 @@ export default class PC extends PCJSLib {
     {
         let pc = this;
         for (let modulePath of modules) {
-            /*
+            /**
              * Unless I replace all backslashes in modulePath with forward slashes; eg:
              *
              *      .replace(/\\/g, '/')
@@ -372,13 +372,13 @@ export default class PC extends PCJSLib {
                 continue;
             }
             let module = await import(modulePath);
-            /*
+            /**
              * Below are the set of classes that we need access to (eg, their static methods, constants, etc).
              */
             switch(name) {
             case "component":
                 this.Component = module.default;
-                /*
+                /**
                  * We override Component.printf() in order to replace its DEBUG check with our own debug check.
                  */
                 this.Component.printf = function(format, ...args) {
@@ -401,7 +401,7 @@ export default class PC extends PCJSLib {
                 };
                 break;
             case "defines":
-                /*
+                /**
                  * Whereas OUR "globals.browser" value reflects whether WE are running in a browser, we always
                  * want the machine's "globals.browser" value to indicate that it is NOT running in a browser, so that
                  * Component.getElementsByClass() will always build fake HTML elements for the machine's initialization.
@@ -418,7 +418,7 @@ export default class PC extends PCJSLib {
                 this.Web = module.default;
                 break;
             }
-            /*
+            /**
              * If there's any chance that the module might print something, add a function to intercept it.
              */
             if (module.default && module.default.prototype) {
@@ -444,13 +444,13 @@ export default class PC extends PCJSLib {
         let Component = this.Component;
         let Interrupts = this.Interrupts;
         try {
-            /*
+            /**
              * Simulate the "web page" embedding and initialization process now.
              */
             this.embedMachine(machine.id, null, null, args);
             this.Web.doPageInit();
 
-            /*
+            /**
              * Get the CPU component so we can keep tabs on its running state and also hook
              * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
              * the debugger's print() function.
@@ -464,27 +464,27 @@ export default class PC extends PCJSLib {
                 machine.cpu.addIntNotify(Interrupts.DOS_EXIT, this.intLoad.bind(this));
             }
 
-            /*
+            /**
              * Get the FDC component so we can query its list of available diskettes,
              * and get the HDC component so we can get the state of its hard drive(s).
              */
             machine.fdc = Component.getComponentByType("FDC");
             machine.hdc = Component.getComponentByType("HDC");
 
-            /*
+            /**
              * Get the Debugger component so we can receive debugger events and send
              * debugger commands.
              */
             machine.dbg = Component.getComponentByType("Debugger");
             if (machine.dbg) machine.dbg.onEvent(this.setDebugMode.bind(this));
 
-            /*
+            /**
              * Get the Keyboard component to get access to injectKeys(), which simplifies the
              * injection of keystrokes into the machine.
              */
             machine.kbd = Component.getComponentByType("Keyboard");
 
-            /*
+            /**
              * Establish a serial connection for console I/O if --serial was specified OR there's
              * no keyboard device (as in the case of our PDP-11 machines).
              */
@@ -493,7 +493,7 @@ export default class PC extends PCJSLib {
                 if (machine.serial) {
                     let exports = machine.serial['exports'];
                     if (exports) {
-                        /*
+                        /**
                          * The PDP-11 serial.js component exports a "setConnection" function, whereas the
                          * PC serial.js component exports a "bind" function.  TODO: Bring the PDP-11 and PC
                          * serial interfaces into alignment.
@@ -508,7 +508,7 @@ export default class PC extends PCJSLib {
                 }
             }
 
-            /*
+            /**
              * Since there may be no debugger (and even if there is, machines that are auto-started won't
              * trigger any debugger events), we simulate an appropriate event.
              *
@@ -569,7 +569,7 @@ export default class PC extends PCJSLib {
                     }
                 }
                 else if (DL > machine.colCursor) {
-                    /*
+                    /**
                      * When BASIC/BASICA erases a character (in response to a BS/DEL key), it wants to redraw
                      * the entire line (eg, with spaces if there was nothing past the character being deleted);
                      * in that situation, it seems best (well, certainly easiest) to simply ignore the cursor
@@ -588,7 +588,7 @@ export default class PC extends PCJSLib {
             break;
         case 0x09:                          // write raw char/attr (AL/BL) with count (CX)
         case 0x0A:                          // write raw char (AL) with count (CX)
-            /*
+            /**
              * NOTE: I don't think the IBM BIOS handled CX == 0 very well (it looped 65536 times instead),
              * so we're not going to emulate/risk that.  Also, this function isn't supposed to move the
              * cursor, but when it's used with a count of 1, the caller usually plans to move the cursor
@@ -602,7 +602,7 @@ export default class PC extends PCJSLib {
             }
             /* falls through */
         case 0x0E:                          // write TTY char (AL)
-            /*
+            /**
              * By default, fromCP437() does NOT translate control characters to UTF-8, which is the proper
              * thing to do for TTY control characters (ie, BEL, BS, LF, and CR) that the TTY function (0x0E)
              * wants to handle, but all other characters must be translated (including ESC or 0x1B, which
@@ -628,7 +628,7 @@ export default class PC extends PCJSLib {
             break;
         }
 
-        /*
+        /**
          * Originally, we only hooked the IRET if a TTY function (0x0E) was being performed, because that
          * was the only time we wanted to ignore nested INT 0x10 calls, but since we're also handling INT 0x6D
          * calls now (so that we don't miss video calls trigged by CALLF), we need to hook the IRET every time.
@@ -679,7 +679,7 @@ export default class PC extends PCJSLib {
     {
         if (this.geometryOverride) {
             let cpu = this.machine.cpu;
-            /*
+            /**
              * We do basically the same thing our custom MBR does: build drive tables in unused
              * interrupt vector space (16 bytes spanning vectors 0xC0 to 0xC3 for drive 0, and 16
              * bytes spanning vectors 0xC4 to 0xC7 for drive 1) and then update the drive table
@@ -731,7 +731,7 @@ export default class PC extends PCJSLib {
      */
     intReboot(addr)
     {
-        /*
+        /**
          * An INT 19h issued from our own QUIT.COM is a signal to shut down.
          */
         let cpu = this.machine.cpu;
@@ -761,7 +761,7 @@ export default class PC extends PCJSLib {
             }
         }
 
-        /*
+        /**
          * Any other INT 19h should proceed normally; however, if the machine's hard drive(s) are using
          * custom geometries AND we didn't build a drive image with our custom MBR, then the drive table(s)
          * for those geometries will never get loaded into memory.  So we take this opportunity to install
@@ -775,7 +775,7 @@ export default class PC extends PCJSLib {
             this.geometryOverride = true;
         }
 
-        /*
+        /**
          * Also, in order to test floppy diskettes with non-standard sector sizes, we take this opportunity
          * to patch the Diskette Parameter Table (DPT) if we're booting a floppy with a non-standard sector size.
          * Since this table will generally be in ROM (well, at least on the first reboot, since no other code
@@ -790,7 +790,7 @@ export default class PC extends PCJSLib {
             let fpDPT = cpu.getLong(0x1E * 4);                      // get the DPT address from interrupt vector 0x1E
             let addrDPT = ((fpDPT >>> 16) << 4) + (fpDPT & 0xffff); // convert real-mode far pointer to physical address
 
-            /*
+            /**
              * The 4th byte in the DPT (at offset 3) indicates the # bytes/sector, and it is stored as a shift
              * count for the base sector size of 128 (128 << 0 = 128, 128 << 1 = 256, 128 << 2 == 512, etc).  So
              * the value to write is log2(cbSector) - log2(128).  We also update the EOT value in the 5th byte
@@ -799,7 +799,7 @@ export default class PC extends PCJSLib {
             cpu.bus.setByteDirect(addrDPT + 3, Math.log2(this.drives[0].cbSector) - 7);
             cpu.bus.setByteDirect(addrDPT + 4, this.drives[0].nSectors);
 
-            /*
+            /**
              * Unfortunately, this all seems to be for naught, because while stepping through the MS-DOS 3.30
              * initialization code in IO.SYS, I saw that when it loads the entire FAT into the top of available
              * memory, it calculates how many paragraphs all the FAT sectors will need, and it does so by shifting
@@ -821,7 +821,7 @@ export default class PC extends PCJSLib {
                 cpu.setShort(0x413, --kbRAM);
             }
 
-            /*
+            /**
              * So, no, MS-DOS 3.30 is totally broken for non-512-byte sectors, because after it got past reading
              * the FAT (into segment 9FA0, thanks to the reduced memory size), it then proceeded to read MSDOS.SYS
              * one track at a time, starting 5C9:0, then 5C9:A00, then 5C9:1400, etc.  Well, that's great if all 5
@@ -1048,7 +1048,7 @@ export default class PC extends PCJSLib {
             break;
         }
         if (sVerify) {
-            /*
+            /**
              * This "pre-read" of the machine file isn't strictly necessary, it just helps confirm
              * the machine type (eg, pcx86, pdp11), which we can also infer from the filename/path, so
              * in the case running remotely, we dispense with it, to avoid another async read.
@@ -1087,7 +1087,7 @@ export default class PC extends PCJSLib {
                     driveCtrl = "COMPAQ";
                 }
             } else {
-                /*
+                /**
                  * If we can't crack open the config, we'll have to make inferences from the machine filename.
                  */
                 if (sFile.indexOf("5150") >= 0) {
@@ -1102,7 +1102,7 @@ export default class PC extends PCJSLib {
                 }
             }
             if (this.floppy) {
-                /*
+                /**
                  * And even if we *can* crack open the config, our configs don't currently tell us the maximum diskette
                  * capacity, so we have to infer that as well.
                  */
@@ -1259,7 +1259,7 @@ export default class PC extends PCJSLib {
                             printf("warning: drive controller (%s) does not match actual controller (%s)\n", driveCtrl, typeCtrl);
                         }
                     }
-                    /*
+                    /**
                      * If we don't have a drive type (eg, if no drive was built and no drive type was explicitly set),
                      * we would still like to match the target capacity with a drive.  Convert the capacity from Mb to
                      * sectors and then give it a go.
@@ -1274,7 +1274,7 @@ export default class PC extends PCJSLib {
                     if (driveInfo.driveType >= 0) {
                         let driveType = driveInfo.driveType;
                         if (!driveType && driveInfo.driveCtrl == "PCJS") {
-                            /*
+                            /**
                              * When a custom geometry is being used, we need to set the drive type to the FIRST type used
                              * by the current drive controller (the PC XT started with type 0, while the PC AT started with 1).
                              */
@@ -1333,7 +1333,7 @@ export default class PC extends PCJSLib {
         };
 
         if (this.machine.cpu) {
-            /*
+            /**
              * Safety check: if newMachine() was called, then this shouldn't happen.
              */
             result = "machine already loaded";
@@ -1385,7 +1385,7 @@ export default class PC extends PCJSLib {
         let result = "";
         try {
             let sConfig = await diskLib.readFileAsync(sFile);
-            /*
+            /**
              * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
              */
             let config = eval('(' + sConfig + ')');
@@ -1422,7 +1422,7 @@ export default class PC extends PCJSLib {
                 if (!aTags) {
                     xml[sNode] = xmlNode[sNode];
                 } else {
-                    /*
+                    /**
                      * Preserve any non-ref attributes in the tag we're updating.
                      */
                     let attrs = aTags[iTag][idAttrs];
@@ -1445,7 +1445,7 @@ export default class PC extends PCJSLib {
                             let sFileXML = attrs && attrs['ref'];
                             if (sFileXML) {
                                 pc.readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
-                                /*
+                                /**
                                  * Any non-ref attributes in the tag should override those in the referenced file.
                                  */
                                 for (let attr in attrs) {
@@ -1570,7 +1570,7 @@ export default class PC extends PCJSLib {
         let value, versionInfo, verNumber;
         let system = configJSON['systems']?.[type];
         if (system && system.versions) {
-            /*
+            /**
              * We'll first try using the version string as-is, but as a backup, we also
              * convert it to a "X.XX" string with optional suffix (eg, "2A" => "2.00A").
              */
@@ -1588,7 +1588,7 @@ export default class PC extends PCJSLib {
                     value = sSystemPath + versionInfo[key] + ".json";
                 } else {
                     value = versionInfo['dir'] || "";
-                    /*
+                    /**
                      * When a "dir" is specified in lieu of a "disk", we check for a leading '%', which signals
                      * that this is a path to a repository alongside the pcjs repository.
                      */
@@ -1674,7 +1674,7 @@ export default class PC extends PCJSLib {
             if (!dbMBR || dbMBR.length < 512) {
                 return "invalid system MBR: " + sSystemMBR;
             }
-            /*
+            /**
              * Normal boot sectors (both master and OS boot records) are one sector in size (eg, 512 bytes),
              * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
              * I've since chopped off those unused bytes, but this will also chop them off if need be.
@@ -1700,7 +1700,7 @@ export default class PC extends PCJSLib {
             }
         }
 
-        /*
+        /**
          * Load the boot sector from the system diskette we just read, and use it to update the boot
          * sector on the disk image.
          *
@@ -1714,7 +1714,7 @@ export default class PC extends PCJSLib {
         if (diSystem) {
             dbBoot = diskLib.getDiskSector(diSystem, 0);
             if (this.bootSector) {
-                /*
+                /**
                 * Load alternate boot sector from the specified file; if it fails, we'll stick with the
                 * boot sector from the system diskette we already loaded.
                 */
@@ -1742,7 +1742,7 @@ export default class PC extends PCJSLib {
             }
         }
 
-        /*
+        /**
          * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
          * "helper binaries" we add to the disk image (and for COMMAND.COM itself).
          */
@@ -1785,7 +1785,7 @@ export default class PC extends PCJSLib {
             printf("warning: %s\n", error);
         }
 
-        /*
+        /**
          * In addition to the system files, we also create a hidden LOAD.COM "helper binary" in the root, which
          * immediately exits with an "INT 20h" instruction.  Our intLoad() interrupt handler should intercept it,
          * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
@@ -1794,7 +1794,7 @@ export default class PC extends PCJSLib {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
-        /*
+        /**
          * We also create a hidden QUIT.COM "helper binary" in the root, which executes an "INT 19h" to reboot the
          * machine. Our intReboot() interrupt handler should intercept it, allowing us to gracefully invoke saveDisk()
          * to look for any changes and then terminate the machine.
@@ -1803,7 +1803,7 @@ export default class PC extends PCJSLib {
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
         }
 
-        /*
+        /**
          * Finally, for any apps listed in configFile, create hidden "helper binaries" in the root, each of which will
          * execute an "INT 20h" that will trigger an exec of the corresponding local command.  Note that 'apps' is a
          * collection of objects, where the keys are the app names and object properties like 'exec' tell us
@@ -1827,7 +1827,7 @@ export default class PC extends PCJSLib {
             }
         }
 
-        /*
+        /**
          * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
          * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
          * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
@@ -1865,7 +1865,7 @@ export default class PC extends PCJSLib {
         }
         if (this.machineDir) data += "CD " + this.machineDir + "\n";
         if (data.length) {
-            /*
+            /**
              * Automatically normalize all line-endings in AUTOEXEC.BAT.
              */
             let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
@@ -1873,7 +1873,7 @@ export default class PC extends PCJSLib {
         }
 
         if (verDOS < 2.0) {
-            /*
+            /**
              * So to get this far, floppy had to be true, so in addition to setting the correct
              * BPB version, we should also set kbCapacity to 160 for 1.0 or 320 for 1.1.
              */
@@ -1882,7 +1882,7 @@ export default class PC extends PCJSLib {
                 if (!kbCapacity || kbCapacity > 160) kbCapacity = 160;
             }
             else {
-                /*
+                /**
                  * Even though PC DOS 1.1 added support for 320K, the PC DOS 1.1 boot diskette was formatted
                  * as 160K, so that it could also boot on single-sided drives.  So, if we really want to boot
                  * from a 320K diskette, we have to make the same boot sector modifications that the PC DOS 1.1
@@ -1897,7 +1897,7 @@ export default class PC extends PCJSLib {
                 if (!kbCapacity || kbCapacity > 320) kbCapacity = 320;
                 if (kbCapacity == 320 && dbBoot.readUInt16LE(0x0003) == 0x0008 && dbBoot.readUInt16LE(0x0005) == 0x0014) {
                     dbBoot.writeUInt16LE(0x0103, 0x0003);
-                    /*
+                    /**
                      * As an added precaution, zero the BPB region, since any BPB would have been for a 160K diskette,
                      * not a 320K diskette.
                      */
@@ -1919,7 +1919,7 @@ export default class PC extends PCJSLib {
                 if (!kbCapacity || kbCapacity > capacity) kbCapacity = capacity;
             }
             if (verDOS >= 3.2 && verDOS < 4.0) {
-                /*
+                /**
                  * When DOS 3.2 writes the boot sector to the media, it inserts the boot drive at offset 0x1fd
                  * (just before the 0x55,0xAA signature).
                  *
@@ -1938,12 +1938,12 @@ export default class PC extends PCJSLib {
 
         let done = function(diskInfo) {
             if (diskInfo) {
-                /*
+                /**
                  * This is where I would normally perform the minimum version check (see below).
                  */
                 let manifest = diskInfo.getFileManifest(null, true);
                 if (diskInfo.volTable[0] && diskInfo.volTable[0].iPartition >= 0) {
-                    /*
+                    /**
                      * Since the disk is partitioned, we need to update the Master Boot Record (MBR),
                      * hence the special volume number (-1).
                      *
@@ -1967,7 +1967,7 @@ export default class PC extends PCJSLib {
                     if (dbMBR) {
                         let iDriveTable = -1;
                         if (sSystemMBR.indexOf("pcjs.mbr") >= 0) {
-                            /*
+                            /**
                              * One case where we CANNOT use a saved machine state is building a secondary drive
                              * image (ie, driveNumber > 0) AND the driveType is NOT 1.  That's because the MBR code
                              * on a secondary drive is not run (only the MBR's partition table is examined), so any
@@ -1979,7 +1979,7 @@ export default class PC extends PCJSLib {
                                     printf("warning: secondary drive (%d) with non-standard drive type (%d) not currently supported\n", driveInfo.driveNumber, driveInfo.driveType);
                                 }
                             }
-                            /*
+                            /**
                              * WARNING: If the driveNumber of the drive we're building is NOT zero, then the system
                              * won't be booting from it, which means the MBR won't run, and so any drive tables in the
                              * MBR will be moot.
@@ -1993,12 +1993,12 @@ export default class PC extends PCJSLib {
                         printf("warning: missing MBR for partitioned disk\n");
                     }
                 }
-                /*
+                /**
                  * Now update the volume boot record (VBR) for the boot drive; for that, the volume number
                  * is always zero because pc.js only builds one volume per drive.
                  */
                 diskInfo.updateBootSector(dbBoot, 0, verBPB);
-                /*
+                /**
                  * Time to update the name of localDisk and then write the disk.  We must create a physical file
                  * (preferably JSON, since that tells us more about the disk, its layout, and its contents) because
                  * currently that's the only way to to pass a disk image to the HDC component.
@@ -2016,7 +2016,7 @@ export default class PC extends PCJSLib {
                 }
                 if (diskLib.writeDiskSync(driveInfo.localDisk, diskInfo, false, 0, true, true)) {
                     pc.updateDriveInfo(driveInfo, diskInfo);
-                    /*
+                    /**
                      * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                      * use the drive image, I'd still like to be able to inspect it.
                      */
@@ -2135,7 +2135,7 @@ export default class PC extends PCJSLib {
                             fileIndex[fileName] = [];
                         }
                         let newItem = {'disk': diskName, 'size': file['size'], 'date': file['date'], 'hash': file['hash']};
-                        /*
+                        /**
                          * Insert the new item into the fileIndex array in 'date' order.
                          */
                         let i = fileIndex[fileName].findIndex(item => item['date'] > newItem['date']);
@@ -2259,7 +2259,7 @@ export default class PC extends PCJSLib {
                 if (this.drives[this.driveBuild].driveManifest && sDir == this.localDir) {
                     let oldManifest = this.drives[this.driveBuild].driveManifest;
                     let newManifest = diskInfo.getFileManifest(null, true);
-                    /*
+                    /**
                      * We now have the old and new manifests, and both should be sorted; time to look for differences.
                      */
                     let removedDirs = [];
@@ -2305,7 +2305,7 @@ export default class PC extends PCJSLib {
 
                         if (oldItem.path == newItem.path) {
                             if ((oldAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) == (newAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME))) {
-                                /*
+                                /**
                                  * Even if both entries are SUBDIR or VOLUME, that's OK, because those entries don't have
                                  * contents, so the compare will succeed and writeFileSync() will be bypassed.
                                  */
@@ -2320,7 +2320,7 @@ export default class PC extends PCJSLib {
                                     // if (this.debug) printf("skipping: %s\n", newItemPath);
                                 }
                             } else {
-                                /*
+                                /**
                                  * Here's where things get complicated, because we could have scenarios like a directory removed
                                  * and a file with the same name created in its place.
                                  */
@@ -2343,7 +2343,7 @@ export default class PC extends PCJSLib {
                             iOld++;
                             iNew++;
                         } else if (iNew >= newManifest.length || oldItem.path < newItem.path) {
-                            /*
+                            /**
                              * Unfortunately, whenever a directory has been removed, we see the directory first,
                              * followed by any files or other directories that it used to contain.  While we could
                              * perform a recursive removal of the directory right now, that comes with some inherent
@@ -2495,7 +2495,7 @@ export default class PC extends PCJSLib {
                     } else {
                         result = sprintf("diskette \"%s\"%s loaded (%d)", diskName, disk? (error < 0? " already" : "") : " not", error || 0);
                         if (disk && !error) {
-                            /*
+                            /**
                              * We blow away the manifest if you just replaced the diskette that was built with that manifest,
                              * because there is no longer a connection between that disk drive and your local files.  That's one
                              * of the downsides of removable media.
@@ -2564,7 +2564,7 @@ export default class PC extends PCJSLib {
             for (let criteria in argv) {
                 let args = argv[criteria];
                 if (!Array.isArray(args)) {
-                    /*
+                    /**
                      * Thanks to unified argument processing, quoted arguments containing spaces are now
                      * allowed, so if you went to the trouble of doing that, we preserve spaces instead of
                      * splitting them.
@@ -2586,7 +2586,7 @@ export default class PC extends PCJSLib {
                     }
                 }
                 for (let arg of args) {
-                    /*
+                    /**
                     * Instead of trying to prevent the user from using regex characters:
                     *
                     *      arg = arg.replace(/([().\[\]])/g, '\\$1');
@@ -2636,7 +2636,7 @@ export default class PC extends PCJSLib {
                             this.fileIndexKeys = Object.keys(this.fileIndexCache).sort();
                         }
                     }
-                    /*
+                    /**
                      * If we have file name criteria AND a file name index, then we dig through the file index keys
                      * and build up a list of disk names, similar to diskIndexKeys.  Otherwise, we start with diskIndexKeys.
                      */
@@ -2666,7 +2666,7 @@ export default class PC extends PCJSLib {
                                         matches.push({'disk': name});
                                     } else {
                                         let a = index[name];
-                                        /*
+                                        /**
                                          * The items in this array are sorted by date, but we also want to eliminate duplicates
                                          * based on the hash value, so we maintain a hash index here.  The key is the hash value,
                                          * and each hash entry is an array of disk names.
@@ -2700,7 +2700,7 @@ export default class PC extends PCJSLib {
                     if (items.length == 1) {
                         doLoad(sDrive, items[0]['disk']);
                     } else if (items.length > 1) {
-                        /*
+                        /**
                          * Since there are multiple items, our job is to display rather than to load; a subsequent
                          * call to loadDiskette() with an item number will do the actual loading of the selected disk.
                          */
@@ -2833,7 +2833,7 @@ export default class PC extends PCJSLib {
                 if (appConfig && appConfig['exec']) {
                     args = appConfig['exec'].replace(/\$\*/, args);
                 }
-                /*
+                /**
                  * I've tweaked execSync() a bit to make it work with both Node and Bun....  I've also tried
                  * spawnSync(arg, argv, ...), but that doesn't work as well.
                  */
@@ -2946,7 +2946,7 @@ export default class PC extends PCJSLib {
         default:
             if (s) {
                 if (!this.machine.dbg) {
-                    /*
+                    /**
                      * For machines without a debugger, provide some *very* limited machine control.
                      */
                     switch(cmd) {
@@ -3129,7 +3129,7 @@ export default class PC extends PCJSLib {
             if (match) {
                 let driveCtrl = match[1] || driveInfo.driveCtrl;
                 let driveType = +match[2];
-                /*
+                /**
                  * WARNING: This code may not validate the type correctly if you didn't specify a controller (eg, "XT:1"),
                  * because the default controller is "COMPAQ" (because our default machine is a COMPAQ) and the code in
                  * checkMachine() that attempts to detect/update the appropriate controller for your particular machine hasn't
@@ -3194,7 +3194,7 @@ export default class PC extends PCJSLib {
             this.exit(1);
         }
         this.checkMachineArgs(argv, defaults);
-        /*
+        /**
          * Now that we have most of the system defaults, we can process --help (since it displays some of them).
          */
         return !PC.removeFlag(argv, 'help');
@@ -3227,7 +3227,7 @@ export default class PC extends PCJSLib {
 
         let i = this.systemType.indexOf(':');
         if (i > 0) {
-            /*
+            /**
              * We allow the version to be included with the system argument (eg, --sys=pcdos:2.0), for convenience.
              */
             this.systemVersion = this.systemType.slice(i+1);
@@ -3246,7 +3246,7 @@ export default class PC extends PCJSLib {
             this.kbTarget = this.maxFiles = 0;
         }
 
-        /*
+        /**
          * When using --floppy, certain other options are disallowed (eg, drivectrl).
          */
         if (this.floppy) {
@@ -3306,7 +3306,7 @@ export default class PC extends PCJSLib {
             checkRemaining = true;
         }
         this.halt = PC.removeFlag(argv, 'halt', this.halt);
-        /*
+        /**
          * --boot can now be used to EITHER select the boot drive OR specify a custom boot sector.
          */
         let boot = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect);
@@ -3359,7 +3359,7 @@ export default class PC extends PCJSLib {
         if (sDir[0] == '~') {
             sDir = node.path.join(node.process.env.HOME, sDir.slice(1));
         } else if (sDir[0] == '%') {
-            /*
+            /**
              * Like we do for 'dir' values in getSystemValue(), we check for a leading '%',
              * which signals that this is a path to a repository alongside the pcjs repository.
              */
@@ -3426,13 +3426,13 @@ export default class PC extends PCJSLib {
                 }
                 let diskInfo = await diskLib.readDiskAsync(sDisk);
                 if (diskInfo) {
-                    /*
+                    /**
                      * By default, any prebuilt disk will be used in the first drive.  So any drive-related
                      * settings are propagated to the next drive, and then a new DriveInfo object is created.
                      */
                     let driveInfo = this.newDrive(true);
                     this.updateDriveInfo(driveInfo, diskInfo);
-                    /*
+                    /**
                      * The safe thing to do would be to simply NEVER used a saved state with ANY prebuilt disk,
                      * but we happen to know that our default saved state (state386.json) was built for a machine
                      * with drive type 1, so if that's also the type of the prebuilt disk, we'll allow it.
@@ -3487,7 +3487,7 @@ export default class PC extends PCJSLib {
             this.localDir = this.verifyDir(this.localDir);
         }
 
-        /*
+        /**
          * If --commands (or -c) has been specified, we want to avoid automatically building a disk
          * or starting a machine... UNLESS sDirectory indicates that a directory was specified, in which
          * case we assume that the user still wants a disk automatically built (but nothing more).
@@ -3502,7 +3502,7 @@ export default class PC extends PCJSLib {
                     warning = "unable to add command '" + sCommand + "' to prebuilt disk";
                 } else {
                     error = await this.buildDisk(this.localDir, sCommand, sLocalDisk);
-                    /*
+                    /**
                      * If a target disk image was specified (via --save), then we assume that's all the
                      * user wanted us to do.  We'll also the display drive info if --test was specified.
                      */

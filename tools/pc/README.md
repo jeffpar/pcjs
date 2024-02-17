@@ -34,7 +34,7 @@ The format of a `pc.js` command (as `--help` will also tell you) is:
 Here is the complete help text:
 
     pc.js v3.00
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     Options: --help
 
     usage:
@@ -131,7 +131,7 @@ If you omit the machine name, it defaults to `compaq386` (a machine which also s
 
     % pc.js
     pc.js v3.00
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     error: file(s) too large (32536576 bytes total, 10653696 bytes maximum)
     error: unable to build drive
 

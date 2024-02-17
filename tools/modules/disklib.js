@@ -1,7 +1,7 @@
 /**
  * @fileoverview Disk Image Functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -22,12 +22,12 @@ await node.import("crypto", "fs", "glob", "os", "path", "./BASFile.js", "./FileL
  */
 export default class DiskLib {
 
-    /*
+    /**
      * List of archive file types to expand when "--expand" is specified.
      */
     static asArchiveFileExts = [".ARC", ".ZIP"];       // order must match StreamZip.TYPE_* constants
 
-    /*
+    /**
      * List of text file types to convert line endings from LF to CR+LF when "--normalize" is specified.
      * A warning is always displayed when we replace line endings in any file being copied to a disk image.
      *
@@ -182,7 +182,7 @@ export default class DiskLib {
      */
     extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
     {
-        /*
+        /**
          * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
          * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
          * but no longer assume they always will hidden), then we ignore them.
@@ -230,7 +230,7 @@ export default class DiskLib {
                 if (arcType) {
                     if (!fQuiet) this.printf("expanding: %s\n", sFile);
                     if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
-                        /*
+                        /**
                          * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
                          */
                         arcType = node.StreamZip.TYPE_ARC;
@@ -261,7 +261,7 @@ export default class DiskLib {
                         node.fs.utimesSync(this.getLocalPath(sFullPath), date, date);
                     }).on('error', (err) => {
                         diskLib.printError(err, sFile);
-                        /*
+                        /**
                          * Since this implies a failure to extract anything from the archive, we'll call ourselves
                          * back with allowExpand not set, so that we simply extract the archive without expanding it.
                          */
@@ -270,7 +270,7 @@ export default class DiskLib {
                         }
                     });
                     zip.open();
-                    /*
+                    /**
                      * If we 'expand' the contents of an archive, then we likely don't want to also save the
                      * archive itself, so we return now.  If you do want both, we'll have to add a new option.
                      */
@@ -282,20 +282,20 @@ export default class DiskLib {
                 return ++total;
             }
             if (!fQuiet) this.printf("extracting: %s\n", sFile);
-            /*
+            /**
              * Originally, "normalize" was just an import option (to fix line endings of known text files on
              * disks we created); however, I'm going to make it an export option as well, and not just to revert
              * line endings, but to also address the fact that there are a lot of old "tokenized" BASIC files out
              * in the world, and they are much easier to work with locally in their "de-tokenized" form.
              */
             if (argv['normalize']) {
-                /*
+                /**
                  * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we call
                  * normalize()), tokenized (which we convert to ASCII and automatically normalize in the process),
                  * and protected (which we decrypt and then de-tokenize).
                  */
                 if (this.isBASICFile(sFullPath)) {
-                    /*
+                    /**
                      * In addition to "de-tokenizing", we're also setting convertBASICFile()'s normalize parameter
                      * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
                      * currently combining both features as part of the "normalize" process.
@@ -347,7 +347,7 @@ export default class DiskLib {
         let manifest = di.getFileManifest(null);                // add true for sorted manifest
         for (let i = 0; i < manifest.length; i++) {
             let desc = manifest[i];
-            /*
+            /**
              * Parse each file descriptor in much the same way that buildFileTableFromJSON() does.  That function
              * doesn't get the file's CONTENTS, because it's working with the file descriptors that have been stored
              * in a JSON file (where CONTENTS would be redundant and a waste of space).  Here, we call getFileManifest(),
@@ -359,7 +359,7 @@ export default class DiskLib {
             let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
             let attr = +desc[DiskInfo.FILEDESC.ATTR];
 
-            /*
+            /**
              * We call parseDate() requesting a *local* date from the timestamp, because that's exactly how we're going
              * to use it: as a local file modification time.  We used to deal exclusively in UTC dates, unpolluted
              * by timezone information, but here we don't really have a choice.  Trying to fix the date after the fact,
@@ -374,7 +374,7 @@ export default class DiskLib {
             if (!extractName || extractName == name) {
                 if (!fExtractToFile) {
                     if (extractName || this.isTextFile(sPath)) {
-                        /*
+                        /**
                          * We assume normalization whenever the file is to be displayed instead of extracted to a file;
                          * in other words, --type implies --normalize.
                          *
@@ -674,7 +674,7 @@ export default class DiskLib {
         let di;
         let diskLib = this;
 
-        /*
+        /**
          * There are two special label strings you can pass on the command-line:
          *
          *      "--label none" (for no volume label at all)
@@ -702,7 +702,7 @@ export default class DiskLib {
             }
         } else {
             diskName = node.path.basename(node.path.dirname(sDir));
-            /*
+            /**
              * When we're given a list of files, we don't pick a default label; use --label if you want one.
              */
         }
@@ -728,7 +728,7 @@ export default class DiskLib {
                     }
                 }
                 if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, diskLib.getHash, driveInfo)) {
-                    /*
+                    /**
                      * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
                      */
                     if (arcType) sDir = sDir.slice(0, -4);
@@ -772,7 +772,7 @@ export default class DiskLib {
         let aFiles = [];
         if (sDir.endsWith('/')) {
             asFiles = node.fs.readdirSync(sDir);
-            /*
+            /**
              * Node typically returns directory entries in sorted order (at least on macOS, perhaps not on Windows);
              * however, I have noticed that other runtimes (eg, Bun) don't necessarily return sorted results, so for
              * consistency across all operating systems *and* runtimes, we always sort them ourselves.
@@ -791,7 +791,7 @@ export default class DiskLib {
             }
         }
 
-        /*
+        /**
          * The label, if any, will always be first in the list; this shouldn't be a concern since there is currently
          * no support for building "bootable" disks from a set of files.
          *
@@ -805,7 +805,7 @@ export default class DiskLib {
 
         let iFile;
         for (iFile = 0; iFile < asFiles.length && this.nMaxCount > 0; iFile++, this.nMaxCount--) {
-            /*
+            /**
              * node.fs.readdirSync() already excludes "." and ".." but there are also a variety of hidden
              * files on *nix systems that begin with a period, which in general we should ignore, too.
              *
@@ -815,7 +815,7 @@ export default class DiskLib {
             let sName = node.path.basename(sPath);
             if (sName.charAt(0) == '.') continue;
             let file = {path: (sPath[0] != '/' && sPath[1] != ':'? '/' : '') + sPath, name: sName, nameEncoding: "utf8"};
-            /*
+            /**
              * When statSync() is being handled by PCFS, it may include an "attr" property if the file or directory
              * originated from a DOS disk image or DOS archive.  Otherwise, we rely on the standard "mode" property.
              */
@@ -835,7 +835,7 @@ export default class DiskLib {
                 file.data = new DataBuffer();
                 file.files = this.readDirFiles(sPath + '/', null, null, fNormalize, iLevel + 1, driveInfo);
             } else {
-                /*
+                /**
                  * To properly deal with normalization of BASIC files, we first read the file into
                  * a DataBuffer and make sure the first byte isn't 0xFE or 0xFF (because that indicates
                  * the BASIC program is tokenized and should be left as-is).
@@ -923,7 +923,7 @@ export default class DiskLib {
         for (let entry of entries) {
 
             let file = {path: entry.name, name: node.path.basename(entry.name), nameEncoding: "cp437"};
-            /*
+            /**
              * The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
              * because file times stored in a ZIP file are *local* times.
              *
@@ -936,7 +936,7 @@ export default class DiskLib {
                 let date = new Date(entry.time);
                 file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
             }
-            /*
+            /**
              * Not all archives provide discrete entries for every subdirectory before they are
              * referenced, so we must always examine every entry for subdirectory components and
              * add them to the file list if they don't already exist.
@@ -955,7 +955,7 @@ export default class DiskLib {
                 files = file.files;
             }
             if (!entry.isDirectory) {
-                /*
+                /**
                  * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
                  */
                 let data;
@@ -977,7 +977,7 @@ export default class DiskLib {
                 }
             }
             if (verbose) {
-                /*
+                /**
                  * Notes regarding ARC compression method "naming conventions":
                  *
                  * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
@@ -994,7 +994,7 @@ export default class DiskLib {
                 let methodsARC = [
                     "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
                 ];
-                /*
+                /**
                  * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
                  * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
                  * of PC-SIG 9th edition ZIP files.
@@ -1166,7 +1166,7 @@ export default class DiskLib {
                 }
             }
             else {
-                /*
+                /**
                  * Passing null for the encoding parameter tells readFileSync() to return a DataBuffer.
                  */
                 db = this.readFileSync(diskFile, null);

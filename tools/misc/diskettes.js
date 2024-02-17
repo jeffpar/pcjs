@@ -2,7 +2,7 @@
 /**
  * @fileoverview Node command-line diskettes.json generation tool
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2020 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -269,8 +269,6 @@ function getDiskDB(info)
     }
     return diskDB;
 }
-
-process
 
 /**
  * processCollection(sCollection, argv)
@@ -576,7 +574,7 @@ function processFolders(sDir, argv)
             /*
              * Add a new entry...
              */
-            let groupName = imgParts[0].toUpperCase()
+            let groupName = imgParts[0].toUpperCase();
             let i = imgPath.indexOf('-');
             if (i >= 0) {
                 groupName = imgPath.slice(0, i).toUpperCase();

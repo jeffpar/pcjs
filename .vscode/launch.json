@@ -614,11 +614,22 @@
       }
     },
     {
-      "name": "PC.js Playground",
-      "type": "chrome",
+      "name": "PC.js compaq386",
+      "type": "node",
       "request": "launch",
-      "url": "http://localhost:4000/tools/pc/#playground",
-      "webRoot": "${workspaceFolder}",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "disks/msdos",
+        "--sys=compaq",
+        "--ver=3.31",
+        "--target=40M"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
       "presentation": {
         "hidden": false,
         "group": "machines",
@@ -764,15 +775,26 @@
       }
     },
     {
-      "name": "PC.js compaq386",
+      "name": "PC.js playground",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/pc/#playground",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js scp",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "disks/msdos",
-        "--sys=compaq",
-        "--ver=3.31",
-        "--target=40M"
+        "scp.json",
+        "--debug",
+        "--halt"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
@@ -2034,9 +2056,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "arcs/nesttest.zip",
-        "--extract",
-        "--overwrite"
+        "zips/imd120.zip",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",
       "stopOnEntry": false,

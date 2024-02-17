@@ -7,13 +7,16 @@ machines:
   - id: cpm-mda-256k
     type: pcx86
     config: /machines/pcx86/ibm/5150/mda/256kb/machine.xml
+    autoMount:
+      A:
+        name: IBM CP/M-86 1.00
 ---
 
 This is the first IBM version of CP/M-86, produced by Digital Research Inc. in 1982.
 
 On startup, it reports:
 
-    CP/M-86 Boostrap Loader 1.0
+    CP/M-86 Bootstrap Loader 1.0
     Reading Track 0 1 2 3 4
     
     CP/M-86 for the IBM Personal Computer.

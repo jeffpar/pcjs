@@ -88,7 +88,7 @@ Now let's dive into a much more interesting example.  Imagine we have a small co
 
     $ pc.js --commands
     pc.js v3.00
-    Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
     Options: --commands
     [Type help for list of commands, CTRL-C to terminate]
     >> fetch https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json disks/msdos

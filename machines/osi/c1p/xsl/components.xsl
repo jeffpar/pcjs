@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2023 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
+<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2024 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
 <!DOCTYPE xsl:stylesheet [
 ]>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
@@ -177,7 +177,7 @@
 					<xsl:otherwise/>
 				</xsl:choose>
 				<div class="{$CSSCLASS}-copyright">
-					<a href="{$SITEURL}" target="_blank">C1Pjs</a> v<xsl:value-of select="$APPVERSION"/> © 2012-2023 <a href="https://github.com/jeffpar" target="_blank">Jeff Parsons</a>
+					<a href="{$SITEURL}" target="_blank">C1Pjs</a> v<xsl:value-of select="$APPVERSION"/> © 2012-2024 <a href="https://github.com/jeffpar" target="_blank">Jeff Parsons</a>
 				</div>
 				<div style="clear:both"> </div>
 			</xsl:if>

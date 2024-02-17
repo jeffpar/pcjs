@@ -1,23 +1,23 @@
 (function(){/*
- https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/dumpapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/reportapi.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/strlib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/weblib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/embed.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/defines.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/usrlib.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/shared/lib/component.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/defines.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/panel.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/cpu.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/rom.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/ram.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/keyboard.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/video.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/serial.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/disk.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/debugger.js (C) 2012-2024 Jeff Parsons
+ https://www.pcjs.org/machines/osi/c1p/lib/computer.js (C) 2012-2024 Jeff Parsons
 */
 var f;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function ba(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}
 var ca="function"==typeof Object.create?Object.create:function(a){function b(){}b.prototype=a;return new b},da="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){if(a==Array.prototype||a==Object.prototype)return a;a[b]=c.value;return a};

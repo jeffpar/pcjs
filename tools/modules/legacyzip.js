@@ -1,7 +1,7 @@
 /**
  * @fileoverview Library for decompressing various "legacy" ZIP formats
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -294,7 +294,7 @@ export class LegacyZip
  */
 class BitStream
 {
-    /*
+    /**
      * The original code set MIN_BITS to (64 - 7), because it read 64 bits at a time,
      * and if bit_pos wasn't on a byte boundary, it would shift 1-7 zeros into the top
      * of the result, and the caller would assert that it never used more than MIN_BITS.
@@ -394,7 +394,7 @@ class BitStream
         if (bit_off) {
             bits >>>= bit_off;
             let bitsAvail = (bytesAvail << 3) - bit_off;
-            /*
+            /**
              * If we're not sure how many bits the caller wants (because lsb is zero), or
              * the caller wants more bits than we just read, then try to read one more byte.
              */
@@ -513,7 +513,7 @@ class HuffmanDecoder
      */
     constructor()
     {
-        /*
+        /**
          * In the original implementation, table was an array of 16-bit values,
          * split into two bit-fields:
          *
@@ -545,16 +545,16 @@ class HuffmanDecoder
 
         assert(n <= HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
         this.num_syms = n;
-        /*
+        /**
          * Zero-initialize the lookup table
          */
         for (let i = 0; i < this.table.length; i++) {
             this.table[i] = {
                 sym: 0,
                 len: 0
-            }
+            };
         }
-        /*
+        /**
          * Count the number of codewords of each length
          */
         for (let i = 0; i < n; i++) {
@@ -562,19 +562,19 @@ class HuffmanDecoder
             count[lengths[i]]++;
         }
         count[0] = 0;           // ignore zero-length codewords
-        /*
+        /**
          * Compute sentinel_bits and offset_first_sym_idx for each length
          */
         code[0] = 0;
         sym_idx[0] = 0;
         for (let l = 1; l <= HuffmanDecoder.MAX_HUFFMAN_BITS; l++) {
-            /*
+            /**
              * First canonical codeword of this length
              */
             code[l] = ((code[l - 1] + count[l - 1]) << 1) & 0xffff;
 
             if (count[l] != 0 && code[l] + count[l] - 1 > (1 << l) - 1) {
-                /*
+                /**
                  * The last codeword is longer than l bits
                  */
                 return false;
@@ -587,7 +587,7 @@ class HuffmanDecoder
             sym_idx[l] = sym_idx[l - 1] + count[l - 1];
             this.offset_first_sym_idx[l] = (sym_idx[l] - code[l]) & 0xffff;
         }
-        /*
+        /**
          * Build mapping from index to symbol and populate the lookup table
          */
         for (let i = 0; i < n; i++) {
@@ -619,7 +619,7 @@ class HuffmanDecoder
 
         codeword = HuffmanDecoder.reverse16(codeword, len);     // Make it LSB-first
         let pad_len = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS - len;
-        /*
+        /**
          * Pad the pad_len upper bits with all bit combinations
          */
         for (let padding = 0; padding < (1 << pad_len); padding++) {
@@ -646,7 +646,7 @@ class HuffmanDecoder
     decode(/* uint16_t */ bits)
     {
         bits &= 0xffff;
-        /*
+        /**
          * First try the lookup table
          */
         let lookup_bits = BitStream.lsb(bits, HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
@@ -656,7 +656,7 @@ class HuffmanDecoder
             assert(this.table[lookup_bits].sym < this.num_syms);
             return {sym: this.table[lookup_bits].sym, used: this.table[lookup_bits].len};
         }
-        /*
+        /**
          * Then do canonical decoding with the bits in MSB-first order
          */
         bits = HuffmanDecoder.reverse16(bits, HuffmanDecoder.MAX_HUFFMAN_BITS);
@@ -1087,12 +1087,12 @@ class Decompress
  */
 class ArcUnpack extends Decompress
 {
-    /*
+    /**
      * Stuff for repeat unpacking
      */
     static DLE = 0x90;          // repeat byte flag
 
-    /*
+    /**
      * Repeat unpacking states
      */
     static NOHIST = 0;          // no relevant history
@@ -1161,7 +1161,7 @@ class ArcUnpack extends Decompress
                 if (data[i]) {
                     while (--data[i]) {
                         assert(this.lastc >= 0);
-                        this.writeOutput(this.lastc)
+                        this.writeOutput(this.lastc);
                     }
                 } else {
                     this.writeOutput(ArcUnpack.DLE);
@@ -1204,7 +1204,7 @@ class ArcUnpack extends Decompress
 class ArcUnsqueeze extends ArcUnpack
 {
     static SPEOF = 256;                 // special endfile token
-    static NUMVALS = 257                // 256 data values plus SPEOF
+    static NUMVALS = 257;               // 256 data values plus SPEOF
 
     /**
      * init(src, dst_len)
@@ -1217,7 +1217,7 @@ class ArcUnsqueeze extends ArcUnpack
     {
         super.init(src, dst_len, true);
 
-        /*
+        /**
          * Initialize Huffman unsqueezing (from init_usq() in arcusq.c)
          */
         this.numNodes = this.bs.bits(16, true);
@@ -1225,7 +1225,7 @@ class ArcUnsqueeze extends ArcUnpack
             throw new Error("invalid decode tree");
         }
 
-        /*
+        /**
          * Initialize for possible empty tree (SPEOF only)
          *
          * Each node entry contain two child entries: child[0] aka "left", and child[1] aka "right".
@@ -1233,7 +1233,7 @@ class ArcUnsqueeze extends ArcUnpack
         this.node = new Array(this.numNodes);
         this.node[0] = {child: [-(ArcUnsqueeze.SPEOF + 1), -(ArcUnsqueeze.SPEOF + 1)]};
 
-        /*
+        /**
          * Get decoding tree from file
          *
          * NOTE: The 16-bit values being pulled from the bit stream (child[0] and child[1]) are signed,
@@ -1257,12 +1257,12 @@ class ArcUnsqueeze extends ArcUnpack
         let j;
         let o = 0;                      // data index
         for (j = 0; j < data.length; j++) {
-            /*
+            /**
              * Follow bit stream in tree to a leaf
              */
             let i;                      // tree index
             for (i = 0; i >= 0;) {
-                /*
+                /**
                  * Work down(up?) from root
                  */
                 if (this.bs.empty()) {
@@ -1271,7 +1271,7 @@ class ArcUnsqueeze extends ArcUnpack
                 let b = this.bs.bits(1, true);
                 i = this.node[i].child[b];
             }
-            /*
+            /**
              * Decode fake node index to original data value
              */
             i = -(i + 1) | 0;
@@ -1436,12 +1436,12 @@ class ArcUncrunch extends ArcUnpack
         if (!this.string_tab[local].used) {     // if that spot is free
             return local;                       // then that's all we need
         }
-        /*
+        /**
          * Collision has occurred
          */
         local = this.eolist(local);             // move to last duplicate
 
-        /*
+        /**
          * We must find an empty spot. We start looking 101 places
          * down the table from the last duplicate.
          */
@@ -1457,7 +1457,7 @@ class ArcUncrunch extends ArcUnpack
             }
         }
 
-        /*
+        /**
          * local still has the pointer to the last duplicate, while
          * next has the pointer to the spot we found.  We use this to
          * maintain the chain of pointers to duplicates.
@@ -1565,7 +1565,7 @@ class ArcUncrunch extends ArcUnpack
                 this.finchar = ep.follower;
                 this.push(this.finchar);        // save first character also */
 
-                /*
+                /**
                  * The above loop will terminate, one way or another, with
                  * string_tab[code].follower equal to the first character in
                  * the string.
@@ -1614,7 +1614,7 @@ class ArcUncrunch extends ArcUnpack
  */
 class ArcUncrush extends ArcUnpack
 {
-    /*
+    /**
      * Definitions for the new dynamic Lempel-Zev crunch (herein referred to as "crush")
      */
     static CRBITS   = 12;               // maximum bits per code
@@ -1626,7 +1626,7 @@ class ArcUncrush extends ArcUnpack
     static SQGAP    = 10000;
     static INIT_BITS = 9;               // initial number of bits/code
 
-    /*
+    /**
      * The next two codes should not be changed lightly, as they must not lie within the contiguous general code space.
      */
     static FIRST    = 257;              // first free entry
@@ -1672,7 +1672,7 @@ class ArcUncrush extends ArcUnpack
         this.offset = this.size = 0;
         this.buf = new Array(ArcUncrush.SQBITS);
 
-        /*
+        /**
          * Initialize the first 256 entries in the tables.
          */
         this.prefix.fill(0, 0, 256);
@@ -1702,7 +1702,7 @@ class ArcUncrush extends ArcUnpack
         let code, r_off, bits, bp = 0;
 
         if (this.clear_flg > 0 || this.offset >= this.size || this.free_ent > this.maxcode) {
-            /*
+            /**
              * If the next entry will be too big for the current code
              * size, then we must increase the size. This implies reading
              * a new buffer full, too.
@@ -1731,7 +1731,7 @@ class ArcUncrush extends ArcUnpack
                 return -1;
             }
             this.offset = 0;
-            /*
+            /**
              * Round size down to integral number of codes
              */
             this.size = (this.size << 3) - (this.n_bits - 1);
@@ -1739,20 +1739,20 @@ class ArcUncrush extends ArcUnpack
         r_off = this.offset;
         bits = this.n_bits;
 
-        /*
+        /**
          * Get to the first byte.
          */
         bp += (r_off >> 3);
         r_off &= 7;
 
-        /*
+        /**
          * Get first part (low order bits)
          */
         code = (this.buf[bp++] >> r_off);
         bits -= 8 - r_off;
         r_off = 8 - r_off;
 
-        /*
+        /**
          * Get any 8 bit parts in the middle (<=1 for up to 16 bits).
          */
         if (bits >= 8) {
@@ -1761,7 +1761,7 @@ class ArcUncrush extends ArcUnpack
             bits -= 8;
         }
 
-        /*
+        /**
          * Get high order bits.
          */
         code |= (this.buf[bp] & ArcUncrush.RMASK[bits]) << r_off;
@@ -1804,7 +1804,7 @@ class ArcUncrush extends ArcUnpack
 
         while ((code = this.getCode()) > -1) {
             if (code == ArcUncrush.CLEAR) {
-                /*
+                /**
                  * Reset string table.
                  */
                 this.prefix.fill(0, 0, 256);
@@ -1817,7 +1817,7 @@ class ArcUncrush extends ArcUnpack
             }
             let incode = code;
 
-            /*
+            /**
              * Special case for KwKwK string.
              */
             if (code >= this.free_ent) {
@@ -1828,7 +1828,7 @@ class ArcUncrush extends ArcUnpack
                 code = oldcode;
             }
 
-            /*
+            /**
              * Generate output characters in reverse order
              */
             while (code >= 256) {
@@ -1837,7 +1837,7 @@ class ArcUncrush extends ArcUnpack
             }
             this.stack[p++] = finchar = this.suffix[code];
 
-            /*
+            /**
              * And put them out in forward order
              */
             do {
@@ -1848,7 +1848,7 @@ class ArcUncrush extends ArcUnpack
                 }
             } while (p > 0);
 
-            /*
+            /**
              * Generate the new entry.
              */
             if ((code = this.free_ent) < this.max_maxcode) {
@@ -1857,7 +1857,7 @@ class ArcUncrush extends ArcUnpack
                 this.free_ent = code + 1;
             }
 
-            /*
+            /**
              * Remember previous code.
              */
             oldcode = incode;
@@ -1935,14 +1935,14 @@ class ZipStretch extends Decompress
     allocCodeTable()
     {
         let table = /** @type {Array.<Code>} */ new Array(ZipStretch.MAX_CODE + 1);
-        /*
+        /**
          * Codes for literal bytes.  Set a phony prefix_code so they're valid.
          */
         let i;
         for (i = 0; i <= 0xff; i++) {
             let prefix_code = i;
             let ext_byte = i, len = 1;
-            table[i] = {prefix_code, ext_byte, len}
+            table[i] = {prefix_code, ext_byte, len};
         }
         for (; i < table.length; i++) {
             let prefix_code = ZipStretch.INVALID_CODE;
@@ -1984,7 +1984,7 @@ class ZipStretch extends Decompress
             queue.codes[code_queue_size++] = code;
         }
         assert(code_queue_size < queue.codes.length);
-        /*
+        /**
          * Add an end-of-queue marker
          */
         queue.codes[code_queue_size] = ZipStretch.INVALID_CODE;
@@ -2036,14 +2036,14 @@ class ZipStretch extends Decompress
         if (!this.bs.advance(this.code_size)) {
             return false;
         }
-        /*
+        /**
          * Handle regular codes (the common case)
          */
         if (code != ZipStretch.CONTROL_CODE) {
             this.curr_code = code;
             return true;
         }
-        /*
+        /**
          * Handle control codes
          */
         let /* uint16_t */ control_code = this.bs.bits(this.code_size);
@@ -2075,7 +2075,7 @@ class ZipStretch extends Decompress
     {
         let is_prefix = new Array(ZipStretch.MAX_CODE + 1).fill(false);
 
-        /*
+        /**
          * Scan for codes that have been used as a prefix.
          */
         for (let i = ZipStretch.CONTROL_CODE + 1; i <= ZipStretch.MAX_CODE; i++) {
@@ -2084,7 +2084,7 @@ class ZipStretch extends Decompress
             }
         }
 
-        /*
+        /**
          * Clear "non-prefix" codes in the table; populate the code queue.
          */
         let code_queue_size = 0;
@@ -2116,7 +2116,7 @@ class ZipStretch extends Decompress
         assert(this.dst_pos < this.dst.length);
 
         if (code <= 0xff) {
-            /*
+            /**
              * Output literal byte
              */
             assert(code >= 0);
@@ -2126,13 +2126,13 @@ class ZipStretch extends Decompress
             return ZipStretch.OK;
         }
         if (this.codetable[code].prefix_code == ZipStretch.INVALID_CODE || this.codetable[code].prefix_code == code) {
-            /*
+            /**
              * Reject invalid codes. Self-referential codes may exist in the table but cannot be used.
              */
             return ZipStretch.ERR;
         }
         if (this.codetable[code].len != ZipStretch.UNKNOWN_LEN) {
-            /*
+            /**
              * Output string with known length (the common case).
              */
             if (this.dst.length - this.dst_pos < this.codetable[code].len) {
@@ -2143,7 +2143,7 @@ class ZipStretch extends Decompress
             this.len = this.codetable[code].len;
             return ZipStretch.OK;
         }
-        /*
+        /**
          * Output a string of unknown length. This happens when the prefix was invalid
          * (due to partial clearing) when the code was inserted into the table. The prefix
          * can then become valid when it's added to the table at a later point.
@@ -2153,7 +2153,7 @@ class ZipStretch extends Decompress
         assert(prefix_code > ZipStretch.CONTROL_CODE);
 
         if (prefix_code == this.getCodeQueueNext()) {
-            /*
+            /**
              * The prefix code hasn't been added yet, but we were just about to: the KwKwK case.
              * Add the previous string extended with its first byte.
              */
@@ -2162,12 +2162,12 @@ class ZipStretch extends Decompress
             this.writeOutput(this.first_byte, false);
         }
         else if (this.codetable[prefix_code].prefix_code == ZipStretch.INVALID_CODE) {
-            /*
+            /**
              * The prefix code is still invalid.
              */
             return ZipStretch.ERR;
         }
-        /*
+        /**
          * Output the prefix string, then the extension byte.
          */
         this.len = this.codetable[prefix_code].len + 1;
@@ -2177,7 +2177,7 @@ class ZipStretch extends Decompress
         this.copyBytes(this.dst_pos, this.codetable[prefix_code].last_dst_pos, this.codetable[prefix_code].len);
         this.writeByte(this.codetable[code].ext_byte, this.dst_pos + this.len - 1);
         this.first_byte = this.readByte(this.dst_pos);
-        /*
+        /**
          * Update the code table now that the string has a length and pos.
          */
         assert(prev_code != code);
@@ -2201,7 +2201,7 @@ class ZipStretch extends Decompress
     {
         this.init(src, dst_len);
         this.code_size = ZipStretch.MIN_CODE_SIZE;
-        /*
+        /**
          * Handle the first code separately since there is no previous code.
          */
         if (!this.readCode()) {
@@ -2226,17 +2226,17 @@ class ZipStretch extends Decompress
             if (this.dst_pos == /* dst_len */ this.dst.length) {
                 return ZipStretch.FULL;
             }
-            /*
+            /**
              * Handle KwKwK: next code used before being added.
              */
             if (this.curr_code == this.getCodeQueueNext()) {
                 if (this.codetable[prev_code].prefix_code == ZipStretch.INVALID_CODE) {
-                    /*
+                    /**
                      * The previous code is no longer valid.
                      */
                     return ZipStretch.ERR;
                 }
-                /*
+                /**
                  * Extend the previous code with its first byte.
                  */
                 assert(this.curr_code != prev_code);
@@ -2244,14 +2244,14 @@ class ZipStretch extends Decompress
                 assert(this.dst_pos < /* dst_len */ this.dst.length);
                 this.writeOutput(this.first_byte, false);
             }
-            /*
+            /**
              * Output the string represented by the current code.
              */
             let s = this.outputCode(prev_code);
             if (s !== ZipStretch.OK) {
                 return s;
             }
-            /*
+            /**
              * Verify that the output matches walking the prefixes.
              */
             let c = this.curr_code;
@@ -2260,7 +2260,7 @@ class ZipStretch extends Decompress
                 assert(this.codetable[c].ext_byte == this.dst[this.dst_pos + this.len - i - 1]);
                 c = this.codetable[c].prefix_code;
             }
-            /*
+            /**
              * Add a new code to the string table if there's room.  The string is the
              * previous code's string extended with the first byte of the current code's string.
              */
@@ -2269,13 +2269,13 @@ class ZipStretch extends Decompress
                 assert(this.codetable[prev_code].last_dst_pos < this.dst_pos);
                 this.updateCodeTable(new_code, prev_code);
                 if (this.codetable[prev_code].prefix_code == ZipStretch.INVALID_CODE) {
-                    /*
+                    /**
                      * prev_code was invalidated in a partial clearing.  Until that code is re-used,
                      * the string represented by new_code is indeterminate.
                      */
                     this.codetable[new_code].len = ZipStretch.UNKNOWN_LEN;
                 }
-                /*
+                /**
                  * If prev_code was invalidated in a partial clearing, it's possible that new_code == prev_code,
                  * in which case it will never be used or cleared.
                  */
@@ -2389,7 +2389,7 @@ class ZipExpand extends Decompress
     getMaxLen()
     {
         let v_len_bits = (8 - this.comp_factor);
-        /*
+        /**
          * Bits in V + extra len byte + implicit 3.
          */
         return ((1 << v_len_bits) - 1) + 255 + 3;
@@ -2404,7 +2404,7 @@ class ZipExpand extends Decompress
     getMaxDist()
     {
         let v_dist_bits = this.comp_factor;
-        /*
+        /**
          * Bits in V * 256 + W byte + implicit 1.
          */
         return ((1 << v_dist_bits) - 1) * 256 + 255 + 1;
@@ -2427,20 +2427,20 @@ class ZipExpand extends Decompress
         let prev_byte = this.curr_byte;
 
         if (this.fsets[prev_byte].size == 0) {
-            /*
+            /**
              * No followers; read a literal byte.
              */
             this.curr_byte = bits & 0xff;
             return this.bs.advance(8);
         }
         if (BitStream.lsb(bits, 1) == 1) {
-            /*
+            /**
              * Don't use the follower set; read a literal byte.
              */
             this.curr_byte = (bits >> 1) & 0xff;
             return this.bs.advance(1 + 8);
         }
-        /*
+        /**
          * The bits represent the index of a follower byte.
          */
         let idx_bw = this.fsets[prev_byte].idx_bw;
@@ -2468,47 +2468,47 @@ class ZipExpand extends Decompress
             return false;
         }
 
-        /*
+        /**
          * Number of bits in V used for backref length
          */
         let v_len_bits = (8 - comp_factor);
 
-        /*
+        /**
          * The first "previous byte" is implicitly zero
          */
         this.curr_byte = 0;
 
         while (this.dst_pos < dst_len) {
-            /*
+            /**
              * Read a literal byte or DLE marker.
              */
             if (!this.readNextByte()) {
                 return false;
             }
             if (this.curr_byte != ZipExpand.DLE_BYTE) {
-                /*
+                /**
                  * Output a literal byte.
                  */
                 this.writeOutput(this.curr_byte);
                 continue;
             }
-            /*
+            /**
              * Read the V byte which determines the length.
              */
             if (!this.readNextByte()) {
                 return false;
             }
             if (this.curr_byte == 0) {
-                /*
+                /**
                  * Output a literal DLE byte.
                  */
-                this.writeOutput(ZipExpand.DLE_BYTE)
+                this.writeOutput(ZipExpand.DLE_BYTE);
                 continue;
             }
             let v = this.curr_byte;
             let len = BitStream.lsb(v, v_len_bits);
             if (len == (1 << v_len_bits) - 1) {
-                /*
+                /**
                  * Read an extra length byte.
                  */
                 if (!this.readNextByte()) {
@@ -2517,7 +2517,7 @@ class ZipExpand extends Decompress
                 len += this.curr_byte;
             }
             len += 3;
-            /*
+            /**
              * Read the W byte, which together with V gives the distance.
              */
             if (!this.readNextByte()) {
@@ -2526,16 +2526,16 @@ class ZipExpand extends Decompress
             let dist = (v >> v_len_bits) * 256 + this.curr_byte + 1;
             assert(len <= this.getMaxLen());
             assert(dist <= this.getMaxDist());
-            /*
+            /**
              * Output the back reference.
              */
             if (len > dst_len - this.dst_pos) {
-                /*
+                /**
                  * Not enough room.
                  */
                 return false;
             }
-            /*
+            /**
              * Copy, handling overlap and implicit zeros.
              */
             for (let i = 0; i < len; i++) {
@@ -2605,7 +2605,7 @@ class ZipExplode extends Decompress
 
         while (this.dst_pos < dst_len) {
             let bits = this.bs.bits();
-            /*
+            /**
              * Literal
              */
             if (BitStream.lsb(bits, 1) == 0x1) {
@@ -2626,13 +2626,13 @@ class ZipExplode extends Decompress
                 this.writeOutput(sym);
                 continue;
             }
-            /*
+            /**
              * Backref
              */
             assert(BitStream.lsb(bits, 1) == 0x0);
             bits >>>= 1;
             let used_tot = 1;
-            /*
+            /**
              * Read the low dist bits
              */
             if (large_wnd) {
@@ -2644,7 +2644,7 @@ class ZipExplode extends Decompress
                 bits >>>= 6;
                 used_tot += 6;
             }
-            /*
+            /**
              * Read the Huffman-encoded high distance bits
              */
             ({ sym, used } = this.dist_decoder.decode(~bits));
@@ -2653,14 +2653,14 @@ class ZipExplode extends Decompress
             bits >>>= used;
             dist |= sym << (large_wnd ? 7 : 6);
             dist += 1;
-            /*
+            /**
              * Read the Huffman-encoded length
              */
             ({ sym, used } = this.len_decoder.decode(~bits));
             assert(sym >= 0, `huffman length decode unsuccessful (${sym})`);
             used_tot += used;
             len = (sym + min_len);
-            /*
+            /**
              * Before we (possibly) read an extra len byte, let's advance our
              * position within the BitStream now, so that we don't run the risk of
              * exhausting our 32-bit 'bits' buffer.  This also eliminates the
@@ -2670,7 +2670,7 @@ class ZipExplode extends Decompress
             if (!this.bs.advance(used_tot)) {
                 return false;
             }
-            /*
+            /**
              * Read an extra len byte if necessary
              */
             if (sym == 63) {
@@ -2679,7 +2679,7 @@ class ZipExplode extends Decompress
             if (len > dst_len - this.dst_pos) {
                 return false;                   // not enough room
             }
-            /*
+            /**
              * Copy, handling overlap and implicit zeros
              */
             for (let i = 0; i < len; i++) {
@@ -2708,7 +2708,7 @@ class ZipExplode extends Decompress
         let lens = new Array(256);
         let len_count = new Array(17).fill(0);
         assert(num_lens <= lens.length);
-        /*
+        /**
          * Number of bytes representing the Huffman code
          */
         let byte = this.bs.bits(8, true);
@@ -2737,7 +2737,7 @@ class ZipExplode extends Decompress
         if (codeword_idx < num_lens) {
             return false;                               // too few codeword lengths
         }
-        /*
+        /**
          * Check that the Huffman tree is full
          */
         let avail_codewords = 1;
@@ -2798,7 +2798,7 @@ class ZipBlast
     static lencode;
     static distcode;
 
-    /*
+    /**
      * Static tables used by decomp()
      */
     static /* const short */ base = [3, 2, 4, 5, 6, 7, 8, 9, 10, 12, 16, 24, 40, 72, 136, 264]; // base for length codes
@@ -2908,19 +2908,19 @@ class ZipBlast
         let /* byte * */ from, to;      // copy pointers (indexes)
 
         this.init(src);
-        /*
+        /**
          * Read header
          */
         lit = this.bits(8);
         if (lit > 1) return -1;
         dict = this.bits(8);
         if (dict < 4 || dict > 6) return -2;
-        /*
+        /**
          * Decode literals and length/distance pairs
          */
         do {
             if (this.bits(1)) {
-                /*
+                /**
                  * Get length
                  */
                 symbol = this.decode(ZipBlast.lencode);
@@ -2928,7 +2928,7 @@ class ZipBlast
                 if (len == 519) {
                     break;              // end code
                 }
-                /*
+                /**
                  * Get distance
                  */
                 symbol = len == 2? 2 : dict;
@@ -2938,7 +2938,7 @@ class ZipBlast
                 if (this.first && dist > this.next) {
                     return -3;          // distance too far back
                 }
-                /*
+                /**
                  * Copy length bytes from distance bytes back
                  */
                 do {
@@ -2963,7 +2963,7 @@ class ZipBlast
                 } while (len != 0);
             }
             else {
-                /*
+                /**
                  * Get literal and write it
                  */
                 symbol = lit? this.decode(ZipBlast.litcode) : this.bits(8);
@@ -2974,7 +2974,7 @@ class ZipBlast
                 }
             }
         } while (true);
-        /*
+        /**
          * Write any leftover output
          */
         if (this.next) {
@@ -3090,7 +3090,7 @@ class ZipBlast
     {
         let /* int */ val;          // bit accumulator
 
-        /*
+        /**
          * Load at least need bits into val
          */
         val = this.bitbuf;
@@ -3098,7 +3098,7 @@ class ZipBlast
             if (this.left == 0) {
                 throw new Error("ZipBlast.bits(): out of input");
             }
-            /*
+            /**
              * Load eight more bits
              */
             val |= this.src[this.in++] << this.bitcnt;
@@ -3106,13 +3106,13 @@ class ZipBlast
             this.bitcnt += 8;
         }
 
-        /*
+        /**
          * Drop need bits and update buffer, always zero to seven bits left
          */
         this.bitbuf = val >> need;
         this.bitcnt -= need;
 
-        /*
+        /**
          * Return need bits, zeroing the bits above that
          */
         return val & ((1 << need) - 1);
@@ -3162,7 +3162,7 @@ class ZipBlast
             symbol: new Int16Array(nSymbols),
             left: 0                             // number of possible codes left
         };
-        /*
+        /**
          * Convert compact repeat counts into symbol bit length list
          */
         symbol = 0;
@@ -3175,7 +3175,7 @@ class ZipBlast
             } while (--huffman.left);
         }
         let n = symbol;
-        /*
+        /**
          * Count number of codes of each length
          */
         for (len = 0; len <= nCounts; len++) {
@@ -3187,7 +3187,7 @@ class ZipBlast
         if (huffman.count[0] == n) {            // no codes!
             return huffman;                     // complete, but decode() will fail
         }
-        /*
+        /**
          * Check for an over-subscribed or incomplete set of lengths
          */
         huffman.left = 1;                       // one possible code of zero length
@@ -3198,14 +3198,14 @@ class ZipBlast
                 return huffman;                 // over-subscribed (left > 0 means incomplete)
             }
         }
-        /*
+        /**
          * Generate offsets into symbol table for each length for sorting
          */
         offs[1] = 0;
         for (len = 1; len < nCounts; len++) {
             offs[len + 1] = offs[len] + huffman.count[len];
         }
-        /*
+        /**
          * Put symbols in table sorted by length, by symbol order within each length
          */
         for (symbol = 0; symbol < n; symbol++) {
@@ -3213,7 +3213,7 @@ class ZipBlast
                 huffman.symbol[offs[length[symbol]]++] = symbol;
             }
         }
-        /*
+        /**
          * Left is zero for complete set, positive for incomplete set
          */
         return huffman;

@@ -2,7 +2,7 @@
 /**
  * @fileoverview Command-line interface to disk image processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -36,7 +36,7 @@ let rootDir, sFileIndexCache;
  */
 function compareDisks(sDisk1, sDisk2)
 {
-    /*
+    /**
      * Passing null for the encoding parameter tells readFileSync() to return a buffer (which, in our case, is a DataBuffer).
      */
     let db1 = diskLib.readFileSync(sDisk1, null);
@@ -60,7 +60,7 @@ function createDisk(diskFile, diskette, argv, done)
     }
     let sArchiveFile = path.join(path.dirname(diskFile), sArchiveFolder, path.basename(diskFile).replace(".json", ".img"));
     if (diskette.archive) {
-        /*
+        /**
          * The "archive" property determines what we look for in an "archive/" folder alongside the JSON disk image:
          *
          *  1) If it begins with a period, then we assume it's a file extension (eg, ".img", ".psi", etc)
@@ -79,7 +79,7 @@ function createDisk(diskFile, diskette, argv, done)
             sArchiveFile = path.join(path.dirname(sArchiveFile), diskette.archive) + (diskette.archive.indexOf(".") < 0 && !diskette.archive.endsWith(path.sep)? path.sep : "");
         }
     } else if (!diskLib.existsFile(sArchiveFile)) {
-        /*
+        /**
          * Try automatically switching from a "--disk" to a "--dir" operation if there's no IMG file.
          */
         sArchiveFile = sArchiveFile.replace(".img", path.sep);
@@ -250,7 +250,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
 {
     di.setArgs(argv.slice(1).join(' '));
 
-    /*
+    /**
      * Any "--format=xxx" acts as a filter function; if the disk's format doesn't contain
      * the specified format, we skip the disk.
      */
@@ -270,14 +270,14 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     if (typeof sFindName == "string") {
         let sFindText = argv['find'];
         if (typeof sFindText != "string") sFindText = false;
-        /*
+        /**
          * TODO: Implement support for finding text in findFile()....
          */
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
             printFileDesc(di.getName(), desc);
             if (argv['index']) {
-                /*
+                /**
                  * We cheat and search for matching hash values in the provided index; this is much faster than
                  * opening and searching all the other disk images, even when they DO contain pre-generated file tables.
                  */
@@ -333,7 +333,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 let sector = di.getSector(lba);
                 let offset = di.getUnusedSectorData(sector);
                 sLines += sprintf("\nLBA=%d\n", lba);
-                /*
+                /**
                  * There are two partial sector usage cases: the current sector contains the last N bytes of a file,
                  * or the sector is COMPLETELY unused (ie, offset is zero).  When would a file have a completely unused
                  * sector?  When the disk's cluster size is 2 or more sectors.  If a file ends somewhere in the middle
@@ -356,7 +356,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
             if (!sLines) sLines = "no unused data space on disk";
         } else {
-            /*
+            /**
              * Other --list options include: "metadata", "sorted"
              */
             sLines = di.getFileListing(iVolume, 0, argv['list']) || "\tno listing available\n";
@@ -364,7 +364,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         printf("%s\n", sLines);
     }
 
-    /*
+    /**
      * Similar to --extract, --type is another form of extraction (ie, extract file(s) to the console).
      */
     let sExtraction, fExtractToFile;
@@ -386,7 +386,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
         let extractName = "", extractFolder = "";
         if (fExtractAll) {
-            /*
+            /**
              * Normally, we want every disk to be extracted into its own folder, but if you're just
              * extracting a single disk AND you've already specified an extraction dir, then we don't need
              * to ALSO put the files inside their own disk-based folder name.
@@ -411,7 +411,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         printManifest(diskFile, di.getName(), manifest);
     }
 
-    /*
+    /**
      * If --rewrite, then rewrite the JSON disk image.  --overwrite is implicit.
      */
     if (argv['rewrite']) {
@@ -420,7 +420,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    /*
+    /**
      * If --checkdisk, then let's load the corresponding archived disk image (.IMG) as well, convert it to JSON,
      * load the JSON as a disk image, save it as a temp .IMG, and verify that temp image and archived image are identical.
      *
@@ -436,7 +436,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 }
             }
         }
-        /*
+        /**
          * If a JSON disk image was originally built from kryoflux data AND included special args (eg, for copy-protection),
          * then don't bother with the rebuild, because those disks can't be saved as IMG disk images.
          */
@@ -473,7 +473,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    /*
+    /**
      * If --checkpage, then get the disk's listing and see if it's up-to-date in the website's README.md.
      *
      * Additionally, if the page doesn't have a machine, add one, tailored to the software's requirements as best we can.
@@ -481,7 +481,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
      * You must ALSO specify --rebuild if you want the README.md updated (or created) as well.
      */
     if (argv['checkpage'] && diskette && !diskette.hidden && !diskette.demos) {
-        /*
+        /**
          * We don't need/want any software pages checked/built for private diskette collections.
          *
          * The PCSIG08 software pages (originally at /software/pcx86/shareware/pcsig08/ and later moved
@@ -532,7 +532,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
         }
 
-        /*
+        /**
          * Step 1: make sure there's a machine present to load/examine/test the software.
          */
         let sMachineEmbed = "";
@@ -541,7 +541,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             let sFrontMatter = matchFrontMatter[1];
             let matchMachines = sFrontMatter.match(/^machines: *\n([\s\S]*?\n)(\S|$)/m);
             if (matchMachines) {
-                /*
+                /**
                  * If this was a generated machine and --rebuild is set, then we'll regenerate it.
                  */
                 if (matchMachines[1].indexOf("autoGen: true") >= 0 && matchMachines[1].indexOf(diskette.name) >= 0 && argv['rebuild']) {
@@ -551,7 +551,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 }
             }
             if (!matchMachines) {
-                /*
+                /**
                  * To add a compatible machine, we look at a few aspects of the diskette itself:
                  *
                  *      if the diskette format > 360K or any file dates are >= 1986, then a PC AT ("5170") is preferred;
@@ -604,7 +604,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                     }
                     return configPossible;
                 };
-                /*
+                /**
                  * Now that we have all the raw inputs ("ingredients"), let's toss some defaults together.
                  */
                 let sAutoGen = "    autoGen: true\n";
@@ -657,7 +657,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
         }
 
-        /*
+        /**
          * Step 2: Making sure there's an up-to-date directory listing.  The listing can include a picture of
          * the diskette, if any, and a link to the source of the diskette, if any, so append those to the listing now.
          *
@@ -674,7 +674,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             if (sDiskServer) {
                 sListing += "\n![" + diskette.name + "]({{ site.software." + sDiskServer.replace("disks/", "") + ".server }}" + sDiskPic.slice(sDiskServer.length + 1) + ")\n";
             }
-            /*
+            /**
              * Let's rematch the page header and see if the page also needs a preview image.
              */
             matchFrontMatter = sIndexNew.match(/^(---\n[\s\S]*?\n---\n)/);
@@ -703,7 +703,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 printf("warning: directory heading level '%s' should really be '###'\n", matchDirectory[1]);
             }
             let matchInclude = matchDirectory[2].match(/\n\{%.*?%}\n/);
-            /*
+            /**
              * Work around JavaScript's handling of '$' in the replacement string ('$' is interpreted as a back-reference
              * indicator, with '$$' interpreted as '$', even when the search string is NOT a regular expression) by first
              * replacing every '$' with '$$' in sListing (the only portion where we're likely encounter '$' characters).
@@ -712,7 +712,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
              */
             sIndexNew = sIndexNew.replace(matchDirectory[0], sHeading + (matchInclude? matchInclude[0] : "") + sListing.replace(/\$/g, "$$$$") + matchDirectory[3]);
         } else {
-            /*
+            /**
              * Look for the last "Directory of ..." entry and insert this directory listing after it (and if there's none, append it).
              */
             sListing = sHeading + sListing;
@@ -729,7 +729,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             sIndexNew = sIndexNew.substr(0, index + length) + sListing + sIndex.substr(index + length);
         }
 
-        /*
+        /**
          * Step 3: If a generated machine needs to be embedded, put it just ahead of the first directory listing (which
          * is why we waited until now); if there are any diskette 'info' summary lines, we want it just ahead of those, too.
          */
@@ -742,7 +742,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
         }
 
-        /*
+        /**
          * Along with any diskette info, see if there are any files in the decompressed archive folder that we might want
          * to include in the index, too.
          *
@@ -767,7 +767,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
         }
 
-        /*
+        /**
          * Clean out any old info and then add any new info.  It should be bracketed by 'info_begin'/'info_end' comments.
          */
         let sInsert = sMachineEmbed;
@@ -784,7 +784,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             sInsert += "\n{% comment %}info_begin{% endcomment %}\n" + info + "{% comment %}info_end{% endcomment %}\n\n";
         }
 
-        /*
+        /**
          * Clean out any old samples and then add any new samples.  They should be bracketed by 'samples_begin'/'samples_end' comments.
          */
         match = sIndexNew.match(/\{% comment %\}samples_begin\{% endcomment %\}[\S\s]*\{% comment %\}samples_end\{% endcomment %\}\n/);
@@ -798,7 +798,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (sInsert) {
             matchDirectory = sIndexNew.match(/\n(##+)\s+Directory of /);
             if (matchDirectory) {
-                /*
+                /**
                  * WARNING: This is another place where we need to work around JavaScript's handling of '$' in the replacement string.
                  */
                 sIndexNew = sIndexNew.replace(matchDirectory[0], sInsert.replace(/\$/g, "$$$$") + matchDirectory[0]);
@@ -807,7 +807,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
         }
 
-        /*
+        /**
          * Step 4: Add a document gallery section if there are any documents associated with this software.
          */
         if (diskette.documents) {
@@ -841,7 +841,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    /*
+    /**
      * NOTE: When recreating an IMG file from a JSON file, if the JSON file preserved the original BPB
      * (which includes the original OEM signature), then you can use --legacy to tell writeDiskSync() to tell
      * getData() to restore those BPB bytes as well.  Otherwise, we leave the PCJS_OEM signature, if any, alone.
@@ -905,7 +905,7 @@ function readCollection(argv)
                     [diskette.argc, diskette.argv] = PCJSLib.getArgs(diskette.args);
                     diskette.args = " " + diskette.args;
                 }
-                /*
+                /**
                  * TODO: I don't think '@local' is being used anymore, so consider removing this support.  The last
                  * place I saw it used was in the PCSIG08 diskettes.json files, but weblib.getResource() knows how to map
                  * local folder names (eg, /pcsig8a-disks) to the corresponding server names now, as does this module,
@@ -1079,7 +1079,7 @@ function processArgs(argv, fSingle = false)
     {
         if (di) {
             if (fFiles) {
-                /*
+                /**
                 * When a disk is created from a list of files, the default name isn't very meaningful;
                 * the basename of the output file isn't much more helpful, but it's better than nothing.
                 *
@@ -1090,7 +1090,7 @@ function processArgs(argv, fSingle = false)
                     name = name[0];
                 }
                 if (name) {
-                    /*
+                    /**
                      * If name isn't a string, then it must be an array (because the user specified multiple
                      * outputs), which is allowed in case you want to create, for example, both IMG and JSON
                      * disk images with a single command.
@@ -1275,7 +1275,7 @@ function main(argc, argv)
         }
     }
     if (input) {
-        /*
+        /**
          * If you used --disk to specify a disk image (or you specified a remote image), call the experimental async function.
          */
         processDiskAsync(input, argv, true);

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Net-related functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2023 Jeff Parsons
+ * @copyright © 2012-2024 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -101,13 +101,13 @@ export default class NetLib {
             if (!fDebug) {
                 if (sURL.match(/^[^:?]*archive\//)) {
                     if (sURL.charAt(0) != '/') sURL = path.join(req.path, sURL);
-                    /*
+                    /**
                      * NOTE: "http://archive.pcjs.org" is now "https://s3-us-west-2.amazonaws.com/archive.pcjs.org"
                      */
                     sURL = "https://s3-us-west-2.amazonaws.com/archive.pcjs.org" + sURL.replace("/archive/", "/");
                 }
             }
-            /*
+            /**
              * If the incoming URL already contains URI-style escape sequences (eg, "%20" instead of spaces),
              * calling decodeURI() first will eliminate them, preventing encodeURI() from converting leading
              * "%" into "%25" and corrupting sequences like "%20" by turning them into "%2520".
@@ -147,7 +147,7 @@ export default class NetLib {
             let stat = null;
             // console.log(JSON.stringify(res.headers));
             if (res.statusCode == 200) {
-                /*
+                /**
                  * Apparently Node lower-cases response headers (at least incoming headers, despite
                  * lots of amusing whining by certain people in the Node community), which seems like
                  * a good thing, because that means I can do two simple key look-ups.
@@ -182,7 +182,7 @@ export default class NetLib {
      */
     static getFile(sURL, sEncoding, done)
     {
-        /*
+        /**
          * Buffer objects are a fixed size, so my choices are: 1) call getStat() first, hope it returns
          * the true size, and then preallocate a buffer; or 2) create a new, larger buffer every time a new
          * chunk arrives.  The latter seems best.
@@ -208,7 +208,7 @@ export default class NetLib {
                     bufFile = data;
                     return;
                 }
-                /*
+                /**
                  * We need to grow bufFile.  I used to do this myself, using the "copy" method:
                  *
                  *      buf.copy(targetBuffer, [targetStart], [sourceStart], [sourceEnd])
@@ -228,7 +228,7 @@ export default class NetLib {
                 bufFile = Buffer.concat([bufFile, data], bufFile.length + data.length);
             }).on('end', function()
             {
-                /*
+                /**
                  * TODO: Decide what to do when res.statusCode is actually an error code (eg, 404), because
                  * in such cases, the file content will likely just be an HTML error page.
                  */
@@ -255,7 +255,7 @@ export default class NetLib {
     {
         let file = fs.createWriteStream(sFile);
 
-        /*
+        /**
          * http.get() accepts a "url" string in lieu of an "options" object; it automatically builds
          * the latter from the former using url.parse(). This is good, because it relieves me from
          * building my own "options" object, and also from wondering why http functions expect "options"
@@ -272,7 +272,7 @@ export default class NetLib {
             }).on('end', function()
             {
                 file.end();
-                /*
+                /**
                  * TODO: We should try to update the file's modification time to match the 'last-modified'
                  * response header value, if any.
                  *
@@ -303,7 +303,7 @@ export default class NetLib {
         let nErrorCode = -1, sResource = null, response = null;
 
         if (NetLib.isRemote(sURL)) {
-            /*
+            /**
              * TODO: This code is nothing more than a band-aid.  It assumes the URL uses "http:"
              * (hence the call to getFile(), which only supports HTTP GET operations), it assumes
              * the requested data is UTF-8 string data (which is normally the case, because nearly
@@ -324,7 +324,7 @@ export default class NetLib {
             if (fAsync) {
                 fs.readFile(sFile, {encoding: "utf8"}, function(err, s)
                 {
-                    /*
+                    /**
                      * TODO: If err is set, is there an error code we should return (instead of -1)?
                      */
                     if (!err) {
@@ -338,7 +338,7 @@ export default class NetLib {
                     sResource = fs.readFileSync(sFile, {encoding: "utf8"});
                     nErrorCode = 0;
                 } catch (err) {
-                    /*
+                    /**
                      * TODO: If err is set, is there an error code we should return (instead of -1)?
                      */
                     console.log(err.message);
@@ -351,7 +351,7 @@ export default class NetLib {
     }
 }
 
-/*
+/**
  * The following are (super-secret) commands that can be added to the URL to enable special features.
  *
  * Our super-secret command processor is affectionately call Gort, and while Gort doesn't understand commands
@@ -373,7 +373,7 @@ NetLib.GORT_REBUILD    = "rebuild";        // use this to force the "index.html"
 NetLib.REVEAL_COMMAND  = "reveal";
 NetLib.REVEAL_PDFS     = "pdfs";
 
-/*
+/**
  * This is a list of the URL parameters that propagateParms() will propagate from the requester's URL to
  * other URLs provided by the requester.
  */

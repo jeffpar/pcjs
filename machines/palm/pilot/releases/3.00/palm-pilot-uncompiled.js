@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -88,7 +88,7 @@ const VERSION = "3.00";
  */
 const REPOSITORY = "pcjs.org";
 
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * The following globals CANNOT be overridden.
@@ -198,7 +198,7 @@ Defines.CLASSES["Defines"] = Defines;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -292,7 +292,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -871,7 +871,7 @@ class Format {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/stdlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/stdlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1477,7 +1477,7 @@ class StdLib extends Defines {
 StdLib.CLASSES["StdLib"] = StdLib;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/stdio.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1645,7 +1645,7 @@ StdIO.PrintTime = null;
 StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/webio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/webio.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string }} */
@@ -3314,7 +3314,7 @@ WebIO.LocalStorage = {
 WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/device.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
@@ -3846,7 +3846,7 @@ class Device extends WebIO {
 Device.CLASSES["Device"] = Device;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/input.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/input.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
@@ -5275,7 +5275,7 @@ Input.KEYCODEMOD = {
 Input.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/led.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/led.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -6394,7 +6394,7 @@ LED.SYMBOL_SEGMENTS = {
 LED.CLASSES["LED"] = LED;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/monitor.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/monitor.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ monitorWidth: number, monitorHeight: number }} */
@@ -6858,7 +6858,7 @@ Monitor.BINDING = {
 Monitor.CLASSES["Monitor"] = Monitor;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/time.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/time.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
@@ -7899,7 +7899,7 @@ Time.BINDING = {
 Time.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/bus.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8749,7 +8749,7 @@ Bus.TYPE = {
 Bus.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/memory.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9806,7 +9806,7 @@ Memory.TYPE = {
 Memory.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -9851,7 +9851,7 @@ class RAM extends Memory {
 RAM.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -10077,7 +10077,7 @@ ROM.BINDING = {
 ROM.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addrReset: number }} */
@@ -10231,7 +10231,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
@@ -12961,7 +12961,7 @@ class Debugger extends Device {
 // Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/cpu68k.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/cpu68k.js (C) 2012-2024 Jeff Parsons
  */
 
 /* eslint-disable no-labels */
@@ -15980,7 +15980,7 @@ CPU68K.FLAGS_T1           = 0x8000;             // 1 == trace on any instruction
 CPU68K.CLASSES["CPU68K"] = CPU68K;
 
 /**
- * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/dbg68k.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/dbg68k.js (C) 2012-2024 Jeff Parsons
  */
 
 /* eslint-disable no-labels */
@@ -18024,7 +18024,7 @@ Dbg68K.DATAACCESS_UNINIT   = 3;
 Dbg68K.CLASSES["Dbg68K"] = Dbg68K;
 
 /**
- * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/eamodes.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/motorola/68k/modules/v3/eamodes.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -19493,7 +19493,7 @@ class EAModeImmediateLong extends EAMode {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/ioregs.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/ioregs.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number }} */
@@ -20011,7 +20011,7 @@ PilotIO.alRegsInit = {
 PilotIO.CLASSES["PilotIO"] = PilotIO;
 
 /**
- * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/video.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferRAM: boolean, bufferBits: number, bufferLeft: number, bufferRotate: number, interruptRate: number }} */
@@ -20435,7 +20435,7 @@ PilotVideo.COLORS = {
 PilotVideo.CLASSES["PilotVideo"] = PilotVideo;
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v3/machine.js (C) 2012-2024 Jeff Parsons
  */
 
 /**

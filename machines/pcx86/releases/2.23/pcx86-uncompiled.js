@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}
@@ -154,7 +154,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -211,7 +211,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -790,7 +790,7 @@ class Format {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/databuffer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/databuffer.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -1151,7 +1151,7 @@ class DataBuffer {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/diskapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1390,7 +1390,7 @@ DiskAPI.ATTR = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1450,7 +1450,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -1473,7 +1473,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/userapi.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -1515,7 +1515,7 @@ const UserAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/keys.js (C) 2012-2024 Jeff Parsons
  */
 
 const Keys = {
@@ -1832,7 +1832,7 @@ Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, size: number, attr: number, date: Date, data: *, files: (Array|null) }} */
@@ -1976,7 +1976,7 @@ if (!globals.pcjs['files']) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -2731,7 +2731,7 @@ StrLib.format = new Format();
 StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -2981,7 +2981,7 @@ class UsrLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -4193,7 +4193,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -5667,7 +5667,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/jsonlib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/jsonlib.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -5836,7 +5836,7 @@ class JSONLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -5962,7 +5962,7 @@ if (DEBUG) {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/message.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/message.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -6044,7 +6044,7 @@ MESSAGE.NAMES['key']        = MESSAGE.KEY;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86.js (C) 2012-2024 Jeff Parsons
  */
 
 const X86 = {
@@ -6927,7 +6927,7 @@ X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/charset.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/charset.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -7098,7 +7098,7 @@ CharSet.CP437 = [
 // ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/driveinfo.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/driveinfo.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -7294,7 +7294,7 @@ const DRIVE_TYPES = [
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/errors.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/errors.js (C) 2012-2024 Jeff Parsons
  */
 
 const Errors = {
@@ -7318,7 +7318,7 @@ const Errors = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/interrupts.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/interrupts.js (C) 2012-2024 Jeff Parsons
  */
 
 const Interrupts = {
@@ -10722,7 +10722,7 @@ Interrupts.VxD = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ iBlock: number, cBlocks: number, type: number }} */
@@ -11822,7 +11822,7 @@ class Panel extends Component {
 WebLib.onInit(Panel.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/bus.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ cbTotal: number, cBlocks: number, aBlocks: Array.<number> }} */
@@ -12214,7 +12214,7 @@ class Busx86 extends Component {
              */
             this.cpu.flushPageBlocks();
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
-                let kb = (size / 1024)|0;
+                let kb = Math.round(size / 1024);
                 let sb = kb? (kb + "Kb") : (size + " bytes");
                 this.printf(MESSAGE.STATUS, "%s %s at 0x%X\n", sb, Memoryx86.TYPE.NAMES[type], addr);
             }
@@ -13517,7 +13517,7 @@ class Busx86 extends Component {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/memory.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -15272,7 +15272,7 @@ if (TYPEDARRAYS) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ nCycles: number, nCyclesTotal: number, msDuration: number, msLag: number, msBegin: number }} */
@@ -16696,7 +16696,7 @@ class CPU extends Component {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/cpux86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -21324,7 +21324,7 @@ class CPUx86 extends CPU {
 WebLib.onInit(CPUx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fpux86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -24664,7 +24664,7 @@ FPUx86.afnPreserveExceptions = [
 WebLib.onInit(FPUx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/segx86.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -26352,7 +26352,7 @@ class Segx86 {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86func.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -29724,7 +29724,7 @@ X86.fnXORw = function(dst, src)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86help.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86help.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -30775,7 +30775,7 @@ X86.zeroSeg = function(seg)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86mods.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86mods.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -34809,7 +34809,7 @@ X86.modSIB = function(mod)
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86ops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86ops.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -39400,7 +39400,7 @@ X86.aOpGrp4w = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86op0f.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/x86op0f.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -41156,7 +41156,7 @@ X86.aOpGrp8 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/chipset.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/chipset.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ countInit: Array.<number>, countStart: Array.<number>, countCurrent: Array.<number>, countLatched: Array.<number>, bcd: number, mode: number, rw: number, countIndex: number, countBytes: number, fOUT: boolean, fCountLatched: boolean, fCounting: boolean, nCyclesStart: number, bStatus: number, fStatusLatched: boolean }} */
@@ -41244,6 +41244,7 @@ class ChipSet extends Component {
      * then step up to a MODEL_5160 system.  We use a multiplier of 16 for 5150 LOWMEM values, and a multiplier
      * of 64 for 5160 LOWMEM values.
      */
+    static MODEL_S100               = 100;      // SCP (Seattle Computer Products) S-100 system
     static MODEL_4860               = 4860;     // PCjr
     static MODEL_5150               = 5150;     // used in reference to the 1st 5150 ROM BIOS, dated Apr 24, 1981
     static MODEL_5150_REV2          = 5150.2;   // used in reference to the 2nd 5150 ROM BIOS, dated Oct 19, 1981
@@ -41271,6 +41272,7 @@ class ChipSet extends Component {
      * Last but not least, a complete list of supported model strings, and corresponding internal model numbers.
      */
     static MODELS = {
+        "100":          ChipSet.MODEL_S100,
         "4860":         ChipSet.MODEL_4860,     // IBM PCjr
         "5150":         ChipSet.MODEL_5150,     // IBM PC
         "5160":         ChipSet.MODEL_5160,     // IBM PC XT
@@ -41339,7 +41341,7 @@ class ChipSet extends Component {
      * MODEL 5150 Switches
      * -------------------
      *
-     * PPI_SW bits are exposed via port PPI_A.
+     * PPI_SW bits are exposed via PPI.PORT (0x60).
      *
      * MODEL 5160 Switches
      * ------------------------
@@ -41748,17 +41750,15 @@ class ChipSet extends Component {
      */
     static PIC0 = {                 // all models: the "master" PIC
         INDEX:              0,
-        PORT_LO:            0x20,
-        PORT_HI:            0x21
+        PORT:               0x20
     };
 
     static PIC1 = {                 // MODEL_5170 and up: the "slave" PIC
         INDEX:              1,
-        PORT_LO:            0xA0,
-        PORT_HI:            0xA1
+        PORT:               0xA0
     };
 
-    static PIC_LO = {               // ChipSet.PIC1.PORT_LO or ChipSet.PIC2.PORT_LO
+    static PIC_LO = {               // ChipSet.PIC0.PORT+0 or ChipSet.PIC1.PORT+0
         ICW1:               0x10,   // set means ICW1
         ICW1_ICW4:          0x01,   // ICW4 needed (otherwise ICW4 must be sent)
         ICW1_SNGL:          0x02,   // single PIC (and therefore no ICW3; otherwise there is another "cascaded" PIC)
@@ -41784,7 +41784,7 @@ class ChipSet extends Component {
         OCW3_SMM_CMD:       0x60
     };
 
-    static PIC_HI = {               // ChipSet.PIC1.PORT_HI or ChipSet.PIC2.PORT_HI
+    static PIC_HI = {               // ChipSet.PIC0.PORT+1 or ChipSet.PIC1.PORT+1
         ICW2_VECTOR:        0xF8,   // starting vector number (bits 0-2 are effectively treated as zeros in 8086/8088 mode)
         ICW4_8086:          0x01,
         ICW4_AUTO_EOI:      0x02,
@@ -41897,14 +41897,14 @@ class ChipSet extends Component {
     /**
      * 8255A Programmable Peripheral Interface (PPI) I/O ports, for Cassette/Speaker/Keyboard/SW1/etc
      *
-     * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI_A.PORT and PPI_C.PORT are INPUT ports
+     * Normally, 0x99 is written to PPI_CTRL.PORT, indicating that PPI.PORT and PPI_C.PORT are INPUT ports
      * and PPI_B.PORT is an OUTPUT port.
      *
-     * However, the MODEL_5160 ROM BIOS initially writes 0x89 instead, making PPI_A.PORT an OUTPUT port.
-     * I'm guessing that's just part of some "diagnostic mode", because all it writes to PPI_A.PORT are a series
+     * However, the MODEL_5160 ROM BIOS initially writes 0x89 instead, making PPI.PORT an OUTPUT port.
+     * I'm guessing that's just part of some "diagnostic mode", because all it writes to PPI.PORT are a series
      * of "checkpoint" values (ie, 0x01, 0x02, and 0x03) before updating PPI_CTRL.PORT with the usual 0x99.
      */
-    static PPI_A = {                // this.bPPIA (port 0x60)
+    static PPI = {                  // this.bPPIA (port 0x60)
         PORT:               0x60    // INPUT: keyboard scan code (PPI_B.CLEAR_KBD must be clear)
     };
 
@@ -41918,7 +41918,7 @@ class ChipSet extends Component {
         DISABLE_RW_MEM:     0x10,   // ALL: clear to enable RAM parity check, set to disable
         DISABLE_IO_CHK:     0x20,   // ALL: clear to enable I/O channel check, set to disable
         CLK_KBD:            0x40,   // ALL: clear to force keyboard clock low
-        CLEAR_KBD:          0x80    // ALL: clear to enable keyboard scan codes (MODEL_5150: set to enable SW1 through PPI_A.PORT)
+        CLEAR_KBD:          0x80    // ALL: clear to enable keyboard scan codes (MODEL_5150: set to enable SW1 through PPI.PORT)
     };
 
     static PPI_C = {                // this.bPPIC (port 0x62)
@@ -41937,7 +41937,7 @@ class ChipSet extends Component {
     };
 
     static PPI_CTRL = {             // this.bPPICtrl (port 0x63)
-        PORT:               0x63,   // OUTPUT: initialized to 0x99, defining PPI_A and PPI_C as INPUT and PPI_B as OUTPUT
+        PORT:               0x63,   // OUTPUT: initialized to 0x99, defining PPI and PPI_C as INPUT and PPI_B as OUTPUT
         A_IN:               0x10,
         B_IN:               0x02,
         C_IN_LO:            0x01,
@@ -41967,11 +41967,14 @@ class ChipSet extends Component {
      *      0x40    Keyboard Clock Reset
      *      0x80    Reset Interrupt Pending
      */
+    static C8041 = {
+        PORT:               0x60
+    };
 
     /**
      * 8042 Keyboard Controller I/O ports (MODEL_5170)
      *
-     * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI_A, although the BIOS also refers to it
+     * On the MODEL_5170, port 0x60 is designated C8042.DATA rather than PPI, although the BIOS also refers to it
      * as "PORT_A: 8042 KEYBOARD SCAN/DIAG OUTPUTS").  This is the 8042's output buffer and should be read only when
      * C8042.STATUS.OUTBUFF_FULL is set.
      *
@@ -41996,7 +41999,8 @@ class ChipSet extends Component {
      *      http://www.os2museum.com/wp/ibm-pcat-8042-keyboard-controller-commands/
      */
     static C8042 = {
-        DATA: {                     // this.b8042OutBuff (PPI_A on previous models, still referred to as "PORT A" by the MODEL_5170 BIOS)
+        PORT:               0x60,
+        DATA: {                     // this.b8042OutBuff (PPI on previous models, still referred to as "PORT A" by the MODEL_5170 BIOS)
             PORT:           0x60,
             CMD: {                  // this.b8042CmdData (C8042.DATA.CMD "data bytes" written to port 0x60, after writing a C8042.CMD byte to port 0x64)
                 INT_ENABLE: 0x01,   // generate an interrupt when the controller places data in the output buffer
@@ -42058,8 +42062,8 @@ class ChipSet extends Component {
         },
         CMD: {                      // this.b8042InBuff (on write to port 0x64, interpret this as a CMD)
             PORT:           0x64,
-            READ_CMD:       0x20,   // sends the current CMD byte (this.b8042CmdData) to C8042.DATA.PORT
-            WRITE_CMD:      0x60,   // followed by a command byte written to C8042.DATA.PORT (see C8042.DATA.CMD)
+            READ_CMD:       0x20,   // sends the current CMD byte (this.b8042CmdData) to C8042.PORT
+            WRITE_CMD:      0x60,   // followed by a command byte written to C8042.PORT (see C8042.DATA.CMD)
             COMPAQ_SLOWD:   0xA3,   // enable system slow down; see COMPAQ 386/25 TechRef p2-111
             COMPAQ_TOGGLE:  0xA4,   // toggle speed-control bit; see COMPAQ 386/25 TechRef p2-111
             COMPAQ_SREAD2:  0xA5,   // special read of "port 2"; see COMPAQ 386/25 TechRef p2-111
@@ -42070,7 +42074,7 @@ class ChipSet extends Component {
             ENABLE_KBD:     0xAE,   // enable keyboard
             READ_INPORT:    0xC0,   // read input port and place data in output buffer (use only if output buffer empty)
             READ_OUTPORT:   0xD0,   // read output port and place data in output buffer (use only if output buffer empty)
-            WRITE_OUTPORT:  0xD1,   // next byte written to C8042.DATA.PORT (port 0x60) is placed in the output port (see C8042.OUTPORT)
+            WRITE_OUTPORT:  0xD1,   // next byte written to C8042.PORT (port 0x60) is placed in the output port (see C8042.OUTPORT)
             READ_TEST:      0xE0,
             PULSE_OUTPORT:  0xF0    // this is the 1st of 16 commands (0xF0-0xFF) that pulse bits 0-3 of the output port
         },
@@ -42376,9 +42380,17 @@ class ChipSet extends Component {
 
         this.sCellClass = CSSCLASS + "-bitCell";
 
-        this.cDMACs = this.cPICs = 1;
+        this.cDMACs = 0;
+        if (this.model >= ChipSet.MODEL_5150) {
+            this.cDMACs++;
+        }
         if (this.model >= ChipSet.MODEL_5170) {
-            this.cDMACs = this.cPICs = 2;
+            this.cDMACs++;
+        }
+
+        this.cPICs = 1;
+        if (this.model == ChipSet.MODEL_S100 || this.model >= ChipSet.MODEL_5170) {
+            this.cPICs++;
         }
 
         this.fScaleTimers = parmsChipSet['scaleTimers'] || false;
@@ -42454,15 +42466,32 @@ class ChipSet extends Component {
          */
         this.nTicksDivisor = (cpu.getBaseCyclesPerSecond() / ChipSet.TIMER_TICKS_PER_SEC);
 
-        bus.addPortInputTable(this, ChipSet.aPortInput);
-        bus.addPortOutputTable(this, ChipSet.aPortOutput);
+        let aPortInput = ChipSet.aPortInput;
+        let aPortOutput = ChipSet.aPortOutput;
+        if (this.model == ChipSet.MODEL_S100) {
+            aPortInput = {
+                [this.portPIC0+0]: ChipSet.aPortInput[ChipSet.PIC0.PORT+0],
+                [this.portPIC0+1]: ChipSet.aPortInput[ChipSet.PIC0.PORT+1],
+                [this.portPIC1+0]: ChipSet.aPortInput5170[ChipSet.PIC1.PORT+0],
+                [this.portPIC1+1]: ChipSet.aPortInput5170[ChipSet.PIC1.PORT+1]
+            };
+            aPortOutput = {
+                [this.portPIC0+0]: ChipSet.aPortOutput[ChipSet.PIC0.PORT+0],
+                [this.portPIC0+1]: ChipSet.aPortOutput[ChipSet.PIC0.PORT+1],
+                [this.portPIC1+0]: ChipSet.aPortOutput5170[ChipSet.PIC1.PORT+0],
+                [this.portPIC1+1]: ChipSet.aPortOutput5170[ChipSet.PIC1.PORT+1]
+            };
+        }
+
+        bus.addPortInputTable(this, aPortInput);
+        bus.addPortOutputTable(this, aPortOutput);
         if (this.model == ChipSet.MODEL_4860) {
             bus.addPortInputTable(this, ChipSet.aPortInput4860);
             bus.addPortOutputTable(this, ChipSet.aPortOutput4860);
         }
-        else {
-            bus.addPortInputTable(this, ChipSet.aPortInput5xxx);
-            bus.addPortOutputTable(this, ChipSet.aPortOutput5xxx);
+        else if (this.model >= ChipSet.MODEL_5150) {
+            bus.addPortInputTable(this, ChipSet.aPortInput51xx);
+            bus.addPortOutputTable(this, ChipSet.aPortOutput51xx);
             if (this.model < ChipSet.MODEL_5170) {
                 if (this.model == ChipSet.MODEL_ATT_6300) {
                     bus.addPortInputTable(this, ChipSet.aPortInput6300);
@@ -42609,9 +42638,16 @@ class ChipSet extends Component {
          * PIC (Programmable Interrupt Controller) initialization
          */
         this.aPICs = new Array(this.cPICs);
-        this.initPIC(ChipSet.PIC0.INDEX, ChipSet.PIC0.PORT_LO);
+        this.portPIC0 = ChipSet.PIC0.PORT;
+        this.portPIC1 = ChipSet.PIC1.PORT;
+        if (this.model == ChipSet.MODEL_S100) {
+            const ports = [0xF0, 0x70, 0xB0, 0x30, 0xD0, 0x50, 0x90, 0x10, 0xE0, 0x60, 0xA0, 0x20, 0xC0, 0x40, 0x80, 0x00];
+            this.portPIC0 = ports[this.aDIPSwitches[0][0] & 0xf];
+            this.portPIC1 = this.portPIC0 + 2;
+        }
+        this.initPIC(ChipSet.PIC0.INDEX, this.portPIC0);
         if (this.cPICs > 1) {
-            this.initPIC(ChipSet.PIC1.INDEX, ChipSet.PIC1.PORT_LO);
+            this.initPIC(ChipSet.PIC1.INDEX, this.portPIC1);
         }
 
         /**
@@ -43316,7 +43352,7 @@ class ChipSet extends Component {
 
         a = data[2];
         for (i = 0; i < this.cPICs; i++) {
-            this.initPIC(i, i === 0? ChipSet.PIC0.PORT_LO : ChipSet.PIC1.PORT_LO, a[0][i]);
+            this.initPIC(i, i === 0? this.portPIC0 : this.portPIC1, a[0][i]);
         }
 
         a = data[3];
@@ -43548,7 +43584,7 @@ class ChipSet extends Component {
         let pic = this.aPICs[iPIC];
         if (!pic) {
             pic = {
-                aICW:   [null,null,null,null]
+                aICW: [null,null,null,null]
             };
         }
         let a = aState && aState.length == 8? aState : this.aPICInit;
@@ -47269,50 +47305,50 @@ class ChipSet extends Component {
      * Port input notification tables, starting with the one that's common to all models (aPortInput)
      */
     static aPortInput = {
-        0x20: /** @this {ChipSet} */ function inPort20(port, addrFrom) { return this.inPICLo(ChipSet.PIC0.INDEX, addrFrom); },
-        0x21: /** @this {ChipSet} */ function inPort21(port, addrFrom) { return this.inPICHi(ChipSet.PIC0.INDEX, addrFrom); },
-        0x40: /** @this {ChipSet} */ function inPort40(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, addrFrom); },
-        0x41: /** @this {ChipSet} */ function inPort41(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, addrFrom); },
-        0x42: /** @this {ChipSet} */ function inPort42(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, addrFrom); },
-        0x43: /** @this {ChipSet} */ function inPort43(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT0.INDEX, port, addrFrom); },
+        [ChipSet.PIC0.PORT+0]: /** @this {ChipSet} */ function inPort20(port, addrFrom) { return this.inPICLo(ChipSet.PIC0.INDEX, addrFrom); },
+        [ChipSet.PIC0.PORT+1]: /** @this {ChipSet} */ function inPort21(port, addrFrom) { return this.inPICHi(ChipSet.PIC0.INDEX, addrFrom); },
+        [ChipSet.PIT0.PORT+0]: /** @this {ChipSet} */ function inPort40(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, addrFrom); },
+        [ChipSet.PIT0.PORT+1]: /** @this {ChipSet} */ function inPort41(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, addrFrom); },
+        [ChipSet.PIT0.PORT+2]: /** @this {ChipSet} */ function inPort42(port, addrFrom) { return this.inTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, addrFrom); },
+        [ChipSet.PIT0.PORT+3]: /** @this {ChipSet} */ function inPort43(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT0.INDEX, port, addrFrom); },
     };
 
     static aPortInput4860 = {
-        0x60: ChipSet.prototype.inPPIA,
-        0x61: ChipSet.prototype.inPPIB,
-        0x62: ChipSet.prototype.inPPIC,
-        0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
-        0xA0: ChipSet.prototype.inNMI
+        [ChipSet.PPI.PORT+0]: ChipSet.prototype.inPPIA,
+        [ChipSet.PPI.PORT+1]: ChipSet.prototype.inPPIB,
+        [ChipSet.PPI.PORT+2]: ChipSet.prototype.inPPIC,
+        [ChipSet.PPI.PORT+3]: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
+        [ChipSet.NMI.PORT]:   ChipSet.prototype.inNMI
     };
 
     static aPortInput5150 = {
-        0x60: ChipSet.prototype.inPPIA,
-        0x61: ChipSet.prototype.inPPIB,
-        0x62: ChipSet.prototype.inPPIC,
-        0x63: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
+        [ChipSet.PPI.PORT+0]: ChipSet.prototype.inPPIA,
+        [ChipSet.PPI.PORT+1]: ChipSet.prototype.inPPIB,
+        [ChipSet.PPI.PORT+2]: ChipSet.prototype.inPPIC,
+        [ChipSet.PPI.PORT+3]: ChipSet.prototype.inPPICtrl,  // technically, not actually readable, but I want the Debugger to be able to read it
     };
 
-    static aPortInput5xxx = {
-        0x00: /** @this {ChipSet} */ function inPort00(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
-        0x01: /** @this {ChipSet} */ function inPort01(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
-        0x02: /** @this {ChipSet} */ function inPort02(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-        0x03: /** @this {ChipSet} */ function inPort03(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-        0x04: /** @this {ChipSet} */ function inPort04(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-        0x05: /** @this {ChipSet} */ function inPort05(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-        0x06: /** @this {ChipSet} */ function inPort06(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-        0x07: /** @this {ChipSet} */ function inPort07(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-        0x08: /** @this {ChipSet} */ function inPort08(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA0.INDEX, port, addrFrom); },
-        0x0D: /** @this {ChipSet} */ function inPort0D(port, addrFrom) { return this.inDMATemp(ChipSet.DMA0.INDEX, port, addrFrom); },
-        0x81: /** @this {ChipSet} */ function inPort81(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
-        0x82: /** @this {ChipSet} */ function inPort82(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
-        0x83: /** @this {ChipSet} */ function inPort83(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
-        0x87: /** @this {ChipSet} */ function inPort87(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 0, port, addrFrom); }
+    static aPortInput51xx = {
+        [ChipSet.DMA0.PORT.CH0_ADDR]:     /** @this {ChipSet} */ function inPort00(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH0_COUNT]:    /** @this {ChipSet} */ function inPort01(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_ADDR]:     /** @this {ChipSet} */ function inPort02(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_COUNT]:    /** @this {ChipSet} */ function inPort03(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_ADDR]:     /** @this {ChipSet} */ function inPort04(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_COUNT]:    /** @this {ChipSet} */ function inPort05(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_ADDR]:     /** @this {ChipSet} */ function inPort06(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_COUNT]:    /** @this {ChipSet} */ function inPort07(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CMD_STATUS]:   /** @this {ChipSet} */ function inPort08(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA0.INDEX, port, addrFrom); },
+        [ChipSet.DMA0.PORT.MASTER_CLEAR]: /** @this {ChipSet} */ function inPort0D(port, addrFrom) { return this.inDMATemp(ChipSet.DMA0.INDEX, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_PAGE]:     /** @this {ChipSet} */ function inPort81(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_PAGE]:     /** @this {ChipSet} */ function inPort82(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_PAGE]:     /** @this {ChipSet} */ function inPort83(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA0.PORT.CH0_PAGE]:     /** @this {ChipSet} */ function inPort87(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA0.INDEX, 0, port, addrFrom); }
     };
 
     static aPortInput5170 = {
-        0x60: ChipSet.prototype.in8042OutBuff,
-        0x61: ChipSet.prototype.in8042RWReg,
-        0x64: ChipSet.prototype.in8042Status,
+        [ChipSet.C8042.PORT+0]: ChipSet.prototype.in8042OutBuff,
+        [ChipSet.C8042.PORT+1]: ChipSet.prototype.in8042RWReg,
+        [ChipSet.C8042.PORT+4]: ChipSet.prototype.in8042Status,
         0x70: ChipSet.prototype.inCMOSAddr,
         0x71: ChipSet.prototype.inCMOSData,
         0x80: /** @this {ChipSet} */ function inPort80(port, addrFrom) { return this.inDMAPageSpare(7, port, addrFrom); },
@@ -47320,96 +47356,96 @@ class ChipSet extends Component {
         0x85: /** @this {ChipSet} */ function inPort85(port, addrFrom) { return this.inDMAPageSpare(1, port, addrFrom); },
         0x86: /** @this {ChipSet} */ function inPort86(port, addrFrom) { return this.inDMAPageSpare(2, port, addrFrom); },
         0x88: /** @this {ChipSet} */ function inPort88(port, addrFrom) { return this.inDMAPageSpare(3, port, addrFrom); },
-        0x89: /** @this {ChipSet} */ function inPort89(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-        0x8A: /** @this {ChipSet} */ function inPort8A(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-        0x8B: /** @this {ChipSet} */ function inPort8B(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_PAGE]: /** @this {ChipSet} */ function inPort89(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_PAGE]: /** @this {ChipSet} */ function inPort8A(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_PAGE]: /** @this {ChipSet} */ function inPort8B(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
         0x8C: /** @this {ChipSet} */ function inPort8C(port, addrFrom) { return this.inDMAPageSpare(4, port, addrFrom); },
         0x8D: /** @this {ChipSet} */ function inPort8D(port, addrFrom) { return this.inDMAPageSpare(5, port, addrFrom); },
         0x8E: /** @this {ChipSet} */ function inPort8E(port, addrFrom) { return this.inDMAPageSpare(6, port, addrFrom); },
-        0x8F: /** @this {ChipSet} */ function inPort8F(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-        0xA0: /** @this {ChipSet} */ function inPortA0(port, addrFrom) { return this.inPICLo(ChipSet.PIC1.INDEX, addrFrom); },
-        0xA1: /** @this {ChipSet} */ function inPortA1(port, addrFrom) { return this.inPICHi(ChipSet.PIC1.INDEX, addrFrom); },
-        0xC0: /** @this {ChipSet} */ function inPortC0(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-        0xC2: /** @this {ChipSet} */ function inPortC2(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
-        0xC4: /** @this {ChipSet} */ function inPortC4(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
-        0xC6: /** @this {ChipSet} */ function inPortC6(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
-        0xC8: /** @this {ChipSet} */ function inPortC8(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-        0xCA: /** @this {ChipSet} */ function inPortCA(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
-        0xCC: /** @this {ChipSet} */ function inPortCC(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-        0xCE: /** @this {ChipSet} */ function inPortCE(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
-        0xD0: /** @this {ChipSet} */ function inPortD0(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA1.INDEX, port, addrFrom); },
-        0xDA: /** @this {ChipSet} */ function inPortDA(port, addrFrom) { return this.inDMATemp(ChipSet.DMA1.INDEX, port, addrFrom); }
+        [ChipSet.DMA1.PORT.CH4_PAGE]: /** @this {ChipSet} */ function inPort8F(port, addrFrom) { return this.inDMAPageReg(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        [ChipSet.PIC1.PORT+0]: /** @this {ChipSet} */ function inPortA0(port, addrFrom) { return this.inPICLo(ChipSet.PIC1.INDEX, addrFrom); },
+        [ChipSet.PIC1.PORT+1]: /** @this {ChipSet} */ function inPortA1(port, addrFrom) { return this.inPICHi(ChipSet.PIC1.INDEX, addrFrom); },
+        [ChipSet.DMA1.PORT.CH4_ADDR]:     /** @this {ChipSet} */ function inPortC0(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH4_COUNT]:    /** @this {ChipSet} */ function inPortC2(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_ADDR]:     /** @this {ChipSet} */ function inPortC4(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_COUNT]:    /** @this {ChipSet} */ function inPortC6(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_ADDR]:     /** @this {ChipSet} */ function inPortC8(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_COUNT]:    /** @this {ChipSet} */ function inPortCA(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_ADDR]:     /** @this {ChipSet} */ function inPortCC(port, addrFrom) { return this.inDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_COUNT]:    /** @this {ChipSet} */ function inPortCE(port, addrFrom) { return this.inDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, addrFrom); },
+        [ChipSet.DMA1.PORT.CMD_STATUS]:   /** @this {ChipSet} */ function inPortD0(port, addrFrom) { return this.inDMAStatus(ChipSet.DMA1.INDEX, port, addrFrom); },
+        [ChipSet.DMA1.PORT.MASTER_CLEAR]: /** @this {ChipSet} */ function inPortDA(port, addrFrom) { return this.inDMATemp(ChipSet.DMA1.INDEX, port, addrFrom); }
     };
 
     static aPortInput6300 = {
-        0x60: ChipSet.prototype.in8041Kbd,
-        0x61: ChipSet.prototype.in8041Ctrl,
-        0x64: ChipSet.prototype.in8041Status,
+        [ChipSet.C8041.PORT+0]: ChipSet.prototype.in8041Kbd,
+        [ChipSet.C8041.PORT+1]: ChipSet.prototype.in8041Ctrl,
+        [ChipSet.C8041.PORT+4]: ChipSet.prototype.in8041Status,
         0x66: /** @this {ChipSet} */ function inPort66(port, addrFrom) { return this.in6300DIPSwitches(0, port, addrFrom); },
         0x67: /** @this {ChipSet} */ function inPort67(port, addrFrom) { return this.in6300DIPSwitches(1, port, addrFrom); }
     };
 
     static aPortInputDeskPro386 = {
-        0x48: /** @this {ChipSet} */ function inPort48(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, addrFrom); },
-        0x49: /** @this {ChipSet} */ function inPort49(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, addrFrom); },
-        0x4A: /** @this {ChipSet} */ function inPort4A(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, addrFrom); },
-        0x4B: /** @this {ChipSet} */ function inPort4B(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT1.INDEX, port, addrFrom); }
+        [ChipSet.PIT1.PORT+0]: /** @this {ChipSet} */ function inPort48(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, addrFrom); },
+        [ChipSet.PIT1.PORT+1]: /** @this {ChipSet} */ function inPort49(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, addrFrom); },
+        [ChipSet.PIT1.PORT+2]: /** @this {ChipSet} */ function inPort4A(port, addrFrom) { return this.inTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, addrFrom); },
+        [ChipSet.PIT1.PORT+3]: /** @this {ChipSet} */ function inPort4B(port, addrFrom) { return this.inTimerCtrl(ChipSet.PIT1.INDEX, port, addrFrom); }
     };
 
     /**
      * Port output notification tables, starting with the one that's common to all models (aPortOutput)
      */
     static aPortOutput = {
-        0x20: /** @this {ChipSet} */ function outPort20(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC0.INDEX, bOut, addrFrom); },
-        0x21: /** @this {ChipSet} */ function outPort21(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC0.INDEX, bOut, addrFrom); },
-        0x40: /** @this {ChipSet} */ function outPort40(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, bOut, addrFrom); },
-        0x41: /** @this {ChipSet} */ function outPort41(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, bOut, addrFrom); },
-        0x42: /** @this {ChipSet} */ function outPort42(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, bOut, addrFrom); },
-        0x43: /** @this {ChipSet} */ function outPort43(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.PIC0.PORT+0]: /** @this {ChipSet} */ function outPort20(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC0.INDEX, bOut, addrFrom); },
+        [ChipSet.PIC0.PORT+1]: /** @this {ChipSet} */ function outPort21(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC0.INDEX, bOut, addrFrom); },
+        [ChipSet.PIT0.PORT+0]: /** @this {ChipSet} */ function outPort40(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER0, port, bOut, addrFrom); },
+        [ChipSet.PIT0.PORT+1]: /** @this {ChipSet} */ function outPort41(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER1, port, bOut, addrFrom); },
+        [ChipSet.PIT0.PORT+2]: /** @this {ChipSet} */ function outPort42(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT0.INDEX, ChipSet.PIT0.TIMER2, port, bOut, addrFrom); },
+        [ChipSet.PIT0.PORT+3]: /** @this {ChipSet} */ function outPort43(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT0.INDEX, port, bOut, addrFrom); },
     };
 
     static aPortOutput4860 = {
         0x10: ChipSet.prototype.outMFGTest,     // a manufacturing test port that we don't really care about
-        0x60: ChipSet.prototype.outPPIA,
-        0x61: ChipSet.prototype.outPPIB,
-        0x62: ChipSet.prototype.outPPIC,
-        0x63: ChipSet.prototype.outPPICtrl,
-        0xA0: ChipSet.prototype.outNMI
+        [ChipSet.PPI.PORT+0]: ChipSet.prototype.outPPIA,
+        [ChipSet.PPI.PORT+1]: ChipSet.prototype.outPPIB,
+        [ChipSet.PPI.PORT+2]: ChipSet.prototype.outPPIC,
+        [ChipSet.PPI.PORT+3]: ChipSet.prototype.outPPICtrl,
+        [ChipSet.NMI.PORT]:   ChipSet.prototype.outNMI
     };
 
     static aPortOutput5150 = {
-        0x60: ChipSet.prototype.outPPIA,
-        0x61: ChipSet.prototype.outPPIB,
-        0x62: ChipSet.prototype.outPPIC,
-        0x63: ChipSet.prototype.outPPICtrl,
-        0xA0: ChipSet.prototype.outNMI
+        [ChipSet.PPI.PORT+0]: ChipSet.prototype.outPPIA,
+        [ChipSet.PPI.PORT+1]: ChipSet.prototype.outPPIB,
+        [ChipSet.PPI.PORT+2]: ChipSet.prototype.outPPIC,
+        [ChipSet.PPI.PORT+3]: ChipSet.prototype.outPPICtrl,
+        [ChipSet.NMI.PORT]:   ChipSet.prototype.outNMI
     };
 
-    static aPortOutput5xxx = {
-        0x00: /** @this {ChipSet} */ function outPort00(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
-        0x01: /** @this {ChipSet} */ function outPort01(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
-        0x02: /** @this {ChipSet} */ function outPort02(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-        0x03: /** @this {ChipSet} */ function outPort03(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-        0x04: /** @this {ChipSet} */ function outPort04(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-        0x05: /** @this {ChipSet} */ function outPort05(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-        0x06: /** @this {ChipSet} */ function outPort06(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-        0x07: /** @this {ChipSet} */ function outPort07(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-        0x08: /** @this {ChipSet} */ function outPort08(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x09: /** @this {ChipSet} */ function outPort09(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x0A: /** @this {ChipSet} */ function outPort0A(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x0B: /** @this {ChipSet} */ function outPort0B(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x0C: /** @this {ChipSet} */ function outPort0C(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x0D: /** @this {ChipSet} */ function outPort0D(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
-        0x81: /** @this {ChipSet} */ function outPort81(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
-        0x82: /** @this {ChipSet} */ function outPort82(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
-        0x83: /** @this {ChipSet} */ function outPort83(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
-        0x87: /** @this {ChipSet} */ function outPort87(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); }
+    static aPortOutput51xx = {
+        [ChipSet.DMA0.PORT.CH0_ADDR]:     /** @this {ChipSet} */ function outPort00(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH0_COUNT]:    /** @this {ChipSet} */ function outPort01(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_ADDR]:     /** @this {ChipSet} */ function outPort02(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_COUNT]:    /** @this {ChipSet} */ function outPort03(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_ADDR]:     /** @this {ChipSet} */ function outPort04(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_COUNT]:    /** @this {ChipSet} */ function outPort05(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_ADDR]:     /** @this {ChipSet} */ function outPort06(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_COUNT]:    /** @this {ChipSet} */ function outPort07(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CMD_STATUS]:   /** @this {ChipSet} */ function outPort08(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.REQUEST]:      /** @this {ChipSet} */ function outPort09(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.MASK]:         /** @this {ChipSet} */ function outPort0A(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.MODE]:         /** @this {ChipSet} */ function outPort0B(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.RESET_FF]:     /** @this {ChipSet} */ function outPort0C(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.MASTER_CLEAR]: /** @this {ChipSet} */ function outPort0D(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA0.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH2_PAGE]:     /** @this {ChipSet} */ function outPort81(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH3_PAGE]:     /** @this {ChipSet} */ function outPort82(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH1_PAGE]:     /** @this {ChipSet} */ function outPort83(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA0.PORT.CH0_PAGE]:     /** @this {ChipSet} */ function outPort87(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA0.INDEX, 0, port, bOut, addrFrom); }
     };
 
     static aPortOutput5170 = {
-        0x60: ChipSet.prototype.out8042InBuffData,
-        0x61: ChipSet.prototype.out8042RWReg,
-        0x64: ChipSet.prototype.out8042InBuffCmd,
+        [ChipSet.C8042.PORT+0]: ChipSet.prototype.out8042InBuffData,
+        [ChipSet.C8042.PORT+1]: ChipSet.prototype.out8042RWReg,
+        [ChipSet.C8042.PORT+4]: ChipSet.prototype.out8042InBuffCmd,
         0x70: ChipSet.prototype.outCMOSAddr,
         0x71: ChipSet.prototype.outCMOSData,
         0x80: /** @this {ChipSet} */ function outPort80(port, bOut, addrFrom) { this.outDMAPageSpare(7, port, bOut, addrFrom); },
@@ -47417,44 +47453,44 @@ class ChipSet extends Component {
         0x85: /** @this {ChipSet} */ function outPort85(port, bOut, addrFrom) { this.outDMAPageSpare(1, port, bOut, addrFrom); },
         0x86: /** @this {ChipSet} */ function outPort86(port, bOut, addrFrom) { this.outDMAPageSpare(2, port, bOut, addrFrom); },
         0x88: /** @this {ChipSet} */ function outPort88(port, bOut, addrFrom) { this.outDMAPageSpare(3, port, bOut, addrFrom); },
-        0x89: /** @this {ChipSet} */ function outPort89(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-        0x8A: /** @this {ChipSet} */ function outPort8A(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-        0x8B: /** @this {ChipSet} */ function outPort8B(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_PAGE]: /** @this {ChipSet} */ function outPort89(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_PAGE]: /** @this {ChipSet} */ function outPort8A(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_PAGE]: /** @this {ChipSet} */ function outPort8B(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
         0x8C: /** @this {ChipSet} */ function outPort8C(port, bOut, addrFrom) { this.outDMAPageSpare(4, port, bOut, addrFrom); },
         0x8D: /** @this {ChipSet} */ function outPort8D(port, bOut, addrFrom) { this.outDMAPageSpare(5, port, bOut, addrFrom); },
         0x8E: /** @this {ChipSet} */ function outPort8E(port, bOut, addrFrom) { this.outDMAPageSpare(6, port, bOut, addrFrom); },
         0x8F: /** @this {ChipSet} */ function outPort8F(port, bOut, addrFrom) { this.outDMAPageReg(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-        0xA0: /** @this {ChipSet} */ function outPortA0(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC1.INDEX, bOut, addrFrom); },
-        0xA1: /** @this {ChipSet} */ function outPortA1(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC1.INDEX, bOut, addrFrom); },
-        0xC0: /** @this {ChipSet} */ function outPortC0(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-        0xC2: /** @this {ChipSet} */ function outPortC2(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
-        0xC4: /** @this {ChipSet} */ function outPortC4(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
-        0xC6: /** @this {ChipSet} */ function outPortC6(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
-        0xC8: /** @this {ChipSet} */ function outPortC8(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-        0xCA: /** @this {ChipSet} */ function outPortCA(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
-        0xCC: /** @this {ChipSet} */ function outPortCC(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-        0xCE: /** @this {ChipSet} */ function outPortCE(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
-        0xD0: /** @this {ChipSet} */ function outPortD0(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-        0xD2: /** @this {ChipSet} */ function outPortD2(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-        0xD4: /** @this {ChipSet} */ function outPortD4(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-        0xD6: /** @this {ChipSet} */ function outPortD6(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-        0xD8: /** @this {ChipSet} */ function outPortD8(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
-        0xDA: /** @this {ChipSet} */ function outPortDA(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.PIC1.PORT+0]: /** @this {ChipSet} */ function outPortA0(port, bOut, addrFrom) { this.outPICLo(ChipSet.PIC1.INDEX, bOut, addrFrom); },
+        [ChipSet.PIC1.PORT+1]: /** @this {ChipSet} */ function outPortA1(port, bOut, addrFrom) { this.outPICHi(ChipSet.PIC1.INDEX, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH4_ADDR]:     /** @this {ChipSet} */ function outPortC0(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH4_COUNT]:    /** @this {ChipSet} */ function outPortC2(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 0, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_ADDR]:     /** @this {ChipSet} */ function outPortC4(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH5_COUNT]:    /** @this {ChipSet} */ function outPortC6(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 1, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_ADDR]:     /** @this {ChipSet} */ function outPortC8(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH6_COUNT]:    /** @this {ChipSet} */ function outPortCA(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 2, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_ADDR]:     /** @this {ChipSet} */ function outPortCC(port, bOut, addrFrom) { this.outDMAChannelAddr(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CH7_COUNT]:    /** @this {ChipSet} */ function outPortCE(port, bOut, addrFrom) { this.outDMAChannelCount(ChipSet.DMA1.INDEX, 3, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.CMD_STATUS]:   /** @this {ChipSet} */ function outPortD0(port, bOut, addrFrom) { this.outDMACmd(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.REQUEST]:      /** @this {ChipSet} */ function outPortD2(port, bOut, addrFrom) { this.outDMAReq(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.MASK]:         /** @this {ChipSet} */ function outPortD4(port, bOut, addrFrom) { this.outDMAMask(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.MODE]:         /** @this {ChipSet} */ function outPortD6(port, bOut, addrFrom) { this.outDMAMode(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.RESET_FF]:     /** @this {ChipSet} */ function outPortD8(port, bOut, addrFrom) { this.outDMAResetFF(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
+        [ChipSet.DMA1.PORT.MASTER_CLEAR]: /** @this {ChipSet} */ function outPortDA(port, bOut, addrFrom) { this.outDMAMasterClear(ChipSet.DMA1.INDEX, port, bOut, addrFrom); },
         0xF0: ChipSet.prototype.outFPUClear,
         0xF1: ChipSet.prototype.outFPUReset
     };
 
     static aPortOutput6300 = {
-        0x60: ChipSet.prototype.out8041Kbd,
-        0x61: ChipSet.prototype.out8041Ctrl,
-        0xA0: ChipSet.prototype.outNMI
+        [ChipSet.C8041.PORT+0]: ChipSet.prototype.out8041Kbd,
+        [ChipSet.C8041.PORT+1]: ChipSet.prototype.out8041Ctrl,
+        [ChipSet.NMI.PORT]:     ChipSet.prototype.outNMI
     };
 
     static aPortOutputDeskPro386 = {
-        0x48: /** @this {ChipSet} */ function outPort48(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, bOut, addrFrom); },
-        0x49: /** @this {ChipSet} */ function outPort49(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, bOut, addrFrom); },
-        0x4A: /** @this {ChipSet} */ function outPort4A(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, bOut, addrFrom); },
-        0x4B: /** @this {ChipSet} */ function outPort4B(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT1.INDEX, port, bOut, addrFrom); }
+        [ChipSet.PIT1.PORT+0]: /** @this {ChipSet} */ function outPort48(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER3, port, bOut, addrFrom); },
+        [ChipSet.PIT1.PORT+1]: /** @this {ChipSet} */ function outPort49(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER4, port, bOut, addrFrom); },
+        [ChipSet.PIT1.PORT+2]: /** @this {ChipSet} */ function outPort4A(port, bOut, addrFrom) { this.outTimer(ChipSet.PIT1.INDEX, ChipSet.PIT1.TIMER5, port, bOut, addrFrom); },
+        [ChipSet.PIT1.PORT+3]: /** @this {ChipSet} */ function outPort4B(port, bOut, addrFrom) { this.outTimerCtrl(ChipSet.PIT1.INDEX, port, bOut, addrFrom); }
     };
 }
 
@@ -47464,7 +47500,7 @@ class ChipSet extends Component {
 WebLib.onInit(ChipSet.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -48130,7 +48166,7 @@ class ROMx86 extends Component {
 WebLib.onInit(ROMx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -48777,7 +48813,7 @@ class CompaqController extends Controller {
 WebLib.onInit(RAMx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/keyboard.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -52001,7 +52037,7 @@ class Keyboardx86 extends Component {
 WebLib.onInit(Keyboardx86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/video.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -60644,7 +60680,7 @@ class Videox86 extends Component {
 WebLib.onInit(Videox86.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/parallel.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -61165,7 +61201,7 @@ class ParallelPort extends Component {
 WebLib.onInit(ParallelPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -62342,7 +62378,7 @@ class SerialPort extends Component {
 WebLib.onInit(SerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testctl.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -62658,7 +62694,7 @@ class TestController extends Component {
 WebLib.onInit(TestController.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/testmon.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -63109,7 +63145,7 @@ TestMonitor.COMMANDS = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/mouse.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/mouse.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -64060,7 +64096,7 @@ Mouse.aBusOutput = {
 WebLib.onInit(Mouse.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/disk.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -66237,7 +66273,7 @@ class FileInfo {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/fdc.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -69570,7 +69606,7 @@ class FDC extends Component {
 WebLib.onInit(FDC.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/hdc.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/hdc.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string, type: number, size: number, mode: string }} */
@@ -73227,7 +73263,7 @@ class HDC extends Component {
 WebLib.onInit(HDC.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dbglib.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
@@ -74583,7 +74619,7 @@ DbgLib.EVENTS = {
 };
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
 /** @typedef {{ off: (number|undefined), sel: (number|undefined), addr: (number|undefined), type: (number|undefined), fData32: (boolean|undefined), fAddr32: (boolean|undefined), fData32Orig: (boolean|undefined), fAddr32Orig: (boolean|undefined), fTempBreak: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined), nCPUCycles: (number|undefined), nDebugCycles: (number|undefined), nDebugState: (number|undefined) }} */
@@ -82878,7 +82914,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/pcx86/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -84793,7 +84829,7 @@ WebLib.onShow(Computer.show);
 WebLib.onExit(Computer.exit);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/state.js (C) 2012-2024 Jeff Parsons
  */
 
 /**
@@ -85160,7 +85196,7 @@ class State {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
  */
 
 /*
@@ -85903,7 +85939,7 @@ globals.window['sendEvent']    = WebLib.doPageEvent;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/save.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/save.js (C) 2012-2024 Jeff Parsons
  */
 
 /**

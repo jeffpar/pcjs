@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2023 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
+<!-- author="Jeff Parsons (@jeffpar)" copyright="© 2012-2024 Jeff Parsons" license="https://www.pcjs.org/LICENSE.txt" -->
 <!DOCTYPE xsl:stylesheet [
 	<!ENTITY nbsp "&#160;"> <!ENTITY sect "&#167;"> <!ENTITY copy "&#169;"> <!ENTITY para "&#182;"> <!ENTITY ndash "&#8211;"> <!ENTITY mdash "&#8212;">
 	<!ENTITY lsquo "&#8216;"> <!ENTITY rsquo "&#8217;"> <!ENTITY ldquo "&#8220;"> <!ENTITY rdquo "&#8221;"> <!ENTITY dagger "&#8224;"> <!ENTITY Dagger "&#8225;">
