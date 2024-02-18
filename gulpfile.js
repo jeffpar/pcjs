@@ -246,7 +246,7 @@ aMachines.forEach(function(machineID)
                     .pipe(gulpReplace(/\/\*\*\s*\*\s*@fileoverview[\s\S]*?\*\/\s*/gm, ""))
                     .pipe(gulpReplace(/[ \t]*if\s*\(NODE\)\s*({[^}]*}|[^\r\n]*)(\r?\n|$)/gm, ""))
                     .pipe(gulpReplace(/[ \t]*if\s*\(typeof\s+module\s*!==?\s*(['"])undefined\1\)\s*({[^}]*}|[^\r\n]*)(\r?\n|$)/gm, ""))
-                    .pipe(gulpReplace(/\/\*\*[^@/]*@typedef\s*{([A-Z][A-Za-z0-9_<>.]+)}\s*(\S+)\s*([\s\S]*?)\*\//g, function(match, def, type, props) {
+                    .pipe(gulpReplace(/\/\*\*[^@]*?@typedef\s*\{([A-Z][A-Za-z0-9_<>.]+)\}\s*(\S+)\s*([\s\S]*?)\*\//g, function(match, def, type, props) {
                         let sType = "/** @typedef {", sProps = "";
                         let reProps = /@property\s*{([^}]*)}\s*(\[|)([^\s\]]+)]?/g, matchProps;
                         while ((matchProps = reProps.exec(props))) {

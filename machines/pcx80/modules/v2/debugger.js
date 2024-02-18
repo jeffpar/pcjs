@@ -27,14 +27,12 @@ import { APPCLASS, APPNAME, APPVERSION, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, M
  *      sCmd            set for breakpoint addresses if there's an associated command string
  *      aCmds           preprocessed commands (from sCmd)
  *
- * @typedef {{
- *      addr:(number|undefined),
- *      fTemporary:(boolean|undefined),
- *      sCmd:(string|undefined),
- *      aCmds:(Array.<string>|undefined)
- * }}
+ * @typedef {Object} DbgAddrX80
+ * @property {number} [addr]
+ * @property {boolean} [fTemporary]
+ * @property {string} [sCmd]
+ * @property {Array.<string>} [aCmds]
  */
-var DbgAddrX80;
 
 /**
  * TODO: The Closure Compiler treats ES6 classes as 'struct' rather than 'dict' by default,

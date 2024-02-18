@@ -14,8 +14,8 @@ import MESSAGE from "./message.js";
  * Timer objects
  *
  * addTimer() and setTimer() create and manage Timer objects that are used for operations that must
- * occur after a certain amount of "real time" has elapsed (eg, key/button events that need to be timed-out
- * after a predefined period).
+ * occur after a certain amount of "real time" has elapsed (eg, key or button events that need to be
+ * timed-out after a predefined period).
  *
  * These functions are preferred over JavaScript's setTimeout(), because our timers convert "real time"
  * into cycle countdowns, which are effectively paused whenever cycle generation is paused (eg, when the
@@ -48,20 +48,20 @@ import MESSAGE from "./message.js";
  *
  * The purpose of most of the properties should be self-evident.  Below are a few that need a little explanation.
  *
- *  'timeLock': if true, then the millisecond times passed to setTimer() are "locked" to the machine's base speed, which
- *  means that if the machine's speed is increased, the speed of time also increases (eg, devices interrupt faster).  In
- *  some cases, this may improve the machine's internal consistency, at the expense of external usability.
+ * 'timeLock': if true, then the millisecond times passed to setTimer() are "locked" to the machine's base speed, which
+ * means that if the machine's speed is increased, the speed of time also increases (eg, devices interrupt faster).  In
+ * some cases, this may improve the machine's internal consistency, at the expense of external usability.
  *
- *  For example, if an IBM PC has 'timeLock' set to true and its clock speed is doubled, timer interrupts will also occur
- *  twice as fast (which is good for internal consistency), but its "time of day" will advance twice as fast (which is bad
- *  for external usability).
+ * For example, if an IBM PC has 'timeLock' set to true and its clock speed is doubled, timer interrupts will also occur
+ * twice as fast (which is good for internal consistency), but its "time of day" will advance twice as fast (which is bad
+ * for external usability).
  *
- *  In the case of Space Invaders, if 'timeLock' is true, video interrupts will be delivered faster, and the machine will
- *  run visibly faster, whereas if 'timeLock' is false, video interrupts will be delivered at the same millisecond rate
- *  regardless of the machine's speed, and the result is that even though the CPU is running faster, the apparent speed of
- *  the game will seem unchanged.
+ * In the case of Space Invaders, if 'timeLock' is true, video interrupts will be delivered faster, and the machine will
+ * run visibly faster, whereas if 'timeLock' is false, video interrupts will be delivered at the same millisecond rate
+ * regardless of the machine's speed, and the result is that even though the CPU is running faster, the apparent speed of
+ * the game will seem unchanged.
  *
- *  The default for 'timeLock' is true, unless explicity set to false in the configuration.
+ * The default for 'timeLock' is true, unless explicity set to false in the configuration.
  *
  * @typedef {Config} TimeConfig
  * @property {number} [cyclesMinimum]

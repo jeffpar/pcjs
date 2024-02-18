@@ -19760,22 +19760,8 @@ DbgLib.EVENTS = {
  * @copyright https://www.pcjs.org/machines/pcx80/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
-/**
- * DebuggerX80 Address Object
- *
- *      addr            address
- *      fTemporary      true if this is a temporary breakpoint address
- *      sCmd            set for breakpoint addresses if there's an associated command string
- *      aCmds           preprocessed commands (from sCmd)
- *
- * @typedef {{
- *      addr:(number|undefined),
- *      fTemporary:(boolean|undefined),
- *      sCmd:(string|undefined),
- *      aCmds:(Array.<string>|undefined)
- * }}
- */
-var DbgAddrX80;
+/** @typedef {{ addr: (number|undefined), fTemporary: (boolean|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
+let DbgAddrX80;
 
 /**
  * TODO: The Closure Compiler treats ES6 classes as 'struct' rather than 'dict' by default,

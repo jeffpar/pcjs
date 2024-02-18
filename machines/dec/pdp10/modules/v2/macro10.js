@@ -15,54 +15,46 @@ import { MAXDEBUG, PDP10 } from "./defines.js";
 /**
  * Elements of tblMacros.
  *
- * @typedef {{
- *      name:(string),
- *      nOperand:(number),
- *      aParms:(Array.<string>),
- *      aDefaults:(Array.<string>),
- *      aValues:(Array.<string>),
- *      sText:(string),
- *      nLine:(number)
- * }}
+ * @typedef {Object} Mac
+ * @property {string} name
+ * @property {number} nOperand
+ * @property {Array.<string>} aParms
+ * @property {Array.<string>} aDefaults
+ * @property {Array.<string>} aValues
+ * @property {string} sText
+ * @property {number} nLine
  */
-var Mac;
 
 /**
  * Elements of tblSymbols.
  *
- * @typedef {{
- *      name:(string),
- *      value:(number),
- *      nType:(number),
- *      nLine:(number)
- * }}
+ * @typedef {Object} Sym
+ * @property {string} name
+ * @property {number} value
+ * @property {number} nType
+ * @property {number} nLine
  */
-var Sym;
 
 /**
  * Elements of aLiterals.
  *
- * @typedef {{
- *      name:(string),
- *      aWords:(Array.<number>),
- *      aFixups:(Array.<string>)
- * }}
+ * @typedef {Object} Lit
+ * @property {string} name
+ * @property {Array.<number>} aWords
+ * @property {Array.<string>} aFixups
  */
-var Lit;
 
 /**
  * Elements of stackScopes.
  *
- * @typedef {{
- *      name:(string|undefined),
- *      aWords:(Array.<number>),
- *      aFixups:(Array.<string>),
- *      nLocation:(number),
- *      nLocationScope:(number),
- *      nLine:(number)
- * }}
+ * @typedef {Object} Scope
+ * @property {string} [name]
+ * @property {Array.<number>} aWords
+ * @property {Array.<string>} aFixups
+ * @property {number} nLocation
+ * @property {number} nLocationScope
+ * @property {number} nLine
  */
-var Scope;
 
 /**
  * @class Macro10
