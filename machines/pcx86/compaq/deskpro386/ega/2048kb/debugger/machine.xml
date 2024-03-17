@@ -7,7 +7,7 @@
 	<ram id="ramLow" addr="0x00000" test="false" size="0xa0000" comment="ROM BIOS memory test has been disabled"/>
 	<ram id="ramCPQ" addr="0xfa0000" size="0x60000" comment="COMPAQ memory at 0xFA0000"/>
 	<ram id="ramExt" addr="0x100000" size="0x100000" comment="Extended memory at 0x100000"/>
-	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1986-09-04/1986-09-04-HI.json5"/>
+	<rom id="romBIOS" addr="0xf8000" size="0x8000" alias="[0xf0000,0xffff0000,0xffff8000]" file="/machines/pcx86/compaq/deskpro386/rom/1986-08-19/1986-08-19.json5"/>
 	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "COMPAQ MS-DOS 3.31D (720K Disk 1)"}, B: {name: "None"}}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/47mb/unformatted-at5.xml"/>
