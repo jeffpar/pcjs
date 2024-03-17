@@ -10507,16 +10507,8 @@ CPUPDP10.BUTTONS = ["power", "reset"];
  * IRQ list.
  */
 
-/**
- * @typedef {{
- *  vector: number,
- *  priority: number,
- *  message: number,
- *  name: (string|null),
- *  next: (IRQ|null)
- * }}
- */
-var IRQ;
+/** @typedef {{ vector: number, priority: number, message: number, name: (string|null), next: (IRQ|null) }} */
+let IRQ;
 
 /**
  * @class CPUStatePDP10
@@ -19064,26 +19056,8 @@ PDP10.aOpIO_KA10 = [
  * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
-/**
- * DebuggerPDP10 Address Object
- *
- *      addr            address
- *      fPhysical       true if this is a physical address
- *      fTemporary      true if this is a temporary breakpoint address
- *      nBase           set if the address contained an explicit base (eg, 16, 10, 8, etc)
- *      sCmd            set for breakpoint addresses if there's an associated command string
- *      aCmds           preprocessed commands (from sCmd)
- *
- * @typedef {{
- *      addr:(number|null),
- *      fPhysical:(boolean),
- *      fTemporary:(boolean),
- *      nBase:(number|undefined),
- *      sCmd:(string|undefined),
- *      aCmds:(Array.<string>|undefined)
- * }}
- */
-var DbgAddrPDP10;
+/** @typedef {{ addr: (number|null), fPhysical: boolean, fTemporary: boolean, nBase: (number|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
+let DbgAddrPDP10;
 
 /**
  * @class DebuggerPDP10
@@ -24590,57 +24564,17 @@ WebLib.onInit(SerialPortPDP10.init);
  * @copyright https://www.pcjs.org/machines/dec/pdp10/modules/v2/macro10.js (C) 2012-2024 Jeff Parsons
  */
 
-/**
- * Elements of tblMacros.
- *
- * @typedef {{
- *      name:(string),
- *      nOperand:(number),
- *      aParms:(Array.<string>),
- *      aDefaults:(Array.<string>),
- *      aValues:(Array.<string>),
- *      sText:(string),
- *      nLine:(number)
- * }}
- */
-var Mac;
+/** @typedef {{ name: string, nOperand: number, aParms: Array.<string>, aDefaults: Array.<string>, aValues: Array.<string>, sText: string, nLine: number }} */
+let Mac;
 
-/**
- * Elements of tblSymbols.
- *
- * @typedef {{
- *      name:(string),
- *      value:(number),
- *      nType:(number),
- *      nLine:(number)
- * }}
- */
-var Sym;
+/** @typedef {{ name: string, value: number, nType: number, nLine: number }} */
+let Sym;
 
-/**
- * Elements of aLiterals.
- *
- * @typedef {{
- *      name:(string),
- *      aWords:(Array.<number>),
- *      aFixups:(Array.<string>)
- * }}
- */
-var Lit;
+/** @typedef {{ name: string, aWords: Array.<number>, aFixups: Array.<string> }} */
+let Lit;
 
-/**
- * Elements of stackScopes.
- *
- * @typedef {{
- *      name:(string|undefined),
- *      aWords:(Array.<number>),
- *      aFixups:(Array.<string>),
- *      nLocation:(number),
- *      nLocationScope:(number),
- *      nLine:(number)
- * }}
- */
-var Scope;
+/** @typedef {{ name: (string|undefined), aWords: Array.<number>, aFixups: Array.<string>, nLocation: number, nLocationScope: number, nLine: number }} */
+let Scope;
 
 /**
  * @class Macro10

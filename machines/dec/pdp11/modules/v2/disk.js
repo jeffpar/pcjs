@@ -52,18 +52,16 @@ import { DEBUG } from "./defines.js";
  *      cModify:    number of modified dwords in sector
  *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
  *
- * @typedef {{
- *  sector:     number,
- *  length:     number,
- *  data:       Array.<number>,
- *  pattern:    (number|null),
- *  iCylinder:  number,
- *  iHead:      number,
- *  iModify:    number,
- *  cModify:    number
- * }}
+ * @typedef {Object} SectorInfo
+ * @property {number} sector
+ * @property {number} length
+ * @property {Array.<number>} data
+ * @property {number|null} pattern
+ * @property {number} iCylinder
+ * @property {number} iHead
+ * @property {number} iModify
+ * @property {number} cModify
  */
-var SectorInfo;
 
 /**
  * @class DiskPDP11

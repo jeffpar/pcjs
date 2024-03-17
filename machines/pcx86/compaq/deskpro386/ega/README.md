@@ -9,7 +9,7 @@ machines:
     debugger: available
 ---
 
-PCjs DeskPro 386 configurations with EGA use the `Rev F` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/), dated September 4, 1986.  It is currently the oldest available DeskPro 386 ROM.  The VGA did not exist until 1987, so it makes sense to use the EGA with the older ROM.  The machine below uses an IBM EGA connected to an Enhanced Color Display, since support for the COMPAQ EGA hasn't been completely tested yet.
+PCjs DeskPro 386 configurations with EGA and 2Mb of RAM use the `Rev E` [COMPAQ DeskPro 386 ROM](/machines/pcx86/compaq/deskpro386/rom/), dated August 19, 1986, which was the first ROM shipped in the DeskPro 386.  The VGA did not exist until 1987, so it makes sense to use the EGA with 1986 ROMs.  The machine below uses an IBM EGA connected to an Enhanced Color Display, since support for the COMPAQ EGA hasn't been completely tested yet.
 
 {% include machine.html id="deskpro386-ega" %}
 

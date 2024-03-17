@@ -45,14 +45,12 @@ import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
  */
 
 /**
- * @typedef {{
- *  vector: number,
- *  priority: number,
- *  message: number,
- *  next: (IRQ|null)
- * }}
+ * @typedef {Object} IRQ
+ * @property {number} vector
+ * @property {number} priority
+ * @property {number} message
+ * @property {IRQ|null} next
  */
-var IRQ;
 
 /**
  * @class CPUStatePDP11

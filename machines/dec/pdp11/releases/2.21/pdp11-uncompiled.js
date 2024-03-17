@@ -12447,15 +12447,8 @@ CPUPDP11.BUTTONS = ["power", "reset"];
  * IRQ list.
  */
 
-/**
- * @typedef {{
- *  vector: number,
- *  priority: number,
- *  message: number,
- *  next: (IRQ|null)
- * }}
- */
-var IRQ;
+/** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
+let IRQ;
 
 /**
  * @class CPUStatePDP11
@@ -20692,37 +20685,8 @@ PC11.UNIBUS_IOTABLE = {
  */
 
 
-/**
- * Every Sector object (once loaded, parsed, and "normalized") should have ALL of the following named properties:
- *
- *      'sector':   sector number
- *      'length':   size of the sector, in bytes
- *      'data':     array of dwords
- *      'pattern':  dword pattern to use for empty or partial sectors (or null if sector still needs to be loaded)
- *
- * initSector() also sets the following properties, to help us quickly identify its location within aDiskData:
- *
- *      iCylinder
- *      iHead
- *
- * In addition, we will maintain the following information on a per-sector basis, as sectors are modified:
- *
- *      iModify:    index of first modified dword in sector
- *      cModify:    number of modified dwords in sector
- *      fDirty:     true if sector is dirty, false if clean (or cleaning in progress)
- *
- * @typedef {{
- *  sector:     number,
- *  length:     number,
- *  data:       Array.<number>,
- *  pattern:    (number|null),
- *  iCylinder:  number,
- *  iHead:      number,
- *  iModify:    number,
- *  cModify:    number
- * }}
- */
-var SectorInfo;
+/** @typedef {{ sector: number, length: number, data: Array.<number>, pattern: (number|null), iCylinder: number, iHead: number, iModify: number, cModify: number }} */
+let SectorInfo;
 
 /**
  * @class DiskPDP11
@@ -21882,14 +21846,8 @@ DiskPDP11.nDisks = 0;
  * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/drive.js (C) 2012-2024 Jeff Parsons
  */
 
-/**
- * @typedef {{
- *  PRI:        number,
- *  VEC:        number,
- *  DRIVES:     number
- * }}
- */
-var Config;
+/** @typedef {{ PRI: number, VEC: number, DRIVES: number }} */
+let Config;
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,
@@ -26239,26 +26197,8 @@ DbgLib.EVENTS = {
  * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
  */
 
-/**
- * DebuggerPDP11 Address Object
- *
- *      addr            address
- *      fPhysical       true if this is a physical address
- *      fTemporary      true if this is a temporary breakpoint address
- *      nBase           set if the address contained an explicit base (eg, 16, 10, 8, etc)
- *      sCmd            set for breakpoint addresses if there's an associated command string
- *      aCmds           preprocessed commands (from sCmd)
- *
- * @typedef {{
- *      addr:(number|null),
- *      fPhysical:(boolean),
- *      fTemporary:(boolean),
- *      nBase:(number|undefined),
- *      sCmd:(string|undefined),
- *      aCmds:(Array.<string>|undefined)
- * }}
- */
-var DbgAddrPDP11;
+/** @typedef {{ addr: (number|null), fPhysical: boolean, fTemporary: boolean, nBase: (number|undefined), sCmd: (string|undefined), aCmds: (Array.<string>|undefined) }} */
+let DbgAddrPDP11;
 
 /**
  * @class DebuggerPDP11

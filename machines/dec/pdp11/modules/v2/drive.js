@@ -17,13 +17,11 @@ import WebLib from "../../../../modules/v2/weblib.js";
 import { DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
- * @typedef {{
- *  PRI:        number,
- *  VEC:        number,
- *  DRIVES:     number
- * }}
+ * @typedef {Object} Config
+ * @property {number} PRI
+ * @property {number} VEC
+ * @property {number} DRIVES
  */
-var Config;
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,

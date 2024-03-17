@@ -29,16 +29,14 @@ import { APPCLASS, APPNAME, APPVERSION, COMPILED, DEBUG, DEBUGGER, PDP11, global
  *      sCmd            set for breakpoint addresses if there's an associated command string
  *      aCmds           preprocessed commands (from sCmd)
  *
- * @typedef {{
- *      addr:(number|null),
- *      fPhysical:(boolean),
- *      fTemporary:(boolean),
- *      nBase:(number|undefined),
- *      sCmd:(string|undefined),
- *      aCmds:(Array.<string>|undefined)
- * }}
+ * @typedef {Object} DbgAddrPDP11
+ * @property {number|null} addr
+ * @property {boolean} fPhysical
+ * @property {boolean} fTemporary
+ * @property {number} [nBase]
+ * @property {string} [sCmd]
+ * @property {Array.<string>} [aCmds]
  */
-var DbgAddrPDP11;
 
 /**
  * @class DebuggerPDP11
