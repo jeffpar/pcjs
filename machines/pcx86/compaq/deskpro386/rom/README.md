@@ -45,7 +45,7 @@ earliest (if not *the* earliest) ROMs commercially available for this line of CO
 
 	Rev  Even ROM #  Odd ROM #   Size  Date
 	---  ----------  ----------  ----  ----
-	E    108285-001  108284-001
+	E    108285-001  108284-001  32Kb  1986-08-19 (from a 386/16 rev-A motherboard)
 	F    108328-001  108327-001  32Kb  1986-09-04
 	G    108328-002  108327-002
 	H.8  113270-008  113269-008
