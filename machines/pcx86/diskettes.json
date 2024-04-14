@@ -8030,35 +8030,30 @@
 								"@title": "MS Macro Assembler 5.10 (Feb 1988 #1)",
 								"@diskette": "MASM51X-01510-DISK1.json",
 								"@format": "PC360K",
-								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MS Macro Assembler 5.10 (Feb 1988 #2)",
 								"@diskette": "MASM51X-01511-DISK2.json",
 								"@format": "PC360K",
-								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MS Macro Assembler 5.10 (Feb 1988 #3)",
 								"@diskette": "MASM51X-01512-DISK3.json",
 								"@format": "PC360K",
-								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MS Macro Assembler 5.10 (Feb 1988 #4)",
 								"@diskette": "MASM51X-01514-DISK4.json",
 								"@format": "PC360K",
-								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
 								"@title": "MS Macro Assembler 5.10 (Feb 1988 #5)",
 								"@diskette": "MASM51X-03159-DISK5.json",
 								"@format": "PC1200K",
-								"@localonly": true,
 								"@source": "PCjs"
 							},
 							{
