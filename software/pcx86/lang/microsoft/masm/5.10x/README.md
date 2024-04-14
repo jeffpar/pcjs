@@ -8,19 +8,17 @@ machines:
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
     autoMount:
-      B: "MS MASM 5.10 (Feb 1988 Disk 1)"
+      B: "MS Macro Assembler 5.10 (Feb 1988 #1)"
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-Directory listings of the five distribution diskettes (plus a 5.10A update disk issued by Microsoft in March 1990)
-from the [PCjs Software Archive](/software/pcjs/) are provided below.
+Directory listings of the five distribution diskettes (plus a 5.10A update disk issued by Microsoft in March 1990) from the [PCjs Software Archive](/software/pcjs/) are provided below.
 
-We don't have any documents from this release, but you can browse the [5.10A README.DOC](#contents-of-readmedoc) below,
-as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lang/microsoft/masm/5.00/#documents).
+We don't have any documents from this release, but you can browse the [5.10A README.DOC](#contents-of-readmedoc) below, as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lang/microsoft/masm/5.00/#documents).
 
 {% include machine.html id="ibm5170" %}
 
-### Directory of MS MASM 5.10 (Feb 1988 Disk 1)
+### Directory of MS Macro Assembler 5.10 (Feb 1988 #1)
 
      Volume in drive A is MASM
      Directory of A:\
@@ -57,7 +55,7 @@ as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lan
            22 file(s)     245337 bytes
                           103424 bytes free
 
-### Directory of MS MASM 5.10 (Feb 1988 Disk 2)
+### Directory of MS Macro Assembler 5.10 (Feb 1988 #2)
 
      Volume in drive A is UTILITIES
      Directory of A:\
@@ -75,7 +73,7 @@ as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lan
            10 file(s)     295252 bytes
                            61440 bytes free
 
-### Directory of MS MASM 5.10 (Feb 1988 Disk 3)
+### Directory of MS Macro Assembler 5.10 (Feb 1988 #3)
 
      Volume in drive A is CODEVIEW
      Directory of A:\
@@ -98,7 +96,7 @@ as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lan
            15 file(s)     351344 bytes
                             2048 bytes free
 
-### Directory of MS MASM 5.10 (Feb 1988 Disk 4)
+### Directory of MS Macro Assembler 5.10 (Feb 1988 #4)
 
      Volume in drive A is EDITOR
      Directory of A:\
@@ -142,7 +140,7 @@ as well as the [Microsoft Macro Assembler 5.0 Documentation](/software/pcx86/lan
            25 file(s)     305172 bytes
                            45056 bytes free
 
-### Directory of MS MASM 5.10 (Feb 1988 Disk 5)
+### Directory of MS Macro Assembler 5.10 (Feb 1988 #5)
 
      Volume in drive A is OS2 PROGRAM
      Directory of A:\
