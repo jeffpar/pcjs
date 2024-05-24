@@ -2243,7 +2243,7 @@ export class Card extends Controller {
      * distinguish newer (V2) access values from older (V1) access values in saved contexts.  It's set when the context
      * is saved, and cleared when the context is restored.  Thus, if V2 is not set on restore, we assume we're dealing with
      * a V1 value, so we run it through the V1 table (below) to produce a V2 value.  Hopefully at some point V1 contexts
-     * can be deprecated, and the V2 bit can be eliminated/repurposed.
+     * can be deprecated, and the V2 bit can be eliminated or repurposed.
      */
     static READ = {                     // READ values are designed to be OR'ed with WRITE values
         MODE0:      0x0400,

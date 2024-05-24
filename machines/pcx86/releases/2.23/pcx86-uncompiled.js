@@ -6970,13 +6970,19 @@ class CharSet {
      * toCP437(u)
      *
      * @param {string} u
+     * @param {Object} [aMappings]
      * @returns {string}
      */
-    static toCP437(u)
+    static toCP437(u, aMappings = {})
     {
         let s = "";
         for (let i = 0; i < u.length; i++) {
-            let c = CharSet.CP437.indexOf(u[i]);
+            let c = aMappings[u[i]];
+            if (c) {
+                s += c;
+                continue;
+            }
+            c = CharSet.CP437.indexOf(u[i]);
             if (c > 0) {
                 s += String.fromCharCode(c);
             } else {
@@ -6998,21 +7004,24 @@ class CharSet {
     }
 
     /**
-     * isText(data)
+     * isText(text, aIgnore)
      *
      * It can be hard to differentiate between a binary file and a text file that's using
      * lots of IBM PC graphics characters.  Control characters are often red flags, but they
      * can also be interpreted as graphics characters.
      *
-     * @param {string} data
-     * @returns {boolean} true if data is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
+     * @param {string} text
+     * @param {Array} [aIgnore] (optional array of character encodings to ignore)
+     * @returns {boolean} true if text is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
      */
-    static isText(data)
+    static isText(text, aIgnore = [])
     {
-        for (let i = 0; i < data.length; i++) {
-            let b = data.charCodeAt(i);
-            if (b == 0 || b >= 0x80 && !CharSet.isCP437(data[i])) {
-                return false;
+        for (let i = 0; i < text.length; i++) {
+            let b = text.charCodeAt(i);
+            if (aIgnore.indexOf(b) < 0) {
+                if (b == 0 || b >= 0x80 && !CharSet.isCP437(text[i])) {
+                    return false;
+                }
             }
         }
         return true;
@@ -54257,7 +54266,7 @@ class Card extends Controller {
      * distinguish newer (V2) access values from older (V1) access values in saved contexts.  It's set when the context
      * is saved, and cleared when the context is restored.  Thus, if V2 is not set on restore, we assume we're dealing with
      * a V1 value, so we run it through the V1 table (below) to produce a V2 value.  Hopefully at some point V1 contexts
-     * can be deprecated, and the V2 bit can be eliminated/repurposed.
+     * can be deprecated, and the V2 bit can be eliminated or repurposed.
      */
     static READ = {                     // READ values are designed to be OR'ed with WRITE values
         MODE0:      0x0400,

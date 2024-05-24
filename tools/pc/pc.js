@@ -72,7 +72,7 @@ export default class PC extends PCJSLib {
     maxFiles = 1024;            // default disk file limit
     kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
     shutdown = false;
-
+    messages = false;           // true if --messages specified
     messagesFilter; debugMode;
     prompt = ">"; command = ""; commandPrev = "";
     machine = "test";           // TODO: Remove after testing
@@ -423,7 +423,7 @@ export default class PC extends PCJSLib {
              */
             if (module.default && module.default.prototype) {
                 module.default.prototype.print = function print(s, bitsMessage) {
-                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.debug) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
+                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.messages) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
                         printf(s);
                     }
                 };
@@ -3160,6 +3160,7 @@ export default class PC extends PCJSLib {
     async checkArgs(argv)
     {
         this.debug = PC.removeFlag(argv, 'debug', this.debug);
+        this.messages = PC.removeFlag(argv, 'messages', this.messages);
         this.verbose = PC.removeFlag(argv, 'verbose', this.verbose);
         this.test = PC.removeFlag(argv, 'test', this.test);
 
@@ -3709,6 +3710,7 @@ export default class PC extends PCJSLib {
                 "--halt (-h)":              "\thalt machine on startup",
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
+                "--messages (-m)":          "\tenable debugger messages",
                 "--test (-t)":              "\tenable test mode (non-interactive)",
                 "--serial (s)":             "\tuse serial port instead of keyboard",
                 "--verbose (-v)":           "\tenable verbose mode"

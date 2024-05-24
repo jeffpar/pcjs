@@ -1058,6 +1058,30 @@
       }
     },
     {
+      "name": "PC.js --maxfiles=2048 --target=32M --version=3.31 --normalize --messages",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--maxfiles=2048",
+        "--target=32M",
+        "--version=3.31",
+        "--normalize",
+        "--messages"
+      ],
+      "cwd": "/Users/jeff/Projects/GitHub/microsoft/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "PC.js PDP-11/20",
       "type": "node",
       "request": "launch",
@@ -2628,6 +2652,28 @@
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "video.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/private/video.js",
+      "args": [
+        "shows",
+        "rename",
+        "path"
+      ],
+      "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

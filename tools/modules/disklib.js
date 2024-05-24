@@ -34,7 +34,7 @@ export default class DiskLib {
      * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
      * these file contents first.
      */
-    static asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".MAK", ".TXT", ".XML"];
+    static asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL"];
 
     /**
      * DiskLib(device)
@@ -854,17 +854,17 @@ export default class DiskLib {
                     }
                 }
                 if (fText) {
-                    data = this.readFileSync(sPath);
-                    if (CharSet.isText(data)) {
-                        let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-                        if (dataNew != data) {
-                            this.printf(MESSAGE.FILE + MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
+                    let text = this.readFileSync(sPath);
+                    if (CharSet.isText(text, [0xFFFD])) {
+                        let textNew = CharSet.toCP437(text, {'\uFFFD': '*'}).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+                        if (textNew != text) {
+                            this.printf(MESSAGE.FILE + MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, text.length, textNew.length);
                         }
-                        data = dataNew;
+                        text = textNew;
                     } else {
                         this.printf(MESSAGE.FILE + MESSAGE.INFO, "non-ASCII data in %s (line endings unchanged)\n", sName);
                     }
-                    data = new DataBuffer(data);
+                    data = new DataBuffer(text);
                 } else {
                     if (data.length != stats.size) {
                         this.printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
