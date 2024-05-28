@@ -11,7 +11,9 @@ pc.js is started with the following options:
 
     pc.js --system=msdos --version=3.30 --target=30M
 
-to create a 30Mb hard disk that boots MS-DOS 3.30.  By default, pc.js uses a COMPAQ Deskpro 386 [configuration](tools/pc/compaq386.json) running at 16Mhz.  For more information about pc.js, see this [blog post](https://www.pcjs.org/blog/2023/09/05/).
+to create a 30Mb hard disk that boots MS-DOS 3.30.  The pc.js `normalize` option in the [pc.json5](../pc.json5) configuration file has also been set to true, to automatically fix text files during the hard disk build process (ie, line-endings are converted to CR/LF and non-CP437 characters are removed).
+
+By default, pc.js uses a COMPAQ DeskPro 386 [configuration](../compaq386.json) running at 16Mhz.  For more information about pc.js, see this [blog post](https://www.pcjs.org/blog/2023/09/05/).
 
 When you see the `C:\>` prompt, run the following commands:
 
