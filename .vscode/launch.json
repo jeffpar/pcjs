@@ -1058,18 +1058,17 @@
       }
     },
     {
-      "name": "PC.js --maxfiles=2048 --target=32M --version=3.31 --normalize --messages",
+      "name": "PC.js MS-DOS/v4.0",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--maxfiles=2048",
-        "--target=32M",
-        "--version=3.31",
-        "--normalize",
-        "--messages"
+        "--maxfiles=3000",
+        "--system=msdos",
+        "--version=3.30",
+        "--target=30M"
       ],
-      "cwd": "/Users/jeff/Projects/GitHub/microsoft/MS-DOS/v4.0",
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2664,14 +2663,12 @@
       }
     },
     {
-      "name": "video.js",
+      "name": "plex.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/private/video.js",
+      "program": "${workspaceFolder}/tools/private/plex.js",
       "args": [
-        "shows",
-        "rename",
-        "path"
+        "Nelly.srt"
       ],
       "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,

@@ -10,8 +10,15 @@
     "maxfiles": 1024,
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int,hdc",      // a list of debugger message categories to enable when --halt is used
-    "normalize": false,         // use false for disks that are already DOS-compatible (true converts LF to CR/LF and more)
+    "messages": "",             // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
+    "normalize": true,          // use false for disks that are already DOS-compatible (true converts LF to CR/LF and more)
+    "config": [                 // if set (and no CONFIG.SYS already exists), then one will be created with these lines
+      "FILES=20",
+      "BUFFERS=20"
+    ],
+    "autoexec": [               // if set, these lines will be appended to AUTOEXEC.BAT
+      "PROMPT $P$G"
+    ]
   },
   "apps": {
     "cp": {},                   // create CP.COM

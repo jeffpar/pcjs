@@ -1828,6 +1828,19 @@ export default class PC extends PCJSLib {
         }
 
         /**
+         * Create a CONFIG.SYS as needed.
+         */
+        let text;
+        let configSYS = configJSON['defaults'] && configJSON['defaults']['config'];
+        if (configSYS) {
+            text = await diskLib.readFileAsync(node.path.join(sDir, "CONFIG.SYS"), "utf8", true);
+            if (!text) {
+                text = configSYS.join("\r\n") + "\r\n";
+                driveInfo.files.push(diskLib.makeFileDesc(sDir, "CONFIG.SYS", text, attrHidden));
+            }
+        }
+
+        /**
          * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
          * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
          * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
@@ -1835,41 +1848,45 @@ export default class PC extends PCJSLib {
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
-        if (data) {
-            if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
-                data = '@' + data;
+        text = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+        if (text) {
+            if (verDOS >= 3.30 && !text.indexOf("ECHO OFF")) {
+                text = '@' + text;
             }
         } else {
-            data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
+            text = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
             attr |= attrHidden;
         }
-        let matchPath = data.match(/^PATH\s*(.*)$/im);
+        let matchPath = text.match(/^PATH\s*(.*)$/im);
         if (matchPath) {
             let matchPathRoot = matchPath[1].match(new RegExp("(^|;|" + bootLetter + ":|)\\\\(;|$)", "i"));
             if (!matchPathRoot) {
-                data = data.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
+                text = text.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
             }
         } else if (verDOSMajor >= 2) {
-            data += "PATH " + bootLetter + ":\\\n";
+            text += "PATH " + bootLetter + ":\\\n";
         }
 
         if (sCommand) {
             let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
             for (let command of aCommands) {
-                data += command + "\n";
+                text += command + "\n";
             }
         }
+        if (this.machineDir) text += "CD " + this.machineDir + "\n";
         if (this.test) {
-            data += "quit\n";
+            text += "quit\n";
         }
-        if (this.machineDir) data += "CD " + this.machineDir + "\n";
-        if (data.length) {
+        let autoexecBAT = configJSON['defaults'] && configJSON['defaults']['autoexec'];
+        if (autoexecBAT) {
+            text += autoexecBAT.join("\n") + "\n";
+        }
+        if (text.length) {
             /**
              * Automatically normalize all line-endings in AUTOEXEC.BAT.
              */
-            let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-            driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
+            text = CharSet.toCP437(text).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", text, attr));
         }
 
         if (verDOS < 2.0) {
@@ -3160,7 +3177,6 @@ export default class PC extends PCJSLib {
     async checkArgs(argv)
     {
         this.debug = PC.removeFlag(argv, 'debug', this.debug);
-        this.messages = PC.removeFlag(argv, 'messages', this.messages);
         this.verbose = PC.removeFlag(argv, 'verbose', this.verbose);
         this.test = PC.removeFlag(argv, 'test', this.test);
 
@@ -3185,6 +3201,7 @@ export default class PC extends PCJSLib {
         }
         let result;
         let defaults = configJSON['defaults'] || {};
+        this.messages = PC.removeFlag(argv, 'messages', !!defaults['messages']);
         this.localDir = defaults['dir'] || this.localDir;
         this.machineType = defaults['type'] || this.machineType;
         this.savedMachine = defaults['machine'] || this.savedMachine;

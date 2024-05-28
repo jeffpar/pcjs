@@ -57,16 +57,14 @@ export default class CharSet {
         let s = "";
         for (let i = 0; i < u.length; i++) {
             let c = aMappings[u[i]];
-            if (c) {
-                s += c;
-                continue;
+            if (!c) {
+                c = CharSet.CP437.indexOf(u[i]);
+                if (c < 0) {
+                    c = u.charCodeAt(i);
+                    if (c > 255) c = aMappings['\uFFFD'] || 0x2A;       // '*' shall be our replacement for unknown characters
+                }
             }
-            c = CharSet.CP437.indexOf(u[i]);
-            if (c > 0) {
-                s += String.fromCharCode(c);
-            } else {
-                s += u[i];
-            }
+            s += String.fromCharCode(c);
         }
         return s;
     }
@@ -97,7 +95,7 @@ export default class CharSet {
     {
         for (let i = 0; i < text.length; i++) {
             let b = text.charCodeAt(i);
-            if (aIgnore.indexOf(b) < 0) {
+            if (!aIgnore.length || aIgnore.indexOf(b) < 0 && b <= 255) {
                 if (b == 0 || b >= 0x80 && !CharSet.isCP437(text[i])) {
                     return false;
                 }

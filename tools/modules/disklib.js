@@ -33,8 +33,17 @@ export default class DiskLib {
      *
      * NOTE: Some files, like ".BAS" files, aren't always ASCII, which is why we now call isText() on all
      * these file contents first.
+     *
+     * UPDATE: Added ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", "." to the list for the benefit of the
+     * MS-DOS repository at https://github.com/microsoft/MS-DOS.  The final entry (".") is a catch-all for
+     * extension-less files (eg, EXE2BIN response files like "LOCSCR", which fail to satisfy EXE2BIN when
+     * they have Unix-style line endings, and NMAKE makefiles, which actually seem to work fine with
+     * with Unix-style line endings, but we may as well convert them anyway).
      */
-    static asTextFileExts = [".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL"];
+    static asTextFileExts = [
+        ".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF",
+        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", "."
+    ];
 
     /**
      * DiskLib(device)
@@ -526,6 +535,9 @@ export default class DiskLib {
     isTextFile(sFile)
     {
         let sFileUC = sFile.toUpperCase();
+        if (sFileUC.indexOf('.') < 0) {
+            sFileUC += '.';
+        }
         for (let i = 0; i < DiskLib.asTextFileExts.length; i++) {
             if (sFileUC.endsWith(DiskLib.asTextFileExts[i])) return true;
         }
@@ -856,7 +868,7 @@ export default class DiskLib {
                 if (fText) {
                     let text = this.readFileSync(sPath);
                     if (CharSet.isText(text, [0xFFFD])) {
-                        let textNew = CharSet.toCP437(text, {'\uFFFD': '*'}).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+                        let textNew = CharSet.toCP437(text, {'\uFFFD': 0x2A}).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                         if (textNew != text) {
                             this.printf(MESSAGE.FILE + MESSAGE.INFO, "replaced line endings in %s (size changed from %d to %d bytes)\n", sName, text.length, textNew.length);
                         }
