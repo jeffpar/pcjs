@@ -7,7 +7,7 @@
     "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
     "label": ".",               // alternatives: "default"
     "dir": ".",
-    "maxfiles": 1024,
+    "maxfiles": 3072,
     "machine": "compaq386.json",
     "state": "state386.json",
     "messages": "",             // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
