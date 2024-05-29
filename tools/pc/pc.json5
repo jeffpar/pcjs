@@ -17,7 +17,6 @@
       "BUFFERS=20"
     ],
     "autoexec": [               // if set, these lines will be appended to AUTOEXEC.BAT
-      "PROMPT $P$G"
     ]
   },
   "apps": {

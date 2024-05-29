@@ -23,7 +23,7 @@ When you see the `C:\>` prompt, run the following commands:
 
 When **NMAKE** is finished, you can type `QUIT` to exit pc.js, at which point all modified files in the hard disk image will be automatically synchronized with your working copy of the repository.
 
-If you want to edit any files and re-run any DOS commands, you can make all your changes in your host environment and then restart pc.js in the `pcjs/tools/pc/disks/MS-DOS/v4.0` folder, using the same options shown above.  If desired, you can also change the `system` or `version` options to boot any version of PC DOS or MS-DOS that PCjs has archived.
+If you want to edit any files and re-run any DOS commands, you can make all changes in your host environment and then restart pc.js in the `pcjs/tools/pc/disks/MS-DOS/v4.0` folder, using the same options shown above.  If desired, you can also change the `system` or `version` options to boot any version of PC DOS or MS-DOS that PCjs has archived.
 
 ### Log of MS-DOS 4.0 Build
 

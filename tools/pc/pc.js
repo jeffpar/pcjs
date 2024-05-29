@@ -1832,7 +1832,7 @@ export default class PC extends PCJSLib {
          */
         let text;
         let configSYS = configJSON['defaults'] && configJSON['defaults']['config'];
-        if (configSYS) {
+        if (configSYS && configSYS.length) {
             text = await diskLib.readFileAsync(node.path.join(sDir, "CONFIG.SYS"), "utf8", true);
             if (!text) {
                 text = configSYS.join("\r\n") + "\r\n";
@@ -1878,7 +1878,7 @@ export default class PC extends PCJSLib {
             text += "quit\n";
         }
         let autoexecBAT = configJSON['defaults'] && configJSON['defaults']['autoexec'];
-        if (autoexecBAT) {
+        if (autoexecBAT && autoexecBAT.length) {
             text += autoexecBAT.join("\n") + "\n";
         }
         if (text.length) {
