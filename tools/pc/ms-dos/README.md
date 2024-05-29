@@ -5,13 +5,13 @@ Microsoft's [MS-DOS](https://github.com/microsoft/MS-DOS) repository requires so
 - Changes to **SELECT** source files (from [E. C. Masloch](https://hg.pushbx.org/ecm/msdos4/rev/63a05668c5f3))
 - Changes to **SETENV.BAT** in the **v4.0/src** folder (to correct LIB and INCLUDE environment variables)
 
-To download the sources and build them with pc.js, run **build.sh** in the v4.0 folder inside this folder.  That script will download a working copy of the repository into the `pcjs/tools/pc/disks/MS-DOS` folder and then start pc.js, which will build a bootable hard disk image with the contents of the `v4.0` folder of the repository.
+To download the sources and build them with pc.js, run **build.sh** in the v4.0 folder inside this folder.  That script downloads a working copy of the repository into the `pcjs/tools/pc/disks/MS-DOS` folder, makes the above modifications (see the [fixes](v4.0/fixes) folder), and then starts pc.js, which builds a bootable hard disk image with the contents of the repository's `v4.0` folder.
 
 pc.js is started with the following options:
 
-    pc.js --system=msdos --version=3.30 --target=30M
+    pc.js --system=msdos --version=3.30 --target=30M --normalize
 
-to create a 30Mb hard disk that boots MS-DOS 3.30.  The pc.js `normalize` option in the [pc.json5](../pc.json5) configuration file has also been set to true, to automatically fix text files during the hard disk build process (ie, line-endings are converted to CR/LF and non-CP437 characters are removed).
+to create a 30Mb hard disk that boots MS-DOS 3.30.  The pc.js `normalize` option automatically fixes known text files during the hard disk build process (ie, line-endings are converted to CR/LF and non-CP437 characters are translated/replaced as appropriate).
 
 By default, pc.js uses a COMPAQ DeskPro 386 [configuration](../compaq386.json) running at 16Mhz.  For more information about pc.js, see this [blog post](https://www.pcjs.org/blog/2023/09/05/).
 
@@ -36,7 +36,7 @@ If you want to edit any files and re-run any DOS commands, you can make all your
     Resolving deltas: 100% (288/288), done.
     pc.js v3.00
     Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
-    Options: --maxfiles=3000 --system=msdos --version=3.30 --target=30M
+    Options: --maxfiles=3000 --system=msdos --version=3.30 --target=30M --normalize
     [Press CTRL-D to enter command mode]
     C:\>cd src
 
