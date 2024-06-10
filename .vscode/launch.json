@@ -2668,8 +2668,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/private/plex.js",
       "args": [
-        "Nelly.srt"
-      ],
+       ],
       "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,
       "console": "integratedTerminal",
