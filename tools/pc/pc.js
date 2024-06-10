@@ -1576,8 +1576,9 @@ export default class PC extends PCJSLib {
              */
             verNumber = sprintf("%.2f", parseFloat(version) || 0);
             let match = version.match(/([A-Z])$/i);
-            if (match) verNumber += match[1].toUpperCase();
-            versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
+            version = verNumber;
+            if (match) version += match[1].toUpperCase();
+            versionInfo = system.versions[version] || system.versions[verNumber];
         }
         if (versionInfo) {
             if (key == "disk") {

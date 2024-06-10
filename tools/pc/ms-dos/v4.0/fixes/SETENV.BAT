@@ -4,10 +4,10 @@ set CL=
 set LINK=
 set MASM=
 set COUNTRY=usa-ms
-set BAKROOT=c:
+set BAKROOT=C:
 rem BAKROOT points to the home drive/directory of the sources.
-set LIB=%BAKROOT%\src\TOOLS\BLD\LIB
-set INIT=%BAKROOT%\src\TOOLS
-set INCLUDE=%BAKROOT%\src\TOOLS\BLD\INC
-set PATH=%PATH%;%BAKROOT%\src\TOOLS
+set LIB=%BAKROOT%\SRC\TOOLS\BLD\LIB
+set INIT=%BAKROOT%\SRC\TOOLS
+set INCLUDE=%BAKROOT%\SRC\TOOLS\BLD\INC
+set PATH=%PATH%;%BAKROOT%\SRC\TOOLS
 prompt $p$g
