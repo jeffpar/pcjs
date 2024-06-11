@@ -4,6 +4,7 @@ Microsoft's [MS-DOS](https://github.com/microsoft/MS-DOS) repository requires so
 
 - Changes to **SELECT** source files (from [E. C. Masloch](https://hg.pushbx.org/ecm/msdos4/rev/63a05668c5f3))
 - Changes to **SETENV.BAT** in the **v4.0/src** folder (to correct LIB and INCLUDE environment variables)
+- Changes to **MAKEFILE** in the **DEV/XMAEM** and **MEMM/MEMM** folders (to correct minor build dependency mistakes)
 
 To download the sources and build them with pc.js, run **build.sh** in the v4.0 folder inside this folder.  That script downloads a working copy of the repository into the `pcjs/tools/pc/disks/MS-DOS` folder, makes the above modifications (see the [fixes](v4.0/fixes) folder), and then starts pc.js, which builds a bootable hard disk image with the contents of the repository's `v4.0` folder.
 
@@ -36,7 +37,7 @@ If you want to edit any files and re-run any DOS commands, you can make all chan
     Resolving deltas: 100% (288/288), done.
     pc.js v3.00
     Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
-    Options: --maxfiles=3000 --system=msdos --version=3.30 --target=30M --normalize
+    Options: --system=msdos --version=3.30 --target=30M --normalize
     [Press CTRL-D to enter command mode]
     C:\>cd src
 
