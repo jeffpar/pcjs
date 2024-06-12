@@ -28,6 +28,21 @@
     // }
   },
   "systems": {
+    "custom": {
+      "vendor": "microsoft",
+      "product": "ms-dos",
+      "versions": {
+        "4.00": {
+          "dir": "src",
+          "boot": "BOOT/MSBOOT.BIN",
+          "files": [
+            "BIOS/IO.SYS",
+            "DOS/MSDOS.SYS",
+            "CMD/COMMAND/COMMAND.COM"
+          ]
+        }
+      }
+    },
     "bd": {
       "vendor": "pcjs.org",
       "product": "basic-dos",   // see https://github.com/jeffpar/basicdos

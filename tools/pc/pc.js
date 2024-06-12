@@ -1680,7 +1680,9 @@ export default class PC extends PCJSLib {
              * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
              * I've since chopped off those unused bytes, but this will also chop them off if need be.
              */
-            if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
+            if (dbMBR.length > 512) {
+                dbMBR = dbMBR.slice(dbMBR.length - 512);
+            }
         }
 
         let kbCapacity = this.kbTarget;
@@ -1742,6 +1744,9 @@ export default class PC extends PCJSLib {
                 }
             }
         }
+        if (dbBoot.length > 512) {
+            dbBoot = dbBoot.slice(dbBoot.length - 512);
+        }
 
         /**
          * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
@@ -1751,11 +1756,12 @@ export default class PC extends PCJSLib {
         let aSystemFiles = this.getSystemValue("files");
         let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
         for (let name of aSystemFiles) {
-            let desc, data, attr;
+            let desc, attr;
             if (!diSystem) {
                 name = node.path.join(sSystemDisk, name);
                 let dbFile = await diskLib.readFileAsync(name, null, true);
                 if (dbFile) {
+                    let date;
                     if (dbBoot2 && dbBoot2.length) {
                         let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
                         dbBoot2.copy(dbCombined, 0);
@@ -1763,8 +1769,9 @@ export default class PC extends PCJSLib {
                         dbFile = dbCombined;
                         dbBoot2 = null;
                     }
-                    attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
-                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);
+                    attr = this.systemType == "custom"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    date = node.fs.statSync(name).mtime;
+                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
                     driveInfo.files.push(desc);
                     count++;
                     continue;

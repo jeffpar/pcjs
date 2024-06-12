@@ -1058,15 +1058,38 @@
       }
     },
     {
-      "name": "PC.js MS-DOS/v4.0",
+      "name": "PC.js MS-DOS/v4.0 [Build]",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--maxfiles=3000",
         "--system=msdos",
         "--version=3.30",
-        "--target=30M"
+        "--target=30M",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js MS-DOS/v4.0 [Boot]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=custom",
+        "--version=4.00",
+        "--target=30M",
+        "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
       "stopOnEntry": false,
@@ -2668,6 +2691,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/private/plex.js",
       "args": [
+        "shows",
+        "rename",
+        "path"
        ],
       "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,
