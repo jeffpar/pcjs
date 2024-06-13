@@ -1620,10 +1620,11 @@ export default class PC extends PCJSLib {
      *
      * Builds a bootable floppy or hard disk image containing all files in the current directory.
      *
-     * At present, the image size is defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
+     * At present, the image size defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
      * and the operating system files default to MS-DOS 3.30.  Use --sys and --ver command-line options to
-     * override those defaults.  The allowed systems are currently "msdos" and "pcdos", and the allowed versions
-     * are any available in the PCjs diskette repo.
+     * override those defaults.  The allowed systems include "msdos" and "pcdos" and the allowed versions
+     * are any available in the PCjs diskette repo; however, the specified system must also be listed in
+     * the pc.json5 config file.
      *
      * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
      * tweaking the machine configuration file to specify a compatible drive type and customizing the master
@@ -1638,7 +1639,7 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {string} sDir
      * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
-     * @param {string} [sLocalDisk] (optional location for built disk image; default location is in the pc.js "disks" folder)
+     * @param {string} [sLocalDisk] (optional location for built disk image; default is the pc.js "disks" folder)
      * @param {boolean} [log]
      * @returns {string} (error message, if any)
      */
