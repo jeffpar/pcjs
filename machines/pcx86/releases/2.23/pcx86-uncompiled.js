@@ -4471,7 +4471,7 @@ class Component {
      * If format is a number, it's used as a message number, and the format string is the first arg.
      *
      * @param {string|number} format
-     * @param {...} args
+     * @param {...} [args]
      */
     static printf(format, ...args)
     {
@@ -4501,7 +4501,7 @@ class Component {
     }
 
     /**
-     * Component.assert(f, s)
+     * Component.assert(f, s, args)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
      *
@@ -4510,8 +4510,9 @@ class Component {
      *
      * @param {boolean|number|undefined} f is the expression we are asserting to be true
      * @param {string} [s] is description of the assertion on failure
+     * @param {...} [args]
      */
-    static assert(f, s)
+    static assert(f, s, ...args)
     {
         if (DEBUG) {
             if (!f) {
@@ -4532,9 +4533,9 @@ class Component {
                  * a stack trace, too.
                  */
                 try {
-                    throw new Error(s);
+                    throw new Error(StrLib.sprintf(s, ...args));
                 } catch(e) {
-                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", (e.stack || e.message).replace(/^Error: /i, ""));
                 }
             }
         }
@@ -5241,7 +5242,7 @@ class Component {
     }
 
     /**
-     * assert(f, s)
+     * assert(f, s, args)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
      *
@@ -5254,8 +5255,9 @@ class Component {
      * @this {Component}
      * @param {boolean|number|undefined} f is the expression asserted to be true
      * @param {string} [s] is a description of the assertion to be displayed or logged on failure
+     * @param {...} [args]
      */
-    assert(f, s)
+    assert(f, s, ...args)
     {
         if (DEBUG) {
             if (!f) {

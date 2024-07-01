@@ -1557,7 +1557,7 @@ export default class Disk extends Component {
                 let sectorNext = this.diskData[iCylinder][iHead][i];
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
-                this.assert(j >= 0, "findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ") missing from aDirtySectors");
+                this.assert(j >= 0, "findDirtySectors(CHS=%d:%d:%d) missing from aDirtySectors", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
                 this.printf(MESSAGE.DEBUG, "findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
@@ -1565,7 +1565,7 @@ export default class Disk extends Component {
                 sectorNext.fDirty = false;
                 nSectors++;
             }
-            this.assert(!!abSectors.length, "no data for dirty sector (CHS=" + iCylinder + ':' + iHead + ':' + sector[Disk.SECTOR.ID] + ")");
+            this.assert(!!abSectors.length, "no data for dirty sector (CHS=%d:%d:%d)", iCylinder, iHead, sector[Disk.SECTOR.ID]);
             let response = this.writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync);
             return fAsync || response;
         }

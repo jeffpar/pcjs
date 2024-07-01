@@ -1005,7 +1005,7 @@ export default class C1PDebugger extends Component {
         if (addr >= this.offMem && addr < this.offLimit) {
             this.cpu.checkReadNotify(addr);
             b = this.abMem[this.offMem + addr];
-            Component.assert((b == (b & 0xff)), "invalid byte (" + b + ") at address: " + StrLib.toHexWord(addr));
+            this.assert((b == (b & 0xff)), "invalid byte (%#04X) at address: %#06X", b, addr);
             b &= 0xff;
         }
         return b;

@@ -1576,6 +1576,18 @@
       }
     },
     {
+      "name": "Microsoft Windows 95",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "Microsoft Windows 95 [Debugger*]",
       "type": "chrome",
       "request": "launch",
