@@ -18,7 +18,7 @@ Note one sentence in particular:
 
 > The Living Computer Museum also fulfills my hope that the achievements of early computer engineers **aren't lost to time**.
 
-It's difficult to imagine that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- would have also left instructions to liquidate LCM after his death.
+It's unfortunate that Paul Allen, after investing so much time, energy, and money in the Living Computer Museum and its people -- not to mention his *express hope* that efforts like his would not be "lost to time" -- didn't ensure that the museum would continue after his death.
 
 It makes sense for some of Paul Allen's acquisitions, like his recently auctioned [art collection](https://www.christies.com/en/events/visionary-the-paul-g-allen-collection/overview), to find their way into new hands after he's gone.  Items like artwork are always changing hands.
 
