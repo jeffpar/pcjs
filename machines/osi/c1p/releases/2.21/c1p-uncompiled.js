@@ -3512,7 +3512,7 @@ class Component {
      * If format is a number, it's used as a message number, and the format string is the first arg.
      *
      * @param {string|number} format
-     * @param {...} args
+     * @param {...} [args]
      */
     static printf(format, ...args)
     {
@@ -3542,7 +3542,7 @@ class Component {
     }
 
     /**
-     * Component.assert(f, s)
+     * Component.assert(f, s, args)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
      *
@@ -3551,8 +3551,9 @@ class Component {
      *
      * @param {boolean|number|undefined} f is the expression we are asserting to be true
      * @param {string} [s] is description of the assertion on failure
+     * @param {...} [args]
      */
-    static assert(f, s)
+    static assert(f, s, ...args)
     {
         if (DEBUG) {
             if (!f) {
@@ -3573,9 +3574,9 @@ class Component {
                  * a stack trace, too.
                  */
                 try {
-                    throw new Error(s);
+                    throw new Error(StrLib.sprintf(s, ...args));
                 } catch(e) {
-                    Component.printf(MESSAGE.ERROR, "%s\n", e.stack || e.message);
+                    Component.printf(MESSAGE.ERROR, "%s\n", (e.stack || e.message).replace(/^Error: /i, ""));
                 }
             }
         }
@@ -4282,7 +4283,7 @@ class Component {
     }
 
     /**
-     * assert(f, s)
+     * assert(f, s, args)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
      *
@@ -4295,8 +4296,9 @@ class Component {
      * @this {Component}
      * @param {boolean|number|undefined} f is the expression asserted to be true
      * @param {string} [s] is a description of the assertion to be displayed or logged on failure
+     * @param {...} [args]
      */
-    assert(f, s)
+    assert(f, s, ...args)
     {
         if (DEBUG) {
             if (!f) {
@@ -5316,6 +5318,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setBinding(sHTMLType, sBinding, control, sValue)
+     *
      * @this {C1PCPU}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
@@ -5363,6 +5367,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setBuffer(abMemory, start, end)
+     *
      * @this {C1PCPU}
      * @param {Array} abMemory
      * @param {number} start
@@ -5389,6 +5395,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setPower(fOn, cmp)
+     *
      * @this {C1PCPU}
      * @param {boolean} fOn
      * @param {C1PComputer} cmp
@@ -5431,6 +5439,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * addReadNotify(start, end, component, fn)
+     *
      * Add a memory read-notification handler to the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -5456,6 +5466,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * checkReadNotify(addrRead, addrFrom)
+     *
      * @this {C1PCPU}
      * @param {number} addrRead is the EA value at the time of the read
      * @param {number} [addrFrom] is the PC value at the time of the read;
@@ -5472,6 +5484,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * removeReadNotify(start, end, component, fn)
+     *
      * Remove a memory read-notification handler from the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -5496,6 +5510,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * addWriteNotify(start, end, component, fn)
+     *
      * Add a memory write-notification handler to the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -5521,6 +5537,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * checkWriteNotify(addrWrite, addrFrom)
+     *
      * @this {C1PCPU}
      * @param {number} addrWrite is the EA value at the time of the write
      * @param {number} [addrFrom] is the PC value at the time of the write;
@@ -5537,6 +5555,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * removeWriteNotify(start, end, component, fn)
+     *
      * Remove a memory write-notification handler from the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -5561,6 +5581,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * findNotify(aNotify, start, end, component, fn)
+     *
      * Find a memory notification handler from the given array of handlers
      *
      * @this {C1PCPU}
@@ -5582,6 +5604,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * removeNotify(aNotify, start, end, component, fn)
+     *
      * Remove a memory notification handler from the given array of handlers
      *
      * @this {C1PCPU}
@@ -5616,6 +5640,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setSpeed(speed, fOnClick)
+     *
      * @this {C1PCPU}
      * @param {number} [speed] is one of: 0 (slow), 1 (fast) or 2 (maximum)
      * @param {boolean} [fOnClick] is true if called from a click handler that might have stolen focus
@@ -5639,6 +5665,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * calcSpeed(nCycles, msElapsed)
+     *
      * @this {C1PCPU}
      * @param {number} nCycles
      * @param {number} msElapsed
@@ -5654,6 +5682,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * displayVideo()
+     *
      * @this {C1PCPU}
      */
     displayVideo()
@@ -5662,6 +5692,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setFocus()
+     *
      * @this {C1PCPU}
      */
     setFocus()
@@ -5670,6 +5702,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * displayReg(sReg, vReg, len)
+     *
      * @this {C1PCPU}
      * @param {string} sReg
      * @param {number} vReg
@@ -5685,6 +5719,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * displayStatus()
+     *
      * @this {C1PCPU}
      */
     displayStatus()
@@ -5708,6 +5744,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * isRunning()
+     *
      * @this {C1PCPU}
      * @returns {boolean}
      */
@@ -5717,6 +5755,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * calcCycles(fRecalc)
+     *
      * Calculate the number of cycles to process for each "burst" of CPU activity.  The size of a burst
      * is driven by the following values:
      *
@@ -5773,6 +5813,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * calcStartTime()
+     *
      * @this {C1PCPU}
      */
     calcStartTime()
@@ -5785,6 +5827,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * calcRemainingTime()
+     *
      * @this {C1PCPU}
      * @returns {number}
      */
@@ -5876,6 +5920,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * run()
+     *
      * @this {C1PCPU}
      */
     run()
@@ -5954,6 +6000,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * step(nMinCycles)
+     *
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
      * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
@@ -6079,6 +6127,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * yieldCPU()
+     *
      * yieldCPU() is similar to halt() with regard to how it resets various cycle countdown values,
      * but the CPU remains in a "running" state.
      *
@@ -6092,6 +6142,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * halt()
+     *
      * halt() is similar to yieldCPU(), but it doesn't need to zero nCyclesNextYield to break out of run();
      * it simply needs to clear fRunning.
      *
@@ -6109,11 +6161,13 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * update()
      *
      * This used to be performed at the end of every step(), but run() -- which relies upon step() -- needed to have
      * more control over when these updates are performed.  However, for other callers of step(), such as the Debugger,
      * the combination of step() + update() provides the old behavior.
+     *
+     * @this {C1PCPU}
      */
     update()
     {
@@ -6122,6 +6176,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * getCycles()
+     *
      * getCycles() returns the number of cycles executed so far.  Note that we can be called after
      * a run() OR during a run(), perhaps from a handler triggered during the current run's step(),
      * so nRunCycles must always be adjusted by number of cycles step() was asked to run (nBurstCycles),
@@ -6141,6 +6197,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * getByte(addr)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @returns {number}
@@ -6163,6 +6221,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * getWord(addr)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @returns {number}
@@ -6176,6 +6236,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * setByte(addr, b)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @param {number} b
@@ -6188,6 +6250,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * getRegP()
+     *
      * @this {C1PCPU}
      * @returns {number}
      */
@@ -6211,9 +6275,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearC()
      *
      * Clear the C flag
+     *
+     * @this {C1PCPU}
      */
     clearC()
     {
@@ -6221,9 +6287,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setC()
      *
      * Set the C flag
+     *
+     * @this {C1PCPU}
      */
     setC()
     {
@@ -6231,9 +6299,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearN()
      *
      * Clear the N bit
+     *
+     * @this {C1PCPU}
      */
     clearN()
     {
@@ -6241,9 +6311,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setN()
      *
      * Set the N bit
+     *
+     * @this {C1PCPU}
      */
     setN()
     {
@@ -6251,9 +6323,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearV()
      *
      * Clear the V bit
+     *
+     * @this {C1PCPU}
      */
     clearV()
     {
@@ -6261,9 +6335,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setV()
      *
      * Set the V bit
+     *
+     * @this {C1PCPU}
      */
     setV()
     {
@@ -6271,9 +6347,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearZ()
      *
      * Clear the Z bit
+     *
+     * @this {C1PCPU}
      */
     clearZ()
     {
@@ -6281,9 +6359,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setZ()
      *
      * Set the Z bit
+     *
+     * @this {C1PCPU}
      */
     setZ()
     {
@@ -6291,9 +6371,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setBCD()
      *
      * Set the BCD bit and install the BCD opcode handlers
+     *
+     * @this {C1PCPU}
      */
     setBCD()
     {
@@ -6317,9 +6399,11 @@ class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearBCD()
      *
      * Clear the BCD bit and remove the BCD opcode handlers
+     *
+     * @this {C1PCPU}
      */
     clearBCD()
     {
@@ -6343,13 +6427,15 @@ class C1PCPU extends Component {
     }
 
     /**
+     * addBCD(reg, mem)
+     *
+     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
+     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
+     *
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
      * @returns {number}
-     *
-     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
-     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
      */
     addBCD(reg, mem)
     {
@@ -6408,13 +6494,15 @@ class C1PCPU extends Component {
     }
 
     /**
+     * subBCD(reg, mem)
+     *
+     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
+     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
+     *
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
      * @returns {number}
-     *
-     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
-     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
      */
     subBCD(reg, mem)
     {
@@ -6460,6 +6548,8 @@ class C1PCPU extends Component {
     }
 
     /**
+     * clearRegs()
+     *
      * @this {C1PCPU}
      */
     clearRegs()
@@ -14798,6 +14888,8 @@ class C1PComputer extends Component {
     }
 
     /**
+     * setBinding(sHTMLType, sBinding, control, sValue)
+     *
      * @this {C1PComputer}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
@@ -14823,6 +14915,8 @@ class C1PComputer extends Component {
     }
 
     /**
+     * getComponentByType(sType, idRelated, componentPrev)
+     *
      * NOTE: If there are multiple components for a given type, we may need to provide a means of discriminating.
      *
      * @this {C1PComputer}

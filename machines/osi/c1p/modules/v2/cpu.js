@@ -497,6 +497,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * setBinding(sHTMLType, sBinding, control, sValue)
+     *
      * @this {C1PCPU}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
@@ -544,6 +546,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * setBuffer(abMemory, start, end)
+     *
      * @this {C1PCPU}
      * @param {Array} abMemory
      * @param {number} start
@@ -570,6 +574,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * setPower(fOn, cmp)
+     *
      * @this {C1PCPU}
      * @param {boolean} fOn
      * @param {C1PComputer} cmp
@@ -612,6 +618,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * addReadNotify(start, end, component, fn)
+     *
      * Add a memory read-notification handler to the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -637,6 +645,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * checkReadNotify(addrRead, addrFrom)
+     *
      * @this {C1PCPU}
      * @param {number} addrRead is the EA value at the time of the read
      * @param {number} [addrFrom] is the PC value at the time of the read;
@@ -653,6 +663,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * removeReadNotify(start, end, component, fn)
+     *
      * Remove a memory read-notification handler from the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -677,6 +689,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * addWriteNotify(start, end, component, fn)
+     *
      * Add a memory write-notification handler to the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -702,6 +716,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * checkWriteNotify(addrWrite, addrFrom)
+     *
      * @this {C1PCPU}
      * @param {number} addrWrite is the EA value at the time of the write
      * @param {number} [addrFrom] is the PC value at the time of the write;
@@ -718,6 +734,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * removeWriteNotify(start, end, component, fn)
+     *
      * Remove a memory write-notification handler from the CPU's list of such handlers.
      *
      * @this {C1PCPU}
@@ -742,6 +760,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * findNotify(aNotify, start, end, component, fn)
+     *
      * Find a memory notification handler from the given array of handlers
      *
      * @this {C1PCPU}
@@ -763,6 +783,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * removeNotify(aNotify, start, end, component, fn)
+     *
      * Remove a memory notification handler from the given array of handlers
      *
      * @this {C1PCPU}
@@ -797,6 +819,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * setSpeed(speed, fOnClick)
+     *
      * @this {C1PCPU}
      * @param {number} [speed] is one of: 0 (slow), 1 (fast) or 2 (maximum)
      * @param {boolean} [fOnClick] is true if called from a click handler that might have stolen focus
@@ -820,6 +844,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * calcSpeed(nCycles, msElapsed)
+     *
      * @this {C1PCPU}
      * @param {number} nCycles
      * @param {number} msElapsed
@@ -835,6 +861,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * displayVideo()
+     *
      * @this {C1PCPU}
      */
     displayVideo()
@@ -843,6 +871,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * setFocus()
+     *
      * @this {C1PCPU}
      */
     setFocus()
@@ -851,6 +881,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * displayReg(sReg, vReg, len)
+     *
      * @this {C1PCPU}
      * @param {string} sReg
      * @param {number} vReg
@@ -866,6 +898,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * displayStatus()
+     *
      * @this {C1PCPU}
      */
     displayStatus()
@@ -889,6 +923,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * isRunning()
+     *
      * @this {C1PCPU}
      * @returns {boolean}
      */
@@ -898,6 +934,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * calcCycles(fRecalc)
+     *
      * Calculate the number of cycles to process for each "burst" of CPU activity.  The size of a burst
      * is driven by the following values:
      *
@@ -954,6 +992,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * calcStartTime()
+     *
      * @this {C1PCPU}
      */
     calcStartTime()
@@ -966,6 +1006,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * calcRemainingTime()
+     *
      * @this {C1PCPU}
      * @returns {number}
      */
@@ -1057,6 +1099,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * run()
+     *
      * @this {C1PCPU}
      */
     run()
@@ -1135,6 +1179,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * step(nMinCycles)
+     *
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
      * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
@@ -1194,7 +1240,7 @@ export default class C1PCPU extends Component {
             /*
              * Assert that all register contents remain within their respective ranges.
              */
-            Component.assert(!(this.regA & ~0xff) && !(this.regX & ~0xff) && !(this.regY & ~0xff) && !(this.regS & ~0x1ff), "register out of bounds");
+            this.assert(!(this.regA & ~0xff) && !(this.regX & ~0xff) && !(this.regY & ~0xff) && !(this.regS & ~0x1ff), "register out of bounds");
 
             /*
              * WARNING: By making the following read-or-write test exclusive, we're not going to catch
@@ -1260,6 +1306,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * yieldCPU()
+     *
      * yieldCPU() is similar to halt() with regard to how it resets various cycle countdown values,
      * but the CPU remains in a "running" state.
      *
@@ -1273,6 +1321,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * halt()
+     *
      * halt() is similar to yieldCPU(), but it doesn't need to zero nCyclesNextYield to break out of run();
      * it simply needs to clear fRunning.
      *
@@ -1290,11 +1340,13 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * update()
      *
      * This used to be performed at the end of every step(), but run() -- which relies upon step() -- needed to have
      * more control over when these updates are performed.  However, for other callers of step(), such as the Debugger,
      * the combination of step() + update() provides the old behavior.
+     *
+     * @this {C1PCPU}
      */
     update()
     {
@@ -1303,6 +1355,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * getCycles()
+     *
      * getCycles() returns the number of cycles executed so far.  Note that we can be called after
      * a run() OR during a run(), perhaps from a handler triggered during the current run's step(),
      * so nRunCycles must always be adjusted by number of cycles step() was asked to run (nBurstCycles),
@@ -1322,6 +1376,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * getByte(addr)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @returns {number}
@@ -1337,38 +1393,44 @@ export default class C1PCPU extends Component {
      */
     getByte(addr)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
+        this.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: %#06X", addr);
         var b = this.abMem[addr];
-        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + StrLib.toHexWord(addr));
+        this.assert(!(b & ~0xff), "invalid byte (%#04X) at address %#06X", b, addr);
         return b;
     }
 
     /**
+     * getWord(addr)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @returns {number}
      */
     getWord(addr)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
+        this.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: %#06X", addr);
         var w = this.abMem[addr] | (this.abMem[addr+1] << 8);
-        Component.assert(!(w & ~0xffff), "invalid word (" + w + ") at address " + StrLib.toHexWord(addr));
+        this.assert(!(w & ~0xffff), "invalid word (%#06X) at address %#06X", w, addr);
         return w;
     }
 
     /**
+     * setByte(addr, b)
+     *
      * @this {C1PCPU}
      * @param {number} addr
      * @param {number} b
      */
     setByte(addr, b)
     {
-        Component.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: " + StrLib.toHexWord(addr));
-        Component.assert(!(b & ~0xff), "invalid byte (" + b + ") at address " + StrLib.toHexWord(addr));
+        this.assert((addr >= this.offMem && addr < this.offLimit), "invalid address: %#06X", addr);
+        this.assert(!(b & ~0xff), "invalid byte (%#04X) at address %#06X", b, addr);
         this.abMem[addr] = b;
     }
 
     /**
+     * getRegP()
+     *
      * @this {C1PCPU}
      * @returns {number}
      */
@@ -1392,9 +1454,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearC()
      *
      * Clear the C flag
+     *
+     * @this {C1PCPU}
      */
     clearC()
     {
@@ -1402,9 +1466,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setC()
      *
      * Set the C flag
+     *
+     * @this {C1PCPU}
      */
     setC()
     {
@@ -1412,9 +1478,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearN()
      *
      * Clear the N bit
+     *
+     * @this {C1PCPU}
      */
     clearN()
     {
@@ -1422,9 +1490,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setN()
      *
      * Set the N bit
+     *
+     * @this {C1PCPU}
      */
     setN()
     {
@@ -1432,9 +1502,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearV()
      *
      * Clear the V bit
+     *
+     * @this {C1PCPU}
      */
     clearV()
     {
@@ -1442,9 +1514,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setV()
      *
      * Set the V bit
+     *
+     * @this {C1PCPU}
      */
     setV()
     {
@@ -1452,9 +1526,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearZ()
      *
      * Clear the Z bit
+     *
+     * @this {C1PCPU}
      */
     clearZ()
     {
@@ -1462,9 +1538,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setZ()
      *
      * Set the Z bit
+     *
+     * @this {C1PCPU}
      */
     setZ()
     {
@@ -1472,9 +1550,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * setBCD()
      *
      * Set the BCD bit and install the BCD opcode handlers
+     *
+     * @this {C1PCPU}
      */
     setBCD()
     {
@@ -1498,9 +1578,11 @@ export default class C1PCPU extends Component {
     }
 
     /**
-     * @this {C1PCPU}
+     * clearBCD()
      *
      * Clear the BCD bit and remove the BCD opcode handlers
+     *
+     * @this {C1PCPU}
      */
     clearBCD()
     {
@@ -1524,13 +1606,15 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * addBCD(reg, mem)
+     *
+     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
+     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
+     *
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
      * @returns {number}
-     *
-     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
-     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
      */
     addBCD(reg, mem)
     {
@@ -1572,7 +1656,7 @@ export default class C1PCPU extends Component {
          * resulting value is within the proper range.
          */
         if (r >= 0x200) r -= 0x100;
-        Component.assert((r & 0x1ff) == r, "BCD addition overflow");
+        this.assert((r & 0x1ff) == r, "BCD addition overflow");
 
         /*
          * In BCD mode, the C flag reflects the decimal result, but the Z flag reflects binary addition.
@@ -1589,13 +1673,15 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * subBCD(reg, mem)
+     *
+     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
+     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
+     *
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
      * @returns {number}
-     *
-     * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
-     * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
      */
     subBCD(reg, mem)
     {
@@ -1641,6 +1727,8 @@ export default class C1PCPU extends Component {
     }
 
     /**
+     * clearRegs()
+     *
      * @this {C1PCPU}
      */
     clearRegs()

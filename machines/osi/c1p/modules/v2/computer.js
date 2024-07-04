@@ -124,6 +124,8 @@ export default class C1PComputer extends Component {
     }
 
     /**
+     * setBinding(sHTMLType, sBinding, control, sValue)
+     *
      * @this {C1PComputer}
      * @param {string} sHTMLType is the type of the HTML control (eg, "button", "list", "text", "submit", "textarea")
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
@@ -149,6 +151,8 @@ export default class C1PComputer extends Component {
     }
 
     /**
+     * getComponentByType(sType, idRelated, componentPrev)
+     *
      * NOTE: If there are multiple components for a given type, we may need to provide a means of discriminating.
      *
      * @this {C1PComputer}

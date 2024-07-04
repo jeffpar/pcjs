@@ -1058,6 +1058,52 @@
       }
     },
     {
+      "name": "PC.js MS-DOS/v4.0 [Build]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=msdos",
+        "--version=3.30",
+        "--target=30M",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
+      "name": "PC.js MS-DOS/v4.0 [Boot]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=custom",
+        "--version=4.00",
+        "--target=30M",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "PC.js PDP-11/20",
       "type": "node",
       "request": "launch",
@@ -1522,6 +1568,18 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.11/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
+      "name": "Microsoft Windows 95",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -2628,6 +2686,28 @@
         "--verbose"
       ],
       "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "plex.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/private/plex.js",
+      "args": [
+        "shows",
+        "rename",
+        "path"
+       ],
+      "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

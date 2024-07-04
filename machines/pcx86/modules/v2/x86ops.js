@@ -10,7 +10,7 @@
 import MESSAGE from "./message.js";
 import X86 from "./x86.js";
 import StrLib from "../../../modules/v2/strlib.js";
-import { BACKTRACK, DEBUG, DEBUGGER, I386 } from "./defines.js";
+import { BACKTRACK, DEBUG, DEBUGGER, I386, MAXDEBUG } from "./defines.js";
 
 /**
  * op=0x00 (ADD byte,reg)
@@ -28,7 +28,7 @@ X86.opADDmb = function()
      * Notice that we also test fRunning: this allows the Debugger to step over the instruction,
      * because its trace ("t") command doesn't "run" the CPU; it merely "steps" the CPU.
      */
-    if (DEBUG && !this.bModRM && this.flags.running) {
+    if (MAXDEBUG && !this.bModRM && this.flags.running) {
         this.printf("suspicious opcode (0x00,0x00)\n");
         if (DEBUGGER && this.dbg) this.dbg.stopCPU();
     }

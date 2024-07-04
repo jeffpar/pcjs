@@ -72,7 +72,7 @@ export default class PC extends PCJSLib {
     maxFiles = 1024;            // default disk file limit
     kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
     shutdown = false;
-
+    messages = false;           // true if --messages specified
     messagesFilter; debugMode;
     prompt = ">"; command = ""; commandPrev = "";
     machine = "test";           // TODO: Remove after testing
@@ -423,7 +423,7 @@ export default class PC extends PCJSLib {
              */
             if (module.default && module.default.prototype) {
                 module.default.prototype.print = function print(s, bitsMessage) {
-                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.debug) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
+                    if ((pc.debugMode || !pc.autoStart) && !bitsMessage || (bitsMessage || pc.messages) && pc.Component.testBits(pc.messagesFilter, bitsMessage)) {
                         printf(s);
                     }
                 };
@@ -1576,8 +1576,9 @@ export default class PC extends PCJSLib {
              */
             verNumber = sprintf("%.2f", parseFloat(version) || 0);
             let match = version.match(/([A-Z])$/i);
-            if (match) verNumber += match[1].toUpperCase();
-            versionInfo = system.versions[version.toUpperCase()] || system.versions[verNumber];
+            version = verNumber;
+            if (match) version += match[1].toUpperCase();
+            versionInfo = system.versions[version] || system.versions[verNumber];
         }
         if (versionInfo) {
             if (key == "disk") {
@@ -1619,10 +1620,11 @@ export default class PC extends PCJSLib {
      *
      * Builds a bootable floppy or hard disk image containing all files in the current directory.
      *
-     * At present, the image size is defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
+     * At present, the image size defaults to 10Mb (which corresponds to an XT type 3 or AT type 1 drive)
      * and the operating system files default to MS-DOS 3.30.  Use --sys and --ver command-line options to
-     * override those defaults.  The allowed systems are currently "msdos" and "pcdos", and the allowed versions
-     * are any available in the PCjs diskette repo.
+     * override those defaults.  The allowed systems include "msdos" and "pcdos" and the allowed versions
+     * are any available in the PCjs diskette repo; however, the specified system must also be listed in
+     * the pc.json5 config file.
      *
      * Choice of hardware (ie, drives other than 10Mb) will be a bit trickier, because that also requires
      * tweaking the machine configuration file to specify a compatible drive type and customizing the master
@@ -1637,7 +1639,7 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {string} sDir
      * @param {string} [sCommand] (eg, "COPY A:*.COM C:"; multiple commands can be separated by commas or semicolons)
-     * @param {string} [sLocalDisk] (optional location for built disk image; default location is in the pc.js "disks" folder)
+     * @param {string} [sLocalDisk] (optional location for built disk image; default is the pc.js "disks" folder)
      * @param {boolean} [log]
      * @returns {string} (error message, if any)
      */
@@ -1679,7 +1681,9 @@ export default class PC extends PCJSLib {
              * but at one point, I was using the PCJS MBR as built, which was 32K bytes due to its ORG address.
              * I've since chopped off those unused bytes, but this will also chop them off if need be.
              */
-            if (dbMBR.length > 512) dbMBR = dbMBR.slice(dbMBR.length - 512);
+            if (dbMBR.length > 512) {
+                dbMBR = dbMBR.slice(dbMBR.length - 512);
+            }
         }
 
         let kbCapacity = this.kbTarget;
@@ -1741,6 +1745,9 @@ export default class PC extends PCJSLib {
                 }
             }
         }
+        if (dbBoot.length > 512) {
+            dbBoot = dbBoot.slice(dbBoot.length - 512);
+        }
 
         /**
          * Alas, DOS 2.x COMMAND.COM didn't support running hidden files, so attrHidden will be zero for any
@@ -1750,11 +1757,12 @@ export default class PC extends PCJSLib {
         let aSystemFiles = this.getSystemValue("files");
         let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
         for (let name of aSystemFiles) {
-            let desc, data, attr;
+            let desc, attr;
             if (!diSystem) {
                 name = node.path.join(sSystemDisk, name);
                 let dbFile = await diskLib.readFileAsync(name, null, true);
                 if (dbFile) {
+                    let date;
                     if (dbBoot2 && dbBoot2.length) {
                         let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
                         dbBoot2.copy(dbCombined, 0);
@@ -1762,8 +1770,9 @@ export default class PC extends PCJSLib {
                         dbFile = dbCombined;
                         dbBoot2 = null;
                     }
-                    attr = DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
-                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr);
+                    attr = this.systemType == "custom"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    date = node.fs.statSync(name).mtime;
+                    desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
                     driveInfo.files.push(desc);
                     count++;
                     continue;
@@ -1828,6 +1837,19 @@ export default class PC extends PCJSLib {
         }
 
         /**
+         * Create a CONFIG.SYS as needed.
+         */
+        let text;
+        let configSYS = configJSON['defaults'] && configJSON['defaults']['config'];
+        if (configSYS && configSYS.length) {
+            text = await diskLib.readFileAsync(node.path.join(sDir, "CONFIG.SYS"), "utf8", true);
+            if (!text) {
+                text = configSYS.join("\r\n") + "\r\n";
+                driveInfo.files.push(diskLib.makeFileDesc(sDir, "CONFIG.SYS", text, attrHidden));
+            }
+        }
+
+        /**
          * We also make sure there's an AUTOEXEC.BAT.  If one already exists, then we make sure there's
          * a PATH command, to which we prepend "C:\" if not already present.  We create an AUTOEXEC.BAT
          * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
@@ -1835,41 +1857,45 @@ export default class PC extends PCJSLib {
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
-        let data = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
-        if (data) {
-            if (verDOS >= 3.30 && !data.indexOf("ECHO OFF")) {
-                data = '@' + data;
+        text = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
+        if (text) {
+            if (verDOS >= 3.30 && !text.indexOf("ECHO OFF")) {
+                text = '@' + text;
             }
         } else {
-            data = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
+            text = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
             attr |= attrHidden;
         }
-        let matchPath = data.match(/^PATH\s*(.*)$/im);
+        let matchPath = text.match(/^PATH\s*(.*)$/im);
         if (matchPath) {
             let matchPathRoot = matchPath[1].match(new RegExp("(^|;|" + bootLetter + ":|)\\\\(;|$)", "i"));
             if (!matchPathRoot) {
-                data = data.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
+                text = text.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
             }
         } else if (verDOSMajor >= 2) {
-            data += "PATH " + bootLetter + ":\\\n";
+            text += "PATH " + bootLetter + ":\\\n";
         }
 
         if (sCommand) {
             let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
             for (let command of aCommands) {
-                data += command + "\n";
+                text += command + "\n";
             }
         }
+        if (this.machineDir) text += "CD " + this.machineDir + "\n";
         if (this.test) {
-            data += "quit\n";
+            text += "quit\n";
         }
-        if (this.machineDir) data += "CD " + this.machineDir + "\n";
-        if (data.length) {
+        let autoexecBAT = configJSON['defaults'] && configJSON['defaults']['autoexec'];
+        if (autoexecBAT && autoexecBAT.length) {
+            text += autoexecBAT.join("\n") + "\n";
+        }
+        if (text.length) {
             /**
              * Automatically normalize all line-endings in AUTOEXEC.BAT.
              */
-            let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
-            driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", dataNew, attr));
+            text = CharSet.toCP437(text).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", text, attr));
         }
 
         if (verDOS < 2.0) {
@@ -3184,6 +3210,7 @@ export default class PC extends PCJSLib {
         }
         let result;
         let defaults = configJSON['defaults'] || {};
+        this.messages = PC.removeFlag(argv, 'messages', !!defaults['messages']);
         this.localDir = defaults['dir'] || this.localDir;
         this.machineType = defaults['type'] || this.machineType;
         this.savedMachine = defaults['machine'] || this.savedMachine;
@@ -3238,7 +3265,7 @@ export default class PC extends PCJSLib {
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
-        this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || this.maxFiles);
+        this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 10));
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
@@ -3709,6 +3736,7 @@ export default class PC extends PCJSLib {
                 "--halt (-h)":              "\thalt machine on startup",
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
+                "--messages (-m)":          "\tenable debugger messages",
                 "--test (-t)":              "\tenable test mode (non-interactive)",
                 "--serial (s)":             "\tuse serial port instead of keyboard",
                 "--verbose (-v)":           "\tenable verbose mode"

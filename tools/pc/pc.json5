@@ -5,13 +5,19 @@
     "ver": "3.30",              // alternatives: (see "versions" below)
     "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
     "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
+    "maxfiles": 0,              // 0 for default: target disk size (in Kb) divided by 10 (eg, 10240Kb / 10 or 1024 files)
     "label": ".",               // alternatives: "default"
     "dir": ".",
-    "maxfiles": 1024,
     "machine": "compaq386.json",
     "state": "state386.json",
-    "messages": "int,hdc",      // a list of debugger message categories to enable when --halt is used
-    "normalize": false,         // use false for disks that are already DOS-compatible (true converts LF to CR/LF and more)
+    "messages": "",             // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
+    "normalize": false,         // true converts LF to CR/LF and translates/removes non-CP437 characters from text files
+    "config": [                 // if set (and no CONFIG.SYS already exists), then one will be created with these lines
+      "FILES=20",
+      "BUFFERS=20"
+    ],
+    "autoexec": [               // if set, these lines will be appended to AUTOEXEC.BAT
+    ]
   },
   "apps": {
     "cp": {},                   // create CP.COM
@@ -22,6 +28,21 @@
     // }
   },
   "systems": {
+    "custom": {
+      "vendor": "microsoft",
+      "product": "ms-dos",
+      "versions": {
+        "4.00": {
+          "dir": "src",
+          "boot": "BOOT/MSBOOT.BIN",
+          "files": [
+            "BIOS/IO.SYS",
+            "DOS/MSDOS.SYS",
+            "CMD/COMMAND/COMMAND.COM"
+          ]
+        }
+      }
+    },
     "bd": {
       "vendor": "pcjs.org",
       "product": "basic-dos",   // see https://github.com/jeffpar/basicdos

@@ -50,7 +50,9 @@ drv_parms	ends
 ;
 ; Why do we ORG at RELOC (7E00h) when this code is always loaded at 7C00h?
 ; Because 7E00h is where the code immediately relocates itself (see rep movsw
-; below); the code has to move itself before loading the next boot sector.
+; below) so that the memory at 7C00h is free for loading the next boot sector.
+; Note that since we only relocate 512 bytes, 1024-byte boot sectors are not
+; supported.
 ;
 ; Also, note that an ORG of 7E00h with a size of 200h bytes will result
 ; in the binary being 32K bytes long, so after linking and running EXE2BIN,
@@ -99,8 +101,16 @@ start:	cli
 	mov	di,offset start	; dst = 7E00h
 	mov	cx,100h
 	rep	movsw		; move 200h bytes
+;
+; The above code doesn't care that it's running at 7C00h yet ORG'ed at 7E00h.
+; Unfortunately, that ORG means the assembler will assume that "JMP CHK0" can
+; be encoded with a relative 8-bit displacement instead of a 16-bit address.
+; Rather than trying to trick the assembler, we jump through a register instead.
+;
 	mov	bx,offset chk0
-	jmp	bx		; jump to where the rest of the code is ORG'ed
+	jmp	bx		; jump to where the rest of the code now lives
+;
+; The rest of the MBR is now running at the ORG'ed address.
 ;
 ; Now let's get to the whole reason for this MBR's existence: checking
 ; for internal drive parameter table(s), and if they exist, copying them
@@ -110,16 +120,16 @@ chk0:	mov	bx,VEC_DRIVE0 * 4
 	mov	si,offset drv0tbl
 	mov	di,TBL_DRIVE0
 	cmp	[si].drv_cyls,cx
-	je	chk1
+	je	chk1		; jump if drv_cyls is zero (drv0tbl is unused)
 	mov	dl,80h
-	call	copy
+	call	copy		; (on return, CX is still zero)
 chk1:	mov	bx,VEC_DRIVE1 * 4
 	mov	si,offset drv1tbl
 	mov	di,TBL_DRIVE1
 	cmp	[si].drv_cyls,cx
-	je	scan
+	je	scan		; jump if drv_cyls is zero (drv1tbl is unused)
 	mov	dl,81h
-	call	copy
+	call	copy		; (on return, CX is still zero)
 ;
 ; Now back to our regularly scheduled Master Boot Record: scan the partition
 ; table, find the ACTIVE partition, ensure the rest are INACTIVE, then boot it.
