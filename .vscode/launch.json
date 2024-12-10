@@ -509,6 +509,18 @@
       }
     },
     {
+      "name": "Lite-Brite",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/led/lite-brite/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "PC.js",
       "type": "node",
       "request": "launch",
@@ -2703,9 +2715,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/private/plex.js",
       "args": [
-        "shows",
-        "rename",
-        "path"
+        "movies",
+        "search",
+        "file"
        ],
       "cwd": "${workspaceFolder}/tools/private",
       "stopOnEntry": false,

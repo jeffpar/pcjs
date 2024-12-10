@@ -144,6 +144,8 @@ export default class LEDCtrl extends CPU {
     {
         let cpu = this, elementInput, patterns;
 
+        super.addBinding(binding, element);
+
         switch(binding) {
         case LEDCtrl.BINDING.COLOR_PALETTE:
         case LEDCtrl.BINDING.COLOR_SELECTION:
@@ -219,7 +221,6 @@ export default class LEDCtrl extends CPU {
                 };
             }
         }
-        super.addBinding(binding, element);
     }
 
     /**
