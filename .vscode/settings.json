@@ -13,7 +13,7 @@
   "editor.rulers": [127],
   "editor.tabSize": 8,
   "editor.insertSpaces": false,
-  "workbench.colorTheme": "Dark+ Material",
+  "workbench.colorTheme": "Default Dark+",
   "workbench.colorCustomizations": {
     "[Atom One Dark]": {
       "debugToolBar.background": "#21252B"
