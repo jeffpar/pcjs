@@ -5896,6 +5896,37 @@
 					}
 				}
 			},
+			"karel": {
+				"@title": "Karel the Robot",
+				"@versions": {
+					"1.00": {
+						"@title": "Karel the Robot 1.00",
+						"@media": [
+							{
+								"@title": "Karel the Robot 1.00 (KAREL)",
+								"@diskette": "KAREL100-KAREL.json",
+								"@photo": "png",
+								"@format": "PC360K",
+								"@archive": "KAREL100-KAREL.img"
+							},
+							{
+								"@title": "Karel the Robot 1.00 (WORLDS)",
+								"@diskette": "KAREL100-WORLDS.json",
+								"@photo": "png",
+								"@format": "PC360K",
+								"@archive": "KAREL100-WORLDS.img"
+							},
+							{
+								"@title": "Karel the Robot 1.00 (ANSWERS)",
+								"@diskette": "KAREL100-ANSWERS.json",
+								"@photo": "png",
+								"@format": "PC360K",
+								"@archive": "KAREL100-ANSWERS.img"
+							}
+						]
+					}
+				}
+			},
 			"multiplan": {
 				"@title": "Multiplan",
 				"@versions": {
@@ -7220,6 +7251,9 @@
 				"@versions": {
 					"": {
 						"@title": "IBM PC Dealer Demos",
+						"@hardware": {
+							"autoType": "$date\\r$time\\rB:\\rDIR\\rDEMMEN\\r"
+						},
 						"@media": [
 							{
 								"@title": "IBM PC Dealer Demo (1982)",
