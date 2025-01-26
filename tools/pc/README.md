@@ -34,7 +34,7 @@ The format of a `pc.js` command (as `--help` will also tell you) is:
 Here is the complete help text:
 
     pc.js v3.00
-    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
     Options: --help
 
     usage:
@@ -56,7 +56,6 @@ Here is the complete help text:
             --hidden=[number]       set hidden sectors (default is 1)
             --label=[string]        set volume label of disk image
             --maxfiles=[number]     set maximum local files (default is 1024)
-            --normalize=[boolean]   convert text file encoding (default is false)
             --save=[filename]       save drive disk image and exit
             --system=[string]       set operating system type (default is msdos)
             --target=[nK|nM]        set target disk size (default is 10M)
@@ -70,7 +69,10 @@ Here is the complete help text:
             --halt (-h)             halt machine on startup
             --help (-?)             display command-line usage
             --local (-l)            use local diskette images
+            --messages (-m)         enable debugger messages
+            --normalize (-n)        normalize characters in text files
             --test (-t)             enable test mode (non-interactive)
+            --serial (s)            use serial port instead of keyboard
             --verbose (-v)          enable verbose mode
 
     notes:
@@ -131,7 +133,7 @@ If you omit the machine name, it defaults to `compaq386` (a machine which also s
 
     % pc.js
     pc.js v3.00
-    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
     error: file(s) too large (32536576 bytes total, 10653696 bytes maximum)
     error: unable to build drive
 
@@ -359,6 +361,16 @@ See "[Loading Diskettes](https://www.pcjs.org/blog/2023/07/15/#loading-diskettes
 ### Shutting Down
 
 Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut down the machine.  `QUIT.COM` also supports a switch (`/R`) to reboot the machine instead of shutting it down.
+
+### Other Features
+
+While `pc.js` defaults to building a bootable hard disk image for use as drive C, it also possible to boot from a pre-built hard disk, which then "bumps" its on-demand disk image from drive C to drive D.  For example:
+
+    pc.js --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --dir=. -n
+
+The combination of `--disk` with `--dir` allows you to boot from a pre-built disk image as drive C, and access all the files in specified local directory (".") as drive D.  Any of the special utilities that `pc.js` automatically includes on a built disk (eg, `LOAD.COM`, `QUIT.COM`) will still be available, but you'll have to run them from the root of drive D, since the pre-built disk image will be unaware of them.
+
+The `-n` option is convenient for automatically converting all text file characters from UTF-8 to the IBM PC character set (code page 437) and all line-endings from LF to CR/LF.
 
 ### More Information
 
