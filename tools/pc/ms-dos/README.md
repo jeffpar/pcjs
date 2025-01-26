@@ -36,7 +36,7 @@ If you want to edit any files and re-run any DOS commands, you can make all chan
     Receiving objects: 100% (1859/1859), 117.41 MiB | 13.18 MiB/s, done.
     Resolving deltas: 100% (288/288), done.
     pc.js v3.00
-    Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>
+    Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
     Options: --system=msdos --version=3.30 --target=30M --normalize
     [Press CTRL-D to enter command mode]
     C:\>cd src

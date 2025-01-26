@@ -1,5 +1,5 @@
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/defines.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -17,7 +17,7 @@ const COMPILED = false;                 // this @define is overridden by the Clo
 /**
  * @define {string}
  */
-const COPYRIGHT = "Copyright © 2012-2024 Jeff Parsons <Jeff@pcjs.org>";
+const COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
  * @define {string}
@@ -154,7 +154,7 @@ globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/message.js (C) 2012-2025 Jeff Parsons
  */
 
 /*
@@ -211,7 +211,7 @@ MESSAGE.NAMES = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/format.js (C) 2012-2025 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -790,7 +790,7 @@ class Format {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/dumpapi.js (C) 2012-2025 Jeff Parsons
  */
 
 /*
@@ -850,7 +850,7 @@ DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/reportapi.js (C) 2012-2025 Jeff Parsons
  */
 
 const ReportAPI = {
@@ -873,7 +873,7 @@ const ReportAPI = {
 
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/pcfs.js (C) 2012-2025 Jeff Parsons
  */
 
 /** @typedef {{ name: string, size: number, attr: number, date: Date, data: *, files: (Array|null) }} */
@@ -1017,7 +1017,7 @@ if (!globals.pcjs['files']) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/strlib.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -1772,7 +1772,7 @@ StrLib.format = new Format();
 StrLib.sprintf = StrLib.format.sprintf.bind(StrLib.format);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/usrlib.js (C) 2012-2025 Jeff Parsons
  */
 
 /** @typedef {{ mask: number, shift: number }} */
@@ -2022,7 +2022,7 @@ class UsrLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/weblib.js (C) 2012-2025 Jeff Parsons
  */
 
 /*
@@ -3234,7 +3234,7 @@ if (DEBUG) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/component.js (C) 2012-2025 Jeff Parsons
  */
 
 /*
@@ -4710,7 +4710,7 @@ if (!Function.prototype.bind) {
 }
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/defines.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/defines.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -4725,7 +4725,7 @@ const APPNAME = "C1Pjs";        // this @define is the default application name 
 
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/panel.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/panel.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -4831,7 +4831,7 @@ class C1PPanel extends Component {
 WebLib.onInit(C1PPanel.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/cpu.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/cpu.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -8810,7 +8810,7 @@ class C1PCPU extends Component {
 WebLib.onInit(C1PCPU.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/rom.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/rom.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -9033,7 +9033,7 @@ class C1PROM extends Component {
 WebLib.onInit(C1PROM.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/ram.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/ram.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -9105,7 +9105,7 @@ class C1PRAM extends Component {
 WebLib.onInit(C1PRAM.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/keyboard.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/keyboard.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -10196,7 +10196,7 @@ class C1PKeyboard extends Component {
 WebLib.onInit(C1PKeyboard.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/video.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/video.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -10820,7 +10820,7 @@ class C1PVideo extends Component {
 WebLib.onInit(C1PVideo.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/serial.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/serial.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -11282,7 +11282,7 @@ C1PSerialPort.AUTOLOAD_6502  = 2;
 WebLib.onInit(C1PSerialPort.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/disk.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/disk.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -12537,7 +12537,7 @@ class C1PDiskController extends Component {
 WebLib.onInit(C1PDiskController.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/debugger.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/debugger.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -14773,7 +14773,7 @@ if (DEBUGGER) {
 }   // endif DEBUGGER
 
 /**
- * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/computer.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/osi/c1p/modules/v2/computer.js (C) 2012-2025 Jeff Parsons
  */
 
 /**
@@ -15105,7 +15105,7 @@ class C1PComputer extends Component {
 WebLib.onInit(C1PComputer.init);
 
 /**
- * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2024 Jeff Parsons
+ * @copyright https://www.pcjs.org/machines/modules/v2/embed.js (C) 2012-2025 Jeff Parsons
  */
 
 /*
