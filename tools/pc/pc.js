@@ -2,7 +2,7 @@
 /**
  * @fileoverview Implements the PCjs machine command-line interface
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2024 Jeff Parsons
+ * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -3723,7 +3723,6 @@ export default class PC extends PCJSLib {
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
                 "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
-                "--normalize=[boolean]":    "convert text file encoding (default is " + this.normalize + ")",
                 "--save=[filename]":        "save drive disk image and exit",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",
@@ -3737,6 +3736,7 @@ export default class PC extends PCJSLib {
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
                 "--messages (-m)":          "\tenable debugger messages",
+                "--normalize (-n)":         "normalize characters in text files",
                 "--test (-t)":              "\tenable test mode (non-interactive)",
                 "--serial (s)":             "\tuse serial port instead of keyboard",
                 "--verbose (-v)":           "\tenable verbose mode"

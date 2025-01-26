@@ -1,7 +1,7 @@
 /**
  * @fileoverview A MACRO-10 "work-alike" Mini-Assembler for the PDP-10
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2024 Jeff Parsons
+ * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.

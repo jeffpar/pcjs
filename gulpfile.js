@@ -1,7 +1,7 @@
 /**
  * @fileoverview Gulp file for pcjs.org
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2024 Jeff Parsons
+ * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -59,7 +59,6 @@ import fs from "fs";
 import path from "path";
 import gulp from "gulp";
 import gulpNewer from "gulp-newer";
-import gulpChmod from "gulp-chmod";
 import gulpConcat from "gulp-concat";
 import gulpMergeJSON from "gulp-merge-json";
 import gulpForEach from "gulp-foreach";
