@@ -1300,6 +1300,18 @@
       }
     },
     {
+      "name": "The Oregon Trail (1991)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/game/other/1991/oregon_trail/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "other",
+        "order": 20
+      }
+    },
+    {
       "name": "Populous (1989)",
       "type": "chrome",
       "request": "launch",

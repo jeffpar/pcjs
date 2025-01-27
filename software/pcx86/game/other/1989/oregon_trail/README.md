@@ -2,6 +2,7 @@
 layout: page
 title: The Oregon Trail (1989)
 permalink: /software/pcx86/game/other/1989/oregon_trail/
+preview: images/screenshot.png
 machines:
   - id: ibm5170-oregon11
     type: pcx86
