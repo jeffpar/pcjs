@@ -364,7 +364,7 @@ Another utility that `pc.js` provides is `QUIT.COM`, which makes it easy to shut
 
 ### Other Features
 
-While `pc.js` defaults to building a bootable hard disk image for use as drive C, it also possible to boot from a pre-built hard disk, which then "bumps" its on-demand disk image from drive C to drive D.  For example:
+While `pc.js` defaults to building a bootable hard disk image for use as drive C, it is also possible to boot from a pre-built hard disk, which then "bumps" the on-demand disk image from drive C to drive D.  For example:
 
     pc.js --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --dir=. -n
 

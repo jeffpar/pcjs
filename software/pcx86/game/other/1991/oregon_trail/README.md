@@ -3,6 +3,7 @@ layout: page
 title: "The Oregon Trail (1991)"
 permalink: /software/pcx86/game/other/1991/oregon_trail/
 redirect_from: /disks/pcx86/games/other/1991/oregon_trail/
+preview: images/screenshot.png
 machines:
   - id: ibm5170-oregon21
     type: pcx86

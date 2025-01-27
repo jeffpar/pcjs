@@ -2330,6 +2330,7 @@ export default class PC extends PCJSLib {
                         }
 
                         if (oldItem.path == newItem.path) {
+                            let success = true;
                             if ((oldAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) == (newAttr & (DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME))) {
                                 /**
                                  * Even if both entries are SUBDIR or VOLUME, that's OK, because those entries don't have
@@ -2341,7 +2342,7 @@ export default class PC extends PCJSLib {
                                     if (this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
-                                    diskLib.writeFileSync(newItemPath, db, false, true);
+                                    success = diskLib.writeFileSync(newItemPath, db, false, true);
                                 } else {
                                     // if (this.debug) printf("skipping: %s\n", newItemPath);
                                 }
@@ -2351,19 +2352,22 @@ export default class PC extends PCJSLib {
                                  * and a file with the same name created in its place.
                                  */
                                 printf("warning: %s was changed to a %s entry (unsupported)\n", newItemPath, newAttr & DiskInfo.ATTR.SUBDIR? "directory" : (newAttr & DiskInfo.ATTR.VOLUME? "volume" : "file"));
+                                success = false;
                             }
-                            if (oldDate.getTime() != newDate.getTime()) {
+                            if (success && oldDate.getTime() != newDate.getTime()) {
                                 try {
                                     node.fs.utimesSync(newItemPath, newDate, newDate);
                                 } catch (err) {
                                     printf("%s\n", err);
+                                    success = false;
                                 }
                             }
-                            if ((oldAttr & DiskInfo.ATTR.READONLY) != (newAttr & DiskInfo.ATTR.READONLY)) {
+                            if (success && (oldAttr & DiskInfo.ATTR.READONLY) != (newAttr & DiskInfo.ATTR.READONLY)) {
                                 try {
                                     node.fs.chmodSync(newItemPath, (newAttr & DiskInfo.ATTR.READONLY)? 0o444 : 0o644);
                                 } catch (err) {
                                     printf("%s\n", err);
+                                    success = false;
                                 }
                             }
                             iOld++;
@@ -2391,6 +2395,7 @@ export default class PC extends PCJSLib {
                             }
                             iOld++;
                         } else {
+                            let success = true;
                             if (this.debug) printf("creating: %s\n", newItemPath);
                             try {
                                 if (newAttr & DiskInfo.ATTR.SUBDIR) {
@@ -2400,14 +2405,17 @@ export default class PC extends PCJSLib {
                                     if (this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
-                                    diskLib.writeFileSync(newItemPath, db, true, false);
+                                    success = diskLib.writeFileSync(newItemPath, db, true, false);
                                 }
-                                node.fs.utimesSync(newItemPath, newDate, newDate);
-                                if (newAttr & DiskInfo.ATTR.READONLY) {
-                                    node.fs.chmodSync(newItemPath, 0o444);
+                                if (success) {
+                                    node.fs.utimesSync(newItemPath, newDate, newDate);
+                                    if (newAttr & DiskInfo.ATTR.READONLY) {
+                                        node.fs.chmodSync(newItemPath, 0o444);
+                                    }
                                 }
                             } catch(err) {
                                 printf("%s\n", err.message);
+                                success = false;
                             }
                             iNew++;
                         }
