@@ -16,9 +16,12 @@ machines:
     autoType: \r\rB:\rOREGON\r
 ---
 
-NOTE: This is Version 2.1 from 1991.
+This is The Oregon Trail 2.1 (1991) for the IBM PC.
 
-The Oregon Trail [Version 2.0](../../1990/oregon_trail/) from 1990 is also available.
+Older IBM PC versions include:
+
+  - [The Oregon Trail 1.1 (1989)](../../1989/oregon_trail/)
+  - [The Oregon Trail 2.0 (1990)](../../1990/oregon_trail/)
 
 {% include machine.html id="ibm5170-oregon21" %}
 

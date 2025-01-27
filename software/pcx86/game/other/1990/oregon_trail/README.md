@@ -18,9 +18,12 @@ machines:
     resume: 1
 ---
 
-NOTE: This is Version 2.0 from 1990.
+This is The Oregon Trail 2.0 (1990) for the IBM PC.
 
-The Oregon Trail [Version 2.1](../../1991/oregon_trail/) from 1991 is also available.
+Other IBM PC versions include:
+
+  - [The Oregon Trail 1.1 (1989)](../../1989/oregon_trail/)
+  - [The Oregon Trail 2.1 (1991)](../../1991/oregon_trail/)
 
 {% include machine.html id="ibm5170-oregon20" %}
 

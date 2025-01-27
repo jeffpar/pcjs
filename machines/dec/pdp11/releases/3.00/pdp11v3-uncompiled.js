@@ -15227,6 +15227,30 @@ PDP11Ops.aOp8DXn_1140 = [
  * @copyright https://www.pcjs.org/machines/dec/pdp11/modules/v3/pdp11.js (C) 2012-2025 Jeff Parsons
  */
 
+/**
+ * Overview of Device Interrupt Support
+ *
+ * Originally, the CPU maintained a queue of requested interrupts.  Entries in this queue recorded a device's
+ * priority, vector, and delay (ie, a number of instructions to execute before dispatching the interrupt).  This
+ * queue would constantly grow and shrink as requests were issued and dispatched, and as long as there was something
+ * in the queue, the CPU was constantly examining it.
+ *
+ * Now we are trying something more efficient.  First, for devices that require delays (like the SerialPort's receiver
+ * and transmitter buffer registers, which are supposed to "clock" the data in and out at a specific baud rate), the
+ * CPU offers timer services that will "fire" a callback after a specified delay, which are much more efficient than
+ * requiring the CPU to dive into an interrupt queue and decrement delay counts on every instruction.
+ *
+ * Second, devices that generate interrupts will allocate an IRQ object during initialization; we will no longer
+ * be creating and destroying interrupt event objects and inserting/deleting them in a constantly changing queue.
+ * Each IRQ contains properties that never change (eg, the vector and priority), along with a "next" pointer that's
+ * only used when the IRQ is active.
+ *
+ * When a device decides it's time to interrupt (either at the end of some I/O operation or when a timer has fired),
+ * it will simply set the IRQ, which basically means that the IRQ will be linked onto a list of active IRQs, in
+ * priority order, so that when the CPU is ready to acknowledge interrupts, it need only check the top of the active
+ * IRQ list.
+ */
+
 /** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
 let IRQ;
 
@@ -20156,8 +20180,32 @@ DL11.CLASSES["DL11"] = DL11;
 MESSAGE.PC11            = 0x000020000000;
 MESSAGE.NAMES["pc11"]   = MESSAGE.PC11;
 
-/** @typedef {{ name: string, autoLoad: (Media|string), baudReceive: number, baudTransmit: (number|undefined), library: (Array.<Media>|string), mediaLoaded: (Media|null) }} */
-let PC11Config;
+/**
+ * The PC11 component has the following configuration properties:
+ *
+ *      name: PC11 device name; "PTR" if not specified.
+ *
+ *      autoLoad: the name, if any, of a paper tape image to automatically load at startup
+ *      (only the "load" operation is supported; if you want to "read" a tape image directly
+ *      into RAM at startup, you must ask the RAM device to do that).
+ *
+ *      baudReceive: the default number of bits/second that the device should receive data at;
+ *      0 means use the device default (PDP11.PC11.PRS.BAUD).
+ *
+ *      baudTransmit: the default number of bits/second that the device should transmit data at;
+ *      0 means use the device default (PDP11.PC11.PPS.BAUD); TODO: currently ignored, since punch
+ *      support isn't implemented yet.
+ *
+ *      library: the name, if any, of a media library containing PC11 tape images.
+ *
+ * @typedef {Config} PC11Config
+ * @property {string} name
+ * @property {Media|string} autoLoad
+ * @property {number} baudReceive
+ * @property {number} [baudTransmit]
+ * @property {Array.<Media>|string} library
+ * @property {Media|null} mediaLoaded
+ */
 
 /**
  * @class PC11

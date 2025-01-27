@@ -5764,6 +5764,18 @@
 					],
 					"@author": "Telarium"
 				},
+				"1989/oregon_trail": {
+					"@title": "The Oregon Trail (1989)",
+					"@media": [
+						{
+							"@title": "Oregon Trail 1.1 (1989)",
+							"@diskette": "OREGON_TRAIL-110.json",
+							"@format": "PC360K"
+						}
+					],
+					"@author": "MECC",
+					"@version": "1.1"
+				},
 				"1990/oregon_trail": {
 					"@title": "The Oregon Trail (1990)",
 					"@media": [
