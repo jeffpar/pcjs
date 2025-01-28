@@ -2051,6 +2051,28 @@
       }
     },
     {
+      "name": "diskimage.js --all='archive/*.img' --type=json --output=.",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--all='disks/diskettes/pcx86/sys/ucsd/pascal/iv/archive/*.img'",
+        "--type=json",
+        "--output=disks/diskettes/pcx86/sys/ucsd/pascal/iv"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "diskimage.js --dir",
       "type": "node",
       "request": "launch",
@@ -2563,7 +2585,7 @@
       "name": "diskettes.js --collection=pcsigdisks",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "--collection=pcsigdisks",
         "--overwrite"
@@ -2584,7 +2606,7 @@
       "name": "diskettes.js /disks/pcsigdisks --folders=json",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/disks/pcsigdisks",
         "--folders=json",
@@ -2607,7 +2629,7 @@
       "name": "diskettes.js /disks/private --folders",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
       "args": [
         "/disks/private",
         "--folders",

@@ -142,3 +142,45 @@ However, this list is incomplete, because it doesn't include any diskettes impli
 Locating an original PC-SIG CD-ROM from 1986 or 1987, like the one shown below in "[The PC-SIG Library 4th Edition (March 1987)](https://archive.org/details/pc-sig-library-4th-edition-1987-03)", would be a great first step toward getting more "original" diskette contents.
 
 [![PC-SIG Library 4th Edition, Page 424](/blog/images/PC-SIG_Library_4th_Edition_P424.jpg)](/blog/2023/04/06/)
+
+### PC-SIG CD-ROM from April 1988
+
+A number of withdrawn diskettes have been identified on a PC-SIG CD-ROM from April 1988 that was recently shared with me, so I have created diskette images for them.  Some of the diskettes were preserved using ARC files, so in those cases, I created diskette images directly from the contents of the archives, using the `--arc` option in [diskimage.js](/tools/diskimage).  That option eliminates the need to extract the files to a local file system first and run the risk of the local operating system altering timestamps, mangling filenames, or failing to decompress out-dated compression formats.
+
+See [Building PCjs Disk Images from ZIP (and ARC) files](/tools/diskimage#building-pcjs-disk-images-from-zip-and-arc-files) for more details.
+
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/001_100/DISK0005" --output=DISK0005.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/001_100/DISK0076" --output=DISK0076.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/101_200/DISK0129/DISK0129.ARC" --output=DISK0129.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/101_200/DISK0164" --output=DISK0164.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/401_500/DISK0418/DISK0418.ARC" --output=DISK0418.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/401_500/DISK0458" --output=DISK0458.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/401_500/DISK0464" --output=DISK0464.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/401_500/DISK0480" --output=DISK0480.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/501_600/DISK0505" --output=DISK0505.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/501_600/DISK0559" --output=DISK0559.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/501_600/DISK0560" --output=DISK0560.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/501_600/DISK0576" --output=DISK0576.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/601_700/DISK0689" --output=DISK0689.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/701_800/DISK0726/DISK0726.ARC" --output=DISK0726.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0727" --output=DISK0727.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0728" --output=DISK0728.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0729" --output=DISK0729.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0730" --output=DISK0730.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0734" --output=DISK0734.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0773" --output=DISK0773.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/701_800/DISK0787" --output=DISK0787.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/701_800/DISK0788/DISK0788.ARC" --output=DISK0788.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0801/DISK0801.ARC" --output=DISK0801.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/801_900/DISK0803" --output=DISK0803.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/801_900/DISK0822" --output=DISK0822.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0824/DISK0824.ARC" --output=DISK0824.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0826/DISK0826.ARC" --output=DISK0826.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0831/DISK0831.ARC" --output=DISK0831.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/801_900/DISK0836" --output=DISK0836.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0838/DISK0838.ARC" --output=DISK0838.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0887/DISK0887.ARC" --output=DISK0887.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/801_900/DISK0894/DISK0894.ARC" --output=DISK0894.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/901_1000/DISK0924" --output=DISK0924.json
+    diskimage.js --arc="/Volumes/PC-SIG 1988-04/901_1000/DISK0986/DISK0986.ARC" --output=DISK0986.json
+    diskimage.js --dir="/Volumes/PC-SIG 1988-04/901_1000/DISK0998" --output=DISK0998.json
