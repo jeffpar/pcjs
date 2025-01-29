@@ -13,17 +13,6 @@
   "editor.rulers": [127],
   "editor.tabSize": 8,
   "editor.insertSpaces": false,
-  "workbench.colorTheme": "Default Dark+",
-  "workbench.colorCustomizations": {
-    "[Atom One Dark]": {
-      "debugToolBar.background": "#21252B"
-    }
-  },
-  "editor.tokenColorCustomizations": {
-    "[Atom One Dark]": {
-        "comments": "#47856b"
-    }
-  },
   "[asm][masm][plaintext]": {
     "editor.rulers": [80],
     "editor.quickSuggestions": {
