@@ -1244,7 +1244,7 @@ export default class StreamZip extends events.EventEmitter {
             errors++;
         }
         if (errors && entry) {
-            entry.warning("invalid date/time " + JSON.stringify(orig));
+            entry.warning("invalid date/time " + '(' + orig.m + '/' + orig.d + '/' + orig.y + ' ' + orig.h + ':' + (orig.n < 10? '0' : '') + orig.n + ':' + (orig.s < 10? '0' : '') + orig.s + ')');
         }
         if (fLocal) {
             return new Date(d.y, d.m, d.d, d.h, d.n, d.s);

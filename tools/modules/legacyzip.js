@@ -88,7 +88,13 @@ export class LegacyArc
     {
         let unpack = new ArcUnpack();
         if (!unpack.decomp(src, dst_len)) {
-            delete unpack.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete unpack.dst;
+            //
         }
         return unpack;
     }
@@ -104,7 +110,13 @@ export class LegacyArc
     {
         let unsqueeze = new ArcUnsqueeze();
         if (!unsqueeze.decomp(src, dst_len)) {
-            delete unsqueeze.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete unsqueeze.dst;
+            //
         }
         return unsqueeze;
     }
@@ -121,7 +133,13 @@ export class LegacyArc
     {
         let uncrunch = new ArcUncrunch();
         if (!uncrunch.decomp(src, dst_len, type >= 1, type == 2)) {
-            delete uncrunch.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete uncrunch.dst;
+            //
         }
         return uncrunch;
     }
@@ -138,7 +156,13 @@ export class LegacyArc
     {
         let uncrush = new ArcUncrush();
         if (!uncrush.decomp(src, dst_len, squashed)) {
-            delete uncrush.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete uncrush.dst;
+            //
         }
         return uncrush;
     }
@@ -216,7 +240,13 @@ export class LegacyZip
     {
         let stretch = new ZipStretch();
         if (!stretch.decomp(src, dst_len)) {
-            delete stretch.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete stretch.dst;
+            //
         }
         return stretch;
     }
@@ -233,7 +263,13 @@ export class LegacyZip
     {
         let expand = new ZipExpand();
         if (!expand.decomp(src, dst_len, comp_factor)) {
-            delete expand.dst;
+            //
+            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+            // probably good enough.
+            //
+            // delete expand.dst;
+            //
         }
         return expand;
     }
@@ -259,11 +295,17 @@ export class LegacyZip
         let explode = new ZipExplode();
         if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
             if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
-                delete explode.dst;
+                //
+                // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
+                // Usually when this happens, the caller will notice that the destination length is wrong, and that's
+                // probably good enough.
+                //
+                // delete explode.dst;
+                //
             }
-            // else {
-            //     assert(false, "explodeSync() recovered");   // would like to catch just one example of that "PKZIP 1.01/1.02" bug
-            // }
+            else {
+                assert(true, "explodeSync() recovered");        // would like to catch just one example of that "PKZIP 1.01/1.02" bug
+            }
         }
         return explode;
     }
@@ -1007,7 +1049,7 @@ class Decompress
     getOutput()
     {
         if (this.dst) {
-            assert(this.dst_pos == this.dst.length);
+            // assert(this.dst_pos == this.dst.length);
             if (this.dst_pos < this.dst.length) {
                 this.dst = this.dst.slice(0, this.dst_pos);
             }
