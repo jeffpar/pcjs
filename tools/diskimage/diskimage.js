@@ -267,8 +267,12 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    if (argv['all'] || argv['collection'] || argv['verbose']) {
-        printf("processing: %s (%d bytes, hash %s)\n", di.getName(), di.getSize(), di.getHash());
+    if (argv['all'] || argv['collection']) {
+        if (!argv['verbose']) {
+            printf("processing: %s (%d bytes)\n", di.getName(), di.getSize());
+        } else {
+            printf("processing: %s (%d bytes, hash %s)\n", di.getName(), di.getSize(), di.getHash());
+        }
     }
 
     let sFindName = argv['file'];

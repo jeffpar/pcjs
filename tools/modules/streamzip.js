@@ -876,7 +876,7 @@ export default class StreamZip extends events.EventEmitter {
                 if (this.arcType == StreamZip.TYPE_ARC) {
                     let crc = LegacyArc.getCRC(dst);
                     if (crc != entry.crc) {
-                        entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                        entry.error("expected CRC " + entry.crc.toString(16) + ", received " + crc.toString(16));
                     }
                 } else {
                     if (this.canVerifyCRC(entry)) {
@@ -1908,7 +1908,7 @@ class CRCVerify
                 this.entry.error("expected " + this.entry.size + " bytes, received " + this.state.size);
             }
             else if (~this.state.crc !== this.entry.crc) {
-                this.entry.error("expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                this.entry.error("expected CRC " + this.entry.crc.toString(16) + ", received " + crc.toString(16));
             }
         }
     }
