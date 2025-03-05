@@ -1048,6 +1048,8 @@ export default class DiskLib {
      * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
      * equivalent to 10240K).
      *
+     * If neither K nor M is specified AND the value is "large" (more than 1M), it's automatically converted to Kb.
+     *
      * @this {DiskLib}
      * @param {string} sTarget
      * @returns {number} (target Kb for disk image, 0 if no target)
@@ -1056,11 +1058,15 @@ export default class DiskLib {
     {
         let target = 0;
         if (sTarget) {
-            let match = sTarget.match(/^(PC|)([0-9.]+)([KM]*)/i);
+            let match = sTarget.match(/^(PC|)([0-9.]+)(K|M|)$/i);
             if (match) {
                 target = +match[2];
-                if (match[3].toUpperCase() == 'M') {
+                let multiplier = match[3].toUpperCase();
+                if (multiplier == 'M') {
                     target *= 1024;
+                }
+                else if (!multiplier && target >= 1000000) {
+                    target = Math.round(target / 1024);
                 }
             }
         }

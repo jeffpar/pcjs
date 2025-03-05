@@ -2,6 +2,7 @@
 *.log
 *.obj
 *.out
+*.zip
 .DS_Store
 .history
 .jekyll-metadata

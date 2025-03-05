@@ -143,24 +143,29 @@ function createDriveInfo(argv, diskette)
             driveInfo.nSectors = +match[3];
             driveInfo.cbSector = +match[4] || 512;
             if (argv['partitioned'] !== undefined) {
-                driveInfo.fPartitioned = !!argv['partitioned'];
+                driveInfo.partitioned = !!argv['partitioned'];
             } else {
-                driveInfo.fPartitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
+                driveInfo.partitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
             }
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
-                let driveCtrl = match[1] || driveInfo.driveCtrl || "XT";
+                let driveCtrl = match[1].toUpperCase() || driveInfo.driveCtrl || "XT";
                 let driveType = +match[2];
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
                     driveInfo.driveCtrl = driveCtrl;
                     driveInfo.driveType = driveType;
-                } else {
-                    match = null;
                 }
             }
+            else if (typeDrive == "custom") {
+                //
+                // We'll signal to findDriveType() that it should calculate a disk geometry and hope for the best.
+                //
+                driveInfo.driveCtrl = "PCJS";
+                driveInfo.partitioned = true;
+            }
         }
-        if (!match) {
+        if (!driveInfo.driveCtrl) {
             printf("unrecognized drive type: %s\n", typeDrive);
         }
     }
@@ -1222,7 +1227,7 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
-            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--drivetype=[value]":      "set drive type (eg, AT:1 or C:H:S or \"custom\")",
             "--extdir=[directory]":     "write extracted files to directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
