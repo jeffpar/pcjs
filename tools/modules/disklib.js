@@ -1040,7 +1040,7 @@ export default class DiskLib {
             }
         }
         if (messages) this.printf("%s", messages);
-        if (listing == "archive") this.printf("\n");
+        // if (listing == "archive") this.printf("\n");
         return aFiles;
     }
 
