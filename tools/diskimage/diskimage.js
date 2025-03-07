@@ -374,7 +374,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             if (typeof listing != "string") listing = "dir";
             sLines = di.getFileListing(iVolume, 0, listing) || "\tno listing available\n";
         }
-        printf("%s\n", sLines);
+        if (sLines) printf("%s\n", sLines);
     }
 
     /**

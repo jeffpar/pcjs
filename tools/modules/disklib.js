@@ -923,7 +923,7 @@ export default class DiskLib {
     {
         let aFiles = [];
         if (listing == "archive") {
-            this.printf("reading: %s\n\n", zip.fileName);
+            this.printf("\nreading: %s\n\n", zip.fileName);
             this.printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
@@ -971,15 +971,14 @@ export default class DiskLib {
             }
             if (!entry.isDirectory) {
                 /**
-                 * HACK to skip decompression for all entries (--list=skip) or all entries except a named entry.
+                 * HACK to skip decompression for all entries except a named entry.
                  */
                 let data;
-                if (listing == "skip" || listing != entry.name) {
-                    data = new DataBuffer(entry.size);
-                }
-                else {
+                if (!listing || listing == "archive" || listing == entry.name) {
                     data = zip.entryDataSync(entry.name);
                     data = new DataBuffer(data || 0);
+                } else {
+                    data = new DataBuffer(entry.size);
                 }
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
