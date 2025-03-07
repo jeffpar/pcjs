@@ -260,7 +260,7 @@ export default class DiskLib {
                         printfDebug: diskLib.printf,
                         holdErrors: true
                     }).on('ready', () => {
-                        let aFileData = diskLib.getArchiveFiles(zip, null, date, argv['verbose']);
+                        let aFileData = diskLib.getArchiveFiles(zip, null, date, argv['list']);
                         for (let file of aFileData) {
                             let t = diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                             if (t < 0) break;
@@ -666,7 +666,7 @@ export default class DiskLib {
     }
 
     /**
-     * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo, done)
+     * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo, done)
      *
      * @this {DiskLib}
      * @param {string} sDir (directory name)
@@ -677,11 +677,11 @@ export default class DiskLib {
      * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
      * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
      * @param {number} [nMax] (maximum number of files to read; default is 256)
-     * @param {boolean} [verbose] (true for verbose output)
+     * @param {string|boolean} [listing] (listing options, if any)
      * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @param {function(DiskInfo)} [done] (optional function to call on completion)
      */
-    readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo = {}, done)
+    readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo = {}, done)
     {
         let di;
         let diskLib = this;
@@ -753,12 +753,15 @@ export default class DiskLib {
             }
             done();
         };
+        if (listing === true) {
+            listing = arcType? "archive" : "dir";
+        }
         try {
             this.nMaxInit = this.nMaxCount = nMax || this.nMaxDefault;
             if (!arcType) {
                 this.readDirFiles(sDir, sLabel, dateLabel, fNormalize, 0, driveInfo, readDone);
             } else {
-                this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
+                this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, listing || "", readDone);
             }
         } catch(err) {
             this.printError(err);
@@ -907,19 +910,19 @@ export default class DiskLib {
     }
 
     /**
-     * getArchiveFiles(zip, sLabel, date, verbose)
+     * getArchiveFiles(zip, sLabel, date, listing)
      *
      * @this {DiskLib}
      * @param {StreamZip} zip
      * @param {string} [sLabel]
      * @param {Date} [date]
-     * @param {boolean} [verbose]
+     * @param {string} [listing]
      * @returns {Array.<FileData>}
      */
-    getArchiveFiles(zip, sLabel, date, verbose = false)
+    getArchiveFiles(zip, sLabel, date, listing)
     {
         let aFiles = [];
-        if (verbose) {
+        if (listing == "archive") {
             this.printf("reading: %s\n\n", zip.fileName);
             this.printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
@@ -968,10 +971,10 @@ export default class DiskLib {
             }
             if (!entry.isDirectory) {
                 /**
-                 * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
+                 * HACK to skip decompression for all entries (--list=skip) or all entries except a named entry.
                  */
                 let data;
-                if (typeof verbose == "string" && (verbose == "skip" || verbose != entry.name)) {
+                if (listing == "skip" || listing != entry.name) {
                     data = new DataBuffer(entry.size);
                 }
                 else {
@@ -988,7 +991,7 @@ export default class DiskLib {
                     messages += message + "\n";
                 }
             }
-            if (verbose) {
+            if (listing == "archive") {
                 /**
                  * Notes regarding ARC compression method "naming conventions":
                  *
@@ -1037,7 +1040,7 @@ export default class DiskLib {
             }
         }
         if (messages) this.printf("%s", messages);
-        if (verbose) this.printf("\n");
+        if (listing == "archive") this.printf("\n");
         return aFiles;
     }
 
@@ -1074,7 +1077,7 @@ export default class DiskLib {
     }
 
     /**
-     * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
+     * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
      *
      * @this {DiskLib}
      * @param {string} sArchive (ARC/ZIP filename)
@@ -1082,10 +1085,10 @@ export default class DiskLib {
      * @param {number} arcOffset (0 if none)
      * @param {string} sLabel (optional volume label)
      * @param {string} sPassword (optional password)
-     * @param {boolean} verbose (true to display verbose output, false to display minimal output)
+     * @param {string} listing (listing options, if any)
      * @param {function(Array.<FileData>)} done
      */
-    readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
+    readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
     {
         let diskLib = this;
         let stats = node.fs.statSync(sArchive);
@@ -1100,7 +1103,7 @@ export default class DiskLib {
             holdErrors: true
         });
         zip.on('ready', function readArchiveFilesReady() {
-            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, verbose);
+            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, listing);
             zip.close();
             done(aFileData);
         });

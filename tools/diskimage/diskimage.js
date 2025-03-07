@@ -114,8 +114,8 @@ function createDisk(diskFile, diskette, argv, done)
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = diskLib.getTargetValue(diskette.format);
-        let verbose = argv['verbose'];
-        diskLib.readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, driveInfo, done);
+        let listing = argv['list'];
+        diskLib.readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, listing, driveInfo, done);
     } else {
         done(diskLib.readDiskSync(sArchiveFile, false, driveInfo));
     }
@@ -333,10 +333,11 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     }
 
     if (argv['list']) {
+        let listing = argv['list'];
         let sLines = "";
         let iVolume = +argv['volume'];
         if (isNaN(iVolume)) iVolume = -1;
-        if (argv['list'] == "unused") {
+        if (listing == "unused") {
             let lba = -1;
             while ((lba = di.getUnusedSector(iVolume, lba)) >= 0) {
                 let sector = di.getSector(lba);
@@ -364,11 +365,14 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 sLines += dumpSector(di, sector, offset);
             }
             if (!sLines) sLines = "no unused data space on disk";
-        } else {
+        }
+        else if (listing != "archive") {
             /**
-             * Other --list options include: "metadata", "sorted"
+             * "dir" is implied if no other listing option (eg, "metadata", "sorted") is specified.
              */
-            sLines = di.getFileListing(iVolume, 0, argv['list']) || "\tno listing available\n";
+            let listing = argv['list'];
+            if (typeof listing != "string") listing = "dir";
+            sLines = di.getFileListing(iVolume, 0, listing) || "\tno listing available\n";
         }
         printf("%s\n", sLines);
     }
@@ -1159,7 +1163,11 @@ function processArgs(argv, fSingle = false)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        diskLib.readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], diskLib.getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], driveInfo, done);
+        let listing = argv['list'];
+        if (listing === true) {
+            argv['list'] = arcType? "archive" : "dir";
+        }
+        diskLib.readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], diskLib.getTargetValue(argv['target']), +argv['maxfiles'] || 0, listing, driveInfo, done);
         return true;
     }
 
@@ -1186,7 +1194,7 @@ function processArgs(argv, fSingle = false)
  * want a particular boot sector, use --boot=[sector image file].
  *
  * You can also use the contents of a ZIP archive as your input source with --zip=[zipfile]; ditto for
- * ARC files using --arc=[arcfile].  To also print a listing of an archive's contents, include --verbose.
+ * ARC files using --arc=[arcfile].  To also print a listing of an archive's contents, include --list=archive.
  *
  * Use --all to process all files that match the "globbed" filespec (eg, "--all='/Volumes/PCSIG_13B/*.ZIP'");
  * when using --all, --output can be used to specify an output directory, and --type can be used to specify
@@ -1244,13 +1252,12 @@ function main(argc, argv)
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
             "--expand (-x)\t":          "expand all archives inside disk or archive",
             "--label=[label]\t":        "set volume label of output disk image",
-            "--list (-l)\t":            "display directory listings of disk or archive",
-            "--list=unused\t":          "display unused space in disk image (.json only)",
+            "--list[=option]\t":        "listing option (dir, archive, unused, sorted, metadata)",
             "--normalize\t":            "convert line endings and character encoding of text files",
             "--partitioned (-p)":       "force partitioned disk image",
             "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
-            "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
+            "--verbose (-v)\t":         "maximum messages"
         };
         let optionGroups = {
             "Input options:":           optionsInput,
@@ -1264,8 +1271,8 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nOptions --extdir and --output support \"%d\", which will be replaced with the input disk directory.\n");
-        printf("Option values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
+        printf("\nEnclose option values in quotes if they contain whitespace or wildcards.\n");
+        printf("Options --extdir and --output can use %d in place of the input disk directory.\n");
         return;
     }
 

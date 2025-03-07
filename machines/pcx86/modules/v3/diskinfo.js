@@ -3297,17 +3297,17 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileListing(iVolume, indent, options)
+     * getFileListing(iVolume, indent, listing)
      *
-     * If options is something other than "sorted" or "metadata", then it's assumed to be a file specification.
+     * If listing is something other than "dir", "sorted", or "metadata", then it's assumed to be a file specification.
      *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
-     * @param {boolean|string} [options]
+     * @param {string} [listing]
      * @returns {string}
      */
-    getFileListing(iVolume = -1, indent = 0, options)
+    getFileListing(iVolume = -1, indent = 0, listing)
     {
         let sListing = "";
         if (this.buildTables() > 0) {
@@ -3318,7 +3318,7 @@ export default class DiskInfo {
                 nVolumes = 1;
             }
             let sIndent = " ".repeat(indent);
-            let fileSpec = (typeof options == "string" && options != "sorted" && options != "metadata")? new RegExp("^" + options.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
+            let fileSpec = (listing != "dir" && listing != "sorted" && listing != "metadata")? new RegExp("^" + listing.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
             while (iVolume < this.volTable.length && nVolumes-- > 0) {
                 let vol = this.volTable[iVolume];
                 let curVol = -1;
@@ -3330,7 +3330,7 @@ export default class DiskInfo {
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
                 let fileTable = this.fileTable;
-                if (options == "sorted") {
+                if (listing == "sorted") {
                     fileTable = this.fileTable.slice(0);
                     fileTable.sort(function(a, b) {
                         /*
@@ -3366,14 +3366,13 @@ export default class DiskInfo {
                          * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
                          */
                         sLabel = file.name;
-                        break;
                     }
                 }
                 for (i = 0; i < fileTable.length && fileMatch; i++) {
                     let file = fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
-                    if ((file.attr & DiskInfo.ATTR.METADATA) && options != "metadata") continue;
+                    if ((file.attr & DiskInfo.ATTR.METADATA) && listing != "metadata") continue;
                     if (curVol != file.iVolume) {
                         let vol = this.volTable[file.iVolume];
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
@@ -3454,7 +3453,7 @@ export default class DiskInfo {
                 iVolume++;
             }
             if (!sListing && fileSpec) {
-                sListing = "file not found: " + options + "\n";
+                sListing = "file not found: " + listing + "\n";
             }
         }
         return sListing;
