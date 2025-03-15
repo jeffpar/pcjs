@@ -964,7 +964,6 @@ export default class DiskLib {
             let dirs = file.path.split(sep);
             if (!entry.isDirectory) {
                 file.name = dirs.pop();
-                file.path = dirs.join(node.path.sep);
             }
             for (let dir of dirs) {
                 if (!dir || dir == '.') continue;

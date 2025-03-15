@@ -1461,8 +1461,9 @@ class Entry
     // eslint-disable-next-line require-jsdoc
     validateName()
     {
-        if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
-            this.warning("unusual filename");
+        let match = this.name.match(/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/);
+        if (match) {
+            this.warning("unexpected filename character(s) (" + match[0] + ")");
         }
     }
 
