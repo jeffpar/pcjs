@@ -1462,7 +1462,7 @@ class Entry
     validateName()
     {
         if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
-            this.error("invalid filename");
+            this.warning("unusual filename");
         }
     }
 

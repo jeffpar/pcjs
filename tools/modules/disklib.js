@@ -42,7 +42,8 @@ export default class DiskLib {
      */
     static asTextFileExts = [
         ".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF",
-        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", "."
+        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", ".",
+        ".NFO", ".DIZ"
     ];
 
     /**
@@ -937,7 +938,9 @@ export default class DiskLib {
 
         for (let entry of entries) {
 
-            let file = {path: entry.name, name: node.path.basename(entry.name), nameEncoding: "cp437"};
+            let path = entry.name.replace(/:/g, '_');
+            let name = node.path.basename(path);
+            let file = {path, name, nameEncoding: "cp437"};
             /**
              * The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
              * because file times stored in a ZIP file are *local* times.
@@ -958,7 +961,11 @@ export default class DiskLib {
              */
             let files = aFiles, subDir = "";
             let sep = file.path.indexOf('/') >= 0? '/' : '\\';
-            let dirs = (entry.isDirectory? file.path : node.path.dirname(file.path)).split(sep);
+            let dirs = file.path.split(sep);
+            if (!entry.isDirectory) {
+                file.name = dirs.pop();
+                file.path = dirs.join(node.path.sep);
+            }
             for (let dir of dirs) {
                 if (!dir || dir == '.') continue;
                 subDir += dir + '/';

@@ -225,7 +225,8 @@ function dumpSector(di, sector, offset = 0, limit = -1)
  */
 function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskInfo.FILEDESC.PATH]);
+    printf("%-32s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskFile + ':' + desc[DiskInfo.FILEDESC.PATH]);
+    // printf("%-32s  %-12s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskFile + ':' + desc[DiskInfo.FILEDESC.PATH]);
 }
 
 /**
@@ -271,10 +272,13 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (!argv['verbose']) {
             printf("processing: %s\n", diskFile);
         } else {
-            printf("processing: %s (%d bytes, hash %s)\n", di.getName(), di.getSize(), di.getHash());
+            printf("processing: %s (%d bytes, hash %s)\n", diskFile /* di.getName() */, di.getSize(), di.getHash());
         }
     }
 
+    //
+    // TODO: Document the --file option
+    //
     let sFindName = argv['file'];
     if (typeof sFindName == "string") {
         let sFindText = argv['find'];
@@ -284,7 +288,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          */
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
-            printFileDesc(di.getName(), desc);
+            printFileDesc(diskFile, di.getName(), desc);
             if (argv['index']) {
                 /**
                  * We cheat and search for matching hash values in the provided index; this is much faster than
@@ -1060,7 +1064,7 @@ function processAll(all, argv)
                 if (outdir) {
                     args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 }
-                for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
+                for (let arg of ['list', 'expand', 'extract', 'extdir', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processArgs(args);
