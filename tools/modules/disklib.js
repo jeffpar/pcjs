@@ -963,6 +963,7 @@ export default class DiskLib {
             let sep = file.path.indexOf('/') >= 0? '/' : '\\';
             let dirs = file.path.split(sep);
             if (!entry.isDirectory) {
+                file.path = dirs.join(node.path.sep);
                 file.name = dirs.pop();
             }
             for (let dir of dirs) {
