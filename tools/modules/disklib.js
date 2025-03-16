@@ -193,6 +193,17 @@ export default class DiskLib {
     extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
     {
         /**
+         * File systems don't generally provide unnamed files, but unfortunately, ZIP/ARC files can
+         * can contain all sorts of crap, including nameless files.  If the length is zero, we'll silently
+         * skip it, otherwise we'll print a warning.
+         */
+        if (!sPath) {
+            if (db.length) {
+                this.printf("warning: skipping %d-byte unnamed file\n", db.length);
+            }
+            return 0;
+        }
+        /**
          * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
          * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
          * but no longer assume they always will hidden), then we ignore them.
@@ -1031,6 +1042,9 @@ export default class DiskLib {
                 if (filesize < 0) {
                     filesize = 0;
                     filename += node.path.sep;
+                }
+                if (!filename) {
+                    filename = "[Unnamed]";
                 }
                 let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
                 if (entry.encrypted) method += '*';
