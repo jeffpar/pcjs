@@ -397,12 +397,14 @@ export default class StreamZip extends events.EventEmitter {
             this.centralDirectory.read(buffer.slice(pos, pos + StreamZip.CentralEndHeader.getSize()));
             this.centralDirectory.headerOffset = this.op.win.position + pos;
             if (this.centralDirectory.commentLength) {
-                this.comment = buffer
-                    .slice(
-                        pos + StreamZip.CentralEndHeader.getSize(),
-                        pos + StreamZip.CentralEndHeader.getSize() + this.centralDirectory.commentLength
-                    )
-                    .toString();
+                //
+                // Return a Buffer instead of a String, because a generic toString() call assumes
+                // the data is UTF-8, and in the case of old ZIP files, it's almost invariably CP437.
+                //
+                this.comment = buffer.slice(
+                    pos + StreamZip.CentralEndHeader.getSize(),
+                    pos + StreamZip.CentralEndHeader.getSize() + this.centralDirectory.commentLength
+                ) /* .toString() */;
             } else {
                 this.comment = null;
             }
@@ -1576,7 +1578,11 @@ class ZipEntry extends Entry
             this.getEntryExtra(data, offset);
             offset += this.extraLen;
         }
-        this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
+        //
+        // Return a Buffer instead of a String, because a generic toString() call assumes
+        // the data is UTF-8, and in the case of old ZIP files, it's almost invariably CP437.
+        //
+        this.comment = this.comLen? data.slice(offset, offset + this.comLen) /* .toString() */ : null;
     }
 
     // eslint-disable-next-line require-jsdoc

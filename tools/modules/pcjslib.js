@@ -101,7 +101,18 @@ export default class PCJSLib
         let argc = 0;
         let argv = [];
         let lastOp = "";
-        if (i) argv.push(args.slice(i++).join(' '));
+        if (i) {
+            argv.push(args.slice(i++).join(' '));
+            //
+            // For convenience: if the caller has crammed all their arguments into the next argument,
+            // and there are NO double-quotes (because parsing those is extra work), then we split the
+            // argument and append it to args (this can happen in VSCode launch profiles, if you're lazy).
+            //
+            if (i < args.length && args[i].indexOf('"') < 0 && args[i].indexOf(' ') > 0) {
+                let a = args[i].split(' ');
+                args.splice(i, 1, ...a);
+            }
+        }
         while (i < args.length) {
             let j, sSep;
             let sArg = args[i++];

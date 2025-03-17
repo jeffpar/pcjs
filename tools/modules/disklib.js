@@ -935,8 +935,16 @@ export default class DiskLib {
     {
         let aFiles = [];
         if (listing == "archive") {
-            this.printf("\nreading: %s\n\n", zip.fileName);
-            this.printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+            this.printf("\nreading: %s\n", zip.fileName);
+            if (zip.comment) {
+                //
+                // TODO: We shouldn't be calling fromCP437() unless --normalize is specified,
+                // and we should perhaps suppress comments entirely unless --verbose is specified.
+                //
+                let text = CharSet.fromCP437(zip.comment, true);
+                this.printf("%s\n", text.trimEnd());
+            }
+            this.printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
         let messages = "";
@@ -1051,8 +1059,12 @@ export default class DiskLib {
                 let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
                 if (entry.errors) filesize = -1;
                 if (!Device.DEBUG) {
-                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+                    let text = "";
+                    if (entry.comment) {
+                        text = "  " + CharSet.fromCP437(entry.comment);
+                    }
+                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
+                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, text);
                 } else {
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#010x\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
@@ -1421,7 +1433,7 @@ export default class DiskLib {
                     }
                     return true;
                 }
-                if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);
+                // if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);
             } catch(err) {
                 this.printError(err);
             }

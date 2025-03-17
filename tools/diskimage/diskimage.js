@@ -399,7 +399,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (typeof extractDir != "string") {
             extractDir = "";
         } else if (diskFile.indexOf("http") != 0) {
-            extractDir = extractDir.replace("%d", path.dirname(diskFile));
+            extractDir = extractDir.replace("%d", path.dirname(diskFile)).replace("%f", di.getName());
         }
         let extractName = "", extractFolder = "";
         if (fExtractAll) {
@@ -1064,7 +1064,7 @@ function processAll(all, argv)
                 if (outdir) {
                     args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 }
-                for (let arg of ['list', 'expand', 'extract', 'extdir', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
+                for (let arg of ['drivetype', 'expand', 'extdir', 'extract', 'list', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processArgs(args);
@@ -1247,7 +1247,7 @@ function main(argc, argv)
             "--extdir=[directory]":     "write extracted files to directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
-            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+            "--fat=[n:c:r]":            "\tset FAT, cluster, and root sizes",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")",
             "--type[=filename]":        "extract text file(s) to console",
@@ -1276,7 +1276,7 @@ function main(argc, argv)
             }
         }
         printf("\nEnclose option values in quotes if they contain whitespace or wildcards.\n");
-        printf("Options --extdir and --output can use %d in place of the input disk directory.\n");
+        printf("Options --extdir and --output can use %d and %f for input directory and file.\n");
         return;
     }
 
