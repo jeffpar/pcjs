@@ -2492,13 +2492,13 @@ export default class DiskInfo {
         } else {
             let iExt = sName.lastIndexOf('.');
             let sExt = "";
-                if (iExt >= 0) {
+            if (iExt >= 0) {
                 sExt = sName.substr(iExt+1);
                 sName = sName.substr(0, iExt);
             } else if (fLabel && sName.length > 8) {
                 sExt = sName.substr(8);
             }
-            sName = sName.substr(0, 8).trimEnd();
+            sName = sName.substr(0, 8).trimEnd().replace(/\./g, "");
             if (uniqueID) {
                 let suffix = "~" + uniqueID;
                 sName = sName.substr(0, 8 - suffix.length) + suffix;
