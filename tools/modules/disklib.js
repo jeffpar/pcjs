@@ -1061,7 +1061,7 @@ export default class DiskLib {
                 if (!Device.DEBUG) {
                     let text = "";
                     if (entry.comment) {
-                        text = "  " + CharSet.fromCP437(entry.comment);
+                        text = "  <" + CharSet.fromCP437(entry.comment) + ">";
                     }
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, text);
