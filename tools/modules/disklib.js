@@ -1072,7 +1072,7 @@ export default class DiskLib {
             }
         }
         if (messages) this.printf("%s", messages);
-        // if (listing == "archive") this.printf("\n");
+        if (listing == "archive") this.printf("\n");
         return aFiles;
     }
 
@@ -1433,7 +1433,7 @@ export default class DiskLib {
                     }
                     return true;
                 }
-                // if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);
+                if (!fQuiet) this.printf("warning: %s exists, use --overwrite to replace\n", sFile);
             } catch(err) {
                 this.printError(err);
             }

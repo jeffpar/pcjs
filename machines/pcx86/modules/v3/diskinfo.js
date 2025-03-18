@@ -2914,7 +2914,17 @@ export default class DiskInfo {
                     for (let i = 0; i < files.length; i++) {
                         let file = files[i];
                         if (file.cluster) {
-                            clusterInfo[file.cluster] = {origin: file.path, contents: [...file.data.buffer]};
+                            //
+                            // NOTE: This code previously initialized 'contents' with:
+                            //
+                            //      [...file.data.buffer]
+                            //
+                            // to produce an array of numbers.  However, when dealing with large files (eg, 300Mb),
+                            // this can cause memory allocation problems for Node.  However, it *appears* to me that
+                            // all the consumers of 'contents' use the DataBuffer constructor, which accepts buffers
+                            // as well as arrays, so this conversion no longer seems necessary.  Fingers crossed.
+                            //
+                            clusterInfo[file.cluster] = {origin: file.path, contents: file.data.buffer};
                         }
                         if (file.files) scanFiles(file.files);
                     }
