@@ -776,7 +776,7 @@ export default class DiskLib {
                             printCSV(parent + '/' + file.path, aFileData);
                             zip.close();
                         }).on('error', (err) => {
-                            // diskLib.printError(err, parent + '/' + file.path);
+                            diskLib.printf(",,,,,,\"%s\",\"%s\"\n", parent + '/' + file.path, err.message);
                         });
                         zip.open();
                     }
@@ -1227,6 +1227,8 @@ export default class DiskLib {
         zip.on('error', function readArchiveFilesError(err) {
             if (listing != "csv") {
                 diskLib.printError(err, sArchive);
+            } else {
+                diskLib.printf(",,,,,,\"%s\",\"%s\"\n", sArchive, err.message);
             }
         });
     }
