@@ -370,7 +370,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             }
             if (!sLines) sLines = "no unused data space on disk";
         }
-        else if (listing != "archive") {
+        else if (listing != "archive" && listing != "csv") {
             /**
              * "dir" is implied if no other listing option (eg, "metadata", "sorted") is specified.
              */
@@ -1222,7 +1222,7 @@ function main(argc, argv)
 
     Device.DEBUG = !!argv['debug'];
 
-    if (!argv['quiet']) {
+    if (!argv['quiet'] && argv['list'] != "csv") {
         printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
     }
 

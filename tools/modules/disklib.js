@@ -695,9 +695,7 @@ export default class DiskLib {
      */
     readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo = {}, done)
     {
-        let di;
         let diskLib = this;
-
         /**
          * There are two special label strings you can pass on the command-line:
          *
@@ -714,7 +712,6 @@ export default class DiskLib {
             sLabel = DiskInfo.PCJS_LABEL;
             dateLabel = new Date(1989, 8, 27, 3, 0, 0);
         }
-
         let diskName = node.path.basename(sDir);
         if (sDir.endsWith('/')) {
             if (sLabel == undefined) {
@@ -730,9 +727,71 @@ export default class DiskLib {
              * When we're given a list of files, we don't pick a default label; use --label if you want one.
              */
         }
-
         sDir = this.getLocalPath(sDir);
+
+        let printCSV = function(parent, files) {
+            for (let file of files) {
+                let db = file.data;
+                let hash = db && db.length? diskLib.getHash(db) : "--------------------------------";
+                let modified = diskLib.sprintf("%T", file.date);
+                let attr = file.attr;
+                let size = file.size;
+                let compressedSize = file.compressedSize || size;
+                let method = file.method || "None";
+                let path = (file.path[0] != '/'? '/' : '') + file.path;
+                if (path.indexOf('"') >= 0) {
+                    path = path.replace(/"/g, '""');
+                }
+                if (path.indexOf(',') >= 0) {
+                    path = '"' + path + '"';
+                }
+                diskLib.printf("%s,%s,%d,%d,%d,%s,%s:%s\n", hash, modified, attr, size, compressedSize, method, parent, path);
+                if (file.files) {
+                    printCSV(parent, file.files);
+                } else {
+                    let arcType = diskLib.isArchiveFile(file.path);
+                    if (arcType) {
+                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                            /**
+                             * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
+                             */
+                            arcType = node.StreamZip.TYPE_ARC;
+                            diskLib.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
+                        }
+                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
+                            // db = db.slice(0, db.length - 4);
+                            diskLib.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
+                        }
+                        let zip = new node.StreamZip({
+                            file: file.path,
+                            // password: argv['password'],
+                            buffer: db.buffer,
+                            arcType: arcType,
+                            storeEntries: true,
+                            nameEncoding: "ascii",
+                            printfDebug: diskLib.printf,
+                            holdErrors: true
+                        }).on('ready', () => {
+                            let aFileData = diskLib.getArchiveFiles(zip, null, file.date, listing);
+                            printCSV(parent + '/' + file.path, aFileData);
+                            zip.close();
+                        }).on('error', (err) => {
+                            // diskLib.printError(err, parent + '/' + file.path);
+                        });
+                        zip.open();
+                    }
+                }
+            }
+        };
+
         let readDone = function(aFileData) {
+            if (listing == "csv") {
+                /**
+                 * We're not going to create a disk in this case, just display detailed information about the files.
+                 */
+                printCSV(sDir, aFileData);
+                return;
+            }
             if (aFileData) {
                 let db = new DataBuffer();
                 let di = new DiskInfo(diskLib.device);
@@ -934,6 +993,7 @@ export default class DiskLib {
     getArchiveFiles(zip, sLabel, date, listing)
     {
         let aFiles = [];
+        let comment = "";
         if (listing == "archive") {
             this.printf("\nreading: %s\n", zip.fileName);
             if (zip.comment) {
@@ -941,8 +1001,11 @@ export default class DiskLib {
                 // TODO: We shouldn't be calling fromCP437() unless --normalize is specified,
                 // and we should perhaps suppress comments entirely unless --verbose is specified.
                 //
-                let text = CharSet.fromCP437(zip.comment, true);
-                this.printf("%s\n", text.trimEnd());
+                // WARNING: Comments can be multi-line and we do not normalize the line-endings
+                // (they are typically CR/LF).
+                //
+                comment = CharSet.fromCP437(zip.comment, true);
+                this.printf("%s\n", comment.trimEnd());
             }
             this.printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
@@ -952,6 +1015,12 @@ export default class DiskLib {
 
         if (sLabel) {
             let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date, size: 0};
+            //
+            // We attach any archive comment to the label entry, which never actually exists in an archive.
+            //
+            if (comment) {
+                file.comment = comment;
+            }
             aFiles.push(file);
         }
 
@@ -995,12 +1064,39 @@ export default class DiskLib {
                 }
                 files = file.files;
             }
+            /**
+             * Notes regarding ARC compression method "naming conventions":
+             *
+             * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
+             * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
+             * distinct from Method8 which it called "Crunched" (with an upper-case "C").
+             *
+             * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
+             * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
+             * "dynamic" LZW compression.
+             *
+             * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
+             * squarely between "Crunch" and "Squash".
+             */
+            const methodsARC = [
+                "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
+            ];
+            /**
+             * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
+             * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
+             * of PC-SIG 9th edition ZIP files.
+             */
+            const methodsZIP = [
+                "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
+            ];
+            let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+            if (entry.encrypted) method += '*';
             if (!entry.isDirectory) {
                 /**
                  * HACK to skip decompression for all entries except a named entry.
                  */
                 let data;
-                if (!listing || listing == "archive" || listing == entry.name) {
+                if (!listing || listing == "archive" || listing == "csv" || listing == entry.name) {
                     data = zip.entryDataSync(entry.name);
                     data = new DataBuffer(data || 0);
                 } else {
@@ -1009,39 +1105,26 @@ export default class DiskLib {
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
                 file.data = data;
+                //
+                // For archives, we're going to supplement the file object with some additional information.
+                //
+                file.method = method;
+                file.compressedSize = entry.compressedSize;
+                file.crc = entry.crc;
+                if (entry.comment) {
+                    file.comment = CharSet.fromCP437(entry.comment);
+                }
+                if (entry.messages && entry.messages.length) {
+                    file.messages = entry.messages.join('\n');
+                }
                 files.push(file);
             }
-            if (entry.messages && entry.messages.length) {
-                for (let message of entry.messages) {
-                    messages += message + "\n";
-                }
-            }
             if (listing == "archive") {
-                /**
-                 * Notes regarding ARC compression method "naming conventions":
-                 *
-                 * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
-                 * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
-                 * distinct from Method8 which it called "Crunched" (with an upper-case "C").
-                 *
-                 * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
-                 * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
-                 * "dynamic" LZW compression.
-                 *
-                 * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
-                 * squarely between "Crunch" and "Squash".
-                 */
-                let methodsARC = [
-                    "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
-                ];
-                /**
-                 * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
-                 * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
-                 * of PC-SIG 9th edition ZIP files.
-                 */
-                let methodsZIP = [
-                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
-                ];
+                if (entry.messages && entry.messages.length) {
+                    for (let message of entry.messages) {
+                        messages += message + "\n";
+                    }
+                }
                 let filename = CharSet.fromCP437(file.name);
                 if (filename.length > 14) {
                     filename = "..." + filename.slice(filename.length - 11);
@@ -1052,15 +1135,17 @@ export default class DiskLib {
                     filename += node.path.sep;
                 }
                 if (!filename) {
-                    filename = "[Unnamed]";
+                    filename = "[NoName]";
                 }
-                let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
-                if (entry.encrypted) method += '*';
                 let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
                 if (entry.errors) filesize = -1;
                 if (!Device.DEBUG) {
                     let text = "";
                     if (entry.comment) {
+                        //
+                        // WARNING: Comments can be multi-line and we do not normalize the line-endings
+                        // (they are typically CR/LF).
+                        //
                         text = "  <" + CharSet.fromCP437(entry.comment) + ">";
                     }
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
@@ -1140,7 +1225,9 @@ export default class DiskLib {
             done(aFileData);
         });
         zip.on('error', function readArchiveFilesError(err) {
-            diskLib.printError(err, sArchive);
+            if (listing != "csv") {
+                diskLib.printError(err, sArchive);
+            }
         });
     }
 
