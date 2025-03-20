@@ -739,6 +739,10 @@ export default class DiskLib {
                 let compressedSize = file.compressedSize || size;
                 let method = file.method || "None";
                 let path = (file.path[0] != '/'? '/' : '') + file.path;
+                //
+                // Why do we have to remove CRs from filenames?  Just ask "ibm3240-3249/ibm3247/PGCMS101.ZIP/MileageSaver.zip"...
+                //
+                path = path.replace(/\r/g, '');
                 if (path.indexOf('"') >= 0) {
                     path = path.replace(/"/g, '""');
                 }
