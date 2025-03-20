@@ -738,7 +738,7 @@ export default class DiskLib {
                 let size = file.size;
                 let compressedSize = file.compressedSize || size;
                 let method = file.method || "None";
-                let path = (file.path[0] != '/'? '/' : '') + file.path;
+                let path = parent + ':' + (file.path[0] != '/'? '/' : '') + file.path;
                 //
                 // Why do we have to remove CRs from filenames?  Just ask "ibm3240-3249/ibm3247/PGCMS101.ZIP/MileageSaver.zip"...
                 //
@@ -761,7 +761,7 @@ export default class DiskLib {
                 if (file.comment) {
                     comment = '"' + file.comment.replace(/"/g, '""').replace(/\r/g, '') + '"';
                 }
-                diskLib.printf("%s,%s,%d,%d,%d,%s,%s:%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, parent, path, messages, comment);
+                diskLib.printf("%s,%s,%d,%d,%d,%s,%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, path, messages, comment);
                 if (file.files) {
                     printCSV(parent, file.files);
                 } else {
