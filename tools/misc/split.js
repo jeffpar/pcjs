@@ -127,7 +127,7 @@ for (let line of lines) {
         match = remainder.match(/^"([^"]+)"/);
         if (match) {
             let message = match[1];
-            if (message.length > longestMessage) longestMessage = message.length
+            if (message.length > longestMessage) longestMessage = message.length;
         }
         //
         // Fix CSV output on archive-level (as opposed to entry-level) errors; diskimage.js should be fixed now,
