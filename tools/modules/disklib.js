@@ -745,7 +745,19 @@ export default class DiskLib {
                 if (path.indexOf(',') >= 0) {
                     path = '"' + path + '"';
                 }
-                diskLib.printf("%s,%s,%d,%d,%d,%s,%s:%s\n", hash, modified, attr, size, compressedSize, method, parent, path);
+                let messages = "";
+                if (file.messages) {
+                    for (let message of file.messages) {
+                        if (messages) messages += "; ";
+                        messages += message.replace(/^(warning|error): [^ ]*:?\s*/, "");
+                    }
+                    messages = '"' + messages.replace(/"/g, '""') + '"';
+                }
+                let comment = "";
+                if (file.comment) {
+                    comment = '"' + file.comment.replace(/"/g, '""').replace(/\r/g, '') + '"';
+                }
+                diskLib.printf("%s,%s,%d,%d,%d,%s,%s:%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, parent, path, messages, comment);
                 if (file.files) {
                     printCSV(parent, file.files);
                 } else {
@@ -994,17 +1006,19 @@ export default class DiskLib {
     {
         let aFiles = [];
         let comment = "";
+        if (zip.comment) {
+            //
+            // TODO: We shouldn't be calling fromCP437() unless --normalize is specified,
+            // and we should perhaps suppress comments entirely unless --verbose is specified.
+            //
+            // WARNING: Comments can be multi-line and we do not normalize the line-endings
+            // (they are typically CR/LF).
+            //
+            comment = CharSet.fromCP437(zip.comment, true);
+        }
         if (listing == "archive") {
             this.printf("\nreading: %s\n", zip.fileName);
-            if (zip.comment) {
-                //
-                // TODO: We shouldn't be calling fromCP437() unless --normalize is specified,
-                // and we should perhaps suppress comments entirely unless --verbose is specified.
-                //
-                // WARNING: Comments can be multi-line and we do not normalize the line-endings
-                // (they are typically CR/LF).
-                //
-                comment = CharSet.fromCP437(zip.comment, true);
+            if (comment) {
                 this.printf("%s\n", comment.trimEnd());
             }
             this.printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
@@ -1112,10 +1126,10 @@ export default class DiskLib {
                 file.compressedSize = entry.compressedSize;
                 file.crc = entry.crc;
                 if (entry.comment) {
-                    file.comment = CharSet.fromCP437(entry.comment);
+                    file.comment = CharSet.fromCP437(entry.comment, true);
                 }
                 if (entry.messages && entry.messages.length) {
-                    file.messages = entry.messages.join('\n');
+                    file.messages = entry.messages;
                 }
                 files.push(file);
             }
@@ -1146,7 +1160,7 @@ export default class DiskLib {
                         // WARNING: Comments can be multi-line and we do not normalize the line-endings
                         // (they are typically CR/LF).
                         //
-                        text = "  <" + CharSet.fromCP437(entry.comment) + ">";
+                        text = "  <" + CharSet.fromCP437(entry.comment, true) + ">";
                     }
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, text);
