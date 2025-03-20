@@ -788,7 +788,7 @@ export default class DiskLib {
                             printCSV(parent + '/' + file.path, aFileData);
                             zip.close();
                         }).on('error', (err) => {
-                            diskLib.printf(",,,,,,\"%s\",\"%s\"\n", parent + '/' + file.path, err.message);
+                            diskLib.printf(",,,,,,\"%s\",\"%s\",\n", parent + '/' + file.path, err.message);
                         });
                         zip.open();
                     }
@@ -1242,7 +1242,7 @@ export default class DiskLib {
             if (listing != "csv") {
                 diskLib.printError(err, sArchive);
             } else {
-                diskLib.printf(",,,,,,\"%s\",\"%s\"\n", sArchive, err.message);
+                diskLib.printf(",,,,,,\"%s\",\"%s\",\n", sArchive, err.message);
             }
         });
     }
