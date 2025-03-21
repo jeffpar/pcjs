@@ -776,7 +776,9 @@ export default class DiskLib {
                         }
                         if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
                             // db = db.slice(0, db.length - 4);
-                            diskLib.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
+                            if (listing != "csv") {
+                                diskLib.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
+                            }
                         }
                         let zip = new node.StreamZip({
                             file: file.path,

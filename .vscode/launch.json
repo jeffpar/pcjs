@@ -2003,6 +2003,27 @@
       }
     },
     {
+      "name": "diskimage.js --all --list=csv",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--all=ibm-wgam-wbiz-collection/ibm0000-0009/*/*.{ARC,ZIP}",
+        "--list=csv"
+      ],
+      "cwd": "/Volumes/MacSSD/Downloads",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "diskimage.js --all --zip",
       "type": "node",
       "request": "launch",
@@ -2377,27 +2398,6 @@
       "args": [
         "--collection",
         "--checkpage"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "diskimage.js --list",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
-      "args": [
-        "/disks/gamedisks/pcx86/game/other/1990/oregon_trail/OREGON_TRAIL-210.json",
-        "--list"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

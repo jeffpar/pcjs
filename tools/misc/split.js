@@ -3,11 +3,11 @@
 //
 //    node diskimage.js --all="*.{ZIP,ARC}" --list=csv >> archives.csv
 //
-// this produces archives#.csv files with the following fields:
+// this produces archives-#.csv files with the following fields:
 //
 //      archiveID,name,messages,comment
 //
-// and files#.csv files with the following fields:
+// and files-#.csv files with the following fields:
 //
 //      fileID,archiveID,hash,modified,attr,size,compressed,method,name,messages,comment
 //
@@ -46,33 +46,32 @@ if (leftover) {
 fs.closeSync(fd);
 
 //
-// Every line of the input CSV should have the following fields:
+// Every line of the input CSV (well, that we care about) should have the following fields:
 //
 //      hash,modified,attr,size,compressed,method,path,messages,comment
 //
 // unless the line continues the previous line's "comment" field (since they can be multi-line).
 //
-// For every line that begins with a 32-bit "hash", 19-char "modified" date and time, and
-// decimal "attr", "size", and "compressed" values, we will extract the name of the archive
-// from the "path" field (everything up to but not including the first colon), record that
-// as the active archiveName and increment archiveID.  Then we will increment fileID and write
-// the following fields to an files#.csv file:
+// For every line that begins with a 32-bit "hash", 19-char "modified" date and time, decimal
+// "attr", "size", and "compressed" values, and a "method" string, we extract the name of the
+// archive from the remainder of the line (ie, everything up to but not including the first
+// colon of "path").  We then record that name as the current archiveName and increment archiveID.
 //
-//      fileID,archiveID,hash,modified,attr,size,compressed,method,fileName,messages,comment
-//
-// where "fileName" is the everything in the original "path" after the colon.  This line must then
-// be followed by every line that does NOT begin with the above values (ie, hash, modified, etc).
-//
-// Once we have written 500000 lines to our output buffer, we flush the buffer to files#.csv
-// and empty the buffer.
-//
-// At the same time, every time we encounter a new archiveName, we will write the following fields
-// to an archives#.csv file:
+// Every time we encounter a new archiveName, we push a line with the following fields to the
+// archiveLines array:
 //
 //      archiveID,archiveName,messages,comment
 //
-// And as above, this line must be followed by every line that does NOT begin with the above fields,
-// and once we have buffered 500000 lines, we write them to archives#.csv file and flush the buffer.
+// We then increment fileID and push a line with the following fields to the fileLines array:
+//
+//      fileID,archiveID,hash,modified,attr,size,compressed,method,fileName,messages,comment
+//
+// where fileName is the everything in the original "path" after the colon.  This line must then
+// be followed by every line that does NOT begin with the above values (ie, any comment lines that
+// follow it).
+//
+// Once we have pushed 500000 lines to fileLines, we write them to files-#.csv and empty the array;
+// ditto for archiveLines, which is written to archives-#.csv.
 //
 
 let nFiles = 0;
@@ -84,14 +83,13 @@ let archiveName = "", archiveMode = false;
 let archiveID = 10000000, fileID = 20000000;
 let longestFileName = 0, longestArchiveName = 0, longestMethod = 0, longestMessage = 0;
 
-let iLine = 1;
+let iLine = 0;
 for (let line of lines) {
-
+    iLine++;
     let match = line.match(/^([a-z0-9-]{32}|),(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}|),(\d+|),(-?\d+|),(-?\d+|),([^,]+|),(.*)$/);
     if (match) {
         //
-        // The final capture group contains the path, messages, and comment, but all we need from it is the path,
-        // which may be quoted and may contain commas.
+        // The final capture group contains the remainder (ie, path, messages, and comment).
         //
         let hash = match[1];
         let modified = match[2];
@@ -102,39 +100,28 @@ for (let line of lines) {
         if (method.length > longestMethod) longestMethod = method.length;
         let fullPath, remainder = match[7];
         //
-        // TODO: This first match takes care of a bug in diskimage.js where it didn't properly
-        // quote the combination of parent and file (it only quoted file).
+        // This regex is intended to capture either a quoted OR unquoted path; note that either form is
+        // permitted to contain quotes (but only the '""' double-double-quote variety), and only the former
+        // is permitted to contain commas.
         //
-        match = remainder.match(/^([^":]+):"([^"]+)",(.*)$/);
-        if (match) {
-            fullPath = match[1] + ":" + match[2];
-            remainder = match[3];
+        // It also captures the remainder of the line, which becomes the new remainder (messages and comment).
+        //
+        let matchPath = remainder.match(/^(?:"(.*?[^"])",|([^,]*),)(.*)$/);
+        if (matchPath) {
+            //
+            // That regex always returns the first capture group in matchPath[1] and the second capture
+            // group in matchPath[2], and since they both can't be true, one of them will always be undefined.
+            //
+            fullPath = matchPath[1] || matchPath[2];
+            remainder = matchPath[3];
         } else {
-            match = remainder.match(/^"([^"]+)",(.*)$/);
-            if (match) {
-                fullPath = match[1];
-                remainder = match[2];
-            } else {
-                match = remainder.match(/^([^,]*),(.*)$/);
-                if (match) {
-                    fullPath = match[1];
-                    remainder = match[2];
-                } else {
-                    console.log(`unable to parse path in line ${iLine}: ${line}`);
-                }
-            }
+            console.log(`unable to parse path in line ${iLine}: ${line}`);
+            archiveMode = null;
+            continue;
         }
-        match = remainder.match(/^"([^"]+)"/);
-        if (match) {
-            let message = match[1];
-            if (message.length > longestMessage) longestMessage = message.length;
-        }
-        //
-        // Fix CSV output on archive-level (as opposed to entry-level) errors; diskimage.js should be fixed now,
-        // but this hack is for existing CSV files that have already been generated.
-        //
-        if (remainder.match(/^"[^"]*"$/)) {
-            remainder += ",";
+        let matchMessage = remainder.match(/^"([^"]+)"/);
+        if (matchMessage) {
+            if (matchMessage[1].length > longestMessage) longestMessage = matchMessage[1].length;
         }
         let archiveNext = fullPath.split(":")[0];
         if (archiveName != archiveNext) {
@@ -144,7 +131,7 @@ for (let line of lines) {
             // Before we push another line, if we've reached nMaxLines, let's write what we've got.
             //
             if (archiveLines.length >= nMaxLines) {
-                let archiveCSV = `archives${++nArchives}.csv`;
+                let archiveCSV = `archives-${++nArchives}.csv`;
                 console.log(`writing ${archiveCSV}...`);
                 fs.writeFileSync(archiveCSV, archiveLines.join("\n"));
                 archiveLines = [];
@@ -160,7 +147,12 @@ for (let line of lines) {
             archiveMode = true;
         }
         else if (fullPath == archiveName || fullPath.indexOf(':') < 0) {
-            console.log(`skipping line ${iLine}: ${line}`);
+            //
+            // We could try to update the original archiveLine with any new message info,
+            // but it's easier to just re-record the line with a different archiveID.
+            //
+            archiveLines.push(`${++archiveID},${fullPath},${remainder}`);
+            archiveMode = null;
         }
         else {
             let fileName = fullPath;
@@ -178,13 +170,13 @@ for (let line of lines) {
             // Before we push another line, if we've reached nMaxLines, let's write what we've got.
             //
             if (fileLines.length >= nMaxLines) {
-                let fileCSV = `files${++nFiles}.csv`;
+                let fileCSV = `files-${++nFiles}.csv`;
                 console.log(`writing ${fileCSV}...`);
                 fs.writeFileSync(fileCSV, fileLines.join("\n"));
                 fileLines = [];
             }
             //
-            // NOTE: While my original intention was to only include fileName (not fullPath) in files#.csv
+            // NOTE: While my original intention was to only include fileName (not fullPath) in files-#.csv
             // (because it wastes space), it's more convenient to have it all in one place... for now.
             //
             let name = fullPath;
@@ -201,7 +193,7 @@ for (let line of lines) {
     else {
         if (line.match(/^(warning: |error: )/)) {
             console.log(`skipping line ${iLine}: ${line}`);
-        } else {
+        } else if (archiveMode !== null) {
             if (!archiveMode) {
                 fileLines.push(line);
             } else {
@@ -209,17 +201,16 @@ for (let line of lines) {
             }
         }
     }
-    iLine++;
 }
 
 if (archiveLines.length) {
-    let archiveCSV = `archives${++nArchives}.csv`;
+    let archiveCSV = `archives-${++nArchives}.csv`;
     console.log(`writing ${archiveCSV}...`);
     fs.writeFileSync(archiveCSV, archiveLines.join("\n"));
 }
 
 if (fileLines.length) {
-    let fileCSV = `files${++nFiles}.csv`;
+    let fileCSV = `files-${++nFiles}.csv`;
     console.log(`writing ${fileCSV}...`);
     fs.writeFileSync(fileCSV, fileLines.join("\n"));
 }
