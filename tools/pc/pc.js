@@ -3727,7 +3727,7 @@ export default class PC extends PCJSLib {
                 "--disk=[filename]":        "use drive disk image (instead of directory)",
                 "--controller=[id]":        "set drive controller (XT, AT, COMPAQ, or PCJS)",
                 "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
-                "--fat=[value(s)]":         "set FAT type (12 or 16), cluster size, etc",
+                "--fat=[value(s)]":         "set FAT type (12 or 16) [:cluster size[:root size]]",
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
                 "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
