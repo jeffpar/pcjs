@@ -9,6 +9,14 @@
  * Overview
  * --------
  *
+ * Starting with a CSV file created by diskimage.js; eg:
+ *
+ *      diskimage.js --all="*.{ZIP,ARC}" --list=csv > archives.csv
+ *
+ * this splits that CSV file into two smaller sets of files (archives-#.csv and files-#.csv),
+ * making it easier to import the data into "archives" and "files" tables in a MySQL "software"
+ * database.
+ *
  * Every line of the input CSV (well, that we care about) should have the following fields:
  *
  *      hash,modified,attr,size,compressed,method,path,messages,comment
