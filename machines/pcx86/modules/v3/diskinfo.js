@@ -2492,13 +2492,13 @@ export default class DiskInfo {
         } else {
             let iExt = sName.lastIndexOf('.');
             let sExt = "";
-                if (iExt >= 0) {
+            if (iExt >= 0) {
                 sExt = sName.substr(iExt+1);
                 sName = sName.substr(0, iExt);
             } else if (fLabel && sName.length > 8) {
                 sExt = sName.substr(8);
             }
-            sName = sName.substr(0, 8).trimEnd();
+            sName = sName.substr(0, 8).trimEnd().replace(/\./g, "");
             if (uniqueID) {
                 let suffix = "~" + uniqueID;
                 sName = sName.substr(0, 8 - suffix.length) + suffix;
@@ -2914,7 +2914,17 @@ export default class DiskInfo {
                     for (let i = 0; i < files.length; i++) {
                         let file = files[i];
                         if (file.cluster) {
-                            clusterInfo[file.cluster] = {origin: file.path, contents: [...file.data.buffer]};
+                            //
+                            // NOTE: This code previously initialized 'contents' with:
+                            //
+                            //      [...file.data.buffer]
+                            //
+                            // to produce an array of numbers.  However, when dealing with large files (eg, 300Mb),
+                            // this can cause memory allocation problems for Node.  However, it *appears* to me that
+                            // all the consumers of 'contents' use the DataBuffer constructor, which accepts buffers
+                            // as well as arrays, so this conversion no longer seems necessary.  Fingers crossed.
+                            //
+                            clusterInfo[file.cluster] = {origin: file.path, contents: file.data.buffer};
                         }
                         if (file.files) scanFiles(file.files);
                     }
@@ -3297,17 +3307,17 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileListing(iVolume, indent, options)
+     * getFileListing(iVolume, indent, listing)
      *
-     * If options is something other than "sorted" or "metadata", then it's assumed to be a file specification.
+     * If listing is something other than "dir", "sorted", or "metadata", then it's assumed to be a file specification.
      *
      * @this {DiskInfo}
      * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
      * @param {number} [indent]
-     * @param {boolean|string} [options]
+     * @param {string} [listing]
      * @returns {string}
      */
-    getFileListing(iVolume = -1, indent = 0, options)
+    getFileListing(iVolume = -1, indent = 0, listing)
     {
         let sListing = "";
         if (this.buildTables() > 0) {
@@ -3318,7 +3328,7 @@ export default class DiskInfo {
                 nVolumes = 1;
             }
             let sIndent = " ".repeat(indent);
-            let fileSpec = (typeof options == "string" && options != "sorted" && options != "metadata")? new RegExp("^" + options.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
+            let fileSpec = (listing != "dir" && listing != "sorted" && listing != "metadata")? new RegExp("^" + listing.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
             while (iVolume < this.volTable.length && nVolumes-- > 0) {
                 let vol = this.volTable[iVolume];
                 let curVol = -1;
@@ -3330,7 +3340,7 @@ export default class DiskInfo {
                 }.bind(this);
                 let i, sLabel = "", sDrive = "?";
                 let fileTable = this.fileTable;
-                if (options == "sorted") {
+                if (listing == "sorted") {
                     fileTable = this.fileTable.slice(0);
                     fileTable.sort(function(a, b) {
                         /*
@@ -3366,14 +3376,13 @@ export default class DiskInfo {
                          * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
                          */
                         sLabel = file.name;
-                        break;
                     }
                 }
                 for (i = 0; i < fileTable.length && fileMatch; i++) {
                     let file = fileTable[i];
                     if (file.iVolume != iVolume) continue;
                     if (file.attr & DiskInfo.ATTR.VOLUME) continue;
-                    if ((file.attr & DiskInfo.ATTR.METADATA) && options != "metadata") continue;
+                    if ((file.attr & DiskInfo.ATTR.METADATA) && listing != "metadata") continue;
                     if (curVol != file.iVolume) {
                         let vol = this.volTable[file.iVolume];
                         sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
@@ -3454,7 +3463,7 @@ export default class DiskInfo {
                 iVolume++;
             }
             if (!sListing && fileSpec) {
-                sListing = "file not found: " + options + "\n";
+                sListing = "file not found: " + listing + "\n";
             }
         }
         return sListing;

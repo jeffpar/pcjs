@@ -397,12 +397,14 @@ export default class StreamZip extends events.EventEmitter {
             this.centralDirectory.read(buffer.slice(pos, pos + StreamZip.CentralEndHeader.getSize()));
             this.centralDirectory.headerOffset = this.op.win.position + pos;
             if (this.centralDirectory.commentLength) {
-                this.comment = buffer
-                    .slice(
-                        pos + StreamZip.CentralEndHeader.getSize(),
-                        pos + StreamZip.CentralEndHeader.getSize() + this.centralDirectory.commentLength
-                    )
-                    .toString();
+                //
+                // Return a Buffer instead of a String, because a generic toString() call assumes
+                // the data is UTF-8, and in the case of old ZIP files, it's almost invariably CP437.
+                //
+                this.comment = buffer.slice(
+                    pos + StreamZip.CentralEndHeader.getSize(),
+                    pos + StreamZip.CentralEndHeader.getSize() + this.centralDirectory.commentLength
+                ) /* .toString() */;
             } else {
                 this.comment = null;
             }
@@ -876,7 +878,7 @@ export default class StreamZip extends events.EventEmitter {
                 if (this.arcType == StreamZip.TYPE_ARC) {
                     let crc = LegacyArc.getCRC(dst);
                     if (crc != entry.crc) {
-                        entry.error("expected CRC 0x" + entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                        entry.error("expected CRC " + entry.crc.toString(16) + ", received " + crc.toString(16));
                     }
                 } else {
                     if (this.canVerifyCRC(entry)) {
@@ -1244,7 +1246,7 @@ export default class StreamZip extends events.EventEmitter {
             errors++;
         }
         if (errors && entry) {
-            entry.warning("invalid date/time " + JSON.stringify(orig));
+            entry.warning("invalid date/time " + '(' + (orig.m+1) + '/' + orig.d + '/' + orig.y + ' ' + orig.h + ':' + (orig.n < 10? '0' : '') + orig.n + ':' + (orig.s < 10? '0' : '') + orig.s + ')');
         }
         if (fLocal) {
             return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
@@ -1461,8 +1463,9 @@ class Entry
     // eslint-disable-next-line require-jsdoc
     validateName()
     {
-        if ((/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/).test(this.name)) {
-            this.error("invalid filename");
+        let match = this.name.match(/\\|^\w+:|^\/|(^|\/)\.\.(\/|$)/);
+        if (match) {
+            this.warning("unexpected filename character(s) (" + match[0] + ")");
         }
     }
 
@@ -1575,7 +1578,11 @@ class ZipEntry extends Entry
             this.getEntryExtra(data, offset);
             offset += this.extraLen;
         }
-        this.comment = this.comLen? data.slice(offset, offset + this.comLen).toString() : null;
+        //
+        // Return a Buffer instead of a String, because a generic toString() call assumes
+        // the data is UTF-8, and in the case of old ZIP files, it's almost invariably CP437.
+        //
+        this.comment = this.comLen? data.slice(offset, offset + this.comLen) /* .toString() */ : null;
     }
 
     // eslint-disable-next-line require-jsdoc
@@ -1908,7 +1915,7 @@ class CRCVerify
                 this.entry.error("expected " + this.entry.size + " bytes, received " + this.state.size);
             }
             else if (~this.state.crc !== this.entry.crc) {
-                this.entry.error("expected CRC 0x" + this.entry.crc.toString(16) + ", received 0x" + crc.toString(16));
+                this.entry.error("expected CRC " + this.entry.crc.toString(16) + ", received " + crc.toString(16));
             }
         }
     }

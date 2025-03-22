@@ -111,11 +111,11 @@ Unfortunately, I quickly discovered that *zlib* could not decompress the content
 
 Here's an example of `--zip` in action:
 
-    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --list
 
     DiskImage v3.00
     Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
-    Options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --verbose
+    Options: --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --output=DISK0042.json --list
     reading: /Volumes/PCSIG_13B/BBS/DISK0042.ZIP
 
     Filename        Length   Method      Size  Ratio   Date       Time       CRC
@@ -132,17 +132,17 @@ Here's an example of `--zip` in action:
     processing DISK0042: 327680 bytes (checksum -1217186896, hash bba045788185bc8284f5e4cde0929b70)
     writing DISK0042.json...
 
-The `--verbose` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
+The `--list` option generates the `PKZIP`-style file listing, displaying the individual file names, compressed and uncompressed file sizes, compression ratio, etc.
 
 In fact, creating a disk image is entirely optional; you can use `diskimage.js` to simply examine the contents of `ZIP` file:
 
-    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --verbose
+    diskimage.js --zip=/Volumes/PCSIG_13B/BBS/DISK0042.ZIP --list
 
 To simplify dealing with large collections of files, I also added an `--all` option:
 
-    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --verbose
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --list
 
-That command will locate *all* matching `ZIP` files and process each one with any other options you specify (eg, `--verbose` to display their contents).  `--all` also supports file extensions `JSON` and `IMG`; `--disk` is assumed for any file ending with one of those extensions, whereas `--zip` is assumed for any file ending with a `ZIP` extension.
+That command will locate *all* matching `ZIP` files and process each one with any other options you specify (eg, `--list` to display their contents).  `--all` also supports file extensions `JSON` and `IMG`; `--disk` is assumed for any file ending with one of those extensions, whereas `--zip` is assumed for any file ending with a `ZIP` extension.
 
 If you want to create a disk image for every `ZIP` file:
 

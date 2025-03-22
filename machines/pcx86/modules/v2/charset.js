@@ -36,9 +36,10 @@ export default class CharSet {
             } else {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
-            if (c < CharSet.CP437.length && (c >= 32 || translateControl)) {
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 10 && c != 13 && c != 26)) {
                 u += CharSet.CP437[c];
             } else {
+                if (translateControl && c == 26) break;
                 u += String.fromCharCode(c);
             }
         }

@@ -3274,6 +3274,89 @@
 				}
 			}
 		},
+		"ucsd": {
+			"@title": "UCSD p-System",
+			"fortran": {
+				"@title": "UCSD p-System with Fortran",
+				"@versions": {
+					"iv": {
+						"@title": "UCSD p-System IV with Fortran",
+						"@media": [
+							{
+								"@title": "UCSD Fortran Disk 1 (STARTUP)",
+								"@diskette": "UCSD-PSYS-IV-STARTUP.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Fortran Disk 2 (SYSTEM2)",
+								"@diskette": "UCSD-PSYS-IV-SYSTEM2.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Fortran Disk 3 (UTILITY)",
+								"@diskette": "UCSD-PSYS-IV-UTILITY.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Fortran Disk 4 (SYSTEM4)",
+								"@diskette": "UCSD-PSYS-IV-SYSTEM4.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Fortran Disk 5 (EXTRAS)",
+								"@diskette": "UCSD-PSYS-IV-EXTRAS.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Fortran Disk 6 (FORTRAN)",
+								"@diskette": "UCSD-PSYS-IV-FORTRAN.json",
+								"@format": "PC160K"
+							}
+						]
+					}
+				}
+			},
+			"pascal": {
+				"@title": "UCSD p-System with Pascal",
+				"@versions": {
+					"iv": {
+						"@title": "UCSD p-System IV with Pascal",
+						"@media": [
+							{
+								"@title": "UCSD Pascal Disk 1 (STARTUP)",
+								"@diskette": "UCSD-PSYS-IV-STARTUP.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Pascal Disk 2 (SYSTEM2)",
+								"@diskette": "UCSD-PSYS-IV-SYSTEM2.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Pascal Disk 3 (UTILITY)",
+								"@diskette": "UCSD-PSYS-IV-UTILITY.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Pascal Disk 4 (SYSTEM4)",
+								"@diskette": "UCSD-PSYS-IV-SYSTEM4.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Pascal Disk 5 (EXTRAS)",
+								"@diskette": "UCSD-PSYS-IV-EXTRAS.json",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "UCSD Pascal Disk 6 (PASCAL)",
+								"@diskette": "UCSD-PSYS-IV-PASCAL.json",
+								"@format": "PC160K"
+							}
+						]
+					}
+				}
+			}
+		},
 		"unix": {
 			"@title": "UNIX",
 			"ibm": {

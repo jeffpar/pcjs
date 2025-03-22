@@ -114,8 +114,8 @@ function createDisk(diskFile, diskette, argv, done)
         let password = argv['password'];
         let normalize = diskette.normalize || argv['normalize'];
         let target = diskLib.getTargetValue(diskette.format);
-        let verbose = argv['verbose'];
-        diskLib.readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, verbose, driveInfo, done);
+        let listing = argv['list'];
+        diskLib.readDir(sArchiveFile, arcType, arcOffset, label, password, normalize, target, undefined, listing, driveInfo, done);
     } else {
         done(diskLib.readDiskSync(sArchiveFile, false, driveInfo));
     }
@@ -143,24 +143,29 @@ function createDriveInfo(argv, diskette)
             driveInfo.nSectors = +match[3];
             driveInfo.cbSector = +match[4] || 512;
             if (argv['partitioned'] !== undefined) {
-                driveInfo.fPartitioned = !!argv['partitioned'];
+                driveInfo.partitioned = !!argv['partitioned'];
             } else {
-                driveInfo.fPartitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
+                driveInfo.partitioned = (driveInfo.nCylinders * driveInfo.nHeads * driveInfo.nSectors * driveInfo.cbSector >= DiskInfo.MIN_PARTITION);
             }
         } else {
             match = typeDrive.match(/^([A-Z]+|):?([0-9]+)$/i);
             if (match) {
-                let driveCtrl = match[1] || driveInfo.driveCtrl || "XT";
+                let driveCtrl = match[1].toUpperCase() || driveInfo.driveCtrl || "XT";
                 let driveType = +match[2];
                 if (DiskInfo.validateDriveType(driveCtrl, driveType)) {
                     driveInfo.driveCtrl = driveCtrl;
                     driveInfo.driveType = driveType;
-                } else {
-                    match = null;
                 }
             }
+            else if (typeDrive == "custom") {
+                //
+                // We'll signal to findDriveType() that it should calculate a disk geometry and hope for the best.
+                //
+                driveInfo.driveCtrl = "PCJS";
+                driveInfo.partitioned = true;
+            }
         }
-        if (!match) {
+        if (!driveInfo.driveCtrl) {
             printf("unrecognized drive type: %s\n", typeDrive);
         }
     }
@@ -220,7 +225,8 @@ function dumpSector(di, sector, offset = 0, limit = -1)
  */
 function printFileDesc(diskFile, diskName, desc)
 {
-    printf("%-32s  %-12s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskName + ':' + desc[DiskInfo.FILEDESC.PATH]);
+    printf("%-32s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskFile + ':' + desc[DiskInfo.FILEDESC.PATH]);
+    // printf("%-32s  %-12s  %s  %#05x %7d  %s\n", desc[DiskInfo.FILEDESC.HASH] || "-".repeat(32), desc[DiskInfo.FILEDESC.NAME], desc[DiskInfo.FILEDESC.DATE], +desc[DiskInfo.FILEDESC.ATTR], desc[DiskInfo.FILEDESC.SIZE] || 0, diskFile + ':' + desc[DiskInfo.FILEDESC.PATH]);
 }
 
 /**
@@ -262,10 +268,17 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    if (argv['all'] || argv['collection'] || argv['verbose']) {
-        printf("processing: %s (%d bytes, hash %s)\n", di.getName(), di.getSize(), di.getHash());
+    if (argv['all'] || argv['collection']) {
+        if (!argv['verbose']) {
+            printf("processing: %s\n", diskFile);
+        } else {
+            printf("processing: %s (%d bytes, hash %s)\n", diskFile /* di.getName() */, di.getSize(), di.getHash());
+        }
     }
 
+    //
+    // TODO: Document the --file option
+    //
     let sFindName = argv['file'];
     if (typeof sFindName == "string") {
         let sFindText = argv['find'];
@@ -275,7 +288,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
          */
         let desc = di.findFile(sFindName, sFindText);
         if (desc) {
-            printFileDesc(di.getName(), desc);
+            printFileDesc(diskFile, di.getName(), desc);
             if (argv['index']) {
                 /**
                  * We cheat and search for matching hash values in the provided index; this is much faster than
@@ -324,10 +337,11 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     }
 
     if (argv['list']) {
+        let listing = argv['list'];
         let sLines = "";
         let iVolume = +argv['volume'];
         if (isNaN(iVolume)) iVolume = -1;
-        if (argv['list'] == "unused") {
+        if (listing == "unused") {
             let lba = -1;
             while ((lba = di.getUnusedSector(iVolume, lba)) >= 0) {
                 let sector = di.getSector(lba);
@@ -355,13 +369,16 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
                 sLines += dumpSector(di, sector, offset);
             }
             if (!sLines) sLines = "no unused data space on disk";
-        } else {
-            /**
-             * Other --list options include: "metadata", "sorted"
-             */
-            sLines = di.getFileListing(iVolume, 0, argv['list']) || "\tno listing available\n";
         }
-        printf("%s\n", sLines);
+        else if (listing != "archive" && listing != "csv") {
+            /**
+             * "dir" is implied if no other listing option (eg, "metadata", "sorted") is specified.
+             */
+            let listing = argv['list'];
+            if (typeof listing != "string") listing = "dir";
+            sLines = di.getFileListing(iVolume, 0, listing) || "\tno listing available\n";
+        }
+        if (sLines) printf("%s\n", sLines);
     }
 
     /**
@@ -382,7 +399,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (typeof extractDir != "string") {
             extractDir = "";
         } else if (diskFile.indexOf("http") != 0) {
-            extractDir = extractDir.replace("%d", path.dirname(diskFile));
+            extractDir = extractDir.replace("%d", path.dirname(diskFile)).replace("%f", di.getName());
         }
         let extractName = "", extractFolder = "";
         if (fExtractAll) {
@@ -1047,7 +1064,7 @@ function processAll(all, argv)
                 if (outdir) {
                     args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 }
-                for (let arg of ['list', 'expand', 'extract', 'extdir', 'normalize', 'overwrite', 'quiet', 'verbose']) {
+                for (let arg of ['drivetype', 'expand', 'extdir', 'extract', 'list', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processArgs(args);
@@ -1150,7 +1167,11 @@ function processArgs(argv, fSingle = false)
             printf("error: %s is not a supported archive file\n", input);
             return true;
         }
-        diskLib.readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], diskLib.getTargetValue(argv['target']), +argv['maxfiles'] || 0, argv['verbose'], driveInfo, done);
+        let listing = argv['list'];
+        if (listing === true) {
+            argv['list'] = arcType? "archive" : "dir";
+        }
+        diskLib.readDir(input, arcType, offset, argv['label'], argv['password'], argv['normalize'], diskLib.getTargetValue(argv['target']), +argv['maxfiles'] || 0, listing, driveInfo, done);
         return true;
     }
 
@@ -1177,7 +1198,7 @@ function processArgs(argv, fSingle = false)
  * want a particular boot sector, use --boot=[sector image file].
  *
  * You can also use the contents of a ZIP archive as your input source with --zip=[zipfile]; ditto for
- * ARC files using --arc=[arcfile].  To also print a listing of an archive's contents, include --verbose.
+ * ARC files using --arc=[arcfile].  To also print a listing of an archive's contents, include --list=archive.
  *
  * Use --all to process all files that match the "globbed" filespec (eg, "--all='/Volumes/PCSIG_13B/*.ZIP'");
  * when using --all, --output can be used to specify an output directory, and --type can be used to specify
@@ -1201,7 +1222,7 @@ function main(argc, argv)
 
     Device.DEBUG = !!argv['debug'];
 
-    if (!argv['quiet']) {
+    if (!argv['quiet'] && argv['list'] != "csv") {
         printf("DiskImage v%s\n%s\n%s\n", Device.VERSION, Device.COPYRIGHT, (options? sprintf("Options: %s", options) : ""));
     }
 
@@ -1222,11 +1243,11 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
-            "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
+            "--drivetype=[value]":      "set drive type (eg, AT:1 or C:H:S or \"custom\")",
             "--extdir=[directory]":     "write extracted files to directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
-            "--fat=[number]":           "\tset hard disk FAT type (12 or 16)",
+            "--fat=[n:c:r]":            "\tset FAT, cluster, and root sizes",
             "--output=[diskimage]":     "write disk image (.img or .json)",
             "--target=[nK|nM]":         "set target disk size (eg, \"360K\", \"10M\")",
             "--type[=filename]":        "extract text file(s) to console",
@@ -1235,13 +1256,12 @@ function main(argc, argv)
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
             "--expand (-x)\t":          "expand all archives inside disk or archive",
             "--label=[label]\t":        "set volume label of output disk image",
-            "--list (-l)\t":            "display directory listings of disk or archive",
-            "--list=unused\t":          "display unused space in disk image (.json only)",
+            "--list[=option]\t":        "listing option (dir, archive, unused, sorted, metadata)",
             "--normalize\t":            "convert line endings and character encoding of text files",
             "--partitioned (-p)":       "force partitioned disk image",
             "--password=[string]":      "use password for decompression (ARC files only)",
             "--quiet (-q)\t":           "minimum messages",
-            "--verbose (-v)\t":         "maximum messages (eg, display archive contents)"
+            "--verbose (-v)\t":         "maximum messages"
         };
         let optionGroups = {
             "Input options:":           optionsInput,
@@ -1255,8 +1275,8 @@ function main(argc, argv)
                 printf("\t%s\t%s\n", option, optionGroups[group][option]);
             }
         }
-        printf("\nOptions --extdir and --output support \"%d\", which will be replaced with the input disk directory.\n");
-        printf("Option values can be enclosed in single or double quotes (eg, if they contain whitespace or wildcards).\n");
+        printf("\nEnclose option values in quotes if they contain whitespace or wildcards.\n");
+        printf("Options --extdir and --output can use %d and %f for input directory and file.\n");
         return;
     }
 

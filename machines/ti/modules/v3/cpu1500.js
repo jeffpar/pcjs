@@ -1645,7 +1645,7 @@ export default class CPU1500 extends CPU {
             }
             this.fINV = fINV;
         }
-        let angleBits = (this.type == CPU1500.TYPE.TMS1501? (this.regsX[4].digits[15] >> 2) : this.regC.digits[15]);
+        let angleBits = (this.type == CPU1500.TYPE.TMS1501? (this.regsX[4].digits[15] >> 2) : (this.regC.digits[15] & 3));
         let angleMode = on? ((!angleBits)? CPU1500.ANGLEMODE.DEGREES : (angleBits == 1)? CPU1500.ANGLEMODE.RADIANS : CPU1500.ANGLEMODE.GRADIENTS) : CPU1500.ANGLEMODE.OFF;
         if (this.angleMode !== angleMode) {
             if ((element = this.bindings['Deg'])) {

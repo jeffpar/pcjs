@@ -42,7 +42,8 @@ export default class DiskLib {
      */
     static asTextFileExts = [
         ".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF",
-        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", "."
+        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", ".",
+        ".NFO", ".DIZ"
     ];
 
     /**
@@ -192,6 +193,17 @@ export default class DiskLib {
     extractFile(sDir, subDir, sPath, attr, date, db, argv, allowExpand, allowHidden, files)
     {
         /**
+         * File systems don't generally provide unnamed files, but unfortunately, ZIP/ARC files can
+         * can contain all sorts of crap, including nameless files.  If the length is zero, we'll silently
+         * skip it, otherwise we'll print a warning.
+         */
+        if (!sPath) {
+            if (db.length) {
+                this.printf("warning: skipping %d-byte unnamed file\n", db.length);
+            }
+            return 0;
+        }
+        /**
          * OS X / macOS loves to scribble bookkeeping data on any read-write diskettes or diskette images that
          * it mounts, so if we see any of those remnants (which we use to limit to "(attr & DiskInfo.ATTR.HIDDEN)"
          * but no longer assume they always will hidden), then we ignore them.
@@ -260,7 +272,7 @@ export default class DiskLib {
                         printfDebug: diskLib.printf,
                         holdErrors: true
                     }).on('ready', () => {
-                        let aFileData = diskLib.getArchiveFiles(zip, null, date, argv['verbose']);
+                        let aFileData = diskLib.getArchiveFiles(zip, null, date, argv['list']);
                         for (let file of aFileData) {
                             let t = diskLib.extractFile(sDir, sFile, file.path, file.attr, file.date, file.data, argv, true, false, file.files);
                             if (t < 0) break;
@@ -666,7 +678,7 @@ export default class DiskLib {
     }
 
     /**
-     * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo, done)
+     * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo, done)
      *
      * @this {DiskLib}
      * @param {string} sDir (directory name)
@@ -677,15 +689,13 @@ export default class DiskLib {
      * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
      * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
      * @param {number} [nMax] (maximum number of files to read; default is 256)
-     * @param {boolean} [verbose] (true for verbose output)
+     * @param {string|boolean} [listing] (listing options, if any)
      * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @param {function(DiskInfo)} [done] (optional function to call on completion)
      */
-    readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, verbose, driveInfo = {}, done)
+    readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo = {}, done)
     {
-        let di;
         let diskLib = this;
-
         /**
          * There are two special label strings you can pass on the command-line:
          *
@@ -702,7 +712,6 @@ export default class DiskLib {
             sLabel = DiskInfo.PCJS_LABEL;
             dateLabel = new Date(1989, 8, 27, 3, 0, 0);
         }
-
         let diskName = node.path.basename(sDir);
         if (sDir.endsWith('/')) {
             if (sLabel == undefined) {
@@ -718,9 +727,89 @@ export default class DiskLib {
              * When we're given a list of files, we don't pick a default label; use --label if you want one.
              */
         }
-
         sDir = this.getLocalPath(sDir);
+
+        let printCSV = function(parent, files) {
+            for (let file of files) {
+                let db = file.data;
+                let hash = db && db.length? diskLib.getHash(db) : "--------------------------------";
+                let modified = diskLib.sprintf("%T", file.date);
+                let attr = file.attr;
+                let size = file.size;
+                let compressedSize = file.compressedSize || size;
+                let method = file.method || "None";
+                let path = parent + ':' + (file.path[0] != '/'? '/' : '') + file.path;
+                //
+                // Why do we have to remove CRs from filenames?  Just ask "ibm3240-3249/ibm3247/PGCMS101.ZIP/MileageSaver.zip"...
+                //
+                path = path.replace(/\r/g, '');
+                if (path.indexOf('"') >= 0) {
+                    path = path.replace(/"/g, '""');
+                }
+                if (path.indexOf(',') >= 0) {
+                    path = '"' + path + '"';
+                }
+                let messages = "";
+                if (file.messages) {
+                    for (let message of file.messages) {
+                        if (messages) messages += "; ";
+                        messages += message.replace(/^(warning|error): [^ ]*:?\s*/, "");
+                    }
+                    messages = '"' + messages.replace(/"/g, '""') + '"';
+                }
+                let comment = "";
+                if (file.comment) {
+                    comment = '"' + file.comment.replace(/"/g, '""').replace(/\r/g, '') + '"';
+                }
+                diskLib.printf("%s,%s,%d,%d,%d,%s,%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, path, messages, comment);
+                if (file.files) {
+                    printCSV(parent, file.files);
+                } else {
+                    let arcType = diskLib.isArchiveFile(file.path);
+                    if (arcType) {
+                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                            /**
+                             * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
+                             */
+                            arcType = node.StreamZip.TYPE_ARC;
+                            diskLib.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
+                        }
+                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
+                            // db = db.slice(0, db.length - 4);
+                            if (listing != "csv") {
+                                diskLib.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
+                            }
+                        }
+                        let zip = new node.StreamZip({
+                            file: file.path,
+                            // password: argv['password'],
+                            buffer: db.buffer,
+                            arcType: arcType,
+                            storeEntries: true,
+                            nameEncoding: "ascii",
+                            printfDebug: diskLib.printf,
+                            holdErrors: true
+                        }).on('ready', () => {
+                            let aFileData = diskLib.getArchiveFiles(zip, null, file.date, listing);
+                            printCSV(parent + '/' + file.path, aFileData);
+                            zip.close();
+                        }).on('error', (err) => {
+                            diskLib.printf(",,,,,,\"%s\",\"%s\",\n", parent + '/' + file.path, err.message);
+                        });
+                        zip.open();
+                    }
+                }
+            }
+        };
+
         let readDone = function(aFileData) {
+            if (listing == "csv") {
+                /**
+                 * We're not going to create a disk in this case, just display detailed information about the files.
+                 */
+                printCSV(sDir, aFileData);
+                return;
+            }
             if (aFileData) {
                 let db = new DataBuffer();
                 let di = new DiskInfo(diskLib.device);
@@ -753,12 +842,15 @@ export default class DiskLib {
             }
             done();
         };
+        if (listing === true) {
+            listing = arcType? "archive" : "dir";
+        }
         try {
             this.nMaxInit = this.nMaxCount = nMax || this.nMaxDefault;
             if (!arcType) {
                 this.readDirFiles(sDir, sLabel, dateLabel, fNormalize, 0, driveInfo, readDone);
             } else {
-                this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, verbose, readDone);
+                this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, listing || "", readDone);
             }
         } catch(err) {
             this.printError(err);
@@ -907,21 +999,35 @@ export default class DiskLib {
     }
 
     /**
-     * getArchiveFiles(zip, sLabel, date, verbose)
+     * getArchiveFiles(zip, sLabel, date, listing)
      *
      * @this {DiskLib}
      * @param {StreamZip} zip
      * @param {string} [sLabel]
      * @param {Date} [date]
-     * @param {boolean} [verbose]
+     * @param {string} [listing]
      * @returns {Array.<FileData>}
      */
-    getArchiveFiles(zip, sLabel, date, verbose = false)
+    getArchiveFiles(zip, sLabel, date, listing)
     {
         let aFiles = [];
-        if (verbose) {
-            this.printf("reading: %s\n\n", zip.fileName);
-            this.printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+        let comment = "";
+        if (zip.comment) {
+            //
+            // TODO: We shouldn't be calling fromCP437() unless --normalize is specified,
+            // and we should perhaps suppress comments entirely unless --verbose is specified.
+            //
+            // WARNING: Comments can be multi-line and we do not normalize the line-endings
+            // (they are typically CR/LF).
+            //
+            comment = CharSet.fromCP437(zip.comment, true);
+        }
+        if (listing == "archive") {
+            this.printf("\nreading: %s\n", zip.fileName);
+            if (comment) {
+                this.printf("%s\n", comment.trimEnd());
+            }
+            this.printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
             this.printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
         }
         let messages = "";
@@ -929,12 +1035,20 @@ export default class DiskLib {
 
         if (sLabel) {
             let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date, size: 0};
+            //
+            // We attach any archive comment to the label entry, which never actually exists in an archive.
+            //
+            if (comment) {
+                file.comment = comment;
+            }
             aFiles.push(file);
         }
 
         for (let entry of entries) {
 
-            let file = {path: entry.name, name: node.path.basename(entry.name), nameEncoding: "cp437"};
+            let path = entry.name.replace(/:/g, '_');
+            let name = node.path.basename(path);
+            let file = {path, name, nameEncoding: "cp437"};
             /**
              * The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
              * because file times stored in a ZIP file are *local* times.
@@ -955,7 +1069,11 @@ export default class DiskLib {
              */
             let files = aFiles, subDir = "";
             let sep = file.path.indexOf('/') >= 0? '/' : '\\';
-            let dirs = (entry.isDirectory? file.path : node.path.dirname(file.path)).split(sep);
+            let dirs = file.path.split(sep);
+            if (!entry.isDirectory) {
+                file.path = dirs.join(node.path.sep);
+                file.name = dirs.pop();
+            }
             for (let dir of dirs) {
                 if (!dir || dir == '.') continue;
                 subDir += dir + '/';
@@ -966,54 +1084,67 @@ export default class DiskLib {
                 }
                 files = file.files;
             }
+            /**
+             * Notes regarding ARC compression method "naming conventions":
+             *
+             * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
+             * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
+             * distinct from Method8 which it called "Crunched" (with an upper-case "C").
+             *
+             * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
+             * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
+             * "dynamic" LZW compression.
+             *
+             * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
+             * squarely between "Crunch" and "Squash".
+             */
+            const methodsARC = [
+                "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
+            ];
+            /**
+             * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
+             * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
+             * of PC-SIG 9th edition ZIP files.
+             */
+            const methodsZIP = [
+                "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
+            ];
+            let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
+            if (entry.encrypted) method += '*';
             if (!entry.isDirectory) {
                 /**
-                 * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
+                 * HACK to skip decompression for all entries except a named entry.
                  */
                 let data;
-                if (typeof verbose == "string" && (verbose == "skip" || verbose != entry.name)) {
-                    data = new DataBuffer(entry.size);
-                }
-                else {
+                if (!listing || listing == "archive" || listing == "csv" || listing == entry.name) {
                     data = zip.entryDataSync(entry.name);
                     data = new DataBuffer(data || 0);
+                } else {
+                    data = new DataBuffer(entry.size);
                 }
                 file.attr = DiskInfo.ATTR.ARCHIVE;
                 file.size = data.length;
                 file.data = data;
+                //
+                // For archives, we're going to supplement the file object with some additional information.
+                //
+                file.method = method;
+                file.compressedSize = entry.compressedSize;
+                file.crc = entry.crc;
+                if (entry.comment) {
+                    file.comment = CharSet.fromCP437(entry.comment, true);
+                }
+                if (entry.messages && entry.messages.length) {
+                    file.messages = entry.messages;
+                }
                 files.push(file);
             }
-            if (entry.messages && entry.messages.length) {
-                for (let message of entry.messages) {
-                    messages += message + "\n";
+            if (listing == "archive") {
+                if (entry.messages && entry.messages.length) {
+                    for (let message of entry.messages) {
+                        messages += message + "\n";
+                    }
                 }
-            }
-            if (verbose) {
-                /**
-                 * Notes regarding ARC compression method "naming conventions":
-                 *
-                 * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
-                 * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
-                 * distinct from Method8 which it called "Crunched" (with an upper-case "C").
-                 *
-                 * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
-                 * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
-                 * "dynamic" LZW compression.
-                 *
-                 * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
-                 * squarely between "Crunch" and "Squash".
-                 */
-                let methodsARC = [
-                    "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
-                ];
-                /**
-                 * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
-                 * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
-                 * of PC-SIG 9th edition ZIP files.
-                 */
-                let methodsZIP = [
-                    "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
-                ];
                 let filename = CharSet.fromCP437(file.name);
                 if (filename.length > 14) {
                     filename = "..." + filename.slice(filename.length - 11);
@@ -1023,13 +1154,22 @@ export default class DiskLib {
                     filesize = 0;
                     filename += node.path.sep;
                 }
-                let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
-                if (entry.encrypted) method += '*';
+                if (!filename) {
+                    filename = "[NoName]";
+                }
                 let ratio = filesize > entry.compressedSize? Math.round(100 * (filesize - entry.compressedSize) / filesize) : 0;
                 if (entry.errors) filesize = -1;
                 if (!Device.DEBUG) {
-                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc);
+                    let text = "";
+                    if (entry.comment) {
+                        //
+                        // WARNING: Comments can be multi-line and we do not normalize the line-endings
+                        // (they are typically CR/LF).
+                        //
+                        text = "  <" + CharSet.fromCP437(entry.comment, true) + ">";
+                    }
+                    this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
+                        filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, text);
                 } else {
                     this.printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %#010x\n",
                         filename, filesize, method, entry.compressedSize, ratio, file.date, zip.arcType == node.StreamZip.TYPE_ARC? 4 : 8, entry.crc, entry.offset);
@@ -1037,7 +1177,7 @@ export default class DiskLib {
             }
         }
         if (messages) this.printf("%s", messages);
-        if (verbose) this.printf("\n");
+        if (listing == "archive") this.printf("\n");
         return aFiles;
     }
 
@@ -1048,6 +1188,8 @@ export default class DiskLib {
      * K is assumed, whereas M will automatically produce a Kb value equal to the specified Mb value (eg, 10M is
      * equivalent to 10240K).
      *
+     * If neither K nor M is specified AND the value is "large" (more than 1M), it's automatically converted to Kb.
+     *
      * @this {DiskLib}
      * @param {string} sTarget
      * @returns {number} (target Kb for disk image, 0 if no target)
@@ -1056,11 +1198,15 @@ export default class DiskLib {
     {
         let target = 0;
         if (sTarget) {
-            let match = sTarget.match(/^(PC|)([0-9.]+)([KM]*)/i);
+            let match = sTarget.match(/^(PC|)([0-9.]+)(K|M|)$/i);
             if (match) {
                 target = +match[2];
-                if (match[3].toUpperCase() == 'M') {
+                let multiplier = match[3].toUpperCase();
+                if (multiplier == 'M') {
                     target *= 1024;
+                }
+                else if (!multiplier && target >= 1000000) {
+                    target = Math.round(target / 1024);
                 }
             }
         }
@@ -1068,7 +1214,7 @@ export default class DiskLib {
     }
 
     /**
-     * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
+     * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
      *
      * @this {DiskLib}
      * @param {string} sArchive (ARC/ZIP filename)
@@ -1076,10 +1222,10 @@ export default class DiskLib {
      * @param {number} arcOffset (0 if none)
      * @param {string} sLabel (optional volume label)
      * @param {string} sPassword (optional password)
-     * @param {boolean} verbose (true to display verbose output, false to display minimal output)
+     * @param {string} listing (listing options, if any)
      * @param {function(Array.<FileData>)} done
      */
-    readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbose, done)
+    readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
     {
         let diskLib = this;
         let stats = node.fs.statSync(sArchive);
@@ -1094,12 +1240,16 @@ export default class DiskLib {
             holdErrors: true
         });
         zip.on('ready', function readArchiveFilesReady() {
-            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, verbose);
+            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, listing);
             zip.close();
             done(aFileData);
         });
         zip.on('error', function readArchiveFilesError(err) {
-            diskLib.printError(err, sArchive);
+            if (listing != "csv") {
+                diskLib.printError(err, sArchive);
+            } else {
+                diskLib.printf(",,,,,,\"%s\",\"%s\",\n", sArchive, err.message);
+            }
         });
     }
 
