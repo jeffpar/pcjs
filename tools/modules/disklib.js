@@ -58,7 +58,7 @@ export default class DiskLib {
         this.printf = device.printf.bind(device);
         this.sprintf = device.sprintf.bind(device);
         this.assert = device.assert.bind(device);
-        this.nMaxDefault = 512;
+        this.nMaxDefault = 16384;
         this.nMaxInit = 0;
         this.nMaxCount = 0;
     }
@@ -74,7 +74,7 @@ export default class DiskLib {
     {
         let msg = err.message || err.stack;
         if (filename) msg = node.path.basename(filename) + ": " + msg;
-        this.printf("%s\n", msg);
+        this.printf("error: %s\n", msg);
     }
 
     /**
@@ -250,14 +250,14 @@ export default class DiskLib {
                 let arcType = this.isArchiveFile(sFile);
                 if (arcType) {
                     if (!fQuiet) this.printf("expanding: %s\n", sFile);
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 1 && db.readUInt8(0) == 0x1A) {
                         /**
                          * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
                          */
                         arcType = node.StreamZip.TYPE_ARC;
                         this.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
                     }
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 4 && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
                         // db = db.slice(0, db.length - 4);
                         this.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
                     }
@@ -753,14 +753,14 @@ export default class DiskLib {
                 //
                 let arcType = file.files? 0 : diskLib.isArchiveFile(file.path);
                 if (arcType) {
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 1 && db.readUInt8(0) == 0x1A) {
                         /**
                          * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
                          */
                         arcType = node.StreamZip.TYPE_ARC;
                         file.messages.push("overriding as type ARC");
                     }
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 4 && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
                         // db = db.slice(0, db.length - 4);
                         file.messages.push("ZIP extended header signature detected");
                     }
