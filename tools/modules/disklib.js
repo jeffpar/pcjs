@@ -678,13 +678,13 @@ export default class DiskLib {
     }
 
     /**
-     * readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo, done)
+     * readDir(sDir, arcType, arcOffset, label, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo, done)
      *
      * @this {DiskLib}
      * @param {string} sDir (directory name)
      * @param {number} [arcType] (1 if ARC file, 2 if ZIP file, otherwise 0)
      * @param {number} [arcOffset] (0 if none)
-     * @param {string} [sLabel] (if not set with --label, then basename(sDir) will be used instead)
+     * @param {string} [label] (if not set with --label, then basename(sDir) will be used instead)
      * @param {string} [sPassword] (password; for encrypted ARC files only at this point)
      * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
      * @param {number} [kbTarget] (target disk size, in Kb; zero or undefined if no target disk size)
@@ -693,7 +693,7 @@ export default class DiskLib {
      * @param {DriveInfo} [driveInfo] (custom drive parameters, if any)
      * @param {function(DiskInfo)} [done] (optional function to call on completion)
      */
-    readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo = {}, done)
+    readDir(sDir, arcType, arcOffset, label, sPassword, fNormalize, kbTarget, nMax, listing, driveInfo = {}, done)
     {
         let diskLib = this;
         /**
@@ -706,20 +706,20 @@ export default class DiskLib {
          * we build a volume label from the basename of the directory.
          */
         let dateLabel;
-        if (sLabel == "none" || sLabel == false) {
-            sLabel = "";
-        } else if (sLabel == "default" || sLabel == true) {
-            sLabel = DiskInfo.PCJS_LABEL;
+        if (label == "none" || label == false) {
+            label = "";
+        } else if (label == "default" || label == true) {
+            label = DiskInfo.PCJS_LABEL;
             dateLabel = new Date(1989, 8, 27, 3, 0, 0);
         }
         let diskName = node.path.basename(sDir);
         if (sDir.endsWith('/')) {
-            if (sLabel == undefined) {
-                sLabel = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
+            if (label == undefined) {
+                label = diskName.replace(/^.*-([^0-9][^-]+)$/, "$1");
             }
         } else if (arcType) {
-            if (sLabel == undefined) {
-                sLabel = diskName.replace(/\.[^.]*$/, "");
+            if (label == undefined) {
+                label = diskName.replace(/\.[^.]*$/, "");
             }
         } else {
             diskName = node.path.basename(node.path.dirname(sDir));
@@ -738,66 +738,76 @@ export default class DiskLib {
                 let size = file.size;
                 let compressedSize = file.compressedSize || size;
                 let method = file.method || "None";
-                let path = parent + ':' + (file.path[0] != '/'? '/' : '') + file.path;
                 //
                 // Why do we have to remove CRs from filenames?  Just ask "ibm3240-3249/ibm3247/PGCMS101.ZIP/MileageSaver.zip"...
                 //
-                path = path.replace(/\r/g, '');
-                if (path.indexOf('"') >= 0) {
-                    path = path.replace(/"/g, '""');
-                }
-                if (path.indexOf(',') >= 0) {
-                    path = '"' + path + '"';
+                let pathName = node.path.join(parent, file.path.replace(/\r/g, '')).replace(/"/g, '""');
+                let fileName = node.path.basename(pathName);
+                pathName = node.path.dirname(pathName);
+                if (pathName.indexOf(',') >= 0) pathName = '"' + pathName + '"';
+                if (fileName.indexOf(',') >= 0) fileName = '"' + fileName + '"';
+                if (!file.messages) file.messages = [];
+                //
+                // We used to determine arcType below, only if file.files was NOT set, but we now want to determine
+                // it sooner, so that we can record any discrepancies (eg, wrong archive type) in the archive's messages.
+                //
+                let arcType = file.files? 0 : diskLib.isArchiveFile(file.path);
+                if (arcType) {
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
+                        /**
+                         * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
+                         */
+                        arcType = node.StreamZip.TYPE_ARC;
+                        file.messages.push("overriding as type ARC");
+                    }
+                    if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
+                        // db = db.slice(0, db.length - 4);
+                        file.messages.push("ZIP extended header signature detected");
+                    }
                 }
                 let messages = "";
-                if (file.messages) {
-                    for (let message of file.messages) {
-                        if (messages) messages += "; ";
-                        messages += message.replace(/^(warning|error): [^ ]*:?\s*/, "");
-                    }
-                    messages = '"' + messages.replace(/"/g, '""') + '"';
+                for (let message of file.messages) {
+                    if (messages) messages += "; ";
+                    messages += message.replace(/^(warning|error): [^ ]*:?\s*/, "");
                 }
+                if (messages) messages = '"' + messages.replace(/"/g, '""') + '"';
                 let comment = "";
                 if (file.comment) {
                     comment = '"' + file.comment.replace(/"/g, '""').replace(/\r/g, '') + '"';
                 }
-                diskLib.printf("%s,%s,%d,%d,%d,%s,%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, path, messages, comment);
+                diskLib.printf("%s,%s,%d,%d,%d,%s,%s,%s,%s,%s\n", hash, modified, attr, size, compressedSize, method, fileName, pathName, messages, comment);
                 if (file.files) {
                     printCSV(parent, file.files);
-                } else {
-                    let arcType = diskLib.isArchiveFile(file.path);
-                    if (arcType) {
-                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt8(0) == 0x1A) {
-                            /**
-                             * How often does this happen?  I don't know, but look at CCTRAN.ZIP on PC-SIG DISK2631. #ZipAnomalies
-                             */
-                            arcType = node.StreamZip.TYPE_ARC;
-                            diskLib.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
-                        }
-                        if (arcType == node.StreamZip.TYPE_ZIP && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
-                            // db = db.slice(0, db.length - 4);
-                            if (listing != "csv") {
-                                diskLib.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
-                            }
-                        }
-                        let zip = new node.StreamZip({
-                            file: file.path,
-                            // password: argv['password'],
-                            buffer: db.buffer,
-                            arcType: arcType,
-                            storeEntries: true,
-                            nameEncoding: "ascii",
-                            printfDebug: diskLib.printf,
-                            holdErrors: true
-                        }).on('ready', () => {
-                            let aFileData = diskLib.getArchiveFiles(zip, null, file.date, listing);
-                            printCSV(parent + '/' + file.path, aFileData);
-                            zip.close();
-                        }).on('error', (err) => {
-                            diskLib.printf(",,,,,,\"%s\",\"%s\",\n", parent + '/' + file.path, err.message);
-                        });
-                        zip.open();
-                    }
+                } else if (arcType) {
+                    //
+                    // Reset pathName to an unquoted/unmodified version now.
+                    //
+                    pathName = node.path.join(parent, file.path);
+                    let zip = new node.StreamZip({
+                        file: file.path,
+                        // password: argv['password'],
+                        buffer: db.buffer,
+                        arcType: arcType,
+                        storeEntries: true,
+                        nameEncoding: "ascii",
+                        printfDebug: diskLib.printf,
+                        holdErrors: true
+                    }).on('ready', () => {
+                        //
+                        // We used to pass null for the label, but now we always want a label entry
+                        // to which getArchivesFiles() can attach the archive's comment string (if any).
+                        //
+                        let label = file.name.replace(/\.[^.]*$/, "");
+                        let aFileData = diskLib.getArchiveFiles(zip, label, file.date, listing);
+                        printCSV(pathName, aFileData);
+                        zip.close();
+                    }).on('error', (err) => {
+                        pathName = pathName.replace(/"/g, '""');
+                        let fileName = node.path.basename(pathName);
+                        pathName = node.path.dirname(pathName);
+                        diskLib.printf(",,,,,,\"%s\",\"%s\",\"%s\",\n", fileName, pathName, err.message);
+                    });
+                    zip.open();
                 }
             }
         };
@@ -848,9 +858,9 @@ export default class DiskLib {
         try {
             this.nMaxInit = this.nMaxCount = nMax || this.nMaxDefault;
             if (!arcType) {
-                this.readDirFiles(sDir, sLabel, dateLabel, fNormalize, 0, driveInfo, readDone);
+                this.readDirFiles(sDir, label, dateLabel, fNormalize, 0, driveInfo, readDone);
             } else {
-                this.readArchiveFiles(sDir, arcType, arcOffset, sLabel, sPassword, listing || "", readDone);
+                this.readArchiveFiles(sDir, arcType, arcOffset, label, sPassword, listing || "", readDone);
             }
         } catch(err) {
             this.printError(err);
@@ -858,11 +868,11 @@ export default class DiskLib {
     }
 
     /**
-     * readDirFiles(sDir, sLabel, dateLabel, fNormalize, iLevel, driveInfo, done)
+     * readDirFiles(sDir, label, dateLabel, fNormalize, iLevel, driveInfo, done)
      *
      * @this {DiskLib}
      * @param {string} sDir (slash-terminated directory name OR comma-delimited list of files)
-     * @param {string|null} [sLabel] (optional volume label; this should NEVER be set when reading subdirectories)
+     * @param {string|null} [label] (optional volume label; this should NEVER be set when reading subdirectories)
      * @param {Date|null} [dateLabel] (optional volume date)
      * @param {boolean} [fNormalize] (if true, known text files get their line-endings "fixed")
      * @param {number} [iLevel] (current directory level, primarily for diagnostic purposes only; zero if unspecified)
@@ -870,7 +880,7 @@ export default class DiskLib {
      * @param {function(Array.<FileData>)} [done] (optional function to call on completion)
      * @returns {Array.<FileData>}
      */
-    readDirFiles(sDir, sLabel, dateLabel, fNormalize = false, iLevel = 0, driveInfo, done)
+    readDirFiles(sDir, label, dateLabel, fNormalize = false, iLevel = 0, driveInfo, done)
     {
         let asFiles;
         let aFiles = [];
@@ -901,9 +911,9 @@ export default class DiskLib {
          *
          * By default, I prefer a hard-coded date/time, because it avoids creating different disk images every time this is run.
          */
-        if (sLabel && (!driveInfo || driveInfo.verDOS >= 2)) {
-            let sPath = '/' + node.path.basename(sLabel);
-            let file = {path: sPath, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
+        if (label && (!driveInfo || driveInfo.verDOS >= 2)) {
+            let sPath = '/' + node.path.basename(label);
+            let file = {path: sPath, name: label, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
             aFiles.push(file);
         }
 
@@ -999,16 +1009,16 @@ export default class DiskLib {
     }
 
     /**
-     * getArchiveFiles(zip, sLabel, date, listing)
+     * getArchiveFiles(zip, label, date, listing)
      *
      * @this {DiskLib}
      * @param {StreamZip} zip
-     * @param {string} [sLabel]
+     * @param {string} [label]
      * @param {Date} [date]
      * @param {string} [listing]
      * @returns {Array.<FileData>}
      */
-    getArchiveFiles(zip, sLabel, date, listing)
+    getArchiveFiles(zip, label, date, listing)
     {
         let aFiles = [];
         let comment = "";
@@ -1033,8 +1043,8 @@ export default class DiskLib {
         let messages = "";
         let entries = Object.values(zip.entries());
 
-        if (sLabel) {
-            let file = {path: '/' + sLabel, name: sLabel, attr: DiskInfo.ATTR.VOLUME, date, size: 0};
+        if (label) {
+            let file = {path: '/' + label, name: label, attr: DiskInfo.ATTR.VOLUME, date, size: 0};
             //
             // We attach any archive comment to the label entry, which never actually exists in an archive.
             //
@@ -1214,18 +1224,18 @@ export default class DiskLib {
     }
 
     /**
-     * readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
+     * readArchiveFiles(sArchive, arcType, arcOffset, label, sPassword, listing, done)
      *
      * @this {DiskLib}
      * @param {string} sArchive (ARC/ZIP filename)
      * @param {number} arcType (1 for ARC, 2 for ZIP)
      * @param {number} arcOffset (0 if none)
-     * @param {string} sLabel (optional volume label)
+     * @param {string} label (optional volume label)
      * @param {string} sPassword (optional password)
      * @param {string} listing (listing options, if any)
      * @param {function(Array.<FileData>)} done
      */
-    readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, listing, done)
+    readArchiveFiles(sArchive, arcType, arcOffset, label, sPassword, listing, done)
     {
         let diskLib = this;
         let stats = node.fs.statSync(sArchive);
@@ -1240,7 +1250,7 @@ export default class DiskLib {
             holdErrors: true
         });
         zip.on('ready', function readArchiveFilesReady() {
-            let aFileData = diskLib.getArchiveFiles(zip, sLabel, stats.mtime, listing);
+            let aFileData = diskLib.getArchiveFiles(zip, label, stats.mtime, listing);
             zip.close();
             done(aFileData);
         });
@@ -1248,7 +1258,10 @@ export default class DiskLib {
             if (listing != "csv") {
                 diskLib.printError(err, sArchive);
             } else {
-                diskLib.printf(",,,,,,\"%s\",\"%s\",\n", sArchive, err.message);
+                let pathName = sArchive.replace(/"/g, '""');
+                let fileName = node.path.basename(pathName);
+                pathName = node.path.dirname(pathName);
+                diskLib.printf(",,,,,,\"%s\",\"%s\",\"%s\",\n", fileName, pathName, err.message);
             }
         });
     }
