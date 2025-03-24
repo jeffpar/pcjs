@@ -741,7 +741,7 @@ export default class DiskLib {
                 //
                 // Why do we have to remove CRs from filenames?  Just ask "ibm3240-3249/ibm3247/PGCMS101.ZIP/MileageSaver.zip"...
                 //
-                let pathName = node.path.join(parent, file.path.replace(/\r/g, '')).replace(/"/g, '""');
+                let pathName = node.path.join(parent, file.path).replace(/\r/g, '').replace(/"/g, '""');
                 let fileName = node.path.basename(pathName);
                 pathName = node.path.dirname(pathName);
                 if (pathName.indexOf(',') >= 0) pathName = '"' + pathName + '"';
@@ -817,7 +817,7 @@ export default class DiskLib {
                 /**
                  * We're not going to create a disk in this case, just display detailed information about the files.
                  */
-                printCSV(sDir, aFileData);
+                printCSV("", aFileData);
                 return;
             }
             if (aFileData) {
