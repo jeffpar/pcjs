@@ -115,7 +115,7 @@ let flushFiles = function() {
         if (nFiles) nFiles--;
     }
     let fileCSV = `files-${++nFiles}.csv`;
-    let text = (headers? "fileID,archiveID,hash,modified,attr,size,compressed,method,name,path,messages,comment\n" : "") + fileLines.join("\n");
+    let text = (headers? "fileID,archiveID,hash,modified,attr,size,compressed,method,name,path,messages,comment\n" : "") + fileLines.join("\n") + "\n";
     if (write) {
         console.log(`writing ${fileCSV}...`);
         fs.writeFileSync(fileCSV, text);
