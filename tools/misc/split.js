@@ -221,13 +221,14 @@ let findDescription = function(pathName) {
                 // Let's parse tapeListing into tapeArchives, which will be another lookup table indexed by
                 // filenames, which then gives us the corresponding descriptions.
                 //
-                // The tape listings contain rows information that look like this:
+                // The tape listings contain rows of information that look like:
                 //
                 //      Filename  Size  [Date]  Description
                 //
                 // The filenames are 8.3 archive filenames, the size is a decimal number, the date is of the form
-                // "MM/DD/YY" (and may not be present), and description can be anything.  If the following line(s)
-                // do not match the above format, then the description is assumed to continue on those line(s).
+                // "MM/DD/YY" (or "MM-DD-YYYY", and may not be present at all), and the description can be anything.
+                // If the following line(s) do not match the above format, then the description is assumed to continue
+                // on those line(s).
                 //
                 let lines = tapeListing.split(/\n/);
                 let archiveDesc;
@@ -249,7 +250,7 @@ let findDescription = function(pathName) {
                         if (archiveDesc) archiveDesc += ' ';
                         archiveDesc += line;
                         //
-                        // Pipe characters (|) sometimes appear at the end of multi-line descriptions,
+                        // Pipe characters (|) sometimes signal the beginning of a multi-line description,
                         // but sometimes not, and sometimes they appear in the middle of lines in a multi-line
                         // description, so let's do our best to eliminate them without screwing up the text.
                         //
@@ -349,6 +350,12 @@ let flushFiles = function() {
     fileLines = [];
 };
 
+let quoteString = function(s) {
+    let sQuoted = s.replace(/"/g, '""');
+    if (sQuoted.indexOf(',') >= 0 || sQuoted == "NULL") sQuoted = `"${sQuoted}"`;
+    return sQuoted;
+};
+
 let iLine = 0;
 let prevMatch = {};
 
@@ -370,16 +377,16 @@ for (let line of lines) {
         let fileName, pathName, remainder = match[7];
         //
         // This regex is intended to capture either a quoted OR unquoted name; note that either form
-        // is permitted to contain quotes (but only the '""' double double-quote variety), and only the former
-        // is permitted to contain commas.
+        // is permitted to contain quotes (but only the double double-quote variety: '""') and only the
+        // former is permitted to contain commas.
         //
         // It also captures the rest of the line, which becomes the new remainder (path, messages, and comment).
         //
         match = remainder.match(/^(?:"(.*?[^"])",|([^,]*),)(.*)$/);
         if (match) {
             //
-            // That regex always returns the first capture group in matchPath[1] and the second capture
-            // group in matchPath[2], and since they both can't be true, one of them will always be undefined.
+            // That regex always returns the first capture group in match[1] and the second capture
+            // group in match[2], and since they both can't be true, one of them will always be undefined.
             //
             fileName = match[1] || match[2];
             if (fileName.length > longestFileName.length) longestFileName = fileName;
@@ -414,16 +421,12 @@ for (let line of lines) {
             if (pathName != pathPrev || modified != prevMatch.modified) {
                 console.log(`archive ${pathName} does not match previous file ${pathPrev}`);
             }
-            let pathNameQuoted = pathName.replace(/"/g, '""');
-            if (pathNameQuoted.indexOf(',') >= 0 || pathNameQuoted == "NULL") pathNameQuoted = `"${pathNameQuoted}"`;
             //
             // Let's see if we can find a matching LST/TXT file with a description for this archive.
             //
             let description = findDescription(pathName);
             if (description.length > longestDescription.length) longestDescription = description;
-            description = description.replace(/"/g, '""');
-            if (description.indexOf(',') >= 0 || description == "NULL") description = `"${description}"`;
-            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${pathNameQuoted},${description},${remainder}`);
+            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${quoteString(pathName)},${quoteString(description)},${remainder}`);
             archiveMode = true;
         }
         else if (+size == -1) {
@@ -440,8 +443,7 @@ for (let line of lines) {
             //
             let i, processed = false;
             let fullPath = path.join(pathName, fileName);
-            let pathNameQuoted = pathName.replace(/"/g, '""');
-            if (pathNameQuoted.indexOf(',') >= 0 || pathNameQuoted == "NULL") pathNameQuoted = `"${pathNameQuoted}"`;
+            let pathNameQuoted = quoteString(pathName);
             if (lastFilePath == fullPath && fileLines[lastFileIndex] && (i = fileLines[lastFileIndex].indexOf(pathNameQuoted)) >= 0) {
                 let lastFileLine = fileLines[lastFileIndex];
                 i += pathNameQuoted.length;
@@ -482,11 +484,7 @@ for (let line of lines) {
             }
             lastFilePath = path.join(pathName, fileName);
             lastFileIndex = fileLines.length;
-            let fileNameQuoted = fileName.replace(/"/g, '""');
-            if (fileNameQuoted.indexOf(',') >= 0 || fileNameQuoted == "NULL") fileNameQuoted = `"${fileNameQuoted}"`;
-            let pathNameQuoted = pathName.replace(/"/g, '""');
-            if (pathNameQuoted.indexOf(',') >= 0 || pathNameQuoted == "NULL") pathNameQuoted = `"${pathNameQuoted}"`;
-            fileLines.push(`${++fileID},${arcID},${hash},${modified},${attr},${size},${compressed},${method},${fileNameQuoted},${pathNameQuoted},${remainder}`);
+            fileLines.push(`${++fileID},${arcID},${hash},${modified},${attr},${size},${compressed},${method},${quoteString(fileName)},${quoteString(pathName)},${remainder}`);
             archiveMode = false;
         }
         prevMatch = {
