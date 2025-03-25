@@ -34,7 +34,7 @@
  * Every time we encounter a new archive, we push a line with the following fields to the
  * archiveLines array:
  *
- *      arcID,hash,modified,attr,size,name,messages,comment
+ *      arcID,hash,modified,attr,size,name,desc,messages,comment
  *
  * We then increment fileID and push a line with the following fields to the fileLines array:
  *
@@ -59,6 +59,80 @@
  */
 import fs from "fs";
 import path from "path";
+import glob from "glob";
+
+/**
+ * This class is primarily concerned with converting characters between CP437 and UTF-8, when
+ * extracting files from PC media or recreating files onto PC media, which is why it is located
+ * in the "pcx86" section of the project.
+ *
+ * @class CharSet
+ */
+class CharSet {
+
+    static CP437 = [
+        '\u0000', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',
+        '\u25D8', '\u25CB', '\u25D9', '\u2642', '\u2640', '\u266A', '\u266B', '\u263C',
+        '\u25BA', '\u25C4', '\u2195', '\u203C', '\u00B6', '\u00A7', '\u25AC', '\u21A8',
+        '\u2191', '\u2193', '\u2192', '\u2190', '\u221F', '\u2194', '\u25B2', '\u25BC',
+        '\u0020', '\u0021', '\u0022', '\u0023', '\u0024', '\u0025', '\u0026', '\u0027',
+        '\u0028', '\u0029', '\u002A', '\u002B', '\u002C', '\u002D', '\u002E', '\u002F',
+        '\u0030', '\u0031', '\u0032', '\u0033', '\u0034', '\u0035', '\u0036', '\u0037',
+        '\u0038', '\u0039', '\u003A', '\u003B', '\u003C', '\u003D', '\u003E', '\u003F',
+        '\u0040', '\u0041', '\u0042', '\u0043', '\u0044', '\u0045', '\u0046', '\u0047',
+        '\u0048', '\u0049', '\u004A', '\u004B', '\u004C', '\u004D', '\u004E', '\u004F',
+        '\u0050', '\u0051', '\u0052', '\u0053', '\u0054', '\u0055', '\u0056', '\u0057',
+        '\u0058', '\u0059', '\u005A', '\u005B', '\u005C', '\u005D', '\u005E', '\u005F',
+        '\u0060', '\u0061', '\u0062', '\u0063', '\u0064', '\u0065', '\u0066', '\u0067',
+        '\u0068', '\u0069', '\u006A', '\u006B', '\u006C', '\u006D', '\u006E', '\u006F',
+        '\u0070', '\u0071', '\u0072', '\u0073', '\u0074', '\u0075', '\u0076', '\u0077',
+        '\u0078', '\u0079', '\u007A', '\u007B', '\u007C', '\u007D', '\u007E', '\u2302',
+        '\u00C7', '\u00FC', '\u00E9', '\u00E2', '\u00E4', '\u00E0', '\u00E5', '\u00E7',
+        '\u00EA', '\u00EB', '\u00E8', '\u00EF', '\u00EE', '\u00EC', '\u00C4', '\u00C5',
+        '\u00C9', '\u00E6', '\u00C6', '\u00F4', '\u00F6', '\u00F2', '\u00FB', '\u00F9',
+        '\u00FF', '\u00D6', '\u00DC', '\u00A2', '\u00A3', '\u00A5', '\u20A7', '\u0192',
+        '\u00E1', '\u00ED', '\u00F3', '\u00FA', '\u00F1', '\u00D1', '\u00AA', '\u00BA',
+        '\u00BF', '\u2310', '\u00AC', '\u00BD', '\u00BC', '\u00A1', '\u00AB', '\u00BB',
+        '\u2591', '\u2592', '\u2593', '\u2502', '\u2524', '\u2561', '\u2562', '\u2556',
+        '\u2555', '\u2563', '\u2551', '\u2557', '\u255D', '\u255C', '\u255B', '\u2510',
+        '\u2514', '\u2534', '\u252C', '\u251C', '\u2500', '\u253C', '\u255E', '\u255F',
+        '\u255A', '\u2554', '\u2569', '\u2566', '\u2560', '\u2550', '\u256C', '\u2567',
+        '\u2568', '\u2564', '\u2565', '\u2559', '\u2558', '\u2552', '\u2553', '\u256B',
+        '\u256A', '\u2518', '\u250C', '\u2588', '\u2584', '\u258C', '\u2590', '\u2580',
+        '\u03B1', '\u00DF', '\u0393', '\u03C0', '\u03A3', '\u03C3', '\u00B5', '\u03C4',
+        '\u03A6', '\u0398', '\u03A9', '\u03B4', '\u221E', '\u03C6', '\u03B5', '\u2229',
+        '\u2261', '\u00B1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00F7', '\u2248',
+        '\u00B0', '\u2219', '\u00B7', '\u221A', '\u207F', '\u00B2', '\u25A0', '\u00A0'
+    ];
+
+    /**
+     * fromCP437(data, translateControl)
+     *
+     * @param {number|Array|string|DataBuffer} data
+     * @param {boolean} [translateControl] (true to translate control characters; default is false)
+     * @returns {string}
+     */
+    static fromCP437(data, translateControl = false)
+    {
+        let u = "";
+        if (typeof data == "number") data = [data];
+        for (let i = 0; i < data.length; i++) {
+            let c;
+            if (Array.isArray(data)) {
+                c = data[i];
+            } else {
+                c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
+            }
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 10 && c != 13 && c != 26)) {
+                u += CharSet.CP437[c];
+            } else {
+                if (translateControl && c == 26) break;
+                u += String.fromCharCode(c);
+            }
+        }
+        return u;
+    }
+}
 
 let args = process.argv.slice(2);
 let i = 0;
@@ -68,14 +142,153 @@ if (!fileCSV) {
     process.exit(1);
 }
 
+//
+// Let's collect all the names of the associated LST/TXT/PRN files, and then organize them by
+// assigning each one to a lookup table that is first indexed by group "xxxx" (where "xxxx" is the
+// first part of "xxxx-lists" path component) and is then indexed by tape "nnnn" (where "nnnn" is
+// 4-digit number derived from the 1-to-4-digit number at the end of a LST/TXT/PRN basename).
+//
+let tapeFiles = glob.sync("../Downloads/ibm-wgam-wbiz-collection/*-lists/**/*.{LST,TXT,PRN,lst,txt,prn}");
+
+let tapeLookup = {};
+for (let tapeFile of tapeFiles) {
+    let groupMatch = tapeFile.match(/\/([a-z]+)-lists\//);
+    if (!groupMatch) {
+        console.log(`unable to determine group for tape file ${tapeFile}`);
+        continue;
+    }
+    let tapeMatch = tapeFile.match(/(\d{1,4})\.(lst|txt|prn)$/i);
+    if (!tapeMatch) {
+        console.log(`unable to determine tape for tape file ${tapeFile}`);
+        continue;
+    }
+    let group = groupMatch[1];
+    let tape = +tapeMatch[1];
+    if (!tapeLookup[group]) tapeLookup[group] = {};
+    if (tapeLookup[group][tape]) {
+        let prevFile = tapeLookup[group][tape].tapeFile;
+        let prevFix = prevFile.includes(".fix");
+        let currFix = tapeFile.includes(".fix");
+        let prevLst = prevFile.endsWith(".lst") || prevFile.endsWith(".LST");
+        let currLst = tapeFile.endsWith(".lst") || tapeFile.endsWith(".LST");
+        let prevStat = fs.statSync(prevFile);
+        let currStat = fs.statSync(tapeFile);
+        let prevSize = prevStat.size;
+        let currSize = currStat.size;
+        if (prevSize == currSize) {
+            continue;
+        }
+        if (tapeLookup[group][tape].altFile) {
+            // console.log(`multiple possible listings for tape ${tape} in group ${group}:\n\tprev: ${tapeLookup[group][tape].tapeFile}\n\t alt: ${tapeLookup[group][tape].altFile}\n\tcurr: ${tapeFile}`);
+        }
+        //
+        // Prefer .fix over non-fix files, and .lst over non-lst files (for now)
+        //
+        if (!prevFix && currFix || !prevLst && currLst) {
+            tapeLookup[group][tape].altFile = tapeLookup[group][tape].tapeFile;
+            tapeLookup[group][tape].tapeFile = tapeFile;
+        } else {
+            tapeLookup[group][tape].altFile = tapeFile;
+        }
+        continue;
+    }
+    tapeLookup[group][tape] = {
+        tapeFile,
+        altFile: null,
+        tapeArchives: null
+    };
+}
+
+let findDescription = function(pathName) {
+    let description = "";
+    //
+    // Extract the second path component from pathName, which should be something like "ibm####", "wbix####",
+    // "wgam####", or "xtra####".  From that component, the letters provide the necessary group and the digits
+    // provide the tape number, which we can then use to look up the tapeInfo in tapeLookup.
+    //
+    let match = pathName.match(/\/([a-z]+)(\d{1,4})(\.fix|)\//i);
+    if (match) {
+        let group = match[1].toLowerCase();
+        let tape = +match[2];
+        let tapeInfo = tapeLookup[group] && tapeLookup[group][tape];
+        if (tapeInfo) {
+            let archive;
+            if (!tapeInfo.tapeArchives) {
+                tapeInfo.tapeArchives = {};
+                let buffer = fs.readFileSync(tapeInfo.tapeFile);
+                let tapeListing = CharSet.fromCP437(buffer).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+                //
+                // Let's parse tapeListing into tapeArchives, which will be another lookup table indexed by
+                // filenames, which then gives us the corresponding descriptions.
+                //
+                // The tape listings contain rows information that look like this:
+                //
+                //      Filename  Size  [Date]  Description
+                //
+                // The filenames are 8.3 archive filenames, the size is a decimal number, the date is of the form
+                // "MM/DD/YY" (and may not be present), and description can be anything.  If the following line(s)
+                // do not match the above format, then the description is assumed to continue on those line(s).
+                //
+                let lines = tapeListing.split(/\n/);
+                let archiveDesc;
+                for (i = 0; i < lines.length; i++) {
+                    let line = lines[i];
+                    if (!line || line.charCodeAt(0) == 26) continue;
+                    let match = line.match(/^(\S{1,8}\.?\S{1,3}?)\s+([\d,]+)\s+(\d+[/-]\d+[/-]\d+|)\s*(.*)$/);
+                    if (match) {
+                        if (archive) {
+                            if (archiveDesc.length > 255) {
+                                // console.log(`archive description exceeds 255 characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
+                                archiveDesc = archiveDesc.slice(0, 252) + "...";
+                            }
+                            tapeInfo.tapeArchives[archive] = archiveDesc;
+                        }
+                        archive = match[1];
+                        archiveDesc = match[4];
+                    } else if (archive && line.indexOf('\x00') < 0) {
+                        if (archiveDesc) archiveDesc += ' ';
+                        archiveDesc += line;
+                        //
+                        // Pipe characters (|) sometimes appear at the end of multi-line descriptions,
+                        // but sometimes not, and sometimes they appear in the middle of lines in a multi-line
+                        // description, so let's do our best to eliminate them without screwing up the text.
+                        //
+                        archiveDesc = archiveDesc.replace(/\s*\|\s*/g, ' ').replace(/\s+/g, ' ').trim();
+                    }
+                }
+                if (archive) {
+                    if (archiveDesc.length > 255) {
+                        // console.log(`archive description exceeds 255 characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
+                        archiveDesc = archiveDesc.slice(0, 252) + "...";
+                    }
+                    tapeInfo.tapeArchives[archive] = archiveDesc;
+                }
+                let archives = Object.keys(tapeInfo.tapeArchives);
+                if (!archives.length) {
+                    console.log(`no archive details found in ${tapeInfo.tapeFile}`);
+                }
+            }
+            archive = path.basename(pathName);
+            description = tapeInfo.tapeArchives[archive];
+            if (description == undefined) {
+                // console.log(`unable to find description for archive ${archive} on tape ${tape} in group ${group}`);
+                description = "";
+            }
+        } else {
+            // console.log(`unable to find tape ${tape} in group ${group}`);
+        }
+    } else {
+        console.log(`unable to determine group and tape for pathName ${pathName}`);
+    }
+    return description;
+};
+
 let lines = [];
 let bufferSize = 1024 * 1024; // 1MB
 let buffer = Buffer.alloc(bufferSize);
 let leftover = "";
-
 console.log(`reading ${fileCSV}...`);
 let fd = fs.openSync(fileCSV, "r");
-
 while (true) {
     let bytesRead = fs.readSync(fd, buffer, 0, bufferSize, null);
     if (!bytesRead) break;
@@ -100,7 +313,7 @@ let fileLines = [];
 let lastFileIndex = 0, lastFilePath = "";
 let archiveMode = false;
 let arcID = 10000000, fileID = 20000000;
-let longestFileName = "", longestPathName = "", longestMethod = "", longestMessage = "";
+let longestFileName = "", longestPathName = "", longestMethod = "", longestDescription = "", longestMessage = "";
 
 let flushArchives = function() {
     let write = true;
@@ -203,7 +416,14 @@ for (let line of lines) {
             }
             let pathNameQuoted = pathName.replace(/"/g, '""');
             if (pathNameQuoted.indexOf(',') >= 0 || pathNameQuoted == "NULL") pathNameQuoted = `"${pathNameQuoted}"`;
-            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${pathNameQuoted},${remainder}`);
+            //
+            // Let's see if we can find a matching LST/TXT file with a description for this archive.
+            //
+            let description = findDescription(pathName);
+            if (description.length > longestDescription.length) longestDescription = description;
+            description = description.replace(/"/g, '""');
+            if (description.indexOf(',') >= 0 || description == "NULL") description = `"${description}"`;
+            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${pathNameQuoted},${description},${remainder}`);
             archiveMode = true;
         }
         else if (+size == -1) {
@@ -297,4 +517,5 @@ if (fileLines.length) {
 console.log(`longest file name: ${longestFileName.length} (${longestFileName})`);
 console.log(`longest path name: ${longestPathName.length} (${longestPathName})`);
 console.log(`longest method: ${longestMethod.length} (${longestMethod})`);
+console.log(`longest description: ${longestDescription.length} (${longestDescription})`);
 console.log(`longest message: ${longestMessage.length} (${longestMessage})`);
