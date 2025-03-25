@@ -135,12 +135,23 @@ class CharSet {
 }
 
 let args = process.argv.slice(2);
-let i = 0;
-let fileCSV = args[i++];
+let fileCSV = args[0];
 if (!fileCSV) {
-    console.log("Usage: node split.js <csv file>");
+    console.log("Usage: node split.js <CSV file>");
     process.exit(1);
 }
+
+let nFiles = 0;
+let nArchives = 0;
+let nMaxLines = 500000;
+let headers = true;     // if true, this also means we will NOT create split files
+let archiveLines = [];
+let descLines = [];
+let fileLines = [];
+let lastFileIndex = 0, lastFilePath = "";
+let archiveMode = false;
+let arcID = 10000000, fileID = 20000000;
+let longestFileName = "", longestPathName = "", longestMethod = "", longestDescription = "", longestMessage = "";
 
 //
 // Let's collect all the names of the associated LST/TXT/PRN files, and then organize them by
@@ -148,9 +159,8 @@ if (!fileCSV) {
 // first part of "xxxx-lists" path component) and is then indexed by tape "nnnn" (where "nnnn" is
 // 4-digit number derived from the 1-to-4-digit number at the end of a LST/TXT/PRN basename).
 //
-let tapeFiles = glob.sync("../Downloads/ibm-wgam-wbiz-collection/*-lists/**/*.{LST,TXT,PRN,lst,txt,prn}");
-
 let tapeLookup = {};
+let tapeFiles = glob.sync("../Downloads/ibm-wgam-wbiz-collection/*-lists/**/*.{LST,TXT,PRN,lst,txt,prn}");
 for (let tapeFile of tapeFiles) {
     let groupMatch = tapeFile.match(/\/([a-z]+)-lists\//);
     if (!groupMatch) {
@@ -232,7 +242,7 @@ let findDescription = function(pathName) {
                 //
                 let lines = tapeListing.split(/\n/);
                 let archiveDesc;
-                for (i = 0; i < lines.length; i++) {
+                for (let i = 0; i < lines.length; i++) {
                     let line = lines[i];
                     if (!line || line.charCodeAt(0) == 26) continue;
                     let match = line.match(/^(\S{1,8}\.?\S{1,3}?)\s+([\d,]+)\s+(\d+[/-]\d+[/-]\d+|)\s*(.*)$/);
@@ -305,25 +315,15 @@ if (leftover) {
 }
 fs.closeSync(fd);
 
-let nFiles = 0;
-let nArchives = 0;
-let nMaxLines = 500000;
-let headers = false;    // if true, this also means we will NOT create split files
-let archiveLines = [];
-let fileLines = [];
-let lastFileIndex = 0, lastFilePath = "";
-let archiveMode = false;
-let arcID = 10000000, fileID = 20000000;
-let longestFileName = "", longestPathName = "", longestMethod = "", longestDescription = "", longestMessage = "";
-
 let flushArchives = function() {
     let write = true;
+    let archiveCSV = `arcs.csv`;
     if (headers) {
-        write = !nArchives;
-        if (nArchives) nArchives--;
+        write = !nArchives++;
+    } else {
+        archiveCSV = `arcs-${++nArchives}.csv`;
     }
-    let archiveCSV = `arcs-${++nArchives}.csv`;
-    let text = (headers? "arcID,hash,modified,attr,size,name,messages,comment\n" : "") + archiveLines.join("\n") + "\n";
+    let text = (headers && write? "arcID,hash,modified,attr,size,name,messages,comment\n" : "") + archiveLines.join("\n") + "\n";
     if (write) {
         console.log(`writing ${archiveCSV}...`);
         fs.writeFileSync(archiveCSV, text);
@@ -333,14 +333,23 @@ let flushArchives = function() {
     archiveLines = [];
 };
 
+let flushDescriptions = function() {
+    let descCSV = `descs.csv`;
+    let text = (headers? "arcID,description\n" : "") + descLines.join("\n") + "\n";
+    console.log(`writing ${descCSV}...`);
+    fs.writeFileSync(descCSV, text);
+    descLines = [];
+};
+
 let flushFiles = function() {
     let write = true;
+    let fileCSV = `files.csv`;
     if (headers) {
-        write = !nFiles;
-        if (nFiles) nFiles--;
+        write = !nFiles++;
+    } else {
+        fileCSV = `files-${++nFiles}.csv`;
     }
-    let fileCSV = `files-${++nFiles}.csv`;
-    let text = (headers? "fileID,arcID,hash,modified,attr,size,compressed,method,name,path,messages,comment\n" : "") + fileLines.join("\n") + "\n";
+    let text = (headers && write? "fileID,arcID,hash,modified,attr,size,compressed,method,name,path,messages,comment\n" : "") + fileLines.join("\n") + "\n";
     if (write) {
         console.log(`writing ${fileCSV}...`);
         fs.writeFileSync(fileCSV, text);
@@ -350,7 +359,21 @@ let flushFiles = function() {
     fileLines = [];
 };
 
-let quoteString = function(s) {
+let quoteString = function(s, maxLength = 0) {
+    //
+    // The maxLength option was only added because I got an unexpected length error from MySQL
+    // on a string containing quotes, but I'm not sure that that was really the problem, so this
+    // option is disabled for now.
+    //
+    // if (maxLength) {
+    //     //
+    //     // Count the number of quotes in s and reduce its length accordingly...
+    //     //
+    //     let nQuotes = s.split('"').length - 1;
+    //     maxLength -= nQuotes;
+    //     if (s.length > maxLength) s = s.slice(0, maxLength);
+    // }
+    //
     let sQuoted = s.replace(/"/g, '""');
     if (sQuoted.indexOf(',') >= 0 || sQuoted == "NULL") sQuoted = `"${sQuoted}"`;
     return sQuoted;
@@ -426,7 +449,13 @@ for (let line of lines) {
             //
             let description = findDescription(pathName);
             if (description.length > longestDescription.length) longestDescription = description;
-            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${quoteString(pathName)},${quoteString(description)},${remainder}`);
+            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${quoteString(pathName)},${quoteString(description, 255)},${remainder}`);
+            //
+            // This is no longer needed, now that we're including descriptions in the archive CSVs...
+            //
+            // if (description) {
+            //     descLines.push(`${arcID},${quoteString(description, 255)}`);
+            // }
             archiveMode = true;
         }
         else if (+size == -1) {
@@ -506,6 +535,10 @@ for (let line of lines) {
 
 if (archiveLines.length) {
     flushArchives();
+}
+
+if (descLines.length) {
+    flushDescriptions();
 }
 
 if (fileLines.length) {
