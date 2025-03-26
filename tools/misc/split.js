@@ -34,7 +34,7 @@
  * Every time we encounter a new archive, we push a line with the following fields to the
  * archiveLines array:
  *
- *      arcID,hash,modified,attr,size,name,desc,messages,comment
+ *      arcID,hash,modified,attr,size,name,description,messages,comment
  *
  * We then increment fileID and push a line with the following fields to the fileLines array:
  *
@@ -46,16 +46,9 @@
  * Once we have pushed 500000 lines to fileLines, we write them to files-#.csv and empty the array;
  * ditto for archiveLines, which is written to arcs-#.csv.
  *
- * NOTES
+ * After importing all the split CSVs into MySQL, add a foreign key constraint to the "files" table:
  *
- * After importing all the split CSVs into MySQL, I noticed that the arcID of the first entry for
- * each archive in the "files" CSVs was off by 1, so I fixed those arcIDs after-the-fact:
- *
- *      UPDATE files SET arcID = arcID + 1 WHERE method = 'None' AND (name LIKE '%.ZIP' OR name LIKE '%.ARC');
- *
- * Once that was fixed, I was then able to add a foreign key constraint to the "files" table:
- *
- *      ALTER TABLE files ADD CONSTRAINT fk_arc_id FOREIGN KEY (arcID) REFERENCES arcs(arcID) ON DELETE CASCADE ON UPDATE CASCADE;
+ *      ALTER TABLE files ADD CONSTRAINT fk_arcID FOREIGN KEY (arcID) REFERENCES arcs(arcID) ON DELETE CASCADE ON UPDATE CASCADE;
  */
 import fs from "fs";
 import path from "path";
@@ -134,19 +127,30 @@ class CharSet {
     }
 }
 
-let args = process.argv.slice(2);
-let fileCSV = args[0];
+let headers = true;
+let nMaxLines = 500000;
+let nMaxDescription = 0;
+
+let args = process.argv.slice(1);
+let fileCSV = args[1];
+let matchArg = fileCSV && fileCSV.match(/--(\d+)/);
+if (matchArg) {
+    nMaxLines = +matchArg[1];
+    if (nMaxLines < 100) {
+        console.log("number of lines must be at least 100");
+        process.exit(1);
+    }
+    headers = false;
+    fileCSV = args[2];
+}
 if (!fileCSV) {
-    console.log("Usage: node split.js <CSV file>");
+    console.log("Usage: node split.js [--number] <CSV file>");
     process.exit(1);
 }
 
 let nFiles = 0;
 let nArchives = 0;
-let nMaxLines = 500000;
-let headers = true;     // if true, this also means we will NOT create split files
 let archiveLines = [];
-let descLines = [];
 let fileLines = [];
 let lastFileIndex = 0, lastFilePath = "";
 let archiveMode = false;
@@ -248,9 +252,9 @@ let findDescription = function(pathName) {
                     let match = line.match(/^(\S{1,8}\.?\S{1,3}?)\s+([\d,]+)\s+(\d+[/-]\d+[/-]\d+|)\s*(.*)$/);
                     if (match) {
                         if (archive) {
-                            if (archiveDesc.length > 255) {
-                                // console.log(`archive description exceeds 255 characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
-                                archiveDesc = archiveDesc.slice(0, 252) + "...";
+                            if (nMaxDescription && archiveDesc.length > nMaxDescription) {
+                                console.log(`archive description exceeds ${nMaxDescription} characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
+                                archiveDesc = archiveDesc.slice(0, nMaxDescription-3) + "...";
                             }
                             tapeInfo.tapeArchives[archive] = archiveDesc;
                         }
@@ -268,9 +272,9 @@ let findDescription = function(pathName) {
                     }
                 }
                 if (archive) {
-                    if (archiveDesc.length > 255) {
-                        // console.log(`archive description exceeds 255 characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
-                        archiveDesc = archiveDesc.slice(0, 252) + "...";
+                    if (nMaxDescription && archiveDesc.length > nMaxDescription) {
+                        // console.log(`archive description exceeds ${nMaxDescription} characters in ${tapeInfo.tapeFile}:\n\t${archiveDesc}`);
+                        archiveDesc = archiveDesc.slice(0, nMaxDescription-3) + "...";
                     }
                     tapeInfo.tapeArchives[archive] = archiveDesc;
                 }
@@ -323,7 +327,7 @@ let flushArchives = function() {
     } else {
         archiveCSV = `arcs-${++nArchives}.csv`;
     }
-    let text = (headers && write? "arcID,hash,modified,attr,size,name,messages,comment\n" : "") + archiveLines.join("\n") + "\n";
+    let text = (headers && write? "arcID,hash,modified,attr,size,name,description,messages,comment\n" : "") + archiveLines.join("\n") + "\n";
     if (write) {
         console.log(`writing ${archiveCSV}...`);
         fs.writeFileSync(archiveCSV, text);
@@ -331,14 +335,6 @@ let flushArchives = function() {
         fs.appendFileSync(archiveCSV, text);
     }
     archiveLines = [];
-};
-
-let flushDescriptions = function() {
-    let descCSV = `descs.csv`;
-    let text = (headers? "arcID,description\n" : "") + descLines.join("\n") + "\n";
-    console.log(`writing ${descCSV}...`);
-    fs.writeFileSync(descCSV, text);
-    descLines = [];
 };
 
 let flushFiles = function() {
@@ -359,23 +355,11 @@ let flushFiles = function() {
     fileLines = [];
 };
 
-let quoteString = function(s, maxLength = 0) {
-    //
-    // The maxLength option was only added because I got an unexpected length error from MySQL
-    // on a string containing quotes, but I'm not sure that that was really the problem, so this
-    // option is disabled for now.
-    //
-    // if (maxLength) {
-    //     //
-    //     // Count the number of quotes in s and reduce its length accordingly...
-    //     //
-    //     let nQuotes = s.split('"').length - 1;
-    //     maxLength -= nQuotes;
-    //     if (s.length > maxLength) s = s.slice(0, maxLength);
-    // }
-    //
+let quoteString = function(s) {
     let sQuoted = s.replace(/"/g, '""');
-    if (sQuoted.indexOf(',') >= 0 || sQuoted == "NULL") sQuoted = `"${sQuoted}"`;
+    if (sQuoted.indexOf('"') >= 0 || sQuoted.indexOf(',') >= 0 || sQuoted == "NULL") {
+        sQuoted = `"${sQuoted}"`;
+    }
     return sQuoted;
 };
 
@@ -399,11 +383,8 @@ for (let line of lines) {
         if (method.length > longestMethod.length) longestMethod = method;
         let fileName, pathName, remainder = match[7];
         //
-        // This regex is intended to capture either a quoted OR unquoted name; note that either form
-        // is permitted to contain quotes (but only the double double-quote variety: '""') and only the
-        // former is permitted to contain commas.
-        //
-        // It also captures the rest of the line, which becomes the new remainder (path, messages, and comment).
+        // This regex is intended to capture either a quoted OR unquoted name;
+        // it also captures the rest of the line, which becomes the new remainder.
         //
         match = remainder.match(/^(?:"(.*?[^"])",|([^,]*),)(.*)$/);
         if (match) {
@@ -412,6 +393,7 @@ for (let line of lines) {
             // group in match[2], and since they both can't be true, one of them will always be undefined.
             //
             fileName = match[1] || match[2];
+            fileName = fileName.replace(/""/g, '"');
             if (fileName.length > longestFileName.length) longestFileName = fileName;
             remainder = match[3];
             //
@@ -420,6 +402,7 @@ for (let line of lines) {
             match = remainder.match(/^(?:"(.*?[^"])",|([^,]*),)(.*)$/);
             if (match) {
                 pathName = match[1] || match[2];
+                pathName = pathName.replace(/""/g, '"');
                 if (pathName.length > longestPathName.length) longestPathName = pathName;
                 remainder = match[3];
             }
@@ -445,17 +428,21 @@ for (let line of lines) {
                 console.log(`archive ${pathName} does not match previous file ${pathPrev}`);
             }
             //
+            // Advance arcID, and update the previous file's arcID to match this new archive's arcID.
+            //
+            ++arcID;
+            if (fileLines.length) {
+                let prevFileIndex = fileLines.length - 1;
+                fileLines[prevFileIndex] = fileLines[prevFileIndex].replace(/^(\d+),(\d+),/, `$1,${arcID},`);
+            } else {
+                console.log(`unable to update previous file with arcID ${arcID}`);
+            }
+            //
             // Let's see if we can find a matching LST/TXT file with a description for this archive.
             //
             let description = findDescription(pathName);
             if (description.length > longestDescription.length) longestDescription = description;
-            archiveLines.push(`${++arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${quoteString(pathName)},${quoteString(description, 255)},${remainder}`);
-            //
-            // This is no longer needed, now that we're including descriptions in the archive CSVs...
-            //
-            // if (description) {
-            //     descLines.push(`${arcID},${quoteString(description, 255)}`);
-            // }
+            archiveLines.push(`${arcID},${prevMatch.hash},${prevMatch.modified},${prevMatch.attr},${prevMatch.size},${quoteString(pathName)},${quoteString(description)},${remainder}`);
             archiveMode = true;
         }
         else if (+size == -1) {
@@ -535,10 +522,6 @@ for (let line of lines) {
 
 if (archiveLines.length) {
     flushArchives();
-}
-
-if (descLines.length) {
-    flushDescriptions();
 }
 
 if (fileLines.length) {
