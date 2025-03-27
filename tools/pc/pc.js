@@ -68,6 +68,7 @@ export default class PC extends PCJSLib {
     localDir = ".";             // local directory used to build localDisk
     localDisk = "PCJS.json";
     diskLabel = "default";
+    machineDrive = "";          // current drive *inside* the machine
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
     kbTarget = 10 * 1024;       // default disk capacity, in kilobytes (Kb)
@@ -902,7 +903,17 @@ export default class PC extends PCJSLib {
                 let off = cpu.getIP()+6;
                 let len = cpu.getSOByte(cpu.segDS, off++);
                 let appName = getString(cpu.segDS, off, len).trim();
-                this.machineDir = getString(cpu.segDS, 0x120, -1);
+                //
+                // Check for newer helper binaries that store both current drive AND current directory into
+                // the offset stored at offset 0x101; otherwise, we continue with the hard-coded offset of 0x120.
+                //
+                off = 0x120;
+                this.machineDrive = "";
+                if (cpu.getSOByte(cpu.segDS, 0x100) == 0xBE) {
+                    off = cpu.getSOWord(cpu.segDS, 0x101);
+                    this.machineDrive = String.fromCharCode(0x40 + cpu.getSOByte(cpu.segDS, off++));
+                }
+                this.machineDir = getString(cpu.segDS, off, -1);
                 setTimeout(function() {
                     pc.doCommand("exec " + appName + " " + args, !!pc.drives[pc.driveBuild].driveManifest);
                 }, 0);
@@ -1826,10 +1837,49 @@ export default class PC extends PCJSLib {
             for (let appName of appNames) {
                 if (appName[0] == '.') continue;
                 let appFile = appName.toUpperCase() + ".COM";
-                let appContents = [0xB4, 0x47, 0xB2, 0x03, 0xBE, 0x20, 0x01, 0xCD, 0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53];
-                if (this.floppy) appContents[3] = 0x01;
-                appContents.push(appName.length);
-                for (let j = 0; j < appName.length; j++) {
+                //
+                // Here's the disassembly of the original helper binary:
+                //
+                //      0100 B447       MOV     AH,47
+                //      0102 B203       MOV     DL,03
+                //      0104 BE2001     MOV     SI,0120
+                //      0107 CD21       INT     21
+                //      0109 CD20       INT     20
+                //      010B EBFE       JMP     010B
+                //      010D 50434A53   DB      "PCJS"
+                //
+                // And here's the disassembly of the new, improved helper binary, which now retrieves and
+                // stores the current (1-based) drive number into the byte preceding the current directory buffer.
+                //
+                //      0100 BE2201     MOV     SI,0122
+                //      0103 B419       MOV     AH,19
+                //      0105 CD21       INT     21
+                //      0107 40         INC     AX
+                //      0108 8804       MOV     [SI],AL
+                //      010A 46         INC     SI
+                //      010B B447       MOV     AH,47
+                //      010D 88C2       MOV     DL,AL
+                //      010F CD21       INT     21
+                //      0111 CD20       INT     20
+                //      0113 EBFE       JMP     0113
+                //      0115 50434A53   DB      "PCJS"
+                //
+                let appContents = [
+                    0xBE, 0x22, 0x01, 0xB4, 0x19, 0xCD, 0x21, 0x40, 0x88, 0x04, 0x46, 0xB4, 0x47, 0x88, 0xC2, 0xCD,
+                    0x21, 0xCD, 0x20, 0xEB, 0xFE, 0x50, 0x43, 0x4A, 0x53
+                ];
+                //
+                // We don't hard-code a drive number into the "Get Current Directory" code anymore...
+                //
+                //      if (this.floppy) appContents[3] = 0x01;
+                //
+                let len = appName.length;
+                if (len > 8) {
+                    printf("warning: app name \"%s\" truncated to 8 characters\n", appName);
+                    len = 8;
+                }
+                appContents.push(len);
+                for (let j = 0; j < len; j++) {
                     appContents.push(appName.charCodeAt(j));
                 }
                 driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHidden));
@@ -1882,7 +1932,12 @@ export default class PC extends PCJSLib {
                 text += command + "\n";
             }
         }
-        if (this.machineDir) text += "CD " + this.machineDir + "\n";
+        if (this.machineDrive) {
+            text += this.machineDrive + ":\n";
+        }
+        if (this.machineDir) {
+            text += "CD " + this.machineDir + "\n";
+        }
         if (this.test) {
             text += "quit\n";
         }
