@@ -152,6 +152,7 @@ let nFiles = 0;
 let nArchives = 0;
 let archiveLines = [];
 let fileLines = [];
+let fixLines = [];
 let lastFileIndex = 0, lastFilePath = "";
 let archiveMode = false;
 let arcID = 10000000, fileID = 20000000;
@@ -365,6 +366,7 @@ let quoteString = function(s) {
 
 let iLine = 0;
 let prevMatch = {};
+let arcTable = {};
 
 for (let line of lines) {
     iLine++;
@@ -431,6 +433,9 @@ for (let line of lines) {
             // Advance arcID, and update the previous file's arcID to match this new archive's arcID.
             //
             ++arcID;
+            if (arcTable[pathName]) {
+                arcTable[pathName] = arcID;
+            }
             if (fileLines.length) {
                 let prevFileIndex = fileLines.length - 1;
                 fileLines[prevFileIndex] = fileLines[prevFileIndex].replace(/^(\d+),(\d+),/, `$1,${arcID},`);
@@ -500,7 +505,28 @@ for (let line of lines) {
             }
             lastFilePath = path.join(pathName, fileName);
             lastFileIndex = fileLines.length;
-            fileLines.push(`${++fileID},${arcID},${hash},${modified},${attr},${size},${compressed},${method},${quoteString(fileName)},${quoteString(pathName)},${remainder}`);
+            fileID++;
+            let arcEntry = "NULL", arcName = null;
+            if (fileName.match(/\.(ZIP|ARC)$/i)) {
+                arcName = path.join(pathName, fileName);
+            } else {
+                let match = pathName.match(/^(.*\.(?:ZIP|ARC)).*$/i);
+                if (match) {
+                    arcName = match[1];
+                }
+            }
+            if (arcName) {
+                arcEntry = arcTable[arcName];
+                if (!arcEntry) {
+                    arcTable[arcName] = arcEntry = arcID;
+                }
+                if (arcEntry != arcID) {
+                    // fixLines.push(`${fileID},${arcID},${arcEntry}`);
+                }
+            } else {
+                // fixLines.push(`${fileID},${arcID},${arcEntry}`);
+            }
+            fileLines.push(`${fileID},${arcEntry},${hash},${modified},${attr},${size},${compressed},${method},${quoteString(fileName)},${quoteString(pathName)},${remainder}`);
             archiveMode = false;
         }
         prevMatch = {
@@ -526,6 +552,11 @@ if (archiveLines.length) {
 
 if (fileLines.length) {
     flushFiles();
+}
+
+if (fixLines.length) {
+    console.log(`writing fixes.csv...`);
+    fs.writeFileSync("fixes.csv", fixLines.join("\n") + "\n");
 }
 
 console.log(`longest file name: ${longestFileName.length} (${longestFileName})`);
