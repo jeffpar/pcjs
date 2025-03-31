@@ -399,6 +399,11 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         if (typeof extractDir != "string") {
             extractDir = "";
         } else if (diskFile.indexOf("http") != 0) {
+            //
+            // "%c" is an undocumented option that allows me to extract files to a companion
+            // folder (eg, "contents") located alongside the original folder (eg, "download").
+            //
+            extractDir = extractDir.replace("%c", path.dirname(diskFile).replace("/download/", "/contents/"));
             extractDir = extractDir.replace("%d", path.dirname(diskFile)).replace("%f", di.getName());
         }
         let extractName = "", extractFolder = "";
@@ -875,7 +880,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             if (typeof output == "string") output = [output];
             if (Array.isArray(output)) {
                 output.forEach((outputFile) => {
-                    let file = outputFile.replace("%d", path.dirname(diskFile));
+                    let file = outputFile.replace("%d", path.dirname(diskFile)).replace("%f", di.getName());
                     diskLib.writeDiskSync(file, di, argv['legacy'], argv['indent']? 2 : 0, argv['overwrite'], argv['quiet'], argv['writable'], argv['source']);
                 });
             } else {
