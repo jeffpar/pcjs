@@ -1301,6 +1301,26 @@ export default class DiskLib {
                 if (ext == "json") {
                     if (!di.buildDiskFromJSON(db)) di = null;
                 }
+                else if (ext == "zip" || ext == "arc" || ext == "exe") {
+                    let diskLib = this;
+                    db = new DataBuffer(db);
+                    let zip = new node.StreamZip({
+                        file: diskName,
+                        buffer: db.buffer,
+                        arcType: ext == "arc"? node.StreamZip.TYPE_ARC : node.StreamZip.TYPE_ZIP,
+                        storeEntries: true,
+                        nameEncoding: "ascii"
+                    }).on('ready', () => {
+                        let aFileData = diskLib.getArchiveFiles(zip);
+                        let db = new DataBuffer();
+                        di.buildDiskFromFiles(db, diskName, aFileData);
+                        zip.close();
+                    }).on('error', (err) => {
+                        zip.close();
+                        throw err;
+                    });
+                    zip.open();
+                }
                 else {
                     db = new DataBuffer(db);
                     if (ext == "psi") {
@@ -1311,7 +1331,7 @@ export default class DiskLib {
                 }
             }
         } catch(err) {
-            this.printError(err);
+            this.printError(err, diskFile);
             return null;
         }
         return di;

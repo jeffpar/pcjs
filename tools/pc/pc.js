@@ -2333,7 +2333,7 @@ export default class PC extends PCJSLib {
         } else {
             controller = this.floppy? this.machine.fdc : this.machine.hdc;
         }
-        let imageData = controller && controller.aDrives && controller.aDrives.length && controller.aDrives[iDrive].disk;
+        let imageData = controller && controller.aDrives && controller.aDrives.length && iDrive < controller.aDrives.length && controller.aDrives[iDrive].disk;
         if (imageData) {
             let diskInfo = new DiskInfo(device, "PCJS");
             if (diskInfo.buildDiskFromJSON(imageData, true)) {
@@ -3489,12 +3489,13 @@ export default class PC extends PCJSLib {
     {
         let loading = false;
         let error = "", warning = "";
-
         let splice = false;
+
         if (!sMachine) {
             sMachine = argv[1];                 // for convenience, we also allow a bare machine name
             if (sMachine) splice = true;
         }
+
         if (sMachine) {
             this.localMachine = this.checkMachine(sMachine);
             if (this.localMachine) {

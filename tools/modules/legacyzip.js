@@ -304,7 +304,10 @@ export class LegacyZip
                 //
             }
             else {
-                assert(true, "explodeSync() recovered");        // would like to catch just one example of that "PKZIP 1.01/1.02" bug
+                //
+                // We can see this bug in action when decompressing cd.textfiles.com/cds/originalsw/download/25/PKZ101.EXE
+                //
+                assert(true, "explodeSync() recovered");
             }
         }
         return explode;
