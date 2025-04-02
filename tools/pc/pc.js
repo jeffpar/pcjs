@@ -66,7 +66,8 @@ export default class PC extends PCJSLib {
     savedState = "state386.json";
     localMachine = "";          // current machine config file
     localDir = ".";             // local directory used to build localDisk
-    localDisk = "PCJS.json";
+    localDisk = "harddisk.json";
+    localDiskette = "floppy.json";
     diskLabel = "default";
     machineDrive = "";          // current drive *inside* the machine
     machineDir = "";            // current directory *inside* the machine
@@ -1314,9 +1315,30 @@ export default class PC extends PCJSLib {
             }
 
             if (config['fdc']) {
-                if (pc.bootSelect[0] != 'A') {
+                /**
+                 * If the --diskette option was used, then localDiskette will be set, and so we
+                 * mount that diskette; whether or not they also want to boot from it will have to
+                 * be determined by the specified --boot drive (if any).
+                 */
+                if (pc.localDiskette) {
+                    let disk = pc.localDiskette;
+                    let name = node.path.basename(pc.localDiskette);
+                    let boot = (pc.bootSelect[0] == 'A');
+                    config['fdc']['autoMount'] = "{A:{name:\"" + name + "\",path:\"" + disk + "\"}}";
+                    config['fdc']['boot'] = boot;
+                    if (boot) pc.savedState = "";
+                }
+                else if (pc.bootSelect[0] != 'A') {
+                    /**
+                     * If we're not booting from a floppy, then generally we don't want to mount
+                     * a floppy diskette.
+                     */
                     config['fdc']['autoMount'] = "{A:{name:\"None\"}}";
                 } else {
+                    /**
+                     * This path is intended to deal with floppy disk images we have built, as indicated
+                     * by the --floppy (-f) option, and which generally should be bootable as well.
+                     */
                     let disk, name;
                     let driveInfo = pc.drives[pc.driveBuild];
                     if (pc.floppy) {
@@ -1645,7 +1667,7 @@ export default class PC extends PCJSLib {
      *
      * The first three system files on the disk image will be those listed below (eg, IO.SYS, MSDOS.SYS, and
      * COMMAND.COM); if any of those files already exist in the current directory, ours will take precedence.
-     * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command.
+     * As for AUTOEXEC.BAT, we read any existing file (or create an empty file) and append the provided command(s).
      *
      * @this {PC}
      * @param {string} sDir
@@ -2245,7 +2267,7 @@ export default class PC extends PCJSLib {
     updateDriveInfo(driveInfo, diskInfo)
     {
         if (diskInfo.getDriveType(driveInfo)) {
-            if (this.verbose) {
+            if (this.debug) {
                 printf("%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.nCylinders, driveInfo.nHeads, driveInfo.nSectors, driveInfo.driveSize.toFixed(1));
             }
         }
@@ -3275,6 +3297,8 @@ export default class PC extends PCJSLib {
         let defaults = configJSON['defaults'] || {};
         this.messages = PC.removeFlag(argv, 'messages', !!defaults['messages']);
         this.localDir = defaults['dir'] || this.localDir;
+        this.localDiskette = defaults['diskette'] || this.localDiskette;
+        this.localDisk = defaults['disk'] || this.localDisk;
         this.machineType = defaults['type'] || this.machineType;
         this.savedMachine = defaults['machine'] || this.savedMachine;
         this.savedState = defaults['state'] || this.savedState;
@@ -3480,12 +3504,13 @@ export default class PC extends PCJSLib {
      * @this {PC}
      * @param {Array.<string>} argv
      * @param {string} [sMachine] (optional machine configuration file)
+     * @param {string} [sDiskette] (optional source diskette image)
      * @param {string} [sDisk] (optional source disk image)
      * @param {string} [sDirectory] (optional source directory)
      * @param {string} [sLocalDisk] (optional target disk image, passed to buildDisk())
      * @param {string} [sCommands] (optional list of internal commands)
      */
-    async processArgs(argv, sMachine, sDisk, sDirectory, sLocalDisk, sCommands)
+    async processArgs(argv, sMachine, sDiskette, sDisk, sDirectory, sLocalDisk, sCommands)
     {
         let loading = false;
         let error = "", warning = "";
@@ -3506,6 +3531,44 @@ export default class PC extends PCJSLib {
                 }
                 sMachine = "";
             }
+        }
+
+        /**
+         * If a diskette has been specified, then we need to decide whether the machine
+         * can load it as-is; if so, then we can simply assign the path to localDiskette.
+         *
+         * Otherwise, if not (for example, if it's a ZIP archive), call readDiskAsync()
+         * (which has been modified to also transform ZIP/EXE/ARC archives into disk images)
+         * and write the resulting disk to the default localDiskette path.
+         *
+         * Lastly, if no diskette was specified, or there was an error reading or writing
+         * the disk, then we must clear localDiskette.
+         */
+        if (sDiskette) {
+            if (sDiskette.match(/\.(img|json)$/i)) {
+                this.localDiskette = sDiskette;
+            } else {
+                let diskInfo = await diskLib.readDiskAsync(sDiskette);
+                if (diskInfo) {
+                    let sLocalDiskette = this.localDiskette;
+                    if (sLocalDiskette.indexOf(node.path.sep) < 0) {
+                        sLocalDiskette = node.path.join(pcjsDir, "disks", sLocalDiskette);
+                    }
+                    if (this.verbose) {
+                        printf("building diskette %s as %s\n", sDiskette, sLocalDiskette);
+                    }
+                    if (diskLib.writeDiskSync(sLocalDiskette, diskInfo, false, 0, true, true)) {
+                        this.localDiskette = sLocalDiskette;
+                    } else {
+                        sDiskette = "";
+                    }
+                } else {
+                    sDiskette = "";
+                }
+            }
+        }
+        if (!sDiskette) {
+            this.localDiskette = "";
         }
 
         if (sDisk) {
@@ -3781,6 +3844,7 @@ export default class PC extends PCJSLib {
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
                 "--disk=[filename]":        "use drive disk image (instead of directory)",
+                "--diskette=[filename]":    "load diskette image into drive A",
                 "--controller=[id]":        "set drive controller (XT, AT, COMPAQ, or PCJS)",
                 "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
                 "--fat=[value(s)]":         "set FAT type (12 or 16) [:cluster size[:root size]]",
@@ -3827,9 +3891,17 @@ export default class PC extends PCJSLib {
         }
 
         let commands = PC.removeFlag(argv, 'commands')? "none" : PC.removeArg(argv, 'commands', this.commands);
-        await this.processArgs(argv, PC.removeArg(argv, 'select'), PC.removeArg(argv, 'disk'), PC.removeArg(argv, 'dir'), PC.removeArg(argv, 'save'), commands).catch((err) => {
-            printf("exception: %s\n", err.message);
-        });
+        await this.processArgs(
+            argv,
+            PC.removeArg(argv, 'select'),
+            PC.removeArg(argv, 'diskette'),
+            PC.removeArg(argv, 'disk'),
+            PC.removeArg(argv, 'dir'),
+            PC.removeArg(argv, 'save'),
+            commands).catch((err) => {
+                printf("exception: %s\n", err.message);
+            }
+        );
 
         if (!this.checkRemainingArgs(argv)) {
             this.exit(1);

@@ -1433,7 +1433,20 @@ export default class DiskInfo {
             cbMax = cTotalSectors * this.cbSector;
         }
 
-        this.printf(MESSAGE.DISK + MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", aFileData.length, cbTotal);
+        /*
+         * aFileData.length is only the number of entries in the root directory; let's count ALL the entries,
+         * including children.
+         */
+        let countFiles = function(files) {
+            let count = 0;
+            if (files) {
+                for (let file of files) {
+                    count += 1 + countFiles(file.files);
+                }
+            }
+            return count;
+        };
+        this.printf(MESSAGE.DISK + MESSAGE.INFO, "calculated size for %d files: %d bytes (%#x)\n", countFiles(aFileData), cbTotal);
 
         if (cbTotal >= cbMax) {
             this.printf(MESSAGE.DISK + MESSAGE.ERROR, "file(s) too large (%d bytes total, %d bytes maximum)\n", cbTotal, cbMax);
@@ -3141,14 +3154,14 @@ export default class DiskInfo {
             return null;
         }
 
-        this.printf(MESSAGE.DEBUG + MESSAGE.DISK, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
+        this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
 
         /*
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
          * be a perfect multiple of clusSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
         let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusSecs;
-        if (nWasted) this.printf(MESSAGE.DISK + MESSAGE.INFO, "%s volume %d contains %d sectors, wasting %d sectors\n", this.diskName, iVolume, vol.lbaTotal, nWasted);
+        if (nWasted) this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s volume %d contains %d sectors, wasting %d sectors\n", this.diskName, iVolume, vol.lbaTotal, nWasted);
 
         /*
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
@@ -3196,7 +3209,7 @@ export default class DiskInfo {
             }
         }
 
-        this.printf(MESSAGE.DISK + MESSAGE.INFO, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clusBad, vol.clusFree, vol.clusFree * vol.clusSecs * vol.cbSector);
+        this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clusBad, vol.clusFree, vol.clusFree * vol.clusSecs * vol.cbSector);
         return vol;
     }
 
@@ -4535,7 +4548,7 @@ export default class DiskInfo {
                     cbTotal = nTotalSectors * cbSector;
                     parms[5] = cbTotal / 1024 / 1024;
                     if (device) {
-                        device.printf(MESSAGE.DISK + MESSAGE.INFO, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
+                        device.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s drive type %2d: %4d cylinders, %2d heads, %2d sectors/track (%5sMb)%s\n", driveInfo.driveCtrl, parms[0], parms[1], parms[2], parms[3], parms[5].toFixed(1), driveInfo.driveType == parms[0]? '*' : '');
                     }
                     if (driveInfo.driveType >= 0) {
                         if (driveInfo.driveType == parms[0]) {

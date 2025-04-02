@@ -66653,6 +66653,19 @@ class FDC extends Component {
         this.aDriveTypes = null;
         this.aDiskettes = parmsFDC['diskettes'];
         this.sDisketteServer = parmsFDC['server'] || "";
+        /**
+         * The 'boot' parameter is not recognized by our machine transformation templates (ie, XML machines
+         * transformed by /machines/pcx86/xsl/components.xsl or JSON machines transformed by /_includes/machine.html),
+         * so you'll never see a 'boot' setting from machines on the website.
+         *
+         * It is currently only used by loadMachine() in /tools/pc/pc.js, to disable booting from drive A when
+         * loading a (likely non-bootable) diskette image into that drive.
+         *
+         * Note that setting fBootable to false is a kludge, because all it does is fail any attempt to read the
+         * first sector from a disk into 0:7C00h (the traditional boot sector memory location).  There aren't a lot of
+         * other great options, because BIOSes back in "the old days" offered no means of modifying the boot sequence.
+         */
+        this.fBootable = (parmsFDC['boot'] !== false);
 
         /**
          * We don't eval() sDriveTypes until initBus() is called, so that we can check for any machine overrides;
@@ -67352,7 +67365,7 @@ class FDC extends Component {
 
         let nHeads = driveType && driveType['heads'];
         drive.fBootable = driveType && driveType['boot'];
-        if (drive.fBootable == null) drive.fBootable = true;
+        if (drive.fBootable == null) drive.fBootable = this.fBootable;
 
         if (fInit) {
             drive.fWritable = true;
