@@ -2008,10 +2008,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all=ibm-wgam-wbiz-collection/ibm0000-0009/*/*.{ARC,ZIP}",
+        "--dir=ibm0020-0029",
         "--list=csv"
       ],
-      "cwd": "/Volumes/MacSSD/Downloads",
+      "cwd": "/Volumes/MacSSD/Downloads/ibm-wgam-wbiz-collection",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

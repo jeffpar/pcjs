@@ -1415,12 +1415,16 @@ export default class CPU1500 extends CPU {
                     if (k < 4) sDst = CPU1500.OP_INPUTS[k];
                     break;
                 case 2:
-                    if (k < 6) sDst = "NUL";    // "suppressed" operation
+                    if (k < 5) {
+                        sDst = "NUL";                   // "suppressed" operation
+                    } else if (k == 5) {
+                        sDst = CPU1500.OP_INPUTS[j];
+                    }
                     break;
                 case 3:
                     if (!n) {
                         sOp = "XCHG";
-                        if (!j) sDst = "A";     // j != 0 or k >= 4 is invalid
+                        if (!j) sDst = "A";             // j != 0 or k >= 4 is invalid
                         if (k < 4) sSrc = CPU1500.OP_INPUTS[k];
                     } else {
                         sOp = "MOVE";

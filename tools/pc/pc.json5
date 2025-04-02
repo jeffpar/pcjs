@@ -10,6 +10,8 @@
     "dir": ".",
     "machine": "compaq386.json",
     "state": "state386.json",
+    "diskette": "diskette.json",// default name of local diskette image corresponding to 'diskette' option, if any
+    "disk": "pcjs.json",        // default name of local built (floppy or hard) disk image corresponding to local 'dir'
     "messages": "",             // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
     "normalize": false,         // true converts LF to CR/LF and translates/removes non-CP437 characters from text files
     "config": [                 // if set (and no CONFIG.SYS already exists), then one will be created with these lines
