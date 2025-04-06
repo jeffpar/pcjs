@@ -4,7 +4,7 @@ title: "Aversion to History: A PKZIP/Wikipedia Story"
 date: 2025-04-05 10:00:00
 permalink: /blog/2025/04/05/
 preview: /blog/images/aversion-to-history.png
-description: "Some observations about Wikipedia guidelines and PKZIP version history."
+description: "Some observations about Wikipedia guidelines and PKZIP version history"
 ---
 
 A couple of years ago, while sifting through lots of ZIP archives from old [Shareware CD-ROMs](https://www.pcjs.org/blog/2023/04/06/),
@@ -122,7 +122,7 @@ but even if that had been allowed, that seemed a little too passive-aggressive.
 
 It's much easier for me to just write whatever I want on my own website -- adhering at all times to the strictest of guidelines, of course. ;-)
 
-## My Own Limited Survey of PKZIP Versions (1989-1993)
+### My Own Limited Survey of PKZIP Versions (1989-1993)
 
 On a tangential note, here's a summary of what I recently learned about PKZIP versions while working through the [ibm-wgam-wbiz-collection](https://archive.org/details/ibm-wgam-wbiz-collection),
 which has now been ingested by [DiscMaster](https://discmaster.textfiles.com/).
@@ -143,7 +143,7 @@ that shipped alongside each `PKZIP.EXE` below.
 | PKZIP 1.01       | Jul 21 1989 | 1989-07-21 01:01:00 | 31342 | [PKZ101.EXE](http://cd.textfiles.com/originalsw/25/pkz101.exe) | 36408e97e694cd17b12c3e3bfdac2a71 | [Contents](#pkzip-101)
 | PKZIP 1.02       | Oct 01 1989 | 1989-10-01 01:02:00 | 31408 | [PKZ102.EXE](https://discmaster.textfiles.com/file/11833/sdf.org.zip/sdf.org/pub/computers/pcjr/arc/PKZ102.EXE) | 6e762ea5460dcaae43b73a6ec51e50cc | [Contents](#pkzip-102)
 | PKZIP 1.10       | Mar 15 1990 | 1990-03-15 01:10:00 | 34296 | [PKZ110.EXE](https://discmaster.textfiles.com/file/17384/TheUltimateSharewareCollect.cdr/ut/ut037.zip/PKZ110.EXE) | 5036d372ac010331a78071a574354cf0 | [Contents](#pkzip-110)
-| PKZIP 1.93 Alpha | Oct 15 1991 | 1991-10-15 19:30:00 | 24411 | [PKZ193A.EXE](https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0044.tar/ibm0044/PKZ193A.EXE) | 0ece8648324cafda50549ca040421fc5 | [Contents](#pkzip-193a)
+| PKZIP 1.93 Alpha | Oct 15 1991 | 1991-10-15 19:30:00 | 24411 | [PKZ193A.EXE](https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0044.tar/ibm0044/PKZ193A.EXE) | 0ece8648324cafda50549ca040421fc5 | [Contents](#pkzip-193-alpha)
 | PKZIP 2.01       | Mar 15 1992 | 1992-03-15 02:01:00 | 24869 | [PKZ201.ZIP](https://discmaster.textfiles.com/file/30009/wbiz0250-0259/wbiz0250.tar/wbiz0250/PKZ201.ZIP) | b2d208014330d764510bdc54de3a51fd | [Contents](#pkzip-201)
 | PKZIP 2.04c      | Dec 28 1992 | 1992-12-28 02:04:12 | 41462 | [PKZ204C.EXE](https://discmaster.textfiles.com/file/18224/World_Of_Computer_Software-02-386-Vol-2of3.iso/w/wxpress2.zip/PKZ204C.EXE) | 60de53bc608d662f02bf8037e302e337 | [Contents](#pkzip-204c)
 | PKZIP 2.04e      | Jan 25 1993 | 1993-01-25 02:04:14 | 42475 | [PKZ204E.EXE](https://discmaster.textfiles.com/file/4695/sound_sensations.iso/utils/zipfiles/pkz204e.exe) | fe72c498c1012fca65055250d90802e9 | [Contents](#pkzip-204e)
@@ -156,7 +156,7 @@ Other `PKZIP.EXE` variations included versions licensed to Microsoft and IBM, su
 | PKZIP 1.1  [MS]  | Nov 10 1990 | 1990-11-10 00:00:02 | 23509 | [PKZIP.EXE](https://discmaster.textfiles.com/file/29651/ibm0330-0339/ibm0333.tar/ibm0333/MSONLIN2.ZIP/PKZIP.EXE) | 901ddd289e845024511ce19eafb16870 | [Contents](#pkzip-11-ms)
 | PKZIP 1.11 [IBM] | Nov 23 1990 | 1990-11-23 00:00:00 | 23458 | [PKZIP.EXE](https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0040.tar/ibm0040/W3DRV12.ZIP/PKZIP.EXE) | caf3d28e4e27628a28e97a238780d72a | [Contents](#pkzip-111-ibm)
 
-## PKZIP 0.80-Beta
+### PKZIP 0.80 Beta
 
 ```
 pc.js v3.00
@@ -201,7 +201,7 @@ software, regardless of the form of the claim.  The person using the software
 bears all risk as to the quality and performance of the software.
 ```
 
-## PKZIP 0.90
+### PKZIP 0.90
 
 ```
 pc.js v3.00
@@ -254,7 +254,7 @@ check or money order to:   PKWARE, Inc.
                            Glendale, WI 53217
 ```
 
-## PKZIP 0.92
+### PKZIP 0.92
 
 ```
 pc.js v3.00
@@ -311,7 +311,7 @@ check or money order to:   PKWARE, Inc.
                            Glendale, WI 53217
 ```
 
-## PKZIP 1.00ß
+### PKZIP 1.00ß
 
 ```
 pc.js v3.00
@@ -366,7 +366,7 @@ check or money order to:   PKWARE, Inc.
                            Glendale, WI 53217
 ```
 
-## PKZIP 1.01
+### PKZIP 1.01
 
 ```
 pc.js v3.00
@@ -430,7 +430,7 @@ check or money order to:   PKWARE, Inc.
                            Glendale, WI 53217
 ```
 
-## PKZIP 1.02
+### PKZIP 1.02
 
 ```
 pc.js v3.00
@@ -632,7 +632,7 @@ o Do I have to convert the .ZIP files I made with earlier version of PKZIP?
     compression.
 ```
 
-## PKZIP 1.10
+### PKZIP 1.10
 
 ```
 pc.js v3.00
@@ -757,7 +757,7 @@ of PKZIP/PKUNZIP/PKSFX etc. version 1.1 include:
   instruction sets and 32-bit registers.
 ```
 
-## PKZIP 1.1 [MS]
+### PKZIP 1.1 [MS]
 
 ```
 pc.js v3.00
@@ -815,7 +815,7 @@ This copy of PKZIP has been licensed to Microsoft Corporation for
 distribution to Microsoft customers.
 ```
 
-## PKZIP 1.11 [IBM]
+### PKZIP 1.11 [IBM]
 
 ```
 pc.js v3.00
@@ -865,7 +865,7 @@ PKWARE, Inc.
 Glendale, WI 53217
 ```
 
-## PKZIP 1.93A
+### PKZIP 1.93 ALPHA
 
 ```
 pc.js v3.00
@@ -1157,7 +1157,7 @@ R - Rename it!  This will prompt you for a new name of the file and then
     files.
 ```
 
-## PKZIP 2.01
+### PKZIP 2.01
 
 ```
 pc.js v3.00
@@ -1427,7 +1427,7 @@ R - Rename it!  This will prompt you for a new name of the file and then
     files.
 ```
 
-## PKZIP 2.04c
+### PKZIP 2.04c
 
 ```
 pc.js v3.00
@@ -1564,7 +1564,7 @@ of PKZIP/PKUNZIP/PKSFX etc. version 2.04c include:
         files which PKUNZIP can detect tampering of.
 ```
 
-## PKZIP 2.04e
+### PKZIP 2.04e
 
 ```
 pc.js v3.00
@@ -1821,7 +1821,7 @@ PKZIP/PKUNZIP from version 2.04c.
     or directory.  Directory dates are now ignored in this version.
 ```
 
-## PKZIP 2.04g
+### PKZIP 2.04g
 
 ```
 pc.js v3.00
