@@ -60,14 +60,11 @@ export default class StreamZip extends events.EventEmitter {
         .field('extraLen',      Structure.UINT16)       // extra field length
         .verifySize(30);
 
-    static ExtHeader = new Structure("ExtHeader")
+    static SpanHeader = new Structure("SpanHeader")
         .field('signature',     Structure.UINT32, {
-            'EXTSIG': 0x08074b50                        // "PK\007\008" (data descriptor signature)
-        })
-        .field('crc',           Structure.INT32)        // uncompressed file CRC-32 value
-        .field('compressedSize',Structure.UINT32)       // compressed size
-        .field('size',          Structure.UINT32)       // uncompressed size
-        .verifySize(16);
+            'SPANSIG': 0x08074b50                       // "PK\007\008" (spanned/split archive signature)
+        })                                              // if present, followed by 1 or more LocalHeader structures
+        .verifySize(4);
 
     static CentralHeader = new Structure("CentralHeader")
         .field('signature',     Structure.UINT32, {

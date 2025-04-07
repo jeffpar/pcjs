@@ -257,10 +257,6 @@ export default class DiskLib {
                         arcType = node.StreamZip.TYPE_ARC;
                         this.printf("warning: overriding %s as type ARC (%d)\n", sFile, arcType);
                     }
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 4 && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
-                        // db = db.slice(0, db.length - 4);
-                        this.printf("warning: ZIP extended header signature detected (%#010x)\n", node.StreamZip.ExtHeader.signature.EXTSIG);
-                    }
                     let diskLib = this;
                     let zip = new node.StreamZip({
                         file: sFile,
@@ -759,10 +755,6 @@ export default class DiskLib {
                          */
                         arcType = node.StreamZip.TYPE_ARC;
                         file.messages.push("overriding as type ARC");
-                    }
-                    if (arcType == node.StreamZip.TYPE_ZIP && db.length >= 4 && db.readUInt32LE(0) == node.StreamZip.ExtHeader.signature.EXTSIG) {
-                        // db = db.slice(0, db.length - 4);
-                        file.messages.push("ZIP extended header signature detected");
                     }
                 }
                 let messages = "";
