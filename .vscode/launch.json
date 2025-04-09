@@ -2756,16 +2756,11 @@
       }
     },
     {
-      "name": "plex.js",
+      "name": "test.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/private/plex.js",
-      "args": [
-        "movies",
-        "search",
-        "file"
-       ],
-      "cwd": "${workspaceFolder}/tools/private",
+      "program": "${workspaceFolder}/tools/dezip/tests/test.js",
+      "cwd": "${workspaceFolder}/tools/dezip/tests",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

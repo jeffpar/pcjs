@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fetch Byte Range Test</title>
+  <style>
+    textarea {
+      width: 100%;
+      height: 300px;
+      font-family: monospace;
+      white-space: pre;
+    }
+  </style>
+</head>
+<body>
+  <h1>Fetch Byte Range Test</h1>
+  <button id="fetchButton">Fetch Bytes 128-255</button>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    document.getElementById('fetchButton').addEventListener('click', async () => {
+      const url = "http://localhost:4000/machines/pcx86/ibm/video/mda/IBM-MDA.rom";
+      const output = document.getElementById('output');
+
+      try {
+        const response = await fetch(url, {
+          headers: {
+            'Range': 'bytes=128-255'
+          }
+        });
+
+        if (!response.ok && response.status !== 206) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const arrayBuffer = await response.arrayBuffer();
+        const byteArray = new Uint8Array(arrayBuffer);
+
+        // Convert bytes to a readable format (hexadecimal)
+        const hexString = Array.from(byteArray)
+          .map(byte => byte.toString(16).padStart(2, '0')) // Ensure bytes are displayed in hex
+          .join(' ');
+
+        output.value = hexString;
+      } catch (error) {
+        output.value = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
