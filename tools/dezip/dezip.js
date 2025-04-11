@@ -17,33 +17,35 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * archives, so that we don't have to import them ourselves.  As a result, it becomes trivial for
  * this code to run in any environment (eg, Nodejs, browser, etc).
  *
- * @typedef {Object} Interfaces
- * @property {function} fetch (http interface to fetch remote files)
- * @property {function} open (fs interface to open local files)
- * @property {function} inflate (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
+ * @typedef  {Object}   Interfaces
+ * @property {function} fetch       (http interface to fetch remote files)
+ * @property {function} open        (fs interface to open local files)
+ * @property {function} inflate     (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
  *
- * @typedef {Object} InterfaceOptions
- * @property {number} scratchLength (length of scratch buffer, if needed; default is 64K)
+ * @typedef  {Object}   InterfaceOptions
+ * @property {number}   scratchSize (size of scratch buffer, if needed; default is 64K)
  *
- * @typedef {Object} Archive
- * @property {string} fileName (name of the archive file)
- * @property {number} arcType (type of archive)
- * @property {number} length (length of the archive file)
- * @property {Date} [modified] (modification date of archive file, if known)
- * @property {string} [password] (password for encrypted archives; copied from ArchiveOptions)
- * @property {number} offsetHeader (offset of the next header to read, -1 if unknown)
- * @property {number} file (file descriptor, if any)
- * @property {Scratch} scratch (scratch data)
+ * @typedef  {Object}   Archive
+ * @property {string}   fileName    (name of the archive file)
+ * @property {number}   arcType     (type of archive)
+ * @property {Date}     modified    (modification date of archive file, if known)
+ * @property {string}   password    (password for encrypted archives; copied from ArchiveOptions)
+ * @property {number}   length      (length of the archive file)
+ * @property {number}   file        (file descriptor, if any)
+ * @property {Scratch}  scratch     (scratch data)
+ * @property {number}   posHeader   (position of the next header to read, -1 if unknown)
  *
- * @typedef {Object} ArchiveOptions
- * @property {boolean} [prefill] (if true, read the entire archive into memory on open)
- * @property {Date} [modified] (modification date of archive file, if known)
- * @property {string} [password] (password for encrypted archives)
+ * @typedef  {Object}   ArchiveOptions
+ * @property {DataBuffer} db        (optional DataBuffer to use instead of reading from a file)
+ * @property {number}   arcType     (type of archive; default is TYPE_ZIP)
+ * @property {Date}     modified    (modification date of archive file, if known)
+ * @property {string}   password    (password for encrypted archives)
+ * @property {boolean}  prefill     (if true, read the entire archive into memory on open)
  *
- * @typedef {Object} Scratch
- * @property {DataBuffer} [db] (scratch buffer)
- * @property {number} [offset] (offset in file of data in scratch buffer)
- * @property {number} [length] (length of valid data in scratch buffer
+ * @typedef  {Object}   Scratch
+ * @property {DataBuffer} db        (scratch buffer)
+ * @property {number}   offset      (offset in file of data in scratch buffer)
+ * @property {number}   length      (length of valid data in scratch buffer
  */
 
 /**
@@ -88,13 +90,13 @@ export default class Dezip {
         .field('size',          Struct.UINT32)          // uncompressed size
         .field('fnameLen',      Struct.UINT16)          // filename length
         .field('extraLen',      Struct.UINT16)          // extra field length
-        .verifySize(30);
+        .verifyLength(30);
 
     static SpanHeader = new Struct("SpanHeader")
         .field('signature',     Struct.UINT32, {
             SPANSIG:    0x08074b50                      // "PK\007\008" (spanned/split archive signature)
         })                                              // if present, followed by 1 or more LocalHeader structures
-        .verifySize(4);
+        .verifyLength(4);
 
     static CentralHeader = new Struct("CentralHeader")
         .field('signature',     Struct.UINT32, {
@@ -116,7 +118,7 @@ export default class Dezip {
         .field('intAttr',       Struct.UINT16)          // internal file attributes
         .field('attr',          Struct.UINT32)          // external file attributes (host system dependent)
         .field('offset',        Struct.UINT32)          // relative offset of local header
-        .verifySize(46);
+        .verifyLength(46);
 
     static CentralEndHeader = new Struct("CentralEndHeader")
         .field('signature',     Struct.UINT32, {
@@ -127,9 +129,9 @@ export default class Dezip {
         .field('volumeEntries', Struct.UINT16)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT16)          // total number of entries
         .field('size',          Struct.UINT32)          // central directory size in bytes
-        .field('offset',        Struct.UINT32)          // absolute offset of first CentralHeader
+        .field('position',      Struct.UINT32)          // position of first CentralHeader
         .field('commentLength', Struct.UINT16)          // zip file comment length
-        .verifySize(22);
+        .verifyLength(22);
 
     static MAXFILECOMMENT = 0xffff;
 
@@ -140,7 +142,7 @@ export default class Dezip {
         .field('diskNum',       Struct.UINT32)          // number of this disk
         .field('headerOffset',  Struct.UINT64)          // offset of the ZIP64 end of central directory record
         .field('disks',         Struct.UINT32)          // total number of disks
-        .verifySize(20);
+        .verifyLength(20);
 
     static Central64EndHeader = new Struct("Central64EndHeader")
         .field('signature',     Struct.UINT32, {
@@ -155,7 +157,7 @@ export default class Dezip {
         .field('totalEntries',  Struct.UINT64)          // total number of entries
         .field('size',          Struct.UINT64)          // central directory size in bytes
         .field('offset',        Struct.UINT64)          // offset of first CEN header
-        .verifySize(56);
+        .verifyLength(56);
 
     static ArcHeader = new Struct("ArcHeader")
         .field('signature',     Struct.UINT8, {
@@ -179,7 +181,7 @@ export default class Dezip {
         .field('time',          Struct.UINT16)          // modification time (date and time order is reversed from ZIP files)
         .field('crc',           Struct.UINT16)          // CRC value
         .field('size',          Struct.UINT32)          // uncompressed size (not present if type == ARC_OLD)
-        .verifySize(29);
+        .verifyLength(29);
 
     /* Compression methods */
     static ARC_UNP              = -2;                   // unpacked (no compression)
@@ -246,7 +248,7 @@ export default class Dezip {
     constructor(interfaces = {fetch}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
-        this.scratchLength = interfaceOptions.scratchLength || 64 * 1024;
+        this.scratchSize = interfaceOptions.scratchSize || 64 * 1024;
     }
 
     /**
@@ -263,44 +265,43 @@ export default class Dezip {
     }
 
     /**
-     * open(sFile, arcType, db, options)
+     * open(fileName, options)
      *
      * If successful, this method returns an Archive object that can be passed to the readHeader()
      * method to read the next header in the archive.
      *
      * @this {Dezip}
      * @param {string} fileName
-     * @param {number} [arcType]
-     * @param {DataBuffer} [db]
      * @param {ArchiveOptions} [options]
      * @returns {Archive}
      */
-    async open(fileName, arcType = Dezip.TYPE_ZIP, db = null, options = {})
+    async open(fileName, options = {})
     {
         let archive = {
-            fileName,               // name of the archive file
-            arcType,                // eg, Dezip.TYPE_ZIP, Dezip.TYPE_ARC
-            options,                // eg, options.prefill, options.password, etc
-            offsetHeader: -1,       // offset of the next header in the archive (-1 if unknown)
-            file: null,             // file handle, if any
-            length: 0,              // length of the archive file
-            scratch: {}
+            fileName,                   // name of the archive file
+            arcType: options.arcType || Dezip.TYPE_ZIP,
+            modified: options.modified, // modification date of archive file
+            password: options.password, // password for encrypted archives
+            length: 0,                  // length of the archive file
+            file: null,                 // file handle, if any
+            scratch: {},                // scratch data
+            posHeader: -1               // position of the next header in the archive (-1 if unknown)
         };
         //
         // If a DataBuffer (db) is provided, then no reading is required; we also provide
         // the option of reading the entire archive into a DataBuffer.  However, the preferred
         // approach is to read structures from the file as needed into a scratch buffer.
         //
-        if (db) {
-            archive.length = db.length;
-            this.initScratch(archive, db);
+        if (options.db) {
+            archive.length = options.db.length;
+            this.initScratch(archive, options.db);
         }
         else if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
             //
             // For remote files, prefill is the default.
             //
-            // TODO: Honor prefill === false and attempt to read the archive in
-            // chunks using byte ranges.
+            // TODO: Consider honoring prefill === false, provided we can obtain Content-Length
+            // from the server and byte range requests are supported.
             //
             let response = await this.interfaces.fetch(fileName);
             if (!response.ok) {
@@ -308,7 +309,7 @@ export default class Dezip {
             }
             let arrayBuffer = await response.arrayBuffer();
             archive.length = arrayBuffer.byteLength;
-            this.initScratch(archive, new DataBuffer(new Uint8Array(arrayBuffer)));
+            this.initScratch(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.length);
         }
         else if (this.interfaces.open) {
             archive.file = await this.interfaces.open(fileName, 'r');
@@ -318,7 +319,7 @@ export default class Dezip {
             const stats = await archive.file.stat();
             archive.length = stats.size;
             archive.modified = stats.mtime;
-            this.initScratch(archive, Buffer.alloc(this.scratchLength));
+            this.initScratch(archive, Buffer.alloc(Math.min(this.scratchSize, archive.length)));
             if (options.prefill) {
                 let buffer = Buffer.alloc(0);
                 let scratch = archive.scratch;
@@ -337,7 +338,7 @@ export default class Dezip {
                 //
                 await this.close(archive);
                 this.assert(archive.length == buffer.length);
-                this.initScratch(archive, new DataBuffer(buffer));
+                this.initScratch(archive, new DataBuffer(buffer), archive.length);
             }
         }
         else {
@@ -347,151 +348,206 @@ export default class Dezip {
     }
 
     /**
-     * initScratch(archive, db)
+     * initScratch(archive, db, length)
      *
      * @param {Object} archive
      * @param {DataBuffer} [db]
+     * @param {number} [length]
      */
-    initScratch(archive, db = null)
+    initScratch(archive, db = null, length = 0)
     {
         archive.scratch.db = db;
-        archive.scratch.offset = 0;     // offset within the archive of the scratch buffer
-        archive.scratch.length = 0;     // amount of valid data in the scratch buffer (always <= db.length)
+        archive.scratch.position = 0;           // position within the archive of the data in the scratch buffer
+        archive.scratch.length = length;        // amount of valid data in the scratch buffer (always <= db.length)
     }
 
     /**
-     * fillScratch(archive, offset, length)
+     * fillScratch(archive, position, length)
      *
-     * Given an offset and length within the archive, fill in its scratch buffer as needed
-     * and then return the offset of the requested data within the scratch buffer.
+     * Given a position and length within the archive, and given the archive's scratch
+     * buffer, move any existing data in the scratch buffer as appropriate, and then read
+     * any remaining requested data into the scratch buffer.
      *
      * @param {Object} archive
-     * @param {number} offset
+     * @param {number} position
      * @param {number} length
-     * @returns {number} (offsetScratch)
+     * @returns {[number, number]} ([offset, length] of requested data)
      */
-    async fillScratch(archive, offset, length)
+    async fillScratch(archive, position, length)
     {
         let scratch = archive.scratch;
         //
-        // TODO: Grow the scratch buffer, if this could be a problem.
+        // Perform some sanity checks on the input parameters, and enforce boundaries.
         //
-        if (length > scratch.db.length) {
-            throw new Error("Requested length exceeds scratch buffer");
+        this.assert(position >= 0 && length >= 0);
+        if (position < 0 || position >= archive.length) {
+            position = length = 0;
         }
-        if (offset < scratch.offset || offset + length > scratch.offset + scratch.length) {
+        if (position + length > archive.length) {
+            length = archive.length - position;
+        }
+        if (position < scratch.position || position + length > scratch.position + scratch.length) {
             //
             // If there is any overlap between data currently in the scratch buffer and
             // the requested data, move the existing data appropriately, and then read only
             // what is missing.
             //
-            let delta = scratch.offset - offset;
+            let delta = scratch.position - position;
+            let readPosition = position, readOffset = 0, readLength = 0, moveLength;
             if (delta > 0) {
                 //
-                // Since offset < scratch.offset, see if we can make room for new data
-                // in the buffer equal to delta, moving the existing data up by that amount.
+                // See if we can make room for new data at the top of the buffer, moving
+                // any existing data forward by that amount.
                 //
                 if (delta >= scratch.db.length) {
                     //
-                    // The requested new data is too far away from the existing data, so the
-                    // new length will simply be the requested length.
+                    // The requested new data is too large to save any existing data,
+                    // so the new length will simply be the requested length.
                     //
-                    scratch.length = length;
+                    scratch.length = readLength = length;
                 }
                 else {
                     //
-                    // This means there's room in the buffer for the new data (of length delta)
-                    // AND some or all of the existing data (of length scratch.length), so move
-                    // the existing data up.
+                    // There's room in the buffer for the new data (of length delta) AND
+                    // some or all of the existing data (of length scratch.length), so move
+                    // the existing data forward.
                     //
-                    length = delta;
-                    let lengthMove = Math.min(scratch.length, scratch.db.length - length);
-                    scratch.db.copy(scratch.db, length, 0, 0 + lengthMove);
-                    scratch.length = length + lengthMove;
+                    moveLength = Math.min(scratch.length, scratch.db.length - readLength);
+                    scratch.db.copy(scratch.db, readLength, 0, 0 + moveLength);
+                    scratch.length = readLength + moveLength;
+                    readLength = delta;
                 }
                 //
-                // We're now ready to read an amount of new data (length) from the new position (offset).
+                // We're now ready to read an amount of new data (length) from the new position.
                 //
-                scratch.offset = offset;
-            } else {
-
-            }
-
-
-            if (archive.file) {
-                let result = await archive.file.read(scratch.db, {offset: 0, length, position: offset});
-                if (result.bytesRead == 0) {
-                    throw new Error("Unable to read from archive");
-                }
-                if (result.bytesRead < length) {
-                    throw new Error("Insufficient data in archive");
-                }
-                scratch.offset = offset;
+                scratch.position = position;
             }
             else {
-                throw new Error("No file handle available");
+                //
+                // Since position >= scratch.position, the data requested must extend beyond
+                // the data in the scratch buffer, so let's calculate how far beyond it extends.
+                //
+                delta = (position + length) - (scratch.position + scratch.length);
+                if (!scratch.length || delta >= scratch.db.length) {
+                    //
+                    // If there is no existing data, or the requested new data is too large to
+                    // save any existing data, the new length will simply be the requested length.
+                    //
+                    scratch.position = position;
+                    scratch.length = readLength = length;
+                }
+                else if (delta <= scratch.db.length - scratch.length) {
+                    //
+                    // There's enough room after the existing data for the new data.
+                    //
+                    readLength = delta;
+                    readOffset = scratch.length;
+                    scratch.length += readLength;
+                }
+                else {
+                    //
+                    // There's room in the buffer for the new data after we move some or all
+                    // of the existing data backward.
+                    //
+                    readLength = delta;
+                    moveLength = Math.min(scratch.length, scratch.db.length - readLength);
+                    scratch.db.copy(scratch.db, 0, moveLength, moveLength + readLength);
+                    scratch.position += moveLength;
+                    scratch.length = readLength + moveLength;
+                    readOffset += moveLength;
+                    readPosition += readLength;
+                }
+            }
+            this.assert(scratch.position >= 0 && scratch.position + scratch.length <= archive.length);
+            //
+            // If readLength is > 0, then we need to read that many bytes from readPosition into the
+            // scratch buffer at readOffset.
+            //
+            if (readLength > 0) {
+                if (archive.file) {
+                    let result = await archive.file.read(scratch.db, {offset: readOffset, length: readLength, position: readPosition});
+                    if (result.bytesRead != readLength) {
+                        throw new Error("Unable to read from archive");
+                    }
+                }
+                else {
+                    throw new Error("No file handle available");
+                }
             }
         }
-        return offset - scratch.offset;
+        let offset = position - scratch.position;
+        return [offset, length];
     }
 
     /**
      * readHeader(archive)
      *
-     * Reads the next CentralHeader of the archive, based on offsetHeader.  If offsetHeader is -1,
-     * then we need to scan the archive for a CentralEndHeader ENDSIG, starting from the end of the
-     * archive, which will tell us where the first CentralHeader is located.
+     * Reads the next CentralHeader of the archive, based on posHeader.  If posHeader is -1,
+     * then we need to scan the archive for a CentralEndHeader ENDSIG, starting from the end
+     * of the archive, which will tell us where the first CentralHeader is located.
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @returns {Object}
+     * @returns {Object|null}
      */
     async readHeader(archive)
     {
+        let header = null;
         let scratch = archive.scratch;
-        let offsetHeader = archive.offsetHeader;
-        if (offsetHeader < 0) {
+        let posHeader = archive.posHeader;
+        if (posHeader < 0) {
             //
             // Locate CentralEndHeader first, by scanning backwards through scratch buffer chunks,
             // starting with the last chunk in the archive, until we find a CentralEndHeader signature.
             //
-            let offsetArchive = archive.length - scratch.db.length;
-            let offsetScratch = await this.fillScratch(archive, offsetArchive, scratch.db.length);
-            //
-            // Start scanning backwards through the scratch buffer for the CentralEndHeader signature.
-            //
-            let offsetScratchEnd = offsetScratch + scratch.db.length - Dezip.CentralEndHeader.length;
-            while (offsetScratchEnd >= offsetScratch) {
-                let header = Dezip.CentralEndHeader.readStruct(scratch.db, offsetScratchEnd);
-                if (header.signature == Dezip.CentralEndHeader.fields.signature.ENDSIG) {
+            let posArchive = archive.length - scratch.db.length;
+            while (true) {
+                let [offset, length] = await this.fillScratch(archive, posArchive, scratch.db.length);
+                let offsetEnd = offset + scratch.length - Dezip.CentralEndHeader.length;
+                while (offsetEnd >= offset) {
                     //
-                    // Found the CentralEndHeader signature, so we can read the CentralHeader offset.
+                    // To save the expense of readStruct() on every location, we probe the low byte first;
+                    // if it doesn't match the low byte off the CentralEndHeader signature, then we can skip
+                    // the readStruct().
                     //
-                    archive.offsetHeader = header.offset;
-                    break;
+                    if (scratch.db.readUInt8(offsetEnd) == (Dezip.CentralEndHeader.fields.signature.ENDSIG & 0xff)) {
+                        let header = Dezip.CentralEndHeader.readStruct(scratch.db, offsetEnd);
+                        if (header.signature == Dezip.CentralEndHeader.fields.signature.ENDSIG) {
+                            //
+                            // Found the CentralEndHeader signature, so we can read the CentralHeader position.
+                            //
+                            posHeader = header.position;
+                            break;
+                        }
+                    }
+                    offsetEnd--;
                 }
-                offsetScratchEnd--;
+                if (posHeader >= 0 || posArchive == 0) break;
+                posArchive -= scratch.db.length;
+                if (posArchive < 0) posArchive = 0;
             }
         }
-        //
-        // Now we can read the next CentralHeader.
-        //
-        let offset = await this.fillScratch(archive, archive.offsetHeader, Dezip.CentralHeader.length);
-        let header = Dezip.CentralHeader.readStruct(scratch.db, offset);
-        if (header.signature != Dezip.CentralHeader.fields.signature.CENSIG) {
-            throw new Error("Invalid CentralHeader signature");
+        if (posHeader >= 0) {
+            //
+            // Now we can read the next CentralHeader.
+            //
+            let [offset, length] = await this.fillScratch(archive, posHeader, Dezip.CentralHeader.length);
+            header = Dezip.CentralHeader.readStruct(scratch.db, offset);
+            if (header.signature != Dezip.CentralHeader.fields.signature.CENSIG) {
+                throw new Error("Invalid CentralHeader signature");
+            }
+            offset += Dezip.CentralHeader.length;
+            header.fname = Dezip.CentralHeader.readString(scratch.db, offset, header.fnameLen);
+            //
+            // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
+            //
+            offset += header.fnameLen + header.extraLen;
+            header.comment = Dezip.CentralHeader.readString(scratch.db, offset, header.comLen);
+            //
+            // Advance posHeader to the next CentralHeader, and then we're done.
+            //
+            archive.posHeader = posHeader + Dezip.CentralHeader.length + header.fnameLen + header.extraLen + header.comLen;
         }
-        offset += Dezip.CentralHeader.length;
-        header.fname = Dezip.CentralHeader.readString(scratch.db, offset, header.fnameLen);
-        //
-        // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
-        //
-        offset += header.fnameLen + header.extraLen;
-        header.comment = Dezip.CentralHeader.readString(scratch.db, offset, header.comLen);
-        //
-        // Advance offsetHeader to the next CentralHeader, and then we're done.
-        //
-        archive.offsetHeader += Dezip.CentralHeader.length + header.fnameLen + header.extraLen + header.comLen;
         return header;
     }
 

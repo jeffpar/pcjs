@@ -36,7 +36,7 @@ import CharSet from "./charset.js";
  *       .field('size',          Struct.UINT32)         // uncompressed size
  *       .field('fnameLen',      Struct.UINT16)         // filename length
  *       .field('extraLen',      Struct.UINT16)         // extra field length
- *       .verifySize(30);
+ *       .verifyLength(30);
  *
  * Then, to create/initialize an instance (ie, record) of that structure from a DataBuffer:
  *
@@ -96,7 +96,7 @@ export default class Struct {
     field(name, type, values)
     {
         if (this.fields[name]) {
-            throw new Error("field " + name + " already defined in " + this.name);
+            throw new Error("Field " + name + " already defined in " + this.name);
         }
         let size = Struct.SIZES[type];
         if (!size) {
@@ -119,27 +119,16 @@ export default class Struct {
     }
 
     /**
-     * getSize()
+     * verifyLength(size)
      *
      * @this {Struct}
-     * @returns {number} size of the structure
-     */
-    getSize()
-    {
-        return this.length;
-    }
-
-    /**
-     * verifySize(size)
-     *
-     * @this {Struct}
-     * @param {number} size
+     * @param {number} length
      * @returns {Struct}
      */
-    verifySize(size)
+    verifyLength(length)
     {
-        if (size != this.getSize()) {
-            throw new Error("structure size mismatch (" + size + " != " + this.getSize() + ")");
+        if (length != this.length) {
+            throw new Error("Structure size mismatch (" + length + " != " + this.length + ")");
         }
         return this;
     }
@@ -189,11 +178,11 @@ export default class Struct {
     {
         let v;
         let field = this.fields[name];
-        if (!field) throw new Error("field " + name + " not found in " + this.name);
+        if (!field) throw new Error("Field " + name + " not found in " + this.name);
         offset += field.offset;
         let length = field.length;
         if (offset + length > db.length) {
-            throw new Error("field " + name + " limit exceeds buffer limit (" + (offset + length) + " > " + db.length + ")");
+            throw new Error("Field " + name + " limit exceeds buffer limit (" + (offset + length) + " > " + db.length + ")");
         }
         switch(field.type) {
         case Struct.INT8:
@@ -242,7 +231,7 @@ export default class Struct {
             }
             break;
         default:
-            throw new Error("field " + name + " unsupported (" + field.type + ") in " + this.struct.name);
+            throw new Error("Field " + name + " unsupported (" + field.type + ") in " + this.struct.name);
         }
         return v;
     }
