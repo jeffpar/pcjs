@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import DataBuffer from "./db.js";
 import CharSet from "./charset.js";
+import DataBuffer from "./databuffer.js";
 import Struct from './struct.js';
 import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
 
@@ -17,35 +17,34 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * archives, so that we don't have to import them ourselves.  As a result, it becomes trivial for
  * this code to run in any environment (eg, Nodejs, browser, etc).
  *
- * @typedef  {Object}   Interfaces
+ * @typedef  {object}   Interfaces
  * @property {function} fetch       (http interface to fetch remote files)
  * @property {function} open        (fs interface to open local files)
  * @property {function} inflate     (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
  *
- * @typedef  {Object}   InterfaceOptions
- * @property {number}   scratchSize (size of scratch buffer, if needed; default is 64K)
+ * @typedef  {object}   InterfaceOptions
+ * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
  *
- * @typedef  {Object}   Archive
+ * @typedef  {object}   Archive
  * @property {string}   fileName    (name of the archive file)
  * @property {number}   arcType     (type of archive)
  * @property {Date}     modified    (modification date of archive file, if known)
  * @property {string}   password    (password for encrypted archives; copied from ArchiveOptions)
  * @property {number}   length      (length of the archive file)
  * @property {number}   file        (file descriptor, if any)
- * @property {Scratch}  scratch     (scratch data)
- * @property {number}   posHeader   (position of the next header to read, -1 if unknown)
+ * @property {Cache}    cache       (cache data)
  *
- * @typedef  {Object}   ArchiveOptions
+ * @typedef  {object}   ArchiveOptions
  * @property {DataBuffer} db        (optional DataBuffer to use instead of reading from a file)
  * @property {number}   arcType     (type of archive; default is TYPE_ZIP)
  * @property {Date}     modified    (modification date of archive file, if known)
  * @property {string}   password    (password for encrypted archives)
  * @property {boolean}  prefill     (if true, read the entire archive into memory on open)
  *
- * @typedef  {Object}   Scratch
- * @property {DataBuffer} db        (scratch buffer)
- * @property {number}   offset      (offset in file of data in scratch buffer)
- * @property {number}   length      (length of valid data in scratch buffer
+ * @typedef  {object}   Cache
+ * @property {DataBuffer} db        (cache buffer)
+ * @property {number}   offset      (offset in file of data in cache buffer)
+ * @property {number}   length      (length of valid data in cache buffer
  */
 
 /**
@@ -248,7 +247,7 @@ export default class Dezip {
     constructor(interfaces = {fetch}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
-        this.scratchSize = interfaceOptions.scratchSize || 64 * 1024;
+        this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
     }
 
     /**
@@ -284,17 +283,16 @@ export default class Dezip {
             password: options.password, // password for encrypted archives
             length: 0,                  // length of the archive file
             file: null,                 // file handle, if any
-            scratch: {},                // scratch data
-            posHeader: -1               // position of the next header in the archive (-1 if unknown)
+            cache: {}                   // cache data
         };
         //
         // If a DataBuffer (db) is provided, then no reading is required; we also provide
         // the option of reading the entire archive into a DataBuffer.  However, the preferred
-        // approach is to read structures from the file as needed into a scratch buffer.
+        // approach is to read structures from the file as needed into a cache buffer.
         //
         if (options.db) {
             archive.length = options.db.length;
-            this.initScratch(archive, options.db);
+            this.initCache(archive, options.db);
         }
         else if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
             //
@@ -309,7 +307,7 @@ export default class Dezip {
             }
             let arrayBuffer = await response.arrayBuffer();
             archive.length = arrayBuffer.byteLength;
-            this.initScratch(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.length);
+            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.length);
         }
         else if (this.interfaces.open) {
             archive.file = await this.interfaces.open(fileName, 'r');
@@ -319,26 +317,26 @@ export default class Dezip {
             const stats = await archive.file.stat();
             archive.length = stats.size;
             archive.modified = stats.mtime;
-            this.initScratch(archive, Buffer.alloc(Math.min(this.scratchSize, archive.length)));
+            this.initCache(archive, Buffer.alloc(Math.min(this.cacheSize, archive.length)));
             if (options.prefill) {
                 let buffer = Buffer.alloc(0);
-                let scratch = archive.scratch;
+                let cache = archive.cache;
                 do {
-                    let result = await archive.file.read(scratch.db);
+                    let result = await archive.file.read(cache.db);
                     if (result.bytesRead == 0) break;
-                    if (result.bytesRead < scratch.db.length) {
-                        scratch.db = scratch.db.subarray(0, result.bytesRead);
+                    if (result.bytesRead < cache.db.length) {
+                        cache.db = cache.db.subarray(0, result.bytesRead);
                     }
-                    buffer = Buffer.concat([buffer, scratch.db]);
-                    if (result.bytesRead < scratch.db.length) break;
+                    buffer = Buffer.concat([buffer, cache.db]);
+                    if (result.bytesRead < cache.db.length) break;
                 } while (true);
                 //
                 // We're not really done with the archive yet, but we ARE done with the file handle
-                // (and by extension, the old scratch buffer).  The new buffer becomes the scratch buffer.
+                // (and by extension, the old cache buffer).  The new buffer becomes the cache buffer.
                 //
                 await this.close(archive);
                 this.assert(archive.length == buffer.length);
-                this.initScratch(archive, new DataBuffer(buffer), archive.length);
+                this.initCache(archive, new DataBuffer(buffer), archive.length);
             }
         }
         else {
@@ -348,125 +346,136 @@ export default class Dezip {
     }
 
     /**
-     * initScratch(archive, db, length)
+     * initCache(archive, db, length)
      *
-     * @param {Object} archive
+     * @param {object} archive
      * @param {DataBuffer} [db]
      * @param {number} [length]
      */
-    initScratch(archive, db = null, length = 0)
+    initCache(archive, db = null, length = 0)
     {
-        archive.scratch.db = db;
-        archive.scratch.position = 0;           // position within the archive of the data in the scratch buffer
-        archive.scratch.length = length;        // amount of valid data in the scratch buffer (always <= db.length)
+        archive.cache.db = db;
+        archive.cache.position = 0;     // position within the archive of the data in the cache buffer
+        archive.cache.length = length;  // amount of valid data in the cache buffer (always <= db.length)
     }
 
     /**
-     * fillScratch(archive, position, length)
+     * fillCache(archive, position, extent)
      *
-     * Given a position and length within the archive, and given the archive's scratch
-     * buffer, move any existing data in the scratch buffer as appropriate, and then read
-     * any remaining requested data into the scratch buffer.
+     * Given a position and extent within the archive, and given the archive's cache
+     * buffer, move any existing data in the cache buffer as appropriate, and then read
+     * any remaining requested data into the cache buffer, returning the offset and length
+     * of the requested data.
      *
-     * @param {Object} archive
+     * In general, the returned length will be the same as the requested extent, except
+     * when the request is outside the bounds of the archive.
+     *
+     * @param {Archive} archive
      * @param {number} position
-     * @param {number} length
+     * @param {number} extent
      * @returns {[number, number]} ([offset, length] of requested data)
      */
-    async fillScratch(archive, position, length)
+    async fillCache(archive, position, extent)
     {
-        let scratch = archive.scratch;
+        let cache = archive.cache;
         //
         // Perform some sanity checks on the input parameters, and enforce boundaries.
         //
-        this.assert(position >= 0 && length >= 0);
+        this.assert(position >= 0 && extent >= 0);
         if (position < 0 || position >= archive.length) {
-            position = length = 0;
+            position = extent = 0;
         }
-        if (position + length > archive.length) {
-            length = archive.length - position;
+        if (position + extent > archive.length) {
+            extent = archive.length - position;
         }
-        if (position < scratch.position || position + length > scratch.position + scratch.length) {
+        //
+        // Calculate the overlaps, if any (prelap and postlap).
+        //
+        let prelap = cache.position - position;
+        let postlap = (position + extent) - (cache.position + cache.length);
+        if (prelap > 0 || postlap > 0) {
             //
-            // If there is any overlap between data currently in the scratch buffer and
+            // If there is any overlap between data currently in the cache buffer and
             // the requested data, move the existing data appropriately, and then read only
             // what is missing.
             //
-            let delta = scratch.position - position;
-            let readPosition = position, readOffset = 0, readLength = 0, moveLength;
-            if (delta > 0) {
+            let readOffset = 0, readPosition = position, readExtent = 0, moveLength;
+            if (prelap > 0) {
                 //
-                // See if we can make room for new data at the top of the buffer, moving
-                // any existing data forward by that amount.
+                // See if we can make room for new data at the top of the buffer,
+                // moving any existing data forward by that amount.  We also give up
+                // if there is ALSO a postlap (we could do prelap and postlap reads,
+                // but that doesn't seem worthwhile).
                 //
-                if (delta >= scratch.db.length) {
+                if (prelap >= cache.db.length || postlap >= 0 || position + extent < cache.position) {
                     //
-                    // The requested new data is too large to save any existing data,
-                    // so the new length will simply be the requested length.
+                    // The requested new data is too large (or overlaps on both ends,
+                    // or doesn't actually overlap at all) to save any existing data, so
+                    // the new length will simply be the requested extent.
                     //
-                    scratch.length = readLength = length;
+                    cache.length = readExtent = extent;
                 }
                 else {
                     //
-                    // There's room in the buffer for the new data (of length delta) AND
-                    // some or all of the existing data (of length scratch.length), so move
+                    // There's room in the buffer for the new data (of length prelap) AND
+                    // some or all of the existing data (of length cache.length), so move
                     // the existing data forward.
                     //
-                    moveLength = Math.min(scratch.length, scratch.db.length - readLength);
-                    scratch.db.copy(scratch.db, readLength, 0, 0 + moveLength);
-                    scratch.length = readLength + moveLength;
-                    readLength = delta;
+                    readExtent = prelap;
+                    moveLength = Math.min(cache.length, cache.db.length - readExtent);
+                    cache.db.copy(cache.db, readExtent, 0, 0 + moveLength);
+                    cache.length = readExtent + moveLength;
                 }
                 //
-                // We're now ready to read an amount of new data (length) from the new position.
+                // We're now ready to read an amount of new data (readExtent) from readPosition.
                 //
-                scratch.position = position;
+                cache.position = position;
             }
             else {
                 //
-                // Since position >= scratch.position, the data requested must extend beyond
-                // the data in the scratch buffer, so let's calculate how far beyond it extends.
+                // Since position >= cache.position, the data requested must extend beyond
+                // the data in the cache buffer, so let's calculate how far beyond it extends.
                 //
-                delta = (position + length) - (scratch.position + scratch.length);
-                if (!scratch.length || delta >= scratch.db.length) {
+                if (!cache.length || postlap >= cache.db.length || position > cache.position + cache.length) {
                     //
                     // If there is no existing data, or the requested new data is too large to
-                    // save any existing data, the new length will simply be the requested length.
+                    // save any existing data, the new length will simply be the requested extent.
                     //
-                    scratch.position = position;
-                    scratch.length = readLength = length;
+                    cache.position = position;
+                    cache.length = readExtent = extent;
                 }
-                else if (delta <= scratch.db.length - scratch.length) {
+                else if (postlap <= cache.db.length - cache.length) {
                     //
                     // There's enough room after the existing data for the new data.
                     //
-                    readLength = delta;
-                    readOffset = scratch.length;
-                    scratch.length += readLength;
+                    readExtent = postlap;
+                    readOffset += cache.length;
+                    readPosition = cache.position + cache.length;
+                    cache.length += readExtent;
                 }
                 else {
                     //
-                    // There's room in the buffer for the new data after we move some or all
+                    // There's room in the buffer for the new data after we move some
                     // of the existing data backward.
                     //
-                    readLength = delta;
-                    moveLength = Math.min(scratch.length, scratch.db.length - readLength);
-                    scratch.db.copy(scratch.db, 0, moveLength, moveLength + readLength);
-                    scratch.position += moveLength;
-                    scratch.length = readLength + moveLength;
+                    readExtent = postlap;
+                    moveLength = Math.min(cache.length, cache.db.length - readExtent);
+                    cache.db.copy(cache.db, 0, cache.length - moveLength, cache.length);
+                    cache.position += cache.length - moveLength;
+                    cache.length = moveLength + readExtent;
                     readOffset += moveLength;
-                    readPosition += readLength;
+                    readPosition = cache.position + moveLength;
                 }
             }
-            this.assert(scratch.position >= 0 && scratch.position + scratch.length <= archive.length);
+            this.assert(cache.position >= 0 && cache.position + cache.length <= archive.length);
             //
-            // If readLength is > 0, then we need to read that many bytes from readPosition into the
-            // scratch buffer at readOffset.
+            // If readExtent is > 0, then we need to read that many bytes from readPosition into the
+            // cache buffer at readOffset.
             //
-            if (readLength > 0) {
+            if (readExtent > 0) {
                 if (archive.file) {
-                    let result = await archive.file.read(scratch.db, {offset: readOffset, length: readLength, position: readPosition});
-                    if (result.bytesRead != readLength) {
+                    let result = await archive.file.read(cache.db, {offset: readOffset, length: readExtent, position: readPosition});
+                    if (result.bytesRead != readExtent) {
                         throw new Error("Unable to read from archive");
                     }
                 }
@@ -475,78 +484,85 @@ export default class Dezip {
                 }
             }
         }
-        let offset = position - scratch.position;
-        return [offset, length];
+        let offset = position - cache.position;
+        return [offset, extent];
     }
 
     /**
-     * readHeader(archive)
+     * readHeader(archive, lastHeader)
      *
-     * Reads the next CentralHeader of the archive, based on posHeader.  If posHeader is -1,
-     * then we need to scan the archive for a CentralEndHeader ENDSIG, starting from the end
-     * of the archive, which will tell us where the first CentralHeader is located.
+     * Reads the next CentralHeader of the archive, based on the position of the last header.
+     * If this is the first request, then we scan the archive for a CentralEndHeader ENDSIG, starting
+     * from the end of the archive, which should tell us where the first CentralHeader is located.
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @returns {Object|null}
+     * @param {object} [lastHeader]
+     * @returns {object|null}
      */
-    async readHeader(archive)
+    async readHeader(archive, lastHeader = null)
     {
         let header = null;
-        let scratch = archive.scratch;
-        let posHeader = archive.posHeader;
-        if (posHeader < 0) {
+        let cache = archive.cache;
+        let position = lastHeader? lastHeader.position : -1;
+        if (position >= 0) {
+            position += Dezip.CentralHeader.length + lastHeader.fnameLen + lastHeader.extraLen + lastHeader.comLen;
+        } else {
             //
-            // Locate CentralEndHeader first, by scanning backwards through scratch buffer chunks,
+            // Locate CentralEndHeader first, by scanning backwards through cache buffer chunks,
             // starting with the last chunk in the archive, until we find a CentralEndHeader signature.
             //
-            let posArchive = archive.length - scratch.db.length;
+            let posArchive = archive.length - cache.db.length;
             while (true) {
-                let [offset, length] = await this.fillScratch(archive, posArchive, scratch.db.length);
-                let offsetEnd = offset + scratch.length - Dezip.CentralEndHeader.length;
+                let [offset, length] = await this.fillCache(archive, posArchive, cache.db.length);
+                let offsetEnd = offset + length - Dezip.CentralEndHeader.length;
                 while (offsetEnd >= offset) {
                     //
-                    // To save the expense of readStruct() on every location, we probe the low byte first;
+                    // To save the expense of readStruct() at every location, we probe the low byte first;
                     // if it doesn't match the low byte off the CentralEndHeader signature, then we can skip
                     // the readStruct().
                     //
-                    if (scratch.db.readUInt8(offsetEnd) == (Dezip.CentralEndHeader.fields.signature.ENDSIG & 0xff)) {
-                        let header = Dezip.CentralEndHeader.readStruct(scratch.db, offsetEnd);
+                    if (cache.db.readUInt8(offsetEnd) == (Dezip.CentralEndHeader.fields.signature.ENDSIG & 0xff)) {
+                        let header = Dezip.CentralEndHeader.readStruct(cache.db, offsetEnd);
                         if (header.signature == Dezip.CentralEndHeader.fields.signature.ENDSIG) {
                             //
                             // Found the CentralEndHeader signature, so we can read the CentralHeader position.
                             //
-                            posHeader = header.position;
+                            position = header.position;
                             break;
                         }
                     }
                     offsetEnd--;
                 }
-                if (posHeader >= 0 || posArchive == 0) break;
-                posArchive -= scratch.db.length;
+                if (position >= 0 || posArchive == 0) break;
+                posArchive -= cache.db.length;
                 if (posArchive < 0) posArchive = 0;
             }
         }
-        if (posHeader >= 0) {
+        if (position >= 0) {
             //
-            // Now we can read the next CentralHeader.
+            // Read the next CentralHeader.
             //
-            let [offset, length] = await this.fillScratch(archive, posHeader, Dezip.CentralHeader.length);
-            header = Dezip.CentralHeader.readStruct(scratch.db, offset);
+            let [offset, length] = await this.fillCache(archive, position, Dezip.CentralHeader.length);
+            let signature = cache.db.readUInt32LE(offset);
+            if (signature == (Dezip.CentralEndHeader.fields.signature.ENDSIG)) {
+                return null;    // end of archive
+            }
+            header = Dezip.CentralHeader.readStruct(cache.db, offset);
             if (header.signature != Dezip.CentralHeader.fields.signature.CENSIG) {
                 throw new Error("Invalid CentralHeader signature");
             }
             offset += Dezip.CentralHeader.length;
-            header.fname = Dezip.CentralHeader.readString(scratch.db, offset, header.fnameLen);
+            header.fname = Dezip.CentralHeader.readString(cache.db, offset, header.fnameLen);
             //
             // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
             //
             offset += header.fnameLen + header.extraLen;
-            header.comment = Dezip.CentralHeader.readString(scratch.db, offset, header.comLen);
+            header.comment = Dezip.CentralHeader.readString(cache.db, offset, header.comLen);
             //
-            // Advance posHeader to the next CentralHeader, and then we're done.
+            // Last but not least, record the header's position.
             //
-            archive.posHeader = posHeader + Dezip.CentralHeader.length + header.fnameLen + header.extraLen + header.comLen;
+            header.position = position;
         }
         return header;
     }
@@ -563,6 +579,6 @@ export default class Dezip {
             await archive.file.close();
             archive.file = null;
         }
-        this.initScratch(archive);
+        this.initCache(archive);
     }
 }
