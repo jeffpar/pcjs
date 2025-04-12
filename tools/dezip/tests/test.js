@@ -23,36 +23,48 @@ async function main() {
             console.log(`Archive ${testFile} opened successfully`);
             do {
                 //
-                // Using a series of random positions and lengths, call archive.fillCache() with each entry
+                // Using a series of random positions and lengths, call archive.readCache() with each entry
                 // from that series, and the compare the data in the archive's cache buffer with the data in
                 // prefill's cache buffer (the latter uses a fixed-size cache that never changes).
                 //
-                // NOTE: fillCache() should be considered a private method, but because it's critical to the
+                // NOTE: readCache() should be considered a private method, but because it's critical to the
                 // proper function of all other methods, we want to exercise it.
                 //
-                // while (true) {
-                //     let series = Array.from({ length: 1000 }, () => [
-                //         Math.floor(Math.random() * 49458),
-                //         Math.floor(Math.random() * 4097)
-                //     ]);
-                //     for (let entry of series) {
-                //         let [position, extent] = entry;
-                //         console.log(`Testing position ${position} and extent ${extent}`);
-                //         let [offset1, length1] = await dezip.fillCache(archive, position, extent);
-                //         let [offset2, length2] = await dezip.fillCache(prefill, position, extent);
-                //         if (length1 != length2) {
-                //             throw new Error(`Data lengths do not match (${length1} vs. ${length2})`);
-                //         }
-                //         for (let i = 0; i < length1; i++) {
-                //             let b1 = archive.cache.db.readUInt8(offset1 + i);
-                //             let b2 = prefill.cache.db.readUInt8(offset2 + i);
-                //             if (b1 != b2) {
-                //                 throw new Error(`Data bytes do not match at position ${position + i} (${b1} vs. ${b2})`);
-                //             }
-                //         }
-                //     }
-                // }
-                //
+                let series = [
+                    [  100,   100],
+                    [   50,   100],
+                    [   25,   475],
+                    [  600,   100],
+                    [  700,   100],
+                    [  700,   200],
+                    [  800,   200],
+                    [ 2000,   500],
+                    [ 2100,   300],
+                    [ 1500,   500],
+                    [ 1000,   200],
+                    [ 4000,   500],
+                    [49000,   500],
+                ];
+                // let series = Array.from({ length: 1000 }, () => [
+                //     Math.floor(Math.random() * 49458),
+                //     Math.floor(Math.random() * 4097)
+                // ]);
+                for (let entry of series) {
+                    let [position, extent] = entry;
+                    console.log(`Testing position ${position} and extent ${extent}`);
+                    let [offset1, length1] = await dezip.readCache(archive, position, extent);
+                    let [offset2, length2] = await dezip.readCache(prefill, position, extent);
+                    if (length1 != length2) {
+                        throw new Error(`Data lengths do not match (${length1} vs. ${length2})`);
+                    }
+                    for (let i = 0; i < length1; i++) {
+                        let b1 = archive.cache.db.readUInt8(offset1 + i);
+                        let b2 = prefill.cache.db.readUInt8(offset2 + i);
+                        if (b1 != b2) {
+                            throw new Error(`Data bytes do not match at position ${position + i} (${b1} vs. ${b2})`);
+                        }
+                    }
+                }
                 header = await dezip.readHeader(archive, header);
                 if (!header) break;
                 console.log(`header for "${header.fname}"`);

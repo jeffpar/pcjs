@@ -234,6 +234,8 @@ export default class Dezip {
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
 
+    static DEBUG = true;
+
     /**
      * constructor(interfaces)
      *
@@ -258,7 +260,7 @@ export default class Dezip {
      */
     assert(condition, message = "Assertion failed")
     {
-        if (!condition) {
+        if (Dezip.DEBUG && !condition) {
             throw new Error(message);
         }
     }
@@ -356,11 +358,11 @@ export default class Dezip {
     {
         archive.cache.db = db;
         archive.cache.position = 0;     // position within the archive of the data in the cache buffer
-        archive.cache.length = length;  // amount of valid data in the cache buffer (always <= db.length)
+        archive.cache.extent = length;  // amount of valid data in the cache buffer (always <= db.length)
     }
 
     /**
-     * fillCache(archive, position, extent)
+     * readCache(archive, position, extent)
      *
      * Given a position and extent within the archive, and given the archive's cache
      * buffer, move any existing data in the cache buffer as appropriate, and then read
@@ -371,118 +373,75 @@ export default class Dezip {
      * when the request is outside the bounds of the archive.
      *
      * @param {Archive} archive
+     * @param {Archive} archive
      * @param {number} position
      * @param {number} extent
      * @returns {[number, number]} ([offset, length] of requested data)
      */
-    async fillCache(archive, position, extent)
+    async readCache(archive, position, extent)
     {
         let cache = archive.cache;
-        //
-        // Perform some sanity checks on the input parameters, and enforce boundaries.
-        //
         this.assert(position >= 0 && extent >= 0);
-        if (position < 0 || position >= archive.length) {
-            position = extent = 0;
+        if (position > archive.length) {
+            throw new Error(`Position {$position} exceeds archive length (${archive.length})`);
         }
         if (position + extent > archive.length) {
             extent = archive.length - position;
         }
-        //
-        // Calculate the overlaps, if any (prelap and postlap).
-        //
-        let prelap = cache.position - position;
-        let postlap = (position + extent) - (cache.position + cache.length);
-        if (prelap > 0 || postlap > 0) {
+        let fullExtent = cache.db.length;
+        if (extent > fullExtent) {
+            throw new Error(`Requested extent (${extent}) exceeds cache size (${fullExtent})`);
+        }
+        if (position + fullExtent > archive.length) {
+            fullExtent = archive.length - position;
+        }
+        let preceding = cache.position - position;
+        let following = (position + extent) - (cache.position + cache.extent);
+
+        if (preceding > 0 || following > 0) {
             //
-            // If there is any overlap between data currently in the cache buffer and
-            // the requested data, move the existing data appropriately, and then read only
-            // what is missing.
+            // Maximize the request to make the most of the cache buffer.
             //
-            let readOffset = 0, readPosition = position, readExtent = 0, moveLength;
-            if (prelap > 0) {
+            let readOffset = 0;
+            let readPosition = position;
+            let readExtent = fullExtent;
+            if (following <= 0) {
                 //
-                // See if we can make room for new data at the top of the buffer,
-                // moving any existing data forward by that amount.  We also give up
-                // if there is ALSO a postlap (we could do prelap and postlap reads,
-                // but that doesn't seem worthwhile).
+                // If there's any overlap, move that to the end of the cache.
                 //
-                if (prelap >= cache.db.length || postlap >= 0 || position + extent < cache.position) {
-                    //
-                    // The requested new data is too large (or overlaps on both ends,
-                    // or doesn't actually overlap at all) to save any existing data, so
-                    // the new length will simply be the requested extent.
-                    //
-                    cache.length = readExtent = extent;
+                let overlap = (position + fullExtent) - cache.position;
+                if (overlap > 0) {
+                    let moveLength = Math.min(overlap, cache.extent);
+                    cache.db.copy(cache.db, readExtent - moveLength, 0, 0 + moveLength);
+                    readExtent -= moveLength;
                 }
-                else {
-                    //
-                    // There's room in the buffer for the new data (of length prelap) AND
-                    // some or all of the existing data (of length cache.length), so move
-                    // the existing data forward.
-                    //
-                    readExtent = prelap;
-                    moveLength = Math.min(cache.length, cache.db.length - readExtent);
-                    cache.db.copy(cache.db, readExtent, 0, 0 + moveLength);
-                    cache.length = readExtent + moveLength;
-                }
-                //
-                // We're now ready to read an amount of new data (readExtent) from readPosition.
-                //
-                cache.position = position;
             }
-            else {
+            else if (preceding <= 0) {
                 //
-                // Since position >= cache.position, the data requested must extend beyond
-                // the data in the cache buffer, so let's calculate how far beyond it extends.
+                // If there's any overlap, move that to the beginning of the cache.
                 //
-                if (!cache.length || postlap >= cache.db.length || position > cache.position + cache.length) {
-                    //
-                    // If there is no existing data, or the requested new data is too large to
-                    // save any existing data, the new length will simply be the requested extent.
-                    //
-                    cache.position = position;
-                    cache.length = readExtent = extent;
-                }
-                else if (postlap <= cache.db.length - cache.length) {
-                    //
-                    // There's enough room after the existing data for the new data.
-                    //
-                    readExtent = postlap;
-                    readOffset += cache.length;
-                    readPosition = cache.position + cache.length;
-                    cache.length += readExtent;
-                }
-                else {
-                    //
-                    // There's room in the buffer for the new data after we move some
-                    // of the existing data backward.
-                    //
-                    readExtent = postlap;
-                    moveLength = Math.min(cache.length, cache.db.length - readExtent);
-                    cache.db.copy(cache.db, 0, cache.length - moveLength, cache.length);
-                    cache.position += cache.length - moveLength;
-                    cache.length = moveLength + readExtent;
+                let overlap = (cache.position + cache.extent) - position;
+                if (overlap > 0) {
+                    let moveLength = Math.min(overlap, cache.extent);
+                    cache.db.copy(cache.db, 0, cache.extent - moveLength, cache.extent);
+                    cache.extent = readExtent;
                     readOffset += moveLength;
-                    readPosition = cache.position + moveLength;
+                    readPosition += moveLength;
+                    readExtent -= moveLength;
                 }
             }
-            this.assert(cache.position >= 0 && cache.position + cache.length <= archive.length);
-            //
-            // If readExtent is > 0, then we need to read that many bytes from readPosition into the
-            // cache buffer at readOffset.
-            //
             if (readExtent > 0) {
                 if (archive.file) {
-                    let result = await archive.file.read(cache.db, {offset: readOffset, length: readExtent, position: readPosition});
+                    let result = await archive.file.read(cache.db, { offset: readOffset, length: readExtent, position: readPosition });
                     if (result.bytesRead != readExtent) {
                         throw new Error("Unable to read from archive");
                     }
-                }
-                else {
+                } else {
                     throw new Error("No file handle available");
                 }
             }
+            cache.position = position;
+            cache.extent = fullExtent;
         }
         let offset = position - cache.position;
         return [offset, extent];
@@ -514,7 +473,7 @@ export default class Dezip {
             //
             let posArchive = archive.length - cache.db.length;
             while (true) {
-                let [offset, length] = await this.fillCache(archive, posArchive, cache.db.length);
+                let [offset, length] = await this.readCache(archive, posArchive, cache.db.length);
                 let offsetEnd = offset + length - Dezip.CentralEndHeader.length;
                 while (offsetEnd >= offset) {
                     //
@@ -543,7 +502,7 @@ export default class Dezip {
             //
             // Read the next CentralHeader.
             //
-            let [offset, length] = await this.fillCache(archive, position, Dezip.CentralHeader.length);
+            let [offset, length] = await this.readCache(archive, position, Dezip.CentralHeader.length);
             let signature = cache.db.readUInt32LE(offset);
             if (signature == (Dezip.CentralEndHeader.fields.signature.ENDSIG)) {
                 return null;    // end of archive
