@@ -339,23 +339,23 @@ export default class DataBuffer {
     }
 
     /**
-     * toString(format, start, end)
+     * toString(encoding, start, end)
      *
      * @this {DataBuffer}
-     * @param {string} [format]
+     * @param {string} [encoding]
      * @param {number} [start]
      * @param {number} [end]
      * @returns {string}
      */
-    toString(format, start = 0, end = this.length)
+    toString(encoding, start = 0, end = this.length)
     {
         let s = "";
         if (this.node) {
-            s = this.buffer.toString(format, start, end);
+            s = this.buffer.toString(encoding, start, end);
         } else {
             let a = new Uint8Array(this.ab, start, end - start);
-            if (format && "TextDecoder" in window) {
-                let dec = new TextDecoder(format);
+            if (encoding && "TextDecoder" in window) {
+                let dec = new TextDecoder(encoding);
                 s = dec.decode(a);
             } else {
                 // s = String.fromCharCode(...a) fails for large arrays...

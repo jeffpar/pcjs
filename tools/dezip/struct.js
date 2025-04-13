@@ -10,6 +10,7 @@
  */
 
 import CharSet from "./charset.js";
+import DataBuffer from "./databuffer.js";
 
 /**
  * Struct is a helper class for defining and loading on-disk structures.  For example:
@@ -46,25 +47,29 @@ import CharSet from "./charset.js";
  */
 export default class Struct {
 
-    static INT8 = -1;
-    static INT16 = -2;
-    static INT32 = -3;
-    static INT64 = -4;
-    static UINT8 = -5;
-    static UINT16 = -6;
-    static UINT32 = -7;
-    static UINT64 = -8;
-    static STRING = -9;
+    static INT8         = -1;
+    static INT16        = -2;
+    static INT32        = -3;
+    static INT64        = -4;
+    static UINT8        = -5;
+    static UINT16       = -6;
+    static UINT32       = -7;
+    static UINT64       = -8;
+    static DOSTIMEDATE  = -9;
+    static DOSDATETIME  = -10;
 
     static SIZES = {
-        [Struct.INT8]: 1,
-        [Struct.INT16]: 2,
-        [Struct.INT32]: 4,
-        [Struct.INT64]: 8,
-        [Struct.UINT8]: 1,
-        [Struct.UINT16]: 2,
-        [Struct.UINT32]: 4,
-        [Struct.UINT64]: 8
+        [Struct.STRING]:      0,
+        [Struct.INT8]:        1,
+        [Struct.INT16]:       2,
+        [Struct.INT32]:       4,
+        [Struct.INT64]:       8,
+        [Struct.UINT8]:       1,
+        [Struct.UINT16]:      2,
+        [Struct.UINT32]:      4,
+        [Struct.UINT64]:      8,
+        [Struct.DOSTIMEDATE]: 4,    // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
+        [Struct.DOSDATETIME]: 4     // 16-bit date followed by 16-bit time (used by ARC headers)
     };
 
     /**
@@ -138,47 +143,54 @@ export default class Struct {
      *
      * @this {Struct}
      * @param {DataBuffer} db
-     * @param {number} offset
+     * @param {number} [offset]
      * @returns {Object}
      */
     readStruct(db, offset = 0)
     {
-        let record = {};
+        let record = {}, messages = [];
         for (let name in this.fields) {
-            record[name] = this.get(db, offset, name);
+            record[name] = this.get(db, offset, name, undefined, messages);
+        }
+        if (messages.length) {
+            record.messages = messages;
         }
         return record;
     }
 
     /**
-     * readString(db, offset, length)
+     * readString(db, offset, length, encoding)
      *
      * @this {Struct}
      * @param {DataBuffer} db
      * @param {number} offset
      * @param {number} length
+     * @param {string} [encoding]
      * @returns {string}
      */
-    readString(db, offset, length)
+    readString(db, offset, length, encoding)
     {
-        return CharSet.fromCP437(db, offset, length);
+        return encoding? db.toString(encoding, offset, offset+length) : CharSet.fromCP437(db, offset, length);
     }
 
     /**
-     * get(db, offset, name, encoding)
+     * get(db, offset, name, encoding, messages)
      *
      * @this {Struct}
      * @param {DataBuffer} db
      * @param {number} offset
      * @param {string} name
      * @param {string} [encoding] (default is "utf8")
+     * @param {Array} [messages]
      * @returns {number|string}
      */
-    get(db, offset, name, encoding = "utf8")
+    get(db, offset, name, encoding = "utf8", messages = [])
     {
-        let v;
+        let v, time, date;
         let field = this.fields[name];
-        if (!field) throw new Error("Field " + name + " not found in " + this.name);
+        if (!field) {
+            throw new Error("Field " + name + " not found in " + this.name);
+        }
         offset += field.offset;
         let length = field.length;
         if (offset + length > db.length) {
@@ -221,8 +233,18 @@ export default class Struct {
                 (db.readUInt32LE(offset) + db.readUInt32LE(offset + 4) * 0x0000000100000000) :
                 (db.readUInt32BE(offset) * 0x0000000100000000 + db.readUInt32BE(offset + 4));
             break;
+        case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
+            time = db.readUInt16LE(offset);
+            date = db.readUInt16LE(offset + 2);
+            v = this.parseDateTime(date, time, messages);
+            break;
+        case Struct.DOSDATETIME:        // since this is defined as a DOS field, we assume little-endian
+            date = db.readUInt16LE(offset);
+            time = db.readUInt16LE(offset + 2);
+            v = this.parseDateTime(date, time, messages);
+            break;
         case Struct.STRING:
-            v = db.toString(encoding, offset, offset + length);
+            v = this.readString(db, offset, length, encoding);
             for (let i = 0; i < length; i++) {
                 if (v.charCodeAt(i) == 0) {
                     v = v.substr(0, i);
@@ -234,5 +256,79 @@ export default class Struct {
             throw new Error("Field " + name + " unsupported (" + field.type + ") in " + this.struct.name);
         }
         return v;
+    }
+
+    /**
+     * parseDateTime(date, time, messages)
+     *
+     * ZIP/ARC archives contain local times, so we return a Date object in local time.
+     *
+     * @param {number} date (16 bits)
+     * @param {number} time (16 bits)
+     * @param {Array} [messages]
+     * @returns {Date}
+     */
+    parseDateTime(date, time, messages = [])
+    {
+        let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
+        let d = {
+            y: (date >> 9) + 1980,
+            m: ((date >> 5) & 0xf) - 1,
+            d: (date & 0x1f),
+            h: (time >> 11),
+            n: (time >> 5) & 0x3f,
+            s: (time & 0x1f) << 1
+        };
+        /**
+         * date/time validation follows (although each part of the date/time is stored
+         * in a limited number of bits, those bits can still contain out-of-bounds values).
+         *
+         * If date/time wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
+         * resulting in a Date where getFullYear() < 1980.  We allow that, so that the caller
+         * can detect that case and act accordingly; however, if date/time WAS set, then
+         * we do NOT allow those values.
+         *
+         * Unfortunately, while files without dates were zipped by PKZIP with a date of zero,
+         * when such files are unzipped with a modern `unzip` utility, the date is set to the
+         * UNIX epoch, and when such files are re-zipped with a modern `zip` utility, the date
+         * is set to Jan 1 1980, which is NOT zero.  By "rounding up" invalid dates to the
+         * oldest valid MS-DOS date, modern zip utilities fail to preserve original timestamps
+         * (or rather, the lack thereof); they should have re-zipped any date < 1980 as zero.
+         */
+        let errors = 0;
+        let orig = { ...d };
+        if ((date || time) && d.m < 0) {
+            d.m = 0;
+            errors++;
+        }
+        if (d.m > 11) {
+            d.m = 11;
+            errors++;
+        }
+        if ((date || time) && d.d < 1) {
+            d.d = 1;
+            errors++;
+        }
+        if (d.d > 31) {
+            d.d = monthDays[d.m];
+            if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
+            errors++;
+        }
+        if (d.h > 23) {
+            d.h = 23;
+            errors++;
+        }
+        if (d.n > 59) {
+            d.n = 59;
+            errors++;
+        }
+        if (d.s > 59) {
+            d.s = 59;
+            errors++;
+        }
+        if (errors) {
+            messages.push(`Invalid date/time (${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
+        }
+        return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
     }
 }
