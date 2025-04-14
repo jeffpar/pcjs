@@ -33,7 +33,7 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * @property {number}   length      (length of the archive file)
  * @property {number}   file        (file descriptor, if any)
  * @property {Cache}    cache       (cache data)
- * @property {Array}    dirEntries  (array of central directory headers)
+ * @property {Array}    entries     (array of directory entries)
  *
  * @typedef  {object}   ArchiveOptions
  * @property {DataBuffer} db        (optional DataBuffer to use instead of reading from a file)
@@ -68,9 +68,9 @@ export default class Dezip {
      */
     static TYPE_ARC = 1;
     static TYPE_ZIP = 2;
-    static LocalHeader = new Struct("LocalHeader")
+    static FileHeader = new Struct("FileHeader")
         .field('signature',     Struct.UINT32, {
-            LOCSIG:     0x04034b50                      // "PK\003\004" (local file header signature)
+            FILESIG:    0x04034b50                      // "PK\003\004" (local file header signature)
         })
         .field('version',       Struct.UINT16)          // version needed to extract
         .field('flags',         Struct.UINT16, {        // general purpose bit flag
@@ -94,12 +94,12 @@ export default class Dezip {
     static SpanHeader = new Struct("SpanHeader")
         .field('signature',     Struct.UINT32, {
             SPANSIG:    0x08074b50                      // "PK\007\008" (spanned/split archive signature)
-        })                                              // if present, followed by 1 or more LocalHeader structures
+        })                                              // if present, followed by 1 or more FileHeader structures
         .verifyLength(4);
 
-    static CentralHeader = new Struct("CentralHeader")
+    static DirHeader = new Struct("DirHeader")
         .field('signature',     Struct.UINT32, {
-            CENSIG:     0x02014b50                      // "PK\001\002" (central file header signature)
+            DIRSIG:     0x02014b50                      // "PK\001\002" (directory header signature)
         })
         .field('verMade',       Struct.UINT16)          // version made by
         .field('version',       Struct.UINT16)          // version needed to extract
@@ -111,49 +111,49 @@ export default class Dezip {
         .field('size',          Struct.UINT32)          // uncompressed size
         .field('fnameLen',      Struct.UINT16)          // filename length
         .field('extraLen',      Struct.UINT16)          // extra field length
-        .field('comLen',        Struct.UINT16)          // file comment length
+        .field('commentLen',    Struct.UINT16)          // file comment length
         .field('diskStart',     Struct.UINT16)          // disk number start
         .field('intAttr',       Struct.UINT16)          // internal file attributes
         .field('attr',          Struct.UINT32)          // external file attributes (host system dependent)
         .field('offset',        Struct.UINT32)          // relative offset of local header
         .verifyLength(46);
 
-    static CentralEndHeader = new Struct("CentralEndHeader")
+    static DirEndHeader = new Struct("DirEndHeader")
         .field('signature',     Struct.UINT32, {
-            ENDSIG:     0x06054b50                      // "PK\005\006" (end of central dir signature)
+            DIREND:     0x06054b50                      // "PK\005\006" (end of directory signature)
         })
         .field('diskNum',       Struct.UINT16)          // number of this disk
-        .field('diskStart',     Struct.UINT16)          // disk where central directory starts
+        .field('diskStart',     Struct.UINT16)          // disk where directory starts
         .field('volumeEntries', Struct.UINT16)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT16)          // total number of entries
-        .field('size',          Struct.UINT32)          // central directory size in bytes
-        .field('offset',        Struct.UINT32)          // offset of first CentralHeader
-        .field('commentLength', Struct.UINT16)          // zip file comment length
+        .field('size',          Struct.UINT32)          // directory size in bytes
+        .field('offset',        Struct.UINT32)          // offset of first DirHeader
+        .field('commentLen',    Struct.UINT16)          // zip file comment length
         .verifyLength(22);
 
     static MAXFILECOMMENT = 0xffff;
 
-    static Central64Header = new Struct("Central64Header")
+    static Dir64Header = new Struct("Dir64Header")
         .field('signature',     Struct.UINT32,{
-            ENDL64SIG:  0x07064b50                      // "PK\006\007" (ZIP64 end of central directory locator)
+            ENDL64SIG:  0x07064b50                      // "PK\006\007" (ZIP64 end of directory locator)
         })
         .field('diskNum',       Struct.UINT32)          // number of this disk
-        .field('headerOffset',  Struct.UINT64)          // offset of the ZIP64 end of central directory record
+        .field('headerOffset',  Struct.UINT64)          // offset of the ZIP64 end of directory record
         .field('disks',         Struct.UINT32)          // total number of disks
         .verifyLength(20);
 
-    static Central64EndHeader = new Struct("Central64EndHeader")
+    static Dir64EndHeader = new Struct("Dir64EndHeader")
         .field('signature',     Struct.UINT32, {
-            END64SIG:   0x06064b50                      // "PK\006\006" (ZIP64 end of central directory record)
+            END64SIG:   0x06064b50                      // "PK\006\006" (ZIP64 end of directory record)
         })
-        .field('sizeEOCD',      Struct.UINT64)          // size of zip64 end of central directory record
+        .field('sizeEOCD',      Struct.UINT64)          // size of zip64 end of directory record
         .field('verMade',       Struct.UINT16)          // version made by
         .field('version',       Struct.UINT16)          // version needed to extract
         .field('diskNum',       Struct.UINT32)          // number of this disk
-        .field('diskStart',     Struct.UINT32)          // disk where central directory starts
+        .field('diskStart',     Struct.UINT32)          // disk where directory starts
         .field('volumeEntries', Struct.UINT64)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT64)          // total number of entries
-        .field('size',          Struct.UINT64)          // central directory size in bytes
+        .field('size',          Struct.UINT64)          // directory size in bytes
         .field('offset',        Struct.UINT64)          // offset of first CEN header
         .verifyLength(56);
 
@@ -234,6 +234,11 @@ export default class Dezip {
 
     static DEBUG = true;
 
+    static FLAGS = {
+        SCAN_BWD:               0x0001,         // archive has been scanned backward
+        SCAN_FWD:               0x0002,         // archive has been scanned forward
+    };
+
     /**
      * constructor(interfaces)
      *
@@ -253,6 +258,7 @@ export default class Dezip {
     /**
      * assert(condition, message)
      *
+     * @this {Dezip}
      * @param {boolean} condition
      * @param {string} [message]
      */
@@ -277,13 +283,14 @@ export default class Dezip {
     {
         let archive = {
             fileName,                   // name of the archive file
+            flags: 0,                   // see Dezip.FLAGS.*
             arcType: options.arcType || Dezip.TYPE_ZIP,
             modified: options.modified, // modification date of archive file
             password: options.password, // password for encrypted archives
             length: 0,                  // length of the archive file
             file: null,                 // file handle, if any
             cache: {},                  // cache data
-            dirEntries: []              // array of central directory entries
+            entries: []                 // array of directory entries
         };
         //
         // If a DataBuffer (db) is provided, then no reading is required; we also provide
@@ -348,6 +355,7 @@ export default class Dezip {
     /**
      * initCache(archive, db, length)
      *
+     * @this {Dezip}
      * @param {object} archive
      * @param {DataBuffer} [db]
      * @param {number} [length]
@@ -370,6 +378,7 @@ export default class Dezip {
      * In general, the returned length will be the same as the requested extent, except
      * when the request is outside the bounds of the archive.
      *
+     * @this {Dezip}
      * @param {Archive} archive
      * @param {number} position
      * @param {number} extent
@@ -445,46 +454,82 @@ export default class Dezip {
     }
 
     /**
-     * readDirectory(archive, prevEntry)
+     * readDirectory(archive)
      *
-     * Reads the next CentralHeader of the archive, based on the position of the last header.
-     * If this is the first request, then we scan the archive for a CentralEndHeader ENDSIG, starting
-     * from the end of the archive, which should tell us where the first CentralHeader is located.
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @returns {Array}
+     */
+    async readDirectory(archive)
+    {
+        let entry = null;
+        do {
+            entry = await this.readDirEntry(archive, entry);
+            if (!entry) break;
+        } while (true);
+        if (!archive.entries.length) {
+            do {
+                entry = await this.readFileEntry(archive, entry);
+                if (!entry) break;
+            } while (true);
+            if (!archive.entries.length) {
+                throw new Error("No file entries found");
+            }
+        }
+        return archive.entries;
+    }
+
+    /**
+     * readDirEntry(archive, prevEntry)
+     *
+     * Reads the next DirHeader of the archive, based on the position of the last header.
+     * If this is the first request, then we scan the archive for a DirEndHeader DIREND, starting
+     * from the end of the archive, which should tell us where the first DirHeader is located.
      *
      * @this {Dezip}
      * @param {Archive} archive
      * @param {object|null} prevEntry
      * @returns {object|null}
      */
-    async readDirectory(archive, prevEntry)
+    async readDirEntry(archive, prevEntry)
     {
-        let header;
-        let dirEntry = null;
+        let entry, header, position;
+        if (!prevEntry) {
+            position = -1;
+            entry = archive.entries[0];
+        } else {
+            position = prevEntry.position;
+            entry = archive.entries[prevEntry.index + 1];
+        }
+        if (entry && entry.header) {
+            return entry;
+        }
+        entry = null;
         let cache = archive.cache;
-        let position = prevEntry? prevEntry.position : -1;
         if (position >= 0) {
             header = prevEntry.header;
-            position += Dezip.CentralHeader.length + header.fnameLen + header.extraLen + header.comLen;
-        } else {
+            position += Dezip.DirHeader.length + header.fnameLen + header.extraLen + header.commentLen;
+        }
+        else {
             //
-            // Locate CentralEndHeader first, by scanning backwards through cache-sized chunks,
-            // starting with the last chunk in the archive, until we find a CentralEndHeader signature.
+            // Locate DirEndHeader first, by scanning backwards through cache-sized chunks,
+            // starting with the last chunk in the archive, until we find a DirEndHeader signature.
             //
             let posArchive = archive.length - cache.db.length;
             while (true) {
                 let [offset, length] = await this.readCache(archive, posArchive, cache.db.length);
-                let offsetEnd = offset + length - Dezip.CentralEndHeader.length;
+                let offsetEnd = offset + length - Dezip.DirEndHeader.length;
                 while (offsetEnd >= offset) {
                     //
                     // To save the expense of readStruct() at every location, we probe the low byte first;
-                    // if it doesn't match the low byte off the CentralEndHeader signature, then we can skip
-                    // the readStruct().
+                    // if it doesn't match the low byte off the DirEndHeader signature, then we can skip the
+                    // readStruct().
                     //
-                    if (cache.db.readUInt8(offsetEnd) == (Dezip.CentralEndHeader.fields.signature.ENDSIG & 0xff)) {
-                        header = Dezip.CentralEndHeader.readStruct(cache.db, offsetEnd);
-                        if (header.signature == Dezip.CentralEndHeader.fields.signature.ENDSIG) {
+                    if (cache.db.readUInt8(offsetEnd) == (Dezip.DirEndHeader.fields.signature.DIREND & 0xff)) {
+                        header = Dezip.DirEndHeader.readStruct(cache.db, offsetEnd);
+                        if (header.signature == Dezip.DirEndHeader.fields.signature.DIREND) {
                             //
-                            // Found the CentralEndHeader signature, so we can read the CentralHeader position.
+                            // Found the DirEndHeader signature, so we can read the DirHeader position.
                             //
                             position = header.offset;
                             break;
@@ -497,94 +542,131 @@ export default class Dezip {
                 // Move backward another chunk, but less than the full cache size, to ensure that we don't fail
                 // to find a signature (and the structure containing it) that happens to straddle a cache boundary.
                 //
-                posArchive -= (cache.db.length - Dezip.CentralEndHeader.length * 2);
+                posArchive -= (cache.db.length - Dezip.DirEndHeader.length * 2);
                 if (posArchive < 0) posArchive = 0;
             }
         }
         if (position >= 0) {
+            entry = { index: archive.entries.length, position };
             //
-            // Read the specified CentralHeader.
+            // Read the specified DirHeader.
             //
-            dirEntry = {
-                index: archive.dirEntries.length,
-                position
-            };
-            let [offset, length] = await this.readCache(archive, position, Dezip.CentralHeader.length);
+            let [offset, length] = await this.readCache(archive, position, Dezip.DirHeader.length);
             let signature = cache.db.readUInt32LE(offset);
-            if (signature == (Dezip.CentralEndHeader.fields.signature.ENDSIG)) {
+            if (signature == (Dezip.DirEndHeader.fields.signature.DIREND)) {
                 return null;
             }
-            header = dirEntry.header = Dezip.CentralHeader.readStruct(cache.db, offset);
-            if (header.signature != Dezip.CentralHeader.fields.signature.CENSIG) {
-                throw new Error(`Invalid CentralHeader signature (${header.signature.toString(16)}) at position ${position+offset}`);
+            header = Dezip.DirHeader.readStruct(cache.db, offset);
+            if (header.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
+                throw new Error(`Invalid DirHeader signature (${header.signature.toString(16)}) at position ${position+offset}`);
             }
-            offset += Dezip.CentralHeader.length;
-            header.fname = Dezip.CentralHeader.readString(cache.db, offset, header.fnameLen);
+            entry.header = header;
+            offset += Dezip.DirHeader.length;
+            header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen);
             //
             // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
             //
             offset += header.fnameLen + header.extraLen;
-            header.comment = Dezip.CentralHeader.readString(cache.db, offset, header.comLen);
-            //
-            // Last but not least, record the dirEntry's position.
-            //
-            archive.dirEntries.push(dirEntry);
+            header.comment = Dezip.DirHeader.readString(cache.db, offset, header.commentLen);
+            archive.entries.push(entry);
         }
-        return dirEntry;
+        return entry;
     }
 
     /**
-     * readFile(archive, prevEntry)
+     * readFileEntry(archive, prevEntry)
      *
      * Given the previous entry, read the next file in the archive, using the directory if available.
      *
+     * @this {Dezip}
      * @param {Archive} archive
      * @param {object|null} prevEntry
      * @returns {object|null}
      */
-    async readFile(archive, prevEntry)
+    async readFileEntry(archive, prevEntry)
     {
-        let fileEntry = null;
         //
-        // If prevEntry is null, then we start with dirEntries[0], and if there are no directory entries,
-        // then we scan the archive for the first LocalHeader signature.
+        // If prevEntry is null, then we start with entries[0], and if there are no directory entries,
+        // then we scan the archive for the first FileHeader signature.
         //
-        // If prevEntry is NOT null, then we check its header signature: if the signature is LOCSIG, then
-        // calculate the position of the next LocalHeader, and if the signature is CENSIG, fetch the
-        // next entry from dirEntries.
-        //
+        let entry;
         let position = -1;
-        let dirEntry = null;
         if (!prevEntry) {
-            dirEntry = archive.dirEntries[0];
+            entry = archive.entries[0];
         } else {
-            if (prevEntry.header.signature == Dezip.LocalHeader.fields.signature.LOCSIG) {
-                position = prevEntry.position + Dezip.LocalHeader.length;
-                position += prevEntry.header.fnameLen + prevEntry.header.extraLen + prevEntry.header.compressedSize;
+            entry = archive.entries[prevEntry.index + 1];
+        }
+        if (entry) {
+            if (entry.fileHeader) {
+                return entry;
             }
-            else {
-                this.assert(prevEntry.header.signature == Dezip.CentralHeader.fields.signature.CENSIG);
-                dirEntry = archive.dirEntries[prevEntry.index + 1];
-                if (!dirEntry) {
+            position = entry.header.offset;
+        } else {
+            entry = null;
+            if (prevEntry) {
+                this.assert(prevEntry.fileHeader != null);
+                position = prevEntry.filePosition + Dezip.FileHeader.length;
+                position += prevEntry.fileHeader.fnameLen + prevEntry.fileHeader.extraLen + prevEntry.fileHeader.compressedSize;
+                if (position >= archive.length) {
                     return null;
                 }
             }
         }
-        if (dirEntry) {
-            position = dirEntry.header.offset;
-        }
+        let cache = archive.cache;
         if (position < 0) {
             //
-            // Check the beginning of the file for a LocalHeader.
+            // Check the beginning of the file for a FileHeader.
             //
+            let [offset, length] = await this.readCache(archive, 0, cache.db.length);
+            let signature = cache.db.readUInt32LE(offset);
+            if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
+                position = offset + 4;
+            }
         }
         if (position >= 0) {
-            //
-            // Read the specified LocalHeader.
-            //
-            fileEntry = {};
+            let fileHeader = await this.readFileHeader(archive, position);
+            if (!fileHeader) {
+                return null;
+            }
+            if (!entry) {
+                entry = { index: archive.entries.length };
+                archive.entries.push(entry);
+            }
+            entry.fileHeader = fileHeader;
+            entry.filePosition = position;
         }
-        return fileEntry;
+        return entry;
+    }
+
+    /**
+     * readFileHeader(archive, position)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @param {number} position
+     * @returns {object|null} fileHeader
+     */
+    async readFileHeader(archive, position)
+    {
+        let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
+        let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset);
+        if (fileHeader.signature != Dezip.FileHeader.fields.signature.FILESIG) {
+            return null;
+        }
+        offset += Dezip.FileHeader.length;
+        fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen);
+        return fileHeader;
+    }
+
+    /**
+     * readFile(archive, entry)
+     *
+     * @param {Archive} archive
+     * @param {object} entry
+     */
+    async readFile(archive, entry)
+    {
+
     }
 
     /**
