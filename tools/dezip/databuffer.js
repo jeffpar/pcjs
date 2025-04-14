@@ -95,6 +95,35 @@ export default class DataBuffer {
     }
 
     /**
+     * concat(buffers, totalLength)
+     *
+     * Mimics the behavior of Buffer.concat() in Node.js.
+     *
+     * @param {Array<DataBuffer>} buffers (array of DataBuffer instances to concatenate)
+     * @param {number} [totalLength] (optional total length of the resulting buffer)
+     * @returns {DataBuffer} (new DataBuffer containing the concatenated data)
+     */
+    static concat(buffers, totalLength)
+    {
+        if (!Array.isArray(buffers)) {
+            throw new TypeError("Argument must be an array of DataBuffer instances");
+        }
+        if (totalLength == undefined) {
+            totalLength = buffers.reduce((sum, buffer) => sum + buffer.length, 0);
+        }
+        let result = new DataBuffer(totalLength);
+        let offset = 0;
+        for (let buffer of buffers) {
+            if (!(buffer instanceof DataBuffer)) {
+                throw new TypeError("All elements in the array must be DataBuffer instances");
+            }
+            result.copy(buffer, offset);
+            offset += buffer.length;
+        }
+        return result;
+    }
+
+    /**
      * copy(dbTarget, offTarget, offSource, offSourceEnd)
      *
      * @this {DataBuffer}

@@ -115,7 +115,7 @@ export default class Dezip {
         .field('diskStart',     Struct.UINT16)          // disk number start
         .field('intAttr',       Struct.UINT16)          // internal file attributes
         .field('attr',          Struct.UINT32)          // external file attributes (host system dependent)
-        .field('offset',        Struct.UINT32)          // relative offset of local header
+        .field('offset',        Struct.UINT32)          // relative offset of file header
         .verifyLength(46);
 
     static DirEndHeader = new Struct("DirEndHeader")
@@ -154,7 +154,7 @@ export default class Dezip {
         .field('volumeEntries', Struct.UINT64)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT64)          // total number of entries
         .field('size',          Struct.UINT64)          // directory size in bytes
-        .field('offset',        Struct.UINT64)          // offset of first CEN header
+        .field('offset',        Struct.UINT64)          // offset of first directory header
         .verifyLength(56);
 
     static ArcHeader = new Struct("ArcHeader")
@@ -324,17 +324,17 @@ export default class Dezip {
             const stats = await archive.file.stat();
             archive.length = stats.size;
             archive.modified = stats.mtime;
-            this.initCache(archive, Buffer.alloc(Math.min(this.cacheSize, archive.length)));
+            this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.length)));
             if (options.prefill) {
-                let buffer = Buffer.alloc(0);
+                let db = new DataBuffer(0);
                 let cache = archive.cache;
                 do {
-                    let result = await archive.file.read(cache.db);
+                    let result = await archive.file.read(cache.db.buffer);
                     if (result.bytesRead == 0) break;
                     if (result.bytesRead < cache.db.length) {
-                        cache.db = cache.db.subarray(0, result.bytesRead);
+                        cache.db = cache.db.slice(0, result.bytesRead);
                     }
-                    buffer = Buffer.concat([buffer, cache.db]);
+                    db = DataBuffer.concat([db, cache.db]);
                     if (result.bytesRead < cache.db.length) break;
                 } while (true);
                 //
@@ -342,8 +342,8 @@ export default class Dezip {
                 // (and by extension, the old cache buffer).  The new buffer becomes the cache buffer.
                 //
                 await this.close(archive);
-                this.assert(archive.length == buffer.length);
-                this.initCache(archive, new DataBuffer(buffer), archive.length);
+                this.assert(archive.length == db.length);
+                this.initCache(archive, new DataBuffer(db), archive.length);
             }
         }
         else {
@@ -376,7 +376,8 @@ export default class Dezip {
      * of the requested data.
      *
      * In general, the returned length will be the same as the requested extent, except
-     * when the request is outside the bounds of the archive.
+     * when the request is outside the bounds of the archive, or is larger than the current
+     * cache size.
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -396,7 +397,7 @@ export default class Dezip {
         let cache = archive.cache;
         let maxExtent = cache.db.length;
         if (extent > maxExtent) {
-            throw new Error(`Requested size (${extent}) exceeds cache size (${maxExtent})`);
+            extent = maxExtent;
         }
         if (position + maxExtent > archive.length) {
             maxExtent = archive.length - position;
@@ -438,7 +439,7 @@ export default class Dezip {
             }
             if (readExtent > 0) {
                 if (archive.file) {
-                    let result = await archive.file.read(cache.db, { offset: readOffset, length: readExtent, position: readPosition });
+                    let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition );
                     if (result.bytesRead != readExtent) {
                         throw new Error("Unable to read from archive");
                     }
@@ -501,13 +502,13 @@ export default class Dezip {
             position = prevEntry.position;
             entry = archive.entries[prevEntry.index + 1];
         }
-        if (entry && entry.header) {
+        if (entry && entry.dirHeader) {
             return entry;
         }
         entry = null;
         let cache = archive.cache;
         if (position >= 0) {
-            header = prevEntry.header;
+            header = prevEntry.dirHeader;
             position += Dezip.DirHeader.length + header.fnameLen + header.extraLen + header.commentLen;
         }
         else {
@@ -560,7 +561,7 @@ export default class Dezip {
             if (header.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
                 throw new Error(`Invalid DirHeader signature (${header.signature.toString(16)}) at position ${position+offset}`);
             }
-            entry.header = header;
+            entry.dirHeader = header;
             offset += Dezip.DirHeader.length;
             header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen);
             //
@@ -600,7 +601,7 @@ export default class Dezip {
             if (entry.fileHeader) {
                 return entry;
             }
-            position = entry.header.offset;
+            position = entry.dirHeader.offset;
         } else {
             entry = null;
             if (prevEntry) {
@@ -659,14 +660,97 @@ export default class Dezip {
     }
 
     /**
+     * readChunks(archive, position, extent)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @param {number} position
+     * @param {number} extent
+     */
+    async* readChunks(archive, position, extent)
+    {
+        let remaining = extent;
+        while (remaining > 0) {
+            let db = new DataBuffer(this.cacheSize);
+            let result = await archive.file.read(db.buffer, 0, db.length, position);
+            if (result.bytesRead == 0) {
+                break;
+            }
+            if (result.bytesRead < db.length) {
+                db = db.slice(0, result.bytesRead);
+            }
+            yield db;
+            position += db.length;
+            remaining -= db.length;
+        }
+    }
+
+    /**
+     * inflateChunks(chunkGenerator)
+     *
+     * @this {Dezip}
+     * @param {*} chunkGenerator
+     * @returns {Promise<Buffer>}
+     */
+    async inflateChunks(chunkGenerator)
+    {
+        const chunks = [];
+        const inflater = this.interfaces.inflater();
+        for await (const chunk of chunkGenerator) {
+            inflater.write(chunk.buffer);
+        }
+        inflater.end();
+        return new Promise((resolve, reject) => {
+            inflater.on('data', (chunk) => {
+                chunks.push(chunk);
+            });
+            inflater.on('end', () => {
+                resolve(Buffer.concat(chunks));
+            });
+            inflater.on('error', reject);
+        });
+    }
+
+    /**
      * readFile(archive, entry)
      *
      * @param {Archive} archive
      * @param {object} entry
+     * @returns {DataBuffer} (decompressed data)
      */
     async readFile(archive, entry)
     {
-
+        let fileHeader = entry.fileHeader;
+        if (!fileHeader) {
+            this.assert(entry.dirHeader);
+            let position = entry.dirHeader.offset;
+            fileHeader = await this.readFileHeader(archive, position);
+            if (!fileHeader) {
+                throw new Error("Unable to read file header");
+            }
+            entry.fileHeader = fileHeader;
+            entry.filePosition = position;
+        }
+        let position = entry.filePosition + Dezip.FileHeader.length;
+        position += entry.fileHeader.fnameLen + entry.fileHeader.extraLen;
+        let compressedSize = fileHeader.compressedSize;
+        //
+        // Nothing to do for directory entries and zero-length files.
+        //
+        if (!compressedSize) {
+            return new DataBuffer(0);
+        }
+        let decompressedData = 0;
+        if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
+            try {
+                decompressedData = await this.inflateChunks(
+                    this.readChunks(archive, position, compressedSize)
+                );
+            } catch (error) {
+                throw new Error(`Error inflating data (${error.message})`);
+            }
+        }
+        return new DataBuffer(decompressedData);
     }
 
     /**
