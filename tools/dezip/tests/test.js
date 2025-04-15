@@ -10,8 +10,8 @@ const dezip = new Dezip(
     {
         fetch,
         open: fs.open,
-        inflate: zlib.inflateRawSync,
-        inflater: zlib.createInflateRaw
+        inflate: zlib.inflateRaw,
+        createInflate: zlib.createInflateRaw
     },
     {
         cacheSize: 4096

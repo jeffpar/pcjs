@@ -21,6 +21,7 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * @property {function} fetch       (http interface to fetch remote files)
  * @property {function} open        (fs interface to open local files)
  * @property {function} inflate     (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
+ * @property {function} createInflate
  *
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
@@ -53,7 +54,7 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  *
  * That means the constructor must be provided with the reading and decompression interfaces available
  * in the current environment (eg, fetch() and pako.inflateRaw() if running in a browser, or fs.open()
- * and zlib.inflateRawSync() if running in Nodejs).
+ * and zlib.inflateRaw() if running in Nodejs).
  *
  * For this first iteration, I'm going to keep things simple and allow asynchronous I/O when reading an
  * archive but stick with synchronous decompression when extracting entries from an archive; that also
@@ -669,19 +670,31 @@ export default class Dezip {
      */
     async* readChunks(archive, position, extent)
     {
-        let remaining = extent;
-        while (remaining > 0) {
-            let db = new DataBuffer(this.cacheSize);
-            let result = await archive.file.read(db.buffer, 0, db.length, position);
+        while (extent > 0) {
+            let chunkSize = Math.min(extent, this.cacheSize);
+            let db = new DataBuffer(chunkSize);
+            let result = await archive.file.read(db.buffer, 0, chunkSize, position);
             if (result.bytesRead == 0) {
                 break;
             }
-            if (result.bytesRead < db.length) {
+            if (result.bytesRead < chunkSize) {
                 db = db.slice(0, result.bytesRead);
             }
+            //
+            // TODO: Figure out why using our cache buffer instead is problematic.
+            //
+            // let [offset, length] = await this.readCache(archive, position, chunkSize);
+            // if (length == 0) {
+            //     break;
+            // }
+            // let dbCache = new DataBuffer(archive.cache.db, offset, offset + length);
+            // if (!dbCache.compare(db)) {
+            //     throw new Error("Data mismatch");
+            // }
+            //
             yield db;
             position += db.length;
-            remaining -= db.length;
+            extent -= db.length;
         }
     }
 
@@ -695,19 +708,38 @@ export default class Dezip {
     async inflateChunks(chunkGenerator)
     {
         const chunks = [];
-        const inflater = this.interfaces.inflater();
+        const inflate = this.interfaces.createInflate();
         for await (const chunk of chunkGenerator) {
-            inflater.write(chunk.buffer);
+            inflate.write(chunk.buffer);
         }
-        inflater.end();
+        inflate.end();
         return new Promise((resolve, reject) => {
-            inflater.on('data', (chunk) => {
+            inflate.on('data', (chunk) => {
                 chunks.push(chunk);
             });
-            inflater.on('end', () => {
+            inflate.on('end', () => {
                 resolve(Buffer.concat(chunks));
             });
-            inflater.on('error', reject);
+            inflate.on('error', reject);
+        });
+    }
+
+    /**
+     * Asynchronously inflates a buffer using the provided inflate interface.
+     *
+     * @this {Dezip}
+     * @param {Buffer} buffer (compressed data to inflate)
+     * @returns {Promise<Buffer>} (promise that resolves to the decompressed data)
+     */
+    async inflateAsync(buffer)
+    {
+        return new Promise((resolve, reject) => {
+            this.interfaces.inflate(buffer, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
         });
     }
 
@@ -734,20 +766,21 @@ export default class Dezip {
         let position = entry.filePosition + Dezip.FileHeader.length;
         position += entry.fileHeader.fnameLen + entry.fileHeader.extraLen;
         let compressedSize = fileHeader.compressedSize;
-        //
-        // Nothing to do for directory entries and zero-length files.
-        //
-        if (!compressedSize) {
-            return new DataBuffer(0);
-        }
         let decompressedData = 0;
-        if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
-            try {
-                decompressedData = await this.inflateChunks(
-                    this.readChunks(archive, position, compressedSize)
-                );
-            } catch (error) {
-                throw new Error(`Error inflating data (${error.message})`);
+        if (compressedSize) {
+            if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
+                if (this.interfaces.createInflate) {
+                    decompressedData = await this.inflateChunks(
+                        this.readChunks(archive, position, compressedSize)
+                    );
+                } else if (this.interfaces.inflate) {
+                    let db = new DataBuffer(compressedSize);
+                    let result = await archive.file.read(db.buffer, 0, compressedSize, position);
+                    decompressedData = await this.inflateAsync(db.buffer);
+                }
+                else {
+                    throw new Error("No inflate interface available");
+                }
             }
         }
         return new DataBuffer(decompressedData);
