@@ -584,12 +584,14 @@ export default class Dezip {
                 throw new Error(`Invalid DirHeader signature (${header.signature.toString(16)}) at position ${position+offset}`);
             }
             entry.dirHeader = header;
-            offset += Dezip.DirHeader.length;
+            position += Dezip.DirHeader.length;
+            [offset, length] = await this.readCache(archive, position, header.fnameLen);
             header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen);
             //
             // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
             //
-            offset += header.fnameLen + header.extraLen;
+            position += header.fnameLen + header.extraLen;
+            [offset, length] = await this.readCache(archive, position, header.commentLen);
             header.comment = Dezip.DirHeader.readString(cache.db, offset, header.commentLen);
             archive.entries.push(entry);
         }
@@ -672,11 +674,14 @@ export default class Dezip {
     async readFileHeader(archive, position)
     {
         let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
+        this.assert(length == Dezip.FileHeader.length);
         let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset);
         if (fileHeader.signature != Dezip.FileHeader.fields.signature.FILESIG) {
             return null;
         }
-        offset += Dezip.FileHeader.length;
+        position += Dezip.FileHeader.length;
+        [offset, length] = await this.readCache(archive, position, fileHeader.fnameLen);
+        this.assert(length == fileHeader.fnameLen);
         fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen);
         return fileHeader;
     }
@@ -739,7 +744,9 @@ export default class Dezip {
             inflate.on('end', () => {
                 resolve(Buffer.concat(chunks));
             });
-            inflate.on('error', reject);
+            inflate.on('error', (error) => {
+                reject(error);
+            });
         });
     }
 
