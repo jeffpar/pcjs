@@ -21,7 +21,6 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * @property {function} fetch       (http interface to fetch remote files)
  * @property {function} open        (fs interface to open local files)
  * @property {function} inflate     (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
- * @property {function} createInflate
  *
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
@@ -390,7 +389,7 @@ export default class Dezip {
      * readCache(archive, position, extent)
      *
      * Given a position and extent within the archive, and given the archive's cache
-     * buffer, move any existing data in the cache buffer as appropriate, and then read
+     * buffer, moves any existing data in the cache buffer as appropriate, and then reads
      * any remaining requested data into the cache buffer, returning the offset and length
      * of the requested data.
      *
@@ -745,6 +744,8 @@ export default class Dezip {
     }
 
     /**
+     * inflateAsync(buffer)
+     *
      * Asynchronously inflates a buffer using the provided inflate interface.
      *
      * @this {Dezip}
@@ -766,6 +767,7 @@ export default class Dezip {
     /**
      * readFile(archive, entry)
      *
+     * @this {Dezip}
      * @param {Archive} archive
      * @param {object} entry
      * @returns {DataBuffer} (decompressed data)
@@ -812,11 +814,24 @@ export default class Dezip {
                         decompressedData = this.interfaces.stretchSync(db.buffer, decompressedSize).getOutput();
                     }
                     break;
+                case Dezip.ZIP_REDUCE1:
+                case Dezip.ZIP_REDUCE2:
+                case Dezip.ZIP_REDUCE3:
+                case Dezip.ZIP_REDUCE4:
+                    if (this.interfaces.expandSync) {
+                        decompressedData = this.interfaces.expandSync(db.buffer, decompressedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1).getOutput();
+                    }
+                    break;
                 case Dezip.ZIP_IMPLODE:
                     if (this.interfaces.explodeSync) {
                         let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
                         let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
                         decompressedData = this.interfaces.explodeSync(db.buffer, decompressedSize, largeWindow, literalTree).getOutput();
+                    }
+                    break;
+                case Dezip.ZIP_IMPLODE_DCL:
+                    if (this.interfaces.blastSync) {
+                        decompressedData = this.interfaces.blastSync(db.buffer).getOutput();
                     }
                     break;
                 }

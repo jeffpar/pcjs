@@ -14,7 +14,9 @@ const dezip = new Dezip(
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
         createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
         stretchSync: LegacyZip.stretchSync,         // interface for ZIP_SHRINK data
-        explodeSync: LegacyZip.explodeSync          // interface for ZIP_IMPLODE data
+        expandSync: LegacyZip.expandSync,           // interface for ZIP_REDUCE# data
+        explodeSync: LegacyZip.explodeSync,         // interface for ZIP_IMPLODE data
+        blastSync: LegacyZip.blastSync              // interface for ZIP_IMPLODE_DCL data
     },
     {
         cacheSize: 4096
