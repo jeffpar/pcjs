@@ -5,13 +5,16 @@
 import fs from "fs/promises";
 import zlib from "zlib";
 import Dezip from "../dezip.js";
+import { LegacyZip } from "../../modules/legacyzip.js";
 
 const dezip = new Dezip(
     {
         fetch,
         open: fs.open,
-        inflate: zlib.inflateRaw,
-        createInflate: zlib.createInflateRaw
+        inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
+        createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
+        stretchSync: LegacyZip.stretchSync,         // interface for ZIP_SHRINK data
+        explodeSync: LegacyZip.explodeSync          // interface for ZIP_IMPLODE data
     },
     {
         cacheSize: 4096

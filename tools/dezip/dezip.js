@@ -235,11 +235,6 @@ export default class Dezip {
 
     static DEBUG = true;
 
-    static FLAGS = {
-        SCAN_BWD:               0x0001,         // archive has been scanned backward
-        SCAN_FWD:               0x0002,         // archive has been scanned forward
-    };
-
     /**
      * constructor(interfaces)
      *
@@ -284,7 +279,6 @@ export default class Dezip {
     {
         let archive = {
             fileName,                   // name of the archive file
-            flags: 0,                   // see Dezip.FLAGS.*
             arcType: options.arcType || Dezip.TYPE_ZIP,
             modified: options.modified, // modification date of archive file
             password: options.password, // password for encrypted archives
@@ -351,6 +345,30 @@ export default class Dezip {
             throw new Error("No appropriate Dezip interface(s) available");
         }
         return archive;
+    }
+
+    /**
+     * readArchive(archive, position, extent)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @param {number} position
+     * @param {number} extent
+     * @returns {DataBuffer}
+     */
+    async readArchive(archive, position, extent)
+    {
+        let db;
+        if (!archive.file) {
+            db = archive.cache.db.slice(position, position + extent);
+        } else {
+            db = new DataBuffer(extent);
+            let result = await archive.file.read(db.buffer, 0, extent, position);
+            if (result.bytesRead < extent) {
+                db = db.slice(0, result.bytesRead);
+            }
+        }
+        return db;
     }
 
     /**
@@ -439,12 +457,16 @@ export default class Dezip {
                 }
             }
             if (readExtent > 0) {
+                this.assert(archive.file);
                 if (archive.file) {
-                    let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition );
+                    let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
-                        throw new Error("Unable to read from archive");
+                        throw new Error(`Requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
                     }
                 } else {
+                    //
+                    // As asserted above, this is an inconsistency, because archives without handles should be fully cached.
+                    //
                     throw new Error("No file handle available");
                 }
             }
@@ -672,16 +694,14 @@ export default class Dezip {
     {
         while (extent > 0) {
             let chunkSize = Math.min(extent, this.cacheSize);
-            let db = new DataBuffer(chunkSize);
-            let result = await archive.file.read(db.buffer, 0, chunkSize, position);
-            if (result.bytesRead == 0) {
+            let db = await this.readArchive(archive, position, chunkSize);
+            if (db.length == 0) {
                 break;
             }
-            if (result.bytesRead < chunkSize) {
-                db = db.slice(0, result.bytesRead);
-            }
             //
-            // TODO: Figure out why using our cache buffer instead is problematic.
+            // TODO: Figure out why using our cache buffer instead is problematic, even
+            // after copying the data to a new buffer (dbCache). The data always matches,
+            // but differences in timing cause inflate requests to randomly fail.
             //
             // let [offset, length] = await this.readCache(archive, position, chunkSize);
             // if (length == 0) {
@@ -766,6 +786,7 @@ export default class Dezip {
         let position = entry.filePosition + Dezip.FileHeader.length;
         position += entry.fileHeader.fnameLen + entry.fileHeader.extraLen;
         let compressedSize = fileHeader.compressedSize;
+        let decompressedSize = fileHeader.size;
         let decompressedData = 0;
         if (compressedSize) {
             if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
@@ -774,12 +795,36 @@ export default class Dezip {
                         this.readChunks(archive, position, compressedSize)
                     );
                 } else if (this.interfaces.inflate) {
-                    let db = new DataBuffer(compressedSize);
-                    let result = await archive.file.read(db.buffer, 0, compressedSize, position);
+                    let db = await this.readArchive(archive, position, compressedSize);
                     decompressedData = await this.inflateAsync(db.buffer);
                 }
                 else {
                     throw new Error("No inflate interface available");
+                }
+            } else {
+                let db = await this.readArchive(archive, position, compressedSize);
+                switch(fileHeader.method) {
+                case Dezip.ZIP_STORE:
+                    decompressedData = db.buffer;
+                    break;
+                case Dezip.ZIP_SHRINK:
+                    if (this.interfaces.stretchSync) {
+                        decompressedData = this.interfaces.stretchSync(db.buffer, decompressedSize).getOutput();
+                    }
+                    break;
+                case Dezip.ZIP_IMPLODE:
+                    if (this.interfaces.explodeSync) {
+                        let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
+                        let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
+                        decompressedData = this.interfaces.explodeSync(db.buffer, decompressedSize, largeWindow, literalTree).getOutput();
+                    }
+                    break;
+                }
+                if (!decompressedData) {
+                    throw new Error(`Unsupported compression method ${fileHeader.method}`);
+                }
+                if (decompressedData.length != decompressedSize) {
+                    throw new Error(`Decompressed size ${decompressedData.length} does not match expected size ${decompressedSize}`);
                 }
             }
         }
