@@ -6,7 +6,7 @@ import fs from "fs/promises";
 import path from "path";
 import zlib from "zlib";
 import Dezip from "../dezip.js";
-import { LegacyZip } from "../../modules/legacyzip.js";
+import { LegacyZip } from "../legacyzip.js";
 
 const dezip = new Dezip(
     {
@@ -65,6 +65,9 @@ async function main() {
         console.log(`archive #${n+1} ${testFile} opened successfully`);
         try {
             let entries = await dezip.readDirectory(archive);
+            if (archive.comment) {
+                console.log(`archive #${n+1} ${fileName} comment: ${archive.comment}`);
+            }
             for (let i = 0; i < entries.length; i++) {
                 let entry = entries[i];
                 try {

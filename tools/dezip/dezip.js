@@ -10,7 +10,6 @@
 import CharSet from "./charset.js";
 import DataBuffer from "./databuffer.js";
 import Struct from './struct.js';
-import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
 
 /**
  * We give the user total control over the interfaces that will be used to read and decompress
@@ -24,6 +23,7 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  *
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
+ * @property {string}   encoding    (encoding to use for strings in archives; default is "cp437")
  *
  * @typedef  {object}   Archive
  * @property {string}   fileName    (name of the archive file)
@@ -70,6 +70,9 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * must fit entirely in memory.
  *
  * @class Dezip
+ * @property {Interfaces} interfaces
+ * @property {number} cacheSize
+ * @property {string} encoding
  */
 export default class Dezip {
     /**
@@ -259,6 +262,7 @@ export default class Dezip {
     {
         this.interfaces = interfaces;
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
+        this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
     }
 
     /**
@@ -559,13 +563,23 @@ export default class Dezip {
                     // if it doesn't match the low byte off the DirEndHeader signature, then we can skip the
                     // readStruct().
                     //
-                    if (cache.db.readUInt8(offsetEnd) == (Dezip.DirEndHeader.fields.signature.DIREND & 0xff)) {
-                        header = Dezip.DirEndHeader.readStruct(cache.db, offsetEnd);
+                    if (cache.db.buffer[offsetEnd] == (Dezip.DirEndHeader.fields.signature.DIREND & 0xff)) {
+                        header = Dezip.DirEndHeader.readStruct(cache.db, offsetEnd, this.encoding);
                         if (header.signature == Dezip.DirEndHeader.fields.signature.DIREND) {
                             //
-                            // Found the DirEndHeader signature, so we can read the DirHeader position.
+                            // We've got the DirEndHeader, so save it in the archive object.
                             //
+                            archive.endHeader = header;
                             position = header.position;
+                            //
+                            // If there's comment, read it and save it in the archive object.
+                            //
+                            let commentLen = header.commentLen;
+                            if (commentLen) {
+                                let posHeader = posArchive + offsetEnd - offset;
+                                [offset, length] = await this.readCache(archive, posHeader + Dezip.DirEndHeader.length, commentLen);
+                                archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, commentLen, this.encoding);
+                            }
                             break;
                         }
                     }
@@ -590,20 +604,20 @@ export default class Dezip {
             if (signature == (Dezip.DirEndHeader.fields.signature.DIREND)) {
                 return null;
             }
-            header = Dezip.DirHeader.readStruct(cache.db, offset);
+            header = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (header.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
                 throw new Error(`Invalid DirHeader signature (${header.signature.toString(16)}) at position ${position+offset}`);
             }
             entry.dirHeader = header;
             position += Dezip.DirHeader.length;
             [offset, length] = await this.readCache(archive, position, header.fnameLen);
-            header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen);
+            header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen, this.encoding);
             //
             // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
             //
             position += header.fnameLen + header.extraLen;
             [offset, length] = await this.readCache(archive, position, header.commentLen);
-            header.comment = Dezip.DirHeader.readString(cache.db, offset, header.commentLen);
+            header.comment = Dezip.DirHeader.readString(cache.db, offset, header.commentLen, this.encoding);
             archive.entries.push(entry);
         }
         return entry;
@@ -685,13 +699,13 @@ export default class Dezip {
     async readFileHeader(archive, position)
     {
         let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
-        let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset);
+        let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
         if (fileHeader.signature != Dezip.FileHeader.fields.signature.FILESIG) {
             return null;
         }
         position += Dezip.FileHeader.length;
         [offset, length] = await this.readCache(archive, position, fileHeader.fnameLen);
-        fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen);
+        fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen, this.encoding);
         return fileHeader;
     }
 
@@ -825,7 +839,7 @@ export default class Dezip {
                     break;
                 case Dezip.ZIP_SHRINK:
                     if (this.interfaces.stretchSync) {
-                        decompressedData = this.interfaces.stretchSync(db.buffer, decompressedSize).getOutput();
+                        decompressedData = this.interfaces.stretchSync(db.buffer, decompressedSize);
                     }
                     break;
                 case Dezip.ZIP_REDUCE1:
@@ -833,19 +847,19 @@ export default class Dezip {
                 case Dezip.ZIP_REDUCE3:
                 case Dezip.ZIP_REDUCE4:
                     if (this.interfaces.expandSync) {
-                        decompressedData = this.interfaces.expandSync(db.buffer, decompressedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1).getOutput();
+                        decompressedData = this.interfaces.expandSync(db.buffer, decompressedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
                     }
                     break;
                 case Dezip.ZIP_IMPLODE:
                     if (this.interfaces.explodeSync) {
                         let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
                         let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
-                        decompressedData = this.interfaces.explodeSync(db.buffer, decompressedSize, largeWindow, literalTree).getOutput();
+                        decompressedData = this.interfaces.explodeSync(db.buffer, decompressedSize, largeWindow, literalTree);
                     }
                     break;
                 case Dezip.ZIP_IMPLODE_DCL:
                     if (this.interfaces.blastSync) {
-                        decompressedData = this.interfaces.blastSync(db.buffer).getOutput();
+                        decompressedData = this.interfaces.blastSync(db.buffer);
                     }
                     break;
                 }
@@ -896,7 +910,7 @@ export default class Dezip {
             const crcTable = Dezip.getCRCTable();
             crc = entry.crcValue;
             for (let off = 0; off < db.length; off++) {
-                crc = crcTable[(crc ^ db.readUInt8(off)) & 0xff] ^ (crc >>> 8);
+                crc = crcTable[(crc ^ db.buffer[off]) & 0xff] ^ (crc >>> 8);
             }
             entry.crcValue = crc;
             entry.crcBytes += db.length;

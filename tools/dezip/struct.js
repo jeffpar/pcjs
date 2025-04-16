@@ -139,18 +139,19 @@ export default class Struct {
     }
 
     /**
-     * readStruct(db, offset)
+     * readStruct(db, offset, encoding)
      *
      * @this {Struct}
      * @param {DataBuffer} db
      * @param {number} [offset]
+     * @param {string} [encoding]
      * @returns {Object}
      */
-    readStruct(db, offset = 0)
+    readStruct(db, offset = 0, encoding = "cp437")
     {
         let record = {}, messages = [];
         for (let name in this.fields) {
-            record[name] = this.get(db, offset, name, undefined, messages);
+            record[name] = this.get(db, offset, name, encoding, messages);
         }
         if (messages.length) {
             record.messages = messages;
@@ -165,12 +166,12 @@ export default class Struct {
      * @param {DataBuffer} db
      * @param {number} offset
      * @param {number} length
-     * @param {string} [encoding]
+     * @param {string} [encoding] (default is "cp437")
      * @returns {string}
      */
-    readString(db, offset, length, encoding)
+    readString(db, offset, length, encoding = "cp437")
     {
-        return encoding? db.toString(encoding, offset, offset+length) : CharSet.fromCP437(db, offset, length);
+        return encoding == "cp437"? CharSet.fromCP437(db, offset, length, true) : db.toString(encoding, offset, offset+length);
     }
 
     /**
@@ -180,11 +181,11 @@ export default class Struct {
      * @param {DataBuffer} db
      * @param {number} offset
      * @param {string} name
-     * @param {string} [encoding] (default is "utf8")
+     * @param {string} [encoding] (default is "cp437")
      * @param {Array} [messages]
      * @returns {number|string}
      */
-    get(db, offset, name, encoding = "utf8", messages = [])
+    get(db, offset, name, encoding = "cp437", messages = [])
     {
         let v, time, date;
         let field = this.fields[name];
