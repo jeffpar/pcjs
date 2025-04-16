@@ -559,29 +559,26 @@ export default class Dezip {
                 let offsetEnd = offset + length - Dezip.DirEndHeader.length;
                 while (offsetEnd >= offset) {
                     //
-                    // To save the expense of readStruct() at every location, we probe the low byte first;
-                    // if it doesn't match the low byte off the DirEndHeader signature, then we can skip the
-                    // readStruct().
+                    // To save the expense of readStruct(), probe the signature first.
                     //
-                    if (cache.db.buffer[offsetEnd] == (Dezip.DirEndHeader.fields.signature.DIREND & 0xff)) {
+                    if (cache.db.readUInt32LE(offsetEnd) == Dezip.DirEndHeader.fields.signature.DIREND) {
                         header = Dezip.DirEndHeader.readStruct(cache.db, offsetEnd, this.encoding);
-                        if (header.signature == Dezip.DirEndHeader.fields.signature.DIREND) {
-                            //
-                            // We've got the DirEndHeader, so save it in the archive object.
-                            //
-                            archive.endHeader = header;
-                            position = header.position;
-                            //
-                            // If there's comment, read it and save it in the archive object.
-                            //
-                            let commentLen = header.commentLen;
-                            if (commentLen) {
-                                let posHeader = posArchive + offsetEnd - offset;
-                                [offset, length] = await this.readCache(archive, posHeader + Dezip.DirEndHeader.length, commentLen);
-                                archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, commentLen, this.encoding);
-                            }
-                            break;
+                        this.assert(header.signature == Dezip.DirEndHeader.fields.signature.DIREND);
+                        //
+                        // We've got the DirEndHeader, so save it in the archive object.
+                        //
+                        archive.endHeader = header;
+                        position = header.position;
+                        //
+                        // If there's comment, read it and save it in the archive object.
+                        //
+                        let commentLen = header.commentLen;
+                        if (commentLen) {
+                            let posHeader = posArchive + offsetEnd - offset;
+                            [offset, length] = await this.readCache(archive, posHeader + Dezip.DirEndHeader.length, commentLen);
+                            archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, commentLen, this.encoding);
                         }
+                        break;
                     }
                     offsetEnd--;
                 }
