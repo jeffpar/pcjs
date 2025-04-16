@@ -46,6 +46,15 @@ import {LegacyZip, LegacyArc} from '../modules/legacyzip.js';
  * @property {DataBuffer} db        (cache buffer)
  * @property {number}   offset      (offset in file of data in cache buffer)
  * @property {number}   length      (length of valid data in cache buffer
+ *
+ * @typedef  {object}   Entry
+ * @property {number}   index       (index of entry)
+ * @property {object}   dirHeader   (DirHeader structure)
+ * @property {number}   dirPosition (position of dirHeader in the archive)
+ * @property {object}   fileHeader  (FileHeader structure)
+ * @property {number}   filePosition (position of fileHeader in the archive)
+ * @property {number}   crcBytes    (number of bytes checksummed so far)
+ * @property {number}   crcValue    (value of CRC so far)
  */
 
 /**
@@ -376,7 +385,7 @@ export default class Dezip {
      * initCache(archive, db, length)
      *
      * @this {Dezip}
-     * @param {object} archive
+     * @param {Archive} archive
      * @param {DataBuffer} [db]
      * @param {number} [length]
      */
@@ -513,8 +522,8 @@ export default class Dezip {
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @param {object|null} prevEntry
-     * @returns {object|null}
+     * @param {Entry|null} prevEntry
+     * @returns {Entry|null}
      */
     async readDirEntry(archive, prevEntry)
     {
@@ -608,7 +617,7 @@ export default class Dezip {
      * @this {Dezip}
      * @param {Archive} archive
      * @param {object|null} prevEntry
-     * @returns {object|null}
+     * @returns {Entry|null}
      */
     async readFileEntry(archive, prevEntry)
     {
@@ -689,7 +698,7 @@ export default class Dezip {
     }
 
     /**
-     * readChunks(archive, entry, position, extent)
+     * readChunks(archive, position, extent)
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -704,21 +713,6 @@ export default class Dezip {
             if (db.length == 0) {
                 break;
             }
-            //
-            // TODO: Figure out why using our cache buffer instead is problematic, even
-            // after copying the data to a new buffer (dbCache). The data always matches,
-            // but differences in timing cause inflate requests to randomly fail.
-            //
-            // let [offset, length] = await this.readCache(archive, position, chunkSize);
-            // if (length == 0) {
-            //     break;
-            // }
-            // let dbCache = new DataBuffer(archive.cache.db, offset, offset + length);
-            // if (!dbCache.compare(db)) {
-            //     throw new Error("Data mismatch");
-            // }
-            //
-            this.updateCRC(entry, db);
             yield db;
             position += db.length;
             extent -= db.length;
@@ -726,13 +720,14 @@ export default class Dezip {
     }
 
     /**
-     * inflateChunks(chunkGenerator)
+     * inflateChunks(entry, chunkGenerator)
      *
      * @this {Dezip}
+     * @param {Entry} entry
      * @param {*} chunkGenerator
      * @returns {Promise<Buffer>}
      */
-    async inflateChunks(chunkGenerator)
+    async inflateChunks(entry, chunkGenerator)
     {
         const chunks = [];
         const inflate = this.interfaces.createInflate();
@@ -743,6 +738,7 @@ export default class Dezip {
         return new Promise((resolve, reject) => {
             inflate.on('data', (chunk) => {
                 chunks.push(chunk);
+                this.updateCRC(entry, new DataBuffer(chunk));
             });
             inflate.on('end', () => {
                 resolve(Buffer.concat(chunks));
@@ -779,7 +775,7 @@ export default class Dezip {
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @param {object} entry
+     * @param {Entry} entry
      * @returns {DataBuffer} (decompressedDB)
      */
     async readFile(archive, entry)
@@ -809,7 +805,7 @@ export default class Dezip {
             if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
                 if (this.interfaces.createInflate) {
                     decompressedData = await this.inflateChunks(
-                        this.readChunks(archive, entry, position, compressedSize)
+                        entry, this.readChunks(archive, position, compressedSize)
                     );
                 } else if (this.interfaces.inflate) {
                     let db = await this.readArchive(archive, position, compressedSize);
@@ -889,7 +885,7 @@ export default class Dezip {
      * updateCRC(entry, db)
      *
      * @this {Dezip}
-     * @param {object} entry
+     * @param {Entry} entry
      * @param {DataBuffer} db
      * @returns {number} (CRC value)
      */
@@ -898,7 +894,7 @@ export default class Dezip {
         let crc = 0;
         let crcFile = entry.fileHeader.crc;
         let sizeFile = entry.fileHeader.size;
-        if (crcFile) {
+        if (crcFile && entry.crcBytes < sizeFile) {
             const crcTable = Dezip.getCRCTable();
             crc = entry.crcValue;
             for (let off = 0; off < db.length; off++) {

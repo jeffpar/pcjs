@@ -58,7 +58,7 @@ async function main() {
     //
     // Process the test files
     //
-    for (let n = 0 /*28724*/; n < testFiles.length; n++) {
+    for (let n = 0; n < testFiles.length; n++) {
         let testFile = testFiles[n];
         let fileName = path.basename(testFile);
         let archive = await dezip.open(testFile);
@@ -69,7 +69,7 @@ async function main() {
                 let entry = entries[i];
                 try {
                     let db = await dezip.readFile(archive, entry);
-                    // console.log(`${fileName} entry #${i+1} (${entry.fileHeader.fname}): ${db.length} bytes`);
+                    console.log(`${fileName} entry #${i+1} (${entry.fileHeader.fname}): ${db.length} bytes`);
                 } catch (error) {
                     if (!error.message.includes("does not match expected size")) {
                         throw new Error(`${fileName} entry #${i+1} (${entry.dirHeader?.fname || "unknown"}): ${error.message}`);
