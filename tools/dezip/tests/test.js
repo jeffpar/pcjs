@@ -69,10 +69,10 @@ async function main() {
                 let entry = entries[i];
                 try {
                     let db = await dezip.readFile(archive, entry);
-                    // console.log(`${fileName} entry #${i+1}: ${entry.fileHeader.fname}: ${db.length} bytes`);
+                    // console.log(`${fileName} entry #${i+1} (${entry.fileHeader.fname}): ${db.length} bytes`);
                 } catch (error) {
                     if (!error.message.includes("does not match expected size")) {
-                        throw new Error(`${fileName} entry #${i+1}: ${entry.dirHeader?.fname || "unknown"}: ${error.message}`);
+                        throw new Error(`${fileName} entry #${i+1} (${entry.dirHeader?.fname || "unknown"}): ${error.message}`);
                     }
                 }
             }

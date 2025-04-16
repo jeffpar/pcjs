@@ -232,6 +232,8 @@ export default class Dezip {
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
 
+    static crcTable = [];       // initialized by Dezip.getCRCTable() when needed
+
     static DEBUG = true;
 
     /**
@@ -521,7 +523,7 @@ export default class Dezip {
             position = -1;
             entry = archive.entries[0];
         } else {
-            position = prevEntry.position;
+            position = prevEntry.dirPosition;
             entry = archive.entries[prevEntry.index + 1];
         }
         if (entry && entry.dirHeader) {
@@ -570,7 +572,7 @@ export default class Dezip {
             }
         }
         if (position >= 0) {
-            entry = { index: archive.entries.length, position };
+            entry = { index: archive.entries.length, dirPosition: position };
             //
             // Read the specified DirHeader.
             //
@@ -687,7 +689,7 @@ export default class Dezip {
     }
 
     /**
-     * readChunks(archive, position, extent)
+     * readChunks(archive, entry, position, extent)
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -716,6 +718,7 @@ export default class Dezip {
             //     throw new Error("Data mismatch");
             // }
             //
+            this.updateCRC(entry, db);
             yield db;
             position += db.length;
             extent -= db.length;
@@ -777,10 +780,11 @@ export default class Dezip {
      * @this {Dezip}
      * @param {Archive} archive
      * @param {object} entry
-     * @returns {DataBuffer} (decompressed data)
+     * @returns {DataBuffer} (decompressedDB)
      */
     async readFile(archive, entry)
     {
+        let decompressedDB;
         let fileHeader = entry.fileHeader;
         if (!fileHeader) {
             this.assert(entry.dirHeader);
@@ -792,16 +796,20 @@ export default class Dezip {
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
         }
+        entry.crcBytes = 0;
+        entry.crcValue = ~0;
         let position = entry.filePosition + Dezip.FileHeader.length;
         position += entry.fileHeader.fnameLen + entry.fileHeader.extraLen;
         let compressedSize = fileHeader.compressedSize;
         let decompressedSize = fileHeader.size;
-        let decompressedData = 0;
-        if (compressedSize) {
+        if (!compressedSize) {
+            decompressedDB = new DataBuffer(0);
+        } else {
+            let decompressedData;
             if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
                 if (this.interfaces.createInflate) {
                     decompressedData = await this.inflateChunks(
-                        this.readChunks(archive, position, compressedSize)
+                        this.readChunks(archive, entry, position, compressedSize)
                     );
                 } else if (this.interfaces.inflate) {
                     let db = await this.readArchive(archive, position, compressedSize);
@@ -811,6 +819,11 @@ export default class Dezip {
                     throw new Error("No inflate interface available");
                 }
             } else {
+                //
+                // Process "legacy" compression methods here.
+                //
+                // TODO: Create versions of the LegacyZIP and LegacyARC classes that use DataBuffers.
+                //
                 let db = await this.readArchive(archive, position, compressedSize);
                 switch(fileHeader.method) {
                 case Dezip.ZIP_STORE:
@@ -849,8 +862,12 @@ export default class Dezip {
                     throw new Error(`Decompressed size ${decompressedData.length} does not match expected size ${decompressedSize}`);
                 }
             }
+            decompressedDB = new DataBuffer(decompressedData);
+            if (fileHeader.crc) {
+                this.updateCRC(entry, decompressedDB);
+            }
         }
-        return new DataBuffer(decompressedData);
+        return decompressedDB;
     }
 
     /**
@@ -866,5 +883,61 @@ export default class Dezip {
             archive.file = null;
         }
         this.initCache(archive);
+    }
+
+    /**
+     * updateCRC(entry, db)
+     *
+     * @this {Dezip}
+     * @param {object} entry
+     * @param {DataBuffer} db
+     * @returns {number} (CRC value)
+     */
+    updateCRC(entry, db)
+    {
+        let crc = 0;
+        let crcFile = entry.fileHeader.crc;
+        let sizeFile = entry.fileHeader.size;
+        if (crcFile) {
+            const crcTable = Dezip.getCRCTable();
+            crc = entry.crcValue;
+            for (let off = 0; off < db.length; off++) {
+                crc = crcTable[(crc ^ db.readUInt8(off)) & 0xff] ^ (crc >>> 8);
+            }
+            entry.crcValue = crc;
+            entry.crcBytes += db.length;
+            if (entry.crcBytes >= sizeFile) {
+                if (entry.crcBytes != sizeFile) {
+                    throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                }
+                else if (~crc != crcFile) {
+                    throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
+                }
+            }
+        }
+        return crc;
+    }
+
+    /**
+     * getCRCTable()
+     */
+    static getCRCTable()
+    {
+        let crcTable = Dezip.crcTable;
+        if (!crcTable.length) {
+            for (let n = 0; n < 256; n++) {
+                let c = n;
+                for (let k = 8; --k >= 0; ) {
+                    if ((c & 1) !== 0) {
+                        c = 0xedb88320 ^ (c >>> 1);
+                    } else {
+                        c = c >>> 1;
+                    }
+                }
+                crcTable[n] = c;
+            }
+            Dezip.crcTable = crcTable;
+        }
+        return crcTable;
     }
 }
