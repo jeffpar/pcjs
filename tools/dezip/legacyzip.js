@@ -82,7 +82,7 @@ export class LegacyArc
      *
      * @param {Buffer} src (packed data)
      * @param {number} dst_len
-     * @returns {Decompress}
+     * @returns {Buffer|null}
      */
     static unpackSync(src, dst_len)
     {
@@ -96,7 +96,7 @@ export class LegacyArc
             // delete unpack.dst;
             //
         }
-        return unpack;
+        return unpack.getOutput();
     }
 
     /**
@@ -104,7 +104,7 @@ export class LegacyArc
      *
      * @param {Buffer} src (squeezed data)
      * @param {number} dst_len
-     * @returns {Decompress}
+     * @returns {Buffer|null}
      */
     static unsqueezeSync(src, dst_len)
     {
@@ -118,7 +118,7 @@ export class LegacyArc
             // delete unsqueeze.dst;
             //
         }
-        return unsqueeze;
+        return unsqueeze.getOutput();
     }
 
     /**
@@ -127,7 +127,7 @@ export class LegacyArc
      * @param {Buffer} src (crunched data)
      * @param {number} dst_len
      * @param {number} type (0 for unpacked, 1 for packed, 2 for packed w/new hash)
-     * @returns {Decompress}
+     * @returns {Buffer|null}
      */
     static uncrunchSync(src, dst_len, type)
     {
@@ -141,7 +141,7 @@ export class LegacyArc
             // delete uncrunch.dst;
             //
         }
-        return uncrunch;
+        return uncrunch.getOutput();
     }
 
     /**
@@ -150,7 +150,7 @@ export class LegacyArc
      * @param {Buffer} src (crushed or squashed data)
      * @param {number} dst_len
      * @param {boolean} squashed (false if crushed, true if squashed)
-     * @returns {Decompress}
+     * @returns {Buffer|null}
      */
     static uncrushSync(src, dst_len, squashed)
     {
@@ -164,10 +164,10 @@ export class LegacyArc
             // delete uncrush.dst;
             //
         }
-        return uncrush;
+        return uncrush.getOutput();
     }
 
-    static crctab = [   // CRC lookup table
+    static crcTable = [         // CRC lookup table
         0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241,
         0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
         0xCC01, 0x0CC0, 0x0D80, 0xCD41, 0x0F00, 0xCFC1, 0xCE81, 0x0E40,
@@ -203,7 +203,7 @@ export class LegacyArc
     ];
 
    /**
-    * getCRC(buf, crc)
+    * getArcCRC(buf, crc)
     *
     * Calculate CRC for the given ARC data.
     *
@@ -213,10 +213,10 @@ export class LegacyArc
     * @param {Buffer} buf
     * @param {number} [crc] (running CRC value, if any)
     */
-    static getCRC(buf, crc = 0)
+    static getArcCRC(buf, crc = 0)
     {
         for (let i = 0; i < buf.length; i++) {
-            crc = ((crc >> 8) & 0xff) ^ LegacyArc.crctab[(crc ^ buf.readUInt8(i)) & 0xff];
+            crc = ((crc >> 8) & 0xff) ^ LegacyArc.crcTable[(crc ^ buf[i]) & 0xff];
         }
         return crc;
     }

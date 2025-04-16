@@ -7,7 +7,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CharSet from "./charset.js";
 import DataBuffer from "./databuffer.js";
 import Struct from './struct.js';
 
@@ -99,7 +98,7 @@ export default class Dezip {
         .field('crc',           Struct.INT32)           // uncompressed file CRC-32 value
         .field('compressedSize',Struct.UINT32)          // compressed size
         .field('size',          Struct.UINT32)          // uncompressed size
-        .field('fnameLen',      Struct.UINT16)          // filename length
+        .field('nameLen',       Struct.UINT16)          // filename length
         .field('extraLen',      Struct.UINT16)          // extra field length
         .verifyLength(30);
 
@@ -121,7 +120,7 @@ export default class Dezip {
         .field('crc',           Struct.INT32)           // uncompressed file CRC-32 value
         .field('compressedSize',Struct.UINT32)          // compressed size
         .field('size',          Struct.UINT32)          // uncompressed size
-        .field('fnameLen',      Struct.UINT16)          // filename length
+        .field('nameLen',       Struct.UINT16)          // filename length
         .field('extraLen',      Struct.UINT16)          // extra field length
         .field('commentLen',    Struct.UINT16)          // file comment length
         .field('diskStart',     Struct.UINT16)          // disk number start
@@ -171,7 +170,7 @@ export default class Dezip {
 
     static ArcHeader = new Struct("ArcHeader")
         .field('signature',     Struct.UINT8, {
-            ARC_SIG:    0x1a                            // EOF
+            ARCSIG:     0x1a                            // EOF
         })
         .field('type',          Struct.UINT8, {         // header type
             ARC_END:    0x00,                           // end of archive
@@ -183,7 +182,8 @@ export default class Dezip {
             ARC_LZNR:   0x06,                           // LZ non-repeat compression
             ARC_LZNH:   0x07,                           // LZ with new hash
             ARC_LZC:    0x08,                           // LZ dynamic ("crunch")
-            ARC_LZS:    0x09                            // LZ dynamic ("squash")
+            ARC_LZS:    0x09,                           // LZ dynamic ("squash")
+            ARC_UNK:    0x0a                            // unknown compression type
         })
         .field('name',          13)                     // filename (null terminated)
         .field('compressedSize',Struct.UINT32)          // compressed size
@@ -546,7 +546,7 @@ export default class Dezip {
         let cache = archive.cache;
         if (position >= 0) {
             header = prevEntry.dirHeader;
-            position += Dezip.DirHeader.length + header.fnameLen + header.extraLen + header.commentLen;
+            position += Dezip.DirHeader.length + header.nameLen + header.extraLen + header.commentLen;
         }
         else {
             //
@@ -607,12 +607,12 @@ export default class Dezip {
             }
             entry.dirHeader = header;
             position += Dezip.DirHeader.length;
-            [offset, length] = await this.readCache(archive, position, header.fnameLen);
-            header.fname = Dezip.DirHeader.readString(cache.db, offset, header.fnameLen, this.encoding);
+            [offset, length] = await this.readCache(archive, position, header.nameLen);
+            header.name = Dezip.DirHeader.readString(cache.db, offset, header.nameLen, this.encoding);
             //
             // TODO: Find examples of archives with "extraLen" data and figure out what to do with it.
             //
-            position += header.fnameLen + header.extraLen;
+            position += header.nameLen + header.extraLen;
             [offset, length] = await this.readCache(archive, position, header.commentLen);
             header.comment = Dezip.DirHeader.readString(cache.db, offset, header.commentLen, this.encoding);
             archive.entries.push(entry);
@@ -634,7 +634,7 @@ export default class Dezip {
     {
         //
         // If prevEntry is null, then we start with entries[0], and if there are no directory entries,
-        // then we scan the archive for the first FileHeader signature.
+        // then we scan the archive for the first FileHeader (or ArcHeader).
         //
         let entry;
         let position = -1;
@@ -652,8 +652,7 @@ export default class Dezip {
             entry = null;
             if (prevEntry) {
                 this.assert(prevEntry.fileHeader != null);
-                position = prevEntry.filePosition + Dezip.FileHeader.length;
-                position += prevEntry.fileHeader.fnameLen + prevEntry.fileHeader.extraLen + prevEntry.fileHeader.compressedSize;
+                position = prevEntry.filePosition + prevEntry.fileHeader.length + prevEntry.fileHeader.compressedSize;
                 if (position >= archive.length) {
                     return null;
                 }
@@ -662,12 +661,19 @@ export default class Dezip {
         let cache = archive.cache;
         if (position < 0) {
             //
-            // Check the beginning of the file for a FileHeader.
+            // Check the beginning of the file for a FileHeader (or ArcHeader).
             //
-            let [offset, length] = await this.readCache(archive, 0, cache.db.length);
+            let extent = Math.max(Dezip.FileHeader.length, Dezip.ArcHeader.length);
+            let [offset, length] = await this.readCache(archive, 0, extent);
             let signature = cache.db.readUInt32LE(offset);
-            if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
-                position = offset + 4;
+            let type = (signature >> 8) & 0xff;
+            if (signature == Dezip.FileHeader.fields.signature.FILESIG) {
+                position = 0;
+            } else if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
+                position = 4;
+            } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
+                archive.arcType = Dezip.TYPE_ARC;
+                position = 0;
             }
         }
         if (position >= 0) {
@@ -695,14 +701,34 @@ export default class Dezip {
      */
     async readFileHeader(archive, position)
     {
-        let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
-        let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
-        if (fileHeader.signature != Dezip.FileHeader.fields.signature.FILESIG) {
-            return null;
+        let fileHeader = null;
+        if (archive.arcType == Dezip.TYPE_ARC) {
+            let [offset, length] = await this.readCache(archive, position, Dezip.ArcHeader.length);
+            if (length >= Dezip.ArcHeader.length) {
+                let arcHeader = Dezip.ArcHeader.readStruct(archive.cache.db, offset, this.encoding);
+                if (arcHeader.signature == Dezip.ArcHeader.fields.signature.ARCSIG && arcHeader.type > 0 && arcHeader.type < Dezip.ArcHeader.fields.type.ARC_UNK) {
+                    arcHeader.method = -arcHeader.type;             // convert ARC type to method (signed to avoid conflict with ZIP methods)
+                    if (arcHeader.type == Dezip.ArcHeader.fields.type.ARC_OLD) {
+                        arcHeader.size = arcHeader.compressedSize;
+                        arcHeader.method = Dezip.ARC_UNP;
+                    }
+                    arcHeader.length = Dezip.ArcHeader.length;
+                    fileHeader = arcHeader;
+                }
+            }
+        } else {
+            let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
+            if (length >= Dezip.FileHeader.length) {
+                let zipHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
+                if (zipHeader.signature == Dezip.FileHeader.fields.signature.FILESIG) {
+                    position += Dezip.FileHeader.length;
+                    [offset, length] = await this.readCache(archive, position, zipHeader.nameLen);
+                    zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, zipHeader.nameLen, this.encoding);
+                    zipHeader.length = Dezip.FileHeader.length + zipHeader.nameLen + zipHeader.extraLen;
+                    fileHeader = zipHeader;
+                }
+            }
         }
-        position += Dezip.FileHeader.length;
-        [offset, length] = await this.readCache(archive, position, fileHeader.fnameLen);
-        fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen, this.encoding);
         return fileHeader;
     }
 
@@ -747,7 +773,7 @@ export default class Dezip {
         return new Promise((resolve, reject) => {
             inflate.on('data', (chunk) => {
                 chunks.push(chunk);
-                this.updateCRC(entry, new DataBuffer(chunk));
+                this.updateCRC(entry, new DataBuffer(chunk), Dezip.TYPE_ZIP);
             });
             inflate.on('end', () => {
                 resolve(Buffer.concat(chunks));
@@ -803,8 +829,7 @@ export default class Dezip {
         }
         entry.crcBytes = 0;
         entry.crcValue = ~0;
-        let position = entry.filePosition + Dezip.FileHeader.length;
-        position += entry.fileHeader.fnameLen + entry.fileHeader.extraLen;
+        let position = entry.filePosition + entry.fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
         let decompressedSize = fileHeader.size;
         if (!compressedSize) {
@@ -831,8 +856,44 @@ export default class Dezip {
                 //
                 let db = await this.readArchive(archive, position, compressedSize);
                 switch(fileHeader.method) {
+                case Dezip.ARC_UNP:
                 case Dezip.ZIP_STORE:
                     decompressedData = db.buffer;
+                    break;
+                case Dezip.ARC_NR:              // aka "Pack"
+                    if (this.interfaces.unpackSync) {
+                        decompressedData = this.interfaces.unpackSync(db.buffer, decompressedSize);
+                    }
+                    break;
+                case Dezip.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
+                    if (this.interfaces.unsqueezeSync) {
+                        decompressedData = this.interfaces.unsqueezeSync(db.buffer, decompressedSize);
+                    }
+                    break;
+                case Dezip.ARC_LZ:              // aka "Crunch5" (LZ compression)
+                    if (this.interfaces.uncrunchSync) {
+                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 0);
+                    }
+                    break;
+                case Dezip.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
+                    if (this.interfaces.uncrunchSync) {
+                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 1);
+                    }
+                    break;
+                case Dezip.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
+                    if (this.interfaces.uncrunchSync) {
+                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 2);
+                    }
+                    break;
+                case Dezip.ARC_LZC:             // aka "Crush" (dynamic LZW)
+                    if (this.interfaces.uncrushSync) {
+                        decompressedData = this.interfaces.uncrushSync(db.buffer, decompressedSize, false);
+                    }
+                    break;
+                case Dezip.ARC_LZS:             // aka "Squash"
+                    if (this.interfaces.uncrushSync) {
+                        decompressedData = this.interfaces.uncrushSync(db.buffer, decompressedSize, true);
+                    }
                     break;
                 case Dezip.ZIP_SHRINK:
                     if (this.interfaces.stretchSync) {
@@ -869,7 +930,7 @@ export default class Dezip {
             }
             decompressedDB = new DataBuffer(decompressedData);
             if (fileHeader.crc) {
-                this.updateCRC(entry, decompressedDB);
+                this.updateCRC(entry, decompressedDB, archive.arcType);
             }
         }
         return decompressedDB;
@@ -891,32 +952,43 @@ export default class Dezip {
     }
 
     /**
-     * updateCRC(entry, db)
+     * updateCRC(entry, db, arcType)
      *
      * @this {Dezip}
      * @param {Entry} entry
      * @param {DataBuffer} db
+     * @param {number} arcType
      * @returns {number} (CRC value)
      */
-    updateCRC(entry, db)
+    updateCRC(entry, db, arcType)
     {
         let crc = 0;
         let crcFile = entry.fileHeader.crc;
         let sizeFile = entry.fileHeader.size;
         if (crcFile && entry.crcBytes < sizeFile) {
-            const crcTable = Dezip.getCRCTable();
-            crc = entry.crcValue;
-            for (let off = 0; off < db.length; off++) {
-                crc = crcTable[(crc ^ db.buffer[off]) & 0xff] ^ (crc >>> 8);
-            }
-            entry.crcValue = crc;
-            entry.crcBytes += db.length;
-            if (entry.crcBytes >= sizeFile) {
-                if (entry.crcBytes != sizeFile) {
-                    throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+            if (arcType == Dezip.TYPE_ARC) {
+                if (this.interfaces.getArcCRC) {
+                    crc = this.interfaces.getArcCRC(db.buffer);
+                    if (crc != crcFile) {
+                        throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
+                    }
                 }
-                else if (~crc != crcFile) {
-                    throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
+            }
+            else {
+                const crcTable = Dezip.getCRCTable();
+                crc = entry.crcValue;
+                for (let off = 0; off < db.length; off++) {
+                    crc = crcTable[(crc ^ db.buffer[off]) & 0xff] ^ (crc >>> 8);
+                }
+                entry.crcValue = crc;
+                entry.crcBytes += db.length;
+                if (entry.crcBytes >= sizeFile) {
+                    if (entry.crcBytes != sizeFile) {
+                        throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                    }
+                    else if (~crc != crcFile) {
+                        throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
+                    }
                 }
             }
         }

@@ -15,9 +15,9 @@ import DataBuffer from "./databuffer.js";
 /**
  * Struct is a helper class for defining and loading on-disk structures.  For example:
  *
- *     static LocalHeader = new Struct("LocalHeader")
+ *     static FileHeader = new Struct("FileHeader")
  *       .field('signature',     Struct.UINT32, {
- *           LOCSIG:    0x04034b50                      // "PK\003\004" (local file header signature)
+ *           FILESIG:   0x04034b50                      // "PK\003\004" (local file header signature)
  *       })
  *       .field('version',       Struct.UINT16)         // version needed to extract
  *       .field('flags',         Struct.UINT16, {       // general purpose bit flag
@@ -35,13 +35,13 @@ import DataBuffer from "./databuffer.js";
  *       .field('crc',           Struct.UINT32)         // uncompressed file CRC-32 value
  *       .field('compressedSize',Struct.UINT32)         // compressed size
  *       .field('size',          Struct.UINT32)         // uncompressed size
- *       .field('fnameLen',      Struct.UINT16)         // filename length
+ *       .field('nameLen',       Struct.UINT16)         // filename length
  *       .field('extraLen',      Struct.UINT16)         // extra field length
  *       .verifyLength(30);
  *
  * Then, to create/initialize an instance (ie, record) of that structure from a DataBuffer:
  *
- *   let header = LocalHeader.readStruct(db, offset);
+ *   let header = FileHeader.readStruct(db, offset);
  *
  * @class Struct
  */
@@ -121,57 +121,6 @@ export default class Struct {
         this.fields[name] = field;
         this.length += size;
         return this;
-    }
-
-    /**
-     * verifyLength(size)
-     *
-     * @this {Struct}
-     * @param {number} length
-     * @returns {Struct}
-     */
-    verifyLength(length)
-    {
-        if (length != this.length) {
-            throw new Error("Structure size mismatch (" + length + " != " + this.length + ")");
-        }
-        return this;
-    }
-
-    /**
-     * readStruct(db, offset, encoding)
-     *
-     * @this {Struct}
-     * @param {DataBuffer} db
-     * @param {number} [offset]
-     * @param {string} [encoding]
-     * @returns {Object}
-     */
-    readStruct(db, offset = 0, encoding = "cp437")
-    {
-        let record = {}, messages = [];
-        for (let name in this.fields) {
-            record[name] = this.get(db, offset, name, encoding, messages);
-        }
-        if (messages.length) {
-            record.messages = messages;
-        }
-        return record;
-    }
-
-    /**
-     * readString(db, offset, length, encoding)
-     *
-     * @this {Struct}
-     * @param {DataBuffer} db
-     * @param {number} offset
-     * @param {number} length
-     * @param {string} [encoding] (default is "cp437")
-     * @returns {string}
-     */
-    readString(db, offset, length, encoding = "cp437")
-    {
-        return encoding == "cp437"? CharSet.fromCP437(db, offset, length, true) : db.toString(encoding, offset, offset+length);
     }
 
     /**
@@ -260,6 +209,42 @@ export default class Struct {
     }
 
     /**
+     * readStruct(db, offset, encoding)
+     *
+     * @this {Struct}
+     * @param {DataBuffer} db
+     * @param {number} [offset]
+     * @param {string} [encoding]
+     * @returns {Object}
+     */
+    readStruct(db, offset = 0, encoding = "cp437")
+    {
+        let record = {}, messages = [];
+        for (let name in this.fields) {
+            record[name] = this.get(db, offset, name, encoding, messages);
+        }
+        if (messages.length) {
+            record.messages = messages;
+        }
+        return record;
+    }
+
+    /**
+     * readString(db, offset, length, encoding)
+     *
+     * @this {Struct}
+     * @param {DataBuffer} db
+     * @param {number} offset
+     * @param {number} length
+     * @param {string} [encoding] (default is "cp437")
+     * @returns {string}
+     */
+    readString(db, offset, length, encoding = "cp437")
+    {
+        return encoding == "cp437"? CharSet.fromCP437(db, offset, length, true) : db.toString(encoding, offset, offset+length);
+    }
+
+    /**
      * parseDateTime(date, time, messages)
      *
      * ZIP/ARC archives contain local times, so we return a Date object in local time.
@@ -331,5 +316,20 @@ export default class Struct {
             messages.push(`Invalid date/time (${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
         }
         return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
+    }
+
+    /**
+     * verifyLength(size)
+     *
+     * @this {Struct}
+     * @param {number} length
+     * @returns {Struct}
+     */
+    verifyLength(length)
+    {
+        if (length != this.length) {
+            throw new Error("Structure size mismatch (" + length + " != " + this.length + ")");
+        }
+        return this;
     }
 }

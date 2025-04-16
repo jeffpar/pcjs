@@ -6,7 +6,7 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Adapted from (and should ultimately replace) /machines/pcx86/modules/v2/charset.js
+ * Adapted from /machines/pcx86/modules/v2/charset.js
  */
 
 import DataBuffer from "./databuffer.js";

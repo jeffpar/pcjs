@@ -6,7 +6,7 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Adapted from (and should ultimately replace) /machines/modules/v2/databuffer.js
+ * Adapted from /machines/modules/v2/databuffer.js
  */
 
 /**
