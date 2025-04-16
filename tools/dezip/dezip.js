@@ -124,7 +124,7 @@ export default class Dezip {
         .field('diskStart',     Struct.UINT16)          // disk number start
         .field('intAttr',       Struct.UINT16)          // internal file attributes
         .field('attr',          Struct.UINT32)          // external file attributes (host system dependent)
-        .field('offset',        Struct.UINT32)          // relative offset of file header
+        .field('position',      Struct.UINT32)          // position of file header
         .verifyLength(46);
 
     static DirEndHeader = new Struct("DirEndHeader")
@@ -136,7 +136,7 @@ export default class Dezip {
         .field('volumeEntries', Struct.UINT16)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT16)          // total number of entries
         .field('size',          Struct.UINT32)          // directory size in bytes
-        .field('offset',        Struct.UINT32)          // offset of first DirHeader
+        .field('position',      Struct.UINT32)          // position of first DirHeader
         .field('commentLen',    Struct.UINT16)          // zip file comment length
         .verifyLength(22);
 
@@ -163,7 +163,7 @@ export default class Dezip {
         .field('volumeEntries', Struct.UINT64)          // number of entries on this disk
         .field('totalEntries',  Struct.UINT64)          // total number of entries
         .field('size',          Struct.UINT64)          // directory size in bytes
-        .field('offset',        Struct.UINT64)          // offset of first directory header
+        .field('position',      Struct.UINT64)          // position of first directory header
         .verifyLength(56);
 
     static ArcHeader = new Struct("ArcHeader")
@@ -565,7 +565,7 @@ export default class Dezip {
                             //
                             // Found the DirEndHeader signature, so we can read the DirHeader position.
                             //
-                            position = header.offset;
+                            position = header.position;
                             break;
                         }
                     }
@@ -636,7 +636,7 @@ export default class Dezip {
             if (entry.fileHeader) {
                 return entry;
             }
-            position = entry.dirHeader.offset;
+            position = entry.dirHeader.position;
         } else {
             entry = null;
             if (prevEntry) {
@@ -685,14 +685,12 @@ export default class Dezip {
     async readFileHeader(archive, position)
     {
         let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
-        this.assert(length == Dezip.FileHeader.length);
         let fileHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset);
         if (fileHeader.signature != Dezip.FileHeader.fields.signature.FILESIG) {
             return null;
         }
         position += Dezip.FileHeader.length;
         [offset, length] = await this.readCache(archive, position, fileHeader.fnameLen);
-        this.assert(length == fileHeader.fnameLen);
         fileHeader.fname = Dezip.FileHeader.readString(archive.cache.db, offset, fileHeader.fnameLen);
         return fileHeader;
     }
@@ -784,7 +782,7 @@ export default class Dezip {
         let fileHeader = entry.fileHeader;
         if (!fileHeader) {
             this.assert(entry.dirHeader);
-            let position = entry.dirHeader.offset;
+            let position = entry.dirHeader.position;
             fileHeader = await this.readFileHeader(archive, position);
             if (!fileHeader) {
                 throw new Error("Unable to read file header");
