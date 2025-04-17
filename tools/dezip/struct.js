@@ -6,7 +6,7 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Adapted from (and should ultimately replace) /tools/modules/structure.js
+ * Adapted from https://www.pcjs.org/tools/modules/structure.js
  */
 
 import CharSet from "./charset.js";

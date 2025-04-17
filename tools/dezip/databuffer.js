@@ -6,7 +6,7 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Adapted from /machines/modules/v2/databuffer.js
+ * Adapted from https://www.pcjs.org/machines/modules/v2/databuffer.js
  */
 
 /**
@@ -18,7 +18,7 @@ export default class DataBuffer {
     /**
      * DataBuffer
      *
-     * Our pseudo-Buffer class constructor needs to handle:
+     * Our pseudo-Buffer class constructor supports:
      *
      *   1) Array.<number> (array of bytes)
      *   2) ArrayBuffer
@@ -29,7 +29,7 @@ export default class DataBuffer {
      *
      * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
      *
-     * NOTE: You will NOT find all the methods of the Buffer class implemented here (only the ones we actually use).
+     * NOTE: You will NOT find all the methods of the Buffer class implemented here (only the ones we actually need).
      *
      * @this {DataBuffer}
      * @param {*} [init]
