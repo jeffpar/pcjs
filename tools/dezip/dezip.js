@@ -826,7 +826,7 @@ export default class Dezip {
             entry.filePosition = position;
         }
         entry.crcBytes = 0;
-        entry.crcValue = ~0;
+        entry.crcValue = archive.arcType == Dezip.TYPE_ARC? 0 : ~0;
         let position = entry.filePosition + entry.fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
         let decompressedSize = fileHeader.size;
@@ -966,25 +966,23 @@ export default class Dezip {
         if (crcFile && entry.crcBytes < sizeFile) {
             if (arcType == Dezip.TYPE_ARC) {
                 if (this.interfaces.getArcCRC) {
-                    crc = this.interfaces.getArcCRC(db.buffer);
+                    entry.crcValue = crc = this.interfaces.getArcCRC(db.buffer, entry.crcValue);
                     entry.crcBytes += db.length;
-                    if (crc != crcFile) {
-                        throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
-                    }
                 }
             }
             else {
                 if (this.interfaces.getZipCRC) {
                     entry.crcValue = crc = this.interfaces.getZipCRC(db.buffer, entry.crcValue);
                     entry.crcBytes += db.length;
-                    if (entry.crcBytes >= sizeFile) {
-                        if (entry.crcBytes != sizeFile) {
-                            throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
-                        }
-                        else if (~crc != crcFile) {
-                            throw new Error(`expected CRC ${crcFile.toString(16)}, received ${(~crc).toString(16)}`);
-                        }
-                    }
+                    crc = ~crc;
+                }
+            }
+            if (entry.crcBytes >= sizeFile) {
+                if (entry.crcBytes != sizeFile) {
+                    throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                }
+                else if (crc != crcFile) {
+                    throw new Error(`expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
                 }
             }
         }
