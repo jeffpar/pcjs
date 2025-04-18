@@ -12,11 +12,12 @@ const dezip = new Dezip(
     {
         fetch,
         open: fs.open,
+        getArcCRC: LegacyArc.getArcCRC,
         unpackSync: LegacyArc.unpackSync,           // interface for ARC_NR data
         unsqueezeSync: LegacyArc.unsqueezeSync,     // interface for ARC_HS data
         uncrunchSync: LegacyArc.uncrunchSync,       // interface for ARC_LZ, ARC_LZNR, ARC_LZNH data
         uncrushSync: LegacyArc.uncrushSync,         // interface for ARC_LZC data
-        getArcCRC: LegacyArc.getArcCRC,
+        getZipCRC: LegacyZip.getZipCRC,
         stretchSync: LegacyZip.stretchSync,         // interface for ZIP_SHRINK data
         expandSync: LegacyZip.expandSync,           // interface for ZIP_REDUCE# data
         explodeSync: LegacyZip.explodeSync,         // interface for ZIP_IMPLODE data

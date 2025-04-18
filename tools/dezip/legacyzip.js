@@ -1,5 +1,5 @@
 /**
- * @fileoverview Library for decompressing various "legacy" ZIP formats
+ * @fileoverview Library for decompressing various "legacy" ZIP (and ARC) formats
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -216,7 +216,7 @@ export class LegacyArc
     static getArcCRC(buf, crc = 0)
     {
         for (let i = 0; i < buf.length; i++) {
-            crc = ((crc >> 8) & 0xff) ^ LegacyArc.crcTable[(crc ^ buf[i]) & 0xff];
+            crc = LegacyArc.crcTable[(crc ^ buf[i]) & 0xff] ^ ((crc >> 8) & 0xff);
         }
         return crc;
     }
@@ -328,6 +328,33 @@ export class LegacyZip
 
         blast.decomp(src);
         return blast.getOutput;
+    }
+
+    static crcTable = [];
+
+   /**
+    * getZipCRC(buf, crc)
+    *
+    * Calculate CRC for the given ZIP data.
+    *
+    * @param {Buffer} buf
+    * @param {number} [crc] (running CRC value, if any)
+    */
+    static getZipCRC(buf, crc = 0)
+    {
+        if (!LegacyZip.crcTable.length) {
+            for (let i = 0; i < 256; i++) {
+                let c = i;
+                for (let j = 0; j < 8; j++) {
+                    c = (c & 1)? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+                }
+                LegacyZip.crcTable[i] = c;
+            }
+        }
+        for (let i = 0; i < buf.length; i++) {
+            crc = LegacyZip.crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+        }
+        return crc;
     }
 }
 

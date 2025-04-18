@@ -244,8 +244,6 @@ export default class Dezip {
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
 
-    static crcTable = [];       // initialized by Dezip.getCRCTable() when needed
-
     static DEBUG = true;
 
     /**
@@ -969,52 +967,27 @@ export default class Dezip {
             if (arcType == Dezip.TYPE_ARC) {
                 if (this.interfaces.getArcCRC) {
                     crc = this.interfaces.getArcCRC(db.buffer);
+                    entry.crcBytes += db.length;
                     if (crc != crcFile) {
                         throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
                     }
                 }
             }
             else {
-                const crcTable = Dezip.getCRCTable();
-                crc = entry.crcValue;
-                for (let off = 0; off < db.length; off++) {
-                    crc = crcTable[(crc ^ db.buffer[off]) & 0xff] ^ (crc >>> 8);
-                }
-                entry.crcValue = crc;
-                entry.crcBytes += db.length;
-                if (entry.crcBytes >= sizeFile) {
-                    if (entry.crcBytes != sizeFile) {
-                        throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
-                    }
-                    else if (~crc != crcFile) {
-                        throw new Error(`expected CRC ${crcFile.toString(16)}, received ${crc.toString(16)}`);
+                if (this.interfaces.getZipCRC) {
+                    entry.crcValue = crc = this.interfaces.getZipCRC(db.buffer, entry.crcValue);
+                    entry.crcBytes += db.length;
+                    if (entry.crcBytes >= sizeFile) {
+                        if (entry.crcBytes != sizeFile) {
+                            throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                        }
+                        else if (~crc != crcFile) {
+                            throw new Error(`expected CRC ${crcFile.toString(16)}, received ${(~crc).toString(16)}`);
+                        }
                     }
                 }
             }
         }
         return crc;
-    }
-
-    /**
-     * getCRCTable()
-     */
-    static getCRCTable()
-    {
-        let crcTable = Dezip.crcTable;
-        if (!crcTable.length) {
-            for (let n = 0; n < 256; n++) {
-                let c = n;
-                for (let k = 8; --k >= 0; ) {
-                    if ((c & 1) !== 0) {
-                        c = 0xedb88320 ^ (c >>> 1);
-                    } else {
-                        c = c >>> 1;
-                    }
-                }
-                crcTable[n] = c;
-            }
-            Dezip.crcTable = crcTable;
-        }
-        return crcTable;
     }
 }
