@@ -1,13 +1,13 @@
 /**
- * Script to test Dezip functions.
+ * Command-line interface to the Dezip class.
  */
 
 import fs from "fs/promises";
 import path from "path";
 import zlib from "zlib";
-import Format from "../format.js";
-import Dezip from "../dezip.js";
-import { LegacyArc, LegacyZip } from "../legacy.js";
+import Format from "./format.js";
+import Dezip from "./dezip.js";
+import { LegacyArc, LegacyZip } from "./legacy.js";
 
 let format = new Format();
 let printf = function(...args) {

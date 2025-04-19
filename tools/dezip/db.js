@@ -1,5 +1,5 @@
 /**
- * @fileoverview DataBuffer: A Buffer-Like Class for Node and Browsers
+ * @fileoverview Buffer-Like class for Node and Browsers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

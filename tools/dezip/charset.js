@@ -9,7 +9,7 @@
  * Adapted from https://www.pcjs.org/machines/pcx86/modules/v2/charset.js
  */
 
-import DataBuffer from "./databuffer.js";
+import DataBuffer from "./db.js";
 
 /**
  * This class is primarily concerned with converting characters between CP437 and UTF-8, when

@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import DataBuffer from "./databuffer.js";
+import DataBuffer from "./db.js";
 import Struct from './struct.js';
 
 /**
@@ -520,7 +520,7 @@ export default class Dezip {
      * readDirEntry(archive, prevEntry)
      *
      * Reads the next DirHeader of the archive, based on the position of the last header.
-     * If this is the first request, then we scan the archive for a DirEndHeader DIREND, starting
+     * If this is the first request, then we scan the archive for a DirEndHeader (DIREND), starting
      * from the end of the archive, which should tell us where the first DirHeader is located.
      *
      * @this {Dezip}

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Struct: A Class for Defining and Loading On-Disk Structures
+ * @fileoverview Library for defining and loading on-disk structures
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -10,7 +10,7 @@
  */
 
 import CharSet from "./charset.js";
-import DataBuffer from "./databuffer.js";
+import DataBuffer from "./db.js";
 
 /**
  * Struct is a helper class for defining and loading on-disk structures.  For example:
@@ -124,7 +124,7 @@ export default class Struct {
     }
 
     /**
-     * get(db, offset, name, encoding, warnings)
+     * read(db, offset, name, encoding, warnings)
      *
      * @this {Struct}
      * @param {DataBuffer} db
@@ -134,7 +134,7 @@ export default class Struct {
      * @param {Array} [warnings]
      * @returns {number|string}
      */
-    get(db, offset, name, encoding = "cp437", warnings = [])
+    read(db, offset, name, encoding = "cp437", warnings = [])
     {
         let v, time, date;
         let field = this.fields[name];
@@ -221,7 +221,7 @@ export default class Struct {
     {
         let record = {}, warnings = [];
         for (let name in this.fields) {
-            record[name] = this.get(db, offset, name, encoding, warnings);
+            record[name] = this.read(db, offset, name, encoding, warnings);
         }
         if (warnings.length) {
             record.warnings = warnings;

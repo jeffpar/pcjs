@@ -6,6 +6,8 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
+ * Adapted from https://www.pcjs.org/tools/modules/legacyzip.js
+ *
  * Unpack(), Unsqueeze(), Uncrunch(), and Uncrush() decompression code adapted from ARC source code
  * (C) Copyright 1985-87 by System Enhancement Associates and Thom Henderson, as released under the terms
  * of the GPL at https://github.com/hyc/arc/blob/master/LICENSE
