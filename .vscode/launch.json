@@ -2760,6 +2760,9 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/tests/test.js",
+      "args": [
+        "--list=good-archives.log"
+      ],
       "cwd": "${workspaceFolder}/tools/dezip/tests",
       "stopOnEntry": false,
       "console": "integratedTerminal",
