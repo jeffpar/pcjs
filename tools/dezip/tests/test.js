@@ -176,8 +176,13 @@ async function main(argc, argv)
         let testFile = testFiles[n++];
         let fileName = path.basename(testFile);
         try {
-            let archive = await dezip.open(testFile);
+            archive = await dezip.open(testFile);
             printf("archive #%d %s opened successfully\n", n+1, testFile);
+        } catch (error) {
+            console.log(error.message);
+            continue;
+        }
+        try {
             let entries = await dezip.readDirectory(archive);
             if (archive.comment) {
                 printf("archive #%d %s comment: %s\n", n+1, fileName, archive.comment);
@@ -191,13 +196,10 @@ async function main(argc, argv)
                     throw new Error(`${fileName} entry #${i+1} (${entry.fileHeader.name}): ${error.message}`);
                 }
             }
-        } catch(error) {
+        } catch (error) {
             console.log(error.message);
-        } finally {
-            if (archive) {
-                await dezip.close(archive);
-            }
         }
+        await dezip.close(archive);
     }
     printf("%d archive(s) processed\n", n);
 }
