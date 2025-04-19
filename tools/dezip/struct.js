@@ -124,17 +124,17 @@ export default class Struct {
     }
 
     /**
-     * get(db, offset, name, encoding, messages)
+     * get(db, offset, name, encoding, warnings)
      *
      * @this {Struct}
      * @param {DataBuffer} db
      * @param {number} offset
      * @param {string} name
      * @param {string} [encoding] (default is "cp437")
-     * @param {Array} [messages]
+     * @param {Array} [warnings]
      * @returns {number|string}
      */
-    get(db, offset, name, encoding = "cp437", messages = [])
+    get(db, offset, name, encoding = "cp437", warnings = [])
     {
         let v, time, date;
         let field = this.fields[name];
@@ -186,12 +186,12 @@ export default class Struct {
         case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
             time = db.readUInt16LE(offset);
             date = db.readUInt16LE(offset + 2);
-            v = this.parseDateTime(date, time, messages);
+            v = this.parseDateTime(date, time, warnings);
             break;
         case Struct.DOSDATETIME:        // since this is defined as a DOS field, we assume little-endian
             date = db.readUInt16LE(offset);
             time = db.readUInt16LE(offset + 2);
-            v = this.parseDateTime(date, time, messages);
+            v = this.parseDateTime(date, time, warnings);
             break;
         case Struct.STRING:
             v = this.readString(db, offset, length, encoding);
@@ -219,12 +219,12 @@ export default class Struct {
      */
     readStruct(db, offset = 0, encoding = "cp437")
     {
-        let record = {}, messages = [];
+        let record = {}, warnings = [];
         for (let name in this.fields) {
-            record[name] = this.get(db, offset, name, encoding, messages);
+            record[name] = this.get(db, offset, name, encoding, warnings);
         }
-        if (messages.length) {
-            record.messages = messages;
+        if (warnings.length) {
+            record.warnings = warnings;
         }
         return record;
     }
@@ -245,16 +245,16 @@ export default class Struct {
     }
 
     /**
-     * parseDateTime(date, time, messages)
+     * parseDateTime(date, time, warnings)
      *
      * ZIP/ARC archives contain local times, so we return a Date object in local time.
      *
      * @param {number} date (16 bits)
      * @param {number} time (16 bits)
-     * @param {Array} [messages]
+     * @param {Array} [warnings]
      * @returns {Date}
      */
-    parseDateTime(date, time, messages = [])
+    parseDateTime(date, time, warnings = [])
     {
         let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
         let d = {
@@ -281,39 +281,39 @@ export default class Struct {
          * oldest valid MS-DOS date, modern zip utilities fail to preserve original timestamps
          * (or rather, the lack thereof); they should have re-zipped any date < 1980 as zero.
          */
-        let errors = 0;
+        let exceptions = 0;
         let orig = { ...d };
         if ((date || time) && d.m < 0) {
             d.m = 0;
-            errors++;
+            exceptions++;
         }
         if (d.m > 11) {
             d.m = 11;
-            errors++;
+            exceptions++;
         }
         if ((date || time) && d.d < 1) {
             d.d = 1;
-            errors++;
+            exceptions++;
         }
         if (d.d > 31) {
             d.d = monthDays[d.m];
             if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
-            errors++;
+            exceptions++;
         }
         if (d.h > 23) {
             d.h = 23;
-            errors++;
+            exceptions++;
         }
         if (d.n > 59) {
             d.n = 59;
-            errors++;
+            exceptions++;
         }
         if (d.s > 59) {
             d.s = 59;
-            errors++;
+            exceptions++;
         }
-        if (errors) {
-            messages.push(`Invalid date/time (${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
+        if (exceptions) {
+            warnings.push(`exceptions (${exceptions}) in date/time (${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
         }
         return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
     }
