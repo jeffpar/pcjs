@@ -2674,6 +2674,7 @@ export default class PC extends PCJSLib {
 
             for (let criteria in argv) {
                 let args = argv[criteria];
+                if (typeof args != 'string') continue;
                 if (!Array.isArray(args)) {
                     /**
                      * Thanks to unified argument processing, quoted arguments containing spaces are now
@@ -2692,7 +2693,7 @@ export default class PC extends PCJSLib {
                 }
                 if (!isNaN(+criteria)) {
                     criteria = 'disk';
-                    if (args[0].match(/\.[A-Z][A-Z][A-Z]$/i)) {
+                    if (args[0].match(/\.[A-Z][A-Z][A-Z]$/i) || argv['f']) {
                         criteria = 'file';
                     }
                 }
