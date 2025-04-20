@@ -325,7 +325,7 @@ export default class Dezip {
             this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.length);
         }
         else if (this.interfaces.open) {
-            archive.file = await this.interfaces.open(fileName, 'r');
+            archive.file = await this.interfaces.open(fileName, "r");
             if (!archive.file) {
                 throw new Error("Unable to open archive " + fileName);
             }
@@ -509,9 +509,6 @@ export default class Dezip {
                 entry = await this.readFileEntry(archive, entry);
                 if (!entry) break;
             } while (true);
-            if (!archive.entries.length) {
-                throw new Error("No file entries found");
-            }
         }
         return archive.entries;
     }
@@ -809,16 +806,17 @@ export default class Dezip {
     }
 
     /**
-     * readFile(archive, entry)
+     * readFile(archive, entry, writeData)
      *
      * @this {Dezip}
      * @param {Archive} archive
      * @param {Entry} entry
-     * @returns {DataBuffer} (decompressedDB)
+     * @param {function} [writeData]
+     * @returns {DataBuffer} (expandedDB)
      */
-    async readFile(archive, entry)
+    async readFile(archive, entry, writeData)
     {
-        let decompressedDB;
+        let expandedDB;
         let fileHeader = entry.fileHeader;
         if (!fileHeader) {
             this.assert(entry.dirHeader);
@@ -834,19 +832,19 @@ export default class Dezip {
         entry.crcValue = archive.type == Dezip.TYPE_ARC? 0 : ~0;
         let position = entry.filePosition + entry.fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
-        let decompressedSize = fileHeader.size;
+        let expandedSize = fileHeader.size;
         if (!compressedSize) {
-            decompressedDB = new DataBuffer(0);
+            expandedDB = new DataBuffer(0);
         } else {
-            let decompressedData;
+            let expandedData;
             if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
                 if (this.interfaces.createInflate) {
-                    decompressedData = await this.inflateChunks(
+                    expandedData = await this.inflateChunks(
                         entry, this.readChunks(archive, position, compressedSize)
                     );
                 } else if (this.interfaces.inflate) {
                     let db = await this.readArchive(archive, position, compressedSize);
-                    decompressedData = await this.inflateAsync(db.buffer);
+                    expandedData = await this.inflateAsync(db.buffer);
                 }
                 else {
                     throw new Error("No inflate interface available");
@@ -861,46 +859,46 @@ export default class Dezip {
                 switch(fileHeader.method) {
                 case Dezip.ARC_UNP:
                 case Dezip.ZIP_STORE:
-                    decompressedData = db.buffer;
+                    expandedData = db.buffer;
                     break;
                 case Dezip.ARC_NR:              // aka "Pack"
                     if (this.interfaces.unpackSync) {
-                        decompressedData = this.interfaces.unpackSync(db.buffer, decompressedSize);
+                        expandedData = this.interfaces.unpackSync(db.buffer, expandedSize);
                     }
                     break;
                 case Dezip.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
                     if (this.interfaces.unsqueezeSync) {
-                        decompressedData = this.interfaces.unsqueezeSync(db.buffer, decompressedSize);
+                        expandedData = this.interfaces.unsqueezeSync(db.buffer, expandedSize);
                     }
                     break;
                 case Dezip.ARC_LZ:              // aka "Crunch5" (LZ compression)
                     if (this.interfaces.uncrunchSync) {
-                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 0);
+                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 0);
                     }
                     break;
                 case Dezip.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
                     if (this.interfaces.uncrunchSync) {
-                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 1);
+                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 1);
                     }
                     break;
                 case Dezip.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
                     if (this.interfaces.uncrunchSync) {
-                        decompressedData = this.interfaces.uncrunchSync(db.buffer, decompressedSize, 2);
+                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 2);
                     }
                     break;
                 case Dezip.ARC_LZC:             // aka "Crush" (dynamic LZW)
                     if (this.interfaces.uncrushSync) {
-                        decompressedData = this.interfaces.uncrushSync(db.buffer, decompressedSize, false);
+                        expandedData = this.interfaces.uncrushSync(db.buffer, expandedSize, false);
                     }
                     break;
                 case Dezip.ARC_LZS:             // aka "Squash"
                     if (this.interfaces.uncrushSync) {
-                        decompressedData = this.interfaces.uncrushSync(db.buffer, decompressedSize, true);
+                        expandedData = this.interfaces.uncrushSync(db.buffer, expandedSize, true);
                     }
                     break;
                 case Dezip.ZIP_SHRINK:
                     if (this.interfaces.stretchSync) {
-                        decompressedData = this.interfaces.stretchSync(db.buffer, decompressedSize);
+                        expandedData = this.interfaces.stretchSync(db.buffer, expandedSize);
                     }
                     break;
                 case Dezip.ZIP_REDUCE1:
@@ -908,35 +906,39 @@ export default class Dezip {
                 case Dezip.ZIP_REDUCE3:
                 case Dezip.ZIP_REDUCE4:
                     if (this.interfaces.expandSync) {
-                        decompressedData = this.interfaces.expandSync(db.buffer, decompressedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
+                        expandedData = this.interfaces.expandSync(db.buffer, expandedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
                     }
                     break;
                 case Dezip.ZIP_IMPLODE:
                     if (this.interfaces.explodeSync) {
                         let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
                         let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
-                        decompressedData = this.interfaces.explodeSync(db.buffer, decompressedSize, largeWindow, literalTree);
+                        expandedData = this.interfaces.explodeSync(db.buffer, expandedSize, largeWindow, literalTree);
                     }
                     break;
                 case Dezip.ZIP_IMPLODE_DCL:
                     if (this.interfaces.blastSync) {
-                        decompressedData = this.interfaces.blastSync(db.buffer);
+                        expandedData = this.interfaces.blastSync(db.buffer);
                     }
                     break;
                 }
-                if (!decompressedData) {
+                if (!expandedData) {
                     throw new Error(`Unsupported compression method ${fileHeader.method}`);
                 }
-                if (decompressedData.length != decompressedSize) {
-                    throw new Error(`Decompressed size ${decompressedData.length} does not match expected size ${decompressedSize}`);
+                if (expandedData.length != expandedSize) {
+                    throw new Error(`expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
                 }
             }
-            decompressedDB = new DataBuffer(decompressedData);
+            expandedDB = new DataBuffer(expandedData);
             if (fileHeader.crc) {
-                this.updateCRC(entry, decompressedDB, archive.type);
+                this.updateCRC(entry, expandedDB, archive.type);
+            }
+            if (writeData) {
+                await writeData(expandedDB);
+                await writeData();
             }
         }
-        return decompressedDB;
+        return expandedDB;
     }
 
     /**

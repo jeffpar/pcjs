@@ -2756,6 +2756,28 @@
       }
     },
     {
+      "name": "dz.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "--dir=.",
+        "--overwrite=true",
+        "tests/archives/deflated.zip"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "test.js",
       "type": "node",
       "request": "launch",

@@ -1,5 +1,10 @@
 /**
- * Command-line interface to the Dezip class.
+ * @fileoverview Command-line interface to the Dezip class
+ * @author Jeff Parsons <Jeff@pcjs.org>
+ * @copyright © 2012-2025 Jeff Parsons
+ * @license MIT <https://www.pcjs.org/LICENSE.txt>
+ *
+ * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
 import fs from "fs/promises";
@@ -9,12 +14,11 @@ import Format from "./format.js";
 import Dezip from "./dezip.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
-let format = new Format();
-let printf = function(...args) {
+const format = new Format();
+const printf = function(...args) {
     let s = format.sprintf(...args);
     process.stdout.write(s);
 };
-
 const dezip = new Dezip(
     {
         fetch,
@@ -37,171 +41,159 @@ const dezip = new Dezip(
     }
 );
 
-/**
- * parseArgs(args, i)
- *
- * Any argument value preceded by a double-hyphen or long-dash switch (eg, "--option value") is
- * saved in argv with the switch as the key (eg, argv["option"] == "value").
- *
- * If there are multiple arguments preceded by the same double-hyphen switch, then the argv entry
- * becomes an array (eg, argv["option"] == ["value1","value2"]).
- *
- * If a double-hyphen switch is followed by another switch (or by nothing, if it's the last argument),
- * then the value of the switch will be a boolean instead of a string (eg, argv["option"] == true).
- *
- * Single-hyphen switches are different: every character following a single hyphen is transformed into
- * a boolean value (eg, "-abc" produces argv["a"] == true, argv["b"] == true, and argv["c"] == true).
- *
- * Only arguments NOT preceded by (or part of) a switch are pushed onto the argv array; they can be
- * accessed as argv[i], argv[i+1], etc.
- *
- * In addition, when the initial i >= 1, then argv[0] is set to the concatenation of all args, starting
- * with args[i], and the first non-switch argument begins at argv[1].
- *
- * Finally, since argv is an Array, it has a built-in 'length' property, so if you also need to specify
- * a "--length" argument, we must precede the key with a '#' (ie, '#length') to avoid a conflict.
- *
- * @param {Array.<string>} [args]
- * @param {number} [i] (default is 1, because if you're passing process.argv, process.argv[0] is useless)
- * @returns {Array} [argc, argv]
- */
-function parseArgs(args, i = 1)
-{
-    let argc = 0, argv = [], option = "";
-    if (i) {
-        argv.push(args.slice(i++).join(' '));
-        //
-        // For convenience: if the caller has crammed all their arguments into the next argument,
-        // and there are NO double-quotes (because parsing those is extra work), then we split the
-        // argument and append it to args (this can happen in VSCode launch profiles, if you're lazy).
-        //
-        if (i < args.length && args[i].indexOf('"') < 0 && args[i].indexOf(' ') > 0) {
-            let a = args[i].split(' ');
-            args.splice(i, 1, ...a);
+const options = {
+    "batch": {
+        type: "string",
+        usage: "--batch=file",
+        description: "process archives in the specified file",
+        handler: async function(argv, option) {
+            try {
+                let lines = await fs.readFile(argv[option], "utf8");
+                archiveFiles = archiveFiles.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
+            } catch (error) {
+                printf(error.message);
+            }
+        }
+    },
+    "comment": {
+        type: "boolean",
+        usage: "--comment",
+        description: "display archive comments"
+    },
+    "dir": {
+        type: "string",
+        usage: "--dir=directory",
+        description: "extract files into the specified directory"
+    },
+    "extract": {
+        type: "boolean",
+        usage: "--extract",
+        description: "extract the contents of the specified archive(s)"
+    },
+    "list": {
+        type: "boolean",
+        usage: "--list",
+        description: "list the contents of the specified archive(s)"
+    },
+    "overwrite": {
+        type: "boolean",
+        usage: "--overwrite",
+        description: "overwrite existing files when extracting"
+    },
+    "help": {
+        type: "boolean",
+        usage: "--help",
+        description: "Display this help message",
+        handler: function(argv, option) {
+            printf("Usage:\n    %s [options] [archives]\n", path.basename(argv[0]));
+            printf("Options:\n");
+            for (let option in options) {
+                let optionProps = options[option];
+                printf("  %-16s %s\n", optionProps.usage, optionProps.description);
+            }
         }
     }
-    while (i < args.length) {
-        let j, sSep;
-        let sArg = args[i++];
-        if (!sArg.indexOf(sSep = "--") || !sArg.indexOf(sSep = "—")) {
-            sArg = sArg.slice(sSep.length);
-            let sValue = true;
-            j = sArg.indexOf("=");
-            if (j < 0) j = sArg.indexOf(":");   // allow ':' as an alternative to '=' (a common mistake)
-            if (j > 0) {
-                sValue = sArg.slice(j + 1);
-                sArg = sArg.slice(0, j);
-                sValue = (sValue == "true") ? true : ((sValue == "false") ? false : sValue);
-            }
-            if (typeof sValue == "string") {
-                let quoteMatch = sValue.match(/^(["'])(.*)\1$/);
-                if (quoteMatch) {
-                    sValue = quoteMatch[2];
-                }
-            }
-            if (typeof argv[sArg] == "number") {
-                sArg = '#' + sArg;              // avoid conflict with the built-in 'length' property
-            }
-            option = (j < 0? sArg : "");
-            if (!argv.hasOwnProperty(sArg)) {
-                argv[sArg] = sValue;
-                continue;
-            }
-            if (typeof sValue == "boolean") {
-                continue;
-            }
-            if (!Array.isArray(argv[sArg])) {
-                argv[sArg] = [argv[sArg]];
-            }
-            argv[sArg].push(sValue);
-            continue;
-        }
-        if (!sArg.indexOf("-")) {
-            for (j = 1; j < sArg.length; j++) {
-                let ch = sArg.charAt(j);
-                if (argv[ch] === undefined) {
-                    argv[ch] = true;
-                }
-            }
-            continue;
-        }
-        if (option) {
-            if (typeof argv[option] == "boolean") {
-                argv[option] = sArg;
-            }
-            else {
-                if (!Array.isArray(argv[option])) {
-                    argv[option] = [argv[option]];
-                }
-                argv[option].push(sArg);
-            }
-            option = "";
-            continue;
-        }
-        argv.push(sArg);
-    }
-    argc = Object.keys(argv).length;
-    return [argc, argv];
-}
+};
+
+let archiveFiles = [];
 
 /**
- * Function to test the Dezip class.
+ * main(argc, argv)
  */
 async function main(argc, argv)
 {
-    if (argc < 2) {
-        printf("Usage: %s --list=<file>\n", path.basename(argv[0]));
-        return;
-    }
-    let testFiles = [];
     for (let i = 1; i < argv.length; i++) {
-        testFiles.push(argv[i]);
+        archiveFiles.push(argv[i]);
     }
-    if (argv['list']) {
-        let listFile = argv['list'];
-        try {
-            let lines = await fs.readFile(listFile, "utf8");
-            testFiles = lines.split(/\r?\n/).filter(line => line.length > 0);
-        } catch (error) {
-            console.log(error.message);
-            return;
+    for (let option in argv) {
+        if (!isNaN(option)) continue;
+        let optionProps = options[option];
+        if (optionProps) {
+            if (!optionProps.handler) {
+                optionProps.value = argv[option];
+            } else {
+                await optionProps.handler(argv, option);
+            }
+        } else {
+            printf("Unknown option: %s\n", option);
         }
     }
+    if (argc < 2) {
+        options.help.handler(argv);
+        return;
+    }
     //
-    // Process the test files
+    // Process all specified archive files
     //
-    let n = 0;
-    while (n < testFiles.length) {
+    let nArchives = 0, nFiles = 0;
+    while (nArchives < archiveFiles.length) {
         let archive;
-        let testFile = testFiles[n++];
-        let fileName = path.basename(testFile);
+        let archiveFile = archiveFiles[nArchives++];
+        let archiveName = path.basename(archiveFile);
+        let archiveExt = path.extname(archiveName);
         try {
-            archive = await dezip.open(testFile);
-            printf("archive #%d %s opened successfully\n", n+1, testFile);
+            archive = await dezip.open(archiveFile);
+            printf("archive #%d %s opened successfully\n", nArchives, archiveFile);
         } catch (error) {
-            console.log(error.message);
+            printf(error.message);
             continue;
         }
         try {
             let entries = await dezip.readDirectory(archive);
-            if (archive.comment) {
-                printf("archive #%d %s comment: %s\n", n+1, fileName, archive.comment);
+            let dirSrc = path.dirname(path.resolve(archiveFile));
+            let dirDst = path.resolve(options.dir.value || ".");
+            if (dirDst.indexOf(dirSrc) == 0) {
+                dirDst = dirDst.slice(dirSrc.length);
             }
-            for (let i = 0; i < entries.length; i++) {
-                let entry = entries[i];
+            dirDst = path.join(dirDst, path.basename(archiveFile, archiveExt));
+            if (archive.comment && options.comment.value) {
+                printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
+            }
+            let nEntries = 0;
+            while (nEntries < entries.length) {
+                let entry = entries[nEntries++];
+                let entryName = entry.dirHeader?.name || entry.fileHeader?.name;
+                let entryAttr = (entry.dirHeader?.attr || 0) & 0xff;
+                if (entryAttr & 0x10) {
+                    continue;       // skip directories
+                }
+                let entryModified = entry.dirHeader?.modified || entry.fileHeader?.modified;
+                let targetFile, targetName, writeData;
+                if (options.extract.value || options.dir.value) {
+                    writeData = async function(db) {
+                        if (db) {
+                            if (!targetFile) {
+                                targetName = path.join(dirDst, entryName);
+                                await fs.mkdir(path.dirname(targetName), { recursive: true });
+                                targetFile = await fs.open(targetName, options.overwrite.value? "w" : "wx");
+                            }
+                            await targetFile.write(db.buffer);
+                            return;
+                        }
+                        if (targetFile) {
+                            await targetFile.close();
+                            if (entryModified) {
+                                await fs.utimes(targetName, entryModified, entryModified);
+                            }
+                        }
+                    };
+                }
                 try {
-                    let db = await dezip.readFile(archive, entry);
-                    // printf("%s entry #%d (%s): %d bytes\n", fileName, i+1, entry.fileHeader.name, db.length);
+                    nFiles++;
+                    let db = await dezip.readFile(archive, entry, writeData);
+                    if (options.list.value) {
+                        printf("%s entry #%d (%s): %d bytes\n", archiveName, nEntries, entryName, db.length);
+                    }
                 } catch (error) {
-                    throw new Error(`${fileName} entry #${i+1} (${entry.fileHeader.name}): ${error.message}`);
+                    printf("%s entry #%d (%s): %s\n", archiveName, nEntries, entryName, error.message);
                 }
             }
         } catch (error) {
-            console.log(error.message);
+            printf(error.message);
         }
         await dezip.close(archive);
     }
-    printf("%d archive(s) processed\n", n);
+    printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
 }
 
-await main(...parseArgs(process.argv));
+await main(...Format.parseArgs(process.argv));
