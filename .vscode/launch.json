@@ -2761,8 +2761,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
+        "-cl",
         "--dir=.",
-        "--overwrite=true",
+        "--overwrite",
         "tests/archives/deflated.zip"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",

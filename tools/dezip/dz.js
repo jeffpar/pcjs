@@ -44,52 +44,51 @@ const dezip = new Dezip(
 const options = {
     "batch": {
         type: "string",
-        usage: "--batch=file",
-        description: "process archives in the specified file",
-        handler: async function(argv, option) {
-            try {
-                let lines = await fs.readFile(argv[option], "utf8");
-                archiveFiles = archiveFiles.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
-            } catch (error) {
-                printf(error.message);
-            }
-        }
+        usage: "--batch file",
+        alias: "-b",
+        description: "process archives in the specified file"
     },
     "comment": {
         type: "boolean",
         usage: "--comment",
+        alias: "-c",
         description: "display archive comments"
     },
     "dir": {
         type: "string",
-        usage: "--dir=directory",
+        usage: "--dir directory",
+        alias: "-d",
         description: "extract files into the specified directory"
     },
     "extract": {
         type: "boolean",
         usage: "--extract",
+        alias: "-e",
         description: "extract the contents of the specified archive(s)"
     },
     "list": {
         type: "boolean",
         usage: "--list",
+        alias: "-l",
         description: "list the contents of the specified archive(s)"
     },
     "overwrite": {
         type: "boolean",
         usage: "--overwrite",
+        alias: "-o",
         description: "overwrite existing files when extracting"
     },
     "help": {
         type: "boolean",
         usage: "--help",
+        alias: "-h",
         description: "Display this help message",
-        handler: function(argv, option) {
-            printf("Usage:\n    %s [options] [archives]\n", path.basename(argv[0]));
+        handler: function() {
+            printf("Usage:\n    %s [options] [archives]\n", path.basename(process.argv[1]));
             printf("Options:\n");
-            for (let option in options) {
-                let optionProps = options[option];
-                printf("  %-16s %s\n", optionProps.usage, optionProps.description);
+            for (let key in options) {
+                let option = options[key];
+                printf("  %-16s %s\n", option.usage, option.description);
             }
         }
     }
@@ -105,22 +104,13 @@ async function main(argc, argv)
     for (let i = 1; i < argv.length; i++) {
         archiveFiles.push(argv[i]);
     }
-    for (let option in argv) {
-        if (!isNaN(option)) continue;
-        let optionProps = options[option];
-        if (optionProps) {
-            if (!optionProps.handler) {
-                optionProps.value = argv[option];
-            } else {
-                await optionProps.handler(argv, option);
-            }
-        } else {
-            printf("Unknown option: %s\n", option);
+    if (argv['batch']) {
+        try {
+            let lines = await fs.readFile(argv['batch'], "utf8");
+            archiveFiles = archiveFiles.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
+        } catch (error) {
+            printf("%s\n", error.message);
         }
-    }
-    if (argc < 2) {
-        options.help.handler(argv);
-        return;
     }
     //
     // Process all specified archive files
@@ -135,18 +125,18 @@ async function main(argc, argv)
             archive = await dezip.open(archiveFile);
             printf("archive #%d %s opened successfully\n", nArchives, archiveFile);
         } catch (error) {
-            printf(error.message);
+            printf("%s\n", error.message);
             continue;
         }
         try {
             let entries = await dezip.readDirectory(archive);
             let dirSrc = path.dirname(path.resolve(archiveFile));
-            let dirDst = path.resolve(options.dir.value || ".");
+            let dirDst = path.resolve(argv['dir'] || ".");
             if (dirDst.indexOf(dirSrc) == 0) {
                 dirDst = dirDst.slice(dirSrc.length);
             }
             dirDst = path.join(dirDst, path.basename(archiveFile, archiveExt));
-            if (archive.comment && options.comment.value) {
+            if (archive.comment && argv['comment']) {
                 printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
             }
             let nEntries = 0;
@@ -159,13 +149,13 @@ async function main(argc, argv)
                 }
                 let entryModified = entry.dirHeader?.modified || entry.fileHeader?.modified;
                 let targetFile, targetName, writeData;
-                if (options.extract.value || options.dir.value) {
+                if (argv['extract'] || argv['dir']) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
                                 targetName = path.join(dirDst, entryName);
                                 await fs.mkdir(path.dirname(targetName), { recursive: true });
-                                targetFile = await fs.open(targetName, options.overwrite.value? "w" : "wx");
+                                targetFile = await fs.open(targetName, argv['overwrite']? "w" : "wx");
                             }
                             await targetFile.write(db.buffer);
                             return;
@@ -181,7 +171,7 @@ async function main(argc, argv)
                 try {
                     nFiles++;
                     let db = await dezip.readFile(archive, entry, writeData);
-                    if (options.list.value) {
+                    if (argv['list']) {
                         printf("%s entry #%d (%s): %d bytes\n", archiveName, nEntries, entryName, db.length);
                     }
                 } catch (error) {
@@ -189,11 +179,11 @@ async function main(argc, argv)
                 }
             }
         } catch (error) {
-            printf(error.message);
+            printf("%s\n", error.message);
         }
         await dezip.close(archive);
     }
     printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
 }
 
-await main(...Format.parseArgs(process.argv));
+await main(...Format.parseOptions(process.argv, options, printf));
