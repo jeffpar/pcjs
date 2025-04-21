@@ -278,16 +278,17 @@ export default class Dezip {
     }
 
     /**
-     * open(fileName, options)
+     * open(fileName, db, options)
      *
      * If successful, this method returns an Archive object used with various read functions.
      *
      * @this {Dezip}
      * @param {string} fileName
+     * @param {DataBuffer} [db]
      * @param {ArchiveOptions} [options]
      * @returns {Archive}
      */
-    async open(fileName, options = {})
+    async open(fileName, db = null, options = {})
     {
         let archive = {
             fileName,                   // name of the archive file
@@ -305,9 +306,9 @@ export default class Dezip {
         // the option of reading the entire archive into a DataBuffer.  However, the preferred
         // approach is to read structures from the file as needed into a cache buffer.
         //
-        if (options.db) {
-            archive.length = options.db.length;
-            this.initCache(archive, options.db);
+        if (db) {
+            archive.length = db.length;
+            this.initCache(archive, db, archive.length);
         }
         else if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
             //

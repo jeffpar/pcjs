@@ -80,6 +80,24 @@ const DEBUG = true;
 export class LegacyArc
 {
     /**
+     * Notes regarding ARC compression method "naming conventions":
+     *
+     * I've not yet seen any examples of Method5 or Method7 "in the wild", but I have seen Method6
+     * (see PC-SIG DISK0568: 123EGA.ARC), which PKXARC.EXE called "crunched" (with a lower-case "c"),
+     * distinct from Method8 which it called "Crunched" (with an upper-case "C").
+     *
+     * Technically, yes, methods 5-7 and method 8 were all called "crunching", but 5-7 performed LZW
+     * compression (with unpacked (5), packed (6), and "new hash" (7) variants) while method 8 performed
+     * "dynamic" LZW compression.
+     *
+     * To distinguish the methods better, I'm going call 5-7 "Crunch" and 8 "Crush", placing method 8
+     * squarely between "Crunch" and "Squash".
+     */
+    static methodNames = [
+        "Store", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
+    ];
+
+    /**
      * unpackSync(src, dst_len)
      *
      * @param {Buffer} src (packed data)
@@ -231,6 +249,15 @@ export class LegacyArc
  */
 export class LegacyZip
 {
+    /**
+     * Deflate is the modern zlib standard (not sure about Deflate64); the rest are "legacy" methods.
+     * I'm also not sure when Deflate came into existence; it's certainly not used by ANY of the thousands
+     * of PC-SIG 9th edition ZIP files.
+     */
+    static methodNames = [
+        "Store", "Shrink", "Reduce1", "Reduce2", "Reduce3", "Reduce4", "Implode", undefined, "Deflate", "Deflate64", "Implode2"
+    ];
+
     /**
      * stretchSync(src, dst_len)
      *

@@ -19,6 +19,7 @@ const printf = function(...args) {
     let s = format.sprintf(...args);
     process.stdout.write(s);
 };
+
 const dezip = new Dezip(
     {
         fetch,
@@ -78,6 +79,12 @@ const options = {
         alias: "-o",
         description: "overwrite existing files when extracting"
     },
+    "recurse": {
+        type: "boolean",
+        usage: "--recurse",
+        alias: "-r",
+        description: "process archives within archives"
+    },
     "help": {
         type: "boolean",
         usage: "--help",
@@ -104,9 +111,9 @@ async function main(argc, argv)
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
-    if (argv['batch']) {
+    if (argv.batch) {
         try {
-            let lines = await fs.readFile(argv['batch'], "utf8");
+            let lines = await fs.readFile(argv.batch, "utf8");
             archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
         } catch (error) {
             printf("%s\n", error.message);
@@ -116,93 +123,114 @@ async function main(argc, argv)
     // Process all specified archive files
     //
     let nArchives = 0, nFiles = 0;
-    while (nArchives < archivePaths.length) {
+
+    let processArchive = async function(archivePath, archiveDB = null) {
         let archive;
-        let archivePath = archivePaths[nArchives++];
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
-            archive = await dezip.open(archivePath);
-            printf("archive #%d %s opened successfully\n", nArchives, archivePath);
+            archive = await dezip.open(archivePath, archiveDB);
+            nArchives++;
+            printf("opening %s\n", archivePath);
         } catch (error) {
             printf("%s\n", error.message);
-            continue;
+            return;
         }
         try {
             let entries = await dezip.readDirectory(archive);
             //
-            // Let's say an archive has a path of:
+            // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
+            // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
-            //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/A10_MOD1.ZIP
-            //
-            // and we want to extract it and other archives to a "extracted" folder alongside the "download" folder.
-            //
-            // Use a special <search>=<replace> form of the "--dir" option, as in "--dir download=extracted".  Note that
-            // since we're using the simple form of replace(), only the first occurrence of <search> will be replaced.
+            // Otherwise, destination path is whatever follows "--dir" (or the current directory if not specified).
             //
             let srcPath = path.dirname(archivePath);
-            let dstPath = argv['dir'] || ".";
+            let dstPath = argv.dir || "";
             let chgPath = dstPath.split("=");
-            if (chgPath.length > 1 && chgPath[0] != chgPath[1] && srcPath.indexOf(chgPath[0]) >= 0) {
-                dstPath = srcPath.replace(chgPath[0], chgPath[1]);
+            if (chgPath.length > 1) {
+                if (srcPath.indexOf(chgPath[0]) >= 0) {
+                    dstPath = srcPath.replace(chgPath[0], chgPath[1]);
+                } else {
+                    printf("warning: source path %s does not contain %s\n", srcPath, chgPath[0]);
+                    dstPath = "";
+                }
             }
-            if (!argv['dir'] || archivePaths.length > 1) {
+            //
+            // If you REALLY want to extract the archive into your current directory, you can specify "--dir ."
+            //
+            if (dstPath != ".") {
                 dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
             }
-            if (archive.comment && argv['comment']) {
+            if (archive.comment && argv.comment) {
                 printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
             }
             let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
-                let entryName = entry.dirHeader?.name || entry.fileHeader?.name;
-                let entryAttr = (entry.dirHeader?.attr || 0) & 0xff;
-                if ((entryAttr & 0x10) || entryName.endsWith("/")) {
+                let header = entry.dirHeader || entry.fileHeader;
+                let entryAttr = (header.attr || 0) & 0xff;
+                if ((entryAttr & 0x10) || header.name.endsWith("/")) {
                     continue;           // skip directories
                 }
-                let entryTime = entry.dirHeader?.modified || entry.fileHeader?.modified;
-                let targetFile, targetPath, writeData;
-                if (argv['extract'] || argv['dir']) {
+                let writeData;
+                let targetFile, targetPath;
+                let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
+                if ((argv.extract || argv.dir) && !recurse) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
-                                targetPath = path.join(dstPath, entryName);
+                                targetPath = path.join(dstPath, header.name);
                                 await fs.mkdir(path.dirname(targetPath), { recursive: true });
-                                targetFile = await fs.open(targetPath, argv['overwrite']? "w" : "wx");
+                                try {
+                                    targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
+                                } catch (error) {
+                                    if (error.code == "EEXIST") {
+                                        printf("skipping %s\n", targetPath);
+                                    } else {
+                                        printf("%s\n", error.message);
+                                    }
+                                    return false;
+                                }
+                                printf("creating %s\n", targetPath);
                             }
                             await targetFile.write(db.buffer);
-                            return;
+                            return true;
                         }
                         if (targetFile) {
                             await targetFile.close();
-                            if (entryTime) {
-                                await fs.utimes(targetPath, entryTime, entryTime);
+                            if (header.modified) {
+                                await fs.utimes(targetPath, header.modified, header.modified);
                             }
-                            //
-                            // If the extracted file is also an archive and a "recursive" option is specified,
-                            // this would be a good time to insert targetPath into archivePaths.
-                            //
-                            // It would be more efficient to determine that ahead of time and read the archive
-                            // into a buffer instead of a file, but this whole loop must first be refactored into
-                            // a function before we can efficiently do that.
-                            //
+                            return true;
                         }
+                        return false;
                     };
                 }
                 try {
-                    nFiles++;
                     let db = await dezip.readFile(archive, entry, writeData);
-                    if (argv['list']) {
-                        printf("%s entry #%d (%s): %d bytes\n", archiveName, nEntries, entryName, db.length);
+                    nFiles++;
+                    if (argv.list) {
+                        let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
+                        if (entry.encrypted) method += '*';
+                        let ratio = db.length > header.compressedSize? Math.round(100 * (db.length - header.compressedSize) / db.length) : 0;
+                        printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
+                                header.name, db.length, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc);
+                    }
+                    if (recurse) {
+                        await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
                     }
                 } catch (error) {
-                    printf("%s entry #%d (%s): %s\n", archiveName, nEntries, entryName, error.message);
+                    printf("%s entry #%d (%s): %s\n", archiveName, nEntries, header.name, error.message);
                 }
             }
         } catch (error) {
             printf("%s\n", error.message);
         }
         await dezip.close(archive);
+    };
+
+    while (archivePaths.length) {
+        await processArchive(archivePaths.shift());
     }
     printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
 }

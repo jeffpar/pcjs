@@ -2761,8 +2761,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--batch tests/good-archives.log",
-        "--dir download=extracted"
+        "--batch tests/sample.log",
+        "--dir download=extracted",
+        "--recurse",
+        "--list"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
