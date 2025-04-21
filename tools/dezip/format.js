@@ -173,6 +173,9 @@ export default class Format {
                 if (sep == "-") {
                     for (j = 0; j < arg.length;) {
                         let ch = arg.charAt(j++);
+                        if (ch == " ") {
+                            break;
+                        }
                         let k = keys.findIndex(key => options[key].alias == "-" + ch);
                         if (k < 0) {
                             printf("Unknown option: %s\n", sep + ch);
@@ -182,6 +185,8 @@ export default class Format {
                         let option = options[keys[k]];
                         if (option.type == "boolean") {
                             value = true;
+                        } else if (j < arg.length) {
+                            value = arg.slice(j).trim();
                         } else {
                             value = args[i++];
                         }
@@ -196,9 +201,9 @@ export default class Format {
                 // The separator must be a double-dash...
                 //
                 let value;
-                j = arg.indexOf("=");
+                j = arg.indexOf(" ");
                 if (j < 0) {
-                    j = arg.indexOf(" ");
+                    j = arg.indexOf("=");
                 }
                 if (j > 0) {
                     value = arg.slice(j + 1).trim();

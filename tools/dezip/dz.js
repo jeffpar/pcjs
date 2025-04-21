@@ -94,7 +94,7 @@ const options = {
     }
 };
 
-let archiveFiles = [];
+let archivePaths = [];
 
 /**
  * main(argc, argv)
@@ -102,12 +102,12 @@ let archiveFiles = [];
 async function main(argc, argv)
 {
     for (let i = 1; i < argv.length; i++) {
-        archiveFiles.push(argv[i]);
+        archivePaths.push(argv[i]);
     }
     if (argv['batch']) {
         try {
             let lines = await fs.readFile(argv['batch'], "utf8");
-            archiveFiles = archiveFiles.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
+            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
         } catch (error) {
             printf("%s\n", error.message);
         }
@@ -116,26 +116,39 @@ async function main(argc, argv)
     // Process all specified archive files
     //
     let nArchives = 0, nFiles = 0;
-    while (nArchives < archiveFiles.length) {
+    while (nArchives < archivePaths.length) {
         let archive;
-        let archiveFile = archiveFiles[nArchives++];
-        let archiveName = path.basename(archiveFile);
+        let archivePath = archivePaths[nArchives++];
+        let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
-            archive = await dezip.open(archiveFile);
-            printf("archive #%d %s opened successfully\n", nArchives, archiveFile);
+            archive = await dezip.open(archivePath);
+            printf("archive #%d %s opened successfully\n", nArchives, archivePath);
         } catch (error) {
             printf("%s\n", error.message);
             continue;
         }
         try {
             let entries = await dezip.readDirectory(archive);
-            let dirSrc = path.dirname(path.resolve(archiveFile));
-            let dirDst = path.resolve(argv['dir'] || ".");
-            if (dirDst.indexOf(dirSrc) == 0) {
-                dirDst = dirDst.slice(dirSrc.length);
+            //
+            // Let's say an archive has a path of:
+            //
+            //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/A10_MOD1.ZIP
+            //
+            // and we want to extract it and other archives to a "extracted" folder alongside the "download" folder.
+            //
+            // Use a special <search>=<replace> form of the "--dir" option, as in "--dir download=extracted".  Note that
+            // since we're using the simple form of replace(), only the first occurrence of <search> will be replaced.
+            //
+            let srcPath = path.dirname(archivePath);
+            let dstPath = argv['dir'] || ".";
+            let chgPath = dstPath.split("=");
+            if (chgPath.length > 1 && chgPath[0] != chgPath[1] && srcPath.indexOf(chgPath[0]) >= 0) {
+                dstPath = srcPath.replace(chgPath[0], chgPath[1]);
             }
-            dirDst = path.join(dirDst, path.basename(archiveFile, archiveExt));
+            if (!argv['dir'] || archivePaths.length > 1) {
+                dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+            }
             if (archive.comment && argv['comment']) {
                 printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
             }
@@ -144,27 +157,35 @@ async function main(argc, argv)
                 let entry = entries[nEntries++];
                 let entryName = entry.dirHeader?.name || entry.fileHeader?.name;
                 let entryAttr = (entry.dirHeader?.attr || 0) & 0xff;
-                if (entryAttr & 0x10) {
-                    continue;       // skip directories
+                if ((entryAttr & 0x10) || entryName.endsWith("/")) {
+                    continue;           // skip directories
                 }
-                let entryModified = entry.dirHeader?.modified || entry.fileHeader?.modified;
-                let targetFile, targetName, writeData;
+                let entryTime = entry.dirHeader?.modified || entry.fileHeader?.modified;
+                let targetFile, targetPath, writeData;
                 if (argv['extract'] || argv['dir']) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
-                                targetName = path.join(dirDst, entryName);
-                                await fs.mkdir(path.dirname(targetName), { recursive: true });
-                                targetFile = await fs.open(targetName, argv['overwrite']? "w" : "wx");
+                                targetPath = path.join(dstPath, entryName);
+                                await fs.mkdir(path.dirname(targetPath), { recursive: true });
+                                targetFile = await fs.open(targetPath, argv['overwrite']? "w" : "wx");
                             }
                             await targetFile.write(db.buffer);
                             return;
                         }
                         if (targetFile) {
                             await targetFile.close();
-                            if (entryModified) {
-                                await fs.utimes(targetName, entryModified, entryModified);
+                            if (entryTime) {
+                                await fs.utimes(targetPath, entryTime, entryTime);
                             }
+                            //
+                            // If the extracted file is also an archive and a "recursive" option is specified,
+                            // this would be a good time to insert targetPath into archivePaths.
+                            //
+                            // It would be more efficient to determine that ahead of time and read the archive
+                            // into a buffer instead of a file, but this whole loop must first be refactored into
+                            // a function before we can efficiently do that.
+                            //
                         }
                     };
                 }

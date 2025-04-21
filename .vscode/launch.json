@@ -2761,10 +2761,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-cl",
-        "--dir=.",
-        "--overwrite",
-        "tests/archives/deflated.zip"
+        "--batch tests/good-archives.log",
+        "--dir download=extracted"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
