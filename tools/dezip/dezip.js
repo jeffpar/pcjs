@@ -422,7 +422,7 @@ export default class Dezip {
     {
         this.assert(position >= 0 && extent >= 0);
         if (position > archive.length) {
-            throw new Error(`Position {$position} exceeds archive length (${archive.length})`);
+            throw new Error(`${archive.fileName}: position {$position} exceeds archive length (${archive.length})`);
         }
         if (position + extent > archive.length) {
             extent = archive.length - position;
@@ -475,13 +475,13 @@ export default class Dezip {
                 if (archive.file) {
                     let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
-                        throw new Error(`Requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
+                        throw new Error(`${archive.fileName}: requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
                     }
                 } else {
                     //
                     // As asserted above, this is an inconsistency, because archives without handles should be fully cached.
                     //
-                    throw new Error("No file handle available");
+                    throw new Error(`${archive.fileName}: no file handle available`);
                 }
             }
             cache.position = position;
@@ -604,7 +604,7 @@ export default class Dezip {
             }
             let dirHeader = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`Invalid DirHeader signature (${dirHeader.signature.toString(16)}) at position ${position+offset}`);
+                throw new Error(`${archive.fileName}: invalid DirHeader signature (${dirHeader.signature.toString(16)}) at position ${position+offset}`);
             }
             entry.dirHeader = dirHeader;
             position += Dezip.DirHeader.length;
@@ -662,19 +662,20 @@ export default class Dezip {
         let cache = archive.cache;
         if (position < 0) {
             //
-            // Check the beginning of the file for a FileHeader (or ArcHeader).
+            // Probe the beginning of the file for a FileHeader (or ArcHeader) signature.
             //
-            let extent = Math.max(Dezip.FileHeader.length, Dezip.ArcHeader.length);
-            let [offset, length] = await this.readCache(archive, 0, extent);
-            let signature = cache.db.readUInt32LE(offset);
-            let type = (signature >> 8) & 0xff;
-            if (signature == Dezip.FileHeader.fields.signature.FILESIG) {
-                position = 0;
-            } else if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
-                position = 4;
-            } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
-                archive.type = Dezip.TYPE_ARC;
-                position = 0;
+            let [offset, length] = await this.readCache(archive, 0, 4);
+            if (length >= 4) {
+                let signature = cache.db.readUInt32LE(offset);
+                let type = (signature >> 8) & 0xff;     // for ARC files, we also probe the type as a sanity check
+                if (signature == Dezip.FileHeader.fields.signature.FILESIG) {
+                    position = 0;
+                } else if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
+                    position = 4;
+                } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
+                    archive.type = Dezip.TYPE_ARC;
+                    position = 0;
+                }
             }
         }
         if (position >= 0) {
@@ -824,14 +825,14 @@ export default class Dezip {
             let position = entry.dirHeader.position;
             fileHeader = await this.readFileHeader(archive, position);
             if (!fileHeader) {
-                throw new Error("Unable to read file header");
+                throw new Error(`${archive.fileName}/${entry.dirHeader.name}: unable to read file header`);
             }
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
         }
         entry.crcBytes = 0;
         entry.crcValue = archive.type == Dezip.TYPE_ARC? 0 : ~0;
-        let position = entry.filePosition + entry.fileHeader.length;
+        let position = entry.filePosition + fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
         let expandedSize = fileHeader.size;
         if (!compressedSize) {
@@ -848,7 +849,7 @@ export default class Dezip {
                     expandedData = await this.inflateAsync(db.buffer);
                 }
                 else {
-                    throw new Error("No inflate interface available");
+                    throw new Error(`${archive.fileName}: no inflate interface available`);
                 }
             } else {
                 //
@@ -924,10 +925,10 @@ export default class Dezip {
                     break;
                 }
                 if (!expandedData) {
-                    throw new Error(`Unsupported compression method ${fileHeader.method}`);
+                    throw new Error(`${archive.fileName}/${fileHeader.name}: unsupported compression method ${fileHeader.method}`);
                 }
                 if (expandedData.length != expandedSize) {
-                    throw new Error(`expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
+                    throw new Error(`${archive.fileName}/${fileHeader.name}: expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
                 }
             }
             expandedDB = new DataBuffer(expandedData);
@@ -983,10 +984,10 @@ export default class Dezip {
             }
             if (entry.crcBytes >= sizeFile) {
                 if (entry.crcBytes != sizeFile) {
-                    throw new Error(`expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                    throw new Error(`${entry.fileHeader.name}: expected ${sizeFile} bytes, received ${entry.crcBytes}`);
                 }
                 else if (crc != crcFile) {
-                    throw new Error(`expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
+                    throw new Error(`${entry.fileHeader.name}: expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
                 }
             }
         }

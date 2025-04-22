@@ -47,7 +47,7 @@ const options = {
         type: "string",
         usage: "--batch file",
         alias: "-b",
-        description: "process archives in the specified file"
+        description: "process archives listed in specified file"
     },
     "comment": {
         type: "boolean",
@@ -59,19 +59,19 @@ const options = {
         type: "string",
         usage: "--dir directory",
         alias: "-d",
-        description: "extract files into the specified directory"
+        description: "extract files into specified directory"
     },
     "extract": {
         type: "boolean",
         usage: "--extract",
         alias: "-e",
-        description: "extract the contents of the specified archive(s)"
+        description: "extract files (implied by --dir)"
     },
     "list": {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list the contents of the specified archive(s)"
+        description: "list contents of specified archive(s)"
     },
     "overwrite": {
         type: "boolean",
@@ -85,11 +85,24 @@ const options = {
         alias: "-r",
         description: "process archives within archives"
     },
+    "skip": {
+        type: "number",
+        usage: "--skip n",
+        alias: "-s",
+        internal: true,
+        description: "skip the first n specified archive(s)"
+    },
     "test": {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test the contents of the specified archive(s)"
+        description: "test contents of specified archive(s)"
+    },
+    "verbose": {
+        type: "boolean",
+        usage: "--verbose",
+        alias: "-v",
+        description: "display detailed information about archive(s)"
     },
     "help": {
         type: "boolean",
@@ -101,6 +114,7 @@ const options = {
             printf("Options:\n");
             for (let key in options) {
                 let option = options[key];
+                if (option.internal) continue;
                 printf("  %-16s %s\n", option.usage, option.description);
             }
         }
@@ -110,13 +124,25 @@ const options = {
 let archivePaths = [];
 
 /**
- * main(argc, argv)
+ * main(argc, argv, errors)
  */
-async function main(argc, argv)
+async function main(argc, argv, errors)
 {
+    //
+    // Before we get started, display any usage errors encountered by parseOptions().
+    //
+    for (let error of errors) {
+        printf("%s\n", error);
+    }
+    //
+    // Build the list of archive files to process, starting with any explicitly listed.
+    //
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
+    //
+    // Next, add all files listed in the specified batch file, if any.
+    //
     if (argv.batch) {
         try {
             let lines = await fs.readFile(argv.batch, "utf8");
@@ -125,19 +151,28 @@ async function main(argc, argv)
             printf("%s\n", error.message);
         }
     }
+    if (argv.skip) {
+        archivePaths = archivePaths.slice(argv.skip);
+    }
     //
-    // Process all specified archive files
+    // Define the function used to process all archive files, which will also allow us to recursively process
+    // nested archives, if --recurse has been specified.
     //
     let nArchives = 0, nFiles = 0;
-
     let processArchive = async function(archivePath, archiveDB = null) {
         let archive;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
-            archive = await dezip.open(archivePath, archiveDB);
             nArchives++;
-            printf("opening %s\n", archivePath);
+            if (argv.verbose) {
+                printf("opening %s\n", archivePath);
+            } else {
+                if (nArchives % 10000 == 0) {
+                    printf("%d archives processed\n", nArchives);
+                }
+            }
+            archive = await dezip.open(archivePath, archiveDB);
         } catch (error) {
             printf("%s\n", error.message);
             return;
@@ -149,6 +184,8 @@ async function main(argc, argv)
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
             // Otherwise, destination path is whatever follows "--dir" (or the current directory if not specified).
+            //
+            // Also note that "--dir" ALWAYS implies "--extract" (since there's no other reason to specify a directory).
             //
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
@@ -162,13 +199,17 @@ async function main(argc, argv)
                 }
             }
             //
-            // If you REALLY want to extract the archive into your current directory, you can specify "--dir ."
+            // If you REALLY want the archive's contents extracted into your current directory, specify "--dir ."
             //
             if (dstPath != ".") {
                 dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
             }
             if (archive.comment && argv.comment) {
-                printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
+                if (argv.verbose) {
+                    printf("comment: \n%s\n", archive.comment);
+                } else {
+                    printf("comment for %s:\n%s\n", archivePath, archive.comment);
+                }
             }
             if (argv.list) {
                 printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
@@ -179,8 +220,21 @@ async function main(argc, argv)
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;
                 let entryAttr = (header.attr || 0) & 0xff;
+                //
+                // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside archives;
+                // for now, I'm trusting that entries inside one or more directories have those directories explicitly
+                // specified in header.name (ie, that header.name is always a full relative path).
+                //
+                // What am I concerned about?  Well, in early ZIP files, I thought I read something somewhere about
+                // entries with zero size also implying directories.  Also, note that the 'attr' field only exists in
+                // DirHeaders, not FileHeaders, so there's that.  And what's the deal with a trailing forward slash?
+                // That feels more like a modern convention and not something the DOS version of PKZIP would have done.
+                //
+                if (entryAttr & 0x08) {
+                    continue;           // skip volume labels
+                }
                 if ((entryAttr & 0x10) || header.name.endsWith("/")) {
-                    continue;           // skip directories
+                    continue;           // skip directory entries
                 }
                 let writeData;
                 let targetFile, targetPath;
@@ -195,13 +249,13 @@ async function main(argc, argv)
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                 } catch (error) {
                                     if (error.code == "EEXIST") {
-                                        printf("skipping %s\n", targetPath);
+                                        if (argv.verbose) printf("skipping %s\n", targetPath);
                                     } else {
                                         printf("%s\n", error.message);
                                     }
                                     return false;
                                 }
-                                printf("creating %s\n", targetPath);
+                                if (argv.verbose) printf("creating %s\n", targetPath);
                             }
                             await targetFile.write(db.buffer);
                             return true;
@@ -218,10 +272,15 @@ async function main(argc, argv)
                 }
                 try {
                     let db;
+                    let printed = false;
+                    nFiles++;
                     if (argv.dir || argv.extract || argv.test || recurse) {
+                        if (argv.verbose) {
+                            printf("reading %s\n", header.name);
+                            printed = true;
+                        }
                         db = await dezip.readFile(archive, entry, writeData);
                     }
-                    nFiles++;
                     if (db && db.length != header.size) {
                         throw new Error(`expected ${header.size} bytes, received ${db.length}`);
                     }
@@ -231,6 +290,9 @@ async function main(argc, argv)
                         let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
                         printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
                                 header.name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc);
+                    }
+                    else if (argv.verbose && !printed) {
+                        printf("listing %s\n", header.name);
                     }
                     if (recurse) {
                         await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
@@ -244,11 +306,13 @@ async function main(argc, argv)
         }
         await dezip.close(archive);
     };
-
+    //
+    // And finally: a one-line loop to bring them all and in the darkness bind them.
+    //
     while (archivePaths.length) {
         await processArchive(archivePaths.shift());
     }
     printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
 }
 
-await main(...Format.parseOptions(process.argv, options, printf));
+await main(...Format.parseOptions(process.argv, options));

@@ -144,25 +144,48 @@ export default class Format {
     }
 
     /**
-     * parseOptions(args, options, printf)
+     * parseOptions(args, options)
      *
      * Any argument value preceded by a double-hyphen or long-dash switch (eg, "--option value") is
      * saved in argv with the switch as the key (eg, argv["option"] == "value").
      *
      * @param {Array.<string>} args
      * @param {object} options
-     * @param {function} printf
-     * @returns {Array} [argc, argv]
+     * @returns {Array} [argc, argv, errors]
      */
-    static parseOptions(args, options, printf)
+    static parseOptions(args, options)
     {
-        let i = 1;
-        let argc = 0, argv = [];
+        let i = 1, j;
         let keys = Object.keys(options);
+        let argc = 0, argv = [], errors = [];
         argv.push(args.slice(i++).join(' '));
+        //
+        // Sanitize all the arguments first, by checking each arg for spaces outside of double quotes and
+        // splitting those args into sub args, and then checking every arg for beginning and ending double
+        // quotes and removing them.
+        //
+        for (j = i; j < args.length; j++) {
+            let arg = args[j];
+            let inQuotes = false;
+            for (let k = 0; k < arg.length; k++) {
+                let ch = arg.charAt(k);
+                if (ch == '"') {
+                    inQuotes = !inQuotes;
+                } else if (ch == ' ' && !inQuotes) {
+                    args[j] = arg.slice(0, k);
+                    args.splice(j + 1, 0, arg.slice(k + 1));
+                    break;
+                }
+            }
+        }
+        for (j = i; j < args.length; j++) {
+            args[j] = args[j].replace(/^"?(.*?)"$/, "$1");
+        }
+        //
+        // Process the args against the options table and build the argv table.
+        //
         while (i < args.length) {
-            let j, sep;
-            let arg = args[i++];
+            let arg = args[i++], sep;
             if (arg.indexOf(sep = "--") == 0 || arg.indexOf(sep = "—") == 0 || arg.indexOf(sep = "-") == 0) {
                 arg = arg.slice(sep.length);
                 //
@@ -178,17 +201,31 @@ export default class Format {
                         }
                         let k = keys.findIndex(key => options[key].alias == "-" + ch);
                         if (k < 0) {
-                            printf("Unknown option: %s\n", sep + ch);
+                            errors.push(`Unknown option ${sep}${ch}`);
                             continue;
                         }
                         let value;
                         let option = options[keys[k]];
                         if (option.type == "boolean") {
                             value = true;
-                        } else if (j < arg.length) {
-                            value = arg.slice(j).trim();
-                        } else {
-                            value = args[i++];
+                        }
+                        else {
+                            if (j < arg.length) {
+                                value = arg.slice(j).trim();
+                            } else {
+                                value = args[i++];
+                            }
+                            if (value === undefined) {
+                                errors.push(`Missing value for option ${sep}${ch}`);
+                                break;
+                            }
+                            if (option.type == "number") {
+                                if (isNaN(+value)) {
+                                    errors.push(`Invalid number (${value}) for option ${sep}${ch}`);
+                                    break;
+                                }
+                                value = +value;
+                            }
                         }
                         argv[keys[k]] = value;
                         if (option.handler) {
@@ -211,7 +248,7 @@ export default class Format {
                 }
                 let option = options[arg];
                 if (!option) {
-                    printf("Unknown option: %s\n", sep + arg);
+                    errors.push(`Unknown option ${sep}${arg}`);
                     continue;
                 }
                 if (option.type == "boolean") {
@@ -219,8 +256,21 @@ export default class Format {
                         args.splice(i, 0, value);
                     }
                     value = true;
-                } else if (!value) {
-                    value = args[i++];
+                } else {
+                    if (!value) {
+                        value = args[i++];
+                    }
+                    if (value === undefined) {
+                        errors.push(`Missing value for option ${sep}${arg}`);
+                        continue;
+                    }
+                    if (option.type == "number") {
+                        if (isNaN(+value)) {
+                            errors.push(`Invalid number (${value}) for option ${sep}${arg}`);
+                            continue;
+                        }
+                        value = +value;
+                    }
                 }
                 argv[arg] = value;
                 if (option.handler) {
@@ -231,7 +281,7 @@ export default class Format {
             argv.push(arg);
         }
         argc = argv.length;
-        return [argc, argv];
+        return [argc, argv, errors];
     }
 
     /**
