@@ -85,6 +85,12 @@ const options = {
         alias: "-r",
         description: "process archives within archives"
     },
+    "test": {
+        type: "boolean",
+        usage: "--test",
+        alias: "-t",
+        description: "test the contents of the specified archive(s)"
+    },
     "help": {
         type: "boolean",
         usage: "--help",
@@ -164,6 +170,10 @@ async function main(argc, argv)
             if (archive.comment && argv.comment) {
                 printf("archive #%d %s comment: \n%s\n", nArchives, archiveName, archive.comment);
             }
+            if (argv.list) {
+                printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+                printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+            }
             let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
@@ -175,7 +185,7 @@ async function main(argc, argv)
                 let writeData;
                 let targetFile, targetPath;
                 let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
-                if ((argv.extract || argv.dir) && !recurse) {
+                if ((argv.dir || argv.extract) && !recurse) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
@@ -207,14 +217,20 @@ async function main(argc, argv)
                     };
                 }
                 try {
-                    let db = await dezip.readFile(archive, entry, writeData);
+                    let db;
+                    if (argv.dir || argv.extract || argv.test || recurse) {
+                        db = await dezip.readFile(archive, entry, writeData);
+                    }
                     nFiles++;
+                    if (db && db.length != header.size) {
+                        throw new Error(`expected ${header.size} bytes, received ${db.length}`);
+                    }
                     if (argv.list) {
                         let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
                         if (entry.encrypted) method += '*';
-                        let ratio = db.length > header.compressedSize? Math.round(100 * (db.length - header.compressedSize) / db.length) : 0;
+                        let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
                         printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                                header.name, db.length, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc);
+                                header.name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc);
                     }
                     if (recurse) {
                         await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
