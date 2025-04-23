@@ -85,13 +85,13 @@ export default class Dezip {
         })
         .field('version',       Struct.UINT16)          // version needed to extract
         .field('flags',         Struct.UINT16, {        // general purpose bit flag
-            ENC:        0x0001,                         // encrypted file
+            ENCRYPTED:  0x0001,                         // encrypted file
             COMP1:      0x0002,                         // compression option
             COMP2:      0x0004,                         // compression option
-            DESC:       0x0008,                         // data descriptor
-            ENH:        0x0010,                         // enhanced deflation
-            STR:        0x0040,                         // strong encryption
-            LNG:        0x0400                          // UNICODE encoding
+            DATADESC:   0x0008,                         // data descriptor
+            DEFLATED2:  0x0010,                         // enhanced deflation
+            ENCRYPTED2: 0x0040,                         // strong encryption
+            UNICODE:    0x0400                          // UNICODE encoding
         })
         .field('method',        Struct.UINT16)          // compression method
         .field('modified',      Struct.DOSTIMEDATE)     // modification time and date
@@ -278,6 +278,27 @@ export default class Dezip {
     }
 
     /**
+     * newEntry(archive)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @returns {Entry}
+     */
+    newEntry(archive)
+    {
+        let entry = {
+            index: archive.entries.length,
+            dirHeader: null,
+            dirPosition: -1,
+            fileHeader: null,
+            filePosition: -1,
+            warnings: []                // array of entry warnings, if any
+        };
+        archive.entries.push(entry);
+        return entry;
+    }
+
+    /**
      * open(fileName, db, options)
      *
      * If successful, this method returns an Archive object used with various read functions.
@@ -299,7 +320,7 @@ export default class Dezip {
             file: null,                 // file handle, if any
             cache: {},                  // cache data
             entries: [],                // array of directory entries
-            warnings: []                // array of warnings
+            warnings: []                // array of archive warnings, if any
         };
         //
         // If a DataBuffer (db) is provided, then no reading is required; we also provide
@@ -422,7 +443,7 @@ export default class Dezip {
     {
         this.assert(position >= 0 && extent >= 0);
         if (position > archive.length) {
-            throw new Error(`${archive.fileName}: position {$position} exceeds archive length (${archive.length})`);
+            throw new Error(`${archive.fileName}: Position ${position} exceeds archive length (${archive.length})`);
         }
         if (position + extent > archive.length) {
             extent = archive.length - position;
@@ -475,13 +496,13 @@ export default class Dezip {
                 if (archive.file) {
                     let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
-                        throw new Error(`${archive.fileName}: requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
+                        throw new Error(`${archive.fileName}: Requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
                     }
                 } else {
                     //
                     // As asserted above, this is an inconsistency, because archives without handles should be fully cached.
                     //
-                    throw new Error(`${archive.fileName}: no file handle available`);
+                    throw new Error(`${archive.fileName}: No file handle available`);
                 }
             }
             cache.position = position;
@@ -574,8 +595,7 @@ export default class Dezip {
                             let posComment = posArchive + offsetEnd - offset + Dezip.DirEndHeader.length;
                             [offset, length] = await this.readCache(archive, posComment, lenComment);
                             if (length < lenComment) {
-                                let limit = (posComment + lenComment > archive.length? "archive" : "cache");
-                                archive.warnings.push(`archive comment length (${lenComment}) exceeds ${limit} length`);
+                                archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
                             archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
                         }
@@ -593,7 +613,6 @@ export default class Dezip {
             }
         }
         if (position >= 0) {
-            entry = { index: archive.entries.length, dirPosition: position };
             //
             // Read the specified DirHeader.
             //
@@ -604,19 +623,26 @@ export default class Dezip {
             }
             let dirHeader = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`${archive.fileName}: invalid DirHeader signature (${dirHeader.signature.toString(16)}) at position ${position+offset}`);
+                throw new Error(`${archive.fileName}: Invalid DirHeader signature (${dirHeader.signature.toString(16)}) at position ${position+offset}`);
             }
+            entry = this.newEntry(archive);
             entry.dirHeader = dirHeader;
+            entry.dirPosition = position;
             position += Dezip.DirHeader.length;
             [offset, length] = await this.readCache(archive, position, dirHeader.lenName);
-            dirHeader.name = Dezip.DirHeader.readString(cache.db, offset, dirHeader.lenName, this.encoding);
+            if (length < dirHeader.lenName) {
+                entry.warnings.push(`Name length (${dirHeader.lenName}) exceeds available length (${length})`);
+            }
+            dirHeader.name = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
             //
             // TODO: Find examples of archives with "lenExtra" data and figure out what to do with it.
             //
             position += dirHeader.lenName + dirHeader.lenExtra;
             [offset, length] = await this.readCache(archive, position, dirHeader.lenComment);
-            dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, dirHeader.lenComment, this.encoding);
-            archive.entries.push(entry);
+            if (length < dirHeader.lenComment) {
+                entry.warnings.push(`Comment length (${dirHeader.lenComment}) exceeds available length (${length})`);
+            }
+            dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
         }
         return entry;
     }
@@ -679,13 +705,12 @@ export default class Dezip {
             }
         }
         if (position >= 0) {
-            let fileHeader = await this.readFileHeader(archive, position);
+            if (!entry) {
+                entry = this.newEntry(archive);
+            }
+            let fileHeader = await this.readFileHeader(archive, entry, position);
             if (!fileHeader) {
                 return null;
-            }
-            if (!entry) {
-                entry = { index: archive.entries.length };
-                archive.entries.push(entry);
             }
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
@@ -694,19 +719,40 @@ export default class Dezip {
     }
 
     /**
-     * readFileHeader(archive, position)
+     * isEntryValid(archive, entry)
+     *
+     * Not all entries listed in an archive's directory are valid within the context of the archive;
+     * ie, if it's one of a series of split archives, then only entries whose diskStart matches diskNum
+     * in the DirEndHeader are currently accessible.
+     *
+     * @param {Archive} archive
+     * @param {Entry} entry
+     * @returns {boolean}
+     */
+    isEntryValid(archive, entry)
+    {
+        if (archive.endHeader && entry.dirHeader && archive.endHeader.diskNum != entry.dirHeader.diskStart) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * readFileHeader(archive, entry, position)
      *
      * @this {Dezip}
      * @param {Archive} archive
+     * @param {Entry} entry
      * @param {number} position
      * @returns {object|null} fileHeader
      */
-    async readFileHeader(archive, position)
+    async readFileHeader(archive, entry, position)
     {
         let fileHeader = null;
-        if (archive.type == Dezip.TYPE_ARC) {
-            let [offset, length] = await this.readCache(archive, position, Dezip.ArcHeader.length);
-            if (length >= Dezip.ArcHeader.length) {
+        let lenHeader = archive.type == Dezip.TYPE_ARC? Dezip.ArcHeader.length : Dezip.FileHeader.length;
+        let [offset, length] = await this.readCache(archive, position, lenHeader);
+        if (length >= lenHeader) {
+            if (archive.type == Dezip.TYPE_ARC) {
                 let arcHeader = Dezip.ArcHeader.readStruct(archive.cache.db, offset, this.encoding);
                 if (arcHeader.signature == Dezip.ArcHeader.fields.signature.ARCSIG && arcHeader.type > 0 && arcHeader.type < Dezip.ArcHeader.fields.type.ARC_UNK) {
                     arcHeader.method = -arcHeader.type;             // convert ARC type to method (signed to avoid conflict with ZIP methods)
@@ -717,15 +763,15 @@ export default class Dezip {
                     arcHeader.length = Dezip.ArcHeader.length;
                     fileHeader = arcHeader;
                 }
-            }
-        } else {
-            let [offset, length] = await this.readCache(archive, position, Dezip.FileHeader.length);
-            if (length >= Dezip.FileHeader.length) {
+            } else {
                 let zipHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
                 if (zipHeader.signature == Dezip.FileHeader.fields.signature.FILESIG) {
                     position += Dezip.FileHeader.length;
                     [offset, length] = await this.readCache(archive, position, zipHeader.lenName);
-                    zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, zipHeader.lenName, this.encoding);
+                    if (length < zipHeader.lenName) {
+                        entry.warnings.push(`Name length (${zipHeader.lenName}) exceeds available length (${length})`);
+                    }
+                    zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, length, this.encoding);
                     zipHeader.length = Dezip.FileHeader.length + zipHeader.lenName + zipHeader.lenExtra;
                     fileHeader = zipHeader;
                 }
@@ -823,9 +869,9 @@ export default class Dezip {
         if (!fileHeader) {
             this.assert(entry.dirHeader);
             let position = entry.dirHeader.position;
-            fileHeader = await this.readFileHeader(archive, position);
+            fileHeader = await this.readFileHeader(archive, entry, position);
             if (!fileHeader) {
-                throw new Error(`${archive.fileName}/${entry.dirHeader.name}: unable to read file header`);
+                throw new Error(`Unable to read file header`);
             }
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
@@ -835,6 +881,13 @@ export default class Dezip {
         let position = entry.filePosition + fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
         let expandedSize = fileHeader.size;
+        if (entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+            //
+            // compressedSize = 0;
+            // entry.warnings.push(`Encrypted files are not supported (yet)`);
+            //
+            throw new Error(`Encrypted files are not supported (yet)`);
+        }
         if (!compressedSize) {
             expandedDB = new DataBuffer(0);
         } else {
@@ -849,7 +902,7 @@ export default class Dezip {
                     expandedData = await this.inflateAsync(db.buffer);
                 }
                 else {
-                    throw new Error(`${archive.fileName}: no inflate interface available`);
+                    throw new Error(`No inflate interface available`);
                 }
             } else {
                 //
@@ -925,10 +978,13 @@ export default class Dezip {
                     break;
                 }
                 if (!expandedData) {
-                    throw new Error(`${archive.fileName}/${fileHeader.name}: unsupported compression method ${fileHeader.method}`);
+                    throw new Error(`Unsupported compression method ${fileHeader.method}`);
                 }
                 if (expandedData.length != expandedSize) {
-                    throw new Error(`${archive.fileName}/${fileHeader.name}: expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
+                    //
+                    // TODO: Should we throw an error here or just warn? Warnings allow us to return at least SOME data.
+                    //
+                    entry.warnings.push(`Expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
                 }
             }
             expandedDB = new DataBuffer(expandedData);
@@ -984,10 +1040,10 @@ export default class Dezip {
             }
             if (entry.crcBytes >= sizeFile) {
                 if (entry.crcBytes != sizeFile) {
-                    throw new Error(`${entry.fileHeader.name}: expected ${sizeFile} bytes, received ${entry.crcBytes}`);
+                    entry.warnings.push(`Expected ${sizeFile} bytes, received ${entry.crcBytes}`);
                 }
                 else if (crc != crcFile) {
-                    throw new Error(`${entry.fileHeader.name}: expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
+                    entry.warnings.push(`Expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
                 }
             }
         }

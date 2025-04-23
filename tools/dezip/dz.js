@@ -55,6 +55,12 @@ const options = {
         alias: "-c",
         description: "display archive comments"
     },
+    "debug": {
+        type: "boolean",
+        usage: "--debug",
+        alias: "-g",
+        description: "display debug information"
+    },
     "dir": {
         type: "string",
         usage: "--dir directory",
@@ -183,9 +189,12 @@ async function main(argc, argv, errors)
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
-            // Otherwise, destination path is whatever follows "--dir" (or the current directory if not specified).
+            // Otherwise, destination path is whatever follows "--dir".  Any form of the "--dir" option automatically
+            // enables extraction.
             //
-            // Also note that "--dir" ALWAYS implies "--extract" (since there's no other reason to specify a directory).
+            // If no directory is specified but extraction is still enabled via "--extract", then the current directory
+            // is used.  By default, extraction always occurs inside a new directory with same name as the base name
+            // of the archive, but you can force extraction into the current directory by specifying "--dir .".
             //
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
@@ -195,14 +204,13 @@ async function main(argc, argv, errors)
                     dstPath = srcPath.replace(chgPath[0], chgPath[1]);
                 } else {
                     printf("warning: source path %s does not contain %s\n", srcPath, chgPath[0]);
-                    dstPath = "";
+                    dstPath = chgPath[1];
                 }
             }
-            //
-            // If you REALLY want the archive's contents extracted into your current directory, specify "--dir ."
-            //
             if (dstPath != ".") {
-                dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                if (!dstPath || archivePaths.length > 1) {
+                    dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                }
             }
             if (archive.comment && argv.comment) {
                 if (argv.verbose) {
@@ -219,6 +227,10 @@ async function main(argc, argv, errors)
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;
+                if (!dezip.isEntryValid(archive, entry)) {
+                    printf("warning: missing %s (archive disk %d != entry disk %d)\n", header.name, archive.endHeader?.diskNum, entry.dirHeader?.diskStart);
+                    continue;
+                }
                 let entryAttr = (header.attr || 0) & 0xff;
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside archives;
@@ -227,8 +239,8 @@ async function main(argc, argv, errors)
                 //
                 // What am I concerned about?  Well, in early ZIP files, I thought I read something somewhere about
                 // entries with zero size also implying directories.  Also, note that the 'attr' field only exists in
-                // DirHeaders, not FileHeaders, so there's that.  And what's the deal with a trailing forward slash?
-                // That feels more like a modern convention and not something the DOS version of PKZIP would have done.
+                // DirHeaders, not FileHeaders, so there's that.  And what's the deal with trailing forward slashes?
+                // That feels more like a modern convention rather than something the DOS version of PKZIP would have done.
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels
@@ -275,30 +287,29 @@ async function main(argc, argv, errors)
                     let printed = false;
                     nFiles++;
                     if (argv.dir || argv.extract || argv.test || recurse) {
-                        if (argv.verbose) {
+                        if (argv.debug) {
                             printf("reading %s\n", header.name);
                             printed = true;
                         }
                         db = await dezip.readFile(archive, entry, writeData);
                     }
-                    if (db && db.length != header.size) {
-                        throw new Error(`expected ${header.size} bytes, received ${db.length}`);
-                    }
                     if (argv.list) {
                         let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
-                        if (entry.encrypted) method += '*';
+                        if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                            method += '*';
+                        }
                         let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
-                        printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x\n",
-                                header.name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc);
+                        printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
+                                header.name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, entry.warnings.join("; "));
                     }
-                    else if (argv.verbose && !printed) {
+                    else if (argv.debug && !printed) {
                         printf("listing %s\n", header.name);
                     }
                     if (recurse) {
                         await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
                     }
                 } catch (error) {
-                    printf("%s entry #%d (%s): %s\n", archiveName, nEntries, header.name, error.message);
+                    printf("%s/%s error: %s\n", archivePath, header.name, error.message);
                 }
             }
         } catch (error) {
@@ -309,8 +320,8 @@ async function main(argc, argv, errors)
     //
     // And finally: a one-line loop to bring them all and in the darkness bind them.
     //
-    while (archivePaths.length) {
-        await processArchive(archivePaths.shift());
+    for (let archivePath of archivePaths) {
+        await processArchive(archivePath);
     }
     printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
 }

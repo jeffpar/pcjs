@@ -619,6 +619,7 @@
     "DASD",
     "DATAACCESS",
     "databuffer",
+    "DATADESC",
     "DATAHIST",
     "DATAI",
     "DATAO",
