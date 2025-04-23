@@ -116,13 +116,14 @@ const options = {
         alias: "-h",
         description: "Display this help message",
         handler: function() {
-            printf("Usage:\n    %s [options] [archives]\n", path.basename(process.argv[1]));
+            printf("Usage:\n    %s [options] [archives]\n\n", path.basename(process.argv[1]));
             printf("Options:\n");
             for (let key in options) {
                 let option = options[key];
                 if (option.internal) continue;
                 printf("  %-16s %s\n", option.usage, option.description);
             }
+            printf("\n");
         }
     }
 };
@@ -134,6 +135,10 @@ let archivePaths = [];
  */
 async function main(argc, argv, errors)
 {
+    printf("Dezip %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
+    if (argv.help) {
+        options.help.handler();
+    }
     //
     // Before we get started, display any usage errors encountered by parseOptions().
     //
@@ -152,7 +157,7 @@ async function main(argc, argv, errors)
     if (argv.batch) {
         try {
             let lines = await fs.readFile(argv.batch, "utf8");
-            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0));
+            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
         } catch (error) {
             printf("%s\n", error.message);
         }
@@ -171,8 +176,9 @@ async function main(argc, argv, errors)
         let archiveExt = path.extname(archiveName);
         try {
             nArchives++;
-            if (argv.verbose) {
-                printf("opening %s\n", archivePath);
+            if (argv.verbose || argv.list) {
+                if (argv.list) printf("\n");
+                printf("%s\n", archivePath);
             } else {
                 if (nArchives % 10000 == 0) {
                     printf("%d archives processed\n", nArchives);
@@ -228,7 +234,9 @@ async function main(argc, argv, errors)
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;
                 if (!dezip.isEntryValid(archive, entry)) {
-                    printf("warning: missing %s (archive disk %d != entry disk %d)\n", header.name, archive.endHeader?.diskNum, entry.dirHeader?.diskStart);
+                    if (argv.debug) {
+                        printf("warning: missing %s (archive disk %d != entry disk %d)\n", header.name, archive.endHeader?.diskNum, entry.dirHeader?.diskStart);
+                    }
                     continue;
                 }
                 let entryAttr = (header.attr || 0) & 0xff;
@@ -299,8 +307,16 @@ async function main(argc, argv, errors)
                             method += '*';
                         }
                         let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
+                        let name = path.basename(header.name);
+                        if (name.length > 14) {
+                            name = "…" + name.slice(-13);
+                        }
+                        let comment = header.comment || (name == header.name? "" : header.name);
+                        if (entry.warnings.length) {
+                            comment = '[' + entry.warnings.join("; ") + ']';
+                        }
                         printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
-                                header.name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, entry.warnings.join("; "));
+                                name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
                     }
                     else if (argv.debug && !printed) {
                         printf("listing %s\n", header.name);

@@ -77,6 +77,10 @@ export default class Dezip {
     /**
      * Public class fields
      */
+    static DEBUG = true;
+    static VERSION = "0.1.0";
+    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
+
     static TYPE_ARC = 1;
     static TYPE_ZIP = 2;
     static FileHeader = new Struct("FileHeader")
@@ -243,8 +247,6 @@ export default class Dezip {
 
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
-
-    static DEBUG = true;
 
     /**
      * constructor(interfaces)
@@ -882,11 +884,8 @@ export default class Dezip {
         let compressedSize = fileHeader.compressedSize;
         let expandedSize = fileHeader.size;
         if (entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
-            //
-            // compressedSize = 0;
-            // entry.warnings.push(`Encrypted files are not supported (yet)`);
-            //
-            throw new Error(`Encrypted files are not supported (yet)`);
+            compressedSize = 0;
+            entry.warnings.push(`Encrypted files are not supported (yet)`);
         }
         if (!compressedSize) {
             expandedDB = new DataBuffer(0);
@@ -980,16 +979,13 @@ export default class Dezip {
                 if (!expandedData) {
                     throw new Error(`Unsupported compression method ${fileHeader.method}`);
                 }
-                if (expandedData.length != expandedSize) {
-                    //
-                    // TODO: Should we throw an error here or just warn? Warnings allow us to return at least SOME data.
-                    //
-                    entry.warnings.push(`Expanded size ${expandedData.length} does not match expected size ${expandedSize}`);
-                }
+            }
+            if (expandedSize != expandedData.length) {
+                entry.warnings.push(`Expected ${expandedSize} bytes, received ${expandedData.length}`);
             }
             expandedDB = new DataBuffer(expandedData);
             if (fileHeader.crc) {
-                this.updateCRC(entry, expandedDB, archive.type);
+                this.updateCRC(entry, expandedDB, archive.type, true);
             }
             if (writeData) {
                 await writeData(expandedDB);
@@ -1015,15 +1011,16 @@ export default class Dezip {
     }
 
     /**
-     * updateCRC(entry, db, type)
+     * updateCRC(entry, db, type, final)
      *
      * @this {Dezip}
      * @param {Entry} entry
      * @param {DataBuffer} db
      * @param {number} type (archive type; ie, TYPE_ARC or TYPE_ZIP)
+     * @param {boolean} [final] (true if we know this is the final -- or only -- chunk)
      * @returns {number} (CRC value)
      */
-    updateCRC(entry, db, type)
+    updateCRC(entry, db, type, final)
     {
         let crc = 0;
         let crcFile = entry.fileHeader.crc;
@@ -1038,11 +1035,8 @@ export default class Dezip {
                 entry.crcBytes += db.length;
                 crc = ~crc;
             }
-            if (entry.crcBytes >= sizeFile) {
-                if (entry.crcBytes != sizeFile) {
-                    entry.warnings.push(`Expected ${sizeFile} bytes, received ${entry.crcBytes}`);
-                }
-                else if (crc != crcFile) {
+            if (entry.crcBytes >= sizeFile || final) {
+                if (crc != crcFile) {
                     entry.warnings.push(`Expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
                 }
             }

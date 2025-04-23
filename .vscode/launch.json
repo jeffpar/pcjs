@@ -2761,7 +2761,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-rtb tests/samples.log"
+        "-rtlb tests/samples.log"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

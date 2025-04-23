@@ -69,9 +69,8 @@ async function main(argc, argv, errors)
     for (let error of errors) {
         printf("%s\n", error);
     }
-    if (!argv.batch && argc < 2) {
+    if (!argv.batch && argc < 2 || argv.help) {
         options.help.handler();
-        return;
     }
     let testFiles = [];
     for (let i = 1; i < argv.length; i++) {

@@ -228,9 +228,6 @@ export default class Format {
                             }
                         }
                         argv[keys[k]] = value;
-                        if (option.handler) {
-                            option.handler(value);
-                        }
                     }
                     continue;
                 }
@@ -273,9 +270,6 @@ export default class Format {
                     }
                 }
                 argv[arg] = value;
-                if (option.handler) {
-                    option.handler(value);
-                }
                 continue;
             }
             argv.push(arg);
