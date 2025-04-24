@@ -161,8 +161,8 @@ export default class Format {
         argv.push(args.slice(i++).join(' '));
         //
         // Sanitize all the arguments first, by checking each arg for spaces outside of double quotes and
-        // splitting those args into sub args, and then checking every arg for beginning and ending double
-        // quotes and removing them.
+        // splitting those args into sub args, and then checking every arg for beginning and ending quotes
+        // and removing them.
         //
         for (j = i; j < args.length; j++) {
             let arg = args[j];
@@ -179,7 +179,7 @@ export default class Format {
             }
         }
         for (j = i; j < args.length; j++) {
-            args[j] = args[j].replace(/^"?(.*?)"$/, "$1");
+            args[j] = args[j].replace(/^(["'])?(.*?)(\1?)$/, "$2");
         }
         //
         // Process the args against the options table and build the argv table.

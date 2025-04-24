@@ -8,6 +8,7 @@
  */
 
 import fs from "fs/promises";
+import glob from "glob";
 import path from "path";
 import zlib from "zlib";
 import Format from "./format.js";
@@ -45,7 +46,7 @@ const dezip = new Dezip(
 const options = {
     "batch": {
         type: "string",
-        usage: "--batch file",
+        usage: "--batch [file]",
         alias: "-b",
         description: "process archives listed in specified file"
     },
@@ -63,7 +64,7 @@ const options = {
     },
     "dir": {
         type: "string",
-        usage: "--dir directory",
+        usage: "--dir [dir]",
         alias: "-d",
         description: "extract files into specified directory"
     },
@@ -72,6 +73,26 @@ const options = {
         usage: "--extract",
         alias: "-e",
         description: "extract files (implied by --dir)"
+    },
+    "filter": {
+        type: "string",
+        usage: "--filter [...]",
+        alias: "-f",
+        description: "comma-separated filter list (see --filter list)",
+        options: {
+            "list": {
+                value: 0,
+                description: "list available filters"
+            },
+            "split": {
+                value: Dezip.EXCEPTION_SPLITDISK,
+                description: "process only split-disk archives"
+            },
+            "wrong": {
+                value: Dezip.EXCEPTION_WRONGTYPE,
+                description: "process only archives with wrong archive type"
+            },
+        }
     },
     "list": {
         type: "boolean",
@@ -85,6 +106,12 @@ const options = {
         alias: "-o",
         description: "overwrite existing files when extracting"
     },
+    "path": {
+        type: "string",
+        usage: "--path [specs]",
+        alias: "-p",
+        description: "archive path specifications (eg, \"**/*.zip\")",
+    },
     "recurse": {
         type: "boolean",
         usage: "--recurse",
@@ -96,7 +123,7 @@ const options = {
         usage: "--skip n",
         alias: "-s",
         internal: true,
-        description: "skip the first n specified archive(s)"
+        description: "skip the first n lines in any batch file"
     },
     "test": {
         type: "boolean",
@@ -116,7 +143,7 @@ const options = {
         alias: "-h",
         description: "Display this help message",
         handler: function() {
-            printf("Usage:\n    %s [options] [archives]\n\n", path.basename(process.argv[1]));
+            printf("Usage:\n    %s [options] [filenames]\n\n", path.basename(process.argv[1]));
             printf("Options:\n");
             for (let key in options) {
                 let option = options[key];
@@ -146,43 +173,71 @@ async function main(argc, argv, errors)
         printf("%s\n", error);
     }
     //
-    // Build the list of archive files to process, starting with any explicitly listed.
-    //
-    for (let i = 1; i < argv.length; i++) {
-        archivePaths.push(argv[i]);
-    }
-    //
-    // Next, add all files listed in the specified batch file, if any.
+    // Build a list of archive files to process, starting with files listed in the batch file, if any.
     //
     if (argv.batch) {
         try {
             let lines = await fs.readFile(argv.batch, "utf8");
+            if (argv.skip) {
+                lines = lines.slice(argv.skip);
+            }
             archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
         } catch (error) {
             printf("%s\n", error.message);
         }
     }
-    if (argv.skip) {
-        archivePaths = archivePaths.slice(argv.skip);
+    //
+    // Add any files matching --path patterns.
+    //
+    if (argv.path) {
+        let files = glob.sync(argv.path);
+        archivePaths = archivePaths.concat(files);
     }
     //
-    // Define the function used to process all archive files, which will also allow us to recursively process
-    // nested archives, if --recurse has been specified.
+    // Finally, include any explicitly listed archive filenames.
     //
-    let nArchives = 0, nFiles = 0;
+    for (let i = 1; i < argv.length; i++) {
+        archivePaths.push(argv[i]);
+    }
+    let nArchives = 0, nFiles = 0, filters = 0;
+    //
+    // Next, let's deal with any specified filters.
+    //
+    if (typeof argv.filter == "string") {
+        let filterNames = argv.filter.split(",");
+        for (let i = 0; i < filterNames.length; i++) {
+            let filter = filterNames[i].trim();
+            let option = options.filter.options[filter];
+            if (!option) {
+                printf("unknown filter: %s\n", filter);
+                continue;
+            }
+            if (!option.value) {
+                printf("\nAvailable filters:\n");
+                for (let key in options.filter.options) {
+                    let option = options.filter.options[key];
+                    if (option.value) {
+                        printf("%12s: %s\n", key, option.description);
+                    }
+                }
+                printf("\n");
+                continue;
+            }
+            filters |= option.value;
+        }
+    }
+    //
+    // Define a function process an individual archive, which then allows us to recursively process
+    // nested archives if --recurse is been specified.
+    //
     let processArchive = async function(archivePath, archiveDB = null) {
         let archive;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
             nArchives++;
-            if (argv.verbose || argv.list) {
-                if (argv.list) printf("\n");
-                printf("%s\n", archivePath);
-            } else {
-                if (nArchives % 10000 == 0) {
-                    printf("%d archives processed\n", nArchives);
-                }
+            if (nArchives % 10000 == 0 && !argv.verbose && !argv.list) {
+                printf("%d archives processed\n", nArchives);
             }
             archive = await dezip.open(archivePath, archiveDB);
         } catch (error) {
@@ -190,55 +245,57 @@ async function main(argc, argv, errors)
             return;
         }
         try {
-            let entries = await dezip.readDirectory(archive);
+            let entries = await dezip.readDirectory(archive, filters);
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
-            // Otherwise, destination path is whatever follows "--dir".  Any form of the "--dir" option automatically
-            // enables extraction.
+            // Otherwise, destination path is whatever follows "--dir".  The presence of "--dir" automatically
+            // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
+            // then the current directory is used.
             //
-            // If no directory is specified but extraction is still enabled via "--extract", then the current directory
-            // is used.  By default, extraction always occurs inside a new directory with same name as the base name
-            // of the archive, but you can force extraction into the current directory by specifying "--dir .".
+            // If multiple archives are being processed and/or extraction was enabled without a specific directory,
+            // then extraction will occur inside a new sub-directory with same name as the base name of the archive;
+            // the only way to bypass that is to process archives one at a time OR explicitly set "--dir ." (merging
+            // the contents of multiple archives into any other directory is not currently supported).
             //
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
-            let chgPath = dstPath.split("=");
-            if (chgPath.length > 1) {
-                if (srcPath.indexOf(chgPath[0]) >= 0) {
-                    dstPath = srcPath.replace(chgPath[0], chgPath[1]);
-                } else {
-                    printf("warning: source path %s does not contain %s\n", srcPath, chgPath[0]);
-                    dstPath = chgPath[1];
+            if (!filters || entries.length) {
+                if (argv.verbose || argv.list) {
+                    if (argv.list) printf("\n");
+                    printf("%s\n", archivePath);
                 }
-            }
-            if (dstPath != ".") {
-                if (!dstPath || archivePaths.length > 1) {
-                    dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                let chgPath = dstPath.split("=");
+                if (chgPath.length > 1) {
+                    if (srcPath.indexOf(chgPath[0]) >= 0) {
+                        dstPath = srcPath.replace(chgPath[0], chgPath[1]);
+                    } else {
+                        printf("warning: source path %s does not contain %s\n", srcPath, chgPath[0]);
+                        dstPath = chgPath[1];
+                    }
                 }
-            }
-            if (archive.comment && argv.comment) {
-                if (argv.verbose) {
-                    printf("comment: \n%s\n", archive.comment);
-                } else {
-                    printf("comment for %s:\n%s\n", archivePath, archive.comment);
+                if (dstPath != ".") {
+                    if (!dstPath || archivePaths.length > 1) {
+                        dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                    }
                 }
-            }
-            if (argv.list) {
-                printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-                printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+                if (archive.comment && argv.comment) {
+                    if (argv.verbose) {
+                        printf("comment: \n%s\n", archive.comment);
+                    } else {
+                        printf("comment for %s:\n%s\n", archivePath, archive.comment);
+                    }
+                }
+                if (argv.list) {
+                    printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+                    printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+                }
             }
             let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;
-                if (!dezip.isEntryValid(archive, entry)) {
-                    if (argv.debug) {
-                        printf("warning: missing %s (archive disk %d != entry disk %d)\n", header.name, archive.endHeader?.diskNum, entry.dirHeader?.diskStart);
-                    }
-                    continue;
-                }
                 let entryAttr = (header.attr || 0) & 0xff;
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside archives;
@@ -312,8 +369,12 @@ async function main(argc, argv, errors)
                             name = "…" + name.slice(-13);
                         }
                         let comment = header.comment || (name == header.name? "" : header.name);
-                        if (entry.warnings.length) {
-                            comment = '[' + entry.warnings.join("; ") + ']';
+                        if (entry.warnings.length || header.warnings) {
+                            let warnings = entry.warnings;
+                            if (header.warnings) {
+                                warnings = warnings.concat(header.warnings);
+                            }
+                            comment = '[' + warnings.join("; ") + ']';
                         }
                         printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
                                 name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
@@ -339,7 +400,7 @@ async function main(argc, argv, errors)
     for (let archivePath of archivePaths) {
         await processArchive(archivePath);
     }
-    printf("%d archive(s), %d file(s) processed\n", nArchives, nFiles);
+    printf("\n%d archive(s) examined, %d file(s) processed\n", nArchives, nFiles);
 }
 
 await main(...Format.parseOptions(process.argv, options));

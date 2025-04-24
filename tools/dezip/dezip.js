@@ -83,6 +83,7 @@ export default class Dezip {
 
     static TYPE_ARC = 1;
     static TYPE_ZIP = 2;
+
     static FileHeader = new Struct("FileHeader")
         .field('signature',     Struct.UINT32, {
             FILESIG:    0x04034b50                      // "PK\003\004" (local file header signature)
@@ -248,6 +249,9 @@ export default class Dezip {
     static EF_ZIP64_OR_32       = 0xffffffff;
     static EF_ZIP64_OR_16       = 0xffff;
 
+    static EXCEPTION_WRONGTYPE  = 0x00000001;       // eg, a ZIP appears to be an ARC, or vice versa
+    static EXCEPTION_SPLITDISK  = 0x00000002;       // the archive contains entries that refer to another (split) archive
+
     /**
      * constructor(interfaces)
      *
@@ -321,7 +325,8 @@ export default class Dezip {
             length: 0,                  // length of the archive file
             file: null,                 // file handle, if any
             cache: {},                  // cache data
-            entries: [],                // array of directory entries
+            entries: [],                // array of directory entries,
+            exceptions: 0,              // see Dezip.EXCEPTION_*
             warnings: []                // array of archive warnings, if any
         };
         //
@@ -515,26 +520,40 @@ export default class Dezip {
     }
 
     /**
-     * readDirectory(archive)
+     * readDirectory(archive, filters)
+     *
+     * This function always returns a new list of entries, based on any filtering that may
+     * have been requested (archives.entries is still available for the complete/unfiltered list).
      *
      * @this {Dezip}
      * @param {Archive} archive
+     * @param {number} [filters]
      * @returns {Array}
      */
-    async readDirectory(archive)
+    async readDirectory(archive, filters = 0)
     {
-        let entry = null;
+        let entry = null, entries = [];
         do {
             entry = await this.readDirEntry(archive, entry);
             if (!entry) break;
+            this.assert(archive.endHeader && entry.dirHeader);
+            if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
+                archive.exceptions |= Dezip.EXCEPTION_SPLITDISK;
+            }
+            if ((archive.exceptions & filters) == filters) {
+                entries.push(entry);
+            }
         } while (true);
         if (!archive.entries.length) {
             do {
                 entry = await this.readFileEntry(archive, entry);
                 if (!entry) break;
+                if ((archive.exceptions & filters) == filters) {
+                    entries.push(entry);
+                }
             } while (true);
         }
-        return archive.entries;
+        return entries;
     }
 
     /**
@@ -694,26 +713,31 @@ export default class Dezip {
             //
             let [offset, length] = await this.readCache(archive, 0, 4);
             if (length >= 4) {
+                let arcType = archive.type;
                 let signature = cache.db.readUInt32LE(offset);
                 let type = (signature >> 8) & 0xff;     // for ARC files, we also probe the type as a sanity check
                 if (signature == Dezip.FileHeader.fields.signature.FILESIG) {
+                    arcType = Dezip.TYPE_ZIP;
                     position = 0;
                 } else if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
+                    arcType = Dezip.TYPE_ZIP;
                     position = 4;
                 } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
-                    archive.type = Dezip.TYPE_ARC;
+                    arcType = Dezip.TYPE_ARC;
                     position = 0;
+                }
+                if (arcType != archive.type) {
+                    archive.exceptions |= Dezip.EXCEPTION_WRONGTYPE;
+                    archive.type = arcType;
                 }
             }
         }
         if (position >= 0) {
-            if (!entry) {
-                entry = this.newEntry(archive);
-            }
-            let fileHeader = await this.readFileHeader(archive, entry, position);
+            let fileHeader = await this.readFileHeader(archive, position);
             if (!fileHeader) {
                 return null;
             }
+            entry = entry || this.newEntry(archive);
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
         }
@@ -721,34 +745,14 @@ export default class Dezip {
     }
 
     /**
-     * isEntryValid(archive, entry)
-     *
-     * Not all entries listed in an archive's directory are valid within the context of the archive;
-     * ie, if it's one of a series of split archives, then only entries whose diskStart matches diskNum
-     * in the DirEndHeader are currently accessible.
-     *
-     * @param {Archive} archive
-     * @param {Entry} entry
-     * @returns {boolean}
-     */
-    isEntryValid(archive, entry)
-    {
-        if (archive.endHeader && entry.dirHeader && archive.endHeader.diskNum != entry.dirHeader.diskStart) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * readFileHeader(archive, entry, position)
+     * readFileHeader(archive, position)
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @param {Entry} entry
      * @param {number} position
      * @returns {object|null} fileHeader
      */
-    async readFileHeader(archive, entry, position)
+    async readFileHeader(archive, position)
     {
         let fileHeader = null;
         let lenHeader = archive.type == Dezip.TYPE_ARC? Dezip.ArcHeader.length : Dezip.FileHeader.length;
@@ -771,7 +775,14 @@ export default class Dezip {
                     position += Dezip.FileHeader.length;
                     [offset, length] = await this.readCache(archive, position, zipHeader.lenName);
                     if (length < zipHeader.lenName) {
-                        entry.warnings.push(`Name length (${zipHeader.lenName}) exceeds available length (${length})`);
+                        //
+                        // Although generally warnings are saved in archive.warnings or entry.warnings as appropriate,
+                        // we don't have an entry yet, so we save it in the header.  Note that headers are created
+                        // by readStruct() which may also generate warnings, but one key difference is that readStruct()
+                        // ONLY adds a 'warnings' property if there were actual warnings, so we have to check first.
+                        //
+                        if (!zipHeader.warnings) zipHeader.warnings = [];
+                        zipHeader.warnings.push(`Name length (${zipHeader.lenName}) exceeds available length (${length})`);
                     }
                     zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, length, this.encoding);
                     zipHeader.length = Dezip.FileHeader.length + zipHeader.lenName + zipHeader.lenExtra;
@@ -871,7 +882,7 @@ export default class Dezip {
         if (!fileHeader) {
             this.assert(entry.dirHeader);
             let position = entry.dirHeader.position;
-            fileHeader = await this.readFileHeader(archive, entry, position);
+            fileHeader = await this.readFileHeader(archive, position);
             if (!fileHeader) {
                 throw new Error(`Unable to read file header`);
             }
