@@ -158,12 +158,25 @@ export default class Format {
         let i = 1, j;
         let keys = Object.keys(options);
         let argc = 0, argv = [], errors = [];
-        argv.push(args.slice(i++).join(' '));
+        //
+        // Do some validation on the options table first (eg, make sure all aliases are unique).
+        //
+        let aliases = {};
+        for (j = 0; j < keys.length; j++) {
+            let option = options[keys[j]];
+            if (option.alias) {
+                if (aliases[option.alias]) {
+                    errors.push(`Duplicate alias: ${option.alias} (see options --${keys[j]} and --${aliases[option.alias]})`);
+                }
+                aliases[option.alias] = keys[j];
+            }
+        }
         //
         // Sanitize all the arguments first, by checking each arg for spaces outside of double quotes and
         // splitting those args into sub args, and then checking every arg for beginning and ending quotes
         // and removing them.
         //
+        argv.push(args.slice(i++).join(' '));
         for (j = i; j < args.length; j++) {
             let arg = args[j];
             let inQuotes = false;

@@ -43,7 +43,7 @@ const dezip = new Dezip(
     }
 );
 
-const options = {
+const optionsDZ = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
@@ -83,7 +83,7 @@ const options = {
     "filter": {
         type: "string",
         usage: "--filter [...]",
-        alias: "-f",
+        alias: "-i",
         description: "comma-separated filter list (see --filter list)",
         options: {
             "list": {
@@ -120,6 +120,12 @@ const options = {
         alias: "-o",
         description: "overwrite existing files when extracting"
     },
+    "password": {
+        type: "string",
+        usage: "--password [...]",
+        alias: "-s",
+        description: "password to use with archive(s)",
+    },
     "path": {
         type: "string",
         usage: "--path [specs]",
@@ -135,7 +141,7 @@ const options = {
     "skip": {
         type: "number",
         usage: "--skip n",
-        alias: "-s",
+        alias: "-n",
         internal: true,
         description: "skip the first n lines in any batch file"
     },
@@ -159,10 +165,10 @@ const options = {
         handler: function() {
             printf("Usage:\n    %s [options] [filenames]\n\n", path.basename(process.argv[1]));
             printf("Options:\n");
-            for (let key in options) {
-                let option = options[key];
+            for (let key in optionsDZ) {
+                let option = optionsDZ[key];
                 if (option.internal) continue;
-                printf("  %-16s %s\n", option.usage, option.description);
+                printf("  %-16s %s%s\n", option.usage, option.description, option.alias? " [" + option.alias + "]" : "");
             }
         }
     }
@@ -177,7 +183,7 @@ async function main(argc, argv, errors)
 {
     printf("Dezip %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
     if (argv.help) {
-        options.help.handler();
+        optionsDZ.help.handler();
     }
     //
     // Before we get started, display any usage errors encountered by parseOptions().
@@ -220,7 +226,7 @@ async function main(argc, argv, errors)
         let filterNames = argv.filter.split(",");
         for (let i = 0; i < filterNames.length; i++) {
             let filter = filterNames[i].trim();
-            let option = options.filter.options[filter];
+            let option = optionsDZ.filter.options[filter];
             if (!option) {
                 //
                 // We also allow filtering based on compression method, but that doesn't actually set a filter bit;
@@ -242,8 +248,8 @@ async function main(argc, argv, errors)
             }
             if (!option.value) {
                 printf("\nAvailable filters:\n");
-                for (let key in options.filter.options) {
-                    let option = options.filter.options[key];
+                for (let key in optionsDZ.filter.options) {
+                    let option = optionsDZ.filter.options[key];
                     if (option.value) {
                         printf("%12s: %s\n", key, option.description);
                     }
@@ -281,7 +287,11 @@ async function main(argc, argv, errors)
             if (nArchives % 10000 == 0 && !argv.verbose && !argv.list) {
                 printf("%d archives processed\n", nArchives);
             }
-            archive = await dezip.open(archivePath, archiveDB);
+            let options = {};
+            if (argv.password) {
+                options.password = argv.password;
+            }
+            archive = await dezip.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("%s\n", error.message);
             return;
@@ -424,7 +434,7 @@ async function main(argc, argv, errors)
                     else if (argv.debug && !printed) {
                         printf("listing %s\n", header.name);
                     }
-                    if (recurse) {
+                    if (recurse && db) {
                         await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
                     }
                 } catch (error) {
@@ -445,4 +455,4 @@ async function main(argc, argv, errors)
     printf("\n%d archive(s) examined, %d file(s) processed\n", nArchives, nFiles);
 }
 
-await main(...Format.parseOptions(process.argv, options));
+await main(...Format.parseOptions(process.argv, optionsDZ));

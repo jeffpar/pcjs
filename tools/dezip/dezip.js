@@ -930,13 +930,11 @@ export default class Dezip {
         let position = entry.filePosition + fileHeader.length;
         let compressedSize = fileHeader.compressedSize;
         let expandedSize = fileHeader.size;
-        if (entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+        if ((entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) && !archive.password) {
             compressedSize = 0;
-            entry.warnings.push(`Encrypted files are not supported (yet)`);
+            entry.warnings.push(`Encrypted file`);
         }
-        if (!compressedSize) {
-            expandedDB = new DataBuffer(0);
-        } else {
+        if (compressedSize) {
             let expandedData;
             if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
                 if (this.interfaces.createInflate) {
@@ -951,92 +949,138 @@ export default class Dezip {
                     throw new Error(`No inflate interface available`);
                 }
             } else {
-                //
-                // Process "legacy" compression methods here.
-                //
-                // TODO: Create versions of the LegacyZIP and LegacyARC classes that use DataBuffers.
-                //
+                /**
+                 * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
+                 * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
+                 * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
+                 *
+                 * With ARC files, our only clue that no password (or a different password) is required is when
+                 * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
+                 * garbage.
+                 *
+                 * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
+                 * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
+                 */
+                let attempts = 2;                       // maximum of two attempts
                 let db = await this.readArchive(archive, position, compressedSize);
-                switch(fileHeader.method) {
-                case Dezip.ARC_UNP:
-                case Dezip.ZIP_STORE:
-                    expandedData = db.buffer;
-                    break;
-                case Dezip.ARC_NR:              // aka "Pack"
-                    if (this.interfaces.unpackSync) {
-                        expandedData = this.interfaces.unpackSync(db.buffer, expandedSize);
+                while (attempts--) {
+                    try {
+                        let srcData = db.buffer;
+                        if (archive.type != Dezip.TYPE_ARC || !archive.password) {
+                            attempts = 0;               // only one attempt for the normal case
+                        } else {
+                            /**
+                             * TODO: decryption of password-protected files is limited to ARC archives, because
+                             * the ARC implementation is simple and I haven't looked into how PKZIP implemented it yet.
+                             */
+                            let password = archive.password.toUpperCase();
+                            for (let off = 0; off < srcData.length; off++) {
+                                srcData.writeUInt8(srcData.readUInt8(off) ^ password.charCodeAt(off % password.length), off);
+                            }
+                            /**
+                             * ARC file headers don't have a "flags" field, but we still include a flags field in the entry object,
+                             * and we borrow the "ENC" flag from the ZIP file header definition to track whether this particular file
+                             * was encrypted.
+                             */
+                            if (attempts) {
+                                fileHeader.flags |= Dezip.FileHeader.fields.flags.ENCRYPTED;
+                            } else {
+                                entry.warnings = [];
+                                fileHeader.flags &= ~Dezip.FileHeader.fields.flags.ENCRYPTED;
+                            }
+                        }
+                        //
+                        // Process "legacy" compression methods here.
+                        //
+                        // TODO: Create versions of the LegacyZIP and LegacyARC classes that use DataBuffers.
+                        //
+                        switch(fileHeader.method) {
+                        case Dezip.ARC_UNP:
+                        case Dezip.ZIP_STORE:
+                            expandedData = srcData;
+                            break;
+                        case Dezip.ARC_NR:              // aka "Pack"
+                            if (this.interfaces.unpackSync) {
+                                expandedData = this.interfaces.unpackSync(srcData, expandedSize);
+                            }
+                            break;
+                        case Dezip.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
+                            if (this.interfaces.unsqueezeSync) {
+                                expandedData = this.interfaces.unsqueezeSync(srcData, expandedSize);
+                            }
+                            break;
+                        case Dezip.ARC_LZ:              // aka "Crunch5" (LZ compression)
+                            if (this.interfaces.uncrunchSync) {
+                                expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 0);
+                            }
+                            break;
+                        case Dezip.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
+                            if (this.interfaces.uncrunchSync) {
+                                expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 1);
+                            }
+                            break;
+                        case Dezip.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
+                            if (this.interfaces.uncrunchSync) {
+                                expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 2);
+                            }
+                            break;
+                        case Dezip.ARC_LZC:             // aka "Crush" (dynamic LZW)
+                            if (this.interfaces.uncrushSync) {
+                                expandedData = this.interfaces.uncrushSync(srcData, expandedSize, false);
+                            }
+                            break;
+                        case Dezip.ARC_LZS:             // aka "Squash"
+                            if (this.interfaces.uncrushSync) {
+                                expandedData = this.interfaces.uncrushSync(srcData, expandedSize, true);
+                            }
+                            break;
+                        case Dezip.ZIP_SHRINK:
+                            if (this.interfaces.stretchSync) {
+                                expandedData = this.interfaces.stretchSync(srcData, expandedSize);
+                            }
+                            break;
+                        case Dezip.ZIP_REDUCE1:
+                        case Dezip.ZIP_REDUCE2:
+                        case Dezip.ZIP_REDUCE3:
+                        case Dezip.ZIP_REDUCE4:
+                            if (this.interfaces.expandSync) {
+                                expandedData = this.interfaces.expandSync(srcData, expandedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
+                            }
+                            break;
+                        case Dezip.ZIP_IMPLODE:
+                            if (this.interfaces.explodeSync) {
+                                let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
+                                let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
+                                expandedData = this.interfaces.explodeSync(srcData, expandedSize, largeWindow, literalTree);
+                            }
+                            break;
+                        case Dezip.ZIP_IMPLODE_DCL:
+                            if (this.interfaces.blastSync) {
+                                expandedData = this.interfaces.blastSync(srcData);
+                            }
+                            break;
+                        }
+                        if (expandedData) break;
+                        if (!attempts) {
+                            throw new Error(`Unsupported compression method ${fileHeader.method}`);
+                        }
+                    } catch (error) {
+                        entry.warnings.push(error.message);
                     }
-                    break;
-                case Dezip.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
-                    if (this.interfaces.unsqueezeSync) {
-                        expandedData = this.interfaces.unsqueezeSync(db.buffer, expandedSize);
-                    }
-                    break;
-                case Dezip.ARC_LZ:              // aka "Crunch5" (LZ compression)
-                    if (this.interfaces.uncrunchSync) {
-                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 0);
-                    }
-                    break;
-                case Dezip.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
-                    if (this.interfaces.uncrunchSync) {
-                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 1);
-                    }
-                    break;
-                case Dezip.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
-                    if (this.interfaces.uncrunchSync) {
-                        expandedData = this.interfaces.uncrunchSync(db.buffer, expandedSize, 2);
-                    }
-                    break;
-                case Dezip.ARC_LZC:             // aka "Crush" (dynamic LZW)
-                    if (this.interfaces.uncrushSync) {
-                        expandedData = this.interfaces.uncrushSync(db.buffer, expandedSize, false);
-                    }
-                    break;
-                case Dezip.ARC_LZS:             // aka "Squash"
-                    if (this.interfaces.uncrushSync) {
-                        expandedData = this.interfaces.uncrushSync(db.buffer, expandedSize, true);
-                    }
-                    break;
-                case Dezip.ZIP_SHRINK:
-                    if (this.interfaces.stretchSync) {
-                        expandedData = this.interfaces.stretchSync(db.buffer, expandedSize);
-                    }
-                    break;
-                case Dezip.ZIP_REDUCE1:
-                case Dezip.ZIP_REDUCE2:
-                case Dezip.ZIP_REDUCE3:
-                case Dezip.ZIP_REDUCE4:
-                    if (this.interfaces.expandSync) {
-                        expandedData = this.interfaces.expandSync(db.buffer, expandedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
-                    }
-                    break;
-                case Dezip.ZIP_IMPLODE:
-                    if (this.interfaces.explodeSync) {
-                        let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
-                        let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
-                        expandedData = this.interfaces.explodeSync(db.buffer, expandedSize, largeWindow, literalTree);
-                    }
-                    break;
-                case Dezip.ZIP_IMPLODE_DCL:
-                    if (this.interfaces.blastSync) {
-                        expandedData = this.interfaces.blastSync(db.buffer);
-                    }
-                    break;
                 }
-                if (!expandedData) {
-                    throw new Error(`Unsupported compression method ${fileHeader.method}`);
+            }
+            if (expandedData) {
+                if (expandedSize != expandedData.length) {
+                    entry.warnings.push(`Expected ${expandedSize} bytes, received ${expandedData.length}`);
                 }
-            }
-            if (expandedSize != expandedData.length) {
-                entry.warnings.push(`Expected ${expandedSize} bytes, received ${expandedData.length}`);
-            }
-            expandedDB = new DataBuffer(expandedData);
-            if (fileHeader.crc) {
-                this.updateCRC(entry, expandedDB, archive.type, true);
-            }
-            if (writeData) {
-                await writeData(expandedDB);
-                await writeData();
+                expandedDB = new DataBuffer(expandedData);
+                if (fileHeader.crc) {
+                    this.updateCRC(entry, expandedDB, archive.type, true);
+                }
+                if (writeData) {
+                    await writeData(expandedDB);
+                    await writeData();
+                }
             }
         }
         return expandedDB;
