@@ -212,7 +212,7 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
-    let nArchives = 0, nFiles = 0, filterExceptions = 0, filterMethod = 0;
+    let nArchives = 0, nFiles = 0, filterExceptions = 0, filterMethod = -1;
     //
     // Next, let's deal with any specified filters.
     //
@@ -260,7 +260,7 @@ async function main(argc, argv, errors)
                         } else {
                             methodValue = -(i - LegacyZip.methodNames.length + 2);
                         }
-                        printf("%12s: process only archives using %s compression (%d)\n", methods[i].toLowerCase(), methods[i], methodValue);
+                        printf("%12s: process only entries using %s compression (%d)\n", methods[i].toLowerCase(), methods[i], methodValue);
                     }
                 }
                 continue;
@@ -304,7 +304,7 @@ async function main(argc, argv, errors)
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
             if (entries.length) {
-                if (argv.verbose || argv.list) {
+                if (argv.verbose || argv.list || filterExceptions || filterMethod != -1) {
                     if (argv.list) printf("\n");
                     printf("%s\n", archivePath);
                 }
@@ -322,7 +322,7 @@ async function main(argc, argv, errors)
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
-                if (archive.comment && (argv.comment || (filterExceptions & Dezip.EXCEPTION_ACOMMENT))) {
+                if (archive.comment && argv.comment) {
                     if (argv.verbose) {
                         printf("comment: \n%s\n", archive.comment);
                     } else {
