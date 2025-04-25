@@ -2776,6 +2776,26 @@
       }
     },
     {
+      "name": "dz.js filter",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "--filter store -b tests/good-archives.log --list"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "dz.js split",
       "type": "node",
       "request": "launch",

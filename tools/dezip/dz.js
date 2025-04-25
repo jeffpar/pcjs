@@ -212,7 +212,7 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
-    let nArchives = 0, nFiles = 0, filters = 0;
+    let nArchives = 0, nFiles = 0, filterExceptions = 0, filterMethod = 0;
     //
     // Next, let's deal with any specified filters.
     //
@@ -222,6 +222,21 @@ async function main(argc, argv, errors)
             let filter = filterNames[i].trim();
             let option = options.filter.options[filter];
             if (!option) {
+                //
+                // We also allow filtering based on compression method, but that doesn't actually set a filter bit;
+                // it sets a method number instead, which means you can filter on only one compression method at a time.
+                //
+                let methodName = filter[0].toUpperCase() + filter.slice(1).toLowerCase();
+                let method = LegacyZip.methodNames.indexOf(methodName);
+                if (method >= 0) {
+                    filterMethod = method;
+                    continue;
+                }
+                method = LegacyArc.methodNames.indexOf(methodName);
+                if (method >= 0) {
+                    filterMethod = -(method + 2);
+                    continue;
+                }
                 printf("unknown filter: %s\n", filter);
                 continue;
             }
@@ -233,9 +248,24 @@ async function main(argc, argv, errors)
                         printf("%12s: %s\n", key, option.description);
                     }
                 }
+                //
+                // Also list all possible compression methods, since we allow filtering on those as well.
+                //
+                let methods = LegacyZip.methodNames.concat(LegacyArc.methodNames);
+                for (let i = 0; i < methods.length; i++) {
+                    if (methods[i]) {
+                        let methodValue;
+                        if (i < LegacyZip.methodNames.length) {
+                            methodValue = i;
+                        } else {
+                            methodValue = -(i - LegacyZip.methodNames.length + 2);
+                        }
+                        printf("%12s: process only archives using %s compression (%d)\n", methods[i].toLowerCase(), methods[i], methodValue);
+                    }
+                }
                 continue;
             }
-            filters |= option.value;
+            filterExceptions |= option.value;
         }
     }
     //
@@ -257,7 +287,7 @@ async function main(argc, argv, errors)
             return;
         }
         try {
-            let entries = await dezip.readDirectory(archive, argv.files, filters);
+            let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
@@ -292,7 +322,7 @@ async function main(argc, argv, errors)
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
-                if (archive.comment && (argv.comment || (filters & Dezip.EXCEPTION_ACOMMENT))) {
+                if (archive.comment && (argv.comment || (filterExceptions & Dezip.EXCEPTION_ACOMMENT))) {
                     if (argv.verbose) {
                         printf("comment: \n%s\n", archive.comment);
                     } else {

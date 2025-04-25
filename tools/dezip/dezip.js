@@ -524,7 +524,7 @@ export default class Dezip {
     }
 
     /**
-     * readDirectory(archive, filespec, filters)
+     * readDirectory(archive, filespec, filterExceptions, filterMethod)
      *
      * This function always returns a new list of entries, based on any filtering that may
      * have been requested (archives.entries always contains the complete and unfiltered list).
@@ -536,10 +536,11 @@ export default class Dezip {
      * @this {Dezip}
      * @param {Archive} archive
      * @param {string} [filespec]
-     * @param {number} [filters]
+     * @param {number} [filterExceptions] (0 if none)
+     * @param {number} [filterMethod] (-1 if none)
      * @returns {Array}
      */
-    async readDirectory(archive, filespec = "*", filters = 0)
+    async readDirectory(archive, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
         let entry = null, entries = [];
         const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
@@ -551,7 +552,10 @@ export default class Dezip {
                 if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
                     archive.exceptions |= Dezip.EXCEPTION_SPLITDISK;
                 }
-                if ((archive.exceptions & filters) == filters && regex.test(entry.dirHeader.name)) {
+                if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
+                    continue;
+                }
+                if ((archive.exceptions & filterExceptions) == filterExceptions && regex.test(entry.dirHeader.name)) {
                     entries.push(entry);
                 }
             } while (true);
@@ -566,7 +570,10 @@ export default class Dezip {
             do {
                 entry = await this.readFileEntry(archive, entry);
                 if (!entry) break;
-                if ((archive.exceptions & filters) == filters && regex.test(entry.fileHeader.name)) {
+                if (filterMethod != -1 && entry.fileHeader.method != filterMethod) {
+                    continue;
+                }
+                if ((archive.exceptions & filterExceptions) == filterExceptions && regex.test(entry.fileHeader.name)) {
                     entries.push(entry);
                 }
             } while (true);
@@ -797,6 +804,10 @@ export default class Dezip {
             } else {
                 let zipHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
                 if (zipHeader.signature == Dezip.FileHeader.fields.signature.FILESIG) {
+                    //
+                    // TODO: For all fields that appear in BOTH FileHeader AND DirHeader, consider comparing them
+                    // and warning about any differences.
+                    //
                     position += Dezip.FileHeader.length;
                     [offset, length] = await this.readCache(archive, position, zipHeader.lenName);
                     if (length < zipHeader.lenName) {
