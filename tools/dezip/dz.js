@@ -74,6 +74,12 @@ const options = {
         alias: "-e",
         description: "extract files (implied by --dir)"
     },
+    "files": {
+        type: "string",
+        usage: "--files [specs]",
+        alias: "-f",
+        description: "file specification (eg, \"*.txt\")",
+    },
     "filter": {
         type: "string",
         usage: "--filter [...]",
@@ -83,6 +89,14 @@ const options = {
             "list": {
                 value: 0,
                 description: "list available filters"
+            },
+            "ac": {
+                value: Dezip.EXCEPTION_ACOMMENT,
+                description: "process only archives with archive comments"
+            },
+            "fc": {
+                value: Dezip.EXCEPTION_FCOMMENT,
+                description: "process only archives with per-file comments"
             },
             "split": {
                 value: Dezip.EXCEPTION_SPLITDISK,
@@ -150,7 +164,6 @@ const options = {
                 if (option.internal) continue;
                 printf("  %-16s %s\n", option.usage, option.description);
             }
-            printf("\n");
         }
     }
 };
@@ -220,14 +233,13 @@ async function main(argc, argv, errors)
                         printf("%12s: %s\n", key, option.description);
                     }
                 }
-                printf("\n");
                 continue;
             }
             filters |= option.value;
         }
     }
     //
-    // Define a function process an individual archive, which then allows us to recursively process
+    // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
     //
     let processArchive = async function(archivePath, archiveDB = null) {
@@ -245,7 +257,7 @@ async function main(argc, argv, errors)
             return;
         }
         try {
-            let entries = await dezip.readDirectory(archive, filters);
+            let entries = await dezip.readDirectory(archive, argv.files, filters);
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
@@ -255,13 +267,13 @@ async function main(argc, argv, errors)
             // then the current directory is used.
             //
             // If multiple archives are being processed and/or extraction was enabled without a specific directory,
-            // then extraction will occur inside a new sub-directory with same name as the base name of the archive;
-            // the only way to bypass that is to process archives one at a time OR explicitly set "--dir ." (merging
-            // the contents of multiple archives into any other directory is not currently supported).
+            // then extraction will occur inside a directory with the name of the archive (which will be created if
+            // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
+            // use "." as the directory, to help avoid unintentional merging of files.
             //
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
-            if (!filters || entries.length) {
+            if (entries.length) {
                 if (argv.verbose || argv.list) {
                     if (argv.list) printf("\n");
                     printf("%s\n", archivePath);
@@ -280,11 +292,11 @@ async function main(argc, argv, errors)
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
-                if (archive.comment && argv.comment) {
+                if (archive.comment && (argv.comment || (filters & Dezip.EXCEPTION_ACOMMENT))) {
                     if (argv.verbose) {
                         printf("comment: \n%s\n", archive.comment);
                     } else {
-                        printf("comment for %s:\n%s\n", archivePath, archive.comment);
+                        printf("\ncomment for %s:\n%s\n", archivePath, archive.comment);
                     }
                 }
                 if (argv.list) {

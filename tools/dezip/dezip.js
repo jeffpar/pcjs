@@ -70,8 +70,8 @@ import Struct from './struct.js';
  *
  * @class Dezip
  * @property {Interfaces} interfaces
- * @property {number} cacheSize
- * @property {string} encoding
+ * @property {number} cacheSize (default is 64K)
+ * @property {string} encoding (default is "cp437")
  */
 export default class Dezip {
     /**
@@ -251,6 +251,10 @@ export default class Dezip {
 
     static EXCEPTION_WRONGTYPE  = 0x00000001;       // eg, a ZIP appears to be an ARC, or vice versa
     static EXCEPTION_SPLITDISK  = 0x00000002;       // the archive contains entries that refer to another (split) archive
+    static EXCEPTION_ACOMMENT   = 0x00000004;       // the archive contains an archive comment
+    static EXCEPTION_FCOMMENT   = 0x00000008;       // the archive contains one or more per-file comments
+    static EXCEPTION_NODIRS     = 0x00000010;       // the archive contains no dir headers
+    static EXCEPTION_NOFILES    = 0x00000020;       // the archive contains no file headers
 
     /**
      * constructor(interfaces)
@@ -520,38 +524,55 @@ export default class Dezip {
     }
 
     /**
-     * readDirectory(archive, filters)
+     * readDirectory(archive, filespec, filters)
      *
      * This function always returns a new list of entries, based on any filtering that may
-     * have been requested (archives.entries is still available for the complete/unfiltered list).
+     * have been requested (archives.entries always contains the complete and unfiltered list).
+     *
+     * Also note that even though this function always uses readDirEntry() (and failing that,
+     * readFileEntry()) to read each entry, those functions only scan the archive on the first
+     * attempt.  Subsequent calls simply return the next entry in the archive.entries list.
      *
      * @this {Dezip}
      * @param {Archive} archive
+     * @param {string} [filespec]
      * @param {number} [filters]
      * @returns {Array}
      */
-    async readDirectory(archive, filters = 0)
+    async readDirectory(archive, filespec = "*", filters = 0)
     {
         let entry = null, entries = [];
-        do {
-            entry = await this.readDirEntry(archive, entry);
-            if (!entry) break;
-            this.assert(archive.endHeader && entry.dirHeader);
-            if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
-                archive.exceptions |= Dezip.EXCEPTION_SPLITDISK;
-            }
-            if ((archive.exceptions & filters) == filters) {
-                entries.push(entry);
-            }
-        } while (true);
-        if (!archive.entries.length) {
+        const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
+        if (!(archive.exceptions & Dezip.EXCEPTION_NODIRS)) {
             do {
-                entry = await this.readFileEntry(archive, entry);
+                entry = await this.readDirEntry(archive, entry);
                 if (!entry) break;
-                if ((archive.exceptions & filters) == filters) {
+                this.assert(archive.endHeader && entry.dirHeader);
+                if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
+                    archive.exceptions |= Dezip.EXCEPTION_SPLITDISK;
+                }
+                if ((archive.exceptions & filters) == filters && regex.test(entry.dirHeader.name)) {
                     entries.push(entry);
                 }
             } while (true);
+            if (!archive.entries.length) {
+                archive.exceptions |= Dezip.EXCEPTION_NODIRS;
+            }
+        }
+        //
+        // Search the file headers ONLY if there are no dir headers AND we're unsure about file headers.
+        //
+        if ((archive.exceptions & (Dezip.EXCEPTION_NODIRS | Dezip.EXCEPTION_NOFILES)) == Dezip.EXCEPTION_NODIRS) {
+            do {
+                entry = await this.readFileEntry(archive, entry);
+                if (!entry) break;
+                if ((archive.exceptions & filters) == filters && regex.test(entry.fileHeader.name)) {
+                    entries.push(entry);
+                }
+            } while (true);
+            if (!archive.entries.length) {
+                archive.exceptions |= Dezip.EXCEPTION_NOFILES;
+            }
         }
         return entries;
     }
@@ -619,6 +640,7 @@ export default class Dezip {
                                 archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
                             archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
+                            archive.exceptions |= Dezip.EXCEPTION_ACOMMENT;
                         }
                         break;
                     }
@@ -659,11 +681,14 @@ export default class Dezip {
             // TODO: Find examples of archives with "lenExtra" data and figure out what to do with it.
             //
             position += dirHeader.lenName + dirHeader.lenExtra;
-            [offset, length] = await this.readCache(archive, position, dirHeader.lenComment);
-            if (length < dirHeader.lenComment) {
-                entry.warnings.push(`Comment length (${dirHeader.lenComment}) exceeds available length (${length})`);
+            if (dirHeader.lenComment) {
+                [offset, length] = await this.readCache(archive, position, dirHeader.lenComment);
+                if (length < dirHeader.lenComment) {
+                    entry.warnings.push(`Comment length (${dirHeader.lenComment}) exceeds available length (${length})`);
+                }
+                dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
+                archive.exceptions |= Dezip.EXCEPTION_FCOMMENT;
             }
-            dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
         }
         return entry;
     }

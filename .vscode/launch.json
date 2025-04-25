@@ -2776,14 +2776,34 @@
       }
     },
     {
-      "name": "test.js",
+      "name": "dz.js split",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/tests/test.js",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-b good-archives.log"
+        "--filter split -b tests/good-archives.log --list"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip/tests",
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js split.log",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        " --filter split -b tests/split.log --list"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
