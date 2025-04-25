@@ -59,7 +59,7 @@ const optionsDZ = {
     "debug": {
         type: "boolean",
         usage: "--debug",
-        alias: "-g",
+        alias: "-u",
         description: "display debug information"
     },
     "dir": {
@@ -76,7 +76,7 @@ const optionsDZ = {
     },
     "files": {
         type: "string",
-        usage: "--files [specs]",
+        usage: "--files [spec]",
         alias: "-f",
         description: "file specification (eg, \"*.txt\")",
     },
@@ -108,6 +108,13 @@ const optionsDZ = {
             },
         }
     },
+    "garble": {
+        type: "string",
+        usage: "--garble [pwd]",
+        alias: "-g",
+        description: "decrypt 'garbled' archives using password",
+        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' archives"
+    },
     "list": {
         type: "boolean",
         usage: "--list",
@@ -120,15 +127,9 @@ const optionsDZ = {
         alias: "-o",
         description: "overwrite existing files when extracting"
     },
-    "password": {
-        type: "string",
-        usage: "--password [...]",
-        alias: "-s",
-        description: "password to use with archive(s)",
-    },
     "path": {
         type: "string",
-        usage: "--path [specs]",
+        usage: "--path [spec]",
         alias: "-p",
         description: "archive path specifications (eg, \"**/*.zip\")",
     },

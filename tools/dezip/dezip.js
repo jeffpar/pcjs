@@ -970,8 +970,8 @@ export default class Dezip {
                             attempts = 0;               // only one attempt for the normal case
                         } else {
                             /**
-                             * TODO: decryption of password-protected files is limited to ARC archives, because
-                             * the ARC implementation is simple and I haven't looked into how PKZIP implemented it yet.
+                             * TODO: decryption of 'garbled' files is limited to ARC archives, because the ARC implementation
+                             * is simple and I haven't looked into how PKZIP implemented it yet.
                              */
                             let password = archive.password.toUpperCase();
                             for (let off = 0; off < srcData.length; off++) {
