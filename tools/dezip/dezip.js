@@ -89,7 +89,7 @@ export default class Dezip {
             FILESIG:    0x04034b50                      // "PK\003\004" (local file header signature)
         })
         .field('version',       Struct.UINT16)          // version needed to extract
-        .field('flags',         Struct.UINT16, {        // general purpose bit flag
+        .field('flags',         Struct.UINT16, {        // general purpose flags
             ENCRYPTED:  0x0001,                         // encrypted file
             COMP1:      0x0002,                         // compression option
             COMP2:      0x0004,                         // compression option
@@ -119,7 +119,15 @@ export default class Dezip {
         })
         .field('verMade',       Struct.UINT16)          // version made by
         .field('version',       Struct.UINT16)          // version needed to extract
-        .field('flags',         Struct.UINT16)          // general purpose bit flag
+        .field('flags',         Struct.UINT16, {
+            ENCRYPTED:  0x0001,                         // encrypted file
+            COMP1:      0x0002,                         // compression option
+            COMP2:      0x0004,                         // compression option
+            DATADESC:   0x0008,                         // data descriptor
+            DEFLATED2:  0x0010,                         // enhanced deflation
+            ENCRYPTED2: 0x0040,                         // strong encryption
+            UNICODE:    0x0400                          // UNICODE encoding
+        })
         .field('method',        Struct.UINT16)          // compression method
         .field('modified',      Struct.DOSTIMEDATE)     // modification time and date
         .field('crc',           Struct.INT32)           // uncompressed file CRC-32 value
@@ -935,6 +943,9 @@ export default class Dezip {
                 }
                 dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
                 archive.exceptions |= Dezip.EXCEPTIONS.FCOMMENT;
+            }
+            if (dirHeader.flags & Dezip.DirHeader.fields.flags.ENCRYPTED) {
+                archive.exceptions |= Dezip.EXCEPTIONS.GARBLED;
             }
         }
         return entry;

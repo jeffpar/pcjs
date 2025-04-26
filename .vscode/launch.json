@@ -2761,7 +2761,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "tests/archive/jeffpar.zip --password=jeffpar -lt"
+        "--batch tests/good-archives.log --filter garbled"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
