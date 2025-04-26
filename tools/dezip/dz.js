@@ -31,14 +31,21 @@ const dezip = new Dezip(
         uncrunchSync: LegacyArc.uncrunchSync,       // interface for ARC_LZ, ARC_LZNR, ARC_LZNH data
         uncrushSync: LegacyArc.uncrushSync,         // interface for ARC_LZC data
         getZipCRC: LegacyZip.getZipCRC,
+        getZipCRCByte: LegacyZip.getZipCRCByte,
         stretchSync: LegacyZip.stretchSync,         // interface for ZIP_SHRINK data
         expandSync: LegacyZip.expandSync,           // interface for ZIP_REDUCE# data
         explodeSync: LegacyZip.explodeSync,         // interface for ZIP_IMPLODE data
         blastSync: LegacyZip.blastSync,             // interface for ZIP_IMPLODE_DCL data
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
-     // createInflate: zlib.createInflateRaw        // interface for ZIP_DEFLATE (chunked async) data
+     // createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
+     // printf                                      // for debugging
     },
     {
+        //
+        // NOTE: We override the default (64K) only to help exercise the cache code a bit more
+        // and help flush out any bugs.  Some structures in an archive (eg, comments) can be as
+        // large as 64K, so this may trigger warnings.
+        //
         cacheSize: 4096
     }
 );
@@ -90,30 +97,27 @@ const optionsDZ = {
                 value: 0,
                 description: "list available filters"
             },
-            "ac": {
-                value: Dezip.EXCEPTION_ACOMMENT,
+            "acomments": {
+                value: Dezip.EXCEPTIONS.ACOMMENT,
                 description: "process only archives with archive comments"
             },
-            "fc": {
-                value: Dezip.EXCEPTION_FCOMMENT,
+            "fcomments": {
+                value: Dezip.EXCEPTIONS.FCOMMENT,
                 description: "process only archives with per-file comments"
             },
+            "garbled": {
+                value: Dezip.EXCEPTIONS.GARBLED,
+                description: "process only archives with garbled files"
+            },
             "split": {
-                value: Dezip.EXCEPTION_SPLITDISK,
+                value: Dezip.EXCEPTIONS.SPLITDISK,
                 description: "process only split-disk archives"
             },
             "wrong": {
-                value: Dezip.EXCEPTION_WRONGTYPE,
+                value: Dezip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with wrong archive type"
             },
         }
-    },
-    "garble": {
-        type: "string",
-        usage: "--garble [pwd]",
-        alias: "-g",
-        description: "decrypt 'garbled' archives using password",
-        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' archives"
     },
     "list": {
         type: "boolean",
@@ -127,11 +131,18 @@ const optionsDZ = {
         alias: "-o",
         description: "overwrite existing files when extracting"
     },
+    "password": {
+        type: "string",
+        usage: "--password [pwd]",
+        alias: "-g",
+        description: "decrypt \"garbled\" archives using password",
+        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' archives"
+    },
     "path": {
         type: "string",
         usage: "--path [spec]",
         alias: "-p",
-        description: "archive path specifications (eg, \"**/*.zip\")",
+        description: "archive path specification (eg, \"**/*.zip\")",
     },
     "recurse": {
         type: "boolean",
@@ -334,11 +345,7 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (archive.comment && argv.comment) {
-                    if (argv.verbose) {
-                        printf("comment: \n%s\n", archive.comment);
-                    } else {
-                        printf("\ncomment for %s:\n%s\n", archivePath, archive.comment);
-                    }
+                    printf("%s\n", archive.comment);
                 }
                 if (argv.list) {
                     printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
@@ -379,6 +386,10 @@ async function main(argc, argv, errors)
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                 } catch (error) {
                                     if (error.code == "EEXIST") {
+                                        //
+                                        // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
+                                        // since extraction has been enabled.
+                                        //
                                         if (argv.verbose) printf("skipping %s\n", targetPath);
                                     } else {
                                         printf("%s\n", error.message);

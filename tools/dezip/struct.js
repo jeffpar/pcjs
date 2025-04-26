@@ -47,16 +47,16 @@ import DataBuffer from "./db.js";
  */
 export default class Struct {
 
-    static INT8         = -1;
-    static INT16        = -2;
-    static INT32        = -3;
-    static INT64        = -4;
-    static UINT8        = -5;
-    static UINT16       = -6;
-    static UINT32       = -7;
-    static UINT64       = -8;
-    static DOSTIMEDATE  = -9;
-    static DOSDATETIME  = -10;
+    static INT8             = -1;
+    static INT16            = -2;
+    static INT32            = -3;
+    static INT64            = -4;
+    static UINT8            = -5;
+    static UINT16           = -6;
+    static UINT32           = -7;
+    static UINT64           = -8;
+    static DOSTIMEDATE      = -9;
+    static DOSDATETIME      = -10;
 
     static SIZES = {
         [Struct.STRING]:      0,
@@ -68,8 +68,8 @@ export default class Struct {
         [Struct.UINT16]:      2,
         [Struct.UINT32]:      4,
         [Struct.UINT64]:      8,
-        [Struct.DOSTIMEDATE]: 4,    // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
-        [Struct.DOSDATETIME]: 4     // 16-bit date followed by 16-bit time (used by ARC headers)
+        [Struct.DOSTIMEDATE]: 4,        // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
+        [Struct.DOSDATETIME]: 4         // 16-bit date followed by 16-bit time (used by ARC headers)
     };
 
     /**
@@ -266,7 +266,7 @@ export default class Struct {
             s: (time & 0x1f) << 1
         };
         /**
-         * date/time validation follows (although each part of the date/time is stored
+         * Date/time validation follows (although each part of the date/time is stored
          * in a limited number of bits, those bits can still contain out-of-bounds values).
          *
          * If date/time wasn't set (ie, 0x00000000), then m will be -1 and d will be 0,
@@ -297,7 +297,7 @@ export default class Struct {
         }
         if (d.d > 31) {
             d.d = monthDays[d.m];
-            if (d.y % 4 == 0) d.d++;        // adequate for the time-frame of dates we're dealing with
+            if (d.y % 4 == 0) d.d++;        // adequate for the range of years we're dealing with
             exceptions++;
         }
         if (d.h > 23) {

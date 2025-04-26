@@ -359,31 +359,47 @@ export class LegacyZip
         return blast.getOutput;
     }
 
-    static crcTable = [];
+    static crcTable = (() => {
+        const table = [];
+        for (let i = 0; i < 256; i++) {
+            let c = i;
+            for (let j = 0; j < 8; j++) {
+                c = (c & 1)? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
+            }
+            table[i] = c;
+        }
+        return table;
+    })();
 
-   /**
+  /**
     * getZipCRC(buf, crc)
     *
     * Calculate CRC for the given ZIP data.
     *
     * @param {Buffer} buf
     * @param {number} [crc] (running CRC value, if any)
+    * @returns {number}
     */
-    static getZipCRC(buf, crc = 0)
+    static getZipCRC(buf, crc = -1)
     {
-        if (!LegacyZip.crcTable.length) {
-            for (let i = 0; i < 256; i++) {
-                let c = i;
-                for (let j = 0; j < 8; j++) {
-                    c = (c & 1)? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-                }
-                LegacyZip.crcTable[i] = c;
-            }
-        }
         for (let i = 0; i < buf.length; i++) {
-            crc = LegacyZip.crcTable[(crc ^ buf[i]) & 0xff] ^ (crc >>> 8);
+            crc = LegacyZip.getZipCRCByte(buf[i], crc);
         }
         return crc;
+    }
+
+   /**
+    * getZipCRCByte(b, crc)
+    *
+    * Calculate CRC for the given ZIP byte.
+    *
+    * @param {number} b
+    * @param {number} [crc] (running CRC value, if any)
+    * @returns {number}
+    */
+    static getZipCRCByte(b, crc = -1)
+    {
+        return LegacyZip.crcTable[(crc ^ b) & 0xff] ^ (crc >>> 8);
     }
 }
 

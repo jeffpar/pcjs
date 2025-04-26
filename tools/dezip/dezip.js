@@ -198,63 +198,40 @@ export default class Dezip {
         .verifyLength(29);
 
     /* Compression methods */
-    static ARC_UNP              = -2;                   // unpacked (no compression)
-    static ARC_NR               = -3;                   // non-repeat packing ("pack")
-    static ARC_HS               = -4;                   // Huffman squeezing ("squeeze")
-    static ARC_LZ               = -5;                   // LZ compression
-    static ARC_LZNR             = -6;                   // LZ non-repeat compression
-    static ARC_LZNH             = -7;                   // LZ with new hash
-    static ARC_LZC              = -8;                   // LZ dynamic ("crunch")
-    static ARC_LZS              = -9;                   // LZ dynamic ("squash")
+    static METHODS = {
+        ARC_UNP:                -2,                     // unpacked (no compression)
+        ARC_NR:                 -3,                     // non-repeat packing ("pack")
+        ARC_HS:                 -4,                     // Huffman squeezing ("squeeze")
+        ARC_LZ:                 -5,                     // LZ compression
+        ARC_LZNR:               -6,                     // LZ non-repeat compression
+        ARC_LZNH:               -7,                     // LZ with new hash
+        ARC_LZC:                -8,                     // LZ dynamic ("crunch")
+        ARC_LZS:                -9,                     // LZ dynamic ("squash")
+        ZIP_STORE:               0,                     // no compression
+        ZIP_SHRINK:              1,                     // shrink
+        ZIP_REDUCE1:             2,                     // reduce with compression factor 1
+        ZIP_REDUCE2:             3,                     // reduce with compression factor 2
+        ZIP_REDUCE3:             4,                     // reduce with compression factor 3
+        ZIP_REDUCE4:             5,                     // reduce with compression factor 4
+        ZIP_IMPLODE:             6,                     // implode
+        ZIP_DEFLATE:             8,                     // deflate
+        ZIP_DEFLATE64:           9,                     // deflate64
+        ZIP_IMPLODE_DCL:        10,                     // PKWare DCL implode
+        ZIP_BZIP2:              12,                     // compressed using BZIP2
+        ZIP_LZMA:               14,                     // LZMA
+        ZIP_IBM_TERSE:          18,                     // compressed using IBM TERSE
+        ZIP_IBM_LZ77:           19                      // IBM LZ77
+    };
 
-    static ZIP_STORE            = 0;                    // no compression
-    static ZIP_SHRINK           = 1;                    // shrink
-    static ZIP_REDUCE1          = 2;                    // reduce with compression factor 1
-    static ZIP_REDUCE2          = 3;                    // reduce with compression factor 2
-    static ZIP_REDUCE3          = 4;                    // reduce with compression factor 3
-    static ZIP_REDUCE4          = 5;                    // reduce with compression factor 4
-    static ZIP_IMPLODE          = 6;                    // implode
-    static ZIP_DEFLATE          = 8;                    // deflate
-    static ZIP_DEFLATE64        = 9;                    // deflate64
-    static ZIP_IMPLODE_DCL      = 10;                   // PKWare DCL implode
-    static ZIP_BZIP2            = 12;                   // compressed using BZIP2
-    static ZIP_LZMA             = 14;                   // LZMA
-    static ZIP_IBM_TERSE        = 18;                   // compressed using IBM TERSE
-    static ZIP_IBM_LZ77         = 19;                   // IBM LZ77
-
-    /* 4.5 Extensible data fields */
-    static EF_ID                = 0;
-    static EF_SIZE              = 2;
-
-    /* Header IDs */
-    static ID_ZIP64             = 0x0001;
-    static ID_AVINFO            = 0x0007;
-    static ID_PFS               = 0x0008;
-    static ID_OS2               = 0x0009;
-    static ID_NTFS              = 0x000a;
-    static ID_OPENVMS           = 0x000c;
-    static ID_UNIX              = 0x000d;
-    static ID_FORK              = 0x000e;
-    static ID_PATCH             = 0x000f;
-    static ID_X509_PKCS7        = 0x0014;
-    static ID_X509_CERTID_F     = 0x0015;
-    static ID_X509_CERTID_C     = 0x0016;
-    static ID_STRONGENC         = 0x0017;
-    static ID_RECORD_MGT        = 0x0018;
-    static ID_X509_PKCS7_RL     = 0x0019;
-    static ID_IBM1              = 0x0065;
-    static ID_IBM2              = 0x0066;
-    static ID_POSZIP            = 0x4690;
-
-    static EF_ZIP64_OR_32       = 0xffffffff;
-    static EF_ZIP64_OR_16       = 0xffff;
-
-    static EXCEPTION_WRONGTYPE  = 0x00000001;       // eg, a ZIP appears to be an ARC, or vice versa
-    static EXCEPTION_SPLITDISK  = 0x00000002;       // the archive contains entries that refer to another (split) archive
-    static EXCEPTION_ACOMMENT   = 0x00000004;       // the archive contains an archive comment
-    static EXCEPTION_FCOMMENT   = 0x00000008;       // the archive contains one or more per-file comments
-    static EXCEPTION_NODIRS     = 0x00000010;       // the archive contains no dir headers
-    static EXCEPTION_NOFILES    = 0x00000020;       // the archive contains no file headers
+    static EXCEPTIONS = {
+        NODIRS:                 0x00000001,             // the archive contains no dir headers
+        NOFILES:                0x00000002,             // the archive contains no file headers
+        WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
+        SPLITDISK:              0x00000008,             // the archive contains entries that refer to another (split) archive
+        ACOMMENT:               0x00000010,             // the archive contains an archive comment
+        FCOMMENT:               0x00000020,             // the archive contains one or more per-file comments
+        GARBLED:                0x00000040              // the archive contains "garbled" (encrypted) entries
+    };
 
     /**
      * constructor(interfaces)
@@ -288,27 +265,6 @@ export default class Dezip {
     }
 
     /**
-     * newEntry(archive)
-     *
-     * @this {Dezip}
-     * @param {Archive} archive
-     * @returns {Entry}
-     */
-    newEntry(archive)
-    {
-        let entry = {
-            index: archive.entries.length,
-            dirHeader: null,
-            dirPosition: -1,
-            fileHeader: null,
-            filePosition: -1,
-            warnings: []                // array of entry warnings, if any
-        };
-        archive.entries.push(entry);
-        return entry;
-    }
-
-    /**
      * open(fileName, db, options)
      *
      * If successful, this method returns an Archive object used with various read functions.
@@ -330,7 +286,7 @@ export default class Dezip {
             file: null,                 // file handle, if any
             cache: {},                  // cache data
             entries: [],                // array of directory entries,
-            exceptions: 0,              // see Dezip.EXCEPTION_*
+            exceptions: 0,              // see Dezip.EXCEPTIONS.*
             warnings: []                // array of archive warnings, if any
         };
         //
@@ -394,7 +350,280 @@ export default class Dezip {
     }
 
     /**
+     * close(archive)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     */
+    async close(archive)
+    {
+        if (archive.file) {
+            await archive.file.close();
+            archive.file = null;
+        }
+        this.initCache(archive);
+    }
+
+    /**
+     * decryptZipData(db, fileHeader, password)
+     *
+     * Notes from PKWARE's APPNOTE.TXT:
+     *
+     *      6.1 Traditional PKWARE Decryption
+     *      ---------------------------------
+     *
+     *      6.1.1 PKWARE is grateful to Mr. Roger Schlafly for his expert
+     *      contribution towards the development of PKWARE's traditional
+     *      encryption.
+     *
+     *      6.1.2 PKZIP encrypts the compressed data stream.  Encrypted files
+     *      MUST be decrypted before they can be extracted to their original
+     *      form.
+     *
+     *      6.1.3 Each encrypted file has an extra 12 bytes stored at the start
+     *      of the data area defining the encryption header for that file.  The
+     *      encryption header is originally set to random values, and then
+     *      itself encrypted, using three, 32-bit keys.  The key values are
+     *      initialized using the supplied encryption password.  After each byte
+     *      is encrypted, the keys are then updated using pseudo-random number
+     *      generation techniques in combination with the same CRC-32 algorithm
+     *      used in PKZIP and described elsewhere in this document.
+     *
+     *      6.1.4 The following are the basic steps required to decrypt a file:
+     *
+     *       1) Initialize the three 32-bit keys with the password.
+     *       2) Read and decrypt the 12-byte encryption header, further
+     *          initializing the encryption keys.
+     *       3) Read and decrypt the compressed data stream using the
+     *          encryption keys.
+     *
+     *      6.1.5 Initializing the encryption keys
+     *
+     *          Key(0) <- 305419896
+     *          Key(1) <- 591751049
+     *          Key(2) <- 878082192
+     *
+     *          loop for i <- 0 to length(password)-1
+     *              update_keys(password(i))
+     *          end loop
+     *
+     *      Where update_keys() is defined as:
+     *
+     *          update_keys(char):
+     *            Key(0) <- crc32(key(0),char)
+     *            Key(1) <- Key(1) + (Key(0) & 000000ffH)
+     *            Key(1) <- Key(1) * 134775813 + 1
+     *            Key(2) <- crc32(key(2),key(1) >> 24)
+     *          end update_keys
+     *
+     *      Where crc32(old_crc,char) is a routine that given a CRC value and a
+     *      character, returns an updated CRC value after applying the CRC-32
+     *      algorithm described elsewhere in this document.
+     *
+     *      6.1.6 Decrypting the encryption header
+     *
+     *      The purpose of this step is to further initialize the encryption
+     *      keys, based on random data, to render a plaintext attack on the
+     *      data ineffective.
+     *
+     *      Read the 12-byte encryption header into Buffer, in locations
+     *      Buffer(0) thru Buffer(11).
+     *
+     *          loop for i <- 0 to 11
+     *              C <- buffer(i) ^ decrypt_byte()
+     *              update_keys(C)
+     *              buffer(i) <- C
+     *          end loop
+     *
+     *      Where decrypt_byte() is defined as:
+     *
+     *          unsigned char decrypt_byte()
+     *              local unsigned short temp
+     *              temp <- Key(2) | 2
+     *              decrypt_byte <- (temp * (temp ^ 1)) >> 8
+     *          end decrypt_byte
+     *
+     *      After the header is decrypted,  the last 1 or 2 bytes in Buffer
+     *      SHOULD be the high-order word/byte of the CRC for the file being
+     *      decrypted, stored in Intel low-byte/high-byte order.  Versions of
+     *      PKZIP prior to 2.0 used a 2 byte CRC check; a 1 byte CRC check is
+     *      used on versions after 2.0.  This can be used to test if the password
+     *      supplied is correct or not.
+     *
+     *      6.1.7 Decrypting the compressed data stream
+     *
+     *      The compressed data stream can be decrypted as follows:
+     *
+     *          loop until done
+     *              read a character into C
+     *              Temp <- C ^ decrypt_byte()
+     *              update_keys(temp)
+     *              output Temp
+     *          end loop
+     *
+     *
+     * @param {DataBuffer} db
+     * @param {FileHeader} fileHeader
+     * @param {string} password
+     * @returns {DataBuffer}
+     */
+    decryptZipData(db, fileHeader, password)
+    {
+        let keys = [0x12345678, 0x23456789, 0x34567890];
+        let crc32 = (crc, b) => this.interfaces.getZipCRCByte(b, crc);
+        //
+        // The ZIP decryption algorithm multiplies two 32-bit numbers, resulting in values
+        // with up to 64 bits.  Even though the algorithm only cares about the low 32 bits of
+        // the result, Javascript multiplication loses precision in those low bits whenever
+        // the result exceeds 53 bits, so we have to roll our own multiplication function that
+        // focuses on just the low 32 bits and doesn't bother with the high bits.
+        //
+        let mul32 = (a, b) => {
+            var ah = (a >>> 16), al = a & 0xffff;
+            var bh = (b >>> 16), bl = b & 0xffff;
+            var high = ((ah * bl) + (al * bh)) & 0xffff;
+            return (high << 16) + (al * bl);
+        };
+        let updateKeys = (b) => {
+            keys[0] = crc32(keys[0], b);
+            keys[1] = mul32(keys[1] + (keys[0] & 0xff), 134775813) + 1;
+            keys[2] = crc32(keys[2], keys[1] >>> 24);
+        };
+        let decryptByte = () => {
+            const w = (keys[2] & 0xffff)|2;
+            return ((w * (w ^ 1)) >> 8) & 0xff;
+        };
+        //
+        // Initialize keys with password.
+        //
+        for (let i = 0; i < password.length; i++) {
+            updateKeys(password.charCodeAt(i));
+        }
+        //
+        // Decrypt the encryption header.
+        //
+        for (let i = 0; i < fileHeader.encBytes.length; i++) {
+            let b = fileHeader.encBytes[i] ^ decryptByte();
+            fileHeader.encBytes[i] = b;
+            updateKeys(b);
+        }
+        //
+        // Check the last 2 bytes of the encryption header: they should match the
+        // high word of the entry's CRC.
+        //
+        // TODO: For archives produced with PKZIP 2.x, do we need to limit the comparison to
+        // the last (high) byte of the encryption header with the last (high) byte of the CRC?
+        //
+        let w = fileHeader.encBytes[10] | (fileHeader.encBytes[11] << 8);
+        if (w != (fileHeader.crc >>> 16)) {
+            throw new Error("Password is incorrect");
+        }
+        //
+        // Decrypt the compressed data stream.
+        //
+        for (let off = 0; off < db.length; off++) {
+            const b = db.readUInt8(off) ^ decryptByte();
+            db.writeUInt8(b, off);
+            updateKeys(b);
+        }
+        return db;
+    }
+
+    /**
+     * inflateAsync(buffer)
+     *
+     * Asynchronously inflates a buffer using the provided inflate interface.
+     *
+     * @this {Dezip}
+     * @param {Buffer} buffer (compressed data to inflate)
+     * @returns {Promise<Buffer>} (promise that resolves to the decompressed data)
+     */
+    async inflateAsync(buffer)
+    {
+        return new Promise((resolve, reject) => {
+            this.interfaces.inflate(buffer, (err, result) => {
+                if (err) {
+                    return reject(err);
+                }
+                resolve(result);
+            });
+        });
+    }
+
+    /**
+     * inflateChunks(entry, chunkGenerator)
+     *
+     * @this {Dezip}
+     * @param {Entry} entry
+     * @param {*} chunkGenerator
+     * @returns {Promise<Buffer>}
+     */
+    async inflateChunks(entry, chunkGenerator)
+    {
+        const chunks = [];
+        const inflate = this.interfaces.createInflate();
+        for await (const chunk of chunkGenerator) {
+            inflate.write(chunk.buffer);
+        }
+        inflate.end();
+        return new Promise((resolve, reject) => {
+            inflate.on('data', (chunk) => {
+                chunks.push(chunk);
+                this.updateCRC(entry, new DataBuffer(chunk), Dezip.TYPE_ZIP);
+            });
+            inflate.on('end', () => {
+                resolve(Buffer.concat(chunks));
+            });
+            inflate.on('error', (error) => {
+                reject(error);
+            });
+        });
+    }
+
+    /**
+     * initCache(archive, db, length)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @param {DataBuffer} [db]
+     * @param {number} [length]
+     */
+    initCache(archive, db = null, length = 0)
+    {
+        archive.cache.db = db;
+        archive.cache.position = 0;     // position within the archive of the data in the cache buffer
+        archive.cache.extent = length;  // amount of valid data in the cache buffer (always <= db.length)
+    }
+
+    /**
+     * newEntry(archive)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @returns {Entry}
+     */
+    newEntry(archive)
+    {
+        let entry = {
+            index: archive.entries.length,
+            dirHeader: null,
+            dirPosition: -1,
+            fileHeader: null,
+            filePosition: -1,
+            warnings: []                // array of entry warnings, if any
+        };
+        archive.entries.push(entry);
+        return entry;
+    }
+
+    /**
      * readArchive(archive, position, extent)
+     *
+     * NOTE: When reading from a file, this function deliberately bypasses the cache,
+     * on the assumption that we're reading unstructured (eg, compressed) chunks of data
+     * which don't need to be cached and/or could exceed the size of our cache buffer.
+     *
+     * The cache is only intended for reading small data structures from the archive.
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -418,21 +647,6 @@ export default class Dezip {
     }
 
     /**
-     * initCache(archive, db, length)
-     *
-     * @this {Dezip}
-     * @param {Archive} archive
-     * @param {DataBuffer} [db]
-     * @param {number} [length]
-     */
-    initCache(archive, db = null, length = 0)
-    {
-        archive.cache.db = db;
-        archive.cache.position = 0;     // position within the archive of the data in the cache buffer
-        archive.cache.extent = length;  // amount of valid data in the cache buffer (always <= db.length)
-    }
-
-    /**
      * readCache(archive, position, extent)
      *
      * Given a position and extent within the archive, and given the archive's cache
@@ -443,6 +657,10 @@ export default class Dezip {
      * In general, the returned length will be the same as the requested extent, except
      * when the request extends beyond the size of the archive or is larger than the current
      * cache size.
+     *
+     * NOTE: I deliberately chose the terminology "position" and "extent" when referring to
+     * file locations, and "offset" and "length" when referring to buffer locations, in
+     * order to minimize the risk of confusion between the two.
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -524,6 +742,28 @@ export default class Dezip {
     }
 
     /**
+     * readChunks(archive, position, extent)
+     *
+     * @this {Dezip}
+     * @param {Archive} archive
+     * @param {number} position
+     * @param {number} extent
+     */
+    async* readChunks(archive, position, extent)
+    {
+        while (extent > 0) {
+            let chunkSize = Math.min(extent, this.cacheSize);
+            let db = await this.readArchive(archive, position, chunkSize);
+            if (db.length == 0) {
+                break;
+            }
+            yield db;
+            position += db.length;
+            extent -= db.length;
+        }
+    }
+
+    /**
      * readDirectory(archive, filespec, filterExceptions, filterMethod)
      *
      * This function always returns a new list of entries, based on any filtering that may
@@ -544,13 +784,13 @@ export default class Dezip {
     {
         let entry = null, entries = [];
         const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
-        if (!(archive.exceptions & Dezip.EXCEPTION_NODIRS)) {
+        if (!(archive.exceptions & Dezip.EXCEPTIONS.NODIRS)) {
             do {
                 entry = await this.readDirEntry(archive, entry);
                 if (!entry) break;
                 this.assert(archive.endHeader && entry.dirHeader);
                 if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
-                    archive.exceptions |= Dezip.EXCEPTION_SPLITDISK;
+                    archive.exceptions |= Dezip.EXCEPTIONS.SPLITDISK;
                 }
                 if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
                     continue;
@@ -560,13 +800,13 @@ export default class Dezip {
                 }
             } while (true);
             if (!archive.entries.length) {
-                archive.exceptions |= Dezip.EXCEPTION_NODIRS;
+                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
         }
         //
         // Search the file headers ONLY if there are no dir headers AND we're unsure about file headers.
         //
-        if ((archive.exceptions & (Dezip.EXCEPTION_NODIRS | Dezip.EXCEPTION_NOFILES)) == Dezip.EXCEPTION_NODIRS) {
+        if ((archive.exceptions & (Dezip.EXCEPTIONS.NODIRS | Dezip.EXCEPTIONS.NOFILES)) == Dezip.EXCEPTIONS.NODIRS) {
             do {
                 entry = await this.readFileEntry(archive, entry);
                 if (!entry) break;
@@ -578,7 +818,7 @@ export default class Dezip {
                 }
             } while (true);
             if (!archive.entries.length) {
-                archive.exceptions |= Dezip.EXCEPTION_NOFILES;
+                archive.exceptions |= Dezip.EXCEPTIONS.NOFILES;
             }
         }
         return entries;
@@ -647,7 +887,7 @@ export default class Dezip {
                                 archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
                             archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
-                            archive.exceptions |= Dezip.EXCEPTION_ACOMMENT;
+                            archive.exceptions |= Dezip.EXCEPTIONS.ACOMMENT;
                         }
                         break;
                     }
@@ -694,7 +934,7 @@ export default class Dezip {
                     entry.warnings.push(`Comment length (${dirHeader.lenComment}) exceeds available length (${length})`);
                 }
                 dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
-                archive.exceptions |= Dezip.EXCEPTION_FCOMMENT;
+                archive.exceptions |= Dezip.EXCEPTIONS.FCOMMENT;
             }
         }
         return entry;
@@ -759,7 +999,7 @@ export default class Dezip {
                     position = 0;
                 }
                 if (arcType != archive.type) {
-                    archive.exceptions |= Dezip.EXCEPTION_WRONGTYPE;
+                    archive.exceptions |= Dezip.EXCEPTIONS.WRONGTYPE;
                     archive.type = arcType;
                 }
             }
@@ -796,10 +1036,11 @@ export default class Dezip {
                     arcHeader.method = -arcHeader.type;             // convert ARC type to method (signed to avoid conflict with ZIP methods)
                     if (arcHeader.type == Dezip.ArcHeader.fields.type.ARC_OLD) {
                         arcHeader.size = arcHeader.compressedSize;
-                        arcHeader.method = Dezip.ARC_UNP;
+                        arcHeader.method = Dezip.METHODS.ARC_UNP;
                     }
                     arcHeader.length = Dezip.ArcHeader.length;
                     fileHeader = arcHeader;
+                    fileHeader.flags = 0;
                 }
             } else {
                 let zipHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
@@ -822,84 +1063,29 @@ export default class Dezip {
                     }
                     zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, length, this.encoding);
                     zipHeader.length = Dezip.FileHeader.length + zipHeader.lenName + zipHeader.lenExtra;
+                    if (zipHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                        //
+                        // There should be an additional 12 bytes of data for encrypted files (ie, the "Encryption Header"),
+                        // which we need to read and skip as well.
+                        //
+                        position += zipHeader.lenName + zipHeader.lenExtra;
+                        [offset, length] = await this.readCache(archive, position, 12);
+                        if (length < 12) {
+                            zipHeader.warnings.push(`Encryption header length (${12}) exceeds available length (${length})`);
+                        }
+                        zipHeader.encBytes = [];
+                        for (let i = 0; i < length; i++) {
+                            zipHeader.encBytes[i] = archive.cache.db.buffer[offset + i];
+                            // zipHeader.encBytes[i] = archive.cache.db.readUInt8(offset + i);
+                        }
+                        zipHeader.length += 12;
+                        archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+                    }
                     fileHeader = zipHeader;
                 }
             }
         }
         return fileHeader;
-    }
-
-    /**
-     * readChunks(archive, position, extent)
-     *
-     * @this {Dezip}
-     * @param {Archive} archive
-     * @param {number} position
-     * @param {number} extent
-     */
-    async* readChunks(archive, position, extent)
-    {
-        while (extent > 0) {
-            let chunkSize = Math.min(extent, this.cacheSize);
-            let db = await this.readArchive(archive, position, chunkSize);
-            if (db.length == 0) {
-                break;
-            }
-            yield db;
-            position += db.length;
-            extent -= db.length;
-        }
-    }
-
-    /**
-     * inflateChunks(entry, chunkGenerator)
-     *
-     * @this {Dezip}
-     * @param {Entry} entry
-     * @param {*} chunkGenerator
-     * @returns {Promise<Buffer>}
-     */
-    async inflateChunks(entry, chunkGenerator)
-    {
-        const chunks = [];
-        const inflate = this.interfaces.createInflate();
-        for await (const chunk of chunkGenerator) {
-            inflate.write(chunk.buffer);
-        }
-        inflate.end();
-        return new Promise((resolve, reject) => {
-            inflate.on('data', (chunk) => {
-                chunks.push(chunk);
-                this.updateCRC(entry, new DataBuffer(chunk), Dezip.TYPE_ZIP);
-            });
-            inflate.on('end', () => {
-                resolve(Buffer.concat(chunks));
-            });
-            inflate.on('error', (error) => {
-                reject(error);
-            });
-        });
-    }
-
-    /**
-     * inflateAsync(buffer)
-     *
-     * Asynchronously inflates a buffer using the provided inflate interface.
-     *
-     * @this {Dezip}
-     * @param {Buffer} buffer (compressed data to inflate)
-     * @returns {Promise<Buffer>} (promise that resolves to the decompressed data)
-     */
-    async inflateAsync(buffer)
-    {
-        return new Promise((resolve, reject) => {
-            this.interfaces.inflate(buffer, (err, result) => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve(result);
-            });
-        });
     }
 
     /**
@@ -936,7 +1122,7 @@ export default class Dezip {
         }
         if (compressedSize) {
             let expandedData;
-            if (fileHeader.method == Dezip.ZIP_DEFLATE || fileHeader.method == Dezip.ZIP_DEFLATE64) {
+            if (fileHeader.method == Dezip.METHODS.ZIP_DEFLATE || fileHeader.method == Dezip.METHODS.ZIP_DEFLATE64) {
                 if (this.interfaces.createInflate) {
                     expandedData = await this.inflateChunks(
                         entry, this.readChunks(archive, position, compressedSize)
@@ -962,99 +1148,104 @@ export default class Dezip {
                  * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
                  */
                 let attempts = 2;                       // maximum of two attempts
+                if (archive.type != Dezip.TYPE_ARC || !archive.password) {
+                    attempts = 1;                       // only one attempt for the normal case
+                }
                 let db = await this.readArchive(archive, position, compressedSize);
                 while (attempts--) {
                     try {
-                        let srcData = db.buffer;
-                        if (archive.type != Dezip.TYPE_ARC || !archive.password) {
-                            attempts = 0;               // only one attempt for the normal case
-                        } else {
+                        if (archive.type == Dezip.TYPE_ARC && archive.password) {
                             /**
-                             * TODO: decryption of 'garbled' files is limited to ARC archives, because the ARC implementation
-                             * is simple and I haven't looked into how PKZIP implemented it yet.
+                             * Decrypt the "garbled" ARC data.
                              */
                             let password = archive.password.toUpperCase();
-                            for (let off = 0; off < srcData.length; off++) {
-                                srcData.writeUInt8(srcData.readUInt8(off) ^ password.charCodeAt(off % password.length), off);
+                            for (let off = 0; off < db.length; off++) {
+                                db.writeUInt8(db.readUInt8(off) ^ password.charCodeAt(off % password.length), off);
                             }
                             /**
-                             * ARC file headers don't have a "flags" field, but we still include a flags field in the entry object,
-                             * and we borrow the "ENC" flag from the ZIP file header definition to track whether this particular file
-                             * was encrypted.
+                             * ARC file headers don't have a "flags" field, but readFileHeader() adds one anyway,
+                             * for consistency between headers, and we now update the ENCRYPTED flag to track whether
+                             * this particular file was encrypted.
                              */
                             if (attempts) {
                                 fileHeader.flags |= Dezip.FileHeader.fields.flags.ENCRYPTED;
                             } else {
-                                entry.warnings = [];
                                 fileHeader.flags &= ~Dezip.FileHeader.fields.flags.ENCRYPTED;
+                                entry.warnings = [];
                             }
                         }
+                        else if (archive.type == Dezip.TYPE_ZIP && archive.password) {
+                            if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                                db = this.decryptZipData(db, fileHeader, archive.password);
+                            }
+                        }
+                        let srcData = db.buffer;
                         //
                         // Process "legacy" compression methods here.
                         //
                         // TODO: Create versions of the LegacyZIP and LegacyARC classes that use DataBuffers.
                         //
                         switch(fileHeader.method) {
-                        case Dezip.ARC_UNP:
-                        case Dezip.ZIP_STORE:
+                        case Dezip.METHODS.ARC_UNP:
+                        case Dezip.METHODS.ZIP_STORE:
                             expandedData = srcData;
                             break;
-                        case Dezip.ARC_NR:              // aka "Pack"
+                        case Dezip.METHODS.ARC_NR:              // aka "Pack"
                             if (this.interfaces.unpackSync) {
                                 expandedData = this.interfaces.unpackSync(srcData, expandedSize);
                             }
                             break;
-                        case Dezip.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
+                        case Dezip.METHODS.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
                             if (this.interfaces.unsqueezeSync) {
                                 expandedData = this.interfaces.unsqueezeSync(srcData, expandedSize);
                             }
                             break;
-                        case Dezip.ARC_LZ:              // aka "Crunch5" (LZ compression)
+                        case Dezip.METHODS.ARC_LZ:              // aka "Crunch5" (LZ compression)
                             if (this.interfaces.uncrunchSync) {
                                 expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 0);
                             }
                             break;
-                        case Dezip.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
+                        case Dezip.METHODS.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
                             if (this.interfaces.uncrunchSync) {
                                 expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 1);
                             }
                             break;
-                        case Dezip.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
+                        case Dezip.METHODS.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
                             if (this.interfaces.uncrunchSync) {
                                 expandedData = this.interfaces.uncrunchSync(srcData, expandedSize, 2);
                             }
                             break;
-                        case Dezip.ARC_LZC:             // aka "Crush" (dynamic LZW)
+                        case Dezip.METHODS.ARC_LZC:             // aka "Crush" (dynamic LZW)
                             if (this.interfaces.uncrushSync) {
                                 expandedData = this.interfaces.uncrushSync(srcData, expandedSize, false);
                             }
                             break;
-                        case Dezip.ARC_LZS:             // aka "Squash"
+                        case Dezip.METHODS.ARC_LZS:             // aka "Squash"
                             if (this.interfaces.uncrushSync) {
                                 expandedData = this.interfaces.uncrushSync(srcData, expandedSize, true);
                             }
                             break;
-                        case Dezip.ZIP_SHRINK:
+                        case Dezip.METHODS.ZIP_SHRINK:
                             if (this.interfaces.stretchSync) {
                                 expandedData = this.interfaces.stretchSync(srcData, expandedSize);
                             }
                             break;
-                        case Dezip.ZIP_REDUCE1:
-                        case Dezip.ZIP_REDUCE2:
-                        case Dezip.ZIP_REDUCE3:
-                        case Dezip.ZIP_REDUCE4:
+                        case Dezip.METHODS.ZIP_REDUCE1:
+                        case Dezip.METHODS.ZIP_REDUCE2:
+                        case Dezip.METHODS.ZIP_REDUCE3:
+                        case Dezip.METHODS.ZIP_REDUCE4:
                             if (this.interfaces.expandSync) {
-                                expandedData = this.interfaces.expandSync(srcData, expandedSize, fileHeader.method - Dezip.ZIP_REDUCE1 + 1);
+                                expandedData = this.interfaces.expandSync(srcData, expandedSize, fileHeader.method - Dezip.METHODS.ZIP_REDUCE1 + 1);
                             }
                             break;
-                        case Dezip.ZIP_IMPLODE:
+                        case Dezip.METHODS.ZIP_IMPLODE:
                             if (this.interfaces.explodeSync) {
                                 let largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
                                 let literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
                                 expandedData = this.interfaces.explodeSync(srcData, expandedSize, largeWindow, literalTree);
                             }
                             break;
-                        case Dezip.ZIP_IMPLODE_DCL:
+                        case Dezip.METHODS.ZIP_IMPLODE_DCL:
                             if (this.interfaces.blastSync) {
                                 expandedData = this.interfaces.blastSync(srcData);
                             }
@@ -1084,21 +1275,6 @@ export default class Dezip {
             }
         }
         return expandedDB;
-    }
-
-    /**
-     * close(archive)
-     *
-     * @this {Dezip}
-     * @param {Archive} archive
-     */
-    async close(archive)
-    {
-        if (archive.file) {
-            await archive.file.close();
-            archive.file = null;
-        }
-        this.initCache(archive);
     }
 
     /**
