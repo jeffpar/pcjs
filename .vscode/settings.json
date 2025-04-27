@@ -1918,6 +1918,7 @@
     "NODEBUG",
     "nodebugger",
     "NODHEADERS",
+    "nodir",
     "NODIRS",
     "NODISP",
     "NOFHEADERS",

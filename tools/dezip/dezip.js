@@ -327,7 +327,7 @@ export default class Dezip {
         else if (this.interfaces.open) {
             archive.file = await this.interfaces.open(fileName, "r");
             if (!archive.file) {
-                throw new Error("Unable to open archive " + fileName);
+                throw new Error(`Unable to open archive: ${fileName}`);
             }
             const stats = await archive.file.stat();
             archive.length = stats.size;
@@ -1028,7 +1028,7 @@ export default class Dezip {
             }
         }
         if (position >= 0) {
-            let fileHeader = await this.readFileHeader(archive, position);
+            let fileHeader = await this.readFileHeader(archive, entry?.dirHeader, position);
             if (!fileHeader) {
                 return null;
             }
@@ -1039,24 +1039,36 @@ export default class Dezip {
                 entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                 archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
             }
+            if (fileHeader.warnings) {
+                entry.warnings.push(...fileHeader.warnings);
+                delete fileHeader.warnings;
+            }
         }
         return entry;
     }
 
     /**
-     * readFileHeader(archive, position)
+     * readFileHeader(archive, dirHeader, position)
      *
      * @this {Dezip}
      * @param {Archive} archive
+     * @param {DirHeader} dirHeader
      * @param {number} position
      * @returns {object|null} fileHeader
      */
-    async readFileHeader(archive, position)
+    async readFileHeader(archive, dirHeader, position)
     {
         let fileHeader = null;
         let lenHeader = archive.type == Dezip.TYPE_ARC? Dezip.ArcHeader.length : Dezip.FileHeader.length;
         let [offset, length] = await this.readCache(archive, position, lenHeader);
         if (length >= lenHeader) {
+            //
+            // Although generally warnings are saved in archive.warnings or entry.warnings as appropriate,
+            // we don't have an entry yet, so we save warnings here.  Note that headers created by readStruct()
+            // may also generate warnings, but one key difference is that readStruct() ONLY adds a 'warnings'
+            // property if there were actual warnings.
+            //
+            let warnings = [];
             if (archive.type == Dezip.TYPE_ARC) {
                 let arcHeader = Dezip.ArcHeader.readStruct(archive.cache.db, offset, this.encoding);
                 if (arcHeader.signature == Dezip.ArcHeader.fields.signature.ARCSIG && arcHeader.type > 0 && arcHeader.type < Dezip.ArcHeader.fields.type.ARC_UNK) {
@@ -1072,21 +1084,10 @@ export default class Dezip {
             } else {
                 let zipHeader = Dezip.FileHeader.readStruct(archive.cache.db, offset, this.encoding);
                 if (zipHeader.signature == Dezip.FileHeader.fields.signature.FILESIG) {
-                    //
-                    // TODO: For all fields that appear in BOTH FileHeader AND DirHeader, consider comparing them
-                    // and warning about any differences.
-                    //
                     position += Dezip.FileHeader.length;
                     [offset, length] = await this.readCache(archive, position, zipHeader.lenName);
                     if (length < zipHeader.lenName) {
-                        //
-                        // Although generally warnings are saved in archive.warnings or entry.warnings as appropriate,
-                        // we don't have an entry yet, so we save it in the header.  Note that headers are created
-                        // by readStruct() which may also generate warnings, but one key difference is that readStruct()
-                        // ONLY adds a 'warnings' property if there were actual warnings, so we have to check first.
-                        //
-                        if (!zipHeader.warnings) zipHeader.warnings = [];
-                        zipHeader.warnings.push(`Name length (${zipHeader.lenName}) exceeds available length (${length})`);
+                        warnings.push(`Name length (${zipHeader.lenName}) exceeds available length (${length})`);
                     }
                     zipHeader.name = Dezip.FileHeader.readString(archive.cache.db, offset, length, this.encoding);
                     zipHeader.length = Dezip.FileHeader.length + zipHeader.lenName + zipHeader.lenExtra;
@@ -1098,7 +1099,7 @@ export default class Dezip {
                         position += zipHeader.lenName + zipHeader.lenExtra;
                         [offset, length] = await this.readCache(archive, position, 12);
                         if (length < 12) {
-                            zipHeader.warnings.push(`Encryption header length (${12}) exceeds available length (${length})`);
+                            warnings.push(`Encryption header length (${12}) exceeds available length (${length})`);
                         }
                         zipHeader.encBytes = [];
                         for (let i = 0; i < length; i++) {
@@ -1108,7 +1109,27 @@ export default class Dezip {
                         zipHeader.length += 12;
                         archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                     }
+                    if (dirHeader) {
+                        //
+                        // Sanity-check a few of the fields that are in both headers and should be in agreement;
+                        // any discrepancies are logged as warnings (and we limit ourselves to one warning, since one
+                        // significant difference often implies many differences).
+                        //
+                        for (let field of ["name", "size", "compressedSize"]) {
+                            if (zipHeader[field] != dirHeader[field]) {
+                                warnings.push(`FileHeader ${field}: ${zipHeader[field]}`);
+                                break;
+                            }
+                        }
+                    }
                     fileHeader = zipHeader;
+                }
+            }
+            if (fileHeader && warnings.length) {
+                if (!fileHeader.warnings) {
+                    fileHeader.warnings = warnings;
+                } else {
+                    fileHeader.warnings.push(...warnings);
                 }
             }
         }
@@ -1127,63 +1148,67 @@ export default class Dezip {
     async readFile(archive, entry, writeData)
     {
         let expandedDB;
-        let fileHeader = entry.fileHeader;
-        if (!fileHeader) {
-            this.assert(entry.dirHeader);
-            let position = entry.dirHeader.position;
-            fileHeader = await this.readFileHeader(archive, position);
+        try {
+            let fileHeader = entry.fileHeader;
             if (!fileHeader) {
-                throw new Error(`Unable to read file header`);
+                this.assert(entry.dirHeader);
+                let position = entry.dirHeader.position;
+                fileHeader = await this.readFileHeader(archive, entry.dirHeader, position);
+                if (!fileHeader) {
+                    throw new Error(`Unable to read FileHeader at ${position}`);
+                }
+                entry.fileHeader = fileHeader;
+                entry.filePosition = position;
+                if (fileHeader.warnings) {
+                    entry.warnings.push(...fileHeader.warnings);
+                    delete fileHeader.warnings;
+                }
             }
-            entry.fileHeader = fileHeader;
-            entry.filePosition = position;
-        }
-        entry.crcBytes = 0;
-        entry.crcValue = archive.type == Dezip.TYPE_ARC? 0 : ~0;
-        let position = entry.filePosition + fileHeader.length;
-        let compressedSize = fileHeader.compressedSize;
-        let expandedSize = fileHeader.size;
-        if ((entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) && !archive.password) {
-            compressedSize = 0;
-            entry.warnings.push(`Encrypted file`);
-        }
-        if (compressedSize) {
-            let expandedData;
-            if (fileHeader.method == Dezip.METHODS.ZIP_DEFLATE || fileHeader.method == Dezip.METHODS.ZIP_DEFLATE64) {
-                if (this.interfaces.createInflate) {
-                    expandedData = await this.inflateChunks(
-                        entry, this.readChunks(archive, position, compressedSize)
-                    );
-                } else if (this.interfaces.inflate) {
-                    let db = await this.readArchive(archive, position, compressedSize);
-                    if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
-                        db = this.decryptZipData(db, fileHeader, archive.password);
+            entry.crcBytes = 0;
+            entry.crcValue = archive.type == Dezip.TYPE_ARC? 0 : ~0;
+            let position = entry.filePosition + fileHeader.length;
+            let compressedSize = fileHeader.compressedSize;
+            let expandedSize = fileHeader.size;
+            if ((entry.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) && !archive.password) {
+                compressedSize = 0;
+                entry.warnings.push(`Encrypted file`);
+            }
+            if (compressedSize) {
+                let expandedData;
+                if (fileHeader.method == Dezip.METHODS.ZIP_DEFLATE || fileHeader.method == Dezip.METHODS.ZIP_DEFLATE64) {
+                    if (this.interfaces.createInflate) {
+                        expandedData = await this.inflateChunks(
+                            entry, this.readChunks(archive, position, compressedSize)
+                        );
+                    } else if (this.interfaces.inflate) {
+                        let db = await this.readArchive(archive, position, compressedSize);
+                        if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                            db = this.decryptZipData(db, fileHeader, archive.password);
+                        }
+                        expandedData = await this.inflateAsync(db.buffer);
                     }
-                    expandedData = await this.inflateAsync(db.buffer);
-                }
-                else {
-                    throw new Error(`No inflate interface available`);
-                }
-            } else {
-                /**
-                 * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
-                 * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
-                 * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
-                 *
-                 * With ARC files, our only clue that no password (or a different password) is required is when
-                 * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
-                 * garbage.
-                 *
-                 * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
-                 * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
-                 */
-                let attempts = 2;                       // maximum of two attempts
-                if (archive.type != Dezip.TYPE_ARC || !archive.password) {
-                    attempts = 1;                       // only one attempt for the normal case
-                }
-                let db = await this.readArchive(archive, position, compressedSize);
-                while (attempts--) {
-                    try {
+                    else {
+                        throw new Error(`No inflate interface available`);
+                    }
+                } else {
+                    /**
+                     * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
+                     * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
+                     * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
+                     *
+                     * With ARC files, our only clue that no password (or a different password) is required is when
+                     * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
+                     * garbage.
+                     *
+                     * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
+                     * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
+                     */
+                    let attempts = 2;                       // maximum of two attempts
+                    if (archive.type != Dezip.TYPE_ARC || !archive.password) {
+                        attempts = 1;                       // only one attempt for the normal case
+                    }
+                    let db = await this.readArchive(archive, position, compressedSize);
+                    while (attempts--) {
                         if (archive.type == Dezip.TYPE_ARC && archive.password) {
                             /**
                              * Decrypt the "garbled" ARC data.
@@ -1285,24 +1310,25 @@ export default class Dezip {
                         if (!attempts) {
                             throw new Error(`Unsupported compression method ${fileHeader.method}`);
                         }
-                    } catch (error) {
-                        entry.warnings.push(error.message);
+                    }
+                }
+                if (expandedData) {
+                    if (expandedSize != expandedData.length) {
+                        entry.warnings.push(`Received ${expandedData.length} bytes`);
+                    }
+                    expandedDB = new DataBuffer(expandedData);
+                    if (fileHeader.crc) {
+                        this.updateCRC(entry, expandedDB, archive.type, true);
+                    }
+                    if (writeData) {
+                        await writeData(expandedDB);
+                        await writeData();
                     }
                 }
             }
-            if (expandedData) {
-                if (expandedSize != expandedData.length) {
-                    entry.warnings.push(`Expected ${expandedSize} bytes, received ${expandedData.length}`);
-                }
-                expandedDB = new DataBuffer(expandedData);
-                if (fileHeader.crc) {
-                    this.updateCRC(entry, expandedDB, archive.type, true);
-                }
-                if (writeData) {
-                    await writeData(expandedDB);
-                    await writeData();
-                }
-            }
+        }
+        catch (error) {
+            entry.warnings.push(error.message);
         }
         return expandedDB;
     }
@@ -1334,7 +1360,7 @@ export default class Dezip {
             }
             if (entry.crcBytes >= sizeFile || final) {
                 if (crc != crcFile) {
-                    entry.warnings.push(`Expected CRC ${crcFile.toString(16)}, received ${(crc).toString(16)}`);
+                    entry.warnings.push(`Received CRC ${(crc).toString(16)}`);
                 }
             }
         }

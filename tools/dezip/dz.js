@@ -5,6 +5,41 @@
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
+ *
+ * Some notes about ZIP anomalies
+ * ------------------------------
+ *
+ * This command:
+ *
+ *      dz.js -lt /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0040-0049/ibm0047/AVC-8.ZIP
+ *
+ * lists 9 files, two of which have warnings:
+ *
+ *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
+ *      --------        ------   ------       ----  -----   ----       ----       ---
+ *      SAMPSHOW._ST     54082   Store       54082     0%   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
+ *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Unable to read FileHeader at 54160]
+ *      SAMPSND._AU       1690   Store        1690     0%   1991-05-22 01:03:00   790b9590
+ *      SAMPSND2._AD    508760   Implode    484636     5%   1991-05-22 01:03:00   9351eec9
+ *      SAMPSND2._AU      2920   Implode      1697    42%   1991-05-22 01:03:00   1138d881
+ *      SAMPVOIC._AD     52448   Implode     50099     4%   1991-05-22 01:03:00   1e1a9d7f
+ *      SPROTECT.EXE     20627   Implode     12461    40%   1991-05-22 01:03:00   918616b2
+ *      VOICE._AD       428672   Implode    410777     4%   1991-05-22 01:03:00   3a53989f
+ *      VOICE._AU         3190   Store        3190     0%   1991-05-22 01:03:00   15a9741a
+ *
+ * If you bypass the archive's DirHeaders (using -n) and rely strictly on FileHeaders, you see a completely different
+ * set of (8) files:
+ *
+ *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
+ *      --------        ------   ------       ----  -----   ----       ----       ---
+ *      BVHXGA.DLL        4330   Implode      2638    39%   1991-04-22 09:28:30   39d50b6b
+ *      DISPLAY.DLL     424864   Implode    161490    62%   1991-04-22 09:21:44   d595a00f
+ *      EXOS2.DLL        35481   Implode     15040    58%   1991-06-06 08:59:16   ea2ee879
+ *      README.XGA        1199   Implode       608    49%   1991-06-06 17:02:38   1069fd3d
+ *      XGA.DDP            336   Implode       211    37%   1991-05-30 13:03:58   76513e7e
+ *      XGALOAD.DLL       5592   Implode      2127    62%   1991-06-06 10:01:08   d3fac5b3
+ *      XGALOAD0.SYS     14993   Implode      3554    76%   1991-06-06 11:14:12   d94fd9d5
+ *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
  */
 
 import fs from "fs/promises";
@@ -126,6 +161,12 @@ const optionsDZ = {
         usage: "--list",
         alias: "-l",
         description: "list contents of specified archive(s)"
+    },
+    "nodir": {
+        type: "boolean",
+        usage: "--nodir",
+        alias: "-n",
+        description: "skip directory entries (scan for files instead)"
     },
     "overwrite": {
         type: "boolean",
@@ -311,6 +352,9 @@ async function main(argc, argv, errors)
             return;
         }
         try {
+            if (argv.nodir) {
+                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
+            }
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             //
             // The entries array can be empty for several reasons (eg, no files matched the specified filters),

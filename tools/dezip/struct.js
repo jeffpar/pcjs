@@ -313,7 +313,7 @@ export default class Struct {
             exceptions++;
         }
         if (exceptions) {
-            warnings.push(`exceptions (${exceptions}) in date/time (${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
+            warnings.push(`Error${exceptions > 1? 's' : ''}) in date/time: ${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
         }
         return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
     }
