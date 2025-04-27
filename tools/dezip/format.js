@@ -214,7 +214,7 @@ export default class Format {
                         }
                         let k = keys.findIndex(key => options[key].alias == "-" + ch);
                         if (k < 0) {
-                            errors.push(`Unknown option ${sep}${ch}`);
+                            errors.push(`Unknown option: ${sep}${ch}`);
                             continue;
                         }
                         let value;
@@ -229,12 +229,12 @@ export default class Format {
                                 value = args[i++];
                             }
                             if (value === undefined) {
-                                errors.push(`Missing value for option ${sep}${ch}`);
+                                errors.push(`Missing value for option: ${sep}${ch}`);
                                 break;
                             }
                             if (option.type == "number") {
                                 if (isNaN(+value)) {
-                                    errors.push(`Invalid number (${value}) for option ${sep}${ch}`);
+                                    errors.push(`Invalid number (${value}) for option: ${sep}${ch}`);
                                     break;
                                 }
                                 value = +value;
@@ -258,7 +258,7 @@ export default class Format {
                 }
                 let option = options[arg];
                 if (!option) {
-                    errors.push(`Unknown option ${sep}${arg}`);
+                    errors.push(`Unknown option: ${sep}${arg}`);
                     continue;
                 }
                 if (option.type == "boolean") {
@@ -271,12 +271,12 @@ export default class Format {
                         value = args[i++];
                     }
                     if (value === undefined) {
-                        errors.push(`Missing value for option ${sep}${arg}`);
+                        errors.push(`Missing value for option: ${sep}${arg}`);
                         continue;
                     }
                     if (option.type == "number") {
                         if (isNaN(+value)) {
-                            errors.push(`Invalid number (${value}) for option ${sep}${arg}`);
+                            errors.push(`Invalid number (${value}) for option: ${sep}${arg}`);
                             continue;
                         }
                         value = +value;

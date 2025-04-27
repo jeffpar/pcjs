@@ -243,40 +243,15 @@ async function main(argc, argv, errors)
     //
     // Before we get started, display any usage errors encountered by parseOptions().
     //
+    let nErrors = 0;
     for (let error of errors) {
         printf("%s\n", error);
+        nErrors++;
     }
-    //
-    // Build a list of archive files to process, starting with files listed in the batch file, if any.
-    //
-    if (argv.batch) {
-        try {
-            let lines = await fs.readFile(argv.batch, "utf8");
-            if (argv.skip) {
-                lines = lines.slice(argv.skip);
-            }
-            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
-        } catch (error) {
-            printf("%s\n", error.message);
-        }
-    }
-    //
-    // Add any files matching --path patterns.
-    //
-    if (argv.path) {
-        let files = glob.sync(argv.path);
-        archivePaths = archivePaths.concat(files);
-    }
-    //
-    // Finally, include any explicitly listed archive filenames.
-    //
-    for (let i = 1; i < argv.length; i++) {
-        archivePaths.push(argv[i]);
-    }
-    let nArchives = 0, nFiles = 0, filterExceptions = 0, filterMethod = -1;
     //
     // Next, let's deal with any specified filters.
     //
+    let filterExceptions = 0, filterMethod = -1;
     if (typeof argv.filter == "string") {
         let filterNames = argv.filter.split(",");
         for (let i = 0; i < filterNames.length; i++) {
@@ -299,6 +274,7 @@ async function main(argc, argv, errors)
                     continue;
                 }
                 printf("unknown filter: %s\n", filter);
+                nErrors++;
                 continue;
             }
             if (!option.value) {
@@ -329,6 +305,37 @@ async function main(argc, argv, errors)
             filterExceptions |= option.value;
         }
     }
+    if (nErrors) {
+        return;
+    }
+    //
+    // Build a list of archive files to process, starting with files listed in the batch file, if any.
+    //
+    if (argv.batch) {
+        try {
+            let lines = await fs.readFile(argv.batch, "utf8");
+            if (argv.skip) {
+                lines = lines.slice(argv.skip);
+            }
+            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
+        } catch (error) {
+            printf("%s\n", error.message);
+        }
+    }
+    //
+    // Add any files matching --path patterns.
+    //
+    if (argv.path) {
+        let files = glob.sync(argv.path);
+        archivePaths = archivePaths.concat(files);
+    }
+    //
+    // Finally, include any explicitly listed archive filenames.
+    //
+    for (let i = 1; i < argv.length; i++) {
+        archivePaths.push(argv[i]);
+    }
+    let nArchives = 0, nFiles = 0;
     //
     // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
@@ -520,7 +527,7 @@ async function main(argc, argv, errors)
         await dezip.close(archive);
     };
     //
-    // And finally: a one-line loop to bring them all and in the darkness bind them.
+    // And finally: the main loop.
     //
     for (let archivePath of archivePaths) {
         await processArchive(archivePath);
