@@ -196,7 +196,7 @@ const optionsDZ = {
     "skip": {
         type: "number",
         usage: "--skip n",
-        alias: "-n",
+        alias: "-k",
         internal: true,
         description: "skip the first n lines in any batch file"
     },
@@ -352,6 +352,10 @@ async function main(argc, argv, errors)
             return;
         }
         try {
+            //
+            // We don't have an "official" means of bypassing an archive's directory, but it's easy enough
+            // to flag the archive as having already scanned the directory, so readDirectory() won't bother.
+            //
             if (argv.nodir) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
