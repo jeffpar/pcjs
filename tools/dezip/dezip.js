@@ -236,10 +236,13 @@ export default class Dezip {
         NOFILES:                0x00000002,             // the archive contains no file headers
         WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
         SPLITDISK:              0x00000008,             // the archive contains entries that refer to another (split) archive
-        ACOMMENT:               0x00000010,             // the archive contains an archive comment
-        FCOMMENT:               0x00000020,             // the archive contains one or more per-file comments
-        GARBLED:                0x00000040              // the archive contains "garbled" (encrypted) entries
+        BANNER:                 0x00000010,             // the archive contains an archive comment ("banner")
+        COMMENT:                0x00010000,             // the archive contains one or more entries with comments
+        ENCRYPTED:              0x00020000              // the archive contains one or more encrypted ("garbled") entries
     };
+
+    static ARCHIVE_EXCEPTIONS = 0x0000ffff;
+    static ENTRY_EXCEPTIONS   = 0xffff0000;
 
     /**
      * constructor(interfaces)
@@ -618,6 +621,7 @@ export default class Dezip {
             dirPosition: -1,
             fileHeader: null,
             filePosition: -1,
+            exceptions: 0,              // see Dezip.EXCEPTIONS.*
             warnings: []                // array of entry warnings, if any
         };
         archive.entries.push(entry);
@@ -779,7 +783,7 @@ export default class Dezip {
      *
      * Also note that even though this function always uses readDirEntry() (and failing that,
      * readFileEntry()) to read each entry, those functions only scan the archive on the first
-     * attempt.  Subsequent calls simply return the next entry in the archive.entries list.
+     * attempt.  Subsequent calls to those functions simply return the next entry in archive.entries.
      *
      * @this {Dezip}
      * @param {Archive} archive
@@ -791,6 +795,8 @@ export default class Dezip {
     async readDirectory(archive, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
         let entry = null, entries = [];
+        let entryExceptions = filterExceptions & Dezip.ENTRY_EXCEPTIONS;
+        let archiveExceptions = filterExceptions & Dezip.ARCHIVE_EXCEPTIONS;
         const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
         if (!(archive.exceptions & Dezip.EXCEPTIONS.NODIRS)) {
             do {
@@ -803,7 +809,7 @@ export default class Dezip {
                 if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
                     continue;
                 }
-                if ((archive.exceptions & filterExceptions) == filterExceptions && regex.test(entry.dirHeader.name)) {
+                if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.dirHeader.name)) {
                     entries.push(entry);
                 }
             } while (true);
@@ -821,13 +827,16 @@ export default class Dezip {
                 if (filterMethod != -1 && entry.fileHeader.method != filterMethod) {
                     continue;
                 }
-                if ((archive.exceptions & filterExceptions) == filterExceptions && regex.test(entry.fileHeader.name)) {
+                if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.fileHeader.name)) {
                     entries.push(entry);
                 }
             } while (true);
             if (!archive.entries.length) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NOFILES;
             }
+        }
+        if ((archive.exceptions & archiveExceptions) != archiveExceptions) {
+            entries = [];
         }
         return entries;
     }
@@ -895,7 +904,7 @@ export default class Dezip {
                                 archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
                             archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
-                            archive.exceptions |= Dezip.EXCEPTIONS.ACOMMENT;
+                            archive.exceptions |= Dezip.EXCEPTIONS.BANNER;
                         }
                         break;
                     }
@@ -942,10 +951,12 @@ export default class Dezip {
                     entry.warnings.push(`Comment length (${dirHeader.lenComment}) exceeds available length (${length})`);
                 }
                 dirHeader.comment = Dezip.DirHeader.readString(cache.db, offset, length, this.encoding);
-                archive.exceptions |= Dezip.EXCEPTIONS.FCOMMENT;
+                entry.exceptions |= Dezip.EXCEPTIONS.COMMENT;
+                archive.exceptions |= Dezip.EXCEPTIONS.COMMENT;
             }
             if (dirHeader.flags & Dezip.DirHeader.fields.flags.ENCRYPTED) {
-                archive.exceptions |= Dezip.EXCEPTIONS.GARBLED;
+                entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+                archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
             }
         }
         return entry;
@@ -1023,6 +1034,10 @@ export default class Dezip {
             entry = entry || this.newEntry(archive);
             entry.fileHeader = fileHeader;
             entry.filePosition = position;
+            if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+                archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+            }
         }
         return entry;
     }

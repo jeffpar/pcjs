@@ -38,15 +38,17 @@ const dezip = new Dezip(
         blastSync: LegacyZip.blastSync,             // interface for ZIP_IMPLODE_DCL data
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
      // createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
-     // printf                                      // for debugging
+     // printf                                      // for debug output
     },
     {
         //
-        // NOTE: We override the default (64K) only to help exercise the cache code a bit more
-        // and help flush out any bugs.  Some structures in an archive (eg, comments) can be as
-        // large as 64K, so this may trigger warnings.
+        // NOTE: I overrode the default (64K) only to exercise the cache code a bit more
+        // and help flush out any bugs.  Some structures in an archive (eg, comments) can be
+        // as large as 64K-1, so this change also had the potential to trigger false warnings,
+        // because the cache should be as large as the largest structure in the archive
+        // (other than compressed data).
         //
-        cacheSize: 4096
+        // cacheSize: 4096
     }
 );
 
@@ -57,11 +59,11 @@ const optionsDZ = {
         alias: "-b",
         description: "process archives listed in specified file"
     },
-    "comment": {
+    "banner": {
         type: "boolean",
-        usage: "--comment",
+        usage: "--banner",
         alias: "-c",
-        description: "display archive comments"
+        description: "display archive (banner) comments"
     },
     "debug": {
         type: "boolean",
@@ -97,17 +99,17 @@ const optionsDZ = {
                 value: 0,
                 description: "list available filters"
             },
-            "acomments": {
-                value: Dezip.EXCEPTIONS.ACOMMENT,
-                description: "process only archives with archive comments"
+            "banner": {
+                value: Dezip.EXCEPTIONS.BANNER,
+                description: "process only archives with banner comments"
             },
-            "fcomments": {
-                value: Dezip.EXCEPTIONS.FCOMMENT,
-                description: "process only archives with per-file comments"
+            "comment": {
+                value: Dezip.EXCEPTIONS.COMMENT,
+                description: "process only commented entries"
             },
-            "garbled": {
-                value: Dezip.EXCEPTIONS.GARBLED,
-                description: "process only archives with garbled files"
+            "encrypted": {
+                value: Dezip.EXCEPTIONS.ENCRYPTED,
+                description: "process only encrypted entries"
             },
             "split": {
                 value: Dezip.EXCEPTIONS.SPLITDISK,
@@ -135,8 +137,8 @@ const optionsDZ = {
         type: "string",
         usage: "--password [pwd]",
         alias: "-g",
-        description: "decrypt \"garbled\" archives using password",
-        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' archives"
+        description: "decrypt \"garbled\" entries using password",
+        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' entries"
     },
     "path": {
         type: "string",
@@ -311,6 +313,14 @@ async function main(argc, argv, errors)
         try {
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             //
+            // The entries array can be empty for several reasons (eg, no files matching the specified
+            // filters), but the NOFILES exception will be set only if the internal entries array is also empty,
+            // suggesting that the file is not a valid archive.
+            //
+            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+                printf("%s: not an archive\n", archivePath);
+            }
+            //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
             // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
@@ -344,7 +354,12 @@ async function main(argc, argv, errors)
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
-                if (archive.comment && argv.comment) {
+                //
+                // We also refer to the archive comment as the archive's "banner", because that's an archive
+                // filtering condition (--filter banner), but if you also want to SEE the banners, then you must
+                // also specify --banner.
+                //
+                if (archive.comment && argv.banner) {
                     printf("%s\n", archive.comment);
                 }
                 if (argv.list) {
