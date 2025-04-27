@@ -112,8 +112,8 @@ const optionsDZ = {
                 description: "process only encrypted entries"
             },
             "split": {
-                value: Dezip.EXCEPTIONS.SPLITDISK,
-                description: "process only split-disk archives"
+                value: Dezip.EXCEPTIONS.SPLIT,
+                description: "process only split archives"
             },
             "wrong": {
                 value: Dezip.EXCEPTIONS.WRONGTYPE,
@@ -313,11 +313,14 @@ async function main(argc, argv, errors)
         try {
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             //
-            // The entries array can be empty for several reasons (eg, no files matching the specified
-            // filters), but the NOFILES exception will be set only if the internal entries array is also empty,
-            // suggesting that the file is not a valid archive.
+            // The entries array can be empty for several reasons (eg, no files matched the specified filters),
+            // but the NOFILES exception will be set only if the internal entries array is also empty, suggesting
+            // that the file is a not actually an archive.
             //
-            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+            // Note that we only display this warning if archiveDB is NOT set (or --verbose IS set), because if
+            // this is a nested archive, then it was only opened implicitly, not explicitly).
+            //
+            if ((archive.exceptions & Dezip.EXCEPTIONS.NOFILES) && (!archiveDB || argv.verbose)) {
                 printf("%s: not an archive\n", archivePath);
             }
             //
@@ -331,7 +334,7 @@ async function main(argc, argv, errors)
             // If multiple archives are being processed and/or extraction was enabled without a specific directory,
             // then extraction will occur inside a directory with the name of the archive (which will be created if
             // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
-            // use "." as the directory, to help avoid unintentional merging of files.
+            // use "." as the directory; the goal is to avoid unintentional merging of files.
             //
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
@@ -355,9 +358,9 @@ async function main(argc, argv, errors)
                     }
                 }
                 //
-                // We also refer to the archive comment as the archive's "banner", because that's an archive
-                // filtering condition (--filter banner), but if you also want to SEE the banners, then you must
-                // also specify --banner.
+                // We also refer to the archive comment as the archive's "banner", which is an archive
+                // filtering condition (--filter banner), but if you also want to SEE the banners, then
+                // you must also specify --banner.
                 //
                 if (archive.comment && argv.banner) {
                     printf("%s\n", archive.comment);
@@ -376,11 +379,6 @@ async function main(argc, argv, errors)
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside archives;
                 // for now, I'm trusting that entries inside one or more directories have those directories explicitly
                 // specified in header.name (ie, that header.name is always a full relative path).
-                //
-                // What am I concerned about?  Well, in early ZIP files, I thought I read something somewhere about
-                // entries with zero size also implying directories.  Also, note that the 'attr' field only exists in
-                // DirHeaders, not FileHeaders, so there's that.  And what's the deal with trailing forward slashes?
-                // That feels more like a modern convention rather than something the DOS version of PKZIP would have done.
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels

@@ -235,9 +235,9 @@ export default class Dezip {
         NODIRS:                 0x00000001,             // the archive contains no dir headers
         NOFILES:                0x00000002,             // the archive contains no file headers
         WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
-        SPLITDISK:              0x00000008,             // the archive contains entries that refer to another (split) archive
-        BANNER:                 0x00000010,             // the archive contains an archive comment ("banner")
-        COMMENT:                0x00010000,             // the archive contains one or more entries with comments
+        SPLIT:                  0x00000008,             // the archive contains entries referring to another ("split") archive
+        BANNER:                 0x00000010,             // the archive contains an archive comment (aka "banner")
+        COMMENT:                0x00010000,             // the archive contains one or more entry comments
         ENCRYPTED:              0x00020000              // the archive contains one or more encrypted ("garbled") entries
     };
 
@@ -522,11 +522,12 @@ export default class Dezip {
         // Check the last 2 bytes of the encryption header: they should match the
         // high word of the entry's CRC.
         //
-        // TODO: For archives produced with PKZIP 2.x, do we need to limit the comparison to
-        // the last (high) byte of the encryption header with the last (high) byte of the CRC?
+        // For archives produced with PKZIP 2.x, we need to limit the comparison to
+        // the last (high) byte of each, so an additional 8-bit shift is needed.
         //
+        let shift = fileHeader.version >= 20? 8 : 0;
         let w = fileHeader.encBytes[10] | (fileHeader.encBytes[11] << 8);
-        if (w != (fileHeader.crc >>> 16)) {
+        if ((w >>> shift) != (fileHeader.crc >>> (16 + shift))) {
             throw new Error("Password is incorrect");
         }
         //
@@ -804,7 +805,7 @@ export default class Dezip {
                 if (!entry) break;
                 this.assert(archive.endHeader && entry.dirHeader);
                 if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
-                    archive.exceptions |= Dezip.EXCEPTIONS.SPLITDISK;
+                    archive.exceptions |= Dezip.EXCEPTIONS.SPLIT;
                 }
                 if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
                     continue;
@@ -1155,6 +1156,9 @@ export default class Dezip {
                     );
                 } else if (this.interfaces.inflate) {
                     let db = await this.readArchive(archive, position, compressedSize);
+                    if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                        db = this.decryptZipData(db, fileHeader, archive.password);
+                    }
                     expandedData = await this.inflateAsync(db.buffer);
                 }
                 else {
