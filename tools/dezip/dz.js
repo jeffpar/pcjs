@@ -196,7 +196,6 @@ const options = {
     "skip": {
         type: "number",
         usage: "--skip n",
-        alias: "-k",
         internal: true,
         description: "skip the first n lines in any batch file"
     },
