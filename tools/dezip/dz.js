@@ -334,7 +334,7 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
-    let nArchives = 0, nFiles = 0;
+    let nTotalArchives = 0, nTotalFiles = 0;
     //
     // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
@@ -344,9 +344,9 @@ async function main(argc, argv, errors)
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
-            nArchives++;
-            if (nArchives % 10000 == 0 && !argv.verbose && !argv.list) {
-                printf("%d archives processed\n", nArchives);
+            nTotalArchives++;
+            if (nTotalArchives % 10000 == 0 && !argv.verbose && !argv.list) {
+                printf("%d archives processed\n", nTotalArchives);
             }
             let options = {};
             if (argv.password) {
@@ -355,12 +355,13 @@ async function main(argc, argv, errors)
             archive = await dezip.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("%s\n", error.message);
-            return;
+            return 0;
         }
+        let nArchiveFiles = 0;
         try {
             //
             // We don't have an "official" means of bypassing an archive's directory, but it's easy enough
-            // to flag the archive as having already scanned the directory, so readDirectory() won't bother.
+            // to flag the archive as having already scanned the directory so that readDirectory() won't bother.
             //
             if (argv.nodir) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
@@ -393,10 +394,6 @@ async function main(argc, argv, errors)
             let srcPath = path.dirname(archivePath);
             let dstPath = argv.dir || "";
             if (entries.length) {
-                if (argv.verbose || argv.list || filterExceptions || filterMethod != -1) {
-                    if (argv.list) printf("\n");
-                    printf("%s\n", archivePath);
-                }
                 let chgPath = dstPath.split("=");
                 if (chgPath.length > 1) {
                     if (srcPath.indexOf(chgPath[0]) >= 0) {
@@ -411,20 +408,8 @@ async function main(argc, argv, errors)
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
-                //
-                // We also refer to the archive comment as the archive's "banner", which is an archive
-                // filtering condition (--filter banner), but if you also want to SEE the banners, then
-                // you must also specify --banner.
-                //
-                if (archive.comment && argv.banner) {
-                    printf("%s\n", archive.comment);
-                }
-                if (argv.list) {
-                    printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-                    printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
-                }
             }
-            let nEntries = 0;
+            let nEntries = 0, heading = false;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;
@@ -440,7 +425,41 @@ async function main(argc, argv, errors)
                 if ((entryAttr & 0x10) || header.name.endsWith("/")) {
                     continue;           // skip directory entries
                 }
-                let writeData;
+                //
+                // While it might seem odd to print the archive heading inside the entry loop, if
+                // you've enabled recursive archive processing, we need to be able to reprint it on
+                // return from a recursive call; otherwise, we may give the mistaken impression
+                // that subsequent entries are part of the previous archive.
+                //
+                // The obvious alternative would be to process all non-recursive entries first,
+                // followed by a separate entry loop to process all the recursive entries.  But that
+                // wastes time and resources, because the best time to process a recursive entry is
+                // when we already have its buffered data in hand (and we will ALWAYS have it in
+                // hand when extracting or even just testing files in the archive).
+                //
+                if (!heading) {
+                    if (argv.verbose || argv.list || filterExceptions || filterMethod != -1) {
+                        if (argv.list) printf("\n");
+                        printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
+                    }
+                    //
+                    // We also refer to the archive comment as the archive's "banner", which is an archive
+                    // filtering condition (--filter banner), but if you also want to SEE the banners, then
+                    // you must also specify --banner.
+                    //
+                    if (archive.comment && argv.banner && !nArchiveFiles) {
+                        printf("%s\n", archive.comment);
+                    }
+                    if (argv.list) {
+                        printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
+                        printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+                    }
+                    heading = true;
+                }
+                nTotalFiles++;
+                nArchiveFiles++;
+                let db, writeData;
+                let printed = false;
                 let targetFile, targetPath;
                 let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
                 if ((argv.dir || argv.extract) && !recurse) {
@@ -478,61 +497,58 @@ async function main(argc, argv, errors)
                         return false;
                     };
                 }
-                try {
-                    let db;
-                    let printed = false;
-                    nFiles++;
-                    if (argv.dir || argv.extract || argv.test || recurse) {
-                        if (argv.debug) {
-                            printf("reading %s\n", header.name);
-                            printed = true;
-                        }
-                        db = await dezip.readFile(archive, entry, writeData);
+                if (argv.dir || argv.extract || argv.test || recurse) {
+                    if (argv.debug) {
+                        printf("reading %s\n", header.name);
+                        printed = true;
                     }
-                    if (argv.list) {
-                        let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
-                        if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
-                            method += '*';
-                        }
-                        let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
-                        let name = path.basename(header.name);
-                        if (name.length > 14) {
-                            name = "…" + name.slice(-13);
-                        }
-                        let comment = header.comment || (name == header.name? "" : header.name);
-                        if (entry.warnings.length) {
-                            let warnings = entry.warnings;
-                            //
-                            // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
-                            // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
-                            // so any warnings in one will probably be in the other.
-                            //
-                            let seen = {};
-                            for (let i = 0; i < warnings.length; i++) {
-                                let j = warnings.indexOf(warnings[i], i + 1);
-                                if (j >= 0) {
-                                    warnings.splice(j, 1);
-                                }
+                    db = await dezip.readFile(archive, entry, writeData);
+                }
+                if (argv.list) {
+                    let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
+                    if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                        method += '*';
+                    }
+                    let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
+                    let name = path.basename(header.name);
+                    if (name.length > 14) {
+                        name = "…" + name.slice(-13);
+                    }
+                    let comment = header.comment || (name == header.name? "" : header.name);
+                    if (entry.warnings.length) {
+                        let warnings = entry.warnings;
+                        //
+                        // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
+                        // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
+                        // so any warnings in one will probably be in the other.
+                        //
+                        let seen = {};
+                        for (let i = 0; i < warnings.length; i++) {
+                            let j = warnings.indexOf(warnings[i], i + 1);
+                            if (j >= 0) {
+                                warnings.splice(j, 1);
                             }
-                            comment = '[' + warnings.join("; ") + ']';
                         }
-                        printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
-                                name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
+                        comment = '[' + warnings.join("; ") + ']';
                     }
-                    else if (argv.debug && !printed) {
-                        printf("listing %s\n", header.name);
+                    printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
+                            name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
+                }
+                else if (argv.debug && !printed) {
+                    printf("listing %s\n", header.name);
+                }
+                if (recurse && db) {
+                    let n = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
+                    if (n) {
+                        heading = false;
                     }
-                    if (recurse && db) {
-                        await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
-                    }
-                } catch (error) {
-                    printf("%s/%s error: %s\n", archivePath, header.name, error.message);
                 }
             }
         } catch (error) {
             printf("%s\n", error.message);
         }
         await dezip.close(archive);
+        return nArchiveFiles;
     };
     //
     // And finally: the main loop.
@@ -540,7 +556,7 @@ async function main(argc, argv, errors)
     for (let archivePath of archivePaths) {
         await processArchive(archivePath);
     }
-    printf("\n%d archive(s) examined, %d file(s) processed\n", nArchives, nFiles);
+    printf("\n%d archive(s) examined, %d file(s) processed\n", nTotalArchives, nTotalFiles);
 }
 
 await main(...Format.parseOptions(process.argv, options));

@@ -685,7 +685,7 @@ export default class Dezip {
     {
         this.assert(position >= 0 && extent >= 0);
         if (position > archive.length) {
-            throw new Error(`${archive.fileName}: Position ${position} exceeds archive length (${archive.length})`);
+            throw new Error(`Position ${position} exceeds maximum (${archive.length})`);
         }
         if (position + extent > archive.length) {
             extent = archive.length - position;
@@ -738,11 +738,12 @@ export default class Dezip {
                 if (archive.file) {
                     let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
-                        throw new Error(`${archive.fileName}: Requested ${readExtent} bytes from archive at position ${readPosition}, received ${result.bytesRead}`);
+                        throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at position ${readPosition}`);
                     }
                 } else {
                     //
-                    // As asserted above, this is an inconsistency, because archives without handles should be fully cached.
+                    // As asserted above, this is an internal inconsistency, because archives without handles
+                    // should be fully cached (so, technically, you should never see this error).
                     //
                     throw new Error(`${archive.fileName}: No file handle available`);
                 }
@@ -931,7 +932,7 @@ export default class Dezip {
             }
             let dirHeader = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`${archive.fileName}: Invalid DirHeader signature (0x${dirHeader.signature.toString(16)}) at position ${position+offset}`);
+                throw new Error(`Position ${position} missing DirHeader`);
             }
             entry = this.newEntry(archive);
             entry.dirHeader = dirHeader;
@@ -1151,7 +1152,7 @@ export default class Dezip {
                 let position = entry.dirHeader.position;
                 await this.readFileHeader(archive, entry, position);
                 if (!entry.fileHeader) {
-                    throw new Error(`Unable to read FileHeader at ${position}`);
+                    throw new Error(`Position ${position} missing FileHeader`);
                 }
                 fileHeader = entry.fileHeader;
             }
