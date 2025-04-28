@@ -87,7 +87,7 @@ const dezip = new Dezip(
     }
 );
 
-const optionsDZ = {
+const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
@@ -220,8 +220,8 @@ const optionsDZ = {
         handler: function() {
             printf("Usage:\n    %s [options] [filenames]\n\n", path.basename(process.argv[1]));
             printf("Options:\n");
-            for (let key in optionsDZ) {
-                let option = optionsDZ[key];
+            for (let key in options) {
+                let option = options[key];
                 if (option.internal) continue;
                 printf("  %-16s %s%s\n", option.usage, option.description, option.alias? " [" + option.alias + "]" : "");
             }
@@ -238,7 +238,7 @@ async function main(argc, argv, errors)
 {
     printf("Dezip %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
     if (argv.help) {
-        optionsDZ.help.handler();
+        options.help.handler();
     }
     //
     // Before we get started, display any usage errors encountered by parseOptions().
@@ -256,7 +256,7 @@ async function main(argc, argv, errors)
         let filterNames = argv.filter.split(",");
         for (let i = 0; i < filterNames.length; i++) {
             let filter = filterNames[i].trim();
-            let option = optionsDZ.filter.options[filter];
+            let option = options.filter.options[filter];
             if (!option) {
                 //
                 // We also allow filtering based on compression method, but that doesn't actually set a filter bit;
@@ -279,8 +279,8 @@ async function main(argc, argv, errors)
             }
             if (!option.value) {
                 printf("\nAvailable filters:\n");
-                for (let key in optionsDZ.filter.options) {
-                    let option = optionsDZ.filter.options[key];
+                for (let key in options.filter.options) {
+                    let option = options.filter.options[key];
                     if (option.value) {
                         printf("%12s: %s\n", key, option.description);
                     }
@@ -501,10 +501,19 @@ async function main(argc, argv, errors)
                             name = "…" + name.slice(-13);
                         }
                         let comment = header.comment || (name == header.name? "" : header.name);
-                        if (entry.warnings.length || header.warnings) {
+                        if (entry.warnings.length) {
                             let warnings = entry.warnings;
-                            if (header.warnings) {
-                                warnings = warnings.concat(header.warnings);
+                            //
+                            // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
+                            // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
+                            // so any warnings in one will probably be in the other.
+                            //
+                            let seen = {};
+                            for (let i = 0; i < warnings.length; i++) {
+                                let j = warnings.indexOf(warnings[i], i + 1);
+                                if (j >= 0) {
+                                    warnings.splice(j, 1);
+                                }
                             }
                             comment = '[' + warnings.join("; ") + ']';
                         }
@@ -535,4 +544,4 @@ async function main(argc, argv, errors)
     printf("\n%d archive(s) examined, %d file(s) processed\n", nArchives, nFiles);
 }
 
-await main(...Format.parseOptions(process.argv, optionsDZ));
+await main(...Format.parseOptions(process.argv, options));

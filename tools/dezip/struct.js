@@ -282,7 +282,7 @@ export default class Struct {
          * (or rather, the lack thereof); they should have re-zipped any date < 1980 as zero.
          */
         let exceptions = 0;
-        let orig = { ...d };
+        let o = { ...d };
         if ((date || time) && d.m < 0) {
             d.m = 0;
             exceptions++;
@@ -313,7 +313,7 @@ export default class Struct {
             exceptions++;
         }
         if (exceptions) {
-            warnings.push(`Error${exceptions > 1? 's' : ''}) in date/time: ${orig.m+1}/${orig.d}/${orig.y} ${orig.h}:${(orig.n < 10? '0' : '')}${orig.n}:${(orig.s < 10? '0' : '')}${orig.s})`);
+            warnings.push(`Invalid date/time: ${o.y}-${(o.m < 9? '0' : '')}${o.m+1}-${(o.g < 10? '0' : '')}${o.d} ${(o.h < 10? '0' : '')}${o.h}:${(o.n < 10? '0' : '')}${o.n}:${(o.s < 10? '0' : '')}${o.s}`);
         }
         return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
     }

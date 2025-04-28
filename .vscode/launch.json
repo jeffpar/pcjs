@@ -2761,7 +2761,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--batch tests/good-archives.log --filter reduce --list"
+        "-ltrb tests/good-archives.log"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

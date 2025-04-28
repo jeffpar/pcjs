@@ -100,7 +100,7 @@ export default class Dezip {
         })
         .field('method',        Struct.UINT16)          // compression method
         .field('modified',      Struct.DOSTIMEDATE)     // modification time and date
-        .field('crc',           Struct.INT32)           // uncompressed file CRC-32 value
+        .field('crc',           Struct.UINT32)          // uncompressed file CRC-32 value
         .field('compressedSize',Struct.UINT32)          // compressed size
         .field('size',          Struct.UINT32)          // uncompressed size
         .field('lenName',       Struct.UINT16)          // filename length
@@ -130,7 +130,7 @@ export default class Dezip {
         })
         .field('method',        Struct.UINT16)          // compression method
         .field('modified',      Struct.DOSTIMEDATE)     // modification time and date
-        .field('crc',           Struct.INT32)           // uncompressed file CRC-32 value
+        .field('crc',           Struct.UINT32)          // uncompressed file CRC-32 value
         .field('compressedSize',Struct.UINT32)          // compressed size
         .field('size',          Struct.UINT32)          // uncompressed size
         .field('lenName',       Struct.UINT16)          // filename length
@@ -931,7 +931,7 @@ export default class Dezip {
             }
             let dirHeader = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`${archive.fileName}: Invalid DirHeader signature (${dirHeader.signature.toString(16)}) at position ${position+offset}`);
+                throw new Error(`${archive.fileName}: Invalid DirHeader signature (0x${dirHeader.signature.toString(16)}) at position ${position+offset}`);
             }
             entry = this.newEntry(archive);
             entry.dirHeader = dirHeader;
@@ -958,6 +958,10 @@ export default class Dezip {
             if (dirHeader.flags & Dezip.DirHeader.fields.flags.ENCRYPTED) {
                 entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                 archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+            }
+            if (dirHeader.warnings) {
+                entry.warnings.unshift(...dirHeader.warnings);
+                delete dirHeader.warnings;
             }
         }
         return entry;
@@ -1028,46 +1032,27 @@ export default class Dezip {
             }
         }
         if (position >= 0) {
-            let fileHeader = await this.readFileHeader(archive, entry?.dirHeader, position);
-            if (!fileHeader) {
-                return null;
-            }
-            entry = entry || this.newEntry(archive);
-            entry.fileHeader = fileHeader;
-            entry.filePosition = position;
-            if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
-                entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
-                archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
-            }
-            if (fileHeader.warnings) {
-                entry.warnings.push(...fileHeader.warnings);
-                delete fileHeader.warnings;
-            }
+            entry = await this.readFileHeader(archive, entry, position);
         }
         return entry;
     }
 
     /**
-     * readFileHeader(archive, dirHeader, position)
+     * readFileHeader(archive, entry, position)
      *
      * @this {Dezip}
      * @param {Archive} archive
-     * @param {DirHeader} dirHeader
+     * @param {Entry} entry
      * @param {number} position
-     * @returns {object|null} fileHeader
+     * @returns {Entry} entry
      */
-    async readFileHeader(archive, dirHeader, position)
+    async readFileHeader(archive, entry, position)
     {
-        let fileHeader = null;
+        let fileHeader;
+        let filePosition = position;
         let lenHeader = archive.type == Dezip.TYPE_ARC? Dezip.ArcHeader.length : Dezip.FileHeader.length;
         let [offset, length] = await this.readCache(archive, position, lenHeader);
         if (length >= lenHeader) {
-            //
-            // Although generally warnings are saved in archive.warnings or entry.warnings as appropriate,
-            // we don't have an entry yet, so we save warnings here.  Note that headers created by readStruct()
-            // may also generate warnings, but one key difference is that readStruct() ONLY adds a 'warnings'
-            // property if there were actual warnings.
-            //
             let warnings = [];
             if (archive.type == Dezip.TYPE_ARC) {
                 let arcHeader = Dezip.ArcHeader.readStruct(archive.cache.db, offset, this.encoding);
@@ -1109,14 +1094,14 @@ export default class Dezip {
                         zipHeader.length += 12;
                         archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                     }
-                    if (dirHeader) {
+                    if (entry?.dirHeader) {
                         //
                         // Sanity-check a few of the fields that are in both headers and should be in agreement;
                         // any discrepancies are logged as warnings (and we limit ourselves to one warning, since one
                         // significant difference often implies many differences).
                         //
                         for (let field of ["name", "size", "compressedSize"]) {
-                            if (zipHeader[field] != dirHeader[field]) {
+                            if (zipHeader[field] != entry.dirHeader[field]) {
                                 warnings.push(`FileHeader ${field}: ${zipHeader[field]}`);
                                 break;
                             }
@@ -1125,15 +1110,26 @@ export default class Dezip {
                     fileHeader = zipHeader;
                 }
             }
-            if (fileHeader && warnings.length) {
-                if (!fileHeader.warnings) {
-                    fileHeader.warnings = warnings;
-                } else {
-                    fileHeader.warnings.push(...warnings);
+            if (fileHeader) {
+                if (!entry) {
+                    entry = this.newEntry(archive);
+                }
+                entry.fileHeader = fileHeader;
+                entry.filePosition = filePosition;
+                if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                    entry.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+                    archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
+                }
+                if (fileHeader.warnings) {
+                    entry.warnings.unshift(...fileHeader.warnings);
+                    delete fileHeader.warnings;
+                }
+                if (warnings.length) {
+                    entry.warnings.push(...warnings);
                 }
             }
         }
-        return fileHeader;
+        return entry;
     }
 
     /**
@@ -1153,16 +1149,11 @@ export default class Dezip {
             if (!fileHeader) {
                 this.assert(entry.dirHeader);
                 let position = entry.dirHeader.position;
-                fileHeader = await this.readFileHeader(archive, entry.dirHeader, position);
-                if (!fileHeader) {
+                await this.readFileHeader(archive, entry, position);
+                if (!entry.fileHeader) {
                     throw new Error(`Unable to read FileHeader at ${position}`);
                 }
-                entry.fileHeader = fileHeader;
-                entry.filePosition = position;
-                if (fileHeader.warnings) {
-                    entry.warnings.push(...fileHeader.warnings);
-                    delete fileHeader.warnings;
-                }
+                fileHeader = entry.fileHeader;
             }
             entry.crcBytes = 0;
             entry.crcValue = archive.type == Dezip.TYPE_ARC? 0 : ~0;
@@ -1359,8 +1350,13 @@ export default class Dezip {
                 crc = ~crc;
             }
             if (entry.crcBytes >= sizeFile || final) {
-                if (crc != crcFile) {
-                    entry.warnings.push(`Received CRC ${(crc).toString(16)}`);
+                //
+                // We now read fileHeader.crc from the file as UINT32 rather than INT32, to avoid
+                // those annoying negative hex values when calling toString(16); however, that means
+                // we must also convert the calculated crc to a positive 32-bit value before comparing.
+                //
+                if ((crc >>> 0) != crcFile) {
+                    entry.warnings.push(`Received CRC 0x${(crc >>> 0).toString(16)}`);
                 }
             }
         }
