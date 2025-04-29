@@ -63,17 +63,6 @@ const dezip = new Dezip(
     {
         fetch,
         open: fs.open,
-        getArcCRC: LegacyArc.getArcCRC,
-        unpackSync: LegacyArc.unpackSync,           // interface for ARC_NR data
-        unsqueezeSync: LegacyArc.unsqueezeSync,     // interface for ARC_HS data
-        uncrunchSync: LegacyArc.uncrunchSync,       // interface for ARC_LZ, ARC_LZNR, ARC_LZNH data
-        uncrushSync: LegacyArc.uncrushSync,         // interface for ARC_LZC data
-        getZipCRC: LegacyZip.getZipCRC,
-        getZipCRCByte: LegacyZip.getZipCRCByte,
-        stretchSync: LegacyZip.stretchSync,         // interface for ZIP_SHRINK data
-        expandSync: LegacyZip.expandSync,           // interface for ZIP_REDUCE# data
-        explodeSync: LegacyZip.explodeSync,         // interface for ZIP_IMPLODE data
-        blastSync: LegacyZip.blastSync,             // interface for ZIP_IMPLODE_DCL data
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
      // createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
      // printf                                      // for debug output

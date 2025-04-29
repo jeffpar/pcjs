@@ -19,7 +19,7 @@
  * Copyright (C) 2003, 2012, 2013 Mark Adler
  */
 
-import { Buffer } from 'node:buffer';
+import DataBuffer from "./db.js";
 
 const DEBUG = true;
 
@@ -100,9 +100,9 @@ export class LegacyArc
     /**
      * unpackSync(src, dst_len)
      *
-     * @param {Buffer} src (packed data)
+     * @param {DataBuffer} src (packed data)
      * @param {number} dst_len
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static unpackSync(src, dst_len)
     {
@@ -122,9 +122,9 @@ export class LegacyArc
     /**
      * unsqueezeSync(src, dst_len)
      *
-     * @param {Buffer} src (squeezed data)
+     * @param {DataBuffer} src (squeezed data)
      * @param {number} dst_len
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static unsqueezeSync(src, dst_len)
     {
@@ -144,10 +144,10 @@ export class LegacyArc
     /**
      * uncrunchSync(src, dst_len, type)
      *
-     * @param {Buffer} src (crunched data)
+     * @param {DataBuffer} src (crunched data)
      * @param {number} dst_len
      * @param {number} type (0 for unpacked, 1 for packed, 2 for packed w/new hash)
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static uncrunchSync(src, dst_len, type)
     {
@@ -167,10 +167,10 @@ export class LegacyArc
     /**
      * uncrushSync(src, dst_len, squashed)
      *
-     * @param {Buffer} src (crushed or squashed data)
+     * @param {DataBuffer} src (crushed or squashed data)
      * @param {number} dst_len
      * @param {boolean} squashed (false if crushed, true if squashed)
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static uncrushSync(src, dst_len, squashed)
     {
@@ -223,20 +223,20 @@ export class LegacyArc
     ];
 
    /**
-    * getArcCRC(buf, crc)
+    * getArcCRC(db, crc)
     *
     * Calculate CRC for the given ARC data.
     *
     * The logic for this method of calculating the CRC 16 bit polynomial is taken
     * from an article by David Schwaderer in the April 1985 issue of PC Tech Journal.
     *
-    * @param {Buffer} buf
+    * @param {DataBuffer} db
     * @param {number} [crc] (running CRC value, if any)
     */
-    static getArcCRC(buf, crc = 0)
+    static getArcCRC(db, crc = 0)
     {
-        for (let i = 0; i < buf.length; i++) {
-            crc = LegacyArc.crcTable[(crc ^ buf[i]) & 0xff] ^ ((crc >> 8) & 0xff);
+        for (let i = 0; i < db.length; i++) {
+            crc = LegacyArc.crcTable[(crc ^ db.buffer[i]) & 0xff] ^ ((crc >> 8) & 0xff);
         }
         return crc;
     }
@@ -261,9 +261,9 @@ export class LegacyZip
     /**
      * stretchSync(src, dst_len)
      *
-     * @param {Buffer} src (SHRINK data)
+     * @param {DataBuffer} src (SHRINK data)
      * @param {number} dst_len
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static stretchSync(src, dst_len)
     {
@@ -283,10 +283,10 @@ export class LegacyZip
     /**
      * expandSync(src, dst_len, comp_factor)
      *
-     * @param {Buffer} src (REDUCE data)
+     * @param {DataBuffer} src (REDUCE data)
      * @param {number} dst_len
      * @param {number} comp_factor
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static expandSync(src, dst_len, comp_factor)
     {
@@ -313,11 +313,11 @@ export class LegacyZip
      * Returns a Decompress object.  Call getBytesRead() to get the number of source
      * bytes read, and getOutput() to the destination data.
      *
-     * @param {Buffer} src (IMPLODE data)
+     * @param {DataBuffer} src (IMPLODE data)
      * @param {number} dst_len
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     static explodeSync(src, dst_len, large_wnd, lit_tree)
     {
@@ -345,16 +345,12 @@ export class LegacyZip
     /**
      * blastSync(src)
      *
-     * @param {Buffer} src (IMPLODE_DCL data)
-     * @returns {Buffer|null}
+     * @param {DataBuffer} src (IMPLODE_DCL data)
+     * @returns {DataBuffer|null}
      */
     static blastSync(src)
     {
         let blast = new ZipBlast();
-
-        // let test = Buffer.from([0x00, 0x04, 0x82, 0x24, 0x25, 0x8f, 0x80, 0x7f]);
-        // blast.decomp(test);
-
         blast.decomp(src);
         return blast.getOutput;
     }
@@ -372,18 +368,18 @@ export class LegacyZip
     })();
 
   /**
-    * getZipCRC(buf, crc)
+    * getZipCRC(db, crc)
     *
     * Calculate CRC for the given ZIP data.
     *
-    * @param {Buffer} buf
+    * @param {DataBuffer} db
     * @param {number} [crc] (running CRC value, if any)
     * @returns {number}
     */
-    static getZipCRC(buf, crc = -1)
+    static getZipCRC(db, crc = -1)
     {
-        for (let i = 0; i < buf.length; i++) {
-            crc = LegacyZip.getZipCRCByte(buf[i], crc);
+        for (let i = 0; i < db.length; i++) {
+            crc = LegacyZip.getZipCRCByte(db.buffer[i], crc);
         }
         return crc;
     }
@@ -405,7 +401,7 @@ export class LegacyZip
 
 /**
  * @class BitStream
- * @property {Buffer} src               // Source bytes
+ * @property {DataBuffer} db            // Source bytes
  * @property {number} bit_pos           // Bit position of the next bit to read
  * @property {number} bit_end           // Bit position of the past-the-end bit
  */
@@ -430,15 +426,15 @@ class BitStream
     static MIN_BITS = 32;
 
     /**
-     * constructor(src)
+     * constructor(db)
      *
      * @this {BitStream}
-     * @param {Buffer} src
+     * @param {DataBuffer} db
      */
-    constructor(src)
+    constructor(db)
     {
-        this.src = src;
-        this.end = src.length;
+        this.db = db;
+        this.end = db.length;
         this.bit_pos = 0;
         this.bit_end = this.end * 8;
         this.cachePos = -1;
@@ -497,7 +493,7 @@ class BitStream
             if (next == this.cachePos) {
                 bits = this.cacheBits;
             } else {
-                bits = this.cacheBits = this.src.readUInt32LE(next);
+                bits = this.cacheBits = this.db.readUInt32LE(next);
                 this.cachePos = next;
             }
             next += 4;
@@ -505,7 +501,7 @@ class BitStream
         } else {
             bits = 0;
             for (let i = 0; i < bytesAvail; i++) {
-                bits |= this.src.readUInt8(next++) << (i << 3);
+                bits |= this.db.readUInt8(next++) << (i << 3);
             }
         }
         if (bit_off) {
@@ -516,7 +512,7 @@ class BitStream
              * the caller wants more bits than we just read, then try to read one more byte.
              */
             if ((!lsb && BitStream.MIN_BITS == 32 || lsb > bitsAvail) && next < this.end) {
-                let b = this.src.readUInt8(next) << (32 - bit_off);
+                let b = this.db.readUInt8(next) << (32 - bit_off);
                 bits |= b;
             }
         }
@@ -1076,7 +1072,7 @@ class HuffmanDecoder
 /**
  * @class Decompress
  * @property {BitStream} bs
- * @property {Buffer} dst
+ * @property {DataBuffer} dst
  *
  * Decompress is the base class for ArcUnpack, ZipStretch, ZipExpand, and ZipExplode classes.
  *
@@ -1090,13 +1086,13 @@ class Decompress
      * Initialize buffers and decompression state.
      *
      * @this {Decompress}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      */
     init(src, dst_len)
     {
         this.bs = new BitStream(src);
-        this.dst = Buffer.alloc(dst_len);
+        this.dst = DataBuffer.alloc(dst_len);
         this.dst_pos = 0;
     }
 
@@ -1119,7 +1115,7 @@ class Decompress
      * Get the output buffer.
      *
      * @this {Decompress}
-     * @returns {Buffer|null}
+     * @returns {DataBuffer|null}
      */
     getOutput()
     {
@@ -1220,7 +1216,7 @@ class ArcUnpack extends Decompress
      * init(src, dst_len, packed)
      *
      * @this {ArcUnpack}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} [packed]
      */
@@ -1300,15 +1296,14 @@ class ArcUnpack extends Decompress
      * Decompresses a packed stream.
      *
      * @this {ArcUnpack}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @returns {boolean|null}
      */
     decomp(src, dst_len)
     {
         this.init(src, dst_len, true);
-        let data = Array.from(src);
-        this.putBytes(data, data.length);
+        this.putBytes(src.buffer, src.length);
         return true;
     }
 }
@@ -1327,7 +1322,7 @@ class ArcUnsqueeze extends ArcUnpack
      * init(src, dst_len)
      *
      * @this {ArcUnsqueeze}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      */
     init(src, dst_len)
@@ -1405,7 +1400,7 @@ class ArcUnsqueeze extends ArcUnpack
      * Decompresses a squeezed stream.
      *
      * @this {ArcUnsqueeze}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @returns {boolean|null}
      */
@@ -1446,7 +1441,7 @@ class ArcUncrunch extends ArcUnpack
      * init(src, dst_len, packed, newHash)
      *
      * @this {ArcUncrunch}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} packed
      * @param {boolean} newHash
@@ -1706,7 +1701,7 @@ class ArcUncrunch extends ArcUnpack
      * Decompresses a crunched stream.
      *
      * @this {ArcUncrunch}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} packed
      * @param {boolean} newHash
@@ -1760,7 +1755,7 @@ class ArcUncrush extends ArcUnpack
      * init(src, dst_len, squashed)
      *
      * @this {ArcUncrush}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} squashed (false if crushed, true if squashed)
      */
@@ -1896,7 +1891,7 @@ class ArcUncrush extends ArcUnpack
      * requiring no table to be stored in the compressed file.
      *
      * @this {ArcUncrush}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} squashed (false if crushed, true if squashed)
      * @returns {boolean|null}
@@ -2029,7 +2024,7 @@ class ZipStretch extends Decompress
      * Initialize buffers and decompression state.
      *
      * @this {ZipStretch}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      */
     init(src, dst_len)
@@ -2256,7 +2251,7 @@ class ZipStretch extends Decompress
                 return ZipStretch.FULL;
             }
             this.copyBytes(this.dst_pos, this.codetable[code].last_dst_pos, this.codetable[code].len);
-            this.first_byte = this.dst[this.dst_pos];
+            this.first_byte = this.dst.buffer[this.dst_pos];
             this.len = this.codetable[code].len;
             return ZipStretch.OK;
         }
@@ -2310,7 +2305,7 @@ class ZipStretch extends Decompress
      * Decompresses a SHRINK stream.
      *
      * @this {ZipStretch}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @returns {boolean|null}
      */
@@ -2374,7 +2369,7 @@ class ZipStretch extends Decompress
             let c = this.curr_code;
             for (let i = 0; i < this.len; i++) {
                 assert(this.codetable[c].len == this.len - i);
-                assert(this.codetable[c].ext_byte == this.dst[this.dst_pos + this.len - i - 1]);
+                assert(this.codetable[c].ext_byte == this.dst.buffer[this.dst_pos + this.len - i - 1]);
                 c = this.codetable[c].prefix_code;
             }
             /**
@@ -2407,8 +2402,8 @@ class ZipStretch extends Decompress
 
 /**
  * @class ZipExpand
- * @property {Buffer} src
- * @property {Buffer} dst
+ * @property {DataBuffer} src
+ * @property {DataBuffer} dst
  *
  * ZipExpand is used to decompress REDUCE streams.
  */
@@ -2433,7 +2428,7 @@ class ZipExpand extends Decompress
      * Initialize buffers.
      *
      * @this {ZipExpand}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {number} comp_factor
      */
@@ -2680,7 +2675,7 @@ class ZipExplode extends Decompress
      * Initializes buffers and allocates the Huffman decoders.
      *
      * @this {ZipExplode}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      */
     init(src, dst_len)
@@ -2697,7 +2692,7 @@ class ZipExplode extends Decompress
      * Decompresses an IMPLODE stream.
      *
      * @this {ZipExplode}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @param {number} dst_len
      * @param {boolean} large_wnd
      * @param {boolean} lit_tree
@@ -2877,12 +2872,12 @@ class ZipExplode extends Decompress
 
 /**
  * @class ZipBlast
- * @property {Buffer} src       // (replaces infun and inhow)
+ * @property {DataBuffer} src   // (replaces infun and inhow)
  * @property {number} in        // next input location
  * @property {number} left      // available input at in
  * @property {number} bitbuf    // bit buffer
  * @property {number} bitcnt    // number of bits in bit buffer
- * @property {Buffer} dst       // (replaces outfun and outhow)
+ * @property {DataBuffer} dst   // (replaces outfun and outhow)
  * @property {number} next      // index of next write location in out[]
  * @property {boolean} first    // true to check distances (for first 4K)
  * @property {Uint8Array} out   // output array and sliding window
@@ -2948,14 +2943,14 @@ class ZipBlast
      * Initialize buffers.
      *
      * @this {ZipBlast}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      */
     init(src)
     {
         this.src = src;
         this.left = src.length;
         this.in = this.bitbuf = this.bitcnt = 0;
-        this.dst = Buffer.alloc(0);
+        this.dst = DataBuffer.alloc(0);
         this.next = 0;
         this.first = true;
     }
@@ -2966,7 +2961,7 @@ class ZipBlast
      * Get the output buffer.
      *
      * @this {ZipBlast}
-     * @returns {Buffer}
+     * @returns {DataBuffer}
      */
     getOutput()
     {
@@ -3011,7 +3006,7 @@ class ZipBlast
      * this correctly.
      *
      * @this {ZipBlast}
-     * @param {Buffer} src
+     * @param {DataBuffer} src
      * @returns {number}
      */
     decomp(src)
@@ -3162,7 +3157,7 @@ class ZipBlast
             if (this.left == 0) {
                 throw new Error("ZipBlast.decode(): out of input");
             }
-            bitbuf = this.src[this.in++];
+            bitbuf = this.src.buffer[this.in++];
             this.left--;
             if (left > 8) left = 8;
         }
@@ -3184,7 +3179,7 @@ class ZipBlast
         if (length < a.length) {
             a = a.slice(0, length);
         }
-        this.dst = Buffer.concat([this.dst, a]);
+        this.dst = DataBuffer.concat([this.dst, a]);
         return true;
     }
 
@@ -3218,7 +3213,7 @@ class ZipBlast
             /**
              * Load eight more bits
              */
-            val |= this.src[this.in++] << this.bitcnt;
+            val |= this.src.buffer[this.in++] << this.bitcnt;
             this.left--;
             this.bitcnt += 8;
         }

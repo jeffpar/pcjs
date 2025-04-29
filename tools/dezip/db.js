@@ -80,6 +80,21 @@ export default class DataBuffer {
     }
 
     /**
+     * alloc(size)
+     *
+     * Mimics the behavior of Buffer.alloc() in Node.js.
+     *
+     * TODO: Add support for the (optional) fill and encoding parameters.
+     *
+     * @param {number} size
+     * @returns {DataBuffer}
+     */
+    static alloc(size)
+    {
+        return new DataBuffer(size);
+    }
+
+    /**
      * compare(dbTarget)
      *
      * @this {DataBuffer}
