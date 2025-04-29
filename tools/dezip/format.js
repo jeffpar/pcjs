@@ -54,7 +54,7 @@ export default class Format {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFGHMNSTWYBbdfjpcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -560,16 +560,6 @@ export default class Format {
                 break;
 
             /**
-             * "%p" is a little innovation of my own for pluralizing strings: if the corresponding arg
-             * is not 1, then output 's'; otherwise, output nothing.
-             */
-            case 'p':
-                if (arg != 1) {
-                    buffer += 's';
-                }
-                break;
-
-            /**
              * "%c" is for characters (which can be either single-character strings or ASCII codes).
              */
             case 'c':
@@ -586,17 +576,30 @@ export default class Format {
                  * else does.
                  */
                 if (arg != undefined) {
-                    if (typeof arg != "string") {
-                        arg = arg.toString();
-                    }
-                    if (precision >= 0) {
-                        arg = arg.substr(0, precision);
-                    }
-                    while (arg.length < width) {
-                        if (flags.indexOf('-') >= 0) {
-                            arg += ' ';
+                    /**
+                     * If you pass a number where a string is expected, we assume you're trying to pluralize
+                     * something.
+                     */
+                    if (typeof arg == "number") {
+                        if (arg == 1) {
+                            arg = '';
                         } else {
-                            arg = ' ' + arg;
+                            arg = 's';
+                        }
+                    }
+                    else {
+                        if (typeof arg != "string") {
+                            arg = arg.toString();
+                        }
+                        if (precision >= 0) {
+                            arg = arg.substr(0, precision);
+                        }
+                        while (arg.length < width) {
+                            if (flags.indexOf('-') >= 0) {
+                                arg += ' ';
+                            } else {
+                                arg = ' ' + arg;
+                            }
                         }
                     }
                 }
@@ -699,14 +702,14 @@ export default class Format {
                 width -= prefix.length;
                 do {
                     let d = 16;         // digit index corresponding to '?'
-                    /*
+                    /**
                      * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
                      * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
                      * to a number, the resulting arg should be NaN.
                      */
                     if (!Number.isNaN(arg)) {
                         d = arg & (radix - 1);
-                        /*
+                        /**
                          * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
                          * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
                          */

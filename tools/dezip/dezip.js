@@ -821,49 +821,54 @@ export default class Dezip {
      */
     async readDirectory(archive, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
-        let entry = null, entries = [];
-        let entryExceptions = filterExceptions & Dezip.ENTRY_EXCEPTIONS;
-        let archiveExceptions = filterExceptions & Dezip.ARCHIVE_EXCEPTIONS;
-        const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
-        if (!(archive.exceptions & Dezip.EXCEPTIONS.NODIRS)) {
-            do {
-                entry = await this.readDirEntry(archive, entry);
-                if (!entry) break;
-                this.assert(archive.endHeader && entry.dirHeader);
-                if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
-                    archive.exceptions |= Dezip.EXCEPTIONS.SPLIT;
+        let entries = [];
+        try {
+            let entry = null;
+            let entryExceptions = filterExceptions & Dezip.ENTRY_EXCEPTIONS;
+            let archiveExceptions = filterExceptions & Dezip.ARCHIVE_EXCEPTIONS;
+            const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
+            if (!(archive.exceptions & Dezip.EXCEPTIONS.NODIRS)) {
+                do {
+                    entry = await this.readDirEntry(archive, entry);
+                    if (!entry) break;
+                    this.assert(archive.endHeader && entry.dirHeader);
+                    if (archive.endHeader.diskNum != entry.dirHeader.diskStart) {
+                        archive.exceptions |= Dezip.EXCEPTIONS.SPLIT;
+                    }
+                    if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
+                        continue;
+                    }
+                    if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.dirHeader.name)) {
+                        entries.push(entry);
+                    }
+                } while (true);
+                if (!archive.entries.length) {
+                    archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
                 }
-                if (filterMethod != -1 && entry.dirHeader.method != filterMethod) {
-                    continue;
-                }
-                if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.dirHeader.name)) {
-                    entries.push(entry);
-                }
-            } while (true);
-            if (!archive.entries.length) {
-                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
-        }
-        //
-        // Search the file headers ONLY if there are no dir headers AND we're unsure about file headers.
-        //
-        if ((archive.exceptions & (Dezip.EXCEPTIONS.NODIRS | Dezip.EXCEPTIONS.NOFILES)) == Dezip.EXCEPTIONS.NODIRS) {
-            do {
-                entry = await this.readFileEntry(archive, entry);
-                if (!entry) break;
-                if (filterMethod != -1 && entry.fileHeader.method != filterMethod) {
-                    continue;
+            //
+            // Search the file headers ONLY if there are no dir headers AND we're unsure about file headers.
+            //
+            if ((archive.exceptions & (Dezip.EXCEPTIONS.NODIRS | Dezip.EXCEPTIONS.NOFILES)) == Dezip.EXCEPTIONS.NODIRS) {
+                do {
+                    entry = await this.readFileEntry(archive, entry);
+                    if (!entry) break;
+                    if (filterMethod != -1 && entry.fileHeader.method != filterMethod) {
+                        continue;
+                    }
+                    if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.fileHeader.name)) {
+                        entries.push(entry);
+                    }
+                } while (true);
+                if (!archive.entries.length) {
+                    archive.exceptions |= Dezip.EXCEPTIONS.NOFILES;
                 }
-                if ((entry.exceptions & entryExceptions) == entryExceptions && regex.test(entry.fileHeader.name)) {
-                    entries.push(entry);
-                }
-            } while (true);
-            if (!archive.entries.length) {
-                archive.exceptions |= Dezip.EXCEPTIONS.NOFILES;
             }
-        }
-        if ((archive.exceptions & archiveExceptions) != archiveExceptions) {
-            entries = [];
+            if ((archive.exceptions & archiveExceptions) != archiveExceptions) {
+                entries = [];
+            }
+        } catch (error) {
+            archive.warnings.push(error.message);
         }
         return entries;
     }
@@ -1360,7 +1365,7 @@ export default class Dezip {
                 // we must also convert the calculated crc to a positive 32-bit value before comparing.
                 //
                 if ((crc >>> 0) != crcFile) {
-                    entry.warnings.push(`Received CRC 0x${(crc >>> 0).toString(16)}`);
+                    entry.warnings.push(`Received CRC ${(crc >>> 0).toString(16)}`);
                 }
             }
         }

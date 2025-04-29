@@ -364,16 +364,29 @@ async function main(argc, argv, errors)
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
+            nArchiveWarnings += archive.warnings.length? 1 : 0;
             //
             // The entries array can be empty for several reasons (eg, no files matched the specified filters),
             // but the NOFILES exception will be set only if the internal entries array is also empty, suggesting
-            // that the file is a not actually an archive.
+            // that the file is not actually an archive.
             //
-            // Note that we only display this warning if archiveDB is NOT set (or --verbose IS set), because if
-            // this is a nested archive, then it was only opened implicitly, not explicitly).
-            //
-            if ((archive.exceptions & Dezip.EXCEPTIONS.NOFILES) && (!archiveDB || argv.verbose)) {
-                printf("%s: not an archive\n", archivePath);
+            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+                //
+                // Note that we only display this message if archiveDB is NOT set (or --verbose IS set), because
+                // if this is a nested archive, then it was only opened implicitly, not explicitly.
+                //
+                if (argv.verbose || !archiveDB) {
+                    printf("%s: not an archive\n", archivePath);
+                }
+            }
+            else if (archive.warnings.length) {
+                //
+                // Similarly, if readDirectory() encountered any issues, we'll tally them, but we won't display them
+                // by default.
+                //
+                if (argv.verbose || !archiveDB) {
+                    printf("%s warnings: %s\n", archiveName, archive.warnings.join("; "));
+                }
             }
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
@@ -414,8 +427,7 @@ async function main(argc, argv, errors)
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
                 // archives; for now, I'm trusting that entries inside one or more directories have those
-                // directories explicitly specified in header.name (ie, that header.name is always a full
-                // relative path).
+                // directories explicitly specified in header.name (ie, that header.name is always a full path).
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels
@@ -435,7 +447,7 @@ async function main(argc, argv, errors)
                 // hand (and we will ALWAYS have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
-                    if (argv.verbose || argv.list || filterExceptions || filterMethod != -1) {
+                    if (argv.list || filterExceptions || filterMethod != -1) {
                         if (argv.list) printf("\n");
                         printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
                     }
@@ -528,7 +540,8 @@ async function main(argc, argv, errors)
                         }
                         comment = '[' + warnings.join("; ") + ']';
                     }
-                    printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x  %s\n",
+                    if (comment.length) comment = "  " + comment;
+                    printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
                             name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
                 }
                 else if (argv.debug && !printed) {
@@ -549,7 +562,7 @@ async function main(argc, argv, errors)
                 }
             }
         } catch (error) {
-            printf("%s\n", error.message);
+            printf("%s: %s\n", archivePath, error.message);
         }
         await dezip.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
@@ -560,10 +573,10 @@ async function main(argc, argv, errors)
     for (let archivePath of archivePaths) {
         let [nFiles, nWarnings] = await processArchive(archivePath);
         if (argv.summary) {
-            printf("%s%s: %d file%p, %d warning%p\n", argv.list? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
+            printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
         }
     }
-    printf("\n%d archive%p examined, %d file%p processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
+    printf("\n%d archive%s examined, %d file%s processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
 }
 
 await main(...Format.parseOptions(process.argv, options));
