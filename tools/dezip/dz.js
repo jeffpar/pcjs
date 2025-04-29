@@ -6,8 +6,8 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Some notes about ZIP anomalies
- * ------------------------------
+ * Some completely random and mildly interesting ZIP anomalies
+ * -----------------------------------------------------------
  *
  * This command:
  *
@@ -18,7 +18,7 @@
  *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
  *      --------        ------   ------       ----  -----   ----       ----       ---
  *      SAMPSHOW._ST     54082   Store       54082     0%   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
- *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Unable to read FileHeader at 54160]
+ *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Position 54160 missing FileHeader]
  *      SAMPSND._AU       1690   Store        1690     0%   1991-05-22 01:03:00   790b9590
  *      SAMPSND2._AD    508760   Implode    484636     5%   1991-05-22 01:03:00   9351eec9
  *      SAMPSND2._AU      2920   Implode      1697    42%   1991-05-22 01:03:00   1138d881
@@ -27,8 +27,8 @@
  *      VOICE._AD       428672   Implode    410777     4%   1991-05-22 01:03:00   3a53989f
  *      VOICE._AU         3190   Store        3190     0%   1991-05-22 01:03:00   15a9741a
  *
- * If you bypass the archive's DirHeaders (using -n) and rely strictly on FileHeaders, you see a completely different
- * set of (8) files:
+ * Since the archive's directory appears to have "issues", let's bypass them using --nodir (or use -ltn instead of -lt)
+ * and rely on a scan of the archive's FileHeaders instead.  Now we see a completely different set of (8) files:
  *
  *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
  *      --------        ------   ------       ----  -----   ----       ----       ---
@@ -40,6 +40,9 @@
  *      XGALOAD.DLL       5592   Implode      2127    62%   1991-06-06 10:01:08   d3fac5b3
  *      XGALOAD0.SYS     14993   Implode      3554    76%   1991-06-06 11:14:12   d94fd9d5
  *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
+ *
+ * And there are no warnings.  This is what I'm talking about when I say that judicious use of --nodir can reveal hidden
+ * treasures.
  */
 
 import fs from "fs/promises";
@@ -166,6 +169,10 @@ const options = {
         usage: "--nodir",
         alias: "-n",
         description: "skip directory entries (scan for files instead)"
+        //
+        // Yes, scanning for files instead of relying on directory entries goes against protocol, but
+        // sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures...
+        //
     },
     "overwrite": {
         type: "boolean",
@@ -178,7 +185,10 @@ const options = {
         usage: "--password [pwd]",
         alias: "-g",
         description: "decrypt \"garbled\" entries using password",
-        note: "pkunzip used -s instead of -g to decrypt 'scrambled' entries"
+        //
+        // The original ARC utility used -g to "garble" entries, whereas pkunzip used -s to "scramble" entries;
+        // going with --password seems more straightforward, but in honor of the original utility, we'll also allow -g.
+        //
     },
     "path": {
         type: "string",
@@ -192,18 +202,14 @@ const options = {
         alias: "-r",
         description: "process archives within archives"
     },
-    "skip": {
-        type: "number",
-        usage: "--skip n",
-        internal: true,
-        description: "skip the first n lines in any batch file"
-    },
     "summary": {
         type: "boolean",
         usage: "--summary",
         alias: "-s",
         description: "display total files and warnings for archive(s)",
-        note: "use --list to also see the individual files and warnings"
+        //
+        // Use --list as well to see all the individual files and warnings...
+        //
     },
     "test": {
         type: "boolean",
@@ -319,9 +325,6 @@ async function main(argc, argv, errors)
     if (argv.batch) {
         try {
             let lines = await fs.readFile(argv.batch, "utf8");
-            if (argv.skip) {
-                lines = lines.slice(argv.skip);
-            }
             archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
         } catch (error) {
             printf("%s\n", error.message);
