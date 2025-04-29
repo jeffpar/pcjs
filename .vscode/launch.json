@@ -2816,12 +2816,12 @@
       }
     },
     {
-      "name": "dz.js split.log",
+      "name": "dz.js test",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        " --filter split -b tests/split.log --list"
+        "-ltrs --batch tests/dirty-archives.log"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

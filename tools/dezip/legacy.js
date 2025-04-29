@@ -21,7 +21,7 @@
 
 import DataBuffer from "./db.js";
 
-const DEBUG = true;
+const DEBUG = false;
 
 /**
  * Legacy ARC Support (decompression only)
@@ -485,9 +485,10 @@ class BitStream
         let next = (this.bit_pos >> 3);
         let bit_off = this.bit_pos % 8;
 
-        assert(!lsb || lsb <= BitStream.MIN_BITS);
-        assert(next <= this.end, "reading past end of BitStream");
-
+        if (DEBUG) {
+            assert(!lsb || lsb <= BitStream.MIN_BITS);
+            assert(next <= this.end, "reading past end of BitStream");
+        }
         let bytesAvail = this.end - next;
         if (bytesAvail >= 4) {
             if (next == this.cachePos) {
@@ -553,7 +554,9 @@ class BitStream
      */
     advance(n)
     {
-        assert(this.bit_pos <= this.bit_end);
+        if (DEBUG) {
+            assert(this.bit_pos <= this.bit_end);
+        }
         if (this.bit_end - this.bit_pos < n) {
             return false;
         }
@@ -600,7 +603,9 @@ class BitStream
      */
     static roundUp(x, m)
     {
-        assert((m & (m - 1)) == 0, `${m} must be a power of two`);
+        if (DEBUG) {
+            assert((m & (m - 1)) == 0, `${m} must be a power of two`);
+        }
         return (x + m - 1) & (-m);              // Hacker's Delight (2nd), 3-1.
     }
 }
@@ -656,7 +661,9 @@ class HuffmanDecoder
         let /* uint16_t */ code = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
         let /* uint16_t */ sym_idx = new Array(HuffmanDecoder.MAX_HUFFMAN_BITS + 1);
 
-        assert(n <= HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
+        if (DEBUG) {
+            assert(n <= HuffmanDecoder.MAX_HUFFMAN_SYMBOLS);
+        }
         this.num_syms = n;
         /**
          * Zero-initialize the lookup table
@@ -671,7 +678,9 @@ class HuffmanDecoder
          * Count the number of codewords of each length
          */
         for (let i = 0; i < n; i++) {
-            assert(lengths[i] <= HuffmanDecoder.MAX_HUFFMAN_BITS);
+            if (DEBUG) {
+                assert(lengths[i] <= HuffmanDecoder.MAX_HUFFMAN_BITS);
+            }
             count[lengths[i]]++;
         }
         count[0] = 0;           // ignore zero-length codewords
@@ -695,8 +704,9 @@ class HuffmanDecoder
 
             let s = ((code[l] + count[l]) << (HuffmanDecoder.MAX_HUFFMAN_BITS - l)) & 0xffffffff;
             this.sentinel_bits[l] = s;
-            assert(this.sentinel_bits[l] >= code[l], "overflow");
-
+            if (DEBUG) {
+                assert(this.sentinel_bits[l] >= code[l], "overflow");
+            }
             sym_idx[l] = sym_idx[l - 1] + count[l - 1];
             this.offset_first_sym_idx[l] = (sym_idx[l] - code[l]) & 0xffff;
         }
@@ -728,8 +738,9 @@ class HuffmanDecoder
      */
     insert(/* size_t */ sym, /* int */ len, /* uint16_t */ codeword)
     {
-        assert(len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
-
+        if (DEBUG) {
+            assert(len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+        }
         codeword = HuffmanDecoder.reverse16(codeword, len);     // Make it LSB-first
         let pad_len = HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS - len;
         /**
@@ -739,7 +750,9 @@ class HuffmanDecoder
             let index = (codeword | (padding << len)) & 0xffff;
             this.table[index].sym = sym & 0xffff;
             this.table[index].len = len & 0xffff;
-            assert(this.table[index].sym == sym && this.table[index].len == len, "bitfield overflow");
+            if (DEBUG) {
+                assert(this.table[index].sym == sym && this.table[index].len == len, "bitfield overflow");
+            }
         }
     }
 
@@ -763,10 +776,14 @@ class HuffmanDecoder
          * First try the lookup table
          */
         let lookup_bits = BitStream.lsb(bits, HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
-        assert(lookup_bits < this.table.length);
+        if (DEBUG) {
+            assert(lookup_bits < this.table.length);
+        }
         if (this.table[lookup_bits].len) {
-            assert(this.table[lookup_bits].len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
-            assert(this.table[lookup_bits].sym < this.num_syms);
+            if (DEBUG) {
+                assert(this.table[lookup_bits].len <= HuffmanDecoder.HUFFMAN_LOOKUP_TABLE_BITS);
+                assert(this.table[lookup_bits].sym < this.num_syms);
+            }
             return {sym: this.table[lookup_bits].sym, used: this.table[lookup_bits].len};
         }
         /**
@@ -777,7 +794,9 @@ class HuffmanDecoder
             if (bits < this.sentinel_bits[l]) {
                 bits >>= HuffmanDecoder.MAX_HUFFMAN_BITS - l;
                 let sym_idx = (this.offset_first_sym_idx[l] + bits) & 0xffff;
-                assert(sym_idx < this.num_syms);
+                if (DEBUG) {
+                    assert(sym_idx < this.num_syms);
+                }
                 return {sym: this.syms[sym_idx], used: l};
             }
         }
@@ -798,14 +817,12 @@ class HuffmanDecoder
     {
         let /* uint16_t */ lo, hi;
         let /* uint16_t */ reversed;
-
-        assert(n > 0 && n <= 16);
-
+        if (DEBUG) {
+            assert(n > 0 && n <= 16);
+        }
         lo = x & 0xff;
         hi = x >> 8;
-
         reversed = ((HuffmanDecoder.reverse8_tbl[lo] << 8) | HuffmanDecoder.reverse8_tbl[hi]) & 0xffff;
-
         return reversed >> (16 - n);
     }
 
@@ -1120,7 +1137,9 @@ class Decompress
     getOutput()
     {
         if (this.dst) {
-            // assert(this.dst_pos == this.dst.length);
+            if (DEBUG) {
+                assert(this.dst_pos == this.dst.length);
+            }
             if (this.dst_pos < this.dst.length) {
                 this.dst = this.dst.slice(0, this.dst_pos);
             }
@@ -1140,7 +1159,9 @@ class Decompress
     readByte(off)
     {
         let b = this.dst.buffer[off];
-        assert(b >= 0);
+        if (DEBUG) {
+            assert(b >= 0);
+        }
         return b;
         // return this.dst.readUInt8(off);
     }
@@ -1157,10 +1178,12 @@ class Decompress
      */
     copyBytes(to, from, len)
     {
-        assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
+        if (DEBUG) {
+            assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
+        }
         for (let i = 0; i < len; i++) {
-            this.dst.buffer[to + i] = this.dst.buffer[from + i];
             // this.writeByte(this.readByte(from + i), to + i);
+            this.dst.buffer[to + i] = this.dst.buffer[from + i];
         }
     }
 
@@ -1175,9 +1198,11 @@ class Decompress
      */
     writeByte(b, off)
     {
-        assert(b >= 0 && off < this.dst.length);
-        this.dst.buffer[off] = b;
+        if (DEBUG) {
+            assert(b >= 0 && off < this.dst.length);
+        }
         // this.dst.writeUInt8(b, off);
+        this.dst.buffer[off] = b;
     }
 
     /**
@@ -1191,9 +1216,14 @@ class Decompress
      */
     writeOutput(b, fAdvance = true)
     {
-        assert(this.dst_pos < this.dst.length);
-        this.writeByte(b, this.dst_pos);
-        if (fAdvance) this.dst_pos++;
+        if (DEBUG) {
+            assert(this.dst_pos < this.dst.length);
+        }
+        if (this.dst_pos < this.dst.length) {
+            this.dst.buffer[this.dst_pos] = b;
+            // this.writeByte(b, this.dst_pos);
+            if (fAdvance) this.dst_pos++;
+        }
     }
 }
 
@@ -1277,7 +1307,9 @@ class ArcUnpack extends Decompress
             if (this.state == ArcUnpack.INREP) {
                 if (data[i]) {
                     while (--data[i]) {
-                        assert(this.lastc >= 0);
+                        if (DEBUG) {
+                            assert(this.lastc >= 0);
+                        }
                         this.writeOutput(this.lastc);
                     }
                 } else {
@@ -1391,7 +1423,9 @@ class ArcUnsqueeze extends ArcUnpack
              * Decode fake node index to original data value
              */
             i = -(i + 1) | 0;
-            assert(i >= 0 && i <= ArcUnsqueeze.SPEOF);
+            if (DEBUG) {
+                assert(i >= 0 && i <= ArcUnsqueeze.SPEOF);
+            }
             if (i == ArcUnsqueeze.SPEOF) break;
             this.data[o++] = i;
         }
@@ -2099,7 +2133,9 @@ class ZipStretch extends Decompress
         for (let code = ZipStretch.CONTROL_CODE + 1; code <= ZipStretch.MAX_CODE; code++) {
             queue.codes[code_queue_size++] = code;
         }
-        assert(code_queue_size < queue.codes.length);
+        if (DEBUG) {
+            assert(code_queue_size < queue.codes.length);
+        }
         /**
          * Add an end-of-queue marker
          */
@@ -2117,7 +2153,9 @@ class ZipStretch extends Decompress
      */
     getCodeQueueNext()
     {
-        assert(this.codequeue.next_idx < this.codequeue.codes.length);
+        if (DEBUG) {
+            assert(this.codequeue.next_idx < this.codequeue.codes.length);
+        }
         return this.codequeue.codes[this.codequeue.next_idx];
     }
 
@@ -2146,8 +2184,9 @@ class ZipStretch extends Decompress
      */
     readCode()
     {
-        assert(/* sizeof(code) */ 2 * ZipStretch.CHAR_BIT >= this.code_size);
-
+        if (DEBUG) {
+            assert(/* sizeof(code) */ 2 * ZipStretch.CHAR_BIT >= this.code_size);
+        }
         let /* uint16_t */ code = this.bs.bits(this.code_size);
         if (!this.bs.advance(this.code_size)) {
             return false;
@@ -2228,14 +2267,17 @@ class ZipStretch extends Decompress
     outputCode(prev_code)
     {
         let code = this.curr_code;
-        assert(code <= ZipStretch.MAX_CODE && code != ZipStretch.CONTROL_CODE);
-        assert(this.dst_pos < this.dst.length);
-
+        if (DEBUG) {
+            assert(code <= ZipStretch.MAX_CODE && code != ZipStretch.CONTROL_CODE);
+            assert(this.dst_pos < this.dst.length);
+        }
         if (code <= 0xff) {
             /**
              * Output literal byte
              */
-            assert(code >= 0);
+            if (DEBUG) {
+                assert(code >= 0);
+            }
             this.first_byte = code;
             this.len = 1;
             this.writeOutput(code, false);
@@ -2264,16 +2306,21 @@ class ZipStretch extends Decompress
          * (due to partial clearing) when the code was inserted into the table. The prefix
          * can then become valid when it's added to the table at a later point.
          */
-        assert(this.codetable[code].len == ZipStretch.UNKNOWN_LEN);
+        if (DEBUG) {
+            assert(this.codetable[code].len == ZipStretch.UNKNOWN_LEN);
+        }
         let /* uint16_t */ prefix_code = this.codetable[code].prefix_code;
-        assert(prefix_code > ZipStretch.CONTROL_CODE);
-
+        if (DEBUG) {
+            assert(prefix_code > ZipStretch.CONTROL_CODE);
+        }
         if (prefix_code == this.getCodeQueueNext()) {
             /**
              * The prefix code hasn't been added yet, but we were just about to: the KwKwK case.
              * Add the previous string extended with its first byte.
              */
-            assert(this.codetable[prev_code].prefix_code != ZipStretch.INVALID_CODE);
+            if (DEBUG) {
+                assert(this.codetable[prev_code].prefix_code != ZipStretch.INVALID_CODE);
+            }
             this.updateCodeTable(prefix_code, prev_code);
             this.writeOutput(this.first_byte, false);
         }
@@ -2296,7 +2343,9 @@ class ZipStretch extends Decompress
         /**
          * Update the code table now that the string has a length and pos.
          */
-        assert(prev_code != code);
+        if (DEBUG) {
+            assert(prev_code != code);
+        }
         this.codetable[code].len = this.len & 0xffff;
         this.codetable[code].last_dst_pos = this.dst_pos;
 
@@ -2323,7 +2372,9 @@ class ZipStretch extends Decompress
         if (!this.readCode()) {
             return ZipStretch.OK;
         }
-        assert(this.curr_code != ZipStretch.CONTROL_CODE);
+        if (DEBUG) {
+            assert(this.curr_code != ZipStretch.CONTROL_CODE);
+        }
         if (this.curr_code > 0xff) {
             return ZipStretch.ERR;                 // the first code must be a literal
         }
@@ -2355,9 +2406,13 @@ class ZipStretch extends Decompress
                 /**
                  * Extend the previous code with its first byte.
                  */
-                assert(this.curr_code != prev_code);
+                if (DEBUG) {
+                    assert(this.curr_code != prev_code);
+                }
                 this.updateCodeTable(this.curr_code, prev_code);
-                assert(this.dst_pos < /* dst_len */ this.dst.length);
+                if (DEBUG) {
+                    assert(this.dst_pos < /* dst_len */ this.dst.length);
+                }
                 this.writeOutput(this.first_byte, false);
             }
             /**
@@ -2372,8 +2427,10 @@ class ZipStretch extends Decompress
              */
             let c = this.curr_code;
             for (let i = 0; i < this.len; i++) {
-                assert(this.codetable[c].len == this.len - i);
-                assert(this.codetable[c].ext_byte == this.dst.buffer[this.dst_pos + this.len - i - 1]);
+                if (DEBUG) {
+                    assert(this.codetable[c].len == this.len - i);
+                    assert(this.codetable[c].ext_byte == this.dst.buffer[this.dst_pos + this.len - i - 1]);
+                }
                 c = this.codetable[c].prefix_code;
             }
             /**
@@ -2382,7 +2439,9 @@ class ZipStretch extends Decompress
              */
             let new_code = this.removeCodeQueueNext();
             if (new_code != ZipStretch.INVALID_CODE) {
-                assert(this.codetable[prev_code].last_dst_pos < this.dst_pos);
+                if (DEBUG) {
+                    assert(this.codetable[prev_code].last_dst_pos < this.dst_pos);
+                }
                 this.updateCodeTable(new_code, prev_code);
                 if (this.codetable[prev_code].prefix_code == ZipStretch.INVALID_CODE) {
                     /**
@@ -2439,7 +2498,9 @@ class ZipExpand extends Decompress
     init(src, dst_len, comp_factor)
     {
         super.init(src, dst_len);
-        assert(comp_factor >= 1 && comp_factor <= 4);
+        if (DEBUG) {
+            assert(comp_factor >= 1 && comp_factor <= 4);
+        }
         this.comp_factor = comp_factor;
     }
 
@@ -2487,7 +2548,9 @@ class ZipExpand extends Decompress
      */
     static getBitWidth(n)
     {
-        assert(n <= 32);
+        if (DEBUG) {
+            assert(n <= 32);
+        }
         if (n > 16) { return 5; }
         if (n > 8)  { return 4; }
         if (n > 4)  { return 3; }
@@ -2640,8 +2703,10 @@ class ZipExpand extends Decompress
                 return false;
             }
             let dist = (v >> v_len_bits) * 256 + this.curr_byte + 1;
-            assert(len <= this.getMaxLen());
-            assert(dist <= this.getMaxDist());
+            if (DEBUG) {
+                assert(len <= this.getMaxLen());
+                assert(dist <= this.getMaxDist());
+            }
             /**
              * Output the back reference.
              */
@@ -2728,7 +2793,9 @@ class ZipExplode extends Decompress
                 bits >>>= 1;
                 if (lit_tree) {
                     ({ sym, used } = this.lit_decoder.decode(~bits));
-                    assert(sym >= 0, `huffman literal decode unsuccessful (${sym})`);
+                    if (DEBUG) {
+                        assert(sym >= 0, `huffman literal decode unsuccessful (${sym})`);
+                    }
                     if (!this.bs.advance(1 + used)) {
                         return false;
                     }
@@ -2738,14 +2805,18 @@ class ZipExplode extends Decompress
                         return false;
                     }
                 }
-                assert(sym >= 0 && sym <= 0xff);
+                if (DEBUG) {
+                    assert(sym >= 0 && sym <= 0xff);
+                }
                 this.writeOutput(sym);
                 continue;
             }
             /**
              * Backref
              */
-            assert(BitStream.lsb(bits, 1) == 0x0);
+            if (DEBUG) {
+                assert(BitStream.lsb(bits, 1) == 0x0);
+            }
             bits >>>= 1;
             let used_tot = 1;
             /**
@@ -2764,7 +2835,9 @@ class ZipExplode extends Decompress
              * Read the Huffman-encoded high distance bits
              */
             ({ sym, used } = this.dist_decoder.decode(~bits));
-            assert(sym >= 0, `huffman distance decode unsuccessful (${sym})`);
+            if (DEBUG) {
+                assert(sym >= 0, `huffman distance decode unsuccessful (${sym})`);
+            }
             used_tot += used;
             bits >>>= used;
             dist |= sym << (large_wnd ? 7 : 6);
@@ -2773,7 +2846,9 @@ class ZipExplode extends Decompress
              * Read the Huffman-encoded length
              */
             ({ sym, used } = this.len_decoder.decode(~bits));
-            assert(sym >= 0, `huffman length decode unsuccessful (${sym})`);
+            if (DEBUG) {
+                assert(sym >= 0, `huffman length decode unsuccessful (${sym})`);
+            }
             used_tot += used;
             len = (sym + min_len);
             /**
@@ -2782,7 +2857,9 @@ class ZipExplode extends Decompress
              * exhausting our 32-bit 'bits' buffer.  This also eliminates the
              * need for a final 'bits >>>= used'.
              */
-            assert(used_tot <= BitStream.MIN_BITS);
+            if (DEBUG) {
+                assert(used_tot <= BitStream.MIN_BITS);
+            }
             if (!this.bs.advance(used_tot)) {
                 return false;
             }
@@ -2823,7 +2900,9 @@ class ZipExplode extends Decompress
     {
         let lens = new Array(256);
         let len_count = new Array(17).fill(0);
-        assert(num_lens <= lens.length);
+        if (DEBUG) {
+            assert(num_lens <= lens.length);
+        }
         /**
          * Number of bytes representing the Huffman code
          */
@@ -2833,23 +2912,26 @@ class ZipExplode extends Decompress
         let codeword_idx = 0;
         for (let byte_idx = 0; byte_idx < num_bytes; byte_idx++) {
             byte = this.bs.bits(8, true);
-
             let codeword_len = (byte & 0xf) + 1;        // low four bits plus one
             let run_length   = (byte >> 4)  + 1;        // high four bits plus one
-
-            assert(codeword_len >= 1 && codeword_len <= 16);
-            assert(codeword_len < len_count.length);
+            if (DEBUG) {
+                assert(codeword_len >= 1 && codeword_len <= 16);
+                assert(codeword_len < len_count.length);
+            }
             len_count[codeword_len] += run_length;
-
             if (codeword_idx + run_length > num_lens) {
                 return false;                           // too many codeword lengths
             }
             for (let i = 0; i < run_length; i++) {
-                assert(codeword_idx < num_lens);
+                if (DEBUG) {
+                    assert(codeword_idx < num_lens);
+                }
                 lens[codeword_idx++] = codeword_len;
             }
         }
-        assert(codeword_idx <= num_lens);
+        if (DEBUG) {
+            assert(codeword_idx <= num_lens);
+        }
         if (codeword_idx < num_lens) {
             return false;                               // too few codeword lengths
         }
@@ -2858,7 +2940,9 @@ class ZipExplode extends Decompress
          */
         let avail_codewords = 1;
         for (let i = 1; i <= 16; i++) {
-            assert(avail_codewords >= 0);
+            if (DEBUG) {
+                assert(avail_codewords >= 0);
+            }
             avail_codewords *= 2;
             avail_codewords -= len_count[i];
             if (avail_codewords < 0) {
@@ -2869,7 +2953,9 @@ class ZipExplode extends Decompress
             return false;                               // not all codewords were used
         }
         let ok = decoder.init(lens, num_lens);
-        assert(ok);
+        if (DEBUG) {
+            assert(ok);
+        }
         return true;
     }
 }
@@ -3344,9 +3430,7 @@ class ZipBlast
  */
 function assert(exp, msg)
 {
-    if (DEBUG) {
-        if (!exp) {
-            throw new Error(msg || "assertion failure");
-        }
+    if (DEBUG && !exp) {
+        throw new Error(msg || "assertion failure");
     }
 }
