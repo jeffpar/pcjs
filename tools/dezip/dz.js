@@ -64,8 +64,7 @@ const dezip = new Dezip(
         fetch,
         open: fs.open,
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
-     // createInflate: zlib.createInflateRaw,       // interface for ZIP_DEFLATE (chunked async) data
-     // printf                                      // for debug output
+     // createInflate: zlib.createInflateRaw        // interface for ZIP_DEFLATE (chunked async) data
     },
     {
         //

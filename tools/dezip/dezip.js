@@ -17,9 +17,10 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * run in any environment (eg, Nodejs, browser, etc).
  *
  * @typedef  {object}   Interfaces
- * @property {function} fetch       (http interface to fetch remote files)
- * @property {function} open        (fs interface to open local files)
- * @property {function} inflate     (zlib interface to decompress "deflated" buffers; all other compression types will be handled by LegacyZip or LegacyArc)
+ * @property {function} fetch       (fetch() interface to read remote files)
+ * @property {function} open        (open() interface to open local files)
+ * @property {function} inflate     (eg, zlib.inflateRaw)
+ * @property {function} createInflate (eg, zlib.createInflateRaw)
  *
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
@@ -258,6 +259,9 @@ export default class Dezip {
     constructor(interfaces = {fetch}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
+        //
+        // If no legacy interfaces are provided, we default to our own.
+        //
         this.getArcCRC = this.interfaces.getArcCRC || LegacyArc.getArcCRC;
         this.unpackSync = this.interfaces.unpackSync || LegacyArc.unpackSync;
         this.unsqueezeSync = this.interfaces.unsqueezeSync || LegacyArc.unsqueezeSync;
@@ -269,6 +273,15 @@ export default class Dezip {
         this.expandSync = this.interfaces.expandSync || LegacyZip.expandSync;
         this.explodeSync = this.interfaces.explodeSync || LegacyZip.explodeSync;
         this.blastSync = this.interfaces.blastSync || LegacyZip.blastSync;
+        //
+        // These non-legacy interfaces, however, have no defaults, so if no zlib (or zlib-compatible)
+        // interfaces are provided, then deflated streams can't be inflated.
+        //
+        this.inflate = this.interfaces.inflate;
+        this.createInflate = this.interfaces.createInflate;
+        //
+        // Set default interface options.
+        //
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
         this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
     }
@@ -565,7 +578,7 @@ export default class Dezip {
     async inflateAsync(buffer)
     {
         return new Promise((resolve, reject) => {
-            this.interfaces.inflate(buffer, (err, result) => {
+            this.inflate(buffer, (err, result) => {
                 if (err) {
                     return reject(err);
                 }
@@ -585,7 +598,7 @@ export default class Dezip {
     async inflateChunks(entry, chunkGenerator)
     {
         const chunks = [];
-        const inflate = this.interfaces.createInflate();
+        const inflate = this.createInflate();
         for await (const chunk of chunkGenerator) {
             inflate.write(chunk.buffer);
         }
@@ -1180,11 +1193,11 @@ export default class Dezip {
             if (compressedSize) {
                 let expandedData;
                 if (fileHeader.method == Dezip.METHODS.ZIP_DEFLATE || fileHeader.method == Dezip.METHODS.ZIP_DEFLATE64) {
-                    if (this.interfaces.createInflate) {
+                    if (this.createInflate) {
                         expandedData = await this.inflateChunks(
                             entry, this.readChunks(archive, position, compressedSize)
                         );
-                    } else if (this.interfaces.inflate) {
+                    } else if (this.inflate) {
                         let db = await this.readArchive(archive, position, compressedSize);
                         if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
                             db = this.decryptZipData(db, fileHeader, archive.password);

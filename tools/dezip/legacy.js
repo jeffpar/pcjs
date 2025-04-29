@@ -1139,7 +1139,10 @@ class Decompress
      */
     readByte(off)
     {
-        return this.dst.readUInt8(off);
+        let b = this.dst.buffer[off];
+        assert(b >= 0);
+        return b;
+        // return this.dst.readUInt8(off);
     }
 
     /**
@@ -1155,9 +1158,9 @@ class Decompress
     copyBytes(to, from, len)
     {
         assert(len > 0 && to + len <= this.dst.length && from + len < this.dst.length);
-
         for (let i = 0; i < len; i++) {
-            this.writeByte(this.readByte(from + i), to + i);
+            this.dst.buffer[to + i] = this.dst.buffer[from + i];
+            // this.writeByte(this.readByte(from + i), to + i);
         }
     }
 
@@ -1172,8 +1175,9 @@ class Decompress
      */
     writeByte(b, off)
     {
-        assert(off < this.dst.length);
-        this.dst.writeUInt8(b, off);
+        assert(b >= 0 && off < this.dst.length);
+        this.dst.buffer[off] = b;
+        // this.dst.writeUInt8(b, off);
     }
 
     /**
