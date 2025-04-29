@@ -91,13 +91,12 @@ const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
-        alias: "-b",
         description: "process archives listed in specified file"
     },
     "banner": {
         type: "boolean",
         usage: "--banner",
-        alias: "-c",
+        alias: "-b",
         description: "display archive (banner) comments"
     },
     "debug": {
@@ -179,7 +178,7 @@ const options = {
         usage: "--password [pwd]",
         alias: "-g",
         description: "decrypt \"garbled\" entries using password",
-        notes: "pkunzip used -s instead of -g to decrypt 'scrambled' entries"
+        note: "pkunzip used -s instead of -g to decrypt 'scrambled' entries"
     },
     "path": {
         type: "string",
@@ -198,6 +197,13 @@ const options = {
         usage: "--skip n",
         internal: true,
         description: "skip the first n lines in any batch file"
+    },
+    "summary": {
+        type: "boolean",
+        usage: "--summary",
+        alias: "-s",
+        description: "display total files and warnings for archive(s)",
+        note: "use --list to also see the individual files and warnings"
     },
     "test": {
         type: "boolean",
@@ -355,9 +361,9 @@ async function main(argc, argv, errors)
             archive = await dezip.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("%s\n", error.message);
-            return 0;
+            return [0, 1];
         }
-        let nArchiveFiles = 0;
+        let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
             //
             // We don't have an "official" means of bypassing an archive's directory, but it's easy enough
@@ -379,8 +385,8 @@ async function main(argc, argv, errors)
                 printf("%s: not an archive\n", archivePath);
             }
             //
-            // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), then
-            // the destination path is the source path with the first occurrence of <search> replaced with <replace>.
+            // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
+            // destination path is the source path with the first occurrence of <search> replaced with <replace>.
             //
             // Otherwise, destination path is whatever follows "--dir".  The presence of "--dir" automatically
             // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
@@ -415,9 +421,10 @@ async function main(argc, argv, errors)
                 let header = entry.dirHeader || entry.fileHeader;
                 let entryAttr = (header.attr || 0) & 0xff;
                 //
-                // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside archives;
-                // for now, I'm trusting that entries inside one or more directories have those directories explicitly
-                // specified in header.name (ie, that header.name is always a full relative path).
+                // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
+                // archives; for now, I'm trusting that entries inside one or more directories have those
+                // directories explicitly specified in header.name (ie, that header.name is always a full
+                // relative path).
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels
@@ -426,16 +433,15 @@ async function main(argc, argv, errors)
                     continue;           // skip directory entries
                 }
                 //
-                // While it might seem odd to print the archive heading inside the entry loop, if
-                // you've enabled recursive archive processing, we need to be able to reprint it on
-                // return from a recursive call; otherwise, we may give the mistaken impression
-                // that subsequent entries are part of the previous archive.
+                // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
+                // recursive archive processing, we need to be able to reprint it on return from a recursive call;
+                // otherwise, we may give the mistaken impression that subsequent entries are part of the previous
+                // archive.
                 //
-                // The obvious alternative would be to process all non-recursive entries first,
-                // followed by a separate entry loop to process all the recursive entries.  But that
-                // wastes time and resources, because the best time to process a recursive entry is
-                // when we already have its buffered data in hand (and we will ALWAYS have it in
-                // hand when extracting or even just testing files in the archive).
+                // The obvious alternative would be to process all non-recursive entries first, followed by a
+                // separate entry loop to process all the recursive entries.  But that wastes time and resources,
+                // because the best time to process a recursive entry is when we already have its buffered data in
+                // hand (and we will ALWAYS have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
                     if (argv.verbose || argv.list || filterExceptions || filterMethod != -1) {
@@ -452,7 +458,7 @@ async function main(argc, argv, errors)
                     }
                     if (argv.list) {
                         printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-                        printf("--------        ------   ------       ----  -----   ----       ----       ---\n");
+                        printf(  "--------        ------   ------       ----  -----   ----       ----       ---\n");
                     }
                     heading = true;
                 }
@@ -504,6 +510,7 @@ async function main(argc, argv, errors)
                     }
                     db = await dezip.readFile(archive, entry, writeData);
                 }
+                nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.list) {
                     let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
                     if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
@@ -522,7 +529,6 @@ async function main(argc, argv, errors)
                         // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
                         // so any warnings in one will probably be in the other.
                         //
-                        let seen = {};
                         for (let i = 0; i < warnings.length; i++) {
                             let j = warnings.indexOf(warnings[i], i + 1);
                             if (j >= 0) {
@@ -538,25 +544,35 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", header.name);
                 }
                 if (recurse && db) {
-                    let n = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
-                    if (n) {
+                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
+                    if (nFiles) {
                         heading = false;
                     }
+                    //
+                    // We now propagate all downstream warning totals upstream, so that the main loop can accurately
+                    // report which archives are completely free of warnings (any nested archive(s) with warnings are
+                    // disqualifying).  For consistency, we'll do the same for file totals as well.
+                    //
+                    nArchiveFiles += nFiles;
+                    nArchiveWarnings += nWarnings;
                 }
             }
         } catch (error) {
             printf("%s\n", error.message);
         }
         await dezip.close(archive);
-        return nArchiveFiles;
+        return [nArchiveFiles, nArchiveWarnings];
     };
     //
     // And finally: the main loop.
     //
     for (let archivePath of archivePaths) {
-        await processArchive(archivePath);
+        let [nFiles, nWarnings] = await processArchive(archivePath);
+        if (argv.summary) {
+            printf("%s%s: %d file%p, %d warning%p\n", argv.list? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
+        }
     }
-    printf("\n%d archive(s) examined, %d file(s) processed\n", nTotalArchives, nTotalFiles);
+    printf("\n%d archive%p examined, %d file%p processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
 }
 
 await main(...Format.parseOptions(process.argv, options));

@@ -54,7 +54,7 @@ export default class Format {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjpcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -557,6 +557,16 @@ export default class Format {
                  * (eg, "%2j"), it's used as an indentation value; otherwise, no whitespace is added.
                  */
                 buffer += JSON.stringify(arg, null, width || undefined);
+                break;
+
+            /**
+             * "%p" is a little innovation of my own for pluralizing strings: if the corresponding arg
+             * is not 1, then output 's'; otherwise, output nothing.
+             */
+            case 'p':
+                if (arg != 1) {
+                    buffer += 's';
+                }
                 break;
 
             /**
