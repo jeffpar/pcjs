@@ -161,14 +161,18 @@ export default class Format {
         //
         // Do some validation on the options table first (eg, make sure all aliases are unique).
         //
-        let aliases = {};
+        let usedAliases = {};
         for (j = 0; j < keys.length; j++) {
             let option = options[keys[j]];
-            if (option.alias) {
-                if (aliases[option.alias]) {
-                    errors.push(`Duplicate alias: ${option.alias} (see options --${keys[j]} and --${aliases[option.alias]})`);
+            let aliases = option.alias || [];
+            if (typeof aliases == "string") {
+                aliases = [aliases];
+            }
+            for (let alias of aliases) {
+                if (usedAliases[alias]) {
+                    errors.push(`Duplicate alias: ${alias} (see options --${keys[j]} and --${usedAliases[alias]})`);
                 }
-                aliases[option.alias] = keys[j];
+                usedAliases[alias] = keys[j];
             }
         }
         //
@@ -195,6 +199,32 @@ export default class Format {
             args[j] = args[j].replace(/^(["'])?(.*?)(\1?)$/, "$2");
         }
         //
+        // Function to handle commonalities between single and double-dash options.
+        //
+        let setArg = function(arg, value, input) {
+            let option = options[arg];
+            if (value === undefined) {
+                errors.push(`Missing value for option: ${input}`);
+                return false;
+            }
+            if (option.type == "number") {
+                if (isNaN(+value)) {
+                    errors.push(`Invalid number (${value}) for option: ${input}`);
+                    return false;
+                }
+                value = +value;
+            }
+            if (option.multiple) {
+                if (!Array.isArray(argv[arg])) {
+                    argv[arg] = [];
+                }
+                argv[arg].push(value);
+            } else {
+                argv[arg] = value;
+            }
+            return true;
+        };
+        //
         // Process the args against the options table and build the argv table.
         //
         while (i < args.length) {
@@ -212,7 +242,7 @@ export default class Format {
                         if (ch == " ") {
                             break;
                         }
-                        let k = keys.findIndex(key => options[key].alias == "-" + ch);
+                        let k = keys.findIndex(key => options[key].alias && options[key].alias.indexOf("-" + ch) >= 0);
                         if (k < 0) {
                             errors.push(`Unknown option: ${sep}${ch}`);
                             continue;
@@ -225,22 +255,14 @@ export default class Format {
                         else {
                             if (j < arg.length) {
                                 value = arg.slice(j).trim();
+                                arg = "";
                             } else {
                                 value = args[i++];
                             }
-                            if (value === undefined) {
-                                errors.push(`Missing value for option: ${sep}${ch}`);
-                                break;
-                            }
-                            if (option.type == "number") {
-                                if (isNaN(+value)) {
-                                    errors.push(`Invalid number (${value}) for option: ${sep}${ch}`);
-                                    break;
-                                }
-                                value = +value;
-                            }
                         }
-                        argv[keys[k]] = value;
+                        if (!setArg(keys[k], value, sep + ch)) {
+                            break;
+                        }
                     }
                     continue;
                 }
@@ -270,19 +292,8 @@ export default class Format {
                     if (!value) {
                         value = args[i++];
                     }
-                    if (value === undefined) {
-                        errors.push(`Missing value for option: ${sep}${arg}`);
-                        continue;
-                    }
-                    if (option.type == "number") {
-                        if (isNaN(+value)) {
-                            errors.push(`Invalid number (${value}) for option: ${sep}${arg}`);
-                            continue;
-                        }
-                        value = +value;
-                    }
                 }
-                argv[arg] = value;
+                setArg(arg, value, sep + arg);
                 continue;
             }
             argv.push(arg);

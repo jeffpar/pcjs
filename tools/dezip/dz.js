@@ -93,7 +93,6 @@ const options = {
     "debug": {
         type: "boolean",
         usage: "--debug",
-        alias: "-u",
         description: "display debug information"
     },
     "dir": {
@@ -105,20 +104,20 @@ const options = {
     "extract": {
         type: "boolean",
         usage: "--extract",
-        alias: "-e",
+        alias: ["-e", "-x"],
         description: "extract files (implied by --dir)"
     },
     "files": {
         type: "string",
         usage: "--files [spec]",
-        alias: "-f",
         description: "file specification (eg, \"*.txt\")",
     },
     "filter": {
         type: "string",
         usage: "--filter [...]",
-        alias: "-i",
-        description: "comma-separated filter list (see --filter list)",
+        alias: "-f",
+        multiple: true,
+        description: "filter archives on criteria (see --filter list)",
         options: {
             "list": {
                 value: 0,
@@ -171,7 +170,7 @@ const options = {
     "password": {
         type: "string",
         usage: "--password [pwd]",
-        alias: "-g",
+        alias: ["-g", "-s"],
         description: "decrypt \"garbled\" entries using password",
         //
         // The original ARC utility used -g to "garble" entries, whereas pkunzip used -s to "scramble" entries;
@@ -181,7 +180,6 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        alias: "-p",
         description: "archive path specification (eg, \"**/*.zip\")",
     },
     "recurse": {
@@ -213,7 +211,8 @@ const options = {
             for (let key in options) {
                 let option = options[key];
                 if (option.internal) continue;
-                printf("  %-16s %s%s\n", option.usage, option.description, option.alias? " [" + option.alias + "]" : "");
+                let aliases = Array.isArray(option.alias)? option.alias.join(",") : option.alias;
+                printf("  %-16s %s%s\n", option.usage, option.description, aliases? " [" + aliases + "]" : "");
             }
         }
     }
@@ -242,10 +241,8 @@ async function main(argc, argv, errors)
     // Next, let's deal with any specified filters.
     //
     let filterExceptions = 0, filterMethod = -1;
-    if (typeof argv.filter == "string") {
-        let filterNames = argv.filter.split(",");
-        for (let i = 0; i < filterNames.length; i++) {
-            let filter = filterNames[i].trim();
+    if (Array.isArray(argv.filter)) {
+        for (let filter of argv.filter) {
             let option = options.filter.options[filter];
             if (!option) {
                 //
@@ -469,6 +466,9 @@ async function main(argc, argv, errors)
                         if (db) {
                             if (!targetFile) {
                                 targetPath = path.join(dstPath, header.name);
+                                //
+                                // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
+                                //
                                 await fs.mkdir(path.dirname(targetPath), { recursive: true });
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
@@ -478,13 +478,13 @@ async function main(argc, argv, errors)
                                         // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
                                         // since extraction has been enabled.
                                         //
-                                        if (argv.verbose) printf("skipping %s\n", targetPath);
+                                        printf("%s: already exists\n", targetPath);
                                     } else {
-                                        printf("%s\n", error.message);
+                                        printf("%s: %s\n", targetPath, error.message);
                                     }
                                     return false;
                                 }
-                                if (argv.verbose) printf("creating %s\n", targetPath);
+                                if (argv.verbose) printf("created %s\n", targetPath);
                             }
                             await targetFile.write(db.buffer);
                             return true;
@@ -565,7 +565,7 @@ async function main(argc, argv, errors)
     //
     for (let archivePath of archivePaths) {
         let [nFiles, nWarnings] = await processArchive(archivePath);
-        if ((argv.list || argv.test) && nWarnings >= 0) {
+        if ((argv.list || argv.test) && nFiles && nWarnings >= 0) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
         }
     }

@@ -239,8 +239,8 @@ export default class Dezip {
         WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
         SPLIT:                  0x00000008,             // the archive contains entries referring to another ("split") archive
         BANNER:                 0x00000010,             // the archive contains an archive comment (aka "banner")
-        COMMENT:                0x00010000,             // the archive contains one or more entry comments
-        ENCRYPTED:              0x00020000              // the archive contains one or more encrypted ("garbled") entries
+        COMMENT:                0x00010000,             // the entry has a comment
+        ENCRYPTED:              0x00020000              // the entry is encrypted ("garbled")
     };
 
     static ARCHIVE_EXCEPTIONS = 0x0000ffff;
