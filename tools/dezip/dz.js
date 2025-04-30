@@ -18,7 +18,7 @@
  *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
  *      --------        ------   ------       ----  -----   ----       ----       ---
  *      SAMPSHOW._ST     54082   Store       54082     0%   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
- *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Position 54160 missing FileHeader]
+ *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Missing FileHeader at 54160]
  *      SAMPSND._AU       1690   Store        1690     0%   1991-05-22 01:03:00   790b9590
  *      SAMPSND2._AD    508760   Implode    484636     5%   1991-05-22 01:03:00   9351eec9
  *      SAMPSND2._AU      2920   Implode      1697    42%   1991-05-22 01:03:00   1138d881
@@ -68,10 +68,10 @@ const dezip = new Dezip(
     },
     {
         //
-        // NOTE: I overrode the default (64K) only to exercise the cache code a bit more
-        // and help flush out any bugs.  Some structures in an archive (eg, comments) can be
-        // as large as 64K-1, so this change also had the potential to trigger false warnings,
-        // because the cache should be as large as the largest structure in the archive
+        // NOTE: You can override the default cacheSize (64K) to exercise the cache a bit more
+        // and help flush out any bugs, but note that some structures in an archive (eg, comments)
+        // can be as large as 64K-1, so lower values have the potential to trigger false warnings.
+        // The cache should be as large as the largest expected data structure in the archive
         // (other than compressed data).
         //
         // cacheSize: 4096
@@ -175,7 +175,7 @@ const options = {
         description: "decrypt \"garbled\" entries using password",
         //
         // The original ARC utility used -g to "garble" entries, whereas pkunzip used -s to "scramble" entries;
-        // going with --password seems more straightforward, but in honor of the original utility, we'll also allow -g.
+        // going with --password seems more straightforward, but in honor of the ARC utility, we'll also allow -g.
         //
     },
     "path": {
@@ -189,15 +189,6 @@ const options = {
         usage: "--recurse",
         alias: "-r",
         description: "process archives within archives"
-    },
-    "summary": {
-        type: "boolean",
-        usage: "--summary",
-        alias: "-s",
-        description: "display total files and warnings for archive(s)",
-        //
-        // Use --list as well to see all the individual files and warnings...
-        //
     },
     "test": {
         type: "boolean",
@@ -375,8 +366,10 @@ async function main(argc, argv, errors)
                 // Note that we only display this message if archiveDB is NOT set (or --verbose IS set), because
                 // if this is a nested archive, then it was only opened implicitly, not explicitly.
                 //
+                nArchiveWarnings++;
                 if (argv.verbose || !archiveDB) {
                     printf("%s: not an archive\n", archivePath);
+                    nArchiveWarnings = -1;      // tells the caller nothing more need be said about this "archive"
                 }
             }
             else if (archive.warnings.length) {
@@ -385,7 +378,7 @@ async function main(argc, argv, errors)
                 // by default.
                 //
                 if (argv.verbose || !archiveDB) {
-                    printf("%s warnings: %s\n", archiveName, archive.warnings.join("; "));
+                    printf("%s: %s\n", archivePath, archive.warnings.join("; "));
                 }
             }
             //
@@ -447,7 +440,7 @@ async function main(argc, argv, errors)
                 // hand (and we will ALWAYS have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
-                    if (argv.list || filterExceptions || filterMethod != -1) {
+                    if (argv.banner && archive.comment || argv.list) {
                         if (argv.list) printf("\n");
                         printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
                     }
@@ -456,7 +449,7 @@ async function main(argc, argv, errors)
                     // filtering condition (--filter banner), but if you also want to SEE the banners, then
                     // you must also specify --banner.
                     //
-                    if (archive.comment && argv.banner && !nArchiveFiles) {
+                    if (argv.banner && archive.comment && !nArchiveFiles) {
                         printf("%s\n", archive.comment);
                     }
                     if (argv.list) {
@@ -572,7 +565,7 @@ async function main(argc, argv, errors)
     //
     for (let archivePath of archivePaths) {
         let [nFiles, nWarnings] = await processArchive(archivePath);
-        if (argv.summary) {
+        if ((argv.list || argv.test) && nWarnings >= 0) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
         }
     }

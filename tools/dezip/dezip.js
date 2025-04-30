@@ -710,7 +710,7 @@ export default class Dezip {
     {
         this.assert(position >= 0 && extent >= 0);
         if (position > archive.length) {
-            throw new Error(`Position ${position} exceeds maximum (${archive.length})`);
+            throw new Error(`Position ${position} exceeds limit (${archive.length})`);
         }
         if (position + extent > archive.length) {
             extent = archive.length - position;
@@ -763,7 +763,7 @@ export default class Dezip {
                 if (archive.file) {
                     let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
-                        throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at position ${readPosition}`);
+                        throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
                     }
                 } else {
                     //
@@ -962,7 +962,7 @@ export default class Dezip {
             }
             let dirHeader = Dezip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != Dezip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`Position ${position} missing DirHeader`);
+                throw new Error(`Missing DirHeader at ${position}`);
             }
             entry = this.newEntry(archive);
             entry.dirHeader = dirHeader;
@@ -1182,7 +1182,7 @@ export default class Dezip {
                 let position = entry.dirHeader.position;
                 await this.readFileHeader(archive, entry, position);
                 if (!entry.fileHeader) {
-                    throw new Error(`Position ${position} missing FileHeader`);
+                    throw new Error(`Missing FileHeader at ${position}`);
                 }
                 fileHeader = entry.fileHeader;
             }
