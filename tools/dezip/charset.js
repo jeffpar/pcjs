@@ -40,7 +40,15 @@ export default class CharSet {
             } else {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
-            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 9 && c != 10 && c != 13 && c != 26)) {
+            //
+            // NOTE: Even when translateControl is true, we still make exceptions for:
+            //
+            //      0x09 (TAB), 0x0A (LF), 0x0D (CR), 0x1A (EOF), and 0x1B (ESC)
+            //
+            // Those characters DO have graphical representations, so if there are situations
+            // where we need EVERYTHING translated, we'll need another option.
+            //
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 9 && c != 10 && c != 13 && c != 26 && c != 27)) {
                 u += CharSet.CP437[c];
             } else {
                 if (translateControl && c == 26) break;

@@ -156,7 +156,8 @@ export default class DataBuffer {
             let cbMax = dbTarget.length - offTarget;
             if (cbCopy > cbMax) cbCopy = cbMax;
             while (cbCopy-- > 0) {
-                dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
+                dbTarget.buffer[offTarget++] = this.buffer[offSource++];
+                // dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
             }
         }
     }
@@ -181,7 +182,8 @@ export default class DataBuffer {
             let i = 0;
             if (end > this.length) end = this.length;
             for (let o = off; o < end; o++) {
-                this.writeUInt8(typeof data == "number"? data : data[i++], o);
+                this.buffer[o] = typeof data == "number"? data : data[i++];
+                // this.writeUInt8(typeof data == "number"? data : data[i++], o);
             }
         }
     }
@@ -232,8 +234,8 @@ export default class DataBuffer {
         } else {
             let i = 0;
             while (off < this.length) {
-                this.dv.setUint8(off, s.charCodeAt(i++));
-                off++;
+                this.buffer[off++] = s.charCodeAt(i++);
+                // this.dv.setUint8(off++, s.charCodeAt(i++));
             }
         }
     }
@@ -247,7 +249,8 @@ export default class DataBuffer {
      */
     readUInt8(off)
     {
-        return this.node? this.buffer.readUInt8(off) : this.dv.getUint8(off);
+        return this.buffer[off];
+        // return this.node? this.buffer.readUInt8(off) : this.dv.getUint8(off);
     }
 
     /**
@@ -259,7 +262,8 @@ export default class DataBuffer {
      */
     writeUInt8(b, off)
     {
-        if (this.node) this.buffer.writeUInt8(b, off); else this.dv.setUint8(off, b);
+        this.buffer[off] = b;
+        // if (this.node) this.buffer.writeUInt8(b, off); else this.dv.setUint8(off, b);
     }
 
     /**
@@ -397,13 +401,16 @@ export default class DataBuffer {
         if (this.node) {
             s = this.buffer.toString(encoding, start, end);
         } else {
-            let a = new Uint8Array(this.ab, start, end - start);
-            if (encoding && "TextDecoder" in window) {
+            //
+            // TODO: Determine how useful TextDecoder really is for our use cases, because it does not
+            // appear to understand the same encodings the Buffer class does (eg, "ascii", "binary", etc).
+            //
+            if (encoding && encoding != "binary" && "TextDecoder" in window) {
                 let dec = new TextDecoder(encoding);
-                s = dec.decode(a);
+                s = dec.decode(Uint8Array(this.ab, start, end - start));
             } else {
                 // s = String.fromCharCode(...a) fails for large arrays...
-                for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+                for (let i = start; i < end; i++) s += String.fromCharCode(this.buffer[i]);
             }
         }
         return s;

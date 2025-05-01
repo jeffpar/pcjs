@@ -869,6 +869,9 @@ export default class Dezip {
             }
         } catch (error) {
             archive.warnings.push(error.message);
+            if (!archive.entries.length) {
+                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS | Dezip.EXCEPTIONS.NOFILES;
+            }
         }
         return entries;
     }
@@ -936,6 +939,7 @@ export default class Dezip {
                                 archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
                             archive.comment = Dezip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
+                            archive.commentRaw = Dezip.DirEndHeader.readString(cache.db, offset, length, "binary");
                             archive.exceptions |= Dezip.EXCEPTIONS.BANNER;
                         }
                         break;
@@ -1123,7 +1127,6 @@ export default class Dezip {
                             // zipHeader.encBytes[i] = archive.cache.db.readUInt8(offset + i);
                         }
                         zipHeader.length += 12;
-                        archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                     }
                     if (entry?.dirHeader) {
                         //

@@ -49,6 +49,7 @@ import fs from "fs/promises";
 import glob from "glob";
 import path from "path";
 import zlib from "zlib";
+import crypto from "crypto";
 import Format from "./format.js";
 import Dezip from "./dezip.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
@@ -142,7 +143,7 @@ const options = {
             "wrong": {
                 value: Dezip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with wrong archive type"
-            },
+            }
         }
     },
     "list": {
@@ -173,8 +174,8 @@ const options = {
         alias: ["-g", "-s"],
         description: "decrypt \"garbled\" entries using password",
         //
-        // The original ARC utility used -g to "garble" entries, whereas pkunzip used -s to "scramble" entries;
-        // going with --password seems more straightforward, but in honor of the ARC utility, we'll also allow -g.
+        // The original ARC utility used -g to "garble" entries, whereas PKUNZIP used -s to "scramble" entries;
+        // going with --password seems more straightforward, but in honor of the utilities, we also allow -g and -s.
         //
     },
     "path": {
@@ -319,6 +320,7 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
     }
+    let bannerHashes = {};
     let nTotalArchives = 0, nTotalFiles = 0;
     //
     // Define a function to process an individual archive, which then allows us to recursively process
@@ -364,20 +366,28 @@ async function main(argc, argv, errors)
                 // if this is a nested archive, then it was only opened implicitly, not explicitly.
                 //
                 nArchiveWarnings++;
-                if (argv.verbose || !archiveDB) {
+                if (argv.verbose || !archiveDB || archivePaths.length > 1) {
                     printf("%s: not an archive\n", archivePath);
-                    nArchiveWarnings = -1;      // tells the caller nothing more need be said about this "archive"
+                    nArchiveWarnings = -1;      // tells caller nothing more need be said about this "archive"
                 }
             }
             else if (archive.warnings.length) {
                 //
-                // Similarly, if readDirectory() encountered any issues, we'll tally them, but we won't display them
-                // by default.
+                // Similarly, if readDirectory() encountered any issues, we already tallied them (above), but we
+                // don't display them by default.
                 //
                 if (argv.verbose || !archiveDB) {
-                    printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                    printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
                 }
             }
+            else if (!entries.length) {
+                printf("%s: no matches\n", archivePath);
+            }
+            if (nArchiveWarnings < 0) {
+                throw nArchiveWarnings;
+            }
+            //
+            // Set dstPath as needed (needed for file and/or banner extraction).
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
             // destination path is the source path with the first occurrence of <search> replaced with <replace>.
@@ -389,23 +399,61 @@ async function main(argc, argv, errors)
             // If multiple archives are being processed and/or extraction was enabled without a specific directory,
             // then extraction will occur inside a directory with the name of the archive (which will be created if
             // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
-            // use "." as the directory; the goal is to avoid unintentional merging of files.
+            // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
             //
+            let dstPath, bannerPath;
             let srcPath = path.dirname(archivePath);
-            let dstPath = argv.dir || "";
-            if (entries.length) {
+            if (argv.dir || argv.extract) {
+                dstPath = argv.dir || "";
                 let chgPath = dstPath.split("=");
                 if (chgPath.length > 1) {
                     if (srcPath.indexOf(chgPath[0]) >= 0) {
                         dstPath = srcPath.replace(chgPath[0], chgPath[1]);
                     } else {
-                        printf("warning: source path %s does not contain %s\n", srcPath, chgPath[0]);
+                        printf("warning: source path %s does not contain '%s'\n", srcPath, chgPath[0]);
                         dstPath = chgPath[1];
                     }
                 }
                 if (dstPath != ".") {
                     if (!dstPath || archivePaths.length > 1) {
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                        bannerPath = dstPath + ".TXT";
+                    }
+                }
+                if (!bannerPath) {
+                    bannerPath = path.join(dstPath, path.basename(archivePath, archiveExt) + ".TXT");
+                }
+            }
+            if (archive.comment) {
+                //
+                // A special case: if we're filtering on archives with banners AND banner extraction is enabled
+                // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
+                //
+                if (!argv.extract && argv.dir && (filterExceptions & Dezip.EXCEPTIONS.BANNER)) {
+                    let hash = crypto.createHash('md5').update(archive.comment).digest('hex');
+                    if (bannerHashes[hash]) {
+                        bannerHashes[hash]++;
+                    } else {
+                        bannerHashes[hash] = 1;
+                        //
+                        // For display purposes, we use archive.comment, which gets translated to UTF-8,
+                        // but for extraction purposes, we use archive.commentRaw, which is untranslated.
+                        //
+                        await fs.mkdir(path.dirname(bannerPath), { recursive: true });
+                        try {
+                            await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
+                            if (argv.verbose) printf("created %s\n", targetPath);
+                        } catch (error) {
+                            if (error.code == "EEXIST") {
+                                //
+                                // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
+                                // since extraction has been enabled.
+                                //
+                                printf("%s: already exists\n", bannerPath);
+                            } else {
+                                printf("%s: %s\n", bannerPath, error.message);
+                            }
+                        }
                     }
                 }
             }
@@ -434,10 +482,10 @@ async function main(argc, argv, errors)
                 // The obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
                 // because the best time to process a recursive entry is when we already have its buffered data in
-                // hand (and we will ALWAYS have it in hand when extracting or even just testing files in the archive).
+                // hand (and we WILL have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
-                    if (argv.banner && archive.comment || argv.list) {
+                    if (argv.banner && archive.comment || argv.list || archivePaths.length > 1) {
                         if (argv.list) printf("\n");
                         printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
                     }
@@ -461,7 +509,7 @@ async function main(argc, argv, errors)
                 let printed = false;
                 let targetFile, targetPath;
                 let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
-                if ((argv.dir || argv.extract) && !recurse) {
+                if ((argv.extract || argv.dir && !(filterExceptions & Dezip.EXCEPTIONS.BANNER)) && !recurse) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
@@ -472,6 +520,7 @@ async function main(argc, argv, errors)
                                 await fs.mkdir(path.dirname(targetPath), { recursive: true });
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
+                                    if (argv.verbose) printf("created %s\n", targetPath);
                                 } catch (error) {
                                     if (error.code == "EEXIST") {
                                         //
@@ -484,7 +533,6 @@ async function main(argc, argv, errors)
                                     }
                                     return false;
                                 }
-                                if (argv.verbose) printf("created %s\n", targetPath);
                             }
                             await targetFile.write(db.buffer);
                             return true;
@@ -555,7 +603,9 @@ async function main(argc, argv, errors)
                 }
             }
         } catch (error) {
-            printf("%s: %s\n", archivePath, error.message);
+            if (typeof error != "number") {
+                printf("%s: %s\n", archivePath, error.message);
+            }
         }
         await dezip.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
