@@ -1370,7 +1370,7 @@ class ArcUnsqueeze extends ArcUnpack
          */
         this.numNodes = this.bs.bits(16, true);
         if (this.numNodes >= ArcUnsqueeze.NUMVALS) {
-            throw new Error("invalid decode tree");
+            throw new Error("Invalid decode tree");
         }
 
         /**
@@ -1667,7 +1667,7 @@ class ArcUncrunch extends ArcUnpack
     {
         this.stack[this.sp] = c;
         if (++this.sp >= ArcUncrunch.STKSIZE) {
-            throw new Error("stack overflow");
+            throw new Error("Stack overflow");
         }
     }
 
@@ -1810,7 +1810,7 @@ class ArcUncrush extends ArcUnpack
             this.maxBits = ArcUncrush.CRBITS;
             let code = this.bs.bits(8, true);
             if (code != this.maxBits) {
-                throw new Error("file packed with " + code + " bits (maximum is " + this.maxBits + ")");
+                throw new Error("File packed with " + code + " bits (maximum is " + this.maxBits + ")");
             }
         }
 
@@ -1972,7 +1972,7 @@ class ArcUncrush extends ArcUnpack
              */
             if (code >= this.free_ent) {
                 if (code > this.free_ent) {
-                    throw new Error("corrupted compressed file (code " + code + ", max " + this.free_ent + ")");
+                    throw new Error("Corrupted compressed file (code " + code + ", max " + this.free_ent + ")");
                 }
                 this.stack[p++] = finchar;
                 code = oldcode;
@@ -3245,7 +3245,7 @@ class ZipBlast
             left = (ZipBlast.MAXBITS+1) - len;
             if (left == 0) break;
             if (this.left == 0) {
-                throw new Error("ZipBlast.decode(): out of input");
+                throw new Error("ZipBlast.decode() out of input");
             }
             bitbuf = this.src.buffer[this.in++];
             this.left--;
@@ -3298,7 +3298,7 @@ class ZipBlast
         val = this.bitbuf;
         while (this.bitcnt < need) {
             if (this.left == 0) {
-                throw new Error("ZipBlast.bits(): out of input");
+                throw new Error("ZipBlast.bits() out of input");
             }
             /**
              * Load eight more bits
@@ -3431,6 +3431,6 @@ class ZipBlast
 function assert(exp, msg)
 {
     if (DEBUG && !exp) {
-        throw new Error(msg || "assertion failure");
+        throw new Error(msg || "Assertion failure");
     }
 }
