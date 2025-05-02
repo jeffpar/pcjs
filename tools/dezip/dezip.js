@@ -1217,16 +1217,17 @@ export default class Dezip {
                     }
                 } else {
                     /**
-                     * The actual decompression is now inside a loop AND a try/catch block, to automatically retry
-                     * decryption in case 1) a password was supplied but not actually required (the ARC file doesn't tell
-                     * us one way or the other) or 2) the ARC contains a mixture of encrypted and unencrypted files.
+                     * Legacy decompression is now inside a loop with its own try/catch handler, to automatically
+                     * retry decryption in case 1) a password was supplied but not actually required (the ARC file
+                     * doesn't tell us one way or the other) or 2) the ARC contains a mixture of encrypted and
+                     * unencrypted files.
                      *
-                     * With ARC files, our only clue that no password (or a different password) is required is when
-                     * decompression fails, and failure can take almost any form, since we may be feeding the decompressor
-                     * garbage.
+                     * With ARC files, our only clue that no password (or a different password) is required is
+                     * when decompression fails, and failure can take almost any form, since we may be feeding the
+                     * decompressor garbage.
                      *
-                     * In the rare case where we do make a 2nd attempt, re-running the password code will restore the
-                     * src data to its original state, and entry.reset() will clear any logged errors from the 1st attempt.
+                     * In the rare case where we do make a 2nd attempt, re-running the "garble" code simply restores
+                     * the src data to its original state.
                      */
                     let attempts = 2;                       // maximum of two attempts
                     if (archive.type != Dezip.TYPE_ARC || !archive.password) {
@@ -1259,60 +1260,66 @@ export default class Dezip {
                                 db = this.decryptZipData(db, fileHeader, archive.password);
                             }
                         }
-                        let srcDB = db;
-                        let largeWindow, literalTree;
-                        switch(fileHeader.method) {
-                        case Dezip.METHODS.ARC_UNP:
-                        case Dezip.METHODS.ZIP_STORE:
-                            expandedDB = srcDB;
+                        try {
+                            let srcDB = db;
+                            let largeWindow, literalTree;
+                            switch(fileHeader.method) {
+                            case Dezip.METHODS.ARC_UNP:
+                            case Dezip.METHODS.ZIP_STORE:
+                                expandedDB = srcDB;
+                                break;
+                            case Dezip.METHODS.ARC_NR:              // aka "Pack"
+                                expandedDB = this.unpackSync(srcDB, expandedSize);
+                                break;
+                            case Dezip.METHODS.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
+                                expandedDB = this.unsqueezeSync(srcDB, expandedSize);
+                                break;
+                            case Dezip.METHODS.ARC_LZ:              // aka "Crunch5" (LZ compression)
+                                expandedDB = this.uncrunchSync(srcDB, expandedSize, 0);
+                                break;
+                            case Dezip.METHODS.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
+                                expandedDB = this.uncrunchSync(srcDB, expandedSize, 1);
+                                break;
+                            case Dezip.METHODS.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
+                                expandedDB = this.uncrunchSync(srcDB, expandedSize, 2);
+                                break;
+                            case Dezip.METHODS.ARC_LZC:             // aka "Crush" (dynamic LZW)
+                                expandedDB = this.uncrushSync(srcDB, expandedSize, false);
+                                break;
+                            case Dezip.METHODS.ARC_LZS:             // aka "Squash"
+                                expandedDB = this.uncrushSync(srcDB, expandedSize, true);
+                                break;
+                            case Dezip.METHODS.ZIP_SHRINK:
+                                expandedDB = this.stretchSync(srcDB, expandedSize);
+                                break;
+                            case Dezip.METHODS.ZIP_REDUCE1:
+                            case Dezip.METHODS.ZIP_REDUCE2:
+                            case Dezip.METHODS.ZIP_REDUCE3:
+                            case Dezip.METHODS.ZIP_REDUCE4:
+                                expandedDB = this.expandSync(srcDB, expandedSize, fileHeader.method - Dezip.METHODS.ZIP_REDUCE1 + 1);
+                                break;
+                            case Dezip.METHODS.ZIP_IMPLODE:
+                                largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
+                                literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
+                                expandedDB = this.explodeSync(srcDB, expandedSize, largeWindow, literalTree);
+                                break;
+                            case Dezip.METHODS.ZIP_IMPLODE_DCL:
+                                expandedDB = this.blastSync(srcDB);
+                                break;
+                            default:
+                                throw new Error(`Unsupported compression method ${fileHeader.method}`);
+                            }
+                            if (!expandedDB) {
+                                //
+                                // Since the decompression handler didn't throw an error of its own, throw a generic error.
+                                //
+                                throw new Error(`Decompression failure`);
+                            }
                             break;
-                        case Dezip.METHODS.ARC_NR:              // aka "Pack"
-                            expandedDB = this.unpackSync(srcDB, expandedSize);
-                            break;
-                        case Dezip.METHODS.ARC_HS:              // aka "Squeeze" (Huffman squeezing)
-                            expandedDB = this.unsqueezeSync(srcDB, expandedSize);
-                            break;
-                        case Dezip.METHODS.ARC_LZ:              // aka "Crunch5" (LZ compression)
-                            expandedDB = this.uncrunchSync(srcDB, expandedSize, 0);
-                            break;
-                        case Dezip.METHODS.ARC_LZNR:            // aka "Crunch6" (LZ non-repeat compression)
-                            expandedDB = this.uncrunchSync(srcDB, expandedSize, 1);
-                            break;
-                        case Dezip.METHODS.ARC_LZNH:            // aka "Crunch7" (LZ with new hash)
-                            expandedDB = this.uncrunchSync(srcDB, expandedSize, 2);
-                            break;
-                        case Dezip.METHODS.ARC_LZC:             // aka "Crush" (dynamic LZW)
-                            expandedDB = this.uncrushSync(srcDB, expandedSize, false);
-                            break;
-                        case Dezip.METHODS.ARC_LZS:             // aka "Squash"
-                            expandedDB = this.uncrushSync(srcDB, expandedSize, true);
-                            break;
-                        case Dezip.METHODS.ZIP_SHRINK:
-                            expandedDB = this.stretchSync(srcDB, expandedSize);
-                            break;
-                        case Dezip.METHODS.ZIP_REDUCE1:
-                        case Dezip.METHODS.ZIP_REDUCE2:
-                        case Dezip.METHODS.ZIP_REDUCE3:
-                        case Dezip.METHODS.ZIP_REDUCE4:
-                            expandedDB = this.expandSync(srcDB, expandedSize, fileHeader.method - Dezip.METHODS.ZIP_REDUCE1 + 1);
-                            break;
-                        case Dezip.METHODS.ZIP_IMPLODE:
-                            largeWindow = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP1);
-                            literalTree = !!(fileHeader.flags & Dezip.FileHeader.fields.flags.COMP2);
-                            expandedDB = this.explodeSync(srcDB, expandedSize, largeWindow, literalTree);
-                            break;
-                        case Dezip.METHODS.ZIP_IMPLODE_DCL:
-                            expandedDB = this.blastSync(srcDB);
-                            break;
-                        default:
-                            throw new Error(`Unsupported compression method ${fileHeader.method}`);
-                        }
-                        if (expandedDB) break;
-                        if (!attempts) {
-                            //
-                            // Since the decompression handler didn't throw an error of its own, throw a generic error.
-                            //
-                            throw new Error(`Decompression failed`);
+                        } catch (error) {
+                            if (!attempts) {
+                                throw error;
+                            }
                         }
                     }
                 }

@@ -27,8 +27,8 @@
  *      VOICE._AD       428672   Implode    410777     4%   1991-05-22 01:03:00   3a53989f
  *      VOICE._AU         3190   Store        3190     0%   1991-05-22 01:03:00   15a9741a
  *
- * Since the archive's directory appears to have "issues", let's bypass them using --nodir (or use -ltn instead of -lt)
- * and rely on a scan of the archive's FileHeaders instead.  Now we see a completely different set of (8) files:
+ * Since the archive's directory appears to have "issues", let's bypass them using -n (aka --nodir)
+ * and rely on a scan of the archive's FileHeaders instead.  Now we see a different set of (8) files:
  *
  *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
  *      --------        ------   ------       ----  -----   ----       ----       ---
@@ -41,8 +41,7 @@
  *      XGALOAD0.SYS     14993   Implode      3554    76%   1991-06-06 11:14:12   d94fd9d5
  *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
  *
- * And there are no warnings.  This is what I'm talking about when I say that judicious use of --nodir can reveal hidden
- * treasures.
+ * And there are no warnings.  So judicious use of -n can reveal hidden treasures (well, hidden *something*).
  */
 
 import fs from "fs/promises";
@@ -354,12 +353,12 @@ async function main(argc, argv, errors)
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
-            nArchiveWarnings += archive.warnings.length? 1 : 0;
             //
             // The entries array can be empty for several reasons (eg, no files matched the specified filters),
             // but the NOFILES exception will be set only if the internal entries array is also empty, suggesting
             // that the file is not actually an archive.
             //
+            nArchiveWarnings += archive.warnings.length? 1 : 0;
             if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
                 //
                 // Note that we only display this message if archiveDB is NOT set (or --verbose IS set), because
@@ -381,7 +380,7 @@ async function main(argc, argv, errors)
                 }
             }
             else if (!entries.length) {
-                printf("%s: no matches\n", archivePath);
+                printf("%s: no match\n", archivePath);
             }
             if (nArchiveWarnings < 0) {
                 throw nArchiveWarnings;
