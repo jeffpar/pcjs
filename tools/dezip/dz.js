@@ -555,7 +555,7 @@ async function main(argc, argv, errors)
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.list) {
-                    let method = header.method < 0? LegacyArc.methodNames[-header.method - 2] : LegacyZip.methodNames[header.method];
+                    let method = header.method < 0? LegacyArc.methodNames[-(header.method + 2)] : LegacyZip.methodNames[header.method];
                     if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
                         method += '*';
                     }

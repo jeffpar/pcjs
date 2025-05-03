@@ -41,9 +41,8 @@ export default class DiskLib {
      * with Unix-style line endings, but we may as well convert them anyway).
      */
     static asTextFileExts = [
-        ".MD", ".ME", ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF",
-        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C", ".H", ".",
-        ".NFO", ".DIZ"
+        ".MD",  ".ME",  ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".NFO", ".DIZ",
+        ".MAK", ".TXT", ".XML", ".MAC", ".INF", ".SKL", ".DAT", ".C",   ".H",   "."
     ];
 
     /**

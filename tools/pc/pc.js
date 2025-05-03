@@ -3353,7 +3353,7 @@ export default class PC extends PCJSLib {
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
-        this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 10));
+        this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 5));
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
