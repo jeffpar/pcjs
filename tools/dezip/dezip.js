@@ -356,7 +356,14 @@ export default class Dezip {
             }
             const stats = await archive.file.stat();
             archive.length = stats.size;
-            archive.modified = stats.mtime;
+            //
+            // If the caller supplied a modification date for the archive, then we stick with that,
+            // because the caller may have extracted the archive from another archive that preserved
+            // the original date.  Otherwise, we use the modification date provided by the file system.
+            //
+            if (!archive.modified) {
+                archive.modified = stats.mtime;
+            }
             this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.length)));
             if (options.prefill) {
                 let db = new DataBuffer(0);

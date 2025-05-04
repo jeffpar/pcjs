@@ -325,7 +325,7 @@ async function main(argc, argv, errors)
     // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
     //
-    let processArchive = async function(archivePath, archiveDB = null) {
+    let processArchive = async function(archivePath, archiveDB = null, modified = null) {
         let archive;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
@@ -337,6 +337,9 @@ async function main(argc, argv, errors)
             let options = {};
             if (argv.password) {
                 options.password = argv.password;
+            }
+            if (modified) {
+                options.modified = modified;
             }
             archive = await dezip.open(archivePath, archiveDB, options);
         } catch (error) {
@@ -416,11 +419,11 @@ async function main(argc, argv, errors)
                 if (dstPath != ".") {
                     if (!dstPath || archivePaths.length > 1) {
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
-                        bannerPath = dstPath + ".TXT";
+                        bannerPath = dstPath + ".BAN";
                     }
                 }
                 if (!bannerPath) {
-                    bannerPath = path.join(dstPath, path.basename(archivePath, archiveExt) + ".TXT");
+                    bannerPath = path.join(dstPath, path.basename(archivePath, archiveExt) + ".BAN");
                 }
             }
             if (archive.comment) {
@@ -442,6 +445,9 @@ async function main(argc, argv, errors)
                         try {
                             await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
                             if (argv.verbose) printf("created %s\n", targetPath);
+                            if (archive.modified) {
+                                await fs.utimes(bannerPath, archive.modified, archive.modified);
+                            }
                         } catch (error) {
                             if (error.code == "EEXIST") {
                                 //
@@ -588,7 +594,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", header.name);
                 }
                 if (recurse && db) {
-                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db);
+                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db, header.modified);
                     if (nFiles) {
                         heading = false;
                     }
