@@ -2841,7 +2841,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-ltr --batch tests/dirty-archives.log"
+        "-t --batch tests/clean-archives.log"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

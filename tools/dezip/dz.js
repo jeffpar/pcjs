@@ -432,34 +432,31 @@ async function main(argc, argv, errors)
                 // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
                 //
                 if (!argv.extract && argv.dir && (filterExceptions & Dezip.EXCEPTIONS.BANNER)) {
-                    let nLines = archive.comment.split(/\r?\n/).length;
-                    if (nLines > 2) {
-                        let hash = crypto.createHash('md5').update(archive.comment).digest('hex');
-                        if (bannerHashes[hash]) {
-                            bannerHashes[hash]++;
-                        } else {
-                            bannerHashes[hash] = 1;
-                            //
-                            // For display purposes, we use archive.comment, which gets translated to UTF-8,
-                            // but for extraction purposes, we use archive.commentRaw, which is untranslated.
-                            //
-                            await fs.mkdir(path.dirname(bannerPath), { recursive: true });
-                            try {
-                                await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
-                                if (argv.verbose) printf("created %s\n", targetPath);
-                                if (archive.modified) {
-                                    await fs.utimes(bannerPath, archive.modified, archive.modified);
-                                }
-                            } catch (error) {
-                                if (error.code == "EEXIST") {
-                                    //
-                                    // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
-                                    // since extraction has been enabled.
-                                    //
-                                    printf("%s: already exists\n", bannerPath);
-                                } else {
-                                    printf("%s: %s\n", bannerPath, error.message);
-                                }
+                    let hash = crypto.createHash('md5').update(archive.comment).digest('hex');
+                    if (bannerHashes[hash]) {
+                        bannerHashes[hash]++;
+                    } else {
+                        bannerHashes[hash] = 1;
+                        //
+                        // For display purposes, we use archive.comment, which gets translated to UTF-8,
+                        // but for extraction purposes, we use archive.commentRaw, which is untranslated.
+                        //
+                        await fs.mkdir(path.dirname(bannerPath), { recursive: true });
+                        try {
+                            await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
+                            if (argv.verbose) printf("created %s\n", targetPath);
+                            if (archive.modified) {
+                                await fs.utimes(bannerPath, archive.modified, archive.modified);
+                            }
+                        } catch (error) {
+                            if (error.code == "EEXIST") {
+                                //
+                                // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
+                                // since extraction has been enabled.
+                                //
+                                printf("%s: already exists\n", bannerPath);
+                            } else {
+                                printf("%s: %s\n", bannerPath, error.message);
                             }
                         }
                     }
@@ -493,7 +490,7 @@ async function main(argc, argv, errors)
                 // hand (and we WILL have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
-                    if (argv.banner && archive.comment || argv.list || archivePaths.length > 1) {
+                    if (argv.banner && archive.comment || argv.list) {
                         if (argv.list) printf("\n");
                         printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
                     }
