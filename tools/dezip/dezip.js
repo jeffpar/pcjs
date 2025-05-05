@@ -80,7 +80,7 @@ export default class Dezip {
      * Public class fields
      */
     static DEBUG = true;
-    static VERSION = "0.1.0";
+    static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
     static TYPE_ARC = 1;
@@ -239,8 +239,8 @@ export default class Dezip {
         WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
         SPLIT:                  0x00000008,             // the archive contains entries referring to another ("split") archive
         BANNER:                 0x00000010,             // the archive contains an archive comment (aka "banner")
-        COMMENT:                0x00010000,             // the entry has a comment
-        ENCRYPTED:              0x00020000              // the entry is encrypted ("garbled")
+        COMMENT:                0x00010000,             // the entry has a comment / the archive contains commented entries
+        ENCRYPTED:              0x00020000              // the entry is encrypted ("garbled") / the archive contains encrypted entries
     };
 
     static ARCHIVE_EXCEPTIONS = 0x0000ffff;
@@ -328,7 +328,7 @@ export default class Dezip {
         //
         // If a DataBuffer (db) is provided, then no reading is required; we also provide
         // the option of reading the entire archive into a DataBuffer.  However, the preferred
-        // approach is to read structures from the file as needed into a cache buffer.
+        // approach is to read structures from the file as needed into the archive's cache buffer.
         //
         if (db) {
             archive.length = db.length;
@@ -517,7 +517,7 @@ export default class Dezip {
         //
         // The ZIP decryption algorithm multiplies two 32-bit numbers, resulting in values
         // with up to 64 bits.  Even though the algorithm only cares about the low 32 bits of
-        // the result, Javascript multiplication loses precision in those low bits whenever
+        // the result, JavaScript multiplication loses precision in those low bits whenever
         // the result exceeds 53 bits, so we have to roll our own multiplication function that
         // focuses on just the low 32 bits and doesn't bother with the high bits.
         //
@@ -555,7 +555,7 @@ export default class Dezip {
         // high word of the entry's CRC.
         //
         // For archives produced with PKZIP 2.x, we need to limit the comparison to
-        // the last (high) byte of each, so an additional 8-bit shift is needed.
+        // just the last (high) byte of each, so an additional 8-bit shift is needed.
         //
         let shift = fileHeader.version >= 20? 8 : 0;
         let w = fileHeader.encBytes[10] | (fileHeader.encBytes[11] << 8);
@@ -668,7 +668,7 @@ export default class Dezip {
      * on the assumption that we're reading unstructured (eg, compressed) chunks of data
      * which don't need to be cached and/or could exceed the size of our cache buffer.
      *
-     * The cache is only intended for reading small data structures from the archive.
+     * The cache is only intended for reading well-defined data structures from the archive.
      *
      * @this {Dezip}
      * @param {Archive} archive

@@ -11244,6 +11244,17 @@
 					"@title": "PC-SIG CD-ROM (8th Edition)",
 					"@hidden": true
 				},
+				"bbs": {
+					"@title": "BBS Collections",
+					"@media": [
+						{
+							"@title": "BBS ZIP Banners",
+							"@diskette": "ZIP-BANNERS.json",
+							"@format": "PC1440K",
+							"@source": "https://archive.org/details/ibm-wgam-wbiz-collection"
+						}
+					]
+				},
 				"pcug": {
 					"@title": "PC User Groups",
 					"@media": [

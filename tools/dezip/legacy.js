@@ -107,15 +107,10 @@ export class LegacyArc
     static unpackSync(src, dst_len)
     {
         let unpack = new ArcUnpack();
-        if (!unpack.decomp(src, dst_len)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete unpack.dst;
-            //
-        }
+        unpack.decomp(src, dst_len);
+        //
+        // We used to delete unpack.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return unpack.getOutput();
     }
 
@@ -129,15 +124,10 @@ export class LegacyArc
     static unsqueezeSync(src, dst_len)
     {
         let unsqueeze = new ArcUnsqueeze();
-        if (!unsqueeze.decomp(src, dst_len)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete unsqueeze.dst;
-            //
-        }
+        unsqueeze.decomp(src, dst_len);
+        //
+        // We used to delete unsqueeze.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return unsqueeze.getOutput();
     }
 
@@ -152,15 +142,10 @@ export class LegacyArc
     static uncrunchSync(src, dst_len, type)
     {
         let uncrunch = new ArcUncrunch();
-        if (!uncrunch.decomp(src, dst_len, type >= 1, type == 2)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete uncrunch.dst;
-            //
-        }
+        uncrunch.decomp(src, dst_len, type >= 1, type == 2);
+        //
+        // We used to delete uncrunch.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return uncrunch.getOutput();
     }
 
@@ -175,15 +160,10 @@ export class LegacyArc
     static uncrushSync(src, dst_len, squashed)
     {
         let uncrush = new ArcUncrush();
-        if (!uncrush.decomp(src, dst_len, squashed)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete uncrush.dst;
-            //
-        }
+        uncrush.decomp(src, dst_len, squashed);
+        //
+        // We used to delete uncrush.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return uncrush.getOutput();
     }
 
@@ -268,15 +248,10 @@ export class LegacyZip
     static stretchSync(src, dst_len)
     {
         let stretch = new ZipStretch();
-        if (!stretch.decomp(src, dst_len)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete stretch.dst;
-            //
-        }
+        stretch.decomp(src, dst_len);
+        //
+        // We used to delete stretch.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return stretch.getOutput();
     }
 
@@ -291,15 +266,10 @@ export class LegacyZip
     static expandSync(src, dst_len, comp_factor)
     {
         let expand = new ZipExpand();
-        if (!expand.decomp(src, dst_len, comp_factor)) {
-            //
-            // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-            // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-            // probably good enough.
-            //
-            // delete expand.dst;
-            //
-        }
+        expand.decomp(src, dst_len, comp_factor);
+        //
+        // We used to delete expand.dst if decomp() returned false, but we now let getOutput() return whatever it can.
+        //
         return expand.getOutput();
     }
 
@@ -322,19 +292,19 @@ export class LegacyZip
     static explodeSync(src, dst_len, large_wnd, lit_tree)
     {
         let explode = new ZipExplode();
+        //
+        // We make two attempts to explode the data, in case we encounter the rare PKZIP 1.01/1.02 bug
+        // described here: https://www.hanshq.net/zip2.html (search for references to "pk101_bug_compat").
+        //
         if (!explode.decomp(src, dst_len, large_wnd, lit_tree, false) || explode.getBytesRead() != src.length) {
             if (!explode.decomp(src, dst_len, large_wnd, lit_tree, true) || explode.getBytesRead() != src.length) {
                 //
-                // It is perhaps better to return whatever data we managed to decompress, rather than nothing at all.
-                // Usually when this happens, the caller will notice that the destination length is wrong, and that's
-                // probably good enough.
-                //
-                // delete explode.dst;
+                // We used to delete explode.dst if decomp() returned false, but we now let getOutput() return whatever it can.
                 //
             }
             else {
                 //
-                // We can see this bug in action when decompressing cd.textfiles.com/cds/originalsw/download/25/PKZ101.EXE
+                // We can see the aforementioned bug when decompressing cd.textfiles.com/cds/originalsw/download/25/PKZ101.EXE
                 //
                 assert(true, "explodeSync() recovered");
             }
