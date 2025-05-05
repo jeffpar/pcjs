@@ -5,7 +5,7 @@
     "ver": "3.30",              // alternatives: (see "versions" below)
     "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
     "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
-    "maxfiles": 0,              // 0 for default: target disk size (in Kb) divided by 10 (eg, 10240Kb / 10 or 1024 files)
+    "maxfiles": 0,              // 0 for default: target disk size (in Kb) divided by 5 (eg, 10240Kb / 5 or 2048 files)
     "label": ".",               // alternatives: "default"
     "dir": ".",
     "machine": "compaq386.json",

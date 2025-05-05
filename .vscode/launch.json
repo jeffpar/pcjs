@@ -2756,16 +2756,94 @@
       }
     },
     {
-      "name": "plex.js",
+      "name": "dz.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/private/plex.js",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "movies",
-        "search",
-        "file"
-       ],
-      "cwd": "${workspaceFolder}/tools/private",
+        "--help"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js all",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "-ltr --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/**/*.{ZIP,ARC}"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js filter",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "--list --filter squeeze --batch tests/clean-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js split",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "--list --filter split --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "-ltr --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
