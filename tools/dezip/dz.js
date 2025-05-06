@@ -353,6 +353,7 @@ async function main(argc, argv, errors)
             // We don't have an "official" means of bypassing an archive's directory, but it's easy enough
             // to flag the archive as having already scanned the directory so that readDirectory() won't bother.
             //
+            let heading = false;
             if (argv.nodir) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
@@ -463,7 +464,7 @@ async function main(argc, argv, errors)
                     }
                 }
             }
-            let nEntries = 0, heading = false;
+            let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let header = entry.dirHeader || entry.fileHeader;

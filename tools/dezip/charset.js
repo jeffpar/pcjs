@@ -141,9 +141,13 @@ export default class CharSet {
  * Table to convert CP437 characters to Unicode.
  *
  * Refer to: https://en.wikipedia.org/wiki/Code_page_437
+ *
+ * NOTES: I've decided to change entry 0x00 from '\u0000' to '\u0020' (SPACE)
+ * and entry 0xFF from '\u00A0' (NO-BREAK SPACE) to '\u0020' (SPACE), because
+ * that's essentially what CP437 displayed (and that also matches our visual table).
  */
 CharSet.CP437 = [
-    '\u0000', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',
+    '\u0020', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',
     '\u25D8', '\u25CB', '\u25D9', '\u2642', '\u2640', '\u266A', '\u266B', '\u263C',
     '\u25BA', '\u25C4', '\u2195', '\u203C', '\u00B6', '\u00A7', '\u25AC', '\u21A8',
     '\u2191', '\u2193', '\u2192', '\u2190', '\u221F', '\u2194', '\u25B2', '\u25BC',
@@ -174,7 +178,7 @@ CharSet.CP437 = [
     '\u03B1', '\u00DF', '\u0393', '\u03C0', '\u03A3', '\u03C3', '\u00B5', '\u03C4',
     '\u03A6', '\u0398', '\u03A9', '\u03B4', '\u221E', '\u03C6', '\u03B5', '\u2229',
     '\u2261', '\u00B1', '\u2265', '\u2264', '\u2320', '\u2321', '\u00F7', '\u2248',
-    '\u00B0', '\u2219', '\u00B7', '\u221A', '\u207F', '\u00B2', '\u25A0', '\u00A0'
+    '\u00B0', '\u2219', '\u00B7', '\u221A', '\u207F', '\u00B2', '\u25A0', '\u0020'
 ];
 
 // CharSet.CP437Visual = [
