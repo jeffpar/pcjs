@@ -144,7 +144,7 @@ export default class Format {
     }
 
     /**
-     * parseOptions(args, options)
+     * parseArgs(args, options)
      *
      * Any argument value preceded by a double-hyphen or long-dash switch (eg, "--option value") is
      * saved in argv with the switch as the key (eg, argv["option"] == "value").
@@ -153,7 +153,7 @@ export default class Format {
      * @param {object} options
      * @returns {Array} [argc, argv, errors]
      */
-    static parseOptions(args, options)
+    static parseArgs(args, options)
     {
         let i = 1, j;
         let keys = Object.keys(options);

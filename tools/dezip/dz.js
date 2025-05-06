@@ -88,12 +88,13 @@ const options = {
         type: "boolean",
         usage: "--banner",
         alias: "-b",
-        description: "display archive (banner) comments"
+        description: "display archive comments (aka banners)"
     },
     "debug": {
         type: "boolean",
         usage: "--debug",
-        description: "display debug information"
+        description: "display debug information",
+        internal: true
     },
     "dir": {
         type: "string",
@@ -125,7 +126,7 @@ const options = {
             },
             "banner": {
                 value: Dezip.EXCEPTIONS.BANNER,
-                description: "process only archives with banner comments"
+                description: "process only commented archives"
             },
             "comment": {
                 value: Dezip.EXCEPTIONS.COMMENT,
@@ -141,7 +142,7 @@ const options = {
             },
             "wrong": {
                 value: Dezip.EXCEPTIONS.WRONGTYPE,
-                description: "process only archives with wrong archive type"
+                description: "process only archives with the wrong type"
             }
         }
     },
@@ -230,7 +231,7 @@ async function main(argc, argv, errors)
         options.help.handler();
     }
     //
-    // Before we get started, display any usage errors encountered by parseOptions().
+    // Before we get started, display any usage errors encountered by parseArgs().
     //
     let nErrors = 0;
     for (let error of errors) {
@@ -490,7 +491,7 @@ async function main(argc, argv, errors)
                 // hand (and we WILL have it in hand when extracting or even just testing files in the archive).
                 //
                 if (!heading) {
-                    if (argv.banner && archive.comment || argv.list) {
+                    if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
                         if (argv.list) printf("\n");
                         printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
                     }
@@ -525,14 +526,22 @@ async function main(argc, argv, errors)
                                 await fs.mkdir(path.dirname(targetPath), { recursive: true });
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
-                                    if (argv.verbose) printf("created %s\n", targetPath);
+                                    if (argv.list) {
+                                        entry.warnings.unshift("created " + targetPath);
+                                    } else {
+                                        printf("created %s\n", targetPath);
+                                    }
                                 } catch (error) {
                                     if (error.code == "EEXIST") {
                                         //
                                         // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
                                         // since extraction has been enabled.
                                         //
-                                        printf("%s: already exists\n", targetPath);
+                                        if (argv.list) {
+                                            entry.warnings.unshift(targetPath + " already exists");
+                                        } else {
+                                            printf("%s already exists\n", targetPath);
+                                        }
                                     } else {
                                         printf("%s: %s\n", targetPath, error.message);
                                     }
@@ -627,4 +636,4 @@ async function main(argc, argv, errors)
     printf("\n%d archive%s examined, %d file%s processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
 }
 
-await main(...Format.parseOptions(process.argv, options));
+await main(...Format.parseArgs(process.argv, options));
