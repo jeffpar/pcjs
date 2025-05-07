@@ -144,7 +144,7 @@ export default class CharSet {
  *
  * NOTES: I've decided to change entry 0x00 from '\u0000' to '\u0020' (SPACE)
  * and entry 0xFF from '\u00A0' (NO-BREAK SPACE) to '\u0020' (SPACE), because
- * that's essentially what CP437 displayed (and that also matches our visual table).
+ * that's essentially what CP437 displayed (and also matches our visual table).
  */
 CharSet.CP437 = [
     '\u0020', '\u263A', '\u263B', '\u2665', '\u2666', '\u2663', '\u2660', '\u2022',

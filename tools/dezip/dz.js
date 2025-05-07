@@ -27,7 +27,7 @@
  *      VOICE._AD       428672   Implode    410777     4%   1991-05-22 01:03:00   3a53989f
  *      VOICE._AU         3190   Store        3190     0%   1991-05-22 01:03:00   15a9741a
  *
- * Since the archive's directory appears to have "issues", let's bypass them using -n (aka --nodir)
+ * Since the archive's DirHeaders appear to have "issues", let's bypass them using -n (aka --nodir)
  * and rely on a scan of the archive's FileHeaders instead.  Now we see a different set of (8) files:
  *
  *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
@@ -349,11 +349,11 @@ async function main(argc, argv, errors)
         }
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
-            //
-            // We don't have an "official" means of bypassing an archive's directory, but it's easy enough
-            // to flag the archive as having already scanned the directory so that readDirectory() won't bother.
-            //
             let heading = false;
+            //
+            // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
+            // to flag the archive as having already scanned them, so that readDirectory() won't bother.
+            //
             if (argv.nodir) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
@@ -366,8 +366,8 @@ async function main(argc, argv, errors)
             nArchiveWarnings += archive.warnings.length? 1 : 0;
             if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
                 //
-                // Note that we only display this message if archiveDB is NOT set (or --verbose IS set), because
-                // if this is a nested archive, then it was only opened implicitly, not explicitly.
+                // Note that we only display this message if archiveDB is NOT set (or --verbose IS set),
+                // because if this is a nested archive, then it was only opened implicitly, not explicitly.
                 //
                 nArchiveWarnings++;
                 if (argv.verbose || !archiveDB || archivePaths.length > 1) {
@@ -388,7 +388,7 @@ async function main(argc, argv, errors)
                 printf("%s: no match\n", archivePath);
             }
             if (nArchiveWarnings < 0) {
-                throw nArchiveWarnings;
+                throw nArchiveWarnings;         // break out of the try/catch clause
             }
             //
             // Set dstPath as needed (needed for file and/or banner extraction).
@@ -440,8 +440,11 @@ async function main(argc, argv, errors)
                     } else {
                         bannerHashes[hash] = 1;
                         //
-                        // For display purposes, we use archive.comment, which gets translated to UTF-8,
+                        // For display purposes, we use archive.comment, which is translated to UTF-8,
                         // but for extraction purposes, we use archive.commentRaw, which is untranslated.
+                        //
+                        // TODO: Add options to 1) override the input encoding (assumed to be "cp437")
+                        // and 2) select the desired output encoding (assumed to be "utf8").
                         //
                         await fs.mkdir(path.dirname(bannerPath), { recursive: true });
                         try {
@@ -516,6 +519,10 @@ async function main(argc, argv, errors)
                 let printed = false;
                 let targetFile, targetPath;
                 let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
+                //
+                // Define a writeData() function within processArchive() to receive data ONLY if extraction
+                // has been enabled; this will take care of writing the received data to the appropriate file.
+                //
                 if ((argv.extract || argv.dir && !(filterExceptions & Dezip.EXCEPTIONS.BANNER)) && !recurse) {
                     writeData = async function(db) {
                         if (db) {
@@ -586,7 +593,7 @@ async function main(argc, argv, errors)
                         //
                         // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
                         // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
-                        // so any warnings in one will probably be in the other.
+                        // so any warnings in one will probably be in the other as well.
                         //
                         for (let i = 0; i < warnings.length; i++) {
                             let j = warnings.indexOf(warnings[i], i + 1);
@@ -609,15 +616,19 @@ async function main(argc, argv, errors)
                         heading = false;
                     }
                     //
-                    // We now propagate all downstream warning totals upstream, so that the main loop can accurately
-                    // report which archives are completely free of warnings (any nested archive(s) with warnings are
-                    // disqualifying).  For consistency, we'll do the same for file totals as well.
+                    // We now propagate all downstream totals upstream, so that the main loop can accurately
+                    // report which archives are completely free of warnings (any nested archive(s) with warnings
+                    // are disqualifying).
                     //
                     nArchiveFiles += nFiles;
                     nArchiveWarnings += nWarnings;
                 }
             }
         } catch (error) {
+            //
+            // If error is a number, then code is breaking out of the try/catch clause early, so we can ignore
+            // it (eg, if the archive is not really an archive, in which case nArchiveWarnings will be negative).
+            //
             if (typeof error != "number") {
                 printf("%s: %s\n", archivePath, error.message);
             }

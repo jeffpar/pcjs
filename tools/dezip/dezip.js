@@ -14,7 +14,7 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
 /**
  * We give the user total control over the interfaces that will be used to read and decompress
  * archives, which also relieves us from importing them ourselves, allowing this code to easily
- * run in any environment (eg, Nodejs, browser, etc).
+ * run in any environment (eg, Node.js, browser, etc).
  *
  * @typedef  {object}   Interfaces
  * @property {function} fetch       (fetch() interface to read remote files)
@@ -63,7 +63,7 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  *
  * That means the constructor must be provided with the reading and decompression interfaces available
  * in the current environment (eg, fetch() and pako.inflateRaw() if running in a browser, or fs.open()
- * and zlib.inflateRaw() if running in Nodejs).
+ * and zlib.inflateRaw() if running in Node.js).
  *
  * For this first iteration, I'm going to keep things simple and allow asynchronous I/O when reading an
  * archive but stick with synchronous decompression when extracting entries from an archive; that also
@@ -250,7 +250,7 @@ export default class Dezip {
      * constructor(interfaces)
      *
      * If no interfaces are provided, the default is to use the fetch() interface, since that's
-     * now available in both Nodejs and the browser.
+     * now available in both Node.js and the browser.
      *
      * @this {Dezip}
      * @param {Interfaces} [interfaces]
@@ -1224,6 +1224,7 @@ export default class Dezip {
                     else {
                         throw new Error(`No inflate interface available`);
                     }
+                    expandedDB = new DataBuffer(expandedData);
                 } else {
                     /**
                      * Legacy decompression is now inside a loop with its own try/catch handler, to automatically
