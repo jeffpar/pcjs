@@ -863,24 +863,10 @@ export default class Dezip {
                 compressedSize: header.compressedSize,
                 flags: header.flags,
                 method: header.method,
-                crc: header.crc
+                crc: header.crc,
+                comment: header.comment,
+                warnings: record.warnings
             };
-            if (header.comment) {
-                entry.comment = header.comment;
-            }
-            if (record.warnings.length) {
-                entry.warnings = [];
-                //
-                // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
-                // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
-                // so any warnings in one will probably be in the other as well.
-                //
-                for (let i = 0; i < record.warnings.length; i++) {
-                    if (entry.warnings.indexOf(record.warnings[i]) < 0) {
-                        entry.warnings.push(record.warnings[i]);
-                    }
-                }
-            }
             //
             // TODO: Consider whether we should also return an exceptions field (ie, record.exceptions).
             //
@@ -1219,7 +1205,16 @@ export default class Dezip {
                     archive.exceptions |= Dezip.EXCEPTIONS.ENCRYPTED;
                 }
                 if (fileHeader.warnings) {
-                    record.warnings.unshift(...fileHeader.warnings);
+                    //
+                    // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
+                    // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
+                    // so any warnings in one will probably be in the other as well.
+                    //
+                    for (let i = 0; i < fileHeader.warnings.length; i++) {
+                        if (record.warnings.indexOf(fileHeader.warnings[i]) < 0) {
+                            record.warnings.push(fileHeader.warnings[i]);
+                        }
+                    }
                     delete fileHeader.warnings;
                 }
                 if (warnings.length) {

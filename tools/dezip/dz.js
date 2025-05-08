@@ -589,7 +589,7 @@ async function main(argc, argv, errors)
                         name = "…" + name.slice(-13);
                     }
                     let comment = entry.comment || (name == entry.name? "" : entry.name);
-                    if (entry.warnings) {
+                    if (entry.warnings.length) {
                         comment = '[' + entry.warnings.join("; ") + ']';
                     }
                     if (comment.length) comment = "  " + comment;
