@@ -199,7 +199,7 @@ const options = {
         type: "boolean",
         usage: "--verbose",
         alias: "-v",
-        description: "display detailed information about archive(s)"
+        description: "display additional information"
     },
     "help": {
         type: "boolean",
@@ -360,7 +360,7 @@ async function main(argc, argv, errors)
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             //
             // The entries array can be empty for several reasons (eg, no files matched the specified filters),
-            // but the NOFILES exception will be set only if the internal entries array is also empty, suggesting
+            // but the NOFILES exception will be set only if the internal array is also empty, suggesting
             // that the file is not actually an archive.
             //
             nArchiveWarnings += archive.warnings.length? 1 : 0;
@@ -470,17 +470,16 @@ async function main(argc, argv, errors)
             let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
-                let header = entry.dirHeader || entry.fileHeader;
-                let entryAttr = (header.attr || 0) & 0xff;
+                let entryAttr = (entry.attr || 0) & 0xff;
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
                 // archives; for now, I'm trusting that entries inside one or more directories have those
-                // directories explicitly specified in header.name (ie, that header.name is always a full path).
+                // directories explicitly specified in entry.name (ie, that entry.name is always a full path).
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels
                 }
-                if ((entryAttr & 0x10) || header.name.endsWith("/")) {
+                if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
                     continue;           // skip directory entries
                 }
                 //
@@ -518,7 +517,7 @@ async function main(argc, argv, errors)
                 let db, writeData;
                 let printed = false;
                 let targetFile, targetPath;
-                let recurse = (argv.recurse && header.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
+                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
                 //
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
@@ -527,7 +526,7 @@ async function main(argc, argv, errors)
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
-                                targetPath = path.join(dstPath, header.name);
+                                targetPath = path.join(dstPath, entry.name);
                                 //
                                 // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
                                 //
@@ -535,6 +534,7 @@ async function main(argc, argv, errors)
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                     if (argv.list) {
+                                        if (!entry.warnings) entry.warnings = [];
                                         entry.warnings.unshift("created " + targetPath);
                                     } else {
                                         printf("created %s\n", targetPath);
@@ -546,6 +546,7 @@ async function main(argc, argv, errors)
                                         // since extraction has been enabled.
                                         //
                                         if (argv.list) {
+                                            if (!entry.warnings) entry.warnings = [];
                                             entry.warnings.unshift(targetPath + " already exists");
                                         } else {
                                             printf("%s already exists\n", targetPath);
@@ -561,8 +562,8 @@ async function main(argc, argv, errors)
                         }
                         if (targetFile) {
                             await targetFile.close();
-                            if (header.modified) {
-                                await fs.utimes(targetPath, header.modified, header.modified);
+                            if (entry.modified) {
+                                await fs.utimes(targetPath, entry.modified, entry.modified);
                             }
                             return true;
                         }
@@ -571,47 +572,35 @@ async function main(argc, argv, errors)
                 }
                 if (argv.dir || argv.extract || argv.test || recurse) {
                     if (argv.debug) {
-                        printf("reading %s\n", header.name);
+                        printf("reading %s\n", entry.name);
                         printed = true;
                     }
-                    db = await dezip.readFile(archive, entry, writeData);
+                    db = await dezip.readFile(archive, entry.index, writeData);
                 }
-                nArchiveWarnings += entry.warnings.length? 1 : 0;
+                nArchiveWarnings += entry.warnings? 1 : 0;
                 if (argv.list) {
-                    let method = header.method < 0? LegacyArc.methodNames[-(header.method + 2)] : LegacyZip.methodNames[header.method];
-                    if (header.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                    let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
+                    if (entry.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
                         method += '*';
                     }
-                    let ratio = header.size > header.compressedSize? Math.round(100 * (header.size - header.compressedSize) / header.size) : 0;
-                    let name = path.basename(header.name);
+                    let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
+                    let name = path.basename(entry.name);
                     if (name.length > 14) {
                         name = "…" + name.slice(-13);
                     }
-                    let comment = header.comment || (name == header.name? "" : header.name);
-                    if (entry.warnings.length) {
-                        let warnings = entry.warnings;
-                        //
-                        // Let's "dedupe" the warnings; we shouldn't be decoding anything more than once, but some
-                        // of the data structures we decode (eg, DirHeaders and FileHeaders) are inherently redundant,
-                        // so any warnings in one will probably be in the other as well.
-                        //
-                        for (let i = 0; i < warnings.length; i++) {
-                            let j = warnings.indexOf(warnings[i], i + 1);
-                            if (j >= 0) {
-                                warnings.splice(j, 1);
-                            }
-                        }
-                        comment = '[' + warnings.join("; ") + ']';
+                    let comment = entry.comment || (name == entry.name? "" : entry.name);
+                    if (entry.warnings) {
+                        comment = '[' + entry.warnings.join("; ") + ']';
                     }
                     if (comment.length) comment = "  " + comment;
                     printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
-                            name, header.size, method, header.compressedSize, ratio, header.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, header.crc, comment);
+                            name, entry.size, method, entry.compressedSize, ratio, entry.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, entry.crc, comment);
                 }
                 else if (argv.debug && !printed) {
-                    printf("listing %s\n", header.name);
+                    printf("listing %s\n", entry.name);
                 }
                 if (recurse && db) {
-                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), header.name), db, header.modified);
+                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), entry.name), db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
