@@ -534,7 +534,6 @@ async function main(argc, argv, errors)
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                     if (argv.list) {
-                                        if (!entry.warnings) entry.warnings = [];
                                         entry.warnings.unshift("created " + targetPath);
                                     } else {
                                         printf("created %s\n", targetPath);
@@ -546,7 +545,6 @@ async function main(argc, argv, errors)
                                         // since extraction has been enabled.
                                         //
                                         if (argv.list) {
-                                            if (!entry.warnings) entry.warnings = [];
                                             entry.warnings.unshift(targetPath + " already exists");
                                         } else {
                                             printf("%s already exists\n", targetPath);
@@ -577,7 +575,7 @@ async function main(argc, argv, errors)
                     }
                     db = await dezip.readFile(archive, entry.index, writeData);
                 }
-                nArchiveWarnings += entry.warnings? 1 : 0;
+                nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.list) {
                     let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
                     if (entry.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
