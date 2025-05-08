@@ -358,37 +358,15 @@ async function main(argc, argv, errors)
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
             let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
-            //
-            // The entries array can be empty for several reasons (eg, no files matched the specified filters),
-            // but the NOFILES exception will be set only if the internal array is also empty, suggesting
-            // that the file is not actually an archive.
-            //
-            nArchiveWarnings += archive.warnings.length? 1 : 0;
-            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
-                //
-                // Note that we only display this message if archiveDB is NOT set (or --verbose IS set),
-                // because if this is a nested archive, then it was only opened implicitly, not explicitly.
-                //
+            if (archive.warnings.length) {
+                printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
                 nArchiveWarnings++;
-                if (argv.verbose || !archiveDB || archivePaths.length > 1) {
-                    printf("%s: not an archive\n", archivePath);
-                    nArchiveWarnings = -1;      // tells caller nothing more need be said about this "archive"
-                }
             }
-            else if (archive.warnings.length) {
-                //
-                // Similarly, if readDirectory() encountered any issues, we already tallied them (above), but we
-                // don't display them by default.
-                //
-                if (argv.verbose || !archiveDB) {
-                    printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
-                }
-            }
-            else if (!entries.length) {
-                printf("%s: no match\n", archivePath);
-            }
-            if (nArchiveWarnings < 0) {
-                throw nArchiveWarnings;         // break out of the try/catch clause
+            else if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+                printf("%s: not an archive\n", archivePath);
+                nArchiveWarnings++;
+            } else if (!entries.length) {
+                printf("%s: no matches\n", archivePath);
             }
             //
             // Set dstPath as needed (needed for file and/or banner extraction).
@@ -612,13 +590,7 @@ async function main(argc, argv, errors)
                 }
             }
         } catch (error) {
-            //
-            // If error is a number, then code is breaking out of the try/catch clause early, so we can ignore
-            // it (eg, if the archive is not really an archive, in which case nArchiveWarnings will be negative).
-            //
-            if (typeof error != "number") {
-                printf("%s: %s\n", archivePath, error.message);
-            }
+            printf("%s: %s\n", archivePath, error.message);
         }
         await dezip.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
