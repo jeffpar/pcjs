@@ -260,7 +260,7 @@ export default class Disk {
         if (file && file.name.length && file.size < diskInfo.cbDiskData) {
             let ab = new Array(file.size);
             let cb = diskInfo.readSectorArray(file, ab);
-            let db = new DataBuffer(ab);
+            db = new DataBuffer(ab, 0, cb);
             if (writeData) {
                 await writeData(db);
                 await writeData();

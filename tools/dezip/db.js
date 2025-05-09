@@ -50,7 +50,7 @@ export default class DataBuffer {
                 this.buffer = init.buffer.slice(start, end);
             }
             else {
-                this.buffer = Buffer.from(init);
+                this.buffer = Buffer.from(init, start || 0, end || init.length);
             }
             this.length = this.buffer.length;
         }

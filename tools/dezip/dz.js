@@ -334,7 +334,7 @@ async function main(argc, argv, errors)
     // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
     //
-    let processArchive = async function(archivePath, archiveDB = null, modified = null) {
+    let processArchive = async function(archivePath, archiveTarget, archiveDB = null, modified = null) {
         let archive;
         let component = dezip, isArchive = true;
         let archiveName = path.basename(archivePath);
@@ -402,7 +402,7 @@ async function main(argc, argv, errors)
             let dstPath, bannerPath;
             let srcPath = path.dirname(archivePath);
             if (argv.dir || argv.extract) {
-                dstPath = argv.dir || "";
+                dstPath = archiveTarget || argv.dir || "";
                 let chgPath = dstPath.split("=");
                 if (chgPath.length > 1) {
                     if (srcPath.indexOf(chgPath[0]) >= 0) {
@@ -413,14 +413,11 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (dstPath != ".") {
-                    if (!dstPath || archivePaths.length > 1) {
+                    if (!dstPath || archiveTarget || archivePaths.length > 1) {
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
-                        bannerPath = dstPath + ".BAN";
                     }
                 }
-                if (!bannerPath) {
-                    bannerPath = path.join(dstPath, path.basename(archivePath, archiveExt) + ".BAN");
-                }
+                bannerPath = path.join(argv.dir || "", path.basename(archivePath, archiveExt) + ".BAN");
             }
             if (archive.comment) {
                 //
@@ -592,7 +589,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 if (recurse && db) {
-                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), entry.name), db, entry.modified);
+                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), entry.name), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
