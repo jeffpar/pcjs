@@ -254,6 +254,25 @@ const options = {
 let archivePaths = [];
 
 /**
+ * enquote(string)
+ *
+ * @param {string} string
+ * @returns {string}
+ */
+function enquote(string) {
+    //
+    // Enquote a string for CSV output, but only if necessary.
+    //
+    // We use the "double-quote" character as the quote character, and escape any double-quotes
+    // in the string with another double-quote.
+    //
+    if (string.indexOf(',') >= 0 || string.indexOf('"') >= 0) {
+        string = '"' + string.replace(/"/g, '""') + '"';
+    }
+    return string;
+}
+
+/**
  * main(argc, argv, errors)
  */
 async function main(argc, argv, errors)
@@ -361,7 +380,7 @@ async function main(argc, argv, errors)
             // The first three columns come from variables of the same name, and all start at 1,
             // but you can override them with the internal --fileID, --diskID, and --setID options.
             //
-            await csvFile.write("fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,warnings,comment\n");
+            await csvFile.write("fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings\n");
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
@@ -568,7 +587,7 @@ async function main(argc, argv, errors)
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                     if (argv.list) {
-                                        entry.warnings.unshift("created " + targetPath);
+                                        entry.warnings.unshift(targetPath);
                                     } else {
                                         printf("created %s\n", targetPath);
                                     }
@@ -636,16 +655,44 @@ async function main(argc, argv, errors)
                     let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
                     let comment = entry.comment || "";
                     //
-                    // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,warnings,comment
+                    // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
                     //
-                    let line = format.sprintf("%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
-                            fileID++, diskID, setID, hash, entry.modified, entry.attr, entry.size, entry.compressedSize,
-                            method, entry.name, archivePath, warnings, comment);
+                    // Instead of outputting archivePath as-is, let's see if argv.path contains any wildcards;
+                    // if so, then convert argv.path to a regex, change the asterisks to "[^/]*", delete all the
+                    // remaining characters, then use that regex to search archivePath for a match and remove it.
+                    //
+                    // For example, if argv.path is:
+                    //
+                    //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/**/*.ZIP
+                    //
+                    // and the current archivePath is:
+                    //
+                    //    /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/DESIGN1.ZIP
+                    //
+                    // then we will reduce archivePath to:
+                    //
+                    //    /ibm0000-0009/ibm0001/DESIGN1.ZIP
+                    //
+                    // Thus, you have a crude but effective means of shaving CSV paths down to their essentials.
+                    //
+                    let entryPath = archivePath;
+                    if (argv.path) {
+                        let i = argv.path.indexOf('*');
+                        if (i >= 0) {
+                            let regex = new RegExp(argv.path.slice(0, i) + "[^/]*");
+                            entryPath = archivePath.replace(regex, "");
+                        }
+                    }
+                    let line = format.sprintf(
+                        "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
+                        fileID++, diskID, setID, hash, entry.modified, entry.attr, entry.size, entry.compressedSize,
+                        method, enquote(entry.name), enquote(entryPath), enquote(comment), enquote(warnings)
+                    );
                     await csvFile.write(line);
                 }
                 if (recurse && db) {
                     diskID++;
-                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), entry.name), dstPath, db, entry.modified);
+                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
