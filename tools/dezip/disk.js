@@ -166,7 +166,7 @@ export default class Disk {
             if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
                 let response = await this.interfaces.fetch(fileName);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch ${fileName}: ${response.statusText}`);
+                    throw new Error(`Failed to fetch ${fileName} (${response.statusText})`);
                 }
                 let arrayBuffer = await response.arrayBuffer();
                 db = new DataBuffer(new Uint8Array(arrayBuffer));
@@ -174,7 +174,7 @@ export default class Disk {
             else if (this.interfaces.open) {
                 let file = await this.interfaces.open(fileName, "r");
                 if (!file) {
-                    throw new Error(`Unable to open archive: ${fileName}`);
+                    throw new Error(`Unable to open ${fileName}`);
                 }
                 const stats = await file.stat();
                 //
@@ -196,7 +196,9 @@ export default class Disk {
                 throw new Error("No appropriate Disk interface(s) available");
             }
         }
-        diskInfo.buildDiskFromBuffer(db);
+        if (!diskInfo.buildDiskFromBuffer(db)) {
+            throw new Error(`Unrecognized disk image ${fileName}`);
+        }
         return diskInfo;
     }
 
@@ -253,13 +255,16 @@ export default class Disk {
      */
     async readFile(diskInfo, index, writeData)
     {
+        let db = null;
         let file = diskInfo.fileTable[index];
-        let ab = new Array(file.size);
-        let cb = diskInfo.readSectorArray(file, ab);
-        let db = new DataBuffer(ab);
-        if (writeData) {
-            await writeData(db);
-            await writeData();
+        if (file && file.name.length && file.size < diskInfo.cbDiskData) {
+            let ab = new Array(file.size);
+            let cb = diskInfo.readSectorArray(file, ab);
+            let db = new DataBuffer(ab);
+            if (writeData) {
+                await writeData(db);
+                await writeData();
+            }
         }
         return db;
     }
@@ -888,7 +893,6 @@ export class DiskInfo {
         this.dwChecksum = 0;
         this.warnings = [];
         this.messages = [];
-        this.format = new Format();
     }
 
     /**
@@ -1504,13 +1508,10 @@ export class DiskInfo {
     }
 
     /**
-     * buildTables(fRebuild)
+     * buildTables()
      *
-     * This function builds (or rebuilds) a complete file table from all FAT volumes found on the current disk,
-     * and then updates all the sector objects with references to the corresponding file and offset.  Used for
-     * BACKTRACK and SYMBOLS support.  Because this is an expensive operation, in terms of both time and memory,
-     * it should only be called when a disk is mounted or has been modified (eg, by applying deltas from a saved
-     * machine state).
+     * This function builds a complete file table from all FAT volumes found on the current disk, and then
+     * updates all the sector objects with references to the corresponding file and offset.
      *
      * More recently, the FileInfo objects in the table have been enhanced to include debugging information if
      * the file is an EXE or DLL, which we determine merely by checking the file extension.
@@ -1525,23 +1526,20 @@ export class DiskInfo {
      * JSON disk image is loaded.
      *
      * @this {DiskInfo}
-     * @param {boolean} [fRebuild]
      * @returns {number} (-1 if error, otherwise number of files found across all volumes)
      */
-    buildTables(fRebuild)
+    buildTables()
     {
-        if (!this.fileTable.length && !this.tablesBuilt || fRebuild) {
+        if (!this.fileTable.length && !this.tablesBuilt) {
 
             /*
              * The built flag avoids rebuilding tables needlessly for volumes that simply have zero files.
              */
             this.tablesBuilt = true;
 
-            this.deleteTables();
-
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.warnings.push("unable to read ${this.diskName} boot sector");
+                this.warnings.push(`unable to read ${this.diskName} boot sector`);
                 return -1;
             }
 
@@ -1566,7 +1564,7 @@ export class DiskInfo {
                 if (file.name == "." || file.name == "..") continue;
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
-                        this.warnings.push("unable to map %s sector to offset %d\n", file.name, off);
+                        break;
                     }
                     off += this.cbSector;
                 }
@@ -1834,34 +1832,6 @@ export class DiskInfo {
     }
 
     /**
-     * deleteTables()
-     *
-     * In order for buildTables() to rebuild an existing table (eg, after deltas have been
-     * applied), we also need to zap any and all existing file table references in the sector data.
-     *
-     * @this {DiskInfo}
-     */
-    deleteTables()
-    {
-        if (this.fileTable.length) {
-            let aDiskData = this.aDiskData;
-            for (let iCylinder = 0; iCylinder < aDiskData.length; iCylinder++) {
-                for (let iHead = 0; iHead < aDiskData[iCylinder].length; iHead++) {
-                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length; iSector++) {
-                        let sector = aDiskData[iCylinder][iHead][iSector];
-                        if (sector) {
-                            delete sector[DiskInfo.SECTOR.FILE_INDEX];
-                            delete sector[DiskInfo.SECTOR.FILE_OFFSET];
-                        }
-                    }
-                }
-            }
-        }
-        this.fileTable = [];
-        this.volTable = [];
-    }
-
-    /**
      * getDir(vol, aLBA, dir, path)
      *
      * @this {DiskInfo}
@@ -1875,7 +1845,6 @@ export class DiskInfo {
         let file;
         let iStart = this.fileTable.length;
         let nEntriesPerSector = (vol.cbSector / DiskInfo.DIRENT.LENGTH) | 0;
-        let warnings = [];
         dir.path = path + "\\";
         for (let iSector = 0; iSector < aLBA.length; iSector++) {
             let lba = aLBA[iSector];
@@ -1888,6 +1857,7 @@ export class DiskInfo {
                 if (dir.attr == DiskInfo.ATTR.LFN) continue;
                 let name = CharSet.fromCP437(dir.name);
                 let path = CharSet.fromCP437(dir.path) + name;
+                let warnings = [];
                 let dateMod = DiskInfo.DirEntry.parseDateTime(dir.modDate, dir.modTime, warnings);
                 file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 file.warnings = file.warnings.concat(warnings);
@@ -2007,7 +1977,7 @@ export class DiskInfo {
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
-                this.warnings.push(`{this.diskName} ${dir.name} contains invalid cluster (${cluster})`);
+                this.warnings.push(`${dir.name} contains invalid cluster (${cluster})`);
             }
         }
         return aLBA;
@@ -2138,56 +2108,6 @@ export class DiskInfo {
     }
 
     /**
-     * getUnusedSector(iVolume, lba)
-     *
-     * @this {DiskInfo}
-     * @param {number} iVolume
-     * @param {number} lba (previous lba from getUnusedSector(), or -1 if none)
-     * @returns {boolean}
-     */
-    getUnusedSector(iVolume, lba)
-    {
-        let lbaNext = -1;
-        if (iVolume < 0) iVolume = 0;
-        if (this.volTable.length && iVolume >= 0 && iVolume < this.volTable.length) {
-            lbaNext = lba + 1;
-            if (!lbaNext) {
-                let vol = this.volTable[iVolume];
-                lbaNext = vol.lbaStart + vol.vbaData;
-            }
-            let sector;
-            while ((sector = this.getSector(lbaNext))) {
-                if (this.getUnusedSectorData(sector) >= 0) break;
-                lbaNext++;
-            }
-            if (!sector) lbaNext = -1;
-        }
-        return lbaNext;
-    }
-
-    /**
-     * getUnusedSectorData(sector)
-     *
-     * @this {DiskInfo}
-     * @param {Sector} sector (presumed to be in the volume data area)
-     * @returns {number} (offset of unused data in sector, or -1 if none)
-     */
-    getUnusedSectorData(sector)
-    {
-        let offset = 0;
-        let iFile = sector[DiskInfo.SECTOR.FILE_INDEX];
-        if (iFile != undefined) {
-            let file = this.fileTable[iFile];
-            if (file) {
-                let offFile = sector[DiskInfo.SECTOR.FILE_OFFSET];
-                offset = file.size - offFile;
-                if (offset >= this.cbSector) offset = -1;
-            }
-        }
-        return offset;
-    }
-
-    /**
      * readSectorArray(file, ab)
      *
      * @this {DiskInfo}
@@ -2279,7 +2199,7 @@ export class DiskInfo {
      * Like getSector(), this must convert a LBA into CHS values; consider factoring that conversion code out.
      *
      * @this {DiskInfo}
-     * @param {number} iFile
+     * @param {number} iFile (0-based file index)
      * @param {number} off (file offset corresponding to the given LBA of the given file)
      * @param {number} lba (logical block address from the file's aLBA)
      * @returns {boolean} true if successfully updated, false if not
@@ -2287,9 +2207,9 @@ export class DiskInfo {
     updateSector(iFile, off, lba)
     {
         let cylinder, head, sector;
+        let file = this.fileTable[iFile];
         let [iCylinder, iHead, idSector] = this.getCHS(lba);
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
-            let file = this.fileTable[iFile];
             if (sector[DiskInfo.SECTOR.ID] != idSector) {
                 this.warnings.push(`${iCylinder}:${iHead}:${idSector} has non-standard sector ID ${sector[DiskInfo.SECTOR.ID]}; see file ${file.path}`);
             }
@@ -2304,7 +2224,7 @@ export class DiskInfo {
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        this.warnings.push(`unable to map ${this.diskName} LBA ${lba} to CHS`);
+        this.warnings.push(`unable to map ${file.path} block ${lba} to offset ${off}`);
         return false;
     }
 

@@ -501,8 +501,8 @@ async function main(argc, argv, errors)
                         printf("%s\n", archive.comment);
                     }
                     if (argv.list) {
-                        printf("\nFilename        Length   Method       Size  Ratio   Date       Time       CRC\n");
-                        printf(  "--------        ------   ------       ----  -----   ----       ----       ---\n");
+                        printf("\nFilename          Length   Method         Size  Ratio   Date       Time       CRC\n");
+                        printf(  "--------          ------   ------         ----  -----   ----       ----       ---\n");
                     }
                     heading = true;
                 }
@@ -585,7 +585,7 @@ async function main(argc, argv, errors)
                         comment = '[' + entry.warnings.join("; ") + ']';
                     }
                     if (comment.length) comment = "  " + comment;
-                    printf("%-14s %7d   %-9s %7d   %3d%%   %T   %0*x%s\n",
+                    printf("%-14s %9d   %-9s %9d   %3d%%   %T   %0*x%s\n",
                             name, entry.size, method, entry.compressedSize, ratio, entry.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, entry.crc, comment);
                 }
                 else if (argv.debug && !printed) {
