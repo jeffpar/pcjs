@@ -90,13 +90,18 @@ const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
-        description: "process archives listed in specified file"
+        description: "process containers listed in file"
     },
     "banner": {
         type: "boolean",
         usage: "--banner",
         alias: "-b",
-        description: "display archive comments (aka banners)"
+        description: "display archive comments (banners)"
+    },
+    "csv": {
+        type: "boolean",
+        usage: "--csv",
+        description: "output file listings in CSV format"
     },
     "debug": {
         type: "boolean",
@@ -126,7 +131,7 @@ const options = {
         usage: "--filter [...]",
         alias: "-f",
         multiple: true,
-        description: "filter archives on criteria (see --filter list)",
+        description: "filter on criteria (see --filter list)",
         options: {
             "list": {
                 value: 0,
@@ -158,13 +163,13 @@ const options = {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of specified archive(s)"
+        description: "list contents of specified container(s)"
     },
     "nodir": {
         type: "boolean",
         usage: "--nodir",
         alias: "-n",
-        description: "skip directory entries (scan for files instead)"
+        description: "skip archive directory (scan for files)"
         //
         // Yes, scanning for files instead of relying on directory entries goes against protocol, but
         // sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures...
@@ -178,9 +183,9 @@ const options = {
     },
     "password": {
         type: "string",
-        usage: "--password [pwd]",
+        usage: "--password [...]",
         alias: ["-g", "-s"],
-        description: "decrypt \"garbled\" entries using password",
+        description: "decrypt garbled entries using password",
         //
         // The original ARC utility used -g to "garble" entries, whereas PKUNZIP used -s to "scramble" entries;
         // going with --password seems more straightforward, but in honor of the utilities, we also allow -g and -s.
@@ -189,19 +194,19 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "archive path specification (eg, \"**/*.zip\")",
+        description: "container path specification (eg, \"**/*.zip\")",
     },
     "recurse": {
         type: "boolean",
         usage: "--recurse",
         alias: "-r",
-        description: "process archives within archives"
+        description: "process containers within containers"
     },
     "test": {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of specified archive(s)"
+        description: "test contents of specified containers(s)"
     },
     "verbose": {
         type: "boolean",
@@ -215,7 +220,8 @@ const options = {
         alias: "-h",
         description: "Display this help message",
         handler: function() {
-            printf("Usage:\n    %s [options] [filenames]\n\n", path.basename(process.argv[1]));
+            printf("\nUsage:\n    %s [options] [filenames]\n", path.basename(process.argv[1]));
+            printf("\nProcesses ZIP, ARC, IMG, and JSON containers\n\n");
             printf("Options:\n");
             for (let key in options) {
                 let option = options[key];

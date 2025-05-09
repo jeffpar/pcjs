@@ -196,8 +196,15 @@ export default class Disk {
                 throw new Error("No appropriate Disk interface(s) available");
             }
         }
-        if (!diskInfo.buildDiskFromBuffer(db)) {
-            throw new Error(`Unrecognized disk image ${fileName}`);
+        let success = false;
+        if (fileName.match(/\.json$/i)) {
+            let json = db.toString();
+            success = diskInfo.buildDiskFromJSON(json);
+        } else {
+            success = diskInfo.buildDiskFromBuffer(db);
+        }
+        if (!success) {
+            throw new Error(`Unrecognized JSON disk image ${fileName}`);
         }
         return diskInfo;
     }
@@ -299,7 +306,7 @@ export class DiskInfo {
     static MIN_PARTITION = 3000000;     // ~3MB (used in lieu of any partitioned media indicator)
 
     /*
-     * Top-level descriptors in "v2" JSON disk images.
+     * Top-level descriptors in PCjs "v2" JSON disk images.
      */
     static DESC = {
         IMAGE:      'imageInfo',
@@ -357,6 +364,25 @@ export class DiskInfo {
     };
 
     /*
+     * File descriptor properties.
+     */
+    static FILEDESC = {
+        VOL:        'vol',
+        PATH:       'path',
+        NAME:       'name',
+        ATTR:       'attr',
+        DATE:       'date',
+        SIZE:       'size',
+        HASH:       'hash',
+        MODULE:     'module',
+        MODNAME:    'name',
+        MODDESC:    'description',
+        MODSEGS:    'segments',
+        CONTENTS:   'contents',
+        ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
+    };
+
+    /*
      * Sector object "public" properties.
      */
     static SECTOR = {
@@ -365,8 +391,8 @@ export class DiskInfo {
         ID:         's',                // sector ID (generally 1-based, except for unusual/copy-protected disks) [formerly 'sector']
         LENGTH:     'l',                // sector length, in bytes (generally 512, except for unusual/copy-protected disks) [formerly 'length']
         DATA:       'd',                // array of signed 32-bit values (if less than length/4, the last value is repeated) [formerly 'data']
-        FILE_INDEX: 'f',                // "v2" JSON disk images only [formerly 'file']
-        FILE_OFFSET:'o',                // "v2" JSON disk images only [formerly 'offFile' or 'offset']
+        FILE_INDEX: 'f',                // PCjs "v2" JSON disk images only [formerly 'file']
+        FILE_OFFSET:'o',                // PCjs "v2" JSON disk images only [formerly 'offFile' or 'offset']
                                         // [no longer used: 'pattern']
         /*
          * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
