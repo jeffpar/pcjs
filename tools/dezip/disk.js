@@ -11,7 +11,7 @@
 
 import CharSet  from "./charset.js";
 import DataBuffer from "./db.js";
-import FileInfo from "./fileinfo.js";
+import FileInfo from "./file.js";
 import Format from "./format.js";
 import Struct from "./struct.js";
 
@@ -1064,11 +1064,11 @@ export class DiskInfo {
                     nSectorsPerTrack = nSectorsPerTrackBPB;
                     nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSectorBPB);
                     if (nCylinders != (nCylinders|0)) {
-                        this.warnings.push(`total cylinders (${nCylinders}) not a multiple of ${nHeads * nSectorsPerTrack} sectors per cylinder`);
+                        this.warnings.push(`Total cylinders (${nCylinders}) not a multiple of ${nHeads * nSectorsPerTrack} sectors per cylinder`);
                         nCylinders |= 0;
                     }
                     if (cbSector != cbSectorBPB) {
-                        this.warnings.push(`overriding default sector size (${cbSector}) with BPB sector size (${cbSectorBPB})`);
+                        this.warnings.push(`Overriding default sector size (${cbSector}) with BPB sector size (${cbSectorBPB})`);
                         cbSector = cbSectorBPB;
                     }
                     bMediaID = bMediaIDBPB;
@@ -1143,7 +1143,7 @@ export class DiskInfo {
                 iBPB -= 2;
                 bMediaID = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.MEDIA];
                 nLogicalSectorsPerTrack = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.TRACKSECS];
-                this.warnings.push(`shrinking track size to ${nLogicalSectorsPerTrack} sectors/track`);
+                this.warnings.push(`Shrinking track size to ${nLogicalSectorsPerTrack} sectors/track`);
             }
             let fBPBWarning = false;
             if (fBPBExists) {
@@ -1175,7 +1175,7 @@ export class DiskInfo {
                 }
             }
             if (!fBPBExists || fBPBWarning) {
-                this.warnings.push(`unrecognized boot sector: ${bByte0},${bByte1}`);
+                this.messages.push(`Unrecognized boot sector (${bByte0.toString(16)},${bByte1.toString(16)})`);
             }
         }
 
@@ -1539,7 +1539,7 @@ export class DiskInfo {
 
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.warnings.push(`unable to read ${this.diskName} boot sector`);
+                this.warnings.push(`Unable to read ${this.diskName} boot sector`);
                 return -1;
             }
 
@@ -2224,7 +2224,7 @@ export class DiskInfo {
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        this.warnings.push(`unable to map ${file.path} block ${lba} to offset ${off}`);
+        this.warnings.push(`Unable to map ${file.path} block ${lba} to offset ${off}`);
         return false;
     }
 
