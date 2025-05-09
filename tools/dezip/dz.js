@@ -99,8 +99,8 @@ const options = {
         description: "display archive comments (banners)"
     },
     "csv": {
-        type: "boolean",
-        usage: "--csv",
+        type: "string",
+        usage: "--csv [file]",
         description: "output file listings in CSV format"
     },
     "debug": {
@@ -214,13 +214,31 @@ const options = {
         alias: "-v",
         description: "display additional information"
     },
+    "fileID": {
+        type: "number",
+        usage: "--fileID [id]",
+        description: "override file ID (default: 1)",
+        internal: true
+    },
+    "diskID": {
+        type: "number",
+        usage: "--diskID [id]",
+        description: "override disk ID (default: 1)",
+        internal: true
+    },
+    "setID": {
+        type: "number",
+        usage: "--setID [id]",
+        description: "override set ID (default: 1)",
+        internal: true
+    },
     "help": {
         type: "boolean",
         usage: "--help",
         alias: "-h",
-        description: "Display this help message",
+        description: "display this help message",
         handler: function() {
-            printf("\nUsage:\n    %s [options] [filenames]\n", path.basename(process.argv[1]));
+            printf("\nUsage:\n    %s [options] [files]\n", path.basename(process.argv[1]));
             printf("\nProcesses ZIP, ARC, IMG, and JSON containers\n\n");
             printf("Options:\n");
             for (let key in options) {
@@ -307,9 +325,6 @@ async function main(argc, argv, errors)
             filterExceptions |= option.value;
         }
     }
-    if (nErrors) {
-        return;
-    }
     //
     // Build a list of archive files to process, starting with files listed in the batch file, if any.
     //
@@ -319,6 +334,7 @@ async function main(argc, argv, errors)
             archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
         } catch (error) {
             printf("%s\n", error.message);
+            nErrors++;
         }
     }
     //
@@ -333,6 +349,27 @@ async function main(argc, argv, errors)
     //
     for (let i = 1; i < argv.length; i++) {
         archivePaths.push(argv[i]);
+    }
+    //
+    // If CSV output is enabled, then open the specified file for writing.
+    //
+    let csvFile;
+    if (argv.csv) {
+        try {
+            csvFile = await fs.open(argv.csv, "w");
+            //
+            // The first three columns come from variables of the same name, and all start at 1,
+            // but you can override them with the internal --fileID, --diskID, and --setID options.
+            //
+            await csvFile.write("fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,warnings,comment\n");
+        } catch (error) {
+            printf("%s: %s\n", argv.csv, error.message);
+            nErrors++;
+        }
+    }
+    let fileID = +argv.fileID || 1, diskID = +argv.diskID || 1, setID = argv.setID || 1;
+    if (nErrors) {
+        return;
     }
     let bannerHashes = {};
     let nTotalArchives = 0, nTotalFiles = 0;
@@ -565,7 +602,7 @@ async function main(argc, argv, errors)
                         return false;
                     };
                 }
-                if (argv.dir || argv.extract || argv.test || recurse) {
+                if (argv.csv || argv.dir || argv.extract || argv.test || recurse) {
                     if (argv.debug) {
                         printf("reading %s\n", entry.name);
                         printed = true;
@@ -573,11 +610,11 @@ async function main(argc, argv, errors)
                     db = await component.readFile(archive, entry.index, writeData);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
+                let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
+                if (entry.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                    method += '*';
+                }
                 if (argv.list) {
-                    let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
-                    if (entry.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
-                        method += '*';
-                    }
                     let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
                     let name = path.basename(entry.name);
                     if (name.length > 14) {
@@ -594,7 +631,20 @@ async function main(argc, argv, errors)
                 else if (argv.debug && !printed) {
                     printf("listing %s\n", entry.name);
                 }
+                if (argv.csv) {
+                    let hash = crypto.createHash('md5').update(db.buffer).digest('hex');
+                    let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
+                    let comment = entry.comment || "";
+                    //
+                    // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,warnings,comment
+                    //
+                    let line = format.sprintf("%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
+                            fileID++, diskID, setID, hash, entry.modified, entry.attr, entry.size, entry.compressedSize,
+                            method, entry.name, archivePath, warnings, comment);
+                    await csvFile.write(line);
+                }
                 if (recurse && db) {
+                    diskID++;
                     let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath, archiveExt), entry.name), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
@@ -624,6 +674,9 @@ async function main(argc, argv, errors)
         }
     }
     printf("\n%d archive%s examined, %d file%s processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
+    if (csvFile) {
+        await csvFile.close();
+    }
 }
 
 await main(...Format.parseArgs(process.argv, options));

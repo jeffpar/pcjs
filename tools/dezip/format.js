@@ -290,7 +290,12 @@ export default class Format {
                     value = true;
                 } else {
                     if (!value) {
-                        value = args[i++];
+                        value = args[i];
+                        if (!value || value[0] == "-") {
+                            errors.push(`Missing value for option: ${sep}${arg}`);
+                            continue;
+                        }
+                        i++;
                     }
                 }
                 setArg(arg, value, sep + arg);
