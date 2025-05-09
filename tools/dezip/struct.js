@@ -47,19 +47,27 @@ import DataBuffer from "./db.js";
  */
 export default class Struct {
 
+    static STRING           = 0;
     static INT8             = -1;
     static INT16            = -2;
     static INT32            = -3;
     static INT64            = -4;
     static UINT8            = -5;
+    static BYTE             = -5;       // alias for UINT8
     static UINT16           = -6;
+    static WORD             = -6;       // alias for UINT16
     static UINT32           = -7;
+    static DWORD            = -7;       // alias for UINT32
     static UINT64           = -8;
     static DOSTIMEDATE      = -9;
     static DOSDATETIME      = -10;
 
+    static STR = function(length) {
+        return length;
+    };
+
     static SIZES = {
-        [Struct.STRING]:      0,
+        [Struct.STR]:         0,
         [Struct.INT8]:        1,
         [Struct.INT16]:       2,
         [Struct.INT32]:       4,
@@ -147,6 +155,15 @@ export default class Struct {
             throw new Error("Field " + name + " limit exceeds buffer limit (" + (offset + length) + " > " + db.length + ")");
         }
         switch(field.type) {
+        case Struct.STRING:
+            v = this.readString(db, offset, length, encoding);
+            for (let i = 0; i < length; i++) {
+                if (v.charCodeAt(i) == 0) {
+                    v = v.substr(0, i);
+                    break;
+                }
+            }
+            break;
         case Struct.INT8:
             v = db.readInt8(offset);
             break;
@@ -192,15 +209,6 @@ export default class Struct {
             date = db.readUInt16LE(offset);
             time = db.readUInt16LE(offset + 2);
             v = this.parseDateTime(date, time, warnings);
-            break;
-        case Struct.STRING:
-            v = this.readString(db, offset, length, encoding);
-            for (let i = 0; i < length; i++) {
-                if (v.charCodeAt(i) == 0) {
-                    v = v.substr(0, i);
-                    break;
-                }
-            }
             break;
         default:
             throw new Error("Field " + name + " unsupported (" + field.type + ") in " + this.struct.name);
@@ -249,6 +257,7 @@ export default class Struct {
      *
      * ZIP/ARC archives contain local times, so we return a Date object in local time.
      *
+     * @this {Struct}
      * @param {number} date (16 bits)
      * @param {number} time (16 bits)
      * @param {Array} [warnings]
@@ -313,7 +322,7 @@ export default class Struct {
             exceptions++;
         }
         if (exceptions) {
-            warnings.push(`Invalid date/time: ${o.y}-${(o.m < 9? '0' : '')}${o.m+1}-${(o.g < 10? '0' : '')}${o.d} ${(o.h < 10? '0' : '')}${o.h}:${(o.n < 10? '0' : '')}${o.n}:${(o.s < 10? '0' : '')}${o.s}`);
+            warnings.push(`Invalid date/time: ${o.y}-${(o.m < 9? '0' : '')}${o.m+1}-${(o.d < 10? '0' : '')}${o.d} ${(o.h < 10? '0' : '')}${o.h}:${(o.n < 10? '0' : '')}${o.n}:${(o.s < 10? '0' : '')}${o.s}`);
         }
         return new Date(d.y, d.m, d.d, d.h, d.n, d.s);
     }

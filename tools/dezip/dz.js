@@ -51,6 +51,7 @@ import zlib from "zlib";
 import crypto from "crypto";
 import Format from "./format.js";
 import Dezip from "./dezip.js";
+import Disk from "./disk.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
 const format = new Format();
@@ -75,6 +76,13 @@ const dezip = new Dezip(
         // (other than compressed data).
         //
         // cacheSize: 4096
+    }
+);
+
+const disk = new Disk(
+    {
+        fetch,
+        open: fs.open
     }
 );
 
@@ -328,6 +336,7 @@ async function main(argc, argv, errors)
     //
     let processArchive = async function(archivePath, archiveDB = null, modified = null) {
         let archive;
+        let component = dezip, isArchive = true;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         try {
@@ -336,13 +345,20 @@ async function main(argc, argv, errors)
                 printf("%d archives processed\n", nTotalArchives);
             }
             let options = {};
-            if (argv.password) {
-                options.password = argv.password;
-            }
             if (modified) {
                 options.modified = modified;
             }
-            archive = await dezip.open(archivePath, archiveDB, options);
+            if (argv.password) {
+                options.password = argv.password;
+            }
+            if (archivePath[0] == '~') {
+                archivePath = path.join(process.env.HOME, archivePath.slice(1));
+            }
+            if (archiveExt.toLowerCase().match(/(\.img|\.json)/)) {
+                component = disk;
+                isArchive = false;
+            }
+            archive = await component.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("%s\n", error.message);
             return [0, 1];
@@ -354,10 +370,10 @@ async function main(argc, argv, errors)
             // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
             // to flag the archive as having already scanned them, so that readDirectory() won't bother.
             //
-            if (argv.nodir) {
+            if (isArchive && argv.nodir) {
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
-            let entries = await dezip.readDirectory(archive, argv.files, filterExceptions, filterMethod);
+            let entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             if (archive.warnings.length) {
                 printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
                 nArchiveWarnings++;
@@ -551,7 +567,7 @@ async function main(argc, argv, errors)
                         printf("reading %s\n", entry.name);
                         printed = true;
                     }
-                    db = await dezip.readFile(archive, entry.index, writeData);
+                    db = await component.readFile(archive, entry.index, writeData);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.list) {
@@ -592,7 +608,7 @@ async function main(argc, argv, errors)
         } catch (error) {
             printf("%s: %s\n", archivePath, error.message);
         }
-        await dezip.close(archive);
+        await component.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
     };
     //

@@ -9,7 +9,7 @@
  * Adapted from https://www.pcjs.org/machines/pcx86/modules/v3/fileinfo.js
  */
 
-import DiskInfo from "./diskinfo.js";
+import { DiskInfo } from "./disk.js";
 
 /**
  * @typedef {Object} segInfo
@@ -21,7 +21,7 @@ import DiskInfo from "./diskinfo.js";
 /**
  * @class FileInfo
  * @property {DiskInfo}         disk
- * @property {number}           iVolume
+ * @property {number}           vol
  * @property {string}           path
  * @property {string}           name
  * @property {number}           attr
@@ -36,6 +36,14 @@ import DiskInfo from "./diskinfo.js";
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class FileInfo {
+
+    /**
+     * Public class fields
+     */
+    static DEBUG = false;
+    static VERSION = "1.0";
+    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
+    static SITE = "pcjs.org";
 
     static ENTRY = {
         OFFSET: "o",
@@ -135,10 +143,11 @@ export default class FileInfo {
     };
 
     /**
-     * FileInfo(disk, iVolume, path, name, attr, size, cluster, aLBA)
+     * FileInfo(disk, vol, path, name, attr, date, size, cluster, aLBA, warnings)
      *
+     * @this {FileInfo}
      * @param {DiskInfo} disk
-     * @param {number} iVolume
+     * @param {number} vol
      * @param {string} path
      * @param {string} name
      * @param {number} attr
@@ -146,11 +155,12 @@ export default class FileInfo {
      * @param {number} size
      * @param {number} [cluster]
      * @param {Array.<number>} [aLBA]
+     * @param {Array.<string>} [warnings]
      */
-    constructor(disk, iVolume, path, name, attr, date, size, cluster = -1, aLBA = null)
+    constructor(disk, vol, path, name, attr, date, size, cluster = -1, aLBA = null, warnings = [])
     {
         this.disk = disk;
-        this.iVolume = iVolume;
+        this.vol = vol;
         this.path = path;
         this.name = name;
         this.attr = attr;
@@ -158,9 +168,10 @@ export default class FileInfo {
         this.size = size;
         this.cluster = cluster;
         this.aLBA = aLBA;
-        this.device = disk.device;
-        if (Device.MAXDEBUG && cluster >= 0) {
-            this.device.printf(MESSAGE.FILE, '"%d:%s" size=%d attr=%#0bx date=%#T cluster=%d sectors=%j\n', iVolume, path, size, attr, date, cluster, aLBA);
+        this.messages = [];
+        this.warnings = warnings;
+        if (FileInfo.DEBUG && cluster >= 0) {
+            this.messages.push(`"${vol}:${path}" size=${size} attr=${attr} date=${date} cluster=${cluster} sectors=${aLBA}\n`);
         }
     }
 
@@ -250,16 +261,16 @@ export default class FileInfo {
         this.segments = {};
         this.ordinals = fOrdinalTable? {} : null;   // this is an optional table for quick ordinal-to-segment lookup
 
-        if (Device.DEBUG) {
-            this.device.printf(MESSAGE.FILE, "loadSegmentTable(%s,%#0lx,%#0wx)\n", this.path, offEntries, nEntries);
+        if (FileInfo.DEBUG) {
+            this.messages.push(`loadSegmentTable(${this.path},${offEntries},${nEntries})`);
         }
 
         while (nEntries--) {
             let offSegment = this.loadValue(offEntries) << nSegOffShift;
             if (offSegment) {
                 let lenSegment = this.loadValue(offEntries + 2) || 0x10000;       // 0 means 64K
-                if (Device.DEBUG) {
-                    this.device.printf(MESSAGE.FILE, "segment %d: offStart=%#0lx offEnd=%#0lx\n" + iSegment, offSegment, offSegment + lenSegment);
+                if (FileInfo.DEBUG) {
+                    this.messages.push(`segment ${iSegment}: offStart=${offSegment.toString(16)} offEnd=${(offSegment + lenSegment).toString(16)}`);
                 }
                 this.segments[iSegment++] = {offStart: offSegment, offEnd: offSegment + lenSegment - 1};
             }
@@ -301,8 +312,8 @@ export default class FileInfo {
     {
         let iOrdinal = 1;
 
-        if (Device.DEBUG) {
-            this.device.printf("loadEntryTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd);
+        if (FileInfo.DEBUG) {
+            this.messages.push(`loadEntryTable(${this.path},${offEntries.toString(16)},${offEntriesEnd.toString(16)})`);
         }
 
         while (offEntries < offEntriesEnd) {
@@ -312,8 +323,8 @@ export default class FileInfo {
             if (!bEntries) break;
             let bSegment = w >> 8, iSegment;
 
-            if (Device.DEBUG) {
-                this.device.printf(MESSAGE.FILE, "bundle for segment %d: %d entries @%#x\n", bSegment, bEntries, offEntries);
+            if (FileInfo.DEBUG) {
+                this.messages.push(`bundle for segment ${bSegment}: ${bEntries} entries @${offEntries.toString(16)}`);
             }
 
             offEntries += 2;
@@ -349,14 +360,14 @@ export default class FileInfo {
                     offEntries += 6;
                 }
                 if (!this.segments[iSegment]) {
-                    if (Device.DEBUG) {
-                        this.device.printf(MESSAGE.FILE, "invalid segment: %d\n", iSegment);
+                    if (FileInfo.DEBUG) {
+                        this.messages.push(`invalid segment: ${iSegment}`);
                     }
                 } else {
                     if (!this.segments[iSegment].ordinals) this.segments[iSegment].ordinals = {};
                     this.segments[iSegment].ordinals[iOrdinal] = {[FileInfo.ENTRY.OFFSET]: offset};
-                    if (Device.DEBUG) {
-                        this.device.printf(MESSAGE.FILE, "ordinal %d: segment=%d offset=%#0lx @%x\n", iOrdinal, iSegment, offset, offDebug);
+                    if (FileInfo.DEBUG) {
+                        this.messages.push(`ordinal ${iOrdinal}: segment=${iSegment} offset=${offset.toString(16)} @${offDebug.toString(16)}`);
                     }
                 }
                 if (this.ordinals) this.ordinals[iOrdinal] = [iSegment, offset];
@@ -380,8 +391,8 @@ export default class FileInfo {
     {
         let cNames = 0;
 
-        if (Device.DEBUG) {
-            this.device.printf(MESSAGE.FILE, "loadNameTable(%#0lx,%#0lx)\n", offEntries, offEntriesEnd || 0);
+        if (FileInfo.DEBUG) {
+            this.messages.push(`loadNameTable(${offEntries.toString(16)},${(offEntriesEnd || 0).toString(16)})`);
         }
 
         while (!offEntriesEnd || offEntries < offEntriesEnd) {
@@ -409,24 +420,24 @@ export default class FileInfo {
                     let iSegment = tuple[0];        // tuple[0] is the segment number and tuple[1] is the corresponding offset
                     if (this.segments[iSegment]) {
                         let ordinalEntries = this.segments[iSegment].ordinals;
-                        this.device.assert(ordinalEntries && ordinalEntries[iOrdinal]);
+                        // Disk.assert(ordinalEntries && ordinalEntries[iOrdinal]);
                         if (ordinalEntries) {
                             ordinalEntry = ordinalEntries[iOrdinal];
                             if (ordinalEntry) {
                                 ordinalEntry[FileInfo.ENTRY.SYMBOL] = sSymbol;
-                                if (Device.DEBUG) {
-                                    this.device.printf(MESSAGE.FILE, "segment %d offset %#0wx ordinal %d: %s @ %x\n", iSegment, ordinalEntry[FileInfo.ENTRY.OFFSET], iOrdinal, sSymbol, offDebug);
+                                if (FileInfo.DEBUG) {
+                                    this.messages.push(`segment ${iSegment} offset ${ordinalEntry[FileInfo.ENTRY.OFFSET]} ordinal ${iOrdinal}: ${sSymbol} @${offDebug}`);
                                 }
                             }
                         }
                     } else {
-                        if (Device.DEBUG) {
-                            this.device.printf("%s: cannot find segment %d (offset %#0wx) for symbol %s with ordinal %d @%x\n", this.path, iSegment, tuple[1], sSymbol, iOrdinal, offDebug);
+                        if (FileInfo.DEBUG) {
+                            this.disk.messages.push(`"${this.path}": cannot find segment ${iSegment} (offset ${tuple[1]}) for symbol ${sSymbol} with ordinal ${iOrdinal} @${offDebug}`);
                         }
                     }
                 }
-                if (Device.DEBUG && !ordinalEntry) {
-                    this.device.printf(MESSAGE.FILE, "s: cannot find ordinal %d for symbol %s @%x\n", this.path, iOrdinal, sSymbol, offDebug);
+                if (FileInfo.DEBUG && !ordinalEntry) {
+                    this.disk.messages.push(`"${this.path}": cannot find ordinal ${iOrdinal} for symbol ${sSymbol} @${offDebug}`);
                 }
             }
             offEntries += 2;
@@ -561,13 +572,13 @@ export default class FileInfo {
                             }
                         }
                         if (!sSymbol && entryNearest) {
-                            sSymbol = this.module + '!' + entryNearest[1] + "+" + this.device.sprintf("%#0x", cbNearest);
+                            sSymbol = this.module + '!' + entryNearest[1] + "+" + cbNearest;
                         }
                     }
                     break;
                 }
             }
         }
-        return sSymbol || this.name + '+' + this.device.sprintf("%#0x", off);
+        return sSymbol || this.name + '+' + off;
     }
 }

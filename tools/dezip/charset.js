@@ -23,6 +23,11 @@ export default class CharSet {
     /**
      * fromCP437(data, offset, length, translateControl)
      *
+     * This version of fromCP437() differs from the original, by allowing (or rather requiring)
+     * the caller to specify a range within the source, excluding TAB and ESC (along with CR and
+     * LF) from translation even when translateControl is true, and always treating NUL (0) and
+     * EOF (26) as terminators.
+     *
      * @param {number|Array|string|DataBuffer} data
      * @param {number} [offset] (optional offset into data; default is 0)
      * @param {number} [length] (optional length of data; default is data.length)
@@ -41,17 +46,20 @@ export default class CharSet {
                 c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             }
             //
-            // NOTE: Even when translateControl is true, we still make exceptions for:
+            // If we assume we're dealing with strings, NUL and EOF are typically terminators.
             //
-            //      0x09 (TAB), 0x0A (LF), 0x0D (CR), 0x1A (EOF), and 0x1B (ESC)
+            if (c == 0 || c == 26) break;
             //
-            // Those characters DO have graphical representations, so if there are situations
+            // Even when translateControl is true, we still make exceptions for:
+            //
+            //      9 (TAB), 10 (LF), 13 (CR), and 27 (ESC)
+            //
+            // Those characters DO have graphical CP437 representations, so if there are situations
             // where we need EVERYTHING translated, we'll need another option.
             //
-            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 9 && c != 10 && c != 13 && c != 26 && c != 27)) {
+            if (c < CharSet.CP437.length && (c >= 32 || translateControl && c != 9 && c != 10 && c != 13 && c != 27)) {
                 u += CharSet.CP437[c];
             } else {
-                if (translateControl && c == 26) break;
                 u += String.fromCharCode(c);
             }
         }

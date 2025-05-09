@@ -39,7 +39,6 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * @property {Array}    warnings    (array of archive warnings, if any)
  *
  * @typedef  {object}   ArchiveOptions
- * @property {DataBuffer} db        (optional DataBuffer to use instead of reading from a file)
  * @property {number}   type        (type of archive; default is TYPE_ZIP)
  * @property {Date}     modified    (modification date of archive file, if known)
  * @property {string}   password    (password for encrypted archives)
@@ -92,6 +91,7 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * @property {string} encoding (default is "cp437")
  */
 export default class Dezip {
+
     /**
      * Public class fields
      */
@@ -216,7 +216,7 @@ export default class Dezip {
             ARC_LZS:    0x09,                           // LZ dynamic ("squash")
             ARC_UNK:    0x0a                            // unknown compression type
         })
-        .field('name',          13)                     // filename (null terminated)
+        .field('name',          Struct.STR(13))         // filename (null terminated)
         .field('compressedSize',Struct.UINT32)          // compressed size
         .field('modified',      Struct.DOSDATETIME)     // modification date and time (order is reversed from DOS and ZIP files)
         .field('crc',           Struct.UINT16)          // CRC value

@@ -10,7 +10,10 @@
  */
 
 import CharSet  from "./charset.js";
+import DataBuffer from "./db.js";
 import FileInfo from "./fileinfo.js";
+import Format from "./format.js";
+import Struct from "./struct.js";
 
 /**
  * Instead of importing CPUx86 from /machines/pcx86/modules/v3/cpux86.js,
@@ -25,9 +28,7 @@ const CPUx86 = {
 };
 
 /**
- * VolInfo describes a volume.  NOTE: this list of properties may not be
- * exhaustive (it may omit certain internal calculations), but at the very least,
- * it should include every "volume descriptor" property we export via getVolDesc().
+ * VolInfo describes a volume.
  *
  * @typedef {Object} VolInfo
  * @property {number} iVolume
@@ -82,9 +83,202 @@ const CPUx86 = {
  */
 
 /**
+ * We give the user total control over the interfaces that will be used to read disk images,
+ * which also relieves us from importing them ourselves, allowing this code to easily run in any
+ * environment (eg, Node.js, browser, etc).
+ *
+ * @typedef  {object}   Interfaces
+ * @property {function} fetch       (fetch() interface to read remote files)
+ * @property {function} open        (open() interface to open local files)
+ *
+ * @typedef  {object}   InterfaceOptions
+ * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
+ * @property {string}   encoding    (encoding to use for strings in archives; default is "cp437")
+ */
+
+/**
+ * This class provides an environment-agnostic interface for extracting files from disk images.
+ *
+ * @class Disk
+ * @property {Interfaces} interfaces
+ * @property {number} cacheSize (default is 64K)
+ * @property {string} encoding (default is "cp437")
+ */
+export default class Disk {
+
+    /**
+     * Public class fields
+     */
+    static DEBUG = true;
+    static VERSION = "1.0";
+    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
+    static SITE = "pcjs.org";
+
+    /**
+     * constructor(interfaces)
+     *
+     * If no interfaces are provided, the default is to use the fetch() interface, since that's
+     * now available in both Node.js and the browser.
+     *
+     * @this {Disk}
+     * @param {Interfaces} [interfaces]
+     * @param {InterfaceOptions} [interfaceOptions]
+     */
+    constructor(interfaces = {fetch}, interfaceOptions = {})
+    {
+        this.interfaces = interfaces;
+        //
+        // Set default interface options.
+        //
+        this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
+        this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
+    }
+
+    /**
+     * assert(condition, message)
+     *
+     * @this {Disk}
+     * @param {boolean} condition
+     * @param {string} [message]
+     */
+    static assert(condition, message = "Assertion failed")
+    {
+        if (Disk.DEBUG && !condition) {
+            throw new Error(message);
+        }
+    }
+
+    /**
+     * open(fileName, db, options)
+     *
+     * Returns an DiskInfo object to be used with various read functions.
+     *
+     * @this {Disk}
+     * @param {string} fileName
+     * @param {DataBuffer} [db]
+     * @param {DiskOptions} [options]
+     * @returns {DiskInfo}
+     */
+    async open(fileName, db = null, options = {})
+    {
+        let diskInfo = new DiskInfo(fileName, options.modified);
+        if (!db) {
+            if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
+                let response = await this.interfaces.fetch(fileName);
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${fileName}: ${response.statusText}`);
+                }
+                let arrayBuffer = await response.arrayBuffer();
+                db = new DataBuffer(new Uint8Array(arrayBuffer));
+            }
+            else if (this.interfaces.open) {
+                let file = await this.interfaces.open(fileName, "r");
+                if (!file) {
+                    throw new Error(`Unable to open archive: ${fileName}`);
+                }
+                const stats = await file.stat();
+                //
+                // If the caller supplied a modification date for the image, then we stick with that,
+                // because the caller may have extracted the image from another container that preserved
+                // the original date.  Otherwise, we use the modification date provided by the file system.
+                //
+                if (!diskInfo.modified) {
+                    diskInfo.modified = stats.mtime;
+                }
+                db = new DataBuffer(stats.size);
+                let result = await file.read(db.buffer);
+                if (result.bytesRead < db.length) {
+                    db = db.slice(0, result.bytesRead);
+                }
+                await file.close();
+            }
+            else {
+                throw new Error("No appropriate Disk interface(s) available");
+            }
+        }
+        diskInfo.buildDiskFromBuffer(db);
+        return diskInfo;
+    }
+
+    /**
+     * readDirectory(diskInfo, filespec, filterExceptions, filterMethod)
+     *
+     * @this {Disk}
+     * @param {DiskInfo} diskInfo
+     * @param {string} [filespec]
+     * @param {number} [filterExceptions] (0 if none)
+     * @param {number} [filterMethod] (-1 if none)
+     * @returns {Array}
+     */
+    async readDirectory(diskInfo, filespec = "*", filterExceptions = 0, filterMethod = -1)
+    {
+        let entries = [];
+        let newEntry = function(file) {
+            let name = file.path.replace(/\\/g, "/");
+            if (name[0] == "/") name = name.slice(1);
+            let entry = {
+                index: file.index,
+                name: name,
+                attr: file.attr,
+                modified: file.date,
+                size: file.size,
+                compressedSize: file.size,
+                flags: 0,
+                method: 0,
+                crc: 0,
+                warnings: file.warnings,
+                cluster: file.cluster
+            };
+            entries.push(entry);
+        };
+        if (diskInfo.buildTables() > 0) {
+            const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
+            for (let i = 0; i < diskInfo.fileTable.length; i++) {
+                let file = diskInfo.fileTable[i];
+                if (file.name == "." || file.name == ".." || !regex.test(file.name)) continue;
+                newEntry(file);
+            }
+        }
+        return entries;
+    }
+
+    /**
+     * readFile(diskInfo, index, writeData)
+     *
+     * @this {Disk}
+     * @param {DiskInfo} diskInfo
+     * @param {number} index
+     * @param {function} [writeData]
+     * @returns {DataBuffer}
+     */
+    async readFile(diskInfo, index, writeData)
+    {
+        let file = diskInfo.fileTable[index];
+        let ab = new Array(file.size);
+        let cb = diskInfo.readSectorArray(file, ab);
+        let db = new DataBuffer(ab);
+        if (writeData) {
+            await writeData(db);
+            await writeData();
+        }
+        return db;
+    }
+
+    /**
+     * close(diskInfo)
+     *
+     * @this {Disk}
+     * @param {DiskInfo} diskInfo
+     */
+    async close(diskInfo)
+    {
+        return;         // nothing to do
+    }
+}
+
+/**
  * @class DiskInfo
  * @property {string} diskName
- * @property {boolean} fWritable
  * @property {Array} aDiskData
  * @property {number} cbDiskData
  * @property {number} dwChecksum
@@ -95,7 +289,7 @@ const CPUx86 = {
  * @property {Array.<VolInfo>|null} volTable
  * @property {Array.<FileInfo>|null} fileTable
  */
-export default class DiskInfo {
+export class DiskInfo {
 
     static MIN_PARTITION = 3000000;     // ~3MB (used in lieu of any partitioned media indicator)
 
@@ -134,8 +328,7 @@ export default class DiskInfo {
         VERSION:    'version',
         REPOSITORY: 'repository',
         GENERATED:  'generated',
-        SOURCE:     'source',           // the source of the data (eg, archive.org, pcjs.org, etc)
-        COMMAND:    'diskimage.js'
+        SOURCE:     'source'            // the source of the data (eg, archive.org, pcjs.org, etc)
     };
 
     /*
@@ -156,28 +349,6 @@ export default class DiskInfo {
         CLUS_BAD:   'clusBad',          // total bad clusters
         CLUS_FREE:  'clusFree',         // total free clusters
         CLUS_TOTAL: 'clusTotal'         // total clusters
-    };
-
-    /*
-     * File descriptor properties.
-     *
-     * getFileDesc() is the mechanism for callers to obtain a FILEDESC, and there are two flavors: abbreviated and complete.
-     * Only the "complete" form includes NAME, SIZE and VOL (regardless if zero), and CONTENTS (if any).
-     */
-    static FILEDESC = {
-        VOL:        'vol',
-        PATH:       'path',
-        NAME:       'name',
-        ATTR:       'attr',
-        DATE:       'date',
-        SIZE:       'size',
-        HASH:       'hash',
-        MODULE:     'module',
-        MODNAME:    'name',
-        MODDESC:    'description',
-        MODSEGS:    'segments',
-        CONTENTS:   'contents',
-        ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
     };
 
     /*
@@ -687,32 +858,41 @@ export default class DiskInfo {
       ]
     ];
 
+    static DirEntry = new Struct("DirEntry")
+        .field('name',      Struct.STR(8))
+        .field('ext',       Struct.STR(3))
+        .field('attr',      Struct.BYTE)
+        .field('reserved',  Struct.STR(10))
+        .field('modified',  Struct.DOSTIMEDATE)
+        .field('cluster',   Struct.WORD)
+        .field('size',      Struct.DWORD)
+        .verifyLength(32);
+
     /**
-     * DiskInfo(device, diskName, fWritable)
+     * DiskInfo(diskName, modified)
      *
      * Returns a DiskInfo object used to build a disk images.
      *
      * @this {DiskInfo}
-     * @param {Device} device
      * @param {string} [diskName]
-     * @param {boolean} [fWritable]
+     * @param {Date} [modified]
      */
-    constructor(device, diskName = "", fWritable = false)
+    constructor(diskName = "", modified = null)
     {
-        this.device = device;
-        this.printf = device.printf.bind(device);
-        this.assert = device.assert.bind(device);
         this.diskName = diskName;
-        this.fWritable = fWritable;
+        this.modified = modified;
         this.volTable = [];
         this.fileTable = [];
         this.tablesBuilt = false;
         this.cbDiskData = 0;
         this.dwChecksum = 0;
+        this.warnings = [];
+        this.messages = [];
+        this.format = new Format();
     }
 
     /**
-     * buildDiskFromBuffer(dbDisk, fnHash)
+     * buildDiskFromBuffer(dbDisk)
      *
      * Build a disk image from a DataBuffer.
      *
@@ -795,16 +975,6 @@ export default class DiskInfo {
         let cbSectorBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.SECBYTES);
 
         /*
-         * Save the original BPB, in case we need to modify it later.
-         */
-        this.abOrigBPB = [];
-        this.fBPBModified = false;
-        this.abOrigBPB.push(offBootSector);
-        for (let i = DiskInfo.BPB.OPCODE; i < DiskInfo.BPB.LARGESECS+4; i++) {
-            this.abOrigBPB.push(dbDisk.readUInt8(offBootSector + i));
-        }
-
-        /*
          * These checks are not only necessary for DOS 1.x diskette images (and other pre-BPB images),
          * but also non-DOS diskette images (eg, CPM-86 diskettes).
          *
@@ -869,20 +1039,20 @@ export default class DiskInfo {
 
                 if (defaultGeometry) {
                     if (bMediaID && bMediaID != bMediaIDBPB) {
-                        this.printf(MESSAGE.WARNING, "BPB media ID (%#0bx) does not match physical media ID (%#0bx)\n", bMediaIDBPB, bMediaID);
+                        this.warnings.push(`BPB media ID (${bMediaIDBPB}) does not match physical media ID (${bMediaID})`);
                     }
                     if (nCylinders != nCylindersBPB) {
                         let message = (nCylinders - nCylindersBPB == 1)? MESSAGE.INFO : MESSAGE.WARNING;
-                        this.printf(message, "BPB cylinders (%d) do not match physical cylinders (%d)\n", nCylindersBPB, nCylinders);
+                        this.warnings.push(`BPB cylinders (${nCylindersBPB}) do not match physical cylinders (${nCylinders})`);
                         if (message == MESSAGE.INFO) {
-                            this.printf(message, "last cylinder may have been reserved for diagnostics and/or head-parking\n");
+                            this.messages.push("last cylinder may have been reserved for diagnostics and/or head-parking");
                         }
                     }
                     if (nHeads != nHeadsBPB) {
-                        this.printf(MESSAGE.WARNING, "BPB heads (%d) do not match physical heads (%d)\n", nHeadsBPB, nHeads);
+                        this.warnings.push(`BPB heads (${nHeadsBPB}) do not match physical heads (${nHeads})`);
                     }
                     if (nSectorsPerTrack != nSectorsPerTrackBPB) {
-                        this.printf(MESSAGE.WARNING, "BPB sectors/track (%d) do not match physical sectors/track (%d)\n", nSectorsPerTrackBPB, nSectorsPerTrack);
+                        this.warnings.push(`BPB sectors/track (${nSectorsPerTrackBPB}) do not match physical sectors/track (${nSectorsPerTrack})`);
                     }
                 }
                 else {
@@ -890,11 +1060,11 @@ export default class DiskInfo {
                     nSectorsPerTrack = nSectorsPerTrackBPB;
                     nCylinders = cbDiskData / (nHeads * nSectorsPerTrack * cbSectorBPB);
                     if (nCylinders != (nCylinders|0)) {
-                        this.printf(MESSAGE.WARNING, "total cylinders (%d) not a multiple of %d sectors per cylinder\n", nCylinders, nHeads * nSectorsPerTrack);
+                        this.warnings.push(`total cylinders (${nCylinders}) not a multiple of ${nHeads * nSectorsPerTrack} sectors per cylinder`);
                         nCylinders |= 0;
                     }
                     if (cbSector != cbSectorBPB) {
-                        this.printf(MESSAGE.WARNING, "overriding default sector size (%d) with BPB sector size (%d)\n", cbSector, cbSectorBPB);
+                        this.warnings.push(`overriding default sector size (${cbSector}) with BPB sector size (${cbSectorBPB})`);
                         cbSector = cbSectorBPB;
                     }
                     bMediaID = bMediaIDBPB;
@@ -927,7 +1097,7 @@ export default class DiskInfo {
                  * For more details, check out this helpful article: http://www.os2museum.com/wp/the-xdf-diskette-format/
                  */
                 if (nSectorsTotalBPB == 3680 && this.fXDFSupport) {
-                    this.printf(MESSAGE.WARNING, "XDF diskette detected, experimental XDF output enabled\n");
+                    this.warnings.push("XDF diskette detected, experimental XDF support enabled");
                     fXDFOutput = true;
                 }
             }
@@ -969,7 +1139,7 @@ export default class DiskInfo {
                 iBPB -= 2;
                 bMediaID = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.MEDIA];
                 nLogicalSectorsPerTrack = DiskInfo.aDefaultBPBs[iBPB][DiskInfo.BPB.TRACKSECS];
-                this.printf(MESSAGE.WARNING, "shrinking track size to %d sectors/track\n", nLogicalSectorsPerTrack);
+                this.warnings.push(`shrinking track size to ${nLogicalSectorsPerTrack} sectors/track`);
             }
             let fBPBWarning = false;
             if (fBPBExists) {
@@ -981,7 +1151,7 @@ export default class DiskInfo {
                     let bDefault = DiskInfo.aDefaultBPBs[iBPB][off];
                     let bActual = dbDisk.readUInt8(offBootSector + off);
                     if (bDefault != bActual) {
-                        this.printf(MESSAGE.WARNING, "BPB byte %#02bx default (%#02bx) does not match actual byte: %#02bx\n", off, bDefault, bActual);
+                        this.warnings.push(`BPB byte ${off} default (${bDefault}) does not match actual byte: ${bActual}`);
                         /*
                          * Silly me for thinking that a given media ID (eg, 0xF9) AND a given disk size (eg, 720K)
                          * AND a given number of sectors/cluster (eg, 2) would always map to the same BPB.  I had already
@@ -1001,7 +1171,7 @@ export default class DiskInfo {
                 }
             }
             if (!fBPBExists || fBPBWarning) {
-                this.printf(MESSAGE.WARNING, "unrecognized boot sector: %#02bx,%#02bx\n", bByte0, bByte1);
+                this.warnings.push(`unrecognized boot sector: ${bByte0},${bByte1}`);
             }
         }
 
@@ -1162,7 +1332,7 @@ export default class DiskInfo {
                         if (bMediaID && !iCylinder && !iHead && iSector == ((offBootSector/cbSector)|0) + 2) {
                             let bFATID = dbSector.readUInt8(0);
                             if (bMediaID != bFATID) {
-                                this.printf(MESSAGE.WARNING, "FAT ID (%#02bx) does not match physical media ID (%#02bx)\n", bFATID, bMediaID);
+                                this.warnings.push(`FAT ID (${bFATID}) does not match physical media ID (${bMediaID})`);
                             }
                             bMediaID = 0;
                         }
@@ -1198,8 +1368,6 @@ export default class DiskInfo {
         this.cbDiskData = 0;
         this.dwChecksum = 0;
         this.fromJSON = false;
-        this.abOrigBPB = [];
-        this.fBPBModified = false;
 
         if (typeof imageData == "string") {
             try {
@@ -1207,8 +1375,8 @@ export default class DiskInfo {
             } catch(e) {
                 try {
                     imageData = JSON.parse(imageData.replace(/([a-z]+):/gm, "\"$1\":").replace(/\/\/[^\n]*/gm, ""));
-                } catch(err) {
-                    this.printf(MESSAGE.ERROR, "%s\n", err.message);
+                } catch(error) {
+                    this.warnings.push(error.message);
                 }
             }
         }
@@ -1220,8 +1388,6 @@ export default class DiskInfo {
              */
             let imageInfo = imageData[DiskInfo.DESC.IMAGE];
             if (imageInfo) {
-                let sOrigBPB = imageInfo[DiskInfo.IMAGE.ORIGBPB];
-                if (sOrigBPB) this.abOrigBPB = JSON.parse(sOrigBPB);
                 if (imageInfo.hash) this.hash = imageInfo.hash;
                 if (!this.volTable.length && imageData.volTable) {
                     let volTable = imageData.volTable;
@@ -1276,7 +1442,7 @@ export default class DiskInfo {
                         if (!this.nSectors) {
                             this.nSectors = nSectors;
                         } else if (this.nSectors != nSectors) {
-                            this.printf(MESSAGE.DISK + MESSAGE.INFO, "%s: %d:%d has non-standard sector count: %d\n", this.diskName, iCylinder, iHead, nSectors);
+                            this.messages.push(`${this.diskName}: ${iCylinder}:${iHead} has non-standard sector count: ${nSectors}`);
                         }
                         for (let iSector = 0; iSector < aSectors.length; iSector++) {
                             let sector = aSectors[iSector], cbSector = 0;
@@ -1287,7 +1453,7 @@ export default class DiskInfo {
                             if (!this.cbSector && cbSector) {
                                 this.cbSector = cbSector;
                             } else if (this.cbSector != cbSector) {
-                                this.printf(MESSAGE.DISK + MESSAGE.INFO, "%s: %d:%d:%d has non-standard sector size: %d\n", this.diskName, iCylinder, iHead, sector? sector[DiskInfo.SECTOR.ID] : (iSector+1), cbSector);
+                                this.messages.push(`${this.diskName}: ${iCylinder}:${iHead}:${sector? sector[DiskInfo.SECTOR.ID] : (iSector+1)} has non-standard sector size: ${cbSector}`);
                             }
                             this.cbDiskData += cbSector;
                         }
@@ -1314,17 +1480,17 @@ export default class DiskInfo {
             if (!this.fileTable.length) {
                 for (let i = 0; i < fileTable.length; i++) {
                     let desc = fileTable[i];
-                    let iVolume = desc[DiskInfo.FILEDESC.VOL] || 0;
-                    let name = this.device.getBaseName(desc[DiskInfo.FILEDESC.PATH], false, true);
+                    let vol = desc[DiskInfo.FILEDESC.VOL] || 0;
+                    let name = desc[DiskInfo.FILEDESC.PATH].replace(/^.*?\/?([^/]*)$/, "$1");
                     let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
                     let attr = +desc[DiskInfo.FILEDESC.ATTR];
                     /*
                      * parseDate() *must* return local time (the second parameter must be true), because we've changed
                      * everything else to use local time (eg, getFileListing()).
                      */
-                    let date = this.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                    let date = Format.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                     let size = desc[DiskInfo.FILEDESC.SIZE] || 0;
-                    let file = new FileInfo(this, iVolume, path, name, attr, date, size);
+                    let file = new FileInfo(this, vol, path, name, attr, date, size);
                     file.index = i;
                     fileTable[i] = file;
                     let hash = desc[DiskInfo.FILEDESC.HASH];
@@ -1375,7 +1541,7 @@ export default class DiskInfo {
 
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.printf(MESSAGE.DISK + MESSAGE.ERROR, "unable to read %s boot sector\n", this.diskName);
+                this.warnings.push("unable to read ${this.diskName} boot sector");
                 return -1;
             }
 
@@ -1400,7 +1566,7 @@ export default class DiskInfo {
                 if (file.name == "." || file.name == "..") continue;
                 for (let iSector = 0; iSector < file.aLBA.length; iSector++) {
                     if (!this.updateSector(iFile, off, file.aLBA[iSector])) {
-                        this.printf(MESSAGE.DISK + MESSAGE.ERROR, "unable to map %s sector to offset %d\n", file.name, off);
+                        this.warnings.push("unable to map %s sector to offset %d\n", file.name, off);
                     }
                     off += this.cbSector;
                 }
@@ -1535,7 +1701,7 @@ export default class DiskInfo {
             }
 
             if (!sectorBoot || iEntry == 4) {
-                if (!iVolume) this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%d-byte %s disk image contains unknown volume(s)\n", cbDisk, this.diskName);
+                if (!iVolume) this.warnings.push(`${cbDisk}-byte ${this.diskName} disk image contains unknown volume(s)`);
                 return null;
             }
 
@@ -1580,7 +1746,7 @@ export default class DiskInfo {
 
         if (vol.nFATBits) {
             if (vol.nFATBits == 12 && vol.clusTotal > DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS) {
-                this.printf(MESSAGE.DISK + MESSAGE.ERROR, "%s volume %d %d-bit FAT inconsistent with cluster total (%d)\n", this.diskName, iVolume, vol.nFATBits, vol.clusTotal);
+                this.warnings.push(`${this.diskName} volume ${iVolume} ${vol.nFATBits}-bit FAT inconsistent with cluster total (${vol.clusTotal})`);
             }
         }
 
@@ -1590,18 +1756,18 @@ export default class DiskInfo {
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
         if (idMedia != vol.idMedia) {
-            this.printf(MESSAGE.DISK + MESSAGE.ERROR, "%s volume %d FAT ID (%#0bx) does not match media ID (%#0bx)\n", this.diskName, iVolume, idMedia, vol.idMedia);
+            this.warnings.push(`${this.diskName} volume ${iVolume} FAT ID (${idMedia}) does not match media ID (${vol.idMedia})`);
             return null;
         }
-
-        this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s:\n  vbaFAT: %d\n  vbaRoot: %d\n  vbaData: %d\n  lbaTotal: %d\n  clusSecs: %d\n  clusTotal: %d\n", this.diskName, vol.vbaFAT, vol.vbaRoot, vol.vbaData, vol.lbaTotal, vol.clusSecs, vol.clusTotal);
 
         /*
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
          * be a perfect multiple of clusSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
         let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusSecs;
-        if (nWasted) this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s volume %d contains %d sectors, wasting %d sectors\n", this.diskName, iVolume, vol.lbaTotal, nWasted);
+        if (nWasted) {
+            this.messages.push(`${this.diskName} volume ${iVolume} contains ${vol.lbaTotal}, wasting ${nWasted} sectors`);
+        }
 
         /*
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
@@ -1610,7 +1776,7 @@ export default class DiskInfo {
          * every sector allocated to the directory.  TODO: Determine whether DOS reads all root sector contents or only rootEntries
          * (ie, create a test volume where rootEntries * 32 is NOT a multiple of cbSector and watch what happens).
          */
-        this.assert(!((vol.rootEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
+        Disk.assert(!((vol.rootEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
 
         this.volTable.push(vol);
 
@@ -1648,8 +1814,7 @@ export default class DiskInfo {
                 vol.clusBad++;
             }
         }
-
-        this.printf(MESSAGE.DISK + MESSAGE.DEBUG, "%s volume %d: %d cluster(s) bad, %d cluster(s) free, %d bytes free\n", this.diskName, iVolume, vol.clusBad, vol.clusFree, vol.clusFree * vol.clusSecs * vol.cbSector);
+        this.messages.push(`${this.diskName} volume ${iVolume}: ${vol.clusBad} cluster(s) bad, ${vol.clusFree} cluster(s) free, ${vol.clusFree * vol.clusSecs * vol.cbSector} bytes free`);
         return vol;
     }
 
@@ -1697,439 +1862,6 @@ export default class DiskInfo {
     }
 
     /**
-     * getFileDesc(file, fComplete, fnHash)
-     *
-     * @this {DiskInfo}
-     * @param {FileInfo} file
-     * @param {boolean} [fComplete] (if not "complete", then the descriptor omits NAME, since PATH includes it, as well as SIZE and VOL when they are zero)
-     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @returns {Object}
-     */
-    getFileDesc(file, fComplete, fnHash)
-    {
-        let ab = null;
-        let desc = {
-            [DiskInfo.FILEDESC.HASH]: file.hash,
-            [DiskInfo.FILEDESC.PATH]: file.path.replace(/\\/g, '/'),
-            [DiskInfo.FILEDESC.NAME]: file.name,
-            [DiskInfo.FILEDESC.ATTR]: this.device.sprintf("%#0bx", file.attr),
-            [DiskInfo.FILEDESC.DATE]: this.device.sprintf("%T", file.date),
-            [DiskInfo.FILEDESC.SIZE]: file.size,
-            [DiskInfo.FILEDESC.VOL]:  file.iVolume
-        };
-        if (file.size && !(file.attr & DiskInfo.ATTR.METADATA) && (fComplete || fnHash)) {
-            this.assert(file.name[0] != '.');   // make sure we're not hashing "." and ".." DIRENTs
-            if (file.contents) {
-                ab = file.contents;
-            } else {
-                ab = new Array(file.size);
-                this.readSectorArray(file, ab);
-            }
-        }
-        if (fComplete) {
-            desc[DiskInfo.FILEDESC.CONTENTS] = ab;
-            if (file.origin) desc[DiskInfo.FILEDESC.ORIGIN] = file.origin;
-        } else {
-            delete desc[DiskInfo.FILEDESC.NAME];
-            if (!file.size && (file.attr & DiskInfo.ATTR.SUBDIR | DiskInfo.ATTR.VOLUME)) {
-                delete desc[DiskInfo.FILEDESC.SIZE];
-            }
-            if (!file.iVolume) {
-                delete desc[DiskInfo.FILEDESC.VOL];
-            }
-        }
-        if (file.module) {
-            desc[DiskInfo.FILEDESC.MODULE] = {
-                [DiskInfo.FILEDESC.MODNAME]: file.module,
-                [DiskInfo.FILEDESC.MODDESC]: file.modDesc,
-                [DiskInfo.FILEDESC.MODSEGS]: file.segments
-            };
-        }
-        if (fnHash && ab) {
-            let hash = fnHash(ab);
-            if (desc[DiskInfo.FILEDESC.HASH] && hash != desc[DiskInfo.FILEDESC.HASH]) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s original hash (%s) does not match current hash (%s)\n", desc[DiskInfo.FILEDESC.PATH], desc[DiskInfo.FILEDESC.HASH], hash);
-            }
-            desc[DiskInfo.FILEDESC.HASH] = hash;
-        } else {
-            if (!desc[DiskInfo.FILEDESC.HASH]) delete desc[DiskInfo.FILEDESC.HASH];
-        }
-        return desc;
-    }
-
-    /**
-     * getFileListing(iVolume, indent, listing)
-     *
-     * If listing is something other than "dir", "sorted", or "metadata", then it's assumed to be a file specification.
-     *
-     * @this {DiskInfo}
-     * @param {number} [iVolume] (-1 to list contents of ALL volumes in image)
-     * @param {number} [indent]
-     * @param {string} [listing]
-     * @returns {string}
-     */
-    getFileListing(iVolume = -1, indent = 0, listing)
-    {
-        let sListing = "";
-        if (this.buildTables() > 0) {
-            let nVolumes = this.volTable.length;
-            if (iVolume < 0) {
-                iVolume = 0;
-            } else {
-                nVolumes = 1;
-            }
-            let sIndent = " ".repeat(indent);
-            let fileSpec = (listing != "dir" && listing != "sorted" && listing != "metadata")? new RegExp("^" + listing.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i") : null;
-            while (iVolume < this.volTable.length && nVolumes-- > 0) {
-                let vol = this.volTable[iVolume];
-                let curVol = -1;
-                let curDir = null;
-                let cbDir = 0, nFiles = 0;
-                let cbTotal = 0, nTotal = 0;
-                let getTotal = function(nFiles, cbDir) {
-                    return this.device.sprintf("%s %8d file(s)   %8d bytes\n", sIndent, nFiles, cbDir);
-                }.bind(this);
-                let i, sLabel = "", sDrive = "?";
-                let fileTable = this.fileTable;
-                if (listing == "sorted") {
-                    fileTable = this.fileTable.slice(0);
-                    fileTable.sort(function(a, b) {
-                        /*
-                         * We don't use "a.path.localeCompare(b.path)", because we want a traditional
-                         * ASCII sort, not a Unicode sort.
-                         */
-                        return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
-                    });
-                }
-                /*
-                 * Do a preliminary scan for a volume label, and don't look beyond root directory entries;
-                 * since those are all at the beginning of the file table, we can stop as soon as we see a SUBDIR.
-                 */
-                let subDirs = false;
-                let fileMatch = !fileSpec;
-                for (i = 0; i < fileTable.length; i++) {
-                    let file = fileTable[i];
-                    if (file.iVolume > iVolume) break;
-                    if (file.iVolume != iVolume) continue;
-                    if (!fileMatch && file.name != "." && file.name != "..") {
-                        if (file.name.match(fileSpec)) {
-                            fileMatch = true;
-                        }
-                    }
-                    if (file.path.lastIndexOf('\\') > 0) {
-                        subDirs = true;
-                        if (!fileSpec) break;
-                    }
-                    if ((file.attr & DiskInfo.ATTR.VOLUME) && !subDirs) {
-                        /*
-                         * Volume labels are displayed slightly differently from all other directory entries;
-                         * specifically, they may contain non-standard characters (eg, extra periods, lower-case letters),
-                         * and they are displayed as an 11-character sequence.  In other words, they are displayed as-is.
-                         */
-                        sLabel = file.name;
-                    }
-                }
-                for (i = 0; i < fileTable.length && fileMatch; i++) {
-                    let file = fileTable[i];
-                    if (file.iVolume != iVolume) continue;
-                    if (file.attr & DiskInfo.ATTR.VOLUME) continue;
-                    if ((file.attr & DiskInfo.ATTR.METADATA) && listing != "metadata") continue;
-                    if (curVol != file.iVolume) {
-                        let vol = this.volTable[file.iVolume];
-                        sDrive = String.fromCharCode(vol.iPartition < 0? 0x41 : 0x43 + vol.iPartition);
-                        curVol = file.iVolume;
-                    }
-                    let name = file.name, ext = "";
-                    let j = file.path.lastIndexOf('\\');
-                    let dir = file.path.substring(0, j);
-                    if (!dir) dir = "\\";
-                    /*
-                     * The only names allowed to begin with a period are "." and "..", and those should always
-                     * have an attr with DiskInfo.ATTR.SUBDIR set.
-                     */
-                    if (name[0] != ".") {
-                        j = name.indexOf(".");
-                        if (j > 0) {
-                            ext = name.substr(j + 1);
-                            name = name.substr(0, j);
-                        }
-                    }
-                    if (curDir != dir) {
-                        if (curDir != null) {
-                            sListing += getTotal(nFiles, cbDir);
-                        } else {
-                            sListing += this.device.sprintf("\n%s Volume in drive %s %s%s", sIndent, sDrive, sLabel? "is " : "has no label", sLabel);
-                        }
-                        curDir = dir;
-                        sListing += this.device.sprintf("\n%s Directory of %s:%s\n\n", sIndent, sDrive, dir);
-                        cbDir = nFiles = 0;
-                    }
-                    let sSize;
-                    if (file.attr & DiskInfo.ATTR.SUBDIR) {
-                        sSize = "<DIR>    ";
-                    } else {
-                        if (fileSpec && !file.name.match(fileSpec)) {
-                            continue;
-                        }
-                        sSize = this.device.sprintf("%9d", file.size);
-                        cbDir += file.size;
-                        cbTotal += file.size;
-                    }
-                    let sDate = "", sTime = "";
-                    if (file.date.getFullYear() >= 1980) {
-                        sDate = this.device.sprintf("  %2M-%02D-%0.2Y", file.date);
-                        if (file.date.getHours() || file.date.getMinutes() || file.date.getSeconds()) {
-                            sTime = this.device.sprintf("  %2G:%02N%.1A", file.date);
-                        }
-                    }
-                    sListing += this.device.sprintf(
-                        "%s%-8s %-3s%s%s%s%s\n",
-                        sIndent, name, ext,
-                        (file.attr & (DiskInfo.ATTR.READONLY | DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM))? "*" : " ",
-                        sSize, sDate, sTime
-                    );
-                    nTotal++;
-                    /*
-                     * NOTE: While it seems odd to include all SUBDIR entries in the file count, that's what DOS always did, so we do, too.
-                     * SUBDIRs don't affect the current directory's byte total (cbDir), since A) the size of a SUBDIR entry is normally recorded
-                     * as zero (regardless whether the SUBDIR contains files or not), and B) we don't add their size to the total anyway.
-                     */
-                    nFiles++;
-                }
-                if (fileMatch) {
-                    sListing += getTotal(nFiles, cbDir);
-                    if (nTotal > nFiles) {
-                        sListing += "\n" + sIndent + "Total files listed:\n";
-                        sListing += getTotal(nTotal, cbTotal);
-                    }
-                    /*
-                    * This calculation used to use vol.cbSector, but we don't really support volumes with (default) sector sizes that
-                    * that differ from the disk's (default) sector size, nor do we export per-volume sector sizes in the VOLDESC structure,
-                    * so the only code that can rely on vol.cbSector is buildTables(), buildVolume(), and any other code that follows
-                    * those calls -- and if we've reconstituted the disk and all its tables using buildDiskFromJSON(), that doesn't happen
-                    * automatically.
-                    */
-                    sListing += this.device.sprintf("%s%28d bytes free\n", sIndent, vol.clusFree * vol.clusSecs * this.cbSector);
-                }
-                iVolume++;
-            }
-            if (!sListing && fileSpec) {
-                sListing = "file not found: " + listing + "\n";
-            }
-        }
-        return sListing;
-    }
-
-    /**
-     * getFileManifest(fnHash, fSorted, fMetaData, fComplete)
-     *
-     * Returns an array of FILEDESC (file descriptors).  Each object is largely a clone of the
-     * FileInfo object, with the exception of cluster and aLBA properties (which aren't useful
-     * outside the context of the DiskInfo object), and with the inclusion of a HASH property,
-     * if the caller provides a hash function.
-     *
-     * @this {DiskInfo}
-     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {boolean} [fSorted] (default is false)
-     * @param {boolean} [fMetaData] (default is false)
-     * @param {boolean} [fComplete] (default is true)
-     * @returns {Array}
-     */
-    getFileManifest(fnHash, fSorted = false, fMetaData = false, fComplete = true)
-    {
-        let aFiles = [];
-        if (this.buildTables() > 0) {
-            for (let i = 0; i < this.fileTable.length; i++) {
-                let file = this.fileTable[i];
-                if (file.name == "." || file.name == "..") continue;
-                if ((file.attr & DiskInfo.ATTR.METADATA) && !fMetaData) continue;
-                aFiles.push(this.getFileDesc(file, fComplete, fnHash));
-            }
-            if (fSorted) {
-                aFiles.sort(function(a, b) {
-                    /*
-                     * We don't use "a.path.localeCompare(b.path)", because we want a traditional
-                     * ASCII sort, not a Unicode sort.
-                     */
-                    return a.path < b.path? -1 : (a.path > b.path? 1 : 0); //
-                });
-            }
-        }
-        return aFiles;
-    }
-
-    /**
-     * getModuleInfo(sModule, nSegment)
-     *
-     * If the given module and segment number is found, we return an Array of symbol offsets, indexed by symbol name.
-     *
-     * @this {DiskInfo}
-     * @param {string} sModule
-     * @param {number} nSegment
-     * @returns {Object}
-     */
-    getModuleInfo(sModule, nSegment)
-    {
-        let aSymbols = {};
-        for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
-            let file = this.fileTable[iFile];
-            if (file.sModule != sModule) continue;
-            let segment = file.aSegments[nSegment];
-            if (!segment) continue;
-            for (let iOrdinal in segment.entries) {
-                let entry = segment.entries[iOrdinal];
-                /*
-                 * entry[1] is the symbol name, which becomes the index, and entry[0] is the offset.
-                 */
-                aSymbols[entry[1]] = entry[0];
-            }
-            break;
-        }
-        return aSymbols;
-    }
-
-    /**
-     * getSymbolInfo(sSymbol)
-     *
-     * For all whole or partial symbol matches, return them in an Array of entries:
-     *
-     *      [symbol, file name, segment number, segment offset, segment size].
-     *
-     * TODO: This function has many limitations (ie, slow, case-sensitive), but it gets the job done for now.
-     *
-     * @this {DiskInfo}
-     * @param {string} sSymbol
-     * @returns {Array}
-     */
-    getSymbolInfo(sSymbol)
-    {
-        let aInfo = [];
-        let sSymbolUpper = sSymbol.toUpperCase();
-        for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
-            let file = this.fileTable[iFile];
-            for (let iSegment in file.aSegments) {
-                let segment = file.aSegments[iSegment];
-                for (let iOrdinal in segment.entries) {
-                    let entry = segment.entries[iOrdinal];
-                    if (entry[1] && entry[1].indexOf(sSymbolUpper) >= 0) {
-                        aInfo.push([entry[1], file.name, iSegment, entry[0], segment.offEnd - segment.offStart]);
-                    }
-                }
-            }
-        }
-        return aInfo;
-    }
-
-    /**
-     * getVolDesc(vol, fComplete)
-     *
-     * @this {DiskInfo}
-     * @param {VolInfo} vol
-     * @param {boolean} [fComplete]
-     * @returns {Object}
-     */
-    getVolDesc(vol, fComplete)
-    {
-        let desc = {
-            [DiskInfo.VOLDESC.PARTITION]:  vol.iPartition,
-            [DiskInfo.VOLDESC.MEDIA_ID]:   vol.idMedia,
-            [DiskInfo.VOLDESC.LBA_VOL]:    vol.lbaStart,
-            [DiskInfo.VOLDESC.LBA_TOTAL]:  vol.lbaTotal,
-            [DiskInfo.VOLDESC.FAT_ID]:     vol.nFATBits,
-            [DiskInfo.VOLDESC.VBA_FAT]:    vol.vbaFAT,
-            [DiskInfo.VOLDESC.VBA_ROOT]:   vol.vbaRoot,
-            [DiskInfo.VOLDESC.ROOT_TOTAL]: vol.rootEntries,
-            [DiskInfo.VOLDESC.VBA_DATA]:   vol.vbaData,
-            [DiskInfo.VOLDESC.CLUS_SECS]:  vol.clusSecs,
-            [DiskInfo.VOLDESC.CLUS_MAX]:   vol.clusMax,
-            [DiskInfo.VOLDESC.CLUS_BAD]:   vol.clusBad,
-            [DiskInfo.VOLDESC.CLUS_FREE]:  vol.clusFree,
-            [DiskInfo.VOLDESC.CLUS_TOTAL]: vol.clusTotal
-        };
-        /*
-         * By default, we don't include a partition number if it's an unpartitioned disk.
-         */
-        if (!fComplete) {
-            if (vol.iPartition < 0) {
-                delete desc[DiskInfo.VOLDESC.PARTITION];
-            }
-        }
-        return desc;
-    }
-
-    /**
-     * getDate(modDate, modTime, sFile)
-     *
-     * If modDate wasn't set (ie, 0x0000), then m will be -1 and d will be 0,
-     * resulting in a Date of "1979-11-30 00:00:00".  We allow those particular
-     * "errors" because that's how we detect uninitialized directory entries
-     * (see getFileListing()).
-     *
-     * @this {DiskInfo}
-     * @param {number} modDate
-     * @param {number} modTime
-     * @param {number} sFile
-     * @returns {Date} (local date corresponding to the given date/time parameters)
-     */
-    getDate(modDate, modTime, sFile)
-    {
-        let errors = 0;
-        let year = (modDate >> 9) + 1980;
-        let month = ((modDate >> 5) & 0xf) - 1;
-        let day = (modDate & 0x1f);
-        let hour = (modTime >> 11);
-        let minute = (modTime >> 5) & 0x3f;
-        let second = (modTime & 0x1f) << 1;
-        let y = year, m = month, d = day, h = hour, n = minute, s = second;
-        if ((modDate || modTime) && m < 0) {
-            m = 0;
-            errors++;
-        }
-        if (m > 11) {
-            m = 11;
-            errors++;
-        }
-        if ((modDate || modTime) && d < 1) {
-            d = 1;
-            errors++;
-        }
-        if (d > 31) {
-            d = 31;
-            errors++;
-        }
-        if (h > 23) {
-            h = 23;
-            errors++;
-        }
-        if (n > 59) {
-            n = 59;
-            errors++;
-        }
-        if (s > 59) {
-            s = 59;
-            errors++;
-        }
-        if (errors) {
-            this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s has invalid timestamp: %04d-%02d-%02d %02d:%02d:%02d\n", sFile, year, month, day, hour, minute, second);
-        }
-        /*
-         * Previously, I used device.parseDate() to create a UTC date and then used "%#T" in getFileDesc() and
-         * assorted "%#" specifiers in getFileListing() to display the UTC date; since file dates are time-zone
-         * agnostic, standardizing on UTC was fine as long as I was consistent.  Unfortunately, I was not.
-         *
-         * For example, when diskimage.js reads a set of files from a local directory, it obtains dates in local
-         * time, not UTC time.  Since I can't change how fs.stat() works (it always returns local times), and
-         * since time-zone conversions can be tricky (especially thanks to Daylight Savings Time), I now use local
-         * times everywhere.
-         *
-         * At least, I hope so.
-         *
-         *      return this.device.parseDate(y, m, d, h, n, s);
-         */
-        return new Date(y, m, d, h, n, s);
-    }
-
-    /**
      * getDir(vol, aLBA, dir, path)
      *
      * @this {DiskInfo}
@@ -2143,11 +1875,8 @@ export default class DiskInfo {
         let file;
         let iStart = this.fileTable.length;
         let nEntriesPerSector = (vol.cbSector / DiskInfo.DIRENT.LENGTH) | 0;
-
+        let warnings = [];
         dir.path = path + "\\";
-
-        this.printf(MESSAGE.DEBUG + MESSAGE.DISK, 'getDir("%s","%s")\n', this.diskName, dir.path);
-
         for (let iSector = 0; iSector < aLBA.length; iSector++) {
             let lba = aLBA[iSector];
             for (let iEntry = 0; iEntry < nEntriesPerSector; iEntry++) {
@@ -2159,8 +1888,9 @@ export default class DiskInfo {
                 if (dir.attr == DiskInfo.ATTR.LFN) continue;
                 let name = CharSet.fromCP437(dir.name);
                 let path = CharSet.fromCP437(dir.path) + name;
-                let dateMod = this.getDate(dir.modDate, dir.modTime, this.diskName + ":" + path);
+                let dateMod = DiskInfo.DirEntry.parseDateTime(dir.modDate, dir.modTime, warnings);
                 file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
+                file.warnings = file.warnings.concat(warnings);
                 file.index = this.fileTable.length;
                 this.fileTable.push(file);
             }
@@ -2219,7 +1949,6 @@ export default class DiskInfo {
         if (!vol.sectorDirCache || !vol.lbaDirCache || vol.lbaDirCache != lba) {
             vol.lbaDirCache = lba;
             vol.sectorDirCache = this.getSector(vol.lbaDirCache);
-            // this.printf(MESSAGE.DEBUG + MESSAGE.DISK, this.dumpSector(vol.sectorDirCache, vol.lbaDirCache, dir.path));
         }
         if (vol.sectorDirCache) {
             let off = i * DiskInfo.DIRENT.LENGTH;
@@ -2278,7 +2007,7 @@ export default class DiskInfo {
                 cluster = this.getClusterEntry(vol, cluster, 0) | this.getClusterEntry(vol, cluster, 1);
             }
             if (cluster < DiskInfo.FAT12.CLUSNUM_MIN || cluster == vol.clusMax + 1 /* aka CLUSNUM_BAD */) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%s %s contains invalid cluster (%d)\n", this.diskName, dir.name, cluster);
+                this.warnings.push(`{this.diskName} ${dir.name} contains invalid cluster (${cluster})`);
             }
         }
         return aLBA;
@@ -2313,7 +2042,7 @@ export default class DiskInfo {
                 if (vol.nFATBits == 16) {
                     w <<= 8;
                 } else {
-                    this.assert(vol.nFATBits == 12);
+                    Disk.assert(vol.nFATBits == 12);
                     if (offBits & 0x7) {
                         w <<= 4;
                     } else {
@@ -2388,14 +2117,14 @@ export default class DiskInfo {
                                  * but if we have to scan every sector for a single file, we may as well do ALL files.
                                  */
                                 let fileCur = this.fileTable[iFile];
-                                this.assert(fileCur);
+                                Disk.assert(fileCur);
                                 if (!fileCur.aLBA) fileCur.aLBA = [];
                                 let iLBA = sector[DiskInfo.SECTOR.FILE_OFFSET] / this.cbSector;
                                 /*
                                  * Disks that have known errors (like the APL-100 disk image we received) can trigger this
                                  * assertion, so it should be a DEBUG-only check.
                                  */
-                                if (Device.DEBUG) this.assert(fileCur.aLBA[iLBA] == undefined || fileCur.aLBA[iLBA] == iLBA);
+                                if (Disk.DEBUG) Disk.assert(fileCur.aLBA[iLBA] == undefined || fileCur.aLBA[iLBA] == iLBA);
                                 fileCur.aLBA[iLBA] = lba;
                                 if (!file || file.index == iFile) nSectors++;
                             }
@@ -2510,11 +2239,11 @@ export default class DiskInfo {
     {
         let dw = 0;
         let nShift = 0;
-        this.assert(len > 0 && len <= 4);
+        Disk.assert(len > 0 && len <= 4);
         while (len--) {
-            this.assert(off < sector[DiskInfo.SECTOR.LENGTH]);
+            Disk.assert(off < sector[DiskInfo.SECTOR.LENGTH]);
             let b = this.read(sector, off++);
-            this.assert(b >= 0);
+            Disk.assert(b >= 0);
             if (b < 0) break;
             dw |= (b << nShift);
             nShift += 8;
@@ -2562,12 +2291,12 @@ export default class DiskInfo {
         if ((cylinder = this.aDiskData[iCylinder]) && (head = cylinder[iHead]) && (sector = head[idSector - 1])) {
             let file = this.fileTable[iFile];
             if (sector[DiskInfo.SECTOR.ID] != idSector) {
-                this.printf(MESSAGE.DISK + MESSAGE.WARNING, "%d:%d:%d has non-standard sector ID %d; see file %s\n", iCylinder, iHead, idSector, sector[DiskInfo.SECTOR.ID], file.path);
+                this.warnings.push(`${iCylinder}:${iHead}:${idSector} has non-standard sector ID ${sector[DiskInfo.SECTOR.ID]}; see file ${file.path}`);
             }
             if (sector[DiskInfo.SECTOR.FILE_INDEX] != undefined) {
                 if (sector[DiskInfo.SECTOR.FILE_INDEX] != iFile || sector[DiskInfo.SECTOR.FILE_OFFSET] != off) {
                     let filePrev = this.fileTable[sector[DiskInfo.SECTOR.FILE_INDEX]];
-                    this.printf(MESSAGE.DISK + MESSAGE.WARNING, '"%s" cross-linked at offset %d with "%s" at offset %d\n', filePrev.path, sector[DiskInfo.SECTOR.FILE_OFFSET], file.path, off);
+                    this.warnings.push(`"${filePrev.path}" cross-linked at offset ${sector[DiskInfo.SECTOR.FILE_OFFSET]} with "${file.path}" at offset ${off}`);
                     return false;
                 }
             }
@@ -2575,7 +2304,7 @@ export default class DiskInfo {
             sector[DiskInfo.SECTOR.FILE_OFFSET] = off;
             return true;
         }
-        this.printf(MESSAGE.DISK + MESSAGE.ERROR, "unable to map %s LBA %d to CHS\n", this.diskName, lba);
+        this.warnings.push(`unable to map ${this.diskName} LBA ${lba} to CHS`);
         return false;
     }
 
@@ -2648,12 +2377,12 @@ export default class DiskInfo {
     rebuildSector(iCylinder, iHead, sector)
     {
         if (sector[DiskInfo.SECTOR.CYLINDER] != undefined) {
-            this.assert(sector[DiskInfo.SECTOR.CYLINDER] == iCylinder);
+            Disk.assert(sector[DiskInfo.SECTOR.CYLINDER] == iCylinder);
             delete sector[DiskInfo.SECTOR.CYLINDER];
         }
 
         if (sector[DiskInfo.SECTOR.HEAD] != undefined) {
-            this.assert(sector[DiskInfo.SECTOR.HEAD] == iHead);
+            Disk.assert(sector[DiskInfo.SECTOR.HEAD] == iHead);
             delete sector[DiskInfo.SECTOR.HEAD];
         }
 
@@ -2679,7 +2408,7 @@ export default class DiskInfo {
 
         let adw = sector[DiskInfo.SECTOR.DATA];
         if (adw) {
-            // this.assert(adw.length);                 // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
+            // Disk.assert(adw.length);                 // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
             delete sector[DiskInfo.SECTOR.DATA];
         } else {
             adw = sector['data'];
@@ -2720,7 +2449,7 @@ export default class DiskInfo {
                     dw = dwPattern;
                 } else {
                     dw = adw[adw.length-1];
-                    // this.assert(dw != undefined);    // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
+                    // Disk.assert(dw != undefined);    // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
                 }
                 adw[idw] = dw;
             }
@@ -2768,289 +2497,17 @@ export default class DiskInfo {
                             let n = sector[DiskInfo.SECTOR.LENGTH];
                             for (let i = 0; i < n; i++) {
                                 let b = this.read(sector, i);
-                                this.assert(b >= 0);
+                                Disk.assert(b >= 0);
                                 dbDisk.writeUInt8(b, ib++);
                             }
                         }
                     }
                 }
             }
-            if (this.abOrigBPB.length && fLegacy) {
-                let off = this.abOrigBPB.shift();
-                for (let i = DiskInfo.BPB.OPCODE; i < DiskInfo.BPB.LARGESECS+4; i++) {
-                    dbDisk.writeUInt8(this.abOrigBPB[i - DiskInfo.BPB.OPCODE], off + i);
-                }
-            }
-            this.assert(ib == dbDisk.length);
+            Disk.assert(ib == dbDisk.length);
             return true;
         }
         return false;
-    }
-
-    /**
-     * getJSON(fnHash, fLegacy, indent, source)
-     *
-     * If a disk image contains a recognized volume type (eg, FAT12, FAT16), we now prefer to produce a
-     * "v2" JSON image, which will include a volume table (of volume descriptors), a file table (of file
-     * descriptors), and sector-level "metadata" which, for every used sector, refers back to a file
-     * in the file table (along with a file offset).
-     *
-     * To create a "legacy" JSON image, without any "v2" information, set fLegacy to true.
-     *
-     * @this {DiskInfo}
-     * @param {function(Array.<number>|string|DataBuffer)} [fnHash]
-     * @param {boolean} [fLegacy] (must be explicitly set to true to generate a "legacy" JSON disk image)
-     * @param {number} [indent] (indentation is not recommended, due to significant bloat)
-     * @param {string} [source] (source information, if any)
-     * @returns {string}
-     */
-    getJSON(fnHash, fLegacy = false, indent = 0, source = "")
-    {
-        let volTable, fileTable;
-        if (!fLegacy) {
-            if (this.buildTables(this.fromJSON) >= 0) {
-                for (let iVolume = 0; iVolume < this.volTable.length; iVolume++) {
-                    if (!volTable) volTable = [];
-                    volTable.push(this.getVolDesc(this.volTable[iVolume]));
-                }
-                for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
-                    let file = this.fileTable[iFile];
-                    /*
-                     * We can't skip any "." and ".." entries without adjusting file indexes, so let's not.
-                     *
-                     *      if (file.name == "." || file.name == "..") continue;
-                     */
-                    let desc = this.getFileDesc(file, false, fnHash);
-                    // let indentDesc = desc[DiskInfo.FILEDESC.MODULE]? 4 : 0;
-                    if (!fileTable) fileTable = [];
-                    fileTable.push(JSON.stringify(desc, null, 0));
-                }
-            }
-        } else {
-            this.deleteTables();
-        }
-        let imageInfo = {
-            [DiskInfo.IMAGE.TYPE]: DiskInfo.TYPE.CHS,
-            [DiskInfo.IMAGE.NAME]: this.diskName,
-            [DiskInfo.IMAGE.FORMAT]: this.getFormat(),
-            [DiskInfo.IMAGE.HASH]: this.hash,
-            [DiskInfo.IMAGE.CHECKSUM]: this.dwChecksum,
-            [DiskInfo.IMAGE.CYLINDERS]: this.nCylinders,
-            [DiskInfo.IMAGE.HEADS]: this.nHeads,
-            [DiskInfo.IMAGE.TRACKDEF]: this.nSectors,
-            [DiskInfo.IMAGE.SECTORDEF]: this.cbSector,
-            [DiskInfo.IMAGE.DISKSIZE]: this.cbDiskData,
-            [DiskInfo.IMAGE.ORIGBPB]: JSON.stringify(this.abOrigBPB),
-            [DiskInfo.IMAGE.VERSION]: "2.10",   // Device.VERSION,
-            [DiskInfo.IMAGE.REPOSITORY]: Device.REPOSITORY
-        };
-        if (!this.fBPBModified) {
-            delete imageInfo[DiskInfo.IMAGE.ORIGBPB];
-        }
-        if (source) {
-            imageInfo[DiskInfo.IMAGE.SOURCE] = source;
-        }
-        let sImageInfo = JSON.stringify(imageInfo, null, indent + 2);
-        let sVolTable, sFileTable;
-        if (volTable) {
-            sVolTable = JSON.stringify(volTable, null, indent + 1);
-        }
-        if (fileTable) {
-            sFileTable = '';
-            fileTable.forEach((desc) => {
-                if (sFileTable) sFileTable += ',\n';
-                sFileTable += '  ' + desc;
-            });
-            sFileTable = '[\n' + sFileTable + '\n]';
-        }
-        let sDiskData = JSON.stringify(this.aDiskData, null, indent);
-        /*
-         * To make "diskData" slightly more readable/diff-able in the "un-indented" case, I've decided to insert
-         * breaks ("\n  ") in front of every "{".
-         */
-        if (!indent) {
-            sDiskData = sDiskData.replace(/\{/g, "\n  {");
-        }
-        let sImageData = "{\n\"" + DiskInfo.DESC.IMAGE + "\": " + sImageInfo + ",\n\"" + (sVolTable? DiskInfo.DESC.VOLUMES + "\": " + sVolTable + ",\n\"" : "") + (sFileTable? DiskInfo.DESC.FILES + "\": " + sFileTable + ",\n\"" : "") + DiskInfo.DESC.DISKDATA + "\":" + sDiskData + "\n}";
-        return sImageData;
-    }
-
-    /**
-     * findFile(name, text)
-     *
-     * @this {DiskInfo}
-     * @param {string} name
-     * @param {string|boolean} [text]
-     * @returns {Object|null}
-     */
-    findFile(name, text = true)
-    {
-        let desc = null;
-        if (this.buildTables() > 0) {
-            name = name.toUpperCase();
-            if (this.fileTable) {
-                for (let i = 0; i < this.fileTable.length; i++) {
-                    let file = this.fileTable[i];
-                    if (name == file.name) {
-                        desc = this.getFileDesc(file, !!text);
-                        break;
-                    }
-                }
-            }
-        }
-        return desc;
-    }
-
-    /**
-     * getChecksum()
-     *
-     * NOTE: As noted in initSector(), our checksums are somewhat constrained by compatibility with previous JSON formats;
-     * in particular, for sectors that end with a repeating value, only the DATA values up to but NOT including that final
-     * repeating value are checksummed.
-     *
-     * Technically, the checksums we calculated for older JSON formats should have repeatedly summed their 'pattern' value
-     * as well.  But they didn't.  And I would like to avoid checksum warnings for anyone loading the new JSON format for the
-     * first time, due to an old checksum stored in their browser's local storage.  The warnings aren't fatal, but they do
-     * cause any saved machine state to be discarded, since the validity of a machine state is predicated on all the original
-     * inputs (including the original diskette images) matching the current inputs.  And while it's unfortunate that our
-     * checksums didn't (and still don't) sum the entire image, the limited purpose that they serve is still satisfied.
-     *
-     * TODO: Add a new "full" checksum property to DiskInfo that checksums the entire disk image, including repeated values,
-     * along with an option to return the "full" checksum here.
-     *
-     * @this {DiskInfo}
-     * @returns {number}
-     */
-    getChecksum()
-    {
-        return this.dwChecksum;
-    }
-
-    /**
-     * getFormat()
-     *
-     * For disks that match a standard "PC" disk geometry AND contain 1 or more FAT volumes,
-     * this returns a "PCxxxK" string; otherwise, it returns "Unknown".  Additionally, if any
-     * sector contains a non-standard "marker", eg:
-     *
-     *      dataCRC
-     *      dataError
-     *      dataMark
-     *      headCRC
-     *      headError
-     *
-     * or a non-standard sector ID, then the string will be flagged with an asterisk (eg, "PC360K*",
-     * "Unknown*", etc.)
-     *
-     * @this {DiskInfo}
-     * @returns {string}
-     */
-    getFormat()
-    {
-        let flags = "";
-        let sFormat = "Unknown";
-        let markers = [
-            DiskInfo.SECTOR.DATA_CRC,
-            DiskInfo.SECTOR.DATA_ERROR,
-            DiskInfo.SECTOR.DATA_MARK,
-            DiskInfo.SECTOR.HEAD_CRC,
-            DiskInfo.SECTOR.HEAD_ERROR
-        ];
-        if (this.aDiskData) {
-            let aDiskData = this.aDiskData;
-            for (let iCylinder = 0; iCylinder < aDiskData.length && !flags; iCylinder++) {
-                for (let iHead = 0; iHead < aDiskData[iCylinder].length && !flags; iHead++) {
-                    for (let iSector = 0; iSector < aDiskData[iCylinder][iHead].length && !flags; iSector++) {
-                        let sector = aDiskData[iCylinder][iHead][iSector];
-                        if (sector) {
-                            if (+sector[DiskInfo.SECTOR.ID] != iSector + 1) {
-                                flags = "*";
-                                break;
-                            }
-                            for (let marker in markers) {
-                                if (sector[markers[marker]] !== undefined) {
-                                    flags = "*";
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (this.volTable.length) {
-                sFormat = "PC" + Math.round(this.cbDiskData / 1024) + "K";
-            }
-        }
-        return sFormat + flags;
-    }
-
-    /**
-     * getHash()
-     *
-     * @this {DiskInfo}
-     * @returns {string}
-     */
-    getHash()
-    {
-        return this.hash;
-    }
-
-    /**
-     * getName()
-     *
-     * @this {DiskInfo}
-     * @returns {string}
-     */
-    getName()
-    {
-        return this.diskName.replace(/\.[a-z]+$/i, "");
-    }
-
-    /**
-     * setName(name)
-     *
-     * A disk image file name is normally associated with the DiskInfo when it's created (see the constructor), and it
-     * doesn't normally change.  However, there are cases where the disk was created from a set of files, and so the default
-     * name isn't particularly meaningful or appropriate, so we let the caller update the name as needed.
-     *
-     * @this {DiskInfo}
-     * @param {string} name
-     */
-    setName(name)
-    {
-        if (name) this.diskName = name;
-    }
-
-    /**
-     * getNewestDate(fExecutable)
-     *
-     * Looks through the dates of all the specified files and returns the newest date found, if any.
-     *
-     * @this {DiskInfo}
-     * @param {boolean} [fExecutable] (true for executable files only, false for all files)
-     * @returns {Date|undefined}
-     */
-    getNewestDate(fExecutable)
-    {
-        let date;
-        for (let i = 0; i < this.fileTable.length; i++) {
-            let file = this.fileTable[i];
-            if (!fExecutable || file.name.indexOf(".COM") > 0 || file.name.indexOf(".EXE") > 0) {
-                if (!date || date.getTime() < file.date.getTime()) date = file.date;
-            }
-        }
-        return date;
-    }
-
-    /**
-     * getSize()
-     *
-     * @this {DiskInfo}
-     * @returns {number|undefined}
-     */
-    getSize()
-    {
-        return this.cbDiskData;
     }
 
     /**
@@ -3066,9 +2523,6 @@ export default class DiskInfo {
     {
         let b = -1;
         if (sector) {
-            if (Device.DEBUG && !iByte && !fCompare) {
-                this.printf(MESSAGE.DEBUG + MESSAGE.DISK, 'read("%s",CHS=%d:%d:%d)\n', this.diskName, sector[DiskInfo.SECTOR.CYLINDER], sector[DiskInfo.SECTOR.HEAD], sector[DiskInfo.SECTOR.ID]);
-            }
             if (iByte < sector[DiskInfo.SECTOR.LENGTH]) {
                 let adw = sector[DiskInfo.SECTOR.DATA];
                 let idw = iByte >> 2;
