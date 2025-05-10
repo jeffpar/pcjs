@@ -396,7 +396,7 @@ async function main(argc, argv, errors)
     // Define a function to process an individual archive, which then allows us to recursively process
     // nested archives if --recurse is been specified.
     //
-    let processArchive = async function(archivePath, archiveTarget, archiveDB = null, modified = null) {
+    let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
         let archive, doCSV = false;
         let component = dezip, isArchive = true;
         let archiveName = path.basename(archivePath);
@@ -447,7 +447,7 @@ async function main(argc, argv, errors)
             }
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
-                fileID++, diskID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
+                fileID++, archiveID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
                 method, enquote(entryName), enquote(entryPath), enquote(comment), enquote(warnings)
             );
             return line;
@@ -717,8 +717,7 @@ async function main(argc, argv, errors)
                     await csvFile.write(getCSVLine(entry, method, db));
                 }
                 if (recurse && db) {
-                    diskID++;
-                    let [nFiles, nWarnings] = await processArchive(path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
+                    let [nFiles, nWarnings] = await processArchive(diskID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
@@ -741,7 +740,7 @@ async function main(argc, argv, errors)
     // And finally: the main loop.
     //
     for (let archivePath of archivePaths) {
-        let [nFiles, nWarnings] = await processArchive(archivePath);
+        let [nFiles, nWarnings] = await processArchive(diskID++, archivePath);
         if ((argv.list || argv.test) && nFiles && nWarnings >= 0) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
         }
