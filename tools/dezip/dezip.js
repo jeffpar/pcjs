@@ -359,7 +359,7 @@ export default class Dezip {
             //
             let response = await this.interfaces.fetch(fileName);
             if (!response.ok) {
-                throw new Error(`Failed to fetch ${fileName}: ${response.statusText}`);
+                throw new Error(`Unable to fetch ${fileName} (${response.statusText})`);
             }
             let arrayBuffer = await response.arrayBuffer();
             archive.length = arrayBuffer.byteLength;
@@ -368,7 +368,7 @@ export default class Dezip {
         else if (this.interfaces.open) {
             archive.file = await this.interfaces.open(fileName, "r");
             if (!archive.file) {
-                throw new Error(`Unable to open archive: ${fileName}`);
+                throw new Error(`Unable to open ${fileName}`);
             }
             const stats = await archive.file.stat();
             archive.length = stats.size;
@@ -1232,7 +1232,7 @@ export default class Dezip {
      * @param {Archive} archive
      * @param {number} index
      * @param {function} [writeData]
-     * @returns {DataBuffer} (expandedDB)
+     * @returns {DataBuffer|undefined}
      */
     async readFile(archive, index, writeData)
     {

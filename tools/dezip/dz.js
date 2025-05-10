@@ -416,7 +416,7 @@ async function main(argc, argv, errors)
             if (archivePath[0] == '~') {
                 archivePath = path.join(process.env.HOME, archivePath.slice(1));
             }
-            if (archiveExt.toLowerCase().match(/(\.img|\.json)/)) {
+            if (archiveExt.match(/(\.img|\.json)$/i)) {
                 component = disk;
                 isArchive = false;
             }
@@ -441,10 +441,10 @@ async function main(argc, argv, errors)
                 nArchiveWarnings++;
             }
             else if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
-                printf("%s: not an archive\n", archivePath);
+                printf("%s: Unrecognized archive\n", archivePath);
                 nArchiveWarnings++;
             } else if (!entries.length) {
-                printf("%s: no matches\n", archivePath);
+                printf("%s: No matches\n", archivePath);
             }
             //
             // Set dstPath as needed (needed for file and/or banner extraction).
@@ -570,7 +570,12 @@ async function main(argc, argv, errors)
                 let db, writeData;
                 let printed = false;
                 let targetFile, targetPath;
-                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.ZIP|\.ARC)$/i));
+                //
+                // TODO: Consider whether we should include IMG and JSON files in the list of containers
+                // to process recursively.  For now, we're only doing that for ZIP and ARC files.  Currently,
+                // I do not not, because those extensions tend be used more broadly for other purposes.
+                //
+                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc)$/i));
                 //
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
@@ -651,7 +656,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 if (argv.csv) {
-                    let hash = crypto.createHash('md5').update(db.buffer).digest('hex');
+                    let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
                     let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
                     let comment = entry.comment || "";
                     //

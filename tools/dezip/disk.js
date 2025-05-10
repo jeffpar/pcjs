@@ -166,7 +166,7 @@ export default class Disk {
             if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
                 let response = await this.interfaces.fetch(fileName);
                 if (!response.ok) {
-                    throw new Error(`Failed to fetch ${fileName} (${response.statusText})`);
+                    throw new Error(`Unable to fetch ${fileName} (${response.statusText})`);
                 }
                 let arrayBuffer = await response.arrayBuffer();
                 db = new DataBuffer(new Uint8Array(arrayBuffer));
@@ -204,7 +204,7 @@ export default class Disk {
             success = diskInfo.buildDiskFromBuffer(db);
         }
         if (!success) {
-            throw new Error(`Unrecognized JSON disk image ${fileName}`);
+            throw new Error(`${fileName}: Unrecognized disk image`);
         }
         return diskInfo;
     }

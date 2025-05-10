@@ -2796,6 +2796,46 @@
       }
     },
     {
+      "name": "dz.js csv",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "--csv test.csv --fileID=100 --diskID=200 --setID=300 --list --test --recurse --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/*/ibm0000-0009/ibm0001/DESIGN1.ZIP"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dz.js dirty",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "args": [
+        "-lt --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dezip",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "dz.js filter",
       "type": "node",
       "request": "launch",
@@ -2841,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-lt --batch tests/dirty-archives.log"
+        "--csv test.csv --list --test --recurse /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/xtra0570-0579/xtra0575/RGD-MB13.ZIP"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
