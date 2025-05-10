@@ -120,19 +120,13 @@ export default class DataBuffer {
      */
     static concat(buffers, totalLength)
     {
-        if (!Array.isArray(buffers)) {
-            throw new TypeError("Argument must be an array of DataBuffer instances");
-        }
         if (totalLength == undefined) {
             totalLength = buffers.reduce((sum, buffer) => sum + buffer.length, 0);
         }
-        let result = new DataBuffer(totalLength);
         let offset = 0;
+        let result = new DataBuffer(totalLength);
         for (let buffer of buffers) {
-            if (!(buffer instanceof DataBuffer)) {
-                throw new TypeError("All elements in the array must be DataBuffer instances");
-            }
-            result.copy(buffer, offset);
+            buffer.copy(result, offset);
             offset += buffer.length;
         }
         return result;

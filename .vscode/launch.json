@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--csv test.csv --list --test --recurse /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/xtra0570-0579/xtra0575/RGD-MB13.ZIP"
+        "--path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download*/**/*.{ZIP,ARC} --fileID=20000001 --diskID=10000001 --setID=1001 --recurse --test --csv ibm-wgam-wbiz.csv"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

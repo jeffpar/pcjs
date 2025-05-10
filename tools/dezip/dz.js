@@ -397,10 +397,61 @@ async function main(argc, argv, errors)
     // nested archives if --recurse is been specified.
     //
     let processArchive = async function(archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let archive;
+        let archive, doCSV = false;
         let component = dezip, isArchive = true;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
+
+        let getCSVLine = function(entry, method, db, archiveEntry = false) {
+            let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
+            let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
+            let comment = entry.comment || "";
+            //
+            // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
+            //
+            let entryName = entry.name, entryPath = archivePath;
+            //
+            // If we're being passed an archive object rather than an entry object, then entryName
+            // will also be the same as the entryPath; reduce them.
+            //
+            if (archiveEntry) {
+                Dezip.assert(entryName == entryPath);
+                entryName = path.basename(entryName);
+                entryPath = path.dirname(entryPath);
+            }
+            //
+            // Instead of outputting entryPath as-is, let's see if argv.path contains any wildcards;
+            // if so, then convert argv.path to a regex, change the asterisks to "[^/]*", delete all the
+            // remaining characters, then use that regex to search entryPath for a match and remove it.
+            //
+            // For example, if argv.path is:
+            //
+            //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/**/*.ZIP
+            //
+            // and the current entryPath is:
+            //
+            //    /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/DESIGN1.ZIP
+            //
+            // then we will reduce entryPath to:
+            //
+            //    /ibm0000-0009/ibm0001/DESIGN1.ZIP
+            //
+            // Thus, you have a crude but effective means of shaving CSV paths down to their essentials.
+            //
+            if (argv.path) {
+                let i = argv.path.indexOf('*');
+                if (i >= 0) {
+                    let regex = new RegExp(argv.path.slice(0, i) + "[^/]*");
+                    entryPath = entryPath.replace(regex, "");
+                }
+            }
+            let line = format.sprintf(
+                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
+                fileID++, diskID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
+                method, enquote(entryName), enquote(entryPath), enquote(comment), enquote(warnings)
+            );
+            return line;
+        };
         try {
             nTotalArchives++;
             if (nTotalArchives % 10000 == 0 && !argv.verbose && !argv.list) {
@@ -409,6 +460,10 @@ async function main(argc, argv, errors)
             let options = {};
             if (modified) {
                 options.modified = modified;
+            }
+            if (argv.csv && !archiveDB) {
+                doCSV = true;
+                options.prefill = true;
             }
             if (argv.password) {
                 options.password = argv.password;
@@ -520,6 +575,9 @@ async function main(argc, argv, errors)
                     }
                 }
             }
+            if (doCSV) {
+                await csvFile.write(getCSVLine(archive, "Store", archive.cache.db, true));
+            }
             let nEntries = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
@@ -572,8 +630,8 @@ async function main(argc, argv, errors)
                 let targetFile, targetPath;
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of containers
-                // to process recursively.  For now, we're only doing that for ZIP and ARC files.  Currently,
-                // I do not not, because those extensions tend be used more broadly for other purposes.
+                // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
+                // those extensions tend be used more broadly for other purposes.
                 //
                 let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc)$/i));
                 //
@@ -656,44 +714,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 if (argv.csv) {
-                    let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
-                    let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
-                    let comment = entry.comment || "";
-                    //
-                    // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
-                    //
-                    // Instead of outputting archivePath as-is, let's see if argv.path contains any wildcards;
-                    // if so, then convert argv.path to a regex, change the asterisks to "[^/]*", delete all the
-                    // remaining characters, then use that regex to search archivePath for a match and remove it.
-                    //
-                    // For example, if argv.path is:
-                    //
-                    //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/**/*.ZIP
-                    //
-                    // and the current archivePath is:
-                    //
-                    //    /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/DESIGN1.ZIP
-                    //
-                    // then we will reduce archivePath to:
-                    //
-                    //    /ibm0000-0009/ibm0001/DESIGN1.ZIP
-                    //
-                    // Thus, you have a crude but effective means of shaving CSV paths down to their essentials.
-                    //
-                    let entryPath = archivePath;
-                    if (argv.path) {
-                        let i = argv.path.indexOf('*');
-                        if (i >= 0) {
-                            let regex = new RegExp(argv.path.slice(0, i) + "[^/]*");
-                            entryPath = archivePath.replace(regex, "");
-                        }
-                    }
-                    let line = format.sprintf(
-                        "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
-                        fileID++, diskID, setID, hash, entry.modified, entry.attr, entry.size, entry.compressedSize,
-                        method, enquote(entry.name), enquote(entryPath), enquote(comment), enquote(warnings)
-                    );
-                    await csvFile.write(line);
+                    await csvFile.write(getCSVLine(entry, method, db));
                 }
                 if (recurse && db) {
                     diskID++;

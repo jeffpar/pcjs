@@ -27,11 +27,11 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * @property {string}   encoding    (encoding to use for strings in archives; default is "cp437")
  *
  * @typedef  {object}   Archive
- * @property {string}   fileName    (name of the archive file)
+ * @property {string}   name        (name of the archive file)
  * @property {number}   type        (type of archive)
  * @property {Date}     modified    (modification date of archive file, if known)
  * @property {string}   password    (password for encrypted archives; copied from ArchiveOptions)
- * @property {number}   length      (length of the archive file)
+ * @property {number}   size        (size of the archive file)
  * @property {number}   file        (file descriptor, if any)
  * @property {Cache}    cache       (cache data)
  * @property {Array}    records     (array of archive records)
@@ -309,7 +309,7 @@ export default class Dezip {
      * @param {boolean} condition
      * @param {string} [message]
      */
-    assert(condition, message = "Assertion failed")
+    static assert(condition, message = "Assertion failed")
     {
         if (Dezip.DEBUG && !condition) {
             throw new Error(message);
@@ -317,24 +317,24 @@ export default class Dezip {
     }
 
     /**
-     * open(fileName, db, options)
+     * open(name, db, options)
      *
      * If successful, this method returns an Archive object used with various read functions.
      *
      * @this {Dezip}
-     * @param {string} fileName
+     * @param {string} name
      * @param {DataBuffer} [db]
      * @param {ArchiveOptions} [options]
      * @returns {Archive}
      */
-    async open(fileName, db = null, options = {})
+    async open(name, db = null, options = {})
     {
         let archive = {
-            fileName,                   // name of the archive file
+            name,                       // name of the archive file
             type: options.type || Dezip.TYPE_ZIP,
             modified: options.modified, // modification date of archive file
             password: options.password, // password for encrypted archives
-            length: 0,                  // length of the archive file
+            size: 0,                    // size of the archive file
             file: null,                 // file handle, if any
             cache: {},                  // cache data
             records: [],                // array of archive records
@@ -347,31 +347,31 @@ export default class Dezip {
         // approach is to read structures from the file as needed into the archive's cache buffer.
         //
         if (db) {
-            archive.length = db.length;
-            this.initCache(archive, db, archive.length);
+            archive.size = db.length;
+            this.initCache(archive, db, archive.size);
         }
-        else if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
+        else if (this.interfaces.fetch && name.match(/^https?:/i)) {
             //
             // For remote files, prefill is the default.
             //
             // TODO: Consider honoring prefill === false, provided we can obtain
             // Content-Length from the server and it supports byte range requests.
             //
-            let response = await this.interfaces.fetch(fileName);
+            let response = await this.interfaces.fetch(name);
             if (!response.ok) {
-                throw new Error(`Unable to fetch ${fileName} (${response.statusText})`);
+                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
             }
             let arrayBuffer = await response.arrayBuffer();
-            archive.length = arrayBuffer.byteLength;
-            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.length);
+            archive.size = arrayBuffer.byteLength;
+            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
         }
         else if (this.interfaces.open) {
-            archive.file = await this.interfaces.open(fileName, "r");
+            archive.file = await this.interfaces.open(name, "r");
             if (!archive.file) {
-                throw new Error(`Unable to open ${fileName}`);
+                throw new Error(`Unable to open ${name}`);
             }
             const stats = await archive.file.stat();
-            archive.length = stats.size;
+            archive.size = stats.size;
             //
             // If the caller supplied a modification date for the archive, then we stick with that,
             // because the caller may have extracted the archive from another archive that preserved
@@ -380,7 +380,7 @@ export default class Dezip {
             if (!archive.modified) {
                 archive.modified = stats.mtime;
             }
-            this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.length)));
+            this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.size)));
             if (options.prefill) {
                 let db = new DataBuffer(0);
                 let cache = archive.cache;
@@ -398,8 +398,8 @@ export default class Dezip {
                 // (and by extension, the old cache buffer).  The new buffer becomes the cache buffer.
                 //
                 await this.close(archive);
-                this.assert(archive.length == db.length);
-                this.initCache(archive, new DataBuffer(db), archive.length);
+                Dezip.assert(archive.size == db.length);
+                this.initCache(archive, new DataBuffer(db), archive.size);
             }
         }
         else {
@@ -733,20 +733,20 @@ export default class Dezip {
      */
     async readCache(archive, position, extent)
     {
-        this.assert(position >= 0 && extent >= 0);
-        if (position > archive.length) {
-            throw new Error(`Position ${position} exceeds limit (${archive.length})`);
+        Dezip.assert(position >= 0 && extent >= 0);
+        if (position > archive.size) {
+            throw new Error(`Position ${position} exceeds limit (${archive.size})`);
         }
-        if (position + extent > archive.length) {
-            extent = archive.length - position;
+        if (position + extent > archive.size) {
+            extent = archive.size - position;
         }
         let cache = archive.cache;
         let maxExtent = cache.db.length;
         if (extent > maxExtent) {
             extent = maxExtent;
         }
-        if (position + maxExtent > archive.length) {
-            maxExtent = archive.length - position;
+        if (position + maxExtent > archive.size) {
+            maxExtent = archive.size - position;
         }
         let preceding = cache.position - position;
         let following = (position + extent) - (cache.position + cache.extent);
@@ -784,7 +784,7 @@ export default class Dezip {
                 }
             }
             if (readExtent > 0) {
-                this.assert(archive.file);
+                Dezip.assert(archive.file);
                 if (archive.file) {
                     let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
                     if (result.bytesRead != readExtent) {
@@ -795,7 +795,7 @@ export default class Dezip {
                     // As asserted above, this is an internal inconsistency, because archives without handles
                     // should be fully cached (so, technically, you should never see this error).
                     //
-                    throw new Error(`${archive.fileName}: No file handle available`);
+                    throw new Error(`${archive.name}: No file handle available`);
                 }
             }
             cache.position = position;
@@ -878,7 +878,7 @@ export default class Dezip {
                 try {
                     record = await this.readDirRecord(archive, record);
                     if (!record) break;
-                    this.assert(archive.endHeader && record.dirHeader);
+                    Dezip.assert(archive.endHeader && record.dirHeader);
                 } catch (error) {
                     archive.warnings.push(error.message);
                     break;
@@ -962,7 +962,7 @@ export default class Dezip {
             // Locate DirEndHeader first, by scanning backwards through cache-sized chunks,
             // starting with the last chunk in the archive, until we find a DirEndHeader signature.
             //
-            let posArchive = archive.length - cache.db.length;
+            let posArchive = archive.size - cache.db.length;
             while (true) {
                 let [offset, length] = await this.readCache(archive, posArchive, cache.db.length);
                 let offsetEnd = offset + length - Dezip.DirEndHeader.length;
@@ -972,7 +972,7 @@ export default class Dezip {
                     //
                     if (cache.db.readUInt32LE(offsetEnd) == Dezip.DirEndHeader.fields.signature.DIREND) {
                         let endHeader = Dezip.DirEndHeader.readStruct(cache.db, offsetEnd, this.encoding);
-                        this.assert(endHeader.signature == Dezip.DirEndHeader.fields.signature.DIREND);
+                        Dezip.assert(endHeader.signature == Dezip.DirEndHeader.fields.signature.DIREND);
                         //
                         // We've got the DirEndHeader, so save it in the archive object.
                         //
@@ -1083,9 +1083,9 @@ export default class Dezip {
         } else {
             record = null;
             if (prevRecord) {
-                this.assert(prevRecord.fileHeader != null);
+                Dezip.assert(prevRecord.fileHeader != null);
                 position = prevRecord.filePosition + prevRecord.fileHeader.length + prevRecord.fileHeader.compressedSize;
-                if (position >= archive.length) {
+                if (position >= archive.size) {
                     return null;
                 }
             }
@@ -1241,7 +1241,7 @@ export default class Dezip {
         try {
             let fileHeader = record.fileHeader;
             if (!fileHeader) {
-                this.assert(record.dirHeader);
+                Dezip.assert(record.dirHeader);
                 let position = record.dirHeader.position;
                 await this.readFileHeader(archive, record, position);
                 if (!record.fileHeader) {
