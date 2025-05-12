@@ -398,7 +398,7 @@ async function main(argc, argv, errors)
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
         let archive, doCSV = false;
-        let component = dezip, isArchive = true;
+        let component = dezip, isArchive = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
 
@@ -420,29 +420,13 @@ async function main(argc, argv, errors)
                 entryPath = path.dirname(entryPath);
             }
             //
-            // Instead of outputting entryPath as-is, let's see if argv.path contains any wildcards;
-            // if so, then convert argv.path to a regex, change the asterisks to "[^/]*", delete all the
-            // remaining characters, then use that regex to search entryPath for a match and remove it.
-            //
-            // For example, if argv.path is:
-            //
-            //      /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/**/*.ZIP
-            //
-            // and the current entryPath is:
-            //
-            //    /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0000-0009/ibm0001/DESIGN1.ZIP
-            //
-            // then we will reduce entryPath to:
-            //
-            //    /ibm0000-0009/ibm0001/DESIGN1.ZIP
-            //
-            // Thus, you have a crude but effective means of shaving CSV paths down to their essentials.
+            // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
+            // if so, then strip all the path components prior to "**" from entryPath.
             //
             if (argv.path) {
-                let i = argv.path.indexOf('*');
-                if (i >= 0) {
-                    let regex = new RegExp(argv.path.slice(0, i) + "[^/]*");
-                    entryPath = entryPath.replace(regex, "");
+                let doubleWild = argv.path.match(/(.*?)\/[^/]*\*\*/);
+                if (doubleWild) {
+                    entryPath = entryPath.replace(doubleWild[1], "");
                 }
             }
             let line = format.sprintf(
@@ -471,9 +455,11 @@ async function main(argc, argv, errors)
             if (archivePath[0] == '~') {
                 archivePath = path.join(process.env.HOME, archivePath.slice(1));
             }
+            if (archiveExt.match(/(\.zip|\.arc)$/i)) {
+                isArchive = true;
+            }
             if (archiveExt.match(/(\.img|\.json)$/i)) {
                 component = disk;
-                isArchive = false;
             }
             archive = await component.open(archivePath, archiveDB, options);
         } catch (error) {
@@ -482,15 +468,18 @@ async function main(argc, argv, errors)
         }
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
+            let entries = [];
             let heading = false;
             //
             // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
             // to flag the archive as having already scanned them, so that readDirectory() won't bother.
             //
-            if (isArchive && argv.nodir) {
-                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
+            if (isArchive) {
+                if (argv.nodir) {
+                    archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
+                }
+                entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             }
-            let entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             if (archive.warnings.length) {
                 printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
                 nArchiveWarnings++;
@@ -498,7 +487,8 @@ async function main(argc, argv, errors)
             else if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
                 printf("%s: Unrecognized archive\n", archivePath);
                 nArchiveWarnings++;
-            } else if (!entries.length) {
+            }
+            else if (isArchive && !entries.length) {
                 printf("%s: No matches\n", archivePath);
             }
             //
