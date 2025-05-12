@@ -480,16 +480,15 @@ async function main(argc, argv, errors)
                 }
                 entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             }
-            if (archive.warnings.length) {
-                printf("%s warnings: %s\n", archivePath, archive.warnings.join("; "));
-                nArchiveWarnings++;
-            }
-            else if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
-                printf("%s: Unrecognized archive\n", archivePath);
-                nArchiveWarnings++;
+            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+                archive.warnings.push("Unrecognized archive");
             }
             else if (isArchive && !entries.length) {
-                printf("%s: No matches\n", archivePath);
+                archive.warnings.push("No matches");
+            }
+            if (archive.warnings.length) {
+                printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                nArchiveWarnings++;
             }
             //
             // Set dstPath as needed (needed for file and/or banner extraction).
