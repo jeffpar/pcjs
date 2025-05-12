@@ -90,7 +90,7 @@ const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
-        description: "process containers listed in file"
+        description: "process items listed in file"
     },
     "banner": {
         type: "boolean",
@@ -163,7 +163,7 @@ const options = {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of specified container(s)"
+        description: "list contents of specified item(s)"
     },
     "nodir": {
         type: "boolean",
@@ -194,19 +194,19 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "container path specification (eg, \"**/*.zip\")",
+        description: "item path specification (eg, \"**/*.zip\")",
     },
     "recurse": {
         type: "boolean",
         usage: "--recurse",
         alias: "-r",
-        description: "process containers within containers"
+        description: "process items within items"
     },
     "test": {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of specified containers(s)"
+        description: "test contents of specified items(s)"
     },
     "verbose": {
         type: "boolean",
@@ -220,10 +220,10 @@ const options = {
         description: "override file ID (default: 1)",
         internal: true
     },
-    "diskID": {
+    "itemID": {
         type: "number",
-        usage: "--diskID [id]",
-        description: "override disk ID (default: 1)",
+        usage: "--itemID [id]",
+        description: "override item ID (default: 1)",
         internal: true
     },
     "setID": {
@@ -238,8 +238,8 @@ const options = {
         alias: "-h",
         description: "display this help message",
         handler: function() {
-            printf("\nUsage:\n    %s [options] [files]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, and JSON containers\n\n");
+            printf("\nUsage:\n    %s [options] [items]\n", path.basename(process.argv[1]));
+            printf("\nProcesses ZIP, ARC, IMG, and JSON containers and other items\n\n");
             printf("Options:\n");
             for (let key in options) {
                 let option = options[key];
@@ -251,7 +251,7 @@ const options = {
     }
 };
 
-let archivePaths = [];
+let itemPaths = [];
 
 /**
  * enquote(string)
@@ -345,29 +345,30 @@ async function main(argc, argv, errors)
         }
     }
     //
-    // Build a list of archive files to process, starting with files listed in the batch file, if any.
+    // Build a list of items to process, starting with items listed in the batch file, if any.
     //
     if (argv.batch) {
         try {
-            let lines = await fs.readFile(argv.batch, "utf8");
-            archivePaths = archivePaths.concat(lines.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
+            let items = await fs.readFile(argv.batch, "utf8");
+            itemPaths = itemPaths.concat(items.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
         }
     }
     //
-    // Add any files matching --path patterns.
+    // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let files = glob.sync(argv.path, { nodir: true });
-        archivePaths = archivePaths.concat(files);
+        let items = glob.sync(argv.path, { nodir: true });
+        itemPaths = itemPaths.concat(items);
+        printf("Found %d matching item(s)\n", items.length);
     }
     //
-    // Finally, include any explicitly listed archive filenames.
+    // Finally, include any explicitly listed items.
     //
     for (let i = 1; i < argv.length; i++) {
-        archivePaths.push(argv[i]);
+        itemPaths.push(argv[i]);
     }
     //
     // If CSV output is enabled, then open the specified file for writing.
@@ -378,23 +379,28 @@ async function main(argc, argv, errors)
             csvFile = await fs.open(argv.csv, "w");
             //
             // The first three columns come from variables of the same name, and all start at 1,
-            // but you can override them with the internal --fileID, --diskID, and --setID options.
+            // but you can override them with the internal --fileID, --itemID, and --setID options.
             //
-            await csvFile.write("fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings\n");
+            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings\n");
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
         }
     }
-    let fileID = +argv.fileID || 1, diskID = +argv.diskID || 1, setID = argv.setID || 1;
+    let fileID = +argv.fileID || 1, itemID = +argv.itemID || 1, setID = argv.setID || 1;
     if (nErrors) {
         return;
     }
     let bannerHashes = {};
-    let nTotalArchives = 0, nTotalFiles = 0;
+    let nTotalItems = 0, nTotalFiles = 0;
     //
-    // Define a function to process an individual archive, which then allows us to recursively process
-    // nested archives if --recurse is been specified.
+    // Define a function to process an individual archive, which then allows us to recursively process nested
+    // archives if --recurse is been specified.
+    //
+    // Note that processArchive() has evolved into container processing, with the added support for disk images,
+    // as well as generic file processing, with the added support for cataloging any specified files, container or
+    // otherwise, so it might be more appropriately named processContainer() or simply processItem(), but since
+    // its primary purpose is still processing archives, we're leaving it as-is for now.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
         let archive, doCSV = false;
@@ -407,7 +413,7 @@ async function main(argc, argv, errors)
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let comment = entry.comment || "";
             //
-            // CSV fields: fileID,diskID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
+            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
             //
             let entryName = entry.name, entryPath = archivePath;
             //
@@ -424,9 +430,10 @@ async function main(argc, argv, errors)
             // if so, then strip all the path components prior to "**" from entryPath.
             //
             if (argv.path) {
-                let doubleWild = argv.path.match(/(.*?)\/[^/]*\*\*/);
+                let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
                 if (doubleWild) {
-                    entryPath = entryPath.replace(doubleWild[1], "");
+                    let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
+                    entryPath = entryPath.replace(regex, "");
                 }
             }
             let line = format.sprintf(
@@ -437,9 +444,9 @@ async function main(argc, argv, errors)
             return line;
         };
         try {
-            nTotalArchives++;
-            if (nTotalArchives % 10000 == 0 && !argv.verbose && !argv.list) {
-                printf("%d archives processed\n", nTotalArchives);
+            nTotalItems++;
+            if (nTotalItems % 10000 == 0 && !argv.verbose && !argv.list) {
+                printf("%d items processed\n", nTotalItems);
             }
             let options = {};
             if (modified) {
@@ -519,7 +526,7 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (dstPath != ".") {
-                    if (!dstPath || archiveTarget || archivePaths.length > 1) {
+                    if (!dstPath || archiveTarget || itemPaths.length > 1) {
                         dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
                     }
                 }
@@ -620,7 +627,7 @@ async function main(argc, argv, errors)
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of containers
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
-                // those extensions tend be used more broadly for other purposes.
+                // IMG and JSON extensions tend be used more broadly for other purposes.
                 //
                 let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc)$/i));
                 //
@@ -706,7 +713,7 @@ async function main(argc, argv, errors)
                     await csvFile.write(getCSVLine(entry, method, db));
                 }
                 if (recurse && db) {
-                    let [nFiles, nWarnings] = await processArchive(diskID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
+                    let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
@@ -728,15 +735,16 @@ async function main(argc, argv, errors)
     //
     // And finally: the main loop.
     //
-    for (let archivePath of archivePaths) {
-        let [nFiles, nWarnings] = await processArchive(diskID++, archivePath);
-        if ((argv.list || argv.test) && nFiles && nWarnings >= 0) {
-            printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
+    for (let itemPath of itemPaths) {
+        let [nFiles, nWarnings] = await processArchive(itemID++, itemPath);
+        if ((argv.list || argv.test) && (!argv.csv || argv.verbose) && nFiles && nWarnings >= 0) {
+            printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", itemPath, nFiles, nFiles, nWarnings, nWarnings);
         }
     }
-    printf("\n%d archive%s examined, %d file%s processed\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles);
+    printf("\n%d item%s examined, %d file%s processed\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles);
     if (csvFile) {
         await csvFile.close();
+        printf("Use --fileID=%d --itemID=%d --setID=%d for the next CSV\n", fileID, itemID, setID);
     }
 }
 
