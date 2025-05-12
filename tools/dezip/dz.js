@@ -360,7 +360,7 @@ async function main(argc, argv, errors)
     // Add any files matching --path patterns.
     //
     if (argv.path) {
-        let files = glob.sync(argv.path);
+        let files = glob.sync(argv.path, { nodir: true });
         archivePaths = archivePaths.concat(files);
     }
     //
