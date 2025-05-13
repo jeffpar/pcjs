@@ -266,7 +266,7 @@ function enquote(string) {
     // We use the "double-quote" character as the quote character, and escape any double-quotes
     // in the string with another double-quote.
     //
-    if (string.indexOf(',') >= 0 || string.indexOf('"') >= 0) {
+    if (string.match(/[\r\n,"]/)) {
         string = '"' + string.replace(/"/g, '""') + '"';
     }
     return string;
@@ -498,7 +498,7 @@ async function main(argc, argv, errors)
                 nArchiveWarnings++;
             }
             //
-            // Set dstPath as needed (needed for file and/or banner extraction).
+            // Set dstPath as needed (for file and/or banner extraction).
             //
             // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
             // destination path is the source path with the first occurrence of <search> replaced with <replace>.

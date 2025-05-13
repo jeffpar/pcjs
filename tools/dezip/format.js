@@ -150,10 +150,10 @@ export default class Format {
      * saved in argv with the switch as the key (eg, argv["option"] == "value").
      *
      * @param {Array.<string>} args
-     * @param {object} options
+     * @param {object} [options]
      * @returns {Array} [argc, argv, errors]
      */
-    static parseArgs(args, options)
+    static parseArgs(args, options = {})
     {
         let i = 1, j;
         let keys = Object.keys(options);
