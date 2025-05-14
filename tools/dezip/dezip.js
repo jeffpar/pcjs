@@ -124,6 +124,10 @@ export default class Dezip {
         .field('lenName',       Struct.UINT16)          // filename length
         .field('lenExtra',      Struct.UINT16)          // extra field length
         .verifyLength(30);
+        //
+        // NOTE: After we read a FileHeader, we also a 'length' field to it, to simplify locating the data
+        // that follows it.
+        //
 
     static SpanHeader = new Struct("SpanHeader")
         .field('signature',     Struct.UINT32, {
@@ -157,6 +161,10 @@ export default class Dezip {
         .field('diskStart',     Struct.UINT16)          // disk number start
         .field('intAttr',       Struct.UINT16)          // internal file attributes
         .field('attr',          Struct.UINT32)          // external file attributes (host system dependent)
+        //
+        // TODO: Define the 'attr' bit flags.  Generally, only bits 0-7 are ever set (from the DOS directory
+        // entries) but some archives, like ibm0020-0029/ibm0028/SDCJRC-S.ZIP, have other bits, like 0x20000000.
+        //
         .field('position',      Struct.UINT32)          // position of file header
         .verifyLength(46);
 
@@ -907,6 +915,10 @@ export default class Dezip {
                     if (!record) break;
                 } catch (error) {
                     archive.warnings.push(error.message);
+                    break;
+                }
+                if (record.fileHeader.compressedSize > archive.size || record.fileHeader.lenName > 255) {
+                    archive.warnings.push(`Invalid size(s) in FileHeader`);
                     break;
                 }
                 if (filterMethod != -1 && record.fileHeader.method != filterMethod) {

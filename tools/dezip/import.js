@@ -9,23 +9,38 @@ import fs from "fs/promises";
 import Format from "./format.js";
 import { Sequelize, DataTypes } from "sequelize";
 
-const dbTables = [
-    "files"
-];
+const dbConfig = {
+    sequelize: {
+        host: "localhost",
+        dialect: "mysql",
+        dialectOptions: {},
+        logging: false,
+        logQueryParameters: false,
+        define: {
+            charset: "utf8mb4",
+            collate: "utf8mb4_0900_as_ci"
+        }
+    },
+    console: false,
+    domain: "localhost",
+    name: "software",
+    user: "root",
+    password: ""
+};
 
-const dbModels = {
+const dbTables = {
   files: {
     fileID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true
     },
     itemID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false
     },
     setID: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false
     },
     hash: {
@@ -37,15 +52,15 @@ const dbModels = {
       allowNull: false
     },
     attr: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.TINYINT.UNSIGNED,
       allowNull: false
     },
     size: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false
     },
     compressed: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false
     },
     method: {
@@ -71,26 +86,6 @@ const dbModels = {
   }
 };
 
-const dbConfig = {
-    sequelize: {
-        host: "localhost",
-        dialect: "mysql",
-        dialectOptions: {},
-        logging: false,
-        logQueryParameters: false,
-        define: {
-            charset: "utf8mb4",
-            collate: "utf8mb4_0900_as_ci"
-        }
-    },
-    console: true,
-    domain: "localhost",
-    name: "software",
-    user: "root",
-    password: "",
-    tables: dbTables
-};
-
 const format = new Format();
 const printf = function(...args) {
     let s = format.sprintf(...args);
@@ -101,6 +96,7 @@ const printf = function(...args) {
  * dbInit()
  *
  * @param {Object} config
+ * @returns {Object} (db)
  */
 function dbInit(config)
 {
@@ -134,8 +130,33 @@ function dbInit(config)
         config.password,
         config.sequelize
     );
-    return { config, sequelize, info, warn, error };
+    return { config, sequelize, models: {}, info, warn, error };
 };
+
+/**
+ * addRows(db, table, rows)
+ *
+ * @param {Object} db
+ * @param {string} table
+ * @param {*} rows
+ */
+async function addRows(db, table, rows)
+{
+    let totalRows = 0;
+    let rowsPerChunk = 100;
+    for (let i = 0; i < rows.length; i += rowsPerChunk) {
+        let j = i + rowsPerChunk;
+        if (j > rows.length) j = rows.length;
+        let chunk = rows.slice(i, j);
+        try {
+            await db.models[table].bulkCreate(chunk);
+            totalRows += chunk.length;
+        } catch(error) {
+            printf("unable to import rows %d-%d: %s\n", i, j-1, error.message);
+        }
+    }
+    return totalRows;
+}
 
 /**
  * main(argc, argv)
@@ -148,13 +169,15 @@ async function main(argc, argv)
     let db = dbInit(dbConfig);
     db.sequelize.authenticate()
     .then(async () => {
-        db.sequelize.sync({ force: true });
-        printf("Connected to database %s\n", dbConfig.name);
+        printf("Connected to database '%s'\n", dbConfig.name);
         //
         // Read the CSV file specified on the command line (eg, argv[1]).  Create an array of rows,
         // where each row is object containing properties that correspond to the header fields on the
         // first row of the CSV.
         //
+        let table = "files";
+        db.models[table] = db.sequelize.define(table, dbTables[table]);
+        await db.models[table].sync( { force: true });
         let csvLines = [];
         let csvFields = [], csvRows = [];
         let totalLines = 0, totalRows = 0;
@@ -240,15 +263,34 @@ async function main(argc, argv)
             if (field) {
                 csvRow[csvFields[nextField++]] = field;
             }
-            csvRows.push(csvRow);
+            //
+            // We do some data sanity checks and fixups next...
+            //
+            if (csvRow.name && csvRow.name.length <= 255) {
+                if (!csvRow.comment) {
+                    csvRow.comment = null;
+                }
+                if (csvRow.modified && db.config.utc) {
+                    csvRow.modified = new Date(csvRow.modified + db.config.timeZone);
+                }
+                if (csvRow.attr) {
+                    csvRow.attr &= 0xff;
+                }
+                if (db.config.utc) {
+                    let date = new Date();
+                    date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                    csvRow.createdAt = csvRow.updatedAt = date;
+                }
+                csvRows.push(csvRow);
+            }
             if (csvRows.length % 10000 == 0) {
-                totalRows += csvRows.length;
+                totalRows += await addRows(db, table, csvRows);
                 printf("Added %d rows...\n", totalRows);
                 csvRows = [];
             }
             await getNextLine();
         }
-        totalRows += csvRows.length;
+        totalRows += await addRows(db, table, csvRows);
         printf("Added %d rows...\n", totalRows);
         printf("All done (%d lines processed, %d rows added)\n", totalLines >> 1, totalRows);
         await file.close(file);
