@@ -6,6 +6,7 @@
  * Usage: node import.js [CSV file]
  */
 import fs from "fs/promises";
+import path from "path";
 import Format from "./format.js";
 import { Sequelize, DataTypes } from "sequelize";
 
@@ -23,67 +24,64 @@ const dbConfig = {
     },
     console: false,
     domain: "localhost",
-    name: "software",
     user: "root",
     password: ""
 };
 
-const dbTables = {
-  files: {
+const dbFields = {
     fileID: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      primaryKey: true,
-      autoIncrement: true
+        type: DataTypes.INTEGER.UNSIGNED,
+        primaryKey: true,
+        autoIncrement: true
     },
     itemID: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
     },
     setID: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
     },
     hash: {
-      type: DataTypes.STRING(32),
-      allowNull: true
+        type: DataTypes.STRING(32),
+        allowNull: true
     },
     modified: {
-      type: DataTypes.DATE,
-      allowNull: false
+        type: DataTypes.DATE,
+        allowNull: false
     },
     attr: {
-      type: DataTypes.TINYINT.UNSIGNED,
-      allowNull: false
+        type: DataTypes.TINYINT.UNSIGNED,
+        allowNull: false
     },
     size: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
     },
     compressed: {
-      type: DataTypes.INTEGER.UNSIGNED,
-      allowNull: false
+        type: DataTypes.INTEGER.UNSIGNED,
+        allowNull: false
     },
     method: {
-      type: DataTypes.STRING(16),
-      allowNull: false
+        type: DataTypes.STRING(16),
+        allowNull: false
     },
     name: {
-      type: DataTypes.STRING(128),
-      allowNull: false
+        type: DataTypes.STRING(128),
+        allowNull: false
     },
     path: {
-      type: DataTypes.STRING(255),
-      allowNull: false
+        type: DataTypes.STRING(255),
+        allowNull: false
     },
     comment: {
-      type: DataTypes.TEXT,
-      allowNull: true
+        type: DataTypes.TEXT,
+        allowNull: true
     },
     warnings: {
-      type: DataTypes.STRING(128),
-      allowNull: true
+        type: DataTypes.STRING(128),
+        allowNull: true
     }
-  }
 };
 
 const format = new Format();
@@ -92,13 +90,47 @@ const printf = function(...args) {
     process.stdout.write(s);
 };
 
+const options = {
+    "database": {
+        type: "string",
+        usage: "--database [name]",
+        alias: "-d",
+        description: "specify the database name",
+        required: true
+    },
+    "table": {
+        type: "string",
+        usage: "--table [name]",
+        alias: "-t",
+        description: "specify the table name",
+        required: true
+    },
+    "help": {
+        type: "boolean",
+        usage: "--help",
+        alias: "-h",
+        description: "display this help message",
+        handler: function() {
+            printf("\nUsage:\n    %s [options] [CSV file]\n", path.basename(process.argv[1]));
+            printf("\nOptions:\n");
+            for (let key in options) {
+                let option = options[key];
+                if (option.internal) continue;
+                let aliases = Array.isArray(option.alias)? option.alias.join(",") : option.alias;
+                printf("    %-18s %s%s\n", option.usage, option.description, aliases? " [" + aliases + "]" : "");
+            }
+        }
+    }
+};
+
 /**
- * dbInit()
+ * dbInit(config, database)
  *
  * @param {Object} config
+ * @param {string} database
  * @returns {Object} (db)
  */
-function dbInit(config)
+function dbInit(config, database)
 {
     //
     // Even if the caller isn't interested in logging, we still create log functions,
@@ -125,12 +157,12 @@ function dbInit(config)
     config.utc = true;
     config.timeZone = "Z";
     let sequelize = new Sequelize(
-        config.name,
+        database,
         config.user,
         config.password,
         config.sequelize
     );
-    return { config, sequelize, models: {}, info, warn, error };
+    return { config, name: database, sequelize, models: {}, info, warn, error };
 };
 
 /**
@@ -159,30 +191,52 @@ async function addRows(db, table, rows)
 }
 
 /**
- * main(argc, argv)
+ * main(argc, argv, errors)
  *
  * @param {number} argc
  * @param {Array} argv
+ * @param {Array} errors
  */
-async function main(argc, argv)
+async function main(argc, argv, errors)
 {
-    let db = dbInit(dbConfig);
+    let file;
+    printf("import.js %s\n%s\n\nArguments: %s\n", "1.0", "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>", argv[0]);
+    if (argv.help) {
+        options.help.handler();
+        return;
+    }
+    if (!argv[1]) {
+        errors.push("Missing CSV file");
+    } else {
+        try {
+            file = await fs.open(argv[1], 'r');
+        }
+        catch (error) {
+            errors.push("Unable to open CSV file: " + error.message);
+        };
+    }
+    if (errors.length) {
+        for (let error of errors) {
+            printf("%s\n", error);
+        }
+        return;
+    }
+    let db = dbInit(dbConfig, argv.database);
     db.sequelize.authenticate()
     .then(async () => {
-        printf("Connected to database '%s'\n", dbConfig.name);
+        printf("Connected to database '%s'\n", db.name);
         //
-        // Read the CSV file specified on the command line (eg, argv[1]).  Create an array of rows,
-        // where each row is object containing properties that correspond to the header fields on the
-        // first row of the CSV.
+        // Read the specified CSV file a chunk at a time, converting each chunk into an array
+        // of lines, then removing lines from the array as we convert them into rows for the table,
+        // and then once we have a batch of rows, we add them to the database and free the batch.
         //
-        let table = "files";
-        db.models[table] = db.sequelize.define(table, dbTables[table]);
+        let table = argv.table;
+        db.models[table] = db.sequelize.define(table, dbFields);
         await db.models[table].sync( { force: true });
         let csvLines = [];
         let csvFields = [], csvRows = [];
         let totalLines = 0, totalRows = 0;
         const chunkSize = 512 * 1024;
-        const file = await fs.open(argv[1], 'r');
         const stats = await file.stat();
         const fileSize = stats.size;
         let buffer = Buffer.alloc(chunkSize), bytesRead = 0, remainingLine = "";
@@ -292,7 +346,7 @@ async function main(argc, argv)
         }
         totalRows += await addRows(db, table, csvRows);
         printf("Added %d rows...\n", totalRows);
-        printf("All done (%d lines processed, %d rows added)\n", totalLines >> 1, totalRows);
+        printf("%d lines processed, %d rows added\n", totalLines >> 1, totalRows);
         await file.close(file);
     })
     .catch(error => {
@@ -300,4 +354,4 @@ async function main(argc, argv)
     });
 }
 
-await main(...Format.parseArgs(process.argv));
+await main(...Format.parseArgs(process.argv, options));

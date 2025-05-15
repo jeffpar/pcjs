@@ -303,6 +303,15 @@ export default class Format {
             }
             argv.push(arg);
         }
+        //
+        // Now determine if all required options have been provided.
+        //
+        for (j = 0; j < keys.length; j++) {
+            let option = options[keys[j]];
+            if (option.required && argv[keys[j]] === undefined) {
+                errors.push(`Missing required option: --${keys[j]}`);
+            }
+        }
         argc = argv.length;
         return [argc, argv, errors];
     }

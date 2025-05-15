@@ -239,13 +239,13 @@ const options = {
         description: "display this help message",
         handler: function() {
             printf("\nUsage:\n    %s [options] [items]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, and JSON containers and other items\n\n");
-            printf("Options:\n");
+            printf("\nProcesses ZIP, ARC, IMG, and JSON containers and other items\n");
+            printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];
                 if (option.internal) continue;
                 let aliases = Array.isArray(option.alias)? option.alias.join(",") : option.alias;
-                printf("  %-16s %s%s\n", option.usage, option.description, aliases? " [" + aliases + "]" : "");
+                printf("    %-18s %s%s\n", option.usage, option.description, aliases? " [" + aliases + "]" : "");
             }
         }
     }
@@ -277,7 +277,7 @@ function enquote(string) {
  */
 async function main(argc, argv, errors)
 {
-    printf("Dezip %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
+    printf("dz.js %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
     if (argv.help) {
         options.help.handler();
     }
@@ -387,12 +387,12 @@ async function main(argc, argv, errors)
             nErrors++;
         }
     }
-    let fileID = +argv.fileID || 1, itemID = +argv.itemID || 1, setID = argv.setID || 1;
     if (nErrors) {
         return;
     }
     let bannerHashes = {};
     let nTotalItems = 0, nTotalFiles = 0;
+    let fileID = +argv.fileID || 1, itemID = +argv.itemID || 1, setID = argv.setID || 1;
     //
     // Define a function to process an individual archive, which then allows us to recursively process nested
     // archives if --recurse is been specified.
