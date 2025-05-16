@@ -177,6 +177,10 @@ export default class Disk {
                     throw new Error(`Unable to open ${fileName}`);
                 }
                 const stats = await file.stat();
+                if (!stats.size) {
+                    await file.close();
+                    throw new Error(`File is empty`);
+                }
                 //
                 // If the caller supplied a modification date for the image, then we stick with that,
                 // because the caller may have extracted the image from another container that preserved
@@ -204,7 +208,7 @@ export default class Disk {
             success = diskInfo.buildDiskFromBuffer(db);
         }
         if (!success) {
-            throw new Error(`${fileName}: Unrecognized disk image`);
+            throw new Error(`Unrecognized disk image`);
         }
         //
         // Add some properties that open() callers may expect to find, consistent with the Dezip class.

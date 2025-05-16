@@ -354,6 +354,7 @@ async function main(argc, argv, errors)
         try {
             let items = await fs.readFile(argv.batch, "utf8");
             itemPaths = itemPaths.concat(items.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
+            printf("Found %d item(s) in specified batch file\n", itemPaths.length);
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
@@ -365,7 +366,7 @@ async function main(argc, argv, errors)
     if (argv.path) {
         let items = glob.sync(argv.path, { nodir: true });
         itemPaths = itemPaths.concat(items);
-        printf("Found %d matching item(s)\n", items.length);
+        printf("Found %d item(s) in specified path\n", items.length);
     }
     //
     // Finally, include any explicitly listed items.
@@ -384,7 +385,7 @@ async function main(argc, argv, errors)
             // The first three columns come from variables of the same name, and all start at 1,
             // but you can override them with the internal --fileID, --itemID, and --setID options.
             //
-            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,path,comment,warnings\n");
+            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,comment,warnings\n");
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
@@ -406,33 +407,100 @@ async function main(argc, argv, errors)
     // its primary purpose is still processing archives, we're leaving it as-is for now.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let archive, doCSV = false;
         let component = dezip;
+        let archive, doCSV = false;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
-        let archivePhoto = null;
+        let archivePhoto = null, widthPhoto = 0, heightPhoto = 0;
+        if (argv.verbose) {
+            printf("processing %s\n", archivePath);
+        }
         if (!archiveDB && archiveExt.match(/(\.img|\.json)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
-            archivePhoto = path.join(path.dirname(archivePath), path.basename(archivePath, archiveExt) + ".jpg");
-            await fs.access(archivePhoto).catch(() => {
-                archivePhoto = null;
-            });
-            if (!archivePhoto) {
-                archivePhoto = path.join(path.dirname(archivePath), path.basename(archivePath, archiveExt) + ".png");
-                await fs.access(archivePhoto).catch(() => {
-                    archivePhoto = null;
-                });
-            }
+            let getPhotoInfo = async function(basePath, baseExt) {
+                const imageExts = ['.jpg', '.png'];
+                for (const ext of imageExts) {
+                    const photoPath = path.join(path.dirname(basePath), path.basename(basePath, baseExt) + ext);
+                    try {
+                        //
+                        // Read file header to determine dimensions (courtesy of CoPilot).
+                        //
+                        let width = 0, height = 0;
+                        const file = await fs.open(photoPath, 'r');
+                        const stats = await file.stat();
+                        const buffer = Buffer.alloc(stats.size);
+                        await file.read(buffer, 0, buffer.length, 0);
+                        await file.close();
+                        if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
+                            //
+                            // JPEG file: Parse JPEG segments to find SOF marker (Start of Frame)
+                            //
+                            let offset = 2; // Skip the initial SOI marker (0xFF, 0xD8)
+                            while (offset < buffer.length - 8) {
+                                //
+                                // Check if we've found a marker
+                                //
+                                if (buffer[offset] === 0xFF) {
+                                    const markerCode = buffer[offset + 1];
+                                    //
+                                    // SOF markers are in range 0xC0-0xCF, excluding 0xC4 (DHT), 0xC8 (JPG), and 0xCC (DAC)
+                                    //
+                                    if (markerCode >= 0xC0 && markerCode <= 0xCF &&
+                                        markerCode !== 0xC4 && markerCode !== 0xC8 && markerCode !== 0xCC) {
+                                        //
+                                        // SOF marker found, extract dimensions
+                                        // Format: FF xx SIZE(2 bytes) PRECISION(1 byte) HEIGHT(2 bytes) WIDTH(2 bytes) ...
+                                        //
+                                        height = (buffer[offset + 5] << 8) | buffer[offset + 6];
+                                        width = (buffer[offset + 7] << 8) | buffer[offset + 8];
+                                        break;
+                                    }
+                                    //
+                                    // If not an SOF marker, skip this segment using its length
+                                    //
+                                    if (markerCode !== 0xFF && markerCode !== 0x00) {
+                                        //
+                                        // Segment length includes the 2 bytes for the length field itself
+                                        //
+                                        const segmentLength = (buffer[offset + 2] << 8) | buffer[offset + 3];
+                                        if (segmentLength < 2) break; // Invalid segment length
+                                        offset += segmentLength + 2;
+                                    } else {
+                                        //
+                                        // Skip padding bytes or continue to next byte
+                                        //
+                                        offset++;
+                                    }
+                                } else {
+                                    offset++;
+                                }
+                            }
+                        }
+                        else if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+                            //
+                            // PNG file
+                            //
+                            width = (buffer[16] << 24) | (buffer[17] << 16) | (buffer[18] << 8) | buffer[19];
+                            height = (buffer[20] << 24) | (buffer[21] << 16) | (buffer[22] << 8) | buffer[23];
+                        }
+                        return [photoPath, width, height];
+                    } catch (error) {
+                        // console.log(error);
+                    }
+                }
+                return [null, 0, 0];
+            };
+            [archivePhoto, widthPhoto, heightPhoto] = await getPhotoInfo(archivePath, archiveExt);
         }
         let getCSVLine = function(entry, method, db, archiveEntry) {
             let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let comment = entry.comment || "";
             //
-            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,path,comment,warnings
+            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,comment,warnings
             //
             let entryName = entry.name, entryPath = archivePath, entryPhoto = null;
             //
@@ -457,9 +525,9 @@ async function main(argc, argv, errors)
                 }
             }
             let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s,%s\n",
+                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s\n",
                 fileID++, archiveID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
-                method, enquote(entryName), enquote(entryPhoto), enquote(entryPath), enquote(comment), enquote(warnings)
+                method, enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryPath), enquote(comment), enquote(warnings)
             );
             return line;
         };
@@ -491,7 +559,7 @@ async function main(argc, argv, errors)
             }
             archive = await component.open(archivePath, archiveDB, options);
         } catch (error) {
-            printf("%s\n", error.message);
+            printf("error opening %s: %s\n", archivePath, error.message);
             return [0, 1];
         }
         let nArchiveFiles = 0, nArchiveWarnings = 0;
@@ -512,7 +580,7 @@ async function main(argc, argv, errors)
                 archive.warnings.push("Unrecognized archive");
             }
             else if ((isArchive || isDisk) && !entries.length) {
-                archive.warnings.push("No matches");
+                archive.warnings.push("No entries");
             }
             if (archive.warnings.length) {
                 printf("%s: %s\n", archivePath, archive.warnings.join("; "));
@@ -600,13 +668,16 @@ async function main(argc, argv, errors)
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
                 //
-                // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
-                // archives; for now, I'm trusting that entries inside one or more directories have those
-                // directories explicitly specified in entry.name (ie, that entry.name is always a full path).
+                // TODO: Consider an option for including volume labels in the output, for completeness.
                 //
                 if (entryAttr & 0x08) {
                     continue;           // skip volume labels
                 }
+                //
+                // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
+                // archives; for now, I'm trusting that entries inside one or more directories have those
+                // directories explicitly specified in entry.name (ie, entry.name is always a complete path).
+                //
                 if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
                     continue;           // skip directory entries
                 }
@@ -748,7 +819,7 @@ async function main(argc, argv, errors)
                 }
             }
         } catch (error) {
-            printf("%s: %s\n", archivePath, error.message);
+            printf("error processing %s: %s\n", archivePath, error.message);
         }
         await component.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
@@ -765,7 +836,9 @@ async function main(argc, argv, errors)
     printf("\n%d item%s examined, %d file%s processed\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles);
     if (csvFile) {
         await csvFile.close();
-        printf("Use --fileID=%d --itemID=%d --setID=%d for the next CSV\n", fileID, itemID, setID);
+        if (argv.fileID) {
+            printf("Use --fileID=%d --itemID=%d --setID=%d for the next CSV\n", fileID, itemID, setID);
+        }
     }
 }
 

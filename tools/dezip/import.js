@@ -74,6 +74,10 @@ const dbFields = {
         type: DataTypes.STRING(128),
         allowNull: true
     },
+    dimensions: {
+        type: DataTypes.STRING(16),
+        allowNull: true
+    },
     path: {
         type: DataTypes.STRING(255),
         allowNull: false
@@ -334,6 +338,9 @@ async function main(argc, argv, errors)
             if (csvRow.name && csvRow.name.length <= 255) {
                 if (!csvRow.photo) {
                     csvRow.photo = null;
+                }
+                if (!csvRow.dimensions) {
+                    csvRow.dimensions = null;
                 }
                 if (!csvRow.comment) {
                     csvRow.comment = null;
