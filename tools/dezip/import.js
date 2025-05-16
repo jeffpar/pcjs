@@ -70,6 +70,10 @@ const dbFields = {
         type: DataTypes.STRING(128),
         allowNull: false
     },
+    photo: {
+        type: DataTypes.STRING(128),
+        allowNull: true
+    },
     path: {
         type: DataTypes.STRING(255),
         allowNull: false
@@ -97,6 +101,12 @@ const options = {
         alias: "-d",
         description: "specify the database name",
         required: true
+    },
+    "drop": {
+        type: "boolean",
+        usage: "--drop",
+        description: "drop the table before importing",
+        default: false
     },
     "table": {
         type: "string",
@@ -231,8 +241,9 @@ async function main(argc, argv, errors)
         // and then once we have a batch of rows, we add them to the database and free the batch.
         //
         let table = argv.table;
+        let drop = argv.drop || false;
         db.models[table] = db.sequelize.define(table, dbFields);
-        await db.models[table].sync( { force: true });
+        await db.models[table].sync( { force: drop });
         let csvLines = [];
         let csvFields = [], csvRows = [];
         let totalLines = 0, totalRows = 0;
@@ -321,6 +332,9 @@ async function main(argc, argv, errors)
             // We do some data sanity checks and fixups next...
             //
             if (csvRow.name && csvRow.name.length <= 255) {
+                if (!csvRow.photo) {
+                    csvRow.photo = null;
+                }
                 if (!csvRow.comment) {
                     csvRow.comment = null;
                 }

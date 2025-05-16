@@ -266,6 +266,9 @@ function enquote(string) {
     // We use the "double-quote" character as the quote character, and escape any double-quotes
     // in the string with another double-quote.
     //
+    if (!string) {
+        return "";
+    }
     if (string.match(/[\r\n,"]/)) {
         string = '"' + string.replace(/"/g, '""') + '"';
     }
@@ -381,7 +384,7 @@ async function main(argc, argv, errors)
             // The first three columns come from variables of the same name, and all start at 1,
             // but you can override them with the internal --fileID, --itemID, and --setID options.
             //
-            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings\n");
+            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,path,comment,warnings\n");
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
@@ -404,26 +407,43 @@ async function main(argc, argv, errors)
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
         let archive, doCSV = false;
-        let component = dezip, isArchive = false;
+        let component = dezip;
+        let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
-
-        let getCSVLine = function(entry, method, db, archiveEntry = false) {
+        let archivePhoto = null;
+        if (!archiveDB && archiveExt.match(/(\.img|\.json)$/i)) {
+            //
+            // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
+            //
+            archivePhoto = path.join(path.dirname(archivePath), path.basename(archivePath, archiveExt) + ".jpg");
+            await fs.access(archivePhoto).catch(() => {
+                archivePhoto = null;
+            });
+            if (!archivePhoto) {
+                archivePhoto = path.join(path.dirname(archivePath), path.basename(archivePath, archiveExt) + ".png");
+                await fs.access(archivePhoto).catch(() => {
+                    archivePhoto = null;
+                });
+            }
+        }
+        let getCSVLine = function(entry, method, db, archiveEntry) {
             let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let comment = entry.comment || "";
             //
-            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,path,comment,warnings
+            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,path,comment,warnings
             //
-            let entryName = entry.name, entryPath = archivePath;
+            let entryName = entry.name, entryPath = archivePath, entryPhoto = null;
             //
             // If we're being passed an archive object rather than an entry object, then entryName
             // will also be the same as the entryPath; reduce them.
             //
-            if (archiveEntry) {
+            if (!archiveEntry) {
                 Dezip.assert(entryName == entryPath);
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
+                entryPhoto = archivePhoto? path.basename(archivePhoto) : null;
             }
             //
             // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
@@ -437,9 +457,9 @@ async function main(argc, argv, errors)
                 }
             }
             let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s\n",
+                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s,%s\n",
                 fileID++, archiveID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
-                method, enquote(entryName), enquote(entryPath), enquote(comment), enquote(warnings)
+                method, enquote(entryName), enquote(entryPhoto), enquote(entryPath), enquote(comment), enquote(warnings)
             );
             return line;
         };
@@ -466,6 +486,7 @@ async function main(argc, argv, errors)
                 isArchive = true;
             }
             if (archiveExt.match(/(\.img|\.json)$/i)) {
+                isDisk = true;
                 component = disk;
             }
             archive = await component.open(archivePath, archiveDB, options);
@@ -481,16 +502,16 @@ async function main(argc, argv, errors)
             // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
             // to flag the archive as having already scanned them, so that readDirectory() won't bother.
             //
-            if (isArchive) {
-                if (argv.nodir) {
-                    archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
-                }
+            if (isArchive && argv.nodir) {
+                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
+            }
+            if (isArchive || isDisk) {
                 entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             }
             if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
             }
-            else if (isArchive && !entries.length) {
+            else if ((isArchive || isDisk) && !entries.length) {
                 archive.warnings.push("No matches");
             }
             if (archive.warnings.length) {
@@ -572,7 +593,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (doCSV) {
-                await csvFile.write(getCSVLine(archive, "Store", archive.cache.db, true));
+                await csvFile.write(getCSVLine(archive, "Store", archive.cache.db, false));
             }
             let nEntries = 0;
             while (nEntries < entries.length) {
@@ -710,7 +731,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 if (argv.csv) {
-                    await csvFile.write(getCSVLine(entry, method, db));
+                    await csvFile.write(getCSVLine(entry, method, db, true));
                 }
                 if (recurse && db) {
                     let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);

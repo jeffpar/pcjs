@@ -206,6 +206,14 @@ export default class Disk {
         if (!success) {
             throw new Error(`${fileName}: Unrecognized disk image`);
         }
+        //
+        // Add some properties that open() callers may expect to find, consistent with the Dezip class.
+        //
+        // TODO: Consider renaming cbDiskData to size, and perhaps others, for more consistency.
+        //
+        diskInfo.cache = {db};
+        diskInfo.size = diskInfo.cbDiskData;
+        diskInfo.name = diskInfo.diskName;
         return diskInfo;
     }
 
