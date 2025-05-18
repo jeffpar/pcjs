@@ -246,7 +246,7 @@ async function main(argc, argv, errors)
         //
         let table = argv.table;
         let drop = argv.drop || false;
-        db.models[table] = db.sequelize.define(table, dbFields);
+        db.models[table] = db.sequelize.define(table, dbFields, {timestamps: false});
         await db.models[table].sync( { force: drop });
         let csvLines = [];
         let csvFields = [], csvRows = [];
@@ -351,11 +351,14 @@ async function main(argc, argv, errors)
                 if (csvRow.attr) {
                     csvRow.attr &= 0xff;
                 }
-                if (db.config.utc) {
-                    let date = new Date();
-                    date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-                    csvRow.createdAt = csvRow.updatedAt = date;
-                }
+                //
+                // This code is no longer needed, since we now set 'timestamps' to false...
+                //
+                // if (db.config.utc) {
+                //     let date = new Date();
+                //     date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                //     csvRow.createdAt = csvRow.updatedAt = date;
+                // }
                 csvRows.push(csvRow);
             }
             if (csvRows.length % 10000 == 0) {

@@ -1,5 +1,5 @@
 /**
- * @fileoverview ZIP/ARC Decompression Library
+ * @fileoverview ZIP (and ARC) Decompression Library
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

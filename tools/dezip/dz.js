@@ -1,5 +1,5 @@
 /**
- * @fileoverview Command-line interface to the Dezip class
+ * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, and JSON file containers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
