@@ -82,6 +82,10 @@ const dbFields = {
         type: DataTypes.STRING(255),
         allowNull: false
     },
+    disk: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
     comment: {
         type: DataTypes.TEXT,
         allowNull: true
@@ -341,6 +345,9 @@ async function main(argc, argv, errors)
                 }
                 if (!csvRow.dimensions) {
                     csvRow.dimensions = null;
+                }
+                if (csvRow.warnings && csvRow.warnings.length > 128) {
+                    csvRow.warnings = csvRow.warnings.substring(0, 128);
                 }
                 if (!csvRow.comment) {
                     csvRow.comment = null;

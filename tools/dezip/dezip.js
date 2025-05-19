@@ -1107,26 +1107,38 @@ export default class Dezip {
             //
             // Probe the beginning of the file for a FileHeader (or ArcHeader) signature.
             //
-            let [offset, length] = await this.readCache(archive, 0, 4);
-            if (length >= 4) {
+            // NOTE: In the case of ZIP files, we now probe beyond position 0, because if you
+            // have only part(s) of a multi-part ZIP archive, then this is the only way to extract
+            // ANY of the files from ANY of the part(s).
+            //
+            // TODO: Consider making this more aggressive probing controlled by an option that
+            // you pass to either the open() or readDirectory() functions.
+            //
+            let probe = 0;
+            do {
+                let [offset, length] = await this.readCache(archive, probe, Dezip.FileHeader.length);
+                if (length < Dezip.FileHeader.length) break;
                 let arcType = archive.type;
                 let signature = cache.db.readUInt32LE(offset);
-                let type = (signature >> 8) & 0xff;     // for ARC files, we also probe the type as a sanity check
+                let type = (signature >> 8) & 0xff;     // for ARC files, we also examine the type byte as a sanity check
                 if (signature == Dezip.FileHeader.fields.signature.FILESIG) {
                     arcType = Dezip.TYPE_ZIP;
-                    position = 0;
-                } else if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
-                    arcType = Dezip.TYPE_ZIP;
-                    position = 4;
-                } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
-                    arcType = Dezip.TYPE_ARC;
-                    position = 0;
+                    position = probe;
+                } else if (probe == 0) {                // searches for non-FILESIG signatures are limited to the start of file
+                    if (signature == Dezip.SpanHeader.fields.signature.SPANSIG) {
+                        arcType = Dezip.TYPE_ZIP;
+                        position = probe + 4;
+                    } else if ((signature & 0xff) == Dezip.ArcHeader.fields.signature.ARCSIG && type > 0 && type < Dezip.ArcHeader.fields.type.ARC_UNK) {
+                        arcType = Dezip.TYPE_ARC;
+                        position = probe;
+                    }
                 }
                 if (arcType != archive.type) {
                     archive.exceptions |= Dezip.EXCEPTIONS.WRONGTYPE;
                     archive.type = arcType;
                 }
-            }
+                probe++;
+            } while (position < 0 && archive.type == Dezip.TYPE_ZIP);
         }
         if (position >= 0) {
             record = await this.readFileHeader(archive, record, position);

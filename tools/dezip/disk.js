@@ -257,6 +257,7 @@ export default class Disk {
             for (let i = 0; i < diskInfo.fileTable.length; i++) {
                 let file = diskInfo.fileTable[i];
                 if (file.name == "." || file.name == ".." || !regex.test(file.name)) continue;
+                if (file.attr & DiskInfo.ATTR.INTERNAL) continue;
                 newEntry(file);
             }
         }
@@ -638,6 +639,7 @@ export class DiskInfo {
         LFN:            0x0f,       // combination used by Windows 95 (MS-DOS 7.0) and up, indicating a long filename (LFN) DIRENT
         SUBDIR:         0x10,       // PC DOS 2.0 and up
         ARCHIVE:        0x20,       // PC DOS 2.0 and up
+        INTERNAL:     0x0140,       // Apparently I generated some disk images with 0x40 instead of 0x100... that's annoying...
         METADATA:     0x0100        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
     };
 
@@ -1084,9 +1086,9 @@ export class DiskInfo {
                         this.warnings.push(`BPB media ID (${bMediaIDBPB}) does not match physical media ID (${bMediaID})`);
                     }
                     if (nCylinders != nCylindersBPB) {
-                        let message = (nCylinders - nCylindersBPB == 1)? MESSAGE.INFO : MESSAGE.WARNING;
+                        let info = (nCylinders - nCylindersBPB == 1);
                         this.warnings.push(`BPB cylinders (${nCylindersBPB}) do not match physical cylinders (${nCylinders})`);
-                        if (message == MESSAGE.INFO) {
+                        if (info) {
                             this.messages.push("last cylinder may have been reserved for diagnostics and/or head-parking");
                         }
                     }
@@ -1484,7 +1486,7 @@ export class DiskInfo {
                         if (!this.nSectors) {
                             this.nSectors = nSectors;
                         } else if (this.nSectors != nSectors) {
-                            this.messages.push(`${this.diskName}: ${iCylinder}:${iHead} has non-standard sector count: ${nSectors}`);
+                            this.messages.push(`${iCylinder}:${iHead} has non-standard sector count: ${nSectors}`);
                         }
                         for (let iSector = 0; iSector < aSectors.length; iSector++) {
                             let sector = aSectors[iSector], cbSector = 0;
@@ -1495,7 +1497,7 @@ export class DiskInfo {
                             if (!this.cbSector && cbSector) {
                                 this.cbSector = cbSector;
                             } else if (this.cbSector != cbSector) {
-                                this.messages.push(`${this.diskName}: ${iCylinder}:${iHead}:${sector? sector[DiskInfo.SECTOR.ID] : (iSector+1)} has non-standard sector size: ${cbSector}`);
+                                this.messages.push(`${iCylinder}:${iHead}:${sector? sector[DiskInfo.SECTOR.ID] : (iSector+1)} has non-standard sector size: ${cbSector}`);
                             }
                             this.cbDiskData += cbSector;
                         }
@@ -1577,7 +1579,7 @@ export class DiskInfo {
 
             let sectorBoot = this.getSector(0);
             if (!sectorBoot) {
-                this.warnings.push(`Unable to read ${this.diskName} boot sector`);
+                this.warnings.push(`Unable to read boot sector`);
                 return -1;
             }
 
@@ -1737,7 +1739,7 @@ export class DiskInfo {
             }
 
             if (!sectorBoot || iEntry == 4) {
-                if (!iVolume) this.warnings.push(`${cbDisk}-byte ${this.diskName} disk image contains unknown volume(s)`);
+                if (!iVolume) this.warnings.push(`${cbDisk}-byte disk image contains unknown volume(s)`);
                 return null;
             }
 
@@ -1782,7 +1784,7 @@ export class DiskInfo {
 
         if (vol.nFATBits) {
             if (vol.nFATBits == 12 && vol.clusTotal > DiskInfo.FAT12.MAX_CLUSTERS || vol.nFATBits == 16 && vol.clusTotal <= DiskInfo.FAT12.MAX_CLUSTERS) {
-                this.warnings.push(`${this.diskName} volume ${iVolume} ${vol.nFATBits}-bit FAT inconsistent with cluster total (${vol.clusTotal})`);
+                this.warnings.push(`volume ${iVolume} ${vol.nFATBits}-bit FAT inconsistent with cluster total (${vol.clusTotal})`);
             }
         }
 
@@ -1792,7 +1794,7 @@ export class DiskInfo {
         if (!idMedia) idMedia = this.getClusterEntry(vol, 0, 0);
 
         if (idMedia != vol.idMedia) {
-            this.warnings.push(`${this.diskName} volume ${iVolume} FAT ID (${idMedia}) does not match media ID (${vol.idMedia})`);
+            this.warnings.push(`volume ${iVolume} FAT ID (${idMedia}) does not match media ID (${vol.idMedia})`);
             return null;
         }
 
@@ -1802,7 +1804,7 @@ export class DiskInfo {
          */
         let nWasted = (vol.lbaTotal - vol.vbaData) % vol.clusSecs;
         if (nWasted) {
-            this.messages.push(`${this.diskName} volume ${iVolume} contains ${vol.lbaTotal}, wasting ${nWasted} sectors`);
+            this.messages.push(`volume ${iVolume} contains ${vol.lbaTotal}, wasting ${nWasted} sectors`);
         }
 
         /*
@@ -1850,7 +1852,7 @@ export class DiskInfo {
                 vol.clusBad++;
             }
         }
-        this.messages.push(`${this.diskName} volume ${iVolume}: ${vol.clusBad} cluster(s) bad, ${vol.clusFree} cluster(s) free, ${vol.clusFree * vol.clusSecs * vol.cbSector} bytes free`);
+        this.messages.push(`volume ${iVolume}: ${vol.clusBad} cluster(s) bad, ${vol.clusFree} cluster(s) free, ${vol.clusFree * vol.clusSecs * vol.cbSector} bytes free`);
         return vol;
     }
 

@@ -196,6 +196,12 @@ const options = {
         usage: "--path [spec]",
         description: "item path specification (eg, \"**/*.zip\")",
     },
+    "pcjs": {
+        type: "boolean",
+        usage: "--pcjs",
+        description: "use PCjs-specific rules when processing disk images",
+        internal: true
+    },
     "recurse": {
         type: "boolean",
         usage: "--recurse",
@@ -251,8 +257,6 @@ const options = {
     }
 };
 
-let itemPaths = [];
-
 /**
  * enquote(string)
  *
@@ -280,6 +284,9 @@ function enquote(string) {
  */
 async function main(argc, argv, errors)
 {
+    let fromDisk = {};
+    let itemPaths = [];
+
     printf("dz.js %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
     if (argv.help) {
         options.help.handler();
@@ -364,7 +371,27 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let items = glob.sync(argv.path, { nodir: true });
+        let items = glob.sync(argv.path, { nodir: true, nocase: true });
+        //
+        // If the path included both .img and .json extensions AND --pcjs was specified, then
+        // we check every .img file for a neighboring .json file; if found, then the .img file is
+        // removed from the list and the .json file is added to the fromDisk list.
+        //
+        if (argv.pcjs) {
+            for (let i = 0; i < items.length; i++) {
+                let itemPath = items[i];
+                if (path.basename(itemPath) == "diskettes.json" || path.basename(itemPath) == "diskettes-annotated.json") {
+                    items.splice(i--, 1);
+                }
+                else if (itemPath.endsWith(".img")) {
+                    let jsonPath = itemPath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
+                    if (items.includes(jsonPath)) {
+                        items.splice(i--, 1);
+                        fromDisk[jsonPath] = itemPath;
+                    }
+                }
+            }
+        }
         itemPaths = itemPaths.concat(items);
         printf("Found %d item(s) in specified path\n", items.length);
     }
@@ -385,7 +412,7 @@ async function main(argc, argv, errors)
             // The first three columns come from variables of the same name, and all start at 1,
             // but you can override them with the internal --fileID, --itemID, and --setID options.
             //
-            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,comment,warnings\n");
+            await csvFile.write("fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,disk,comment,warnings\n");
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
@@ -500,15 +527,19 @@ async function main(argc, argv, errors)
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let comment = entry.comment || "";
             //
-            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,comment,warnings
+            // CSV fields: fileID,itemID,setID,hash,modified,attr,size,compressed,method,name,photo,dimensions,path,disk,comment,warnings
             //
-            let entryName = entry.name, entryPath = archivePath, entryPhoto = null;
+            let entryName = entry.name, entryPath = archivePath, entryPhoto = null, entryDisk = null;
             //
             // If we're being passed an archive object rather than an entry object, then entryName
             // will also be the same as the entryPath; reduce them.
             //
             if (!archiveEntry) {
                 Dezip.assert(entryName == entryPath);
+                entryDisk = fromDisk[entryName];
+                if (entryDisk) {
+                    entryDisk = path.basename(entryDisk);
+                }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
                 entryPhoto = archivePhoto? path.basename(archivePhoto) : null;
@@ -517,7 +548,7 @@ async function main(argc, argv, errors)
             // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
             // if so, then strip all the path components prior to "**" from entryPath.
             //
-            if (argv.path) {
+            if (argv.path && !argv.pcjs) {
                 let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
                 if (doubleWild) {
                     let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
@@ -525,9 +556,9 @@ async function main(argc, argv, errors)
                 }
             }
             let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s\n",
+                "%d,%d,%d,%s,%T,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
                 fileID++, archiveID, setID, hash, entry.modified, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
-                method, enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryPath), enquote(comment), enquote(warnings)
+                method, enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryPath), enquote(entryDisk), enquote(comment), enquote(warnings)
             );
             return line;
         };
@@ -582,7 +613,7 @@ async function main(argc, argv, errors)
             else if ((isArchive || isDisk) && !entries.length) {
                 archive.warnings.push("No entries");
             }
-            if (archive.warnings.length) {
+            if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
                 printf("%s: %s\n", archivePath, archive.warnings.join("; "));
                 nArchiveWarnings++;
             }
@@ -796,7 +827,7 @@ async function main(argc, argv, errors)
                     }
                     if (comment.length) comment = "  " + comment;
                     printf("%-14s %9d   %-9s %9d   %3d%%   %#04x   %T   %0*x%s\n",
-                            name, entry.size, method, entry.compressedSize, ratio, entry.attr, entry.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, entry.crc, comment);
+                            name, entry.size, method, entry.compressedSize, ratio, entryAttr, entry.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, entry.crc, comment);
                 }
                 else if (argv.debug && !printed) {
                     printf("listing %s\n", entry.name);
@@ -837,7 +868,7 @@ async function main(argc, argv, errors)
     if (csvFile) {
         await csvFile.close();
         if (argv.fileID) {
-            printf("Use --fileID=%d --itemID=%d --setID=%d for the next CSV\n", fileID, itemID, setID);
+            printf("Use --fileID=%d --itemID=%d --setID=%d for the next CSV\n", fileID, itemID, ++setID);
         }
     }
 }
