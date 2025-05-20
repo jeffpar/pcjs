@@ -371,7 +371,7 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let items = glob.sync(argv.path, { nodir: true, nocase: true });
+        let items = glob.sync(argv.path, { follow: true, nodir: true, nocase: true });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
@@ -385,7 +385,7 @@ async function main(argc, argv, errors)
                 }
                 else if (itemPath.endsWith(".img")) {
                     let jsonPath = itemPath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
-                    if (items.includes(jsonPath)) {
+                    if (jsonPath != itemPath && items.includes(jsonPath)) {
                         items.splice(i--, 1);
                         fromDisk[jsonPath] = itemPath;
                     }

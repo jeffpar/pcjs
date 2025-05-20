@@ -109,7 +109,7 @@ export default class Disk {
     /**
      * Public class fields
      */
-    static DEBUG = true;
+    static DEBUG = false;
     static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
     static SITE = "pcjs.org";
