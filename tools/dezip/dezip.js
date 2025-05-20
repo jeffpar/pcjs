@@ -339,6 +339,7 @@ export default class Dezip {
     {
         let archive = {
             name,                       // name of the archive file
+            source: "",
             type: options.type || Dezip.TYPE_ZIP,
             modified: options.modified, // modification date of archive file
             password: options.password, // password for encrypted archives
@@ -357,6 +358,7 @@ export default class Dezip {
         if (db) {
             archive.size = db.length;
             this.initCache(archive, db, archive.size);
+            archive.source = "Buffer";
         }
         else if (this.interfaces.fetch && name.match(/^https?:/i)) {
             //
@@ -372,6 +374,7 @@ export default class Dezip {
             let arrayBuffer = await response.arrayBuffer();
             archive.size = arrayBuffer.byteLength;
             this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
+            archive.source = "Web";
         }
         else if (this.interfaces.open) {
             archive.file = await this.interfaces.open(name, "r");
@@ -409,6 +412,7 @@ export default class Dezip {
                 Dezip.assert(archive.size == db.length);
                 this.initCache(archive, new DataBuffer(db), archive.size);
             }
+            archive.source = "FS";
         }
         else {
             throw new Error("No appropriate Dezip interface(s) available");

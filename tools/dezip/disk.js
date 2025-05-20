@@ -162,7 +162,9 @@ export default class Disk {
     async open(fileName, db = null, options = {})
     {
         let diskInfo = new DiskInfo(fileName, options.modified);
-        if (!db) {
+        if (db) {
+            diskInfo.source = "Buffer";
+        } else {
             if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
                 let response = await this.interfaces.fetch(fileName);
                 if (!response.ok) {
@@ -170,6 +172,7 @@ export default class Disk {
                 }
                 let arrayBuffer = await response.arrayBuffer();
                 db = new DataBuffer(new Uint8Array(arrayBuffer));
+                diskInfo.source = "Web";
             }
             else if (this.interfaces.open) {
                 let file = await this.interfaces.open(fileName, "r");
@@ -195,6 +198,7 @@ export default class Disk {
                     db = db.slice(0, result.bytesRead);
                 }
                 await file.close();
+                diskInfo.source = "FS";
             }
             else {
                 throw new Error("No appropriate Disk interface(s) available");
@@ -216,8 +220,8 @@ export default class Disk {
         // TODO: Consider renaming cbDiskData to size, and perhaps others, for more consistency.
         //
         diskInfo.cache = {db};
-        diskInfo.size = diskInfo.cbDiskData;
         diskInfo.name = diskInfo.diskName;
+        diskInfo.size = diskInfo.cbDiskData;
         return diskInfo;
     }
 

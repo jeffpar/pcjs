@@ -371,7 +371,7 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let items = glob.sync(argv.path, { follow: true, nodir: true, nocase: true });
+        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
@@ -548,11 +548,15 @@ async function main(argc, argv, errors)
             // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
             // if so, then strip all the path components prior to "**" from entryPath.
             //
-            if (argv.path && !argv.pcjs) {
-                let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
-                if (doubleWild) {
-                    let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
-                    entryPath = entryPath.replace(regex, "");
+            if (argv.path) {
+                if (argv.pcjs) {
+                    entryPath = path.join("/pcjs", entryPath);
+                } else {
+                    let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
+                    if (doubleWild) {
+                        let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
+                        entryPath = entryPath.replace(regex, "");
+                    }
                 }
             }
             let line = format.sprintf(
@@ -692,7 +696,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (doCSV) {
-                await csvFile.write(getCSVLine(archive, "Store", archive.cache.db, false));
+                await csvFile.write(getCSVLine(archive, archive.source, archive.cache.db, false));
             }
             let nEntries = 0;
             while (nEntries < entries.length) {
@@ -833,7 +837,7 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 if (argv.csv) {
-                    await csvFile.write(getCSVLine(entry, method, db, true));
+                    await csvFile.write(getCSVLine(entry, archive.volTable? "None" : method, db, true));
                 }
                 if (recurse && db) {
                     let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
