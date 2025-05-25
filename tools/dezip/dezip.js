@@ -307,6 +307,12 @@ export default class Dezip {
         //
         // Set default interface options.
         //
+        // NOTE: You can override the default cacheSize (64K) to exercise the cache a bit more
+        // and help flush out any bugs, but note that some structures in an archive (eg, comments)
+        // can be as large as 64K-1, so lower values have the potential to trigger false warnings.
+        // The cache should be as large as the largest expected data structure in the archive
+        // (other than compressed data).
+        //
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
         this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
     }
@@ -366,7 +372,7 @@ export default class Dezip {
             this.initCache(archive, db, archive.size);
             archive.source = "Buffer";
         }
-        else if (this.interfaces.open && !name.match(/^https?:\/\//)) {
+        else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
             archive.file = await this.interfaces.open(name, "r");
             if (!archive.file) {
                 throw new Error(`Unable to open ${name}`);
@@ -421,7 +427,7 @@ export default class Dezip {
             archive.source = "Network";
         }
         else {
-            throw new Error("No open interface available");
+            throw new Error("No archive open interface available");
         }
         return archive;
     }

@@ -60,30 +60,22 @@ const printf = function(...args) {
     process.stdout.write(s);
 };
 
-const dezip = new Dezip(
-    {
-        fetch,
-        open: fs.open,
-        inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
-    },
-    {
-        //
-        // NOTE: You can override the default cacheSize (64K) to exercise the cache a bit more
-        // and help flush out any bugs, but note that some structures in an archive (eg, comments)
-        // can be as large as 64K-1, so lower values have the potential to trigger false warnings.
-        // The cache should be as large as the largest expected data structure in the archive
-        // (other than compressed data).
-        //
-        // cacheSize: 4096
-    }
-);
+//
+// Normally, a client will provide either a fetch interface or an open interface, not both; for example, browsers
+// don't have access to the file system, so they will provide only fetch.  But here, we DO provide both, because we
+// have access to both; our open() API defaults to open but will fall back to fetch if the filename starts with a
+// network prefix (eg, "http://").
+//
+const dezip = new Dezip({
+    fetch: fetch,               // async interface for opening remote files ('fetch' works fine for Node, but browsers need 'window.fetch.bind(window)')
+    open: fs.open,              // async interface for opening local files
+    inflate: zlib.inflateRaw,   // async interface for ZIP_DEFLATE data
+});
 
-const disk = new Disk(
-    {
-        fetch,
-        open: fs.open
-    }
-);
+const disk = new Disk({
+    fetch: fetch,
+    open: fs.open
+});
 
 const options = {
     "batch": {

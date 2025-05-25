@@ -149,63 +149,62 @@ export default class Disk {
     }
 
     /**
-     * open(fileName, db, options)
+     * open(name, db, options)
      *
      * Returns an DiskInfo object to be used with various read functions.
      *
      * @this {Disk}
-     * @param {string} fileName
+     * @param {string} name
      * @param {DataBuffer} [db]
      * @param {DiskOptions} [options]
      * @returns {DiskInfo}
      */
-    async open(fileName, db = null, options = {})
+    async open(name, db = null, options = {})
     {
-        let diskInfo = new DiskInfo(fileName, options.modified);
+        let diskInfo = new DiskInfo(name, options.modified);
         if (db) {
             diskInfo.source = "Buffer";
-        } else {
-            if (this.interfaces.fetch && fileName.match(/^https?:/i)) {
-                let response = await this.interfaces.fetch(fileName);
-                if (!response.ok) {
-                    throw new Error(`Unable to fetch ${fileName} (${response.statusText})`);
-                }
-                let arrayBuffer = await response.arrayBuffer();
-                db = new DataBuffer(new Uint8Array(arrayBuffer));
-                diskInfo.source = "Web";
+        }
+        else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
+            let file = await this.interfaces.open(name, "r");
+            if (!file) {
+                throw new Error(`Unable to open ${name}`);
             }
-            else if (this.interfaces.open) {
-                let file = await this.interfaces.open(fileName, "r");
-                if (!file) {
-                    throw new Error(`Unable to open ${fileName}`);
-                }
-                const stats = await file.stat();
-                if (!stats.size) {
-                    await file.close();
-                    throw new Error(`File is empty`);
-                }
-                //
-                // If the caller supplied a modification date for the image, then we stick with that,
-                // because the caller may have extracted the image from another container that preserved
-                // the original date.  Otherwise, we use the modification date provided by the file system.
-                //
-                if (!diskInfo.modified) {
-                    diskInfo.modified = stats.mtime;
-                }
-                db = new DataBuffer(stats.size);
-                let result = await file.read(db.buffer);
-                if (result.bytesRead < db.length) {
-                    db = db.slice(0, result.bytesRead);
-                }
+            const stats = await file.stat();
+            if (!stats.size) {
                 await file.close();
-                diskInfo.source = "FS";
+                throw new Error(`File is empty`);
             }
-            else {
-                throw new Error("No appropriate Disk interface(s) available");
+            //
+            // If the caller supplied a modification date for the image, then we stick with that,
+            // because the caller may have extracted the image from another container that preserved
+            // the original date.  Otherwise, we use the modification date provided by the file system.
+            //
+            if (!diskInfo.modified) {
+                diskInfo.modified = stats.mtime;
             }
+            db = new DataBuffer(stats.size);
+            let result = await file.read(db.buffer);
+            if (result.bytesRead < db.length) {
+                db = db.slice(0, result.bytesRead);
+            }
+            await file.close();
+            diskInfo.source = "FS";
+        }
+        else if (this.interfaces.fetch) {
+            let response = await this.interfaces.fetch(name);
+            if (!response.ok) {
+                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
+            }
+            let arrayBuffer = await response.arrayBuffer();
+            db = new DataBuffer(new Uint8Array(arrayBuffer));
+            diskInfo.source = "Network";
+        }
+        else {
+            throw new Error("No disk open interface available");
         }
         let success = false;
-        if (fileName.match(/\.json$/i)) {
+        if (name.match(/\.json$/i)) {
             let json = db.toString();
             success = diskInfo.buildDiskFromJSON(json);
         } else {
