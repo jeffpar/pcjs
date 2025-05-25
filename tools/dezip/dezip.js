@@ -1325,19 +1325,19 @@ export default class Dezip {
                     }
                     expandedDB = new DataBuffer(expandedData);
                 } else {
-                    /**
-                     * Legacy decompression is now inside a loop with its own try/catch handler, to automatically
-                     * retry decryption in case 1) a password was supplied but not actually required (the ARC file
-                     * doesn't tell us one way or the other) or 2) the ARC contains a mixture of encrypted and
-                     * unencrypted files.
-                     *
-                     * With ARC files, our only clue that no password (or a different password) is required is
-                     * when decompression fails, and failure can take almost any form, since we may be feeding the
-                     * decompressor garbage.
-                     *
-                     * In the rare case where we do make a 2nd attempt, re-running the "garble" code simply restores
-                     * the src data to its original state.
-                     */
+                    //
+                    // Legacy decompression is now inside a loop with its own try/catch handler, to automatically
+                    // retry decryption in case 1) a password was supplied but not actually required (the ARC file
+                    // doesn't tell us one way or the other) or 2) the ARC contains a mixture of encrypted and
+                    // unencrypted files.
+                    //
+                    // With ARC files, our only clue that no password (or a different password) is required is
+                    // when decompression fails, and failure can take almost any form, since we may be feeding the
+                    // decompressor garbage.
+                    //
+                    // In the rare case where we do make a 2nd attempt, re-running the "garble" code simply restores
+                    // the src data to its original state.
+                    //
                     let attempts = 2;                       // maximum of two attempts
                     if (archive.type != Dezip.TYPE_ARC || !archive.password) {
                         attempts = 1;                       // only one attempt for the normal case
@@ -1345,18 +1345,18 @@ export default class Dezip {
                     let db = await this.readArchive(archive, position, compressedSize);
                     while (attempts--) {
                         if (archive.type == Dezip.TYPE_ARC && archive.password) {
-                            /**
-                             * Decrypt the "garbled" ARC data.
-                             */
+                            //
+                            // Decrypt the "garbled" ARC data.
+                            //
                             let password = archive.password.toUpperCase();
                             for (let off = 0; off < db.length; off++) {
                                 db.writeUInt8(db.readUInt8(off) ^ password.charCodeAt(off % password.length), off);
                             }
-                            /**
-                             * ARC file headers don't have a "flags" field, but readFileHeader() adds one anyway,
-                             * for consistency between headers, and we now update the ENCRYPTED flag to track whether
-                             * this particular file was encrypted.
-                             */
+                            //
+                            // ARC file headers don't have a "flags" field, but readFileHeader() adds one anyway,
+                            // for consistency between headers, and we now update the ENCRYPTED flag to track whether
+                            // this particular file was encrypted.
+                            //
                             if (attempts) {
                                 fileHeader.flags |= Dezip.FileHeader.fields.flags.ENCRYPTED;
                             } else {

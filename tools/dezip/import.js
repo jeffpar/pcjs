@@ -359,7 +359,8 @@ async function main(argc, argv, errors)
                     csvRow.attr &= 0xff;
                 }
                 //
-                // This code is no longer needed, since we now set 'timestamps' to false...
+                // This code is no longer needed, since we now set 'timestamps' to false,
+                // preventing sequelize from adding the 'createdAt' and 'updatedAt' fields.
                 //
                 // if (db.config.utc) {
                 //     let date = new Date();
