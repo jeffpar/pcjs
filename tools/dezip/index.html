@@ -17,7 +17,6 @@
   <h1>Fetch Byte Range Test</h1>
   <button id="fetchButton">Fetch Bytes 128-255</button>
   <textarea id="output" readonly></textarea>
-
   <script>
     document.getElementById('fetchButton').addEventListener('click', async () => {
       const url = "http://localhost:4000/machines/pcx86/ibm/video/mda/IBM-MDA.rom";
@@ -45,6 +44,44 @@
         output.value = hexString;
       } catch (error) {
         output.value = `Error: ${error.message}`;
+      }
+    });
+  </script>
+  <h1>Dezip Test</h1>
+  <button id="dzipButton">Dezip</button>
+  <textarea id="zipOutput" readonly></textarea>
+  <script type="module">
+    import Format from "./format.js";
+    import Dezip from "./dezip.js";
+    import Disk from "./disk.js";
+    import * as pako from "./pako.esm.mjs";
+    document.getElementById('dzipButton').addEventListener('click', async () => {
+      const dezip = new Dezip({
+          fetch: window.fetch.bind(window),
+          inflateSync: pako.inflateRaw
+      });
+      const format = new Format();
+      const printf = function(...args) {
+          let s = format.sprintf(...args);
+          zipOutput.value += s;
+      };
+      const urlZIP = "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
+      try {
+          printf("Fetching ZIP file...\n");
+          let archive = await dezip.open(urlZIP);
+          if (!archive) {
+              printf("Failed to open ZIP archive\n");
+              return;
+          }
+          let entries = await dezip.readDirectory(archive);
+          printf("Found %d entries in ZIP archive\n", entries.length);
+          for (let entry of entries) {
+              let db = await dezip.readFile(archive, entry.index);
+              printf("entry: %s, compressed size: %d bytes, original size: %d bytes\n", entry.name, entry.compressedSize, db.length);
+          }
+          dezip.close(archive);
+      } catch (error) {
+          printf("Error: %s\n", error.message);
       }
     });
   </script>

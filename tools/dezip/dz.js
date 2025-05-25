@@ -65,7 +65,6 @@ const dezip = new Dezip(
         fetch,
         open: fs.open,
         inflate: zlib.inflateRaw,                   // interface for ZIP_DEFLATE (async) data
-     // createInflate: zlib.createInflateRaw        // interface for ZIP_DEFLATE (chunked async) data
     },
     {
         //
@@ -171,8 +170,8 @@ const options = {
         alias: "-n",
         description: "skip archive directory (scan for files)"
         //
-        // Yes, scanning for files instead of relying on directory entries goes against protocol, but
-        // sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures...
+        // Yes, scanning for file entries instead of relying on directory entries goes against ZIP protocol,
+        // but sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures...
         //
     },
     "overwrite": {
@@ -853,6 +852,9 @@ async function main(argc, argv, errors)
                     nArchiveWarnings += nWarnings;
                 }
             }
+            //
+            // TODO: If argv.list, consider displaying archive totals as well (including the total size of the archive)
+            //
         } catch (error) {
             printf("error processing %s: %s\n", archivePath, error.message);
         }

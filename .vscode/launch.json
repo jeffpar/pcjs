@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--path pcsigdisks/pcx86/**/*.{img,json} --recurse --pcjs --csv test.csv"
+        "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP -lt"
       ],
       "cwd": "${workspaceFolder}/disks",
       "stopOnEntry": false,
@@ -2889,6 +2889,18 @@
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dzip.html",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/dezip/index.html",
+      "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
         "group": "utilities",

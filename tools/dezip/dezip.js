@@ -301,8 +301,9 @@ export default class Dezip {
         // These non-legacy interfaces, however, have no defaults, so if no zlib (or zlib-compatible)
         // interfaces are provided, then deflated streams can't be inflated.
         //
-        this.inflate = this.interfaces.inflate;
         this.createInflate = this.interfaces.createInflate;
+        this.inflate = this.interfaces.inflate;
+        this.inflateSync = this.interfaces.inflateSync;
         //
         // Set default interface options.
         //
@@ -327,7 +328,12 @@ export default class Dezip {
     /**
      * open(name, db, options)
      *
-     * If successful, this method returns an Archive object used with various read functions.
+     * If successful, this method returns an Archive object used with our other high-level methods;
+     * eg, readDirectory(), readFile(), and close().
+     *
+     * There are other low-level methods that a caller might be interested in, such as readArchive(),
+     * readDirRecord(), readFileRecord(), etc, but those all imply an understanding of the archive
+     * structure and are not intended for general use.
      *
      * @this {Dezip}
      * @param {string} name
@@ -360,23 +366,7 @@ export default class Dezip {
             this.initCache(archive, db, archive.size);
             archive.source = "Buffer";
         }
-        else if (this.interfaces.fetch && name.match(/^https?:/i)) {
-            //
-            // For remote files, prefill is the default.
-            //
-            // TODO: Consider honoring prefill === false, provided we can obtain
-            // Content-Length from the server and it supports byte range requests.
-            //
-            let response = await this.interfaces.fetch(name);
-            if (!response.ok) {
-                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
-            }
-            let arrayBuffer = await response.arrayBuffer();
-            archive.size = arrayBuffer.byteLength;
-            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
-            archive.source = "Web";
-        }
-        else if (this.interfaces.open) {
+        else if (this.interfaces.open && !name.match(/^https?:\/\//)) {
             archive.file = await this.interfaces.open(name, "r");
             if (!archive.file) {
                 throw new Error(`Unable to open ${name}`);
@@ -414,8 +404,24 @@ export default class Dezip {
             }
             archive.source = "FS";
         }
+        else if (this.interfaces.fetch) {
+            //
+            // For remote files, prefill is the default.
+            //
+            // TODO: Consider honoring prefill === false, provided we can obtain
+            // Content-Length from the server and it supports byte range requests.
+            //
+            let response = await this.interfaces.fetch(name);
+            if (!response.ok) {
+                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
+            }
+            let arrayBuffer = await response.arrayBuffer();
+            archive.size = arrayBuffer.byteLength;
+            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
+            archive.source = "Network";
+        }
         else {
-            throw new Error("No appropriate Dezip interface(s) available");
+            throw new Error("No open interface available");
         }
         return archive;
     }
@@ -1283,25 +1289,33 @@ export default class Dezip {
             let compressedSize = fileHeader.compressedSize;
             let expandedSize = fileHeader.size;
             if ((record.fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) && !archive.password) {
-                compressedSize = 0;
-                record.warnings.push(`Encrypted file`);
+                throw new Error(`Encrypted file, but no password supplied`);
             }
-            if (compressedSize) {
+            if (!compressedSize) {
+                expandedDB = new DataBuffer(0);
+            } else {
                 let expandedData;
                 if (fileHeader.method == Dezip.METHODS.ZIP_DEFLATE || fileHeader.method == Dezip.METHODS.ZIP_DEFLATE64) {
                     if (this.createInflate) {
                         expandedData = await this.inflateChunks(
                             record, this.readChunks(archive, position, compressedSize)
                         );
-                    } else if (this.inflate) {
+                    } else if (this.inflate || this.inflateSync) {
                         let db = await this.readArchive(archive, position, compressedSize);
                         if (fileHeader.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
                             db = this.decryptZipData(db, fileHeader, archive.password);
                         }
-                        expandedData = await this.inflateAsync(db.buffer);
+                        if (this.inflate) {
+                            expandedData = await this.inflateAsync(db.buffer);
+                        } else {
+                            expandedData = this.inflateSync(db.buffer);
+                        }
+                        if (!expandedData) {
+                            throw new Error(`Decompression failure`);
+                        }
                     }
                     else {
-                        throw new Error(`No inflate interface available`);
+                        throw new Error(`No decompression interface available`);
                     }
                     expandedDB = new DataBuffer(expandedData);
                 } else {
@@ -1396,13 +1410,13 @@ export default class Dezip {
                                 expandedDB = this.blastSync(srcDB);
                                 break;
                             default:
-                                throw new Error(`Unsupported compression method ${fileHeader.method}`);
+                                throw new Error(`Unsupported legacy compression method ${fileHeader.method}`);
                             }
                             if (!expandedDB) {
                                 //
                                 // Since the decompression handler didn't throw an error of its own, throw a generic error.
                                 //
-                                throw new Error(`Decompression failure`);
+                                throw new Error(`Legacy decompression failure`);
                             }
                             break;
                         } catch (error) {
