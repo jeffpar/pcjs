@@ -11,7 +11,7 @@
  *
  * This command:
  *
- *      dz.js -lt /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/ibm0040-0049/ibm0047/AVC-8.ZIP
+ *      dz.js -lt https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP
  *
  * lists 9 files, two of which have warnings:
  *

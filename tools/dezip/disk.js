@@ -571,10 +571,10 @@ export class DiskInfo {
      * Media ID (descriptor) bytes for DOS-compatible FAT-formatted disks (stored in the first byte of the FAT)
      */
     static FAT = {
-        MEDIA_160KB:    0xFE,       // 5.25-inch, 1-sided,  8-sector, 40-track
-        MEDIA_180KB:    0xFC,       // 5.25-inch, 1-sided,  9-sector, 40-track
         MEDIA_320KB:    0xFF,       // 5.25-inch, 2-sided,  8-sector, 40-track
+        MEDIA_160KB:    0xFE,       // 5.25-inch, 1-sided,  8-sector, 40-track
         MEDIA_360KB:    0xFD,       // 5.25-inch, 2-sided,  9-sector, 40-track
+        MEDIA_180KB:    0xFC,       // 5.25-inch, 1-sided,  9-sector, 40-track
         MEDIA_720KB:    0xF9,       //  3.5-inch, 2-sided,  9-sector, 80-track
         MEDIA_1200KB:   0xF9,       //  3.5-inch, 2-sided, 15-sector, 80-track
         MEDIA_FIXED:    0xF8,       // fixed disk (aka hard drive)
