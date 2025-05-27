@@ -107,8 +107,7 @@ const options = {
         type: "string",
         usage: "--database [name]",
         alias: "-d",
-        description: "specify the database name",
-        required: true
+        description: "specify the database name"
     },
     "drop": {
         type: "boolean",
@@ -120,8 +119,7 @@ const options = {
         type: "string",
         usage: "--table [name]",
         alias: "-t",
-        description: "specify the table name",
-        required: true
+        description: "specify the table name"
     },
     "help": {
         type: "boolean",
@@ -239,151 +237,176 @@ async function main(argc, argv, errors)
         }
         return;
     }
-    let db = dbInit(dbConfig, argv.database);
-    db.sequelize.authenticate()
-    .then(async () => {
-        printf("Connected to database '%s'\n", db.name);
-        //
-        // Read the specified CSV file a chunk at a time, converting each chunk into an array
-        // of lines, then removing lines from the array as we convert them into rows for the table,
-        // and then once we have a batch of rows, we add them to the database and free the batch.
-        //
-        let table = argv.table;
-        let drop = argv.drop || false;
-        db.models[table] = db.sequelize.define(table, dbFields, {timestamps: false});
-        await db.models[table].sync( { force: drop });
-        let csvLines = [];
-        let csvFields = [], csvRows = [];
-        let totalLines = 0, totalRows = 0;
-        const chunkSize = 512 * 1024;
-        const stats = await file.stat();
-        const fileSize = stats.size;
-        let buffer = Buffer.alloc(chunkSize), bytesRead = 0, remainingLine = "";
-        let getMoreLines = async function() {
-            let lines = [];
-            if (bytesRead < fileSize) {
-                const result = await file.read(buffer, 0, chunkSize, bytesRead);
-                if (result.bytesRead) {
-                    bytesRead += result.bytesRead;
-                    const chunk = remainingLine + buffer.subarray(0, result.bytesRead).toString("utf8");
-                    remainingLine = "";
-                    lines = chunk.split(/(\r?\n)/);
-                    if (bytesRead < fileSize && !lines[lines.length - 1].match(/\r?\n$/)) {
-                        remainingLine = lines.pop();
-                    }
+
+    let csvLines = [];
+    let csvFields = [];
+    const chunkSize = 512 * 1024;
+    const stats = await file.stat();
+    const fileSize = stats.size;
+    let buffer = Buffer.alloc(chunkSize), bytesRead = 0, remainingLine = "";
+
+    let getMoreLines = async function() {
+        let lines = [];
+        if (bytesRead < fileSize) {
+            const result = await file.read(buffer, 0, chunkSize, bytesRead);
+            if (result.bytesRead) {
+                bytesRead += result.bytesRead;
+                const chunk = remainingLine + buffer.subarray(0, result.bytesRead).toString("utf8");
+                remainingLine = "";
+                lines = chunk.split(/(\r?\n)/);
+                if (bytesRead < fileSize && !lines[lines.length - 1].match(/\r?\n$/)) {
+                    remainingLine = lines.pop();
                 }
             }
-            return lines;
-        };
-        let getNextLine = async function() {
-            if (!csvLines.length) {
-                csvLines = await getMoreLines();
+        }
+        return lines;
+    };
+
+    let getNextLine = async function() {
+        if (!csvLines.length) {
+            csvLines = await getMoreLines();
+        }
+        if (!csvLines.length) {
+            return null;
+        }
+        return csvLines.shift();
+    };
+
+    let getNextRow = async function(fields) {
+        let line = await getNextLine();
+        if (line == "\n") {
+            line = await getNextLine();
+        }
+        if (line == null) {
+            return null;
+        }
+        if (!csvFields.length) {
+            csvFields = line.split(",");
+            line = await getNextLine();
+            if (line == "\n") {
+                line = await getNextLine();
             }
-            if (!csvLines.length) {
+            if (line == null) {
                 return null;
             }
-            totalLines++;
-            return csvLines.shift();
-        };
-        while (true) {
-            let line = await getNextLine();
-            if (line == null) {
-                break;
-            }
-            if (!csvFields.length) {
-                csvFields = line.split(",");
-                await getNextLine();
+        }
+        let csvRow = {};
+        let i = 0, field = "";
+        let nextField = 0, inQuotes = false, inField = false;
+        while (i < line.length || inField) {
+            if (i >= line.length) {
+                if (!inQuotes) break;
+                line = await getNextLine();
+                if (line == null) break;
+                i = 0;
                 continue;
             }
-            let csvRow = {};
-            let i = 0, field = "";
-            let nextField = 0, inQuotes = false, inField = false;
-            while (i < line.length || inField) {
-                if (i >= line.length) {
-                    if (!inQuotes) break;
-                    line = await getNextLine();
-                    if (line == null) break;
-                    i = 0;
-                    continue;
-                }
-                let char = line[i++];
-                if (!inQuotes) {
-                    if (char == ',') {
-                        csvRow[csvFields[nextField++]] = field;
-                        field = "";
-                        inField = false;
-                    } else if (char == '"' && !inField) {
-                        inQuotes = inField = true;
-                    } else {
-                        field += char;
-                        inField = true;
-                    }
-                }
-                else if (char == '"') {
-                    let nextChar = line[i];
-                    if (nextChar == '"') {
-                        field += '"';
-                        i++;
-                    } else if (nextChar == ',' || nextChar == undefined) {
-                        inField = inQuotes = false;
-                    } else {
-                        printf("error in line: '%s'\n", line);
-                    }
+            let char = line[i++];
+            if (!inQuotes) {
+                if (char == ',') {
+                    csvRow[csvFields[nextField++]] = field;
+                    field = "";
+                    inField = false;
+                } else if (char == '"' && !inField) {
+                    inQuotes = inField = true;
                 } else {
                     field += char;
+                    inField = true;
                 }
             }
-            if (field) {
-                csvRow[csvFields[nextField++]] = field;
+            else if (char == '"') {
+                let nextChar = line[i];
+                if (nextChar == '"') {
+                    field += '"';
+                    i++;
+                } else if (nextChar == ',' || nextChar == undefined) {
+                    inField = inQuotes = false;
+                } else {
+                    printf("error in line: '%s'\n", line);
+                }
+            } else {
+                field += char;
             }
-            //
-            // We do some data sanity checks and fixups next...
-            //
-            if (csvRow.name && csvRow.name.length <= 255) {
-                if (!csvRow.photo) {
-                    csvRow.photo = null;
-                }
-                if (!csvRow.dimensions) {
-                    csvRow.dimensions = null;
-                }
-                if (csvRow.warnings && csvRow.warnings.length > 128) {
-                    csvRow.warnings = csvRow.warnings.substring(0, 128);
-                }
-                if (!csvRow.comment) {
-                    csvRow.comment = null;
-                }
-                if (csvRow.modified && db.config.utc) {
-                    csvRow.modified = new Date(csvRow.modified + db.config.timeZone);
-                }
-                if (csvRow.attr) {
-                    csvRow.attr &= 0xff;
-                }
-                //
-                // This code is no longer needed, since we now set 'timestamps' to false,
-                // preventing sequelize from adding the 'createdAt' and 'updatedAt' fields.
-                //
-                // if (db.config.utc) {
-                //     let date = new Date();
-                //     date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-                //     csvRow.createdAt = csvRow.updatedAt = date;
-                // }
-                csvRows.push(csvRow);
-            }
-            if (csvRows.length % 10000 == 0) {
-                totalRows += await addRows(db, table, csvRows);
-                printf("Added %d rows...\n", totalRows);
-                csvRows = [];
-            }
-            await getNextLine();
         }
-        totalRows += await addRows(db, table, csvRows);
-        printf("Added %d rows...\n", totalRows);
-        printf("%d lines processed, %d rows added\n", totalLines >> 1, totalRows);
-        await file.close(file);
-    })
-    .catch(error => {
-        printf(error.message);
-    });
+        if (field) {
+            csvRow[csvFields[nextField++]] = field;
+        }
+        return csvRow;
+    };
+
+    if (argv.download) {
+
+    }
+
+    if (argv.database && argv.table) {
+        let db = dbInit(dbConfig, argv.database);
+        db.sequelize.authenticate()
+        .then(async () => {
+            printf("Connected to database '%s'\n", db.name);
+            //
+            // Read the specified CSV file a chunk at a time, converting each chunk into an array
+            // of lines, then removing lines from the array as we convert them into rows for the table,
+            // and then once we have a batch of rows, we add them to the database and free the batch.
+            //
+            let table = argv.table;
+            let drop = argv.drop || false;
+            db.models[table] = db.sequelize.define(table, dbFields, {timestamps: false});
+            await db.models[table].sync( { force: drop });
+            let csvRows = [];
+            let totalRows = 0;
+
+            while (true) {
+                let csvRow = await getNextRow();
+                if (csvRow == null) {
+                    break;
+                }
+                //
+                // We do some data sanity checks and fixups next...
+                //
+                if (csvRow.name && csvRow.name.length <= 255) {
+                    if (!csvRow.photo) {
+                        csvRow.photo = null;
+                    }
+                    if (!csvRow.dimensions) {
+                        csvRow.dimensions = null;
+                    }
+                    if (csvRow.warnings && csvRow.warnings.length > 128) {
+                        csvRow.warnings = csvRow.warnings.substring(0, 128);
+                    }
+                    if (!csvRow.comment) {
+                        csvRow.comment = null;
+                    }
+                    if (csvRow.modified && db.config.utc) {
+                        csvRow.modified = new Date(csvRow.modified + db.config.timeZone);
+                    }
+                    if (csvRow.attr) {
+                        csvRow.attr &= 0xff;
+                    }
+                    //
+                    // This code is no longer needed, since we now set 'timestamps' to false,
+                    // preventing sequelize from adding the 'createdAt' and 'updatedAt' fields.
+                    //
+                    // if (db.config.utc) {
+                    //     let date = new Date();
+                    //     date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+                    //     csvRow.createdAt = csvRow.updatedAt = date;
+                    // }
+                    csvRows.push(csvRow);
+                }
+                if (csvRows.length % 10000 == 0) {
+                    totalRows += await addRows(db, table, csvRows);
+                    printf("Added %d rows...\n", totalRows);
+                    csvRows = [];
+                }
+            }
+            totalRows += await addRows(db, table, csvRows);
+            printf("Added %d rows...\n", totalRows);
+            await file.close(file);
+        })
+        .catch(error => {
+            printf(error.message);
+        });
+    }
 }
 
 await main(...Format.parseArgs(process.argv, options));

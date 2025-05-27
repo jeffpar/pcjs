@@ -2913,7 +2913,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/import.js",
       "args": [
-        "ibm.csv"
+        "archive/ibm.csv --database=software --table=files --drop"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

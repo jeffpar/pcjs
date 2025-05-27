@@ -42,6 +42,11 @@
  *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
  *
  * And there are no warnings.  So judicious use of -n can reveal hidden treasures (well, hidden *something*).
+ *
+ * Interestingly, when you search for "AVC-8.ZIP" on discmaster.textfiles.com, you'll notice that they
+ * display the archive's comment (aka "banner"), which comes from the directory, but they don't display
+ * the files in the directory, so perhaps they have some logic that "falls back" to the file listing
+ * whenever the directory listing appears corrupt.
  */
 
 import fs from "fs/promises";
@@ -425,7 +430,7 @@ async function main(argc, argv, errors)
     // its primary purpose is still processing archives, we're leaving it as-is for now.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let component = dezip;
+        let container = dezip;
         let archive, doCSV = false;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
@@ -581,9 +586,9 @@ async function main(argc, argv, errors)
             }
             if (archiveExt.match(/(\.img|\.json)$/i)) {
                 isDisk = true;
-                component = disk;
+                container = disk;
             }
-            archive = await component.open(archivePath, archiveDB, options);
+            archive = await container.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("error opening %s: %s\n", archivePath, error.message);
             return [0, 1];
@@ -600,7 +605,7 @@ async function main(argc, argv, errors)
                 archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
             }
             if (isArchive || isDisk) {
-                entries = await component.readDirectory(archive, argv.files, filterExceptions, filterMethod);
+                entries = await container.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             }
             if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -701,8 +706,9 @@ async function main(argc, argv, errors)
                 }
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
-                // archives; for now, I'm trusting that entries inside one or more directories have those
-                // directories explicitly specified in entry.name (ie, entry.name is always a complete path).
+                // archives and whether, for example, they should always end with a slash; for now, I'm trusting
+                // that entries inside one or more directories have those directories explicitly specified in
+                // entry.name (ie, entry.name is always a complete relative path).
                 //
                 if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
                     continue;           // skip directory entries
@@ -710,8 +716,8 @@ async function main(argc, argv, errors)
                 //
                 // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
                 // recursive archive processing, we need to be able to reprint it on return from a recursive call;
-                // otherwise, we may give the mistaken impression that subsequent entries are part of the previous
-                // archive.
+                // otherwise, the output would give the wrong impression that subsequent entries are part of the
+                // previous archive.
                 //
                 // The obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
@@ -803,7 +809,7 @@ async function main(argc, argv, errors)
                         printf("reading %s\n", entry.name);
                         printed = true;
                     }
-                    db = await component.readFile(archive, entry.index, writeData);
+                    db = await container.readFile(archive, entry.index, writeData);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
@@ -845,12 +851,12 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // TODO: If argv.list, consider displaying archive totals as well (including the total size of the archive)
+            // TODO: If argv.list, consider displaying entry totals as well (including the total size of the archive)
             //
         } catch (error) {
             printf("error processing %s: %s\n", archivePath, error.message);
         }
-        await component.close(archive);
+        await container.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
     };
     //
