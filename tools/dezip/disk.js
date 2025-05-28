@@ -112,19 +112,15 @@ export default class Disk {
     static DEBUG = false;
     static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
-    static SITE = "pcjs.org";
 
     /**
      * constructor(interfaces)
-     *
-     * If no interfaces are provided, the default is to use the fetch() interface, since that's
-     * now available in both Node.js and the browser.
      *
      * @this {Disk}
      * @param {Interfaces} [interfaces]
      * @param {InterfaceOptions} [interfaceOptions]
      */
-    constructor(interfaces = {fetch}, interfaceOptions = {})
+    constructor(interfaces = {}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
         //
@@ -137,7 +133,6 @@ export default class Disk {
     /**
      * assert(condition, message)
      *
-     * @this {Disk}
      * @param {boolean} condition
      * @param {string} [message]
      */

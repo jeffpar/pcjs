@@ -693,6 +693,7 @@
     "DECBX",
     "DECBYTE",
     "DECCX",
+    "DECDATETIME",
     "DECDI",
     "decdisks",
     "DECDX",

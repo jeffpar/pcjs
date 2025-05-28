@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP -lt"
+        "-l \"/Volumes/MacSSD/Archives/sets/various_cd-rom_iso_collection_2016_07/100 Great Games.iso\""
       ],
       "cwd": "${workspaceFolder}/disks",
       "stopOnEntry": false,
@@ -2913,7 +2913,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/import.js",
       "args": [
-        "archive/ibm.csv --database=software --table=files --drop"
+        "archive/shareware.csv --download"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

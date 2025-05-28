@@ -1,5 +1,5 @@
 /**
- * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, and JSON file containers
+ * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO containers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -57,6 +57,7 @@ import crypto from "crypto";
 import Format from "./format.js";
 import Dezip from "./dezip.js";
 import Disk from "./disk.js";
+import ISO from "./iso.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
 const format = new Format();
@@ -80,6 +81,12 @@ const dezip = new Dezip({
 const disk = new Disk({
     fetch: fetch,
     open: fs.open
+});
+
+const iso = new ISO({
+    fetch: fetch,
+    open: fs.open,
+    printf: printf
 });
 
 const options = {
@@ -241,7 +248,7 @@ const options = {
         description: "display this help message",
         handler: function() {
             printf("\nUsage:\n    %s [options] [items]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, and JSON containers and other items\n");
+            printf("\nProcesses ZIP, ARC, IMG, JSON, ISO containers and other items\n");
             printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];
@@ -587,6 +594,9 @@ async function main(argc, argv, errors)
             if (archiveExt.match(/(\.img|\.json)$/i)) {
                 isDisk = true;
                 container = disk;
+            }
+            if (archiveExt.match(/(\.iso)$/i)) {
+                container = iso;
             }
             archive = await container.open(archivePath, archiveDB, options);
         } catch (error) {

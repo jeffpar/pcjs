@@ -273,14 +273,11 @@ export default class Dezip {
     /**
      * constructor(interfaces)
      *
-     * If no interfaces are provided, the default is to use the fetch() interface, since that's
-     * now available in both Node.js and the browser.
-     *
      * @this {Dezip}
      * @param {Interfaces} [interfaces]
      * @param {InterfaceOptions} [interfaceOptions]
      */
-    constructor(interfaces = {fetch}, interfaceOptions = {})
+    constructor(interfaces = {}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
         //
@@ -320,7 +317,6 @@ export default class Dezip {
     /**
      * assert(condition, message)
      *
-     * @this {Dezip}
      * @param {boolean} condition
      * @param {string} [message]
      */

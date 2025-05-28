@@ -235,6 +235,18 @@ export default class DataBuffer {
     }
 
     /**
+     * readInt8(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readInt8(off)
+    {
+        return this.node? this.buffer.readInt8(off) : this.dv.getInt8(off);
+    }
+
+    /**
      * readUInt8(off)
      *
      * @this {DataBuffer}
@@ -245,6 +257,18 @@ export default class DataBuffer {
     {
         return this.buffer[off];
         // return this.node? this.buffer.readUInt8(off) : this.dv.getUint8(off);
+    }
+
+    /**
+     * writeInt8(b, off)
+     *
+     * @this {DataBuffer}
+     * @param {number} b
+     * @param {number} off
+     */
+    writeInt8(b, off)
+    {
+        if (this.node) this.buffer.writeInt8(b, off); else this.dv.setInt8(off, b);
     }
 
     /**
