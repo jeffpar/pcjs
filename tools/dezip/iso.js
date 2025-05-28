@@ -80,6 +80,20 @@ export default class ISO {
         .field('data',          Struct.DATA(2041))
         .verifyLength(2048);
 
+    static DirRecord = new Struct("Directory Record")
+        .field('len',           Struct.BYTE)            // length of this record in bytes
+        .field('extAttr',       Struct.BYTE)            // extended attribute record length
+        .field('lba',           Struct.UINT32CE)        // logical block address of the file
+        .field('lenData',       Struct.UINT32CE)        // length of the file data in bytes
+        .field('dateTime',      Struct.ISODATETIME7)    // date and time of last modification
+        .field('flags',         Struct.BYTE)            // flags (eg, 0x02 = directory)
+        .field('unitSize',      Struct.BYTE)            // unit size for interleaved files
+        .field('interleave',    Struct.BYTE)            // interleave gap size for interleaved files
+        .field('volSeq',        Struct.UINT16CE)        // volume sequence number for interleaved files
+        .field('lenName',       Struct.BYTE)            // length of the name in bytes
+        .field('name',          Struct.STRLEN)          // name
+        .verifyLength(34);
+
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
         .field('type',          Struct.BYTE)
         .field('identifier',    Struct.STR(5))          // "CD001"
@@ -98,7 +112,7 @@ export default class ISO {
         .field('lbaOptPTLE',    Struct.UINT32LE)        // LBA location of the optional little-endian path table
         .field('lbaPTBE',       Struct.UINT32BE)        // LBA location of the big-endian path table
         .field('lbaOptPTBE',    Struct.UINT32BE)        // LBA location of the optional big-endian path table
-        .field('rootDir',       Struct.DATA(34))        // root directory entry
+        .field('rootDir',       ISO.DirRecord)          // root directory entry
         .field('volSetID',      Struct.STR(128))        // volume set identifier
         .field('publisherID',   Struct.STR(128))        // publisher identifier
         .field('preparerID',    Struct.STR(128))        // preparer identifier
@@ -106,16 +120,15 @@ export default class ISO {
         .field('copyright',     Struct.STR(37))         // copyright file identifier
         .field('abstract',      Struct.STR(37))         // abstract file identifier
         .field('bibliographic', Struct.STR(37))         // bibliographic file identifier
-        .field('created',       Struct.DECDATETIME)     // creation date of the volume
-        .field('modified',      Struct.DECDATETIME)     // modification date of the volume
-        .field('expiration',    Struct.DECDATETIME)     // expiration date of the volume
-        .field('effective',     Struct.DECDATETIME)     // effective date of the volume
+        .field('created',       Struct.ISODATETIME17)   // creation date of the volume
+        .field('modified',      Struct.ISODATETIME17)   // modification date of the volume
+        .field('expiration',    Struct.ISODATETIME17)   // expiration date of the volume
+        .field('effective',     Struct.ISODATETIME17)   // effective date of the volume
         .field('fileStructure', Struct.BYTE)
         .field('unused4',       Struct.BYTE)
         .field('appData',       Struct.DATA(512))       // reserved for future use
         .field('unused5',       Struct.DATA(653))       // reserved for future use
         .verifyLength(2048);
-
 
     /**
      * constructor(interfaces)

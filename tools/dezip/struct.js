@@ -47,37 +47,39 @@ import DataBuffer from "./db.js";
  */
 export default class Struct {
 
-    static STRING           =   0;
-    static INT8             =  -1;
-    static INT16            =  -2;
-    static INT32            =  -3;
-    static INT64            =  -4;
-    static UINT8            =  -5;
-    static BYTE             =  -5;      // alias for UINT8
-    static UINT16           =  -6;
-    static WORD             =  -6;      // alias for UINT16
-    static UINT32           =  -7;
-    static DWORD            =  -7;      // alias for UINT32
-    static UINT64           =  -8;
-    static INT16LE          = -10;      // 16-bit little-endian integer
-    static INT32LE          = -11;      // 32-bit little-endian integer
-    static INT64LE          = -12;      // 64-bit little-endian integer
-    static INT16BE          = -13;      // 16-bit big-endian integer
-    static INT32BE          = -14;      // 32-bit big-endian integer
-    static INT64BE          = -15;      // 64-bit big-endian integer
-    static INT16CE          = -16;      // 16-bit combined-endian integer (ie, little-endian followed by big-endian)
-    static INT32CE          = -17;      // 32-bit combined-endian integer (ie, little-endian followed by big-endian)
-    static UINT16LE         = -18;      // 16-bit little-endian unsigned integer
-    static UINT32LE         = -19;      // 32-bit little-endian unsigned integer
-    static UINT64LE         = -20;      // 64-bit little-endian unsigned integer
-    static UINT16BE         = -21;      // 16-bit big-endian unsigned integer
-    static UINT32BE         = -22;      // 32-bit big-endian unsigned integer
-    static UINT64BE         = -23;      // 64-bit big-endian unsigned integer
-    static UINT16CE         = -24;      // 16-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
-    static UINT32CE         = -25;      // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
-    static DOSTIMEDATE      = -26;
-    static DOSDATETIME      = -27;
-    static DECDATETIME      = -28;      // 17-byte date/time format used in ISO 9660 images
+    static STRING           = "string";         // ASCII string (null-terminated)
+    static STRLEN           = "strlen";         // ASCII string with a length prefix
+    static INT8             = "int8";
+    static INT16            = "int16";
+    static INT32            = "int32";
+    static INT64            = "int64";
+    static UINT8            = "uint8";
+    static BYTE             = "uint8";
+    static UINT16           = "uint16";
+    static WORD             = "uint16";
+    static UINT32           = "uint32";
+    static DWORD            = "uint32";
+    static UINT64           = "uint64";
+    static INT16LE          = "int16le";        // 16-bit little-endian integer
+    static INT32LE          = "int32le";        // 32-bit little-endian integer
+    static INT64LE          = "int64le";        // 64-bit little-endian integer
+    static INT16BE          = "int16be";        // 16-bit big-endian integer
+    static INT32BE          = "int32be";        // 32-bit big-endian integer
+    static INT64BE          = "int64be";        // 64-bit big-endian integer
+    static INT16CE          = "int16ce";        // 16-bit combined-endian integer (ie, little-endian followed by big-endian)
+    static INT32CE          = "int32ce";        // 32-bit combined-endian integer (ie, little-endian followed by big-endian)
+    static UINT16LE         = "uint16le";       // 16-bit little-endian unsigned integer
+    static UINT32LE         = "uint32le";       // 32-bit little-endian unsigned integer
+    static UINT64LE         = "uint64le";       // 64-bit little-endian unsigned integer
+    static UINT16BE         = "uint16be";       // 16-bit big-endian unsigned integer
+    static UINT32BE         = "uint32be";       // 32-bit big-endian unsigned integer
+    static UINT64BE         = "uint64be";       // 64-bit big-endian unsigned integer
+    static UINT16CE         = "uint16ce";       // 16-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
+    static UINT32CE         = "uint32ce";       // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
+    static DOSTIMEDATE      = "dostimedate";    // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
+    static DOSDATETIME      = "dosdatetime";    // 16-bit date followed by 16-bit time (used by ARC headers)
+    static ISODATETIME7     = "isodatetime7";   // 7-byte date/time format used in ISO 9660 directories
+    static ISODATETIME17    = "isodatetime17";  // 17-byte date/time format used in ISO 9660 descriptors
 
     static STR = function(length) {
         return length;
@@ -88,34 +90,36 @@ export default class Struct {
     };
 
     static SIZES = {
-        [Struct.STR]:          0,       // ASCII string
-        [Struct.INT8]:         1,
-        [Struct.INT16]:        2,
-        [Struct.INT32]:        4,
-        [Struct.INT64]:        8,
-        [Struct.INT16LE]:      2,       // 16-bit little-endian integer
-        [Struct.INT32LE]:      4,       // 32-bit little-endian integer
-        [Struct.INT64LE]:      8,       // 64-bit little-endian integer
-        [Struct.INT16BE]:      2,       // 16-bit big-endian integer
-        [Struct.INT32BE]:      4,       // 32-bit big-endian integer
-        [Struct.INT64BE]:      8,       // 64-bit big-endian integer
-        [Struct.INT16CE]:      4,       // 16-bit combined-endian integer (ie, little-endian followed by big-endian)
-        [Struct.INT32CE]:      8,       // 32-bit combined-endian integer (ie, little-endian followed by big-endian)
-        [Struct.UINT8]:        1,
-        [Struct.UINT16]:       2,
-        [Struct.UINT32]:       4,
-        [Struct.UINT64]:       8,
-        [Struct.UINT16LE]:     2,       // 16-bit little-endian unsigned integer
-        [Struct.UINT32LE]:     4,       // 32-bit little-endian unsigned integer
-        [Struct.UINT64LE]:     8,       // 64-bit little-endian unsigned integer
-        [Struct.UINT16BE]:     2,       // 16-bit big-endian unsigned integer
-        [Struct.UINT32BE]:     4,       // 32-bit big-endian unsigned integer
-        [Struct.UINT64BE]:     8,       // 64-bit big-endian unsigned integer
-        [Struct.UINT16CE]:     4,       // 16-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
-        [Struct.UINT32CE]:     8,       // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
-        [Struct.DOSTIMEDATE]:  4,       // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
-        [Struct.DOSDATETIME]:  4,       // 16-bit date followed by 16-bit time (used by ARC headers)
-        [Struct.DECDATETIME]: 17        // 16-byte date/time string followed by 1-byte time zone offset (used by ISO 9660 images)
+        [Struct.STRING]:         0,
+        [Struct.STRLEN]:         1,
+        [Struct.INT8]:           1,
+        [Struct.INT16]:          2,
+        [Struct.INT32]:          4,
+        [Struct.INT64]:          8,
+        [Struct.UINT8]:          1,
+        [Struct.UINT16]:         2,
+        [Struct.UINT32]:         4,
+        [Struct.UINT64]:         8,
+        [Struct.INT16LE]:        2,     // 16-bit little-endian integer
+        [Struct.INT32LE]:        4,     // 32-bit little-endian integer
+        [Struct.INT64LE]:        8,     // 64-bit little-endian integer
+        [Struct.INT16BE]:        2,     // 16-bit big-endian integer
+        [Struct.INT32BE]:        4,     // 32-bit big-endian integer
+        [Struct.INT64BE]:        8,     // 64-bit big-endian integer
+        [Struct.INT16CE]:        4,     // 16-bit combined-endian integer (ie, little-endian followed by big-endian)
+        [Struct.INT32CE]:        8,     // 32-bit combined-endian integer (ie, little-endian followed by big-endian)
+        [Struct.UINT16LE]:       2,     // 16-bit little-endian unsigned integer
+        [Struct.UINT32LE]:       4,     // 32-bit little-endian unsigned integer
+        [Struct.UINT64LE]:       8,     // 64-bit little-endian unsigned integer
+        [Struct.UINT16BE]:       2,     // 16-bit big-endian unsigned integer
+        [Struct.UINT32BE]:       4,     // 32-bit big-endian unsigned integer
+        [Struct.UINT64BE]:       8,     // 64-bit big-endian unsigned integer
+        [Struct.UINT16CE]:       4,     // 16-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
+        [Struct.UINT32CE]:       8,     // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
+        [Struct.DOSTIMEDATE]:    4,     // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
+        [Struct.DOSDATETIME]:    4,     // 16-bit date followed by 16-bit time (used by ARC headers)
+        [Struct.ISODATETIME7]:   7,     // 7-byte date/time encoding (used by ISO 9660 directories)
+        [Struct.ISODATETIME17]: 17,     // 16-byte date/time string followed by 1-byte time zone offset (used by ISO 9660 descriptors)
     };
 
     /**
@@ -147,12 +151,21 @@ export default class Struct {
     field(name, type, values)
     {
         if (this.fields[name]) {
-            throw new Error("Field " + name + " already defined in " + this.name);
+            throw new Error(`Field ${name} already defined in ${this.name}`);
         }
-        let size = Struct.SIZES[type];
-        if (!size) {
+        let size;
+        if (typeof type == "string") {
+            size = Struct.SIZES[type];
+            if (size == undefined) {
+                throw new Error(`Field ${name} has undefined type: ${this.name}`);
+            }
+        }
+        else if (typeof type == "number") {
             size = type;
             type = Struct.STRING;
+        }
+        else {
+            size = type.length;
         }
         let field = {
             type: type,
@@ -182,132 +195,150 @@ export default class Struct {
      */
     read(db, offset, name, encoding = "cp437", warnings = [])
     {
-        let v, time, date;
+        let len, v;
+        let date, time = -1, tz;
         let field = this.fields[name];
         if (!field) {
-            throw new Error("Field " + name + " not found in " + this.name);
+            throw new Error(`Field ${name} not found in ${this.name}`);
         }
         offset += field.offset;
         let length = field.length;
         if (offset + length > db.length) {
-            throw new Error("Field " + name + " limit exceeds buffer limit (" + (offset + length) + " > " + db.length + ")");
+            throw new Error(`Field ${name} limit exceeds buffer limit (${(offset + length)} > ${db.length})`);
         }
-        switch(field.type) {
-        case Struct.STRING:
-            v = this.readString(db, offset, length, encoding);
-            for (let i = 0; i < length; i++) {
-                if (v.charCodeAt(i) == 0) {
-                    v = v.slice(0, i);
-                    break;
+        if (typeof field.type != "string") {
+            v = field.type.readStruct(db, offset, encoding);
+        }
+        else {
+            switch(field.type) {
+            case Struct.STRLEN:         // string with a length prefix
+                length = db.readUInt8(offset - 1);
+                /* falls through */
+            case Struct.STRING:         // string with a maximum length
+                v = this.readString(db, offset, length, encoding);
+                for (let i = 0; i < length; i++) {
+                    if (v.charCodeAt(i) == 0) {
+                        v = v.slice(0, i);
+                        break;
+                    }
                 }
+                v = v.trim();
+                break;
+            case Struct.INT8:
+                v = db.readInt8(offset);
+                break;
+            case Struct.INT16:
+                v = this.littleEndian? db.readInt16LE(offset) : db.readInt16BE(offset);
+                break;
+            case Struct.INT16LE:
+                v = db.readInt16LE(offset);
+                break;
+            case Struct.INT16BE:
+                v = db.readInt16BE(offset);
+                break;
+            case Struct.INT16CE:
+                v = this.littleEndian? db.readInt16LE(offset) : db.readInt16BE(offset + 2);
+                break;
+            case Struct.INT32:
+                v = this.littleEndian? db.readInt32LE(offset) : db.readInt32BE(offset);
+                break;
+            case Struct.INT32LE:
+                v = db.readInt32LE(offset);
+                break;
+            case Struct.INT32BE:
+                v = db.readInt32BE(offset);
+                break;
+            case Struct.INT32CE:
+                v = this.littleEndian? db.readInt32LE(offset) : db.readInt32BE(offset + 4);
+                break;
+            case Struct.INT64:
+            case Struct.INT64LE:
+            case Struct.INT64BE:
+                /**
+                 * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
+                 * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
+                 */
+                v = (this.littleEndian || field.type == Struct.INT64LE) && field.type != Struct.INT64BE?
+                    (db.readInt32LE(offset) + db.readInt32LE(offset + 4) * 0x0000000100000000) :
+                    (db.readInt32BE(offset) * 0x0000000100000000 + db.readInt32BE(offset + 4));
+                break;
+            case Struct.UINT8:
+                v = db.readUInt8(offset);
+                break;
+            case Struct.UINT16:
+                v = this.littleEndian? db.readUInt16LE(offset) : db.readUInt16BE(offset);
+                break;
+            case Struct.UINT16LE:
+                v = db.readUInt16LE(offset);
+                break;
+            case Struct.UINT16BE:
+                v = db.readUInt16BE(offset);
+                break;
+            case Struct.UINT16CE:
+                v = this.littleEndian? db.readUInt16LE(offset) : db.readUInt16BE(offset + 2);
+                break;
+            case Struct.UINT32:
+                v = this.littleEndian? db.readUInt32LE(offset) : db.readUInt32BE(offset);
+                break;
+            case Struct.UINT32LE:
+                v = db.readUInt32LE(offset);
+                break;
+            case Struct.UINT32BE:
+                v = db.readUInt32BE(offset);
+                break;
+            case Struct.UINT32CE:
+                v = this.littleEndian? db.readUInt32LE(offset) : db.readUInt32BE(offset + 4);
+                break;
+            case Struct.UINT64:
+            case Struct.UINT64LE:
+            case Struct.UINT64BE:
+                /**
+                 * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
+                 * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
+                 */
+                v = (this.littleEndian || field.type == Struct.UINT64LE) && field.type != Struct.UINT64BE?
+                    (db.readUInt32LE(offset) + db.readUInt32LE(offset + 4) * 0x0000000100000000) :
+                    (db.readUInt32BE(offset) * 0x0000000100000000 + db.readUInt32BE(offset + 4));
+                break;
+            case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
+                time = db.readUInt16LE(offset);
+                date = db.readUInt16LE(offset + 2);
+                v = this.parseDateTime(date, time, warnings);
+                break;
+            case Struct.DOSDATETIME:        // since this is defined as a DOS field, we assume little-endian
+                date = db.readUInt16LE(offset);
+                time = db.readUInt16LE(offset + 2);
+                v = this.parseDateTime(date, time, warnings);
+                break;
+            case Struct.ISODATETIME7:
+                date = db.readUInt32LE(offset);
+                time = db.readUInt32LE(offset + 4);
+                date = ((date & 0xff) + 1900) + "-" + ((date >> 8) & 0xff).toString().padStart(2, '0') + "-" + ((date >> 16) & 0xff).toString().padStart(2, '0') +
+                    " " + (date >>> 24).toString().padStart(2, '0') + ":" + (time & 0xff).toString().padStart(2, '0') + ":" + ((time >> 8) & 0xff).toString().padStart(2, '0');
+                tz = (time << 8) >> 24;
+                /* falls through */
+            case Struct.ISODATETIME17:
+                if (time < 0) {
+                    date = this.readString(db, offset, 16);
+                    date = date.replace(/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])/, "$1-$2-$3 $4:$5:$6.$7");
+                    tz = db.readInt8(offset + 16);
+                }
+                //
+                // Time zone offset from GMT is in 15 minute intervals, starting at interval -48 (west) and running
+                // up to interval 52 (east), spanning time zones GMT-12 through GMT+13.
+                //
+                v = new Date(date);
+                if (tz < -48 || tz > 52) {
+                    warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);
+                    tz = 0;
+                }
+                if (tz) {
+                    v.setTime(v.getTime() + tz * 15 * 60 * 1000);
+                }
+                break;
+            default:
+                throw new Error(`Field ${name} has unsupported type (${field.type}) in ${this.name}`);
             }
-            v = v.trim();
-            break;
-        case Struct.INT8:
-            v = db.readInt8(offset);
-            break;
-        case Struct.INT16:
-            v = this.littleEndian? db.readInt16LE(offset) : db.readInt16BE(offset);
-            break;
-        case Struct.INT16LE:
-            v = db.readInt16LE(offset);
-            break;
-        case Struct.INT16BE:
-            v = db.readInt16BE(offset);
-            break;
-        case Struct.INT16CE:
-            v = this.littleEndian? db.readInt16LE(offset) : db.readInt16BE(offset + 2);
-            break;
-        case Struct.INT32:
-            v = this.littleEndian? db.readInt32LE(offset) : db.readInt32BE(offset);
-            break;
-        case Struct.INT32LE:
-            v = db.readInt32LE(offset);
-            break;
-        case Struct.INT32BE:
-            v = db.readInt32BE(offset);
-            break;
-        case Struct.INT32CE:
-            v = this.littleEndian? db.readInt32LE(offset) : db.readInt32BE(offset + 4);
-            break;
-        case Struct.INT64:
-        case Struct.INT64LE:
-        case Struct.INT64BE:
-            /**
-             * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
-             * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
-             */
-            v = (this.littleEndian || field.type == Struct.INT64LE) && field.type != Struct.INT64BE?
-                (db.readInt32LE(offset) + db.readInt32LE(offset + 4) * 0x0000000100000000) :
-                (db.readInt32BE(offset) * 0x0000000100000000 + db.readInt32BE(offset + 4));
-            break;
-        case Struct.UINT8:
-            v = db.readUInt8(offset);
-            break;
-        case Struct.UINT16:
-            v = this.littleEndian? db.readUInt16LE(offset) : db.readUInt16BE(offset);
-            break;
-        case Struct.UINT16LE:
-            v = db.readUInt16LE(offset);
-            break;
-        case Struct.UINT16BE:
-            v = db.readUInt16BE(offset);
-            break;
-        case Struct.UINT16CE:
-            v = this.littleEndian? db.readUInt16LE(offset) : db.readUInt16BE(offset + 2);
-            break;
-        case Struct.UINT32:
-            v = this.littleEndian? db.readUInt32LE(offset) : db.readUInt32BE(offset);
-            break;
-        case Struct.UINT32LE:
-            v = db.readUInt32LE(offset);
-            break;
-        case Struct.UINT32BE:
-            v = db.readUInt32BE(offset);
-            break;
-        case Struct.UINT32CE:
-            v = this.littleEndian? db.readUInt32LE(offset) : db.readUInt32BE(offset + 4);
-            break;
-        case Struct.UINT64:
-        case Struct.UINT64LE:
-        case Struct.UINT64BE:
-            /**
-             * TODO: As we noted in StreamZip, perhaps we should be using BigInts, because what this function is
-             * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
-             */
-            v = (this.littleEndian || field.type == Struct.UINT64LE) && field.type != Struct.UINT64BE?
-                (db.readUInt32LE(offset) + db.readUInt32LE(offset + 4) * 0x0000000100000000) :
-                (db.readUInt32BE(offset) * 0x0000000100000000 + db.readUInt32BE(offset + 4));
-            break;
-        case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
-            time = db.readUInt16LE(offset);
-            date = db.readUInt16LE(offset + 2);
-            v = this.parseDateTime(date, time, warnings);
-            break;
-        case Struct.DOSDATETIME:        // since this is defined as a DOS field, we assume little-endian
-            date = db.readUInt16LE(offset);
-            time = db.readUInt16LE(offset + 2);
-            v = this.parseDateTime(date, time, warnings);
-            break;
-        case Struct.DECDATETIME:
-            date = this.readString(db, offset, 16);
-            date = date.replace(/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])/, "$1-$2-$3 $4:$5:$6.$7");
-            //
-            // Time zone offset from GMT is in 15 minute intervals, starting at interval -48 (west) and running
-            // up to interval 52 (east), spanning time zones GMT-12 through GMT+13.
-            //
-            v = new Date(date);
-            let tz = db.readInt8(offset + 16);
-            if (tz < -48 || tz > 52) {
-                warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);
-                tz = 0;
-            }
-            if (tz) {
-                v.setTime(v.getTime() + tz * 15 * 60 * 1000);
-            }
-            break;
-        default:
-            throw new Error("Field " + name + " unsupported (" + field.type + ") in " + this.struct.name);
         }
         return v;
     }
