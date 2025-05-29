@@ -81,11 +81,11 @@ export default class Struct {
     static ISODATETIME7     = "isodatetime7";   // 7-byte date/time format used in ISO 9660 directories
     static ISODATETIME17    = "isodatetime17";  // 17-byte date/time format used in ISO 9660 descriptors
 
-    static STR = function(length) {
+    static BSS = function(length) {
         return length;
     };
 
-    static DATA = function(length) {
+    static STR = function(length) {
         return length;
     };
 
@@ -212,7 +212,22 @@ export default class Struct {
         else {
             switch(field.type) {
             case Struct.STRLEN:         // string with a length prefix
-                length = db.readUInt8(offset - 1);
+                //
+                // Yes, this is a bit wonky, but STRLEN was introduced to handle ISO 9660 directory entries,
+                // and there are two special 1-byte "names" that require special consideration: if the byte
+                // is 0x00, then we have a current directory entry (".") and if the byte is 0x01, then we have
+                // a parent directory entry ("..").
+                //
+                length = db.readUInt16LE(offset - 1);
+                if (length == 0x0001) {
+                    v = ".";
+                    break;
+                }
+                if (length == 0x0101) {
+                    v = "..";
+                    break;
+                }
+                length = length & 0x00ff;
                 /* falls through */
             case Struct.STRING:         // string with a maximum length
                 v = this.readString(db, offset, length, encoding);
@@ -356,7 +371,9 @@ export default class Struct {
     {
         let record = {}, warnings = [];
         for (let name in this.fields) {
-            record[name] = this.read(db, offset, name, encoding, warnings);
+            if (name[0] != '.') {
+                record[name] = this.read(db, offset, name, encoding, warnings);
+            }
         }
         if (warnings.length) {
             record.warnings = warnings;

@@ -64,8 +64,9 @@ export default class ISO {
     static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
-    static BLOCK_SIZE = 2048;           // size of logical block
-    static SYSTEM_AREA = 32768;         // size of system area
+    static BLOCK_SIZE = 2048;           // default block size
+    static SYSTEM_SIZE = 32768;         // size of system area
+    static RECORD_SIZE = 255;           // maximum size of a directory record (255 bytes)
 
     static VolDesc = new Struct("Volume Descriptor")
         .field('type',          Struct.BYTE, {
@@ -77,41 +78,49 @@ export default class ISO {
         })
         .field('identifier',    Struct.STR(5))          // "CD001"
         .field('version',       Struct.BYTE)            // version of the ISO 9660 standard (eg, 0x01)
-        .field('data',          Struct.DATA(2041))
+        .field('data',          Struct.BSS(2041))
         .verifyLength(2048);
 
     static DirRecord = new Struct("Directory Record")
-        .field('len',           Struct.BYTE)            // length of this record in bytes
-        .field('extAttr',       Struct.BYTE)            // extended attribute record length
-        .field('lba',           Struct.UINT32CE)        // logical block address of the file
-        .field('lenData',       Struct.UINT32CE)        // length of the file data in bytes
-        .field('dateTime',      Struct.ISODATETIME7)    // date and time of last modification
-        .field('flags',         Struct.BYTE)            // flags (eg, 0x02 = directory)
-        .field('unitSize',      Struct.BYTE)            // unit size for interleaved files
-        .field('interleave',    Struct.BYTE)            // interleave gap size for interleaved files
-        .field('volSeq',        Struct.UINT16CE)        // volume sequence number for interleaved files
-        .field('lenName',       Struct.BYTE)            // length of the name in bytes
-        .field('name',          Struct.STRLEN)          // name
+        .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
+        .field('extAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
+        .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
+        .field('dateTime',      Struct.ISODATETIME7)    // 0x12: date and time of last modification
+        .field('flags',         Struct.BYTE, {          // 0x19: flags
+            HIDDEN:     0x01,                           // hidden entry
+            DIRECTORY:  0x02,                           // directory entry
+            ASSOCIATED: 0x04,                           // associated file
+            EXTENDED:   0x08                            // record format
+        })
+        .field('unitSize',      Struct.BYTE)            // 0x1A: unit size for interleaved files
+        .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
+        .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
+        .field('lenName',       Struct.BYTE)            // 0x20: length of the name in bytes (maximum of 31)
+        .field('name',          Struct.STRLEN)          // 0x21: name
         .verifyLength(34);
 
+    //
+    // NOTE: Field names beginning with a dot (.) are skipped by readStruct()
+    //
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
         .field('type',          Struct.BYTE)
         .field('identifier',    Struct.STR(5))          // "CD001"
         .field('version',       Struct.BYTE)            // version of the ISO 9660 standard
-        .field('unused1',       Struct.BYTE)
-        .field('systemID',      Struct.STR(32))
-        .field('volumeID',      Struct.STR(32))
-        .field('unused2',       Struct.DATA(8))
+        .field('.unused1',      Struct.BYTE)
+        .field('sysID',         Struct.STR(32))
+        .field('volID',         Struct.STR(32))
+        .field('.unused2',      Struct.BSS(8))
         .field('volBlocks',     Struct.UINT32CE)        // size of the volume in 2048-byte sectors
-        .field('unused3',       Struct.DATA(32))
-        .field('volumeSet',     Struct.UINT16CE)        // number of volumes in the volume set
-        .field('volumeSeq',     Struct.UINT16CE)        // sequence number of this volume in the volume set
-        .field('lenBlock',      Struct.UINT16CE)        // logical block size in bytes (usually 2048)
-        .field('lenPT',         Struct.UINT32CE)        // size of the path table in bytes
-        .field('lbaPTLE',       Struct.UINT32LE)        // LBA location of the little-endian path table
-        .field('lbaOptPTLE',    Struct.UINT32LE)        // LBA location of the optional little-endian path table
-        .field('lbaPTBE',       Struct.UINT32BE)        // LBA location of the big-endian path table
-        .field('lbaOptPTBE',    Struct.UINT32BE)        // LBA location of the optional big-endian path table
+        .field('.unused3',      Struct.BSS(32))
+        .field('volSet',        Struct.UINT16CE)        // number of volumes in the volume set
+        .field('volSeq',        Struct.UINT16CE)        // sequence number of this volume in the volume set
+        .field('blockSize',     Struct.UINT16CE)        // logical block size in bytes (usually 2048)
+        .field('lenPaths',      Struct.UINT32CE)        // size of the path table in bytes
+        .field('lbaPaths',      Struct.UINT32LE)        // LBA location of the little-endian path table
+        .field('lbaOptPaths',   Struct.UINT32LE)        // LBA location of the optional little-endian path table
+        .field('.lbaPathsBE',   Struct.UINT32BE)        // LBA location of the big-endian path table
+        .field('.lbaOptPathsBE',Struct.UINT32BE)        // LBA location of the optional big-endian path table
         .field('rootDir',       ISO.DirRecord)          // root directory entry
         .field('volSetID',      Struct.STR(128))        // volume set identifier
         .field('publisherID',   Struct.STR(128))        // publisher identifier
@@ -125,9 +134,9 @@ export default class ISO {
         .field('expiration',    Struct.ISODATETIME17)   // expiration date of the volume
         .field('effective',     Struct.ISODATETIME17)   // effective date of the volume
         .field('fileStructure', Struct.BYTE)
-        .field('unused4',       Struct.BYTE)
-        .field('appData',       Struct.DATA(512))       // reserved for future use
-        .field('unused5',       Struct.DATA(653))       // reserved for future use
+        .field('.unused4',      Struct.BYTE)
+        .field('appData',       Struct.BSS(512))        // reserved for future use
+        .field('.unused5',      Struct.BSS(653))        // reserved for future use
         .verifyLength(2048);
 
     /**
@@ -254,7 +263,7 @@ export default class ISO {
         else {
             throw new Error("No image open interface available");
         }
-        let position = ISO.SYSTEM_AREA, extent = ISO.BLOCK_SIZE;
+        let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
         do {
             let [offset, length] = await this.readCache(image, position, extent);
             let type = image.cache.db.readUInt8(offset);
@@ -263,10 +272,10 @@ export default class ISO {
             }
             if (type == ISO.VolDesc.fields.type.PRIMARY) {
                 image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
-                extent = image.primary.lenBlock;
+                extent = image.primary.blockSize;
             }
             position += extent;
-        } while (true);
+        } while (position < image.size);
         return image;
     }
 
@@ -440,7 +449,75 @@ export default class ISO {
     async readDirectory(image, filespec = "*")
     {
         let entries = [];
+        if (!image.records) {
+            image.records = await this.readRecords(image, image.primary.rootDir.lba);
+        }
+        for (let record of image.records) {
+            let name = record.name;
+            if (filespec && filespec != "*") {
+                let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
+                if (!name.match(re)) continue;
+            }
+            let attr = 0;
+            if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
+                attr |= 0x10;
+            }
+            entries.push({
+                name,
+                attr,
+                modified: record.dateTime,
+                size: record.size,
+                compressedSize: record.size,
+                flags: 0,
+                method: 0,
+                crc: 0,
+                warnings: []
+            });
+        }
         return entries;
+    }
+
+    /**
+     * readRecords(image, lba, subdir)
+     *
+     * @this {ISO}
+     * @param {Image} image
+     * @param {number} lba
+     * @param {string} [subdir]
+     * @returns {Array}
+     */
+    async readRecords(image, lba, subdir = "")
+    {
+        let records = [];
+        let position = lba * image.primary.blockSize;
+        do {
+            let [offset, length] = await this.readCache(image, position, ISO.RECORD_SIZE);
+            let record = ISO.DirRecord.readStruct(image.cache.db, offset);
+            if (!record.length) break;          // end-of-directory record
+            record.position = position.toString(16);
+            position += record.length;
+            ISO.assert(record.name);
+            if (record.name == ".") {           // skip the first record of the directory, which is always "."
+                ISO.assert(record.lba == lba);
+                continue;
+            }
+            if (record.name == "..") {          // skip the second record of the directory, which is always ".."
+                continue;
+            }
+            //
+            // Massage the name by first stripping any "version" suffix (eg, ";1") and then prepending any subdir.
+            //
+            record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
+            records.push(record);
+        } while (position < image.size);
+        let subrecs = [];
+        for (let record of records) {
+            if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
+                let recs = await this.readRecords(image, record.lba, record.name);
+                subrecs.push(recs);
+            }
+        }
+        return records.concat(...subrecs);
     }
 
     /**

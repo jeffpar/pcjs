@@ -596,6 +596,7 @@ async function main(argc, argv, errors)
                 container = disk;
             }
             if (archiveExt.match(/(\.iso)$/i)) {
+                isDisk = true;
                 container = iso;
             }
             archive = await container.open(archivePath, archiveDB, options);
