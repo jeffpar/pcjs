@@ -781,7 +781,7 @@ async function main(argc, argv, errors)
                                 try {
                                     targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
                                     if (argv.list) {
-                                        entry.warnings.unshift(targetPath);
+                                        entry.comment = targetPath;
                                     } else {
                                         printf("created %s\n", targetPath);
                                     }

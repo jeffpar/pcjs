@@ -550,7 +550,8 @@ export default class ISO {
         if (!image.records) {
             image.records = await this.readDirRecords(image, image.primary.rootDir.lba);
         }
-        for (let record of image.records) {
+        for (let index = 0; index < image.records.length; index++) {
+            let record = image.records[index];
             let name = record.name;
             if (filespec && filespec != "*") {
                 let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
@@ -561,6 +562,7 @@ export default class ISO {
                 attr |= 0x10;
             }
             entries.push({
+                index,
                 name,
                 attr,
                 modified: record.dateTime,
@@ -674,5 +676,15 @@ export default class ISO {
      */
     async readFile(image, index, writeData)
     {
+        let record = image.records[index];
+        if (!record || (record.flags & ISO.DirRecord.fields.flags.DIRECTORY)) {
+            throw new Error(`No file entry at index ${index}`);
+        }
+        let db = await this.readImage(image, record.lba * image.primary.blockSize, record.size);
+        if (writeData) {
+            await writeData(db);
+            await writeData();
+        }
+        return db;
     }
 }

@@ -269,11 +269,11 @@ export default class Disk {
      * @param {DiskInfo} diskInfo
      * @param {number} index
      * @param {function} [writeData]
-     * @returns {DataBuffer}
+     * @returns {DataBuffer|undefined}
      */
     async readFile(diskInfo, index, writeData)
     {
-        let db = null;
+        let db;
         let file = diskInfo.fileTable[index];
         if (file && file.name.length && file.size < diskInfo.cbDiskData) {
             let ab = new Array(file.size);
