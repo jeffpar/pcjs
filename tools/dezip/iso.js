@@ -101,6 +101,26 @@ export default class ISO {
         .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
         .verifyLength(34);
 
+    static HSDirRecord = new Struct("High Sierra Directory Record")
+        .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
+        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
+        .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
+        .field('dateTime',      Struct.ISODATETIME6)    // 0x12: date and time of last modification
+        .field('flags',         Struct.BYTE, {          // 0x18: flags
+            HIDDEN:     0x01,                           // hidden entry
+            DIRECTORY:  0x02,                           // directory entry
+            ASSOCIATED: 0x04,                           // associated file
+            EXTENDED:   0x08                            // record format
+        })
+        .field('.reserved',     Struct.BYTE)            // 0x19: reserved for future use
+        .field('unitSize',      Struct.BYTE)            // 0x1A: unit size for interleaved files
+        .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
+        .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
+        .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
+        .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
+        .verifyLength(34);
+
     //
     // NOTE: This is the little-endian version of the Path Record (the only version we care about)
     //
@@ -131,7 +151,7 @@ export default class ISO {
         .field('blockSize',     Struct.UINT16CE)        // logical block size in bytes (usually 2048)
         .field('lenPaths',      Struct.UINT32CE)        // size of the path table in bytes
         .field('lbaPaths',      Struct.UINT32LE)        // LBA location of the little-endian path table
-        .field('lbaOptPaths',   Struct.UINT32LE)        // LBA location of the optional little-endian path table
+        .field('.lbaOptPaths',  Struct.UINT32LE)        // LBA location of the optional little-endian path table
         .field('.lbaPathsBE',   Struct.UINT32BE)        // LBA location of the big-endian path table
         .field('.lbaOptPathsBE',Struct.UINT32BE)        // LBA location of the optional big-endian path table
         .field('rootDir',       ISO.DirRecord)          // root directory entry
@@ -150,6 +170,49 @@ export default class ISO {
         .field('.unused4',      Struct.BYTE)
         .field('appData',       Struct.BSS(512))        // reserved for future use
         .field('.unused5',      Struct.BSS(653))        // reserved for future use
+        .verifyLength(2048);
+
+    //
+    // High Sierra Primary Volume Descriptor
+    //
+    static HSPrimaryDesc = new Struct("High Sierra Primary Volume Descriptor")
+        .field('lbaVol',        Struct.UINT32CE)        // 0x0000: eg, 0x00000010
+        .field('type',          Struct.BYTE)            // 0x0008: eg, 0x01
+        .field('identifier',    Struct.STR(5))          // 0x0009: "CDROM"
+        .field('version',       Struct.BYTE)            // 0x000E: eg, 0x01
+        .field('.unused1',      Struct.BYTE)            // 0x000F
+        .field('sysID',         Struct.STR(32))         // 0x0010
+        .field('volID',         Struct.STR(32))         // 0x0030: eg, "PC_SIG_4_88"
+        .field('.unused2',      Struct.BSS(8))          // 0x0050
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0058: size of the volume in 2048-byte sectors
+        .field('.unused3',      Struct.BSS(32))         // 0x0060
+        .field('volSet',        Struct.UINT16CE)        // 0x0080: number of volumes in the volume set
+        .field('volSeq',        Struct.UINT16CE)        // 0x0084: sequence number of this volume in the volume set
+        .field('blockSize',     Struct.UINT16CE)        // 0x0088: logical block size in bytes, usually 2048 (0x0800)
+        .field('lenPaths',      Struct.UINT32CE)        // 0x008C: size of the path table in bytes
+        .field('lbaPaths',      Struct.UINT32LE)        // 0x0094: LBA location of the little-endian path table
+        .field('.lbaOptPath1',  Struct.UINT32LE)        // 0x0098: LBA location of the optional little-endian path table
+        .field('.lbaOptPath2',  Struct.UINT32LE)        // 0x009C: LBA location of the optional little-endian path table
+        .field('.lbaOptPath3',  Struct.UINT32LE)        // 0x00A0: LBA location of the optional little-endian path table
+        .field('.lbaPathsBE',   Struct.UINT32BE)        // 0x00A4: LBA location of the big-endian path table
+        .field('.lbaOptPath1BE',Struct.UINT32BE)        // 0x00A8: LBA location of the optional big-endian path table
+        .field('.lbaOptPath2BE',Struct.UINT32BE)        // 0x00AC: LBA location of the optional big-endian path table
+        .field('.lbaOptPath3BE',Struct.UINT32BE)        // 0x00B0: LBA location of the optional big-endian path table
+        .field('rootDir',       ISO.HSDirRecord)        // 0x00B4: root directory entry
+        .field('volSetID',      Struct.STR(128))        // 0x00D6: volume set identifier
+        .field('publisherID',   Struct.STR(128))        // 0x0156: publisher identifier
+        .field('preparerID',    Struct.STR(128))        // 0x01D6: preparer identifier
+        .field('appID',         Struct.STR(128))        // 0x0256: application identifier
+        .field('copyright',     Struct.STR(32))         // 0x02D6: copyright file identifier
+        .field('abstract',      Struct.STR(32))         // 0x02F6: abstract file identifier
+        .field('created',       Struct.ISODATETIME16)   // 0x0316: creation date of the volume
+        .field('modified',      Struct.ISODATETIME16)   // 0x0326: modification date of the volume
+        .field('expiration',    Struct.ISODATETIME16)   // 0x0336: expiration date of the volume
+        .field('effective',     Struct.ISODATETIME16)   // 0x0346: effective date of the volume
+        .field('fileStructure', Struct.BYTE)            // 0x0356: eg, 0x00
+        .field('.unused4',      Struct.BYTE)            // 0x0357
+        .field('appData',       Struct.BSS(512))        // 0x0358: reserved for future use
+        .field('.unused5',      Struct.BSS(680))        // 0x0558: reserved for future use
         .verifyLength(2048);
 
     /**
@@ -200,6 +263,7 @@ export default class ISO {
         let image = {
             name,                       // name of the image file
             source: "",
+            highSierra: false,
             modified: options.modified, // modification date of image file
             size: 0,                    // size of the image file
             file: null,                 // file handle, if any
@@ -276,9 +340,19 @@ export default class ISO {
         else {
             throw new Error("No image open interface available");
         }
+        image.dirClass = ISO.DirRecord;
         let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
         do {
             let [offset, length] = await this.readCache(image, position, extent);
+            //
+            // We're going to probe for a High Sierra Primary Volume Descriptor first...
+            //
+            if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
+                image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
+                image.dirClass = ISO.HSDirRecord;
+                image.highSierra = true;
+                break;
+            }
             let type = image.cache.db.readUInt8(offset);
             if (type == ISO.VolDesc.fields.type.END) {
                 break;
@@ -504,35 +578,38 @@ export default class ISO {
      */
     async readDirRecords(image, lba, subdir = "")
     {
-        let records = [];
+        let records = [], subrecs = [];
         let position = lba * image.primary.blockSize;
-        do {
-            let [offset, length] = await this.readCache(image, position, ISO.DIRREC_SIZE);
-            let record = ISO.DirRecord.readStruct(image.cache.db, offset);
-            if (!record.length) break;          // end-of-directory record
-            if (ISO.DEBUG) record.position = position.toString(16);
-            position += record.length;
-            ISO.assert(record.name);
-            if (record.name == ".") {           // skip the first directory record, which should always be "."
-                ISO.assert(record.lba == lba);
-                continue;
+        try {
+            do {
+                let [offset, length] = await this.readCache(image, position, ISO.DIRREC_SIZE);
+                let record = image.dirClass.readStruct(image.cache.db, offset);
+                if (!record.length) break;          // end-of-directory record
+                if (ISO.DEBUG) record.position = position.toString(16);
+                position += record.length;
+                ISO.assert(record.name);
+                if (record.name == ".") {           // skip the first directory record, which should always be "."
+                    ISO.assert(record.lba == lba);
+                    continue;
+                }
+                if (record.name == "..") {          // skip the second directory record, which should always be ".."
+                    ISO.assert(record.lenName == 1);
+                    continue;
+                }
+                //
+                // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
+                //
+                record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
+                records.push(record);
+            } while (position < image.size);
+            for (let record of records) {
+                if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
+                    let recs = await this.readDirRecords(image, record.lba, record.name);
+                    subrecs.push(recs);
+                }
             }
-            if (record.name == "..") {          // skip the second directory record, which should always be ".."
-                ISO.assert(record.lenName == 1);
-                continue;
-            }
-            //
-            // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
-            //
-            record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
-            records.push(record);
-        } while (position < image.size);
-        let subrecs = [];
-        for (let record of records) {
-            if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
-                let recs = await this.readDirRecords(image, record.lba, record.name);
-                subrecs.push(recs);
-            }
+        } catch (error) {
+            image.warnings.push(`Error reading directory record at position ${position}: ${error.message}`);
         }
         return records.concat(...subrecs);
     }
@@ -550,17 +627,22 @@ export default class ISO {
         let index = 0;
         let paths = [];
         let position = lba * image.primary.blockSize;
-        do {
-            let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
-            let record = ISO.PathRecord.readStruct(image.cache.db, offset);
-            if (!record.lenName) break;         // end-of-path-table record
-            if (ISO.DEBUG) record.position = position.toString(16);
-            position += ISO.PathRecord.length + record.lenName + (record.lenName & 0x1);
-            if (++index == record.indexParent) {
-                continue;                       // if the entry is its own parent (ie, the root), skip it
-            }
-            paths.push(record);
-        } while (position < image.size);
+        let positionEnd = position + image.primary.lenPaths;
+        try {
+            do {
+                let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
+                let record = ISO.PathRecord.readStruct(image.cache.db, offset);
+                if (!record.lenName) break;         // end-of-path-table record?
+                if (ISO.DEBUG) record.position = position.toString(16);
+                position += ISO.PathRecord.length + record.lenName + (record.lenName & 0x1);
+                if (++index == record.indexParent) {
+                    continue;                       // if the entry is its own parent (ie, the root), skip it
+                }
+                paths.push(record);
+            } while (position < positionEnd);
+        } catch (error) {
+            image.warnings.push(`Error reading path record at position ${position}: ${error.message}`);
+        }
         return paths;
     }
 

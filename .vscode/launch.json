@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-l \"/Volumes/MacSSD/Archives/sets/various_cd-rom_iso_collection_2016_07/100 Great Games.iso\""
+        "-l \"~/Disks/Shareware/Discs/PC-SIG Library CD-ROM (1988-04).iso\""
       ],
       "cwd": "${workspaceFolder}/disks",
       "stopOnEntry": false,

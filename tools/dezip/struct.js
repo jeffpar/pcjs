@@ -79,8 +79,10 @@ export default class Struct {
     static UINT32CE         = "uint32ce";       // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
     static DOSTIMEDATE      = "dostimedate";    // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
     static DOSDATETIME      = "dosdatetime";    // 16-bit date followed by 16-bit time (used by ARC headers)
-    static ISODATETIME7     = "isodatetime7";   // 7-byte date/time format used in ISO 9660 directories
-    static ISODATETIME17    = "isodatetime17";  // 17-byte date/time format used in ISO 9660 descriptors
+    static ISODATETIME6     = "isodatetime6";   // 6-byte date/time format (used in High Sierra directories)
+    static ISODATETIME16    = "isodatetime16";  // 16-byte date/time format (used in High Sierra descriptors)
+    static ISODATETIME7     = "isodatetime7";   // 7-byte date/time format (includes 1-byte time zone offset, used in ISO 9660 directories)
+    static ISODATETIME17    = "isodatetime17";  // 17-byte date/time format (includes 1-byte time zone offset, used in ISO 9660 descriptors)
 
     static BSS = function(length) {
         return length;
@@ -120,8 +122,10 @@ export default class Struct {
         [Struct.UINT32CE]:       8,     // 32-bit combined-endian unsigned integer (ie, little-endian followed by big-endian)
         [Struct.DOSTIMEDATE]:    4,     // 16-bit time followed by 16-bit date (used by ZIP headers and DOS)
         [Struct.DOSDATETIME]:    4,     // 16-bit date followed by 16-bit time (used by ARC headers)
-        [Struct.ISODATETIME7]:   7,     // 7-byte date/time encoding (used by ISO 9660 directories)
-        [Struct.ISODATETIME17]: 17,     // 16-byte date/time string followed by 1-byte time zone offset (used by ISO 9660 descriptors)
+        [Struct.ISODATETIME6]:   6,     // 6-byte date/time encoding (used by High Sierra directories)
+        [Struct.ISODATETIME16]: 16,     // 16-byte date/time string (used by High Sierra descriptors)
+        [Struct.ISODATETIME7]:   7,     // 7-byte date/time encoding (includes 1-byte time zone offset, used by ISO 9660 directories)
+        [Struct.ISODATETIME17]: 17,     // 17-byte date/time string (includes 1-byte time zone offset, used by ISO 9660 descriptors)
     };
 
     /**
@@ -198,7 +202,7 @@ export default class Struct {
     read(db, offset, name, encoding = "cp437", warnings = [])
     {
         let len, v;
-        let date, time = -1, tz;
+        let date, time = -1, tz = 0;
         let field = this.fields[name];
         if (!field) {
             throw new Error(`Field ${name} not found in ${this.name}`);
@@ -338,18 +342,26 @@ export default class Struct {
                 time = db.readUInt16LE(offset + 2);
                 v = this.parseDateTime(date, time, warnings);
                 break;
+            case Struct.ISODATETIME6:
+                time = db.readUInt16LE(offset + 4);
+                /* falls through */
             case Struct.ISODATETIME7:
                 date = db.readUInt32LE(offset);
-                time = db.readUInt32LE(offset + 4);
+                if (time < 0) {
+                    time = db.readUInt32LE(offset + 4);
+                    tz = (time << 8) >> 24;
+                }
                 date = ((date & 0xff) + 1900) + "-" + ((date >> 8) & 0xff).toString().padStart(2, '0') + "-" + ((date >> 16) & 0xff).toString().padStart(2, '0') +
                     " " + (date >>> 24).toString().padStart(2, '0') + ":" + (time & 0xff).toString().padStart(2, '0') + ":" + ((time >> 8) & 0xff).toString().padStart(2, '0');
-                tz = (time << 8) >> 24;
                 /* falls through */
+            case Struct.ISODATETIME16:
             case Struct.ISODATETIME17:
                 if (time < 0) {
                     date = this.readString(db, offset, 16);
                     date = date.replace(/([0-9][0-9][0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])([0-9][0-9])/, "$1-$2-$3 $4:$5:$6.$7");
-                    tz = db.readInt8(offset + 16);
+                    if (field.type == Struct.ISODATETIME17) {
+                        tz = db.readInt8(offset + 16);
+                    }
                 }
                 //
                 // Time zone offset from GMT is in 15 minute intervals, starting at interval -48 (west) and running
