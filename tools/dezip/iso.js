@@ -66,7 +66,8 @@ export default class ISO {
 
     static BLOCK_SIZE = 2048;           // default block size
     static SYSTEM_SIZE = 32768;         // size of system area
-    static RECORD_SIZE = 255;           // maximum size of a directory record (255 bytes)
+    static PATHREC_SIZE = 255;          // maximum size of a path record
+    static DIRREC_SIZE = 255;           // maximum size of a directory record
 
     static VolDesc = new Struct("Volume Descriptor")
         .field('type',          Struct.BYTE, {
@@ -83,7 +84,7 @@ export default class ISO {
 
     static DirRecord = new Struct("Directory Record")
         .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
-        .field('extAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
         .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
         .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
         .field('dateTime',      Struct.ISODATETIME7)    // 0x12: date and time of last modification
@@ -96,12 +97,24 @@ export default class ISO {
         .field('unitSize',      Struct.BYTE)            // 0x1A: unit size for interleaved files
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
-        .field('lenName',       Struct.BYTE)            // 0x20: length of the name in bytes (maximum of 31)
-        .field('name',          Struct.STRLEN)          // 0x21: name
+        .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
+        .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
         .verifyLength(34);
 
     //
-    // NOTE: Field names beginning with a dot (.) are skipped by readStruct()
+    // NOTE: This is the little-endian version of the Path Record (the only version we care about)
+    //
+    static PathRecord = new Struct("Path Record")
+        .field('lenName',       Struct.BYTE)            // 0x00: length of name
+        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
+        .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
+        .field('name',          Struct.STRLEN8)         // 0x08: name of directory
+        .verifyLength(8);
+
+    //
+    // NOTE: Field names beginning with a dot (.) are ignored by readStruct(), which means
+    // those fields will not be read and therefore will not be present in any returned structures.
     //
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
         .field('type',          Struct.BYTE)
@@ -449,8 +462,11 @@ export default class ISO {
     async readDirectory(image, filespec = "*")
     {
         let entries = [];
+        if (!image.paths) {
+            image.paths = await this.readPathRecords(image, image.primary.lbaPaths);
+        }
         if (!image.records) {
-            image.records = await this.readRecords(image, image.primary.rootDir.lba);
+            image.records = await this.readDirRecords(image, image.primary.rootDir.lba);
         }
         for (let record of image.records) {
             let name = record.name;
@@ -478,7 +494,7 @@ export default class ISO {
     }
 
     /**
-     * readRecords(image, lba, subdir)
+     * readDirRecords(image, lba, subdir)
      *
      * @this {ISO}
      * @param {Image} image
@@ -486,26 +502,27 @@ export default class ISO {
      * @param {string} [subdir]
      * @returns {Array}
      */
-    async readRecords(image, lba, subdir = "")
+    async readDirRecords(image, lba, subdir = "")
     {
         let records = [];
         let position = lba * image.primary.blockSize;
         do {
-            let [offset, length] = await this.readCache(image, position, ISO.RECORD_SIZE);
+            let [offset, length] = await this.readCache(image, position, ISO.DIRREC_SIZE);
             let record = ISO.DirRecord.readStruct(image.cache.db, offset);
             if (!record.length) break;          // end-of-directory record
-            record.position = position.toString(16);
+            if (ISO.DEBUG) record.position = position.toString(16);
             position += record.length;
             ISO.assert(record.name);
-            if (record.name == ".") {           // skip the first record of the directory, which is always "."
+            if (record.name == ".") {           // skip the first directory record, which should always be "."
                 ISO.assert(record.lba == lba);
                 continue;
             }
-            if (record.name == "..") {          // skip the second record of the directory, which is always ".."
+            if (record.name == "..") {          // skip the second directory record, which should always be ".."
+                ISO.assert(record.lenName == 1);
                 continue;
             }
             //
-            // Massage the name by first stripping any "version" suffix (eg, ";1") and then prepending any subdir.
+            // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
             //
             record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
             records.push(record);
@@ -513,11 +530,38 @@ export default class ISO {
         let subrecs = [];
         for (let record of records) {
             if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
-                let recs = await this.readRecords(image, record.lba, record.name);
+                let recs = await this.readDirRecords(image, record.lba, record.name);
                 subrecs.push(recs);
             }
         }
         return records.concat(...subrecs);
+    }
+
+    /**
+     * readPathRecords(image, lba)
+     *
+     * @this {ISO}
+     * @param {Image} image
+     * @param {number} lba
+     * @returns {Array}
+     */
+    async readPathRecords(image, lba)
+    {
+        let index = 0;
+        let paths = [];
+        let position = lba * image.primary.blockSize;
+        do {
+            let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
+            let record = ISO.PathRecord.readStruct(image.cache.db, offset);
+            if (!record.lenName) break;         // end-of-path-table record
+            if (ISO.DEBUG) record.position = position.toString(16);
+            position += ISO.PathRecord.length + record.lenName + (record.lenName & 0x1);
+            if (++index == record.indexParent) {
+                continue;                       // if the entry is its own parent (ie, the root), skip it
+            }
+            paths.push(record);
+        } while (position < image.size);
+        return paths;
     }
 
     /**

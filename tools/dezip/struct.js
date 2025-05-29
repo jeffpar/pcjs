@@ -47,8 +47,9 @@ import DataBuffer from "./db.js";
  */
 export default class Struct {
 
-    static STRING           = "string";         // ASCII string (null-terminated)
-    static STRLEN           = "strlen";         // ASCII string with a length prefix
+    static STRING           = "string";         // string (null-terminated)
+    static STRLEN           = "strlen";         // string preceded by a 1-byte length
+    static STRLEN8          = "strlen8";        // string with a 1-byte length 8 bytes earlier
     static INT8             = "int8";
     static INT16            = "int16";
     static INT32            = "int32";
@@ -92,6 +93,7 @@ export default class Struct {
     static SIZES = {
         [Struct.STRING]:         0,
         [Struct.STRLEN]:         1,
+        [Struct.STRLEN8]:       -1,
         [Struct.INT8]:           1,
         [Struct.INT16]:          2,
         [Struct.INT32]:          4,
@@ -178,7 +180,7 @@ export default class Struct {
             }
         }
         this.fields[name] = field;
-        this.length += size;
+        this.length += (size > 0? size : 0);
         return this;
     }
 
@@ -211,7 +213,7 @@ export default class Struct {
         }
         else {
             switch(field.type) {
-            case Struct.STRLEN:         // string with a length prefix
+            case Struct.STRLEN:         // string preceded by a 1-byte length
                 //
                 // Yes, this is a bit wonky, but STRLEN was introduced to handle ISO 9660 directory entries,
                 // and there are two special 1-byte "names" that require special consideration: if the byte
@@ -228,6 +230,17 @@ export default class Struct {
                     break;
                 }
                 length = length & 0x00ff;
+                /* falls through */
+            case Struct.STRLEN8:        // string with a 1-byte length 8 bytes earlier
+                //
+                // Yes, this is even wonkier, but ISO 9660 path table entries begin with a length byte
+                // which, instead of being the size of the entire entry (which would have been consistent
+                // with directory entries), is JUST the length of the identifier.  Since we are now reading
+                // that identifier, we must fetch that length.
+                //
+                if (length < 0) {
+                    length = db.readUInt8(offset - 8);
+                }
                 /* falls through */
             case Struct.STRING:         // string with a maximum length
                 v = this.readString(db, offset, length, encoding);
