@@ -28,9 +28,12 @@ import Struct from './struct.js';
  * @property {string}   name        (name of the image file)
  * @property {Date}     modified    (modification date of image file, if known)
  * @property {number}   size        (size of the image file)
+ * @property {string}   source      (source of the image data; eg, "Buffer", "FS", or "Network")
+ * @property {number}   lbaMax      (maximum logical block address in the image)
  * @property {number}   file        (file descriptor, if any)
  * @property {Cache}    cache       (cache data)
- * @property {Array}    volDescs    (volume descriptors)
+ * @property {Array}    paths       (array of path records, if any)
+ * @property {Array}    records     (array of directory records, if any)
  * @property {number}   exceptions  (see ISO.EXCEPTIONS.*)
  * @property {Array}    warnings    (array of image warnings, if any)
  *
@@ -215,6 +218,10 @@ export default class ISO {
         .field('.unused5',      Struct.BSS(680))        // 0x0558: reserved for future use
         .verifyLength(2048);
 
+    static EXCEPTIONS = {
+        HIGH_SIERRA:            0x00000001              // the image is High Sierra (not ISO 9660)
+    };
+
     /**
      * constructor(interfaces)
      *
@@ -263,13 +270,13 @@ export default class ISO {
         let image = {
             name,                       // name of the image file
             source: "",
-            highSierra: false,
             modified: options.modified, // modification date of image file
             size: 0,                    // size of the image file
             file: null,                 // file handle, if any
             cache: {},                  // cache data
-            volDescs: [],               // volume descriptors
-            primary: null,              // primary volume descriptor, if any
+            paths: null,                // array of path records, if any
+            records: null,              // array of directory records, if any
+            primary: {},                // primary volume descriptor, if any
             exceptions: 0,              // see ISO.EXCEPTIONS.*
             warnings: []                // array of image warnings, if any
         };
@@ -350,7 +357,7 @@ export default class ISO {
             if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
                 image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
                 image.dirClass = ISO.HSDirRecord;
-                image.highSierra = true;
+                image.exceptions |= ISO.EXCEPTIONS.HIGH_SIERRA;
                 break;
             }
             let type = image.cache.db.readUInt8(offset);
@@ -363,6 +370,7 @@ export default class ISO {
             }
             position += extent;
         } while (position < image.size);
+        image.lbaMax = Math.floor(image.size / (image.primary.blockSize || ISO.BLOCK_SIZE));
         return image;
     }
 
@@ -596,6 +604,9 @@ export default class ISO {
                     ISO.assert(record.lenName == 1);
                     continue;
                 }
+                if (record.lba >= image.lbaMax) {
+                    throw new Error(`Invalid record in directory "${subdir}" at position ${position}`);
+                }
                 //
                 // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
                 //
@@ -609,7 +620,10 @@ export default class ISO {
                 }
             }
         } catch (error) {
-            image.warnings.push(`Error reading directory record at position ${position}: ${error.message}`);
+            if (subdir) {
+                throw error;
+            }
+            image.warnings.push(error.message);
         }
         return records.concat(...subrecs);
     }
@@ -638,10 +652,13 @@ export default class ISO {
                 if (++index == record.indexParent) {
                     continue;                       // if the entry is its own parent (ie, the root), skip it
                 }
+                if (record.lba >= image.lbaMax) {
+                    throw new Error(`Invalid path record at position ${position}`);
+                }
                 paths.push(record);
             } while (position < positionEnd);
         } catch (error) {
-            image.warnings.push(`Error reading path record at position ${position}: ${error.message}`);
+            image.warnings.push(error.message);
         }
         return paths;
     }
