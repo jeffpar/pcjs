@@ -40,6 +40,7 @@ import Struct from './struct.js';
  * @typedef  {object}   ImageOptions
  * @property {Date}     modified    (modification date of image file, if known)
  * @property {boolean}  prefill     (if true, read the entire image into memory on open)
+ * @property {boolean}  compat      (if true, ignore any supplementary (eg, Joliet) volume descriptor
  *
  * @typedef  {object}   Cache
  * @property {DataBuffer} db        (cache buffer)
@@ -301,7 +302,7 @@ export default class ISO {
             cache: {},                  // cache data
             paths: null,                // array of path records, if any
             records: null,              // array of directory records, if any
-            primary: {},                // primary volume descriptor, if any
+            primary: null,              // primary volume descriptor, if any
             exceptions: 0,              // see ISO.EXCEPTIONS.*
             warnings: []                // array of image warnings, if any
         };
@@ -391,12 +392,7 @@ export default class ISO {
             if (type == ISO.VolDesc.fields.type.END) {
                 break;
             }
-            //
-            // TODO: Provide an open() option to control whether we use (or ignore) the
-            // Supplementary (SUPP) Volume Descriptor.  For example, the caller may not want
-            // long/mixed case names if they're trying to extract DOS-compatible filenames.
-            //
-            if (type == ISO.VolDesc.fields.type.PRIMARY || type == ISO.VolDesc.fields.type.SUPP) {
+            if (type == ISO.VolDesc.fields.type.PRIMARY && !image.primary || type == ISO.VolDesc.fields.type.SUPP && !options.compat) {
                 image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
                 if (image.primary.type == ISO.VolDesc.fields.type.SUPP) {
                     if (image.primary.escSeq == "%/E") {    // 0x25 0x2f 0x45
@@ -408,7 +404,7 @@ export default class ISO {
             }
             position += extent;
         } while (position < image.size);
-        image.lbaMax = Math.floor(image.size / (image.primary.blockSize || ISO.BLOCK_SIZE));
+        image.lbaMax = Math.floor(image.size / (image.primary && image.primary.blockSize || ISO.BLOCK_SIZE));
         return image;
     }
 
@@ -582,35 +578,37 @@ export default class ISO {
     async readDirectory(image, filespec = "*")
     {
         let entries = [];
-        if (!image.paths) {
-            image.paths = await this.readPathRecords(image, image.primary.lbaPaths);
-        }
-        if (!image.records) {
-            image.records = await this.readDirRecords(image, image.primary.rootDir.lba);
-        }
-        for (let index = 0; index < image.records.length; index++) {
-            let record = image.records[index];
-            let name = record.name;
-            if (filespec && filespec != "*") {
-                let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
-                if (!name.match(re)) continue;
+        if (image.primary) {
+            if (!image.paths) {
+                image.paths = await this.readPathRecords(image, image.primary.lbaPaths);
             }
-            let attr = 0;
-            if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                attr |= 0x10;
+            if (!image.records) {
+                image.records = await this.readDirRecords(image, image.primary.rootDir.lba);
             }
-            entries.push({
-                index,
-                name,
-                attr,
-                modified: record.dateTime,
-                size: record.size,
-                compressedSize: record.size,
-                flags: 0,
-                method: 0,
-                crc: 0,
-                warnings: []
-            });
+            for (let index = 0; index < image.records.length; index++) {
+                let record = image.records[index];
+                let name = record.name;
+                if (filespec && filespec != "*") {
+                    let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
+                    if (!name.match(re)) continue;
+                }
+                let attr = 0;
+                if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
+                    attr |= 0x10;
+                }
+                entries.push({
+                    index,
+                    name,
+                    attr,
+                    modified: record.dateTime,
+                    size: record.size,
+                    compressedSize: record.size,
+                    flags: 0,
+                    method: 0,
+                    crc: 0,
+                    warnings: []
+                });
+            }
         }
         return entries;
     }
@@ -715,7 +713,7 @@ export default class ISO {
      */
     async readFile(image, index, writeData)
     {
-        let record = image.records[index];
+        let record = image.records && image.records[index];
         if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
             throw new Error(`No file entry at index ${index}`);
         }

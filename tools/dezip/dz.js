@@ -101,6 +101,12 @@ const options = {
         alias: "-b",
         description: "display archive comments (banners)"
     },
+    "compat": {
+        type: "boolean",
+        usage: "--compat",
+        alias: "-c",
+        description: "enable CD-ROM compatibility mode"
+    },
     "csv": {
         type: "string",
         usage: "--csv [file]",
@@ -584,6 +590,9 @@ async function main(argc, argv, errors)
             }
             if (argv.password) {
                 options.password = argv.password;
+            }
+            if (argv.compat) {
+                options.compat = true;
             }
             if (archivePath[0] == '~') {
                 archivePath = path.join(process.env.HOME, archivePath.slice(1));
