@@ -706,7 +706,9 @@ async function main(argc, argv, errors)
                 await csvFile.write(getCSVLine(archive, archive.source, archive.cache.db, false));
             }
             let nEntries = 0;
+            let dirTimestamps = {};
             while (nEntries < entries.length) {
+                let targetPath;
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
                 //
@@ -722,6 +724,10 @@ async function main(argc, argv, errors)
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
                 if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
+                    if (argv.extract || argv.dir) {
+                        targetPath = path.join(dstPath, entry.name);
+                        dirTimestamps[targetPath] = entry.modified;
+                    }
                     continue;           // skip directory entries
                 }
                 //
@@ -756,9 +762,7 @@ async function main(argc, argv, errors)
                 }
                 nTotalFiles++;
                 nArchiveFiles++;
-                let db, writeData;
-                let printed = false;
-                let targetFile, targetPath;
+                let db, targetFile, writeData, printed = false;
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of containers
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
@@ -859,6 +863,25 @@ async function main(argc, argv, errors)
                     //
                     nArchiveFiles += nFiles;
                     nArchiveWarnings += nWarnings;
+                }
+            }
+            //
+            // If we squirreled away any directory timestamps, now is the time to set them.
+            //
+            // This had to be deferred until all other entries were processed, because the simple
+            // act of creating entries inside directories modifies the timestamps of those directories,
+            //
+            for (let dirPath in dirTimestamps) {
+                try {
+                    //
+                    // Generally, entries in dirTimestamps will already exist UNLESS there were no
+                    // entries inside the directory (seems uncommon in archives but definitely happens
+                    // in disk images).
+                    //
+                    await fs.mkdir(dirPath, { recursive: true });
+                    await fs.utimes(dirPath, dirTimestamps[dirPath], dirTimestamps[dirPath]);
+                } catch (error) {
+                    printf("%s: %s\n", dirPath, error.message);
                 }
             }
             //
