@@ -124,10 +124,7 @@ export default class ISO {
         .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
         .verifyLength(34);
 
-    //
-    // NOTE: This is the little-endian version of the Path Record (the only version we care about)
-    //
-    static PathRecord = new Struct("Path Record")
+    static PathRecordLE = new Struct("Path Record")
         .field('lenName',       Struct.BYTE)            // 0x00: length of name
         .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
         .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
@@ -135,10 +132,14 @@ export default class ISO {
         .field('name',          Struct.STRLEN8)         // 0x08: name of directory
         .verifyLength(8);
 
-    //
-    // NOTE: Field names beginning with a dot (.) are ignored by readStruct(), which means
-    // those fields will not be read and therefore will not be present in any returned structures.
-    //
+    static HSPathRecordLE = new Struct("High Sierra Path Record")
+        .field('lba',           Struct.UINT32LE)        // 0x00: logical block address of directory
+        .field('lenAttr',       Struct.BYTE)            // 0x04: extended attribute record length
+        .field('lenName',       Struct.BYTE)            // 0x05: length of name
+        .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
+        .field('name',          Struct.STRLEN3)         // 0x08: name of directory
+        .verifyLength(8);
+
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
         .field('type',          Struct.BYTE)
         .field('identifier',    Struct.STR(5))          // "CD001"
@@ -175,9 +176,6 @@ export default class ISO {
         .field('.unused5',      Struct.BSS(653))        // reserved for future use
         .verifyLength(2048);
 
-    //
-    // High Sierra Primary Volume Descriptor
-    //
     static HSPrimaryDesc = new Struct("High Sierra Primary Volume Descriptor")
         .field('lbaVol',        Struct.UINT32CE)        // 0x0000: eg, 0x00000010
         .field('type',          Struct.BYTE)            // 0x0008: eg, 0x01
@@ -348,6 +346,7 @@ export default class ISO {
             throw new Error("No image open interface available");
         }
         image.dirClass = ISO.DirRecord;
+        image.pathClass = ISO.PathRecordLE;
         let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
         do {
             let [offset, length] = await this.readCache(image, position, extent);
@@ -357,6 +356,7 @@ export default class ISO {
             if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
                 image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
                 image.dirClass = ISO.HSDirRecord;
+                image.pathClass = ISO.HSPathRecordLE;
                 image.exceptions |= ISO.EXCEPTIONS.HIGH_SIERRA;
                 break;
             }
@@ -647,13 +647,14 @@ export default class ISO {
         try {
             do {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
-                let record = ISO.PathRecord.readStruct(image.cache.db, offset);
+                let record = image.pathClass.readStruct(image.cache.db, offset);
                 if (!record.lenName) break;         // end-of-path-table record?
                 if (ISO.DEBUG) record.position = position.toString(16);
-                position += ISO.PathRecord.length + record.lenName + (record.lenName & 0x1);
+                position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
                 if (++index == record.indexParent) {
                     continue;                       // if the entry is its own parent (ie, the root), skip it
                 }
+                ISO.assert(record.name);
                 if (record.lba >= image.lbaMax) {
                     throw new Error(`Invalid path record at position ${position}`);
                 }

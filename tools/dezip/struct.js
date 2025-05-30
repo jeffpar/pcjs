@@ -49,6 +49,7 @@ export default class Struct {
 
     static STRING           = "string";         // string (null-terminated)
     static STRLEN           = "strlen";         // string preceded by a 1-byte length
+    static STRLEN3          = "strlen3";        // string with a 1-byte length 3 bytes earlier
     static STRLEN8          = "strlen8";        // string with a 1-byte length 8 bytes earlier
     static INT8             = "int8";
     static INT16            = "int16";
@@ -95,6 +96,7 @@ export default class Struct {
     static SIZES = {
         [Struct.STRING]:         0,
         [Struct.STRLEN]:         1,
+        [Struct.STRLEN3]:       -1,
         [Struct.STRLEN8]:       -1,
         [Struct.INT8]:           1,
         [Struct.INT16]:          2,
@@ -146,7 +148,12 @@ export default class Struct {
     /**
      * field(name, type, values)
      *
-     * type should be either a Struct constant (eg, Struct.INT8) or a length (implying a string).
+     * If the name of a field begins with a dot ("."), then the field will not be read or added
+     * to records returned by readStruct(); its main purpose is simply to ensure proper alignment
+     * of subsequent fields.
+     *
+     * The type should be either a Struct constant (eg, Struct.INT8), or a length (implying a string
+     * field with a maximum length), or another Struct instance (implying a nested structure).
      *
      * @this {Struct}
      * @param {string} name
@@ -235,15 +242,15 @@ export default class Struct {
                 }
                 length = length & 0x00ff;
                 /* falls through */
+            case Struct.STRLEN3:        // string with a 1-byte length 3 bytes earlier
             case Struct.STRLEN8:        // string with a 1-byte length 8 bytes earlier
                 //
-                // Yes, this is even wonkier, but ISO 9660 path table entries begin with a length byte
-                // which, instead of being the size of the entire entry (which would have been consistent
-                // with directory entries), is JUST the length of the identifier.  Since we are now reading
-                // that identifier, we must fetch that length.
+                // Yes, this is even wonkier, but High Sierra and ISO 9660 path table entries have
+                // strings whose length bytes do not immediately precede the string; they instead appear
+                // 3 or 8 bytes earlier, respectively.
                 //
                 if (length < 0) {
-                    length = db.readUInt8(offset - 8);
+                    length = db.readUInt8(offset - (field.type == Struct.STRLEN3? 3 : 8));
                 }
                 /* falls through */
             case Struct.STRING:         // string with a maximum length
