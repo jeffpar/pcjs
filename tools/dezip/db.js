@@ -416,7 +416,17 @@ export default class DataBuffer {
     toString(encoding, start = 0, end = this.length)
     {
         let s = "";
-        if (this.node) {
+        if (encoding == "ucs2be") {
+            //
+            // Node apparently supports "ucs2" as an encoding, but it assumes little-endian (because
+            // that's all v8 supported).  I use the encoding "ucs2be" to make it crystal clear what we
+            // need, and that "ucs2" ain't it.
+            //
+            for (let i = start; i < end - 1; i += 2) {
+                s += String.fromCharCode(this.buffer[i] * 256 + this.buffer[i+1]);
+            }
+        }
+        else if (this.node) {
             s = this.buffer.toString(encoding, start, end);
         } else {
             //

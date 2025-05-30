@@ -48,9 +48,11 @@ import DataBuffer from "./db.js";
 export default class Struct {
 
     static STRING           = "string";         // string (null-terminated)
-    static STRLEN           = "strlen";         // string preceded by a 1-byte length
+    static STRLEN1          = "strlen1";        // string preceded by a 1-byte length
     static STRLEN3          = "strlen3";        // string with a 1-byte length 3 bytes earlier
     static STRLEN8          = "strlen8";        // string with a 1-byte length 8 bytes earlier
+    static UCS2BE1          = "ucs2be1";        // UCS-2 string (big-endian) preceded by a 1-byte length
+    static UCS2BE8          = "ucs2be8";        // UCS-2 string (big-endian) with 1-byte length 8 bytes earlier
     static INT8             = "int8";
     static INT16            = "int16";
     static INT32            = "int32";
@@ -95,9 +97,11 @@ export default class Struct {
 
     static SIZES = {
         [Struct.STRING]:         0,
-        [Struct.STRLEN]:         1,
+        [Struct.STRLEN1]:        1,
         [Struct.STRLEN3]:       -1,
         [Struct.STRLEN8]:       -1,
+        [Struct.UCS2BE1]:        1,
+        [Struct.UCS2BE8]:       -1,
         [Struct.INT8]:           1,
         [Struct.INT16]:          2,
         [Struct.INT32]:          4,
@@ -224,9 +228,10 @@ export default class Struct {
         }
         else {
             switch(field.type) {
-            case Struct.STRLEN:         // string preceded by a 1-byte length
+            case Struct.STRLEN1:        // string preceded by a 1-byte length
+            case Struct.UCS2BE1:        // UCS-2 big-endian string preceded by a 1-byte length
                 //
-                // Yes, this is a bit wonky, but STRLEN was introduced to handle ISO 9660 directory entries,
+                // Yes, this is a bit wonky, but STRLEN1 was introduced to handle ISO 9660 directory entries,
                 // and there are two special 1-byte "names" that require special consideration: if the byte
                 // is 0x00, then we have a current directory entry (".") and if the byte is 0x01, then we have
                 // a parent directory entry ("..").
@@ -241,6 +246,9 @@ export default class Struct {
                     break;
                 }
                 length = length & 0x00ff;
+                if (field.type == Struct.UCS2BE1) {
+                    v = db.toString("ucs2be", offset, offset + length);
+                }
                 /* falls through */
             case Struct.STRLEN3:        // string with a 1-byte length 3 bytes earlier
             case Struct.STRLEN8:        // string with a 1-byte length 8 bytes earlier
@@ -254,7 +262,9 @@ export default class Struct {
                 }
                 /* falls through */
             case Struct.STRING:         // string with a maximum length
-                v = this.readString(db, offset, length, encoding);
+                if (v == undefined) {
+                    v = this.readString(db, offset, length, encoding);
+                }
                 for (let i = 0; i < length; i++) {
                     if (v.charCodeAt(i) == 0) {
                         v = v.slice(0, i);
@@ -262,6 +272,10 @@ export default class Struct {
                     }
                 }
                 v = v.trim();
+                break;
+            case Struct.UCS2BE8:      // UCS-2 big-endian string with 1-byte length 8 bytes earlier
+                length = db.readUInt8(offset - 8);
+                v = db.toString("ucs2be", offset, offset + length);
                 break;
             case Struct.INT8:
                 v = db.readInt8(offset);

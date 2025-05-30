@@ -101,7 +101,26 @@ export default class ISO {
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
         .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
-        .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
+        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory
+        .verifyLength(34);
+
+    static DirRecord2 = new Struct("Directory Record (UCS-2 BE)")
+        .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
+        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
+        .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
+        .field('dateTime',      Struct.ISODATETIME7)    // 0x12: date and time of last modification
+        .field('flags',         Struct.BYTE, {          // 0x19: flags
+            HIDDEN:     0x01,                           // hidden entry
+            DIRECTORY:  0x02,                           // directory entry
+            ASSOCIATED: 0x04,                           // associated file
+            EXTENDED:   0x08                            // record format
+        })
+        .field('unitSize',      Struct.BYTE)            // 0x1A: unit size for interleaved files
+        .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
+        .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
+        .field('lenName',       Struct.BYTE)            // 0x20: length of name (in bytes, even though 2-byte characters are used)
+        .field('name',          Struct.UCS2BE1)         // 0x21: name of file or directory (in UCS-2 BE format)
         .verifyLength(34);
 
     static HSDirRecord = new Struct("High Sierra Directory Record")
@@ -121,15 +140,23 @@ export default class ISO {
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
         .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
-        .field('name',          Struct.STRLEN)          // 0x21: name of file or directory
+        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory
         .verifyLength(34);
 
-    static PathRecordLE = new Struct("Path Record")
-        .field('lenName',       Struct.BYTE)            // 0x00: length of name
+    static PathRecordLE = new Struct("Path Record (LE)")
+        .field('lenName',       Struct.BYTE)            // 0x00: length of name (in bytes, even if 2-byte characters are used)
         .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
         .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
         .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
         .field('name',          Struct.STRLEN8)         // 0x08: name of directory
+        .verifyLength(8);
+
+    static PathRecordLE2 = new Struct("Path Record (LE with UCS-2 BE)")
+        .field('lenName',       Struct.BYTE)            // 0x00: length of name (in bytes, even though 2-byte characters are used)
+        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
+        .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
+        .field('name',          Struct.UCS2BE8)         // 0x08: name of directory (in UCS-2 BE format)
         .verifyLength(8);
 
     static HSPathRecordLE = new Struct("High Sierra Path Record")
@@ -141,39 +168,39 @@ export default class ISO {
         .verifyLength(8);
 
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
-        .field('type',          Struct.BYTE)
-        .field('identifier',    Struct.STR(5))          // "CD001"
-        .field('version',       Struct.BYTE)            // version of the ISO 9660 standard
-        .field('.unused1',      Struct.BYTE)
-        .field('sysID',         Struct.STR(32))
-        .field('volID',         Struct.STR(32))
-        .field('.unused2',      Struct.BSS(8))
-        .field('volBlocks',     Struct.UINT32CE)        // size of the volume in 2048-byte sectors
-        .field('.unused3',      Struct.BSS(32))
-        .field('volSet',        Struct.UINT16CE)        // number of volumes in the volume set
-        .field('volSeq',        Struct.UINT16CE)        // sequence number of this volume in the volume set
-        .field('blockSize',     Struct.UINT16CE)        // logical block size in bytes (usually 2048)
-        .field('lenPaths',      Struct.UINT32CE)        // size of the path table in bytes
-        .field('lbaPaths',      Struct.UINT32LE)        // LBA location of the little-endian path table
-        .field('.lbaOptPaths',  Struct.UINT32LE)        // LBA location of the optional little-endian path table
-        .field('.lbaPathsBE',   Struct.UINT32BE)        // LBA location of the big-endian path table
-        .field('.lbaOptPathsBE',Struct.UINT32BE)        // LBA location of the optional big-endian path table
-        .field('rootDir',       ISO.DirRecord)          // root directory entry
-        .field('volSetID',      Struct.STR(128))        // volume set identifier
-        .field('publisherID',   Struct.STR(128))        // publisher identifier
-        .field('preparerID',    Struct.STR(128))        // preparer identifier
-        .field('appID',         Struct.STR(128))        // application identifier
-        .field('copyright',     Struct.STR(37))         // copyright file identifier
-        .field('abstract',      Struct.STR(37))         // abstract file identifier
-        .field('bibliographic', Struct.STR(37))         // bibliographic file identifier
-        .field('created',       Struct.ISODATETIME17)   // creation date of the volume
-        .field('modified',      Struct.ISODATETIME17)   // modification date of the volume
-        .field('expiration',    Struct.ISODATETIME17)   // expiration date of the volume
-        .field('effective',     Struct.ISODATETIME17)   // effective date of the volume
-        .field('fileStructure', Struct.BYTE)
-        .field('.unused4',      Struct.BYTE)
-        .field('appData',       Struct.BSS(512))        // reserved for future use
-        .field('.unused5',      Struct.BSS(653))        // reserved for future use
+        .field('type',          Struct.BYTE)            // 0x0000
+        .field('identifier',    Struct.STR(5))          // 0x0001: "CD001"
+        .field('version',       Struct.BYTE)            // 0x0006: version of the ISO 9660 standard
+        .field('flags',         Struct.BYTE)            // 0x0007: (Supplementary Volume Descriptor only)
+        .field('sysID',         Struct.STR(32))         // 0x0008
+        .field('volID',         Struct.STR(32))         // 0x0028: volume identifier
+        .field('.unused2',      Struct.BSS(8))          // 0x0048
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0050: size of the volume in 2048-byte sectors
+        .field('escSeq',        Struct.STR(32))         // 0x0058: (Supplementary Volume Descriptor only)
+        .field('volSet',        Struct.UINT16CE)        // 0x0078: number of volumes in the volume set
+        .field('volSeq',        Struct.UINT16CE)        // 0x007C: sequence number of this volume in the volume set
+        .field('blockSize',     Struct.UINT16CE)        // 0x0080: logical block size in bytes, usually 2048 (0x0800)
+        .field('lenPaths',      Struct.UINT32CE)        // 0x0084: size of the path table in bytes
+        .field('lbaPaths',      Struct.UINT32LE)        // 0x008C: LBA location of the little-endian path table
+        .field('.lbaOptPaths',  Struct.UINT32LE)        // 0x0090: LBA location of the optional little-endian path table
+        .field('.lbaPathsBE',   Struct.UINT32BE)        // 0x0094: LBA location of the big-endian path table
+        .field('.lbaOptPathsBE',Struct.UINT32BE)        // 0x0098: LBA location of the optional big-endian path table
+        .field('rootDir',       ISO.DirRecord)          // 0x009C: root directory entry
+        .field('volSetID',      Struct.STR(128))        // 0x00BE: volume set identifier
+        .field('publisherID',   Struct.STR(128))        // 0x013E: publisher identifier
+        .field('preparerID',    Struct.STR(128))        // 0x01BE: preparer identifier
+        .field('appID',         Struct.STR(128))        // 0x023E: application identifier
+        .field('copyright',     Struct.STR(37))         // 0x02BE: copyright file identifier
+        .field('abstract',      Struct.STR(37))         // 0x02E3: abstract file identifier
+        .field('bibliographic', Struct.STR(37))         // 0x0308: bibliographic file identifier
+        .field('created',       Struct.ISODATETIME17)   // 0x032D: creation date of the volume
+        .field('modified',      Struct.ISODATETIME17)   // 0x033E: modification date of the volume
+        .field('expiration',    Struct.ISODATETIME17)   // 0x034F: expiration date of the volume
+        .field('effective',     Struct.ISODATETIME17)   // 0x0360: effective date of the volume
+        .field('fileStructure', Struct.BYTE)            // 0x0371
+        .field('.unused4',      Struct.BYTE)            // 0x0372
+        .field('appData',       Struct.BSS(512))        // 0x0373: reserved for future use
+        .field('.unused5',      Struct.BSS(653))        // 0x0573-0x07FF
         .verifyLength(2048);
 
     static HSPrimaryDesc = new Struct("High Sierra Primary Volume Descriptor")
@@ -213,7 +240,7 @@ export default class ISO {
         .field('fileStructure', Struct.BYTE)            // 0x0356: eg, 0x00
         .field('.unused4',      Struct.BYTE)            // 0x0357
         .field('appData',       Struct.BSS(512))        // 0x0358: reserved for future use
-        .field('.unused5',      Struct.BSS(680))        // 0x0558: reserved for future use
+        .field('.unused5',      Struct.BSS(680))        // 0x0558-0x07FF
         .verifyLength(2048);
 
     static EXCEPTIONS = {
@@ -364,8 +391,19 @@ export default class ISO {
             if (type == ISO.VolDesc.fields.type.END) {
                 break;
             }
-            if (type == ISO.VolDesc.fields.type.PRIMARY) {
+            //
+            // TODO: Provide an open() option to control whether we use (or ignore) the
+            // Supplementary (SUPP) Volume Descriptor.  For example, the caller may not want
+            // long/mixed case names if they're trying to extract DOS-compatible filenames.
+            //
+            if (type == ISO.VolDesc.fields.type.PRIMARY || type == ISO.VolDesc.fields.type.SUPP) {
                 image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
+                if (image.primary.type == ISO.VolDesc.fields.type.SUPP) {
+                    if (image.primary.escSeq == "%/E") {    // 0x25 0x2f 0x45
+                        image.dirClass = ISO.DirRecord2;
+                        image.pathClass = ISO.PathRecordLE2;
+                    }
+                }
                 extent = image.primary.blockSize;
             }
             position += extent;
@@ -558,7 +596,7 @@ export default class ISO {
                 if (!name.match(re)) continue;
             }
             let attr = 0;
-            if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
+            if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
                 attr |= 0x10;
             }
             entries.push({
@@ -616,7 +654,7 @@ export default class ISO {
                 records.push(record);
             } while (position < image.size);
             for (let record of records) {
-                if (record.flags & ISO.DirRecord.fields.flags.DIRECTORY) {
+                if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
                     let recs = await this.readDirRecords(image, record.lba, record.name);
                     subrecs.push(recs);
                 }
@@ -678,7 +716,7 @@ export default class ISO {
     async readFile(image, index, writeData)
     {
         let record = image.records[index];
-        if (!record || (record.flags & ISO.DirRecord.fields.flags.DIRECTORY)) {
+        if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
             throw new Error(`No file entry at index ${index}`);
         }
         let db = await this.readImage(image, record.lba * image.primary.blockSize, record.size);

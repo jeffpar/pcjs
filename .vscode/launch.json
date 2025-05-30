@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-l -d archive/pcsig \"~/Disks/Shareware/Discs/PC-SIG Library CD-ROM (1988-04).iso\""
+        "-l \"~/Disks/Shareware/Discs/PC-SIG Library CD-ROM (1988-04).iso\""
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
