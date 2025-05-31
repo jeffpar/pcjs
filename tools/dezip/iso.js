@@ -9,7 +9,7 @@
  * Items of interest:
  *
  * I was intrigued by this blog post (https://multimedia.cx/eggs/iso-9660-compromise-part-2-finding-root),
- * which discussed this ISO 9600 CD-ROM image (https://archive.org/details/Power-Drive-DOS-1994), which was
+ * which discussed this ISO 9660 CD-ROM image (https://archive.org/details/Power-Drive-DOS-1994), which was
  * purported to have some "corruption"... except that macOS was able to mount and read the image just fine.
  *
  * So I took a look, and sure enough, this utility was unable to read the image as well.  As the blogger
@@ -648,12 +648,12 @@ export default class ISO {
      *
      * NOTE: In my extremely limited experience with ISO 9660 images, the size of a directory
      * (in bytes) is always the total number of blocks multiplied by the block size, so it
-     * encompasses all padding in all the blocks, including the unused space in the last block.
+     * encompasses all padding in all the blocks, including any unused space in the last block.
      *
      * @this {ISO}
      * @param {Image} image
      * @param {number} lba
-     * @param {number} size (of the all the directory blocks, in bytes)
+     * @param {number} size (of all the directory blocks, in bytes)
      * @param {string} [subdir]
      * @returns {Array}
      */
