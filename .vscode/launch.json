@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-l archive/100_Great_Games.iso"
+        "-l ~/Downloads/Power-Drive.iso"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

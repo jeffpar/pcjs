@@ -5,6 +5,37 @@
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
+ *
+ * Items of interest:
+ *
+ * I was intrigued by this blog post (https://multimedia.cx/eggs/iso-9660-compromise-part-2-finding-root),
+ * which discussed this ISO 9600 CD-ROM image (https://archive.org/details/Power-Drive-DOS-1994), which was
+ * purported to have some "corruption"... except that macOS was able to mount and read the image just fine.
+ *
+ * So I took a look, and sure enough, this utility was unable to read the image as well.  As the blogger
+ * noted, there seemed to be off-by-one errors in all the directory block numbers.  But then I also noticed
+ * that all the directory entries also contained a 1 instead of the usual 0 in the "extended attributes"
+ * field.
+ *
+ * Up until this point, I had been ignoring that field, largely because most of the ISO 9660 documentation
+ * I'd referred to (eg, https://wiki.osdev.org/ISO_9660) didn't really explain extended attributes, so I had
+ * no idea where they were stored or what they typically contained.  But looking at the Power Drive image,
+ * I saw single-sector chunks of data sprinkled throughout the image that looked a bit "attributey"; eg:
+ *
+ *      00031000  0a 00 00 0a 0c 00 00 0c  aa aa 00 00 00 00 03 a7  |................|
+ *      00031010  4e 0a 00 00 00 d8 03 a7  4e 0a 03 9d de 06 03 a7  |N.......N.......|
+ *      00031020  4d 32 00 00 00 00 00 00  00 3a 00 01 30 30 30 30  |M2.......:..0000|
+ *      00031030  30 30 30 30 30 30 30 30  30 30 30 30 00 30 30 30  |000000000000.000|
+ *      00031040  30 30 30 30 30 30 30 30  30 30 30 30 30 00 00 00  |0000000000000...|
+ *      00031050  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+ *
+ * For example, the first 8 bytes look suspiciously like a pair of UINT16CE values and all those "0" bytes
+ * look like a pair of ISODATETIME17 values.  Anyway, it didn't take long to learn that extended attributes
+ * are always stored in block(s) preceding an items's data block(s), so you simply add the extended attribute
+ * block size (cbAttr) to an item's starting block to get its first data block.
+ *
+ * I still haven't investigated the data stored in those extended attribute blocks, but it's not essential
+ * to the operations performed here (ie, file listing and extraction), so that's an exercise for another day.
  */
 
 import DataBuffer from "./db.js";
@@ -72,22 +103,9 @@ export default class ISO {
     static SYSTEM_SIZE = 32768;         // size of system area
     static PATHREC_SIZE = 255;          // maximum size of a path record
 
-    static VolDesc = new Struct("Volume Descriptor")
-        .field('type',          Struct.BYTE, {
-            BOOT:       0x00,
-            PRIMARY:    0x01,                           // Primary Volume Descriptor
-            SUPP:       0x02,                           // Supplementary Volume Descriptor
-            PARTITION:  0x03,                           // Volume Partition Descriptor
-            END:        0xFF                            // End of Volume Descriptor
-        })
-        .field('identifier',    Struct.STR(5))          // "CD001"
-        .field('version',       Struct.BYTE)            // version of the ISO 9660 standard (eg, 0x01)
-        .field('data',          Struct.BSS(2041))
-        .verifyLength(2048);
-
     static DirRecord = new Struct("Directory Record")
         .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
-        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x01: extended attribute record length (in blocks)
         .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
         .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
         .field('dateTime',      Struct.ISODATETIME7)    // 0x12: date and time of last modification
@@ -101,12 +119,12 @@ export default class ISO {
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
         .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
-        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory
+        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory (in ASCII)
         .verifyLength(34);
 
     static DirRecord2 = new Struct("Directory Record (UCS-2 BE)")
         .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
-        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x01: extended attribute record length (in blocks)
         .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
         .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
         .field('dateTime',      Struct.ISODATETIME7)    // 0x12: date and time of last modification
@@ -120,12 +138,12 @@ export default class ISO {
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
         .field('lenName',       Struct.BYTE)            // 0x20: length of name (in bytes, even though 2-byte characters are used)
-        .field('name',          Struct.UCS2BE1)         // 0x21: name of file or directory (in UCS-2 BE format)
+        .field('name',          Struct.UCS2BE1)         // 0x21: name of file or directory (in UCS-2 BE)
         .verifyLength(34);
 
     static HSDirRecord = new Struct("High Sierra Directory Record")
         .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
-        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x01: extended attribute record length (in blocks)
         .field('lba',           Struct.UINT32CE)        // 0x02: logical block address of the file
         .field('size',          Struct.UINT32CE)        // 0x0A: size of the file (in bytes)
         .field('dateTime',      Struct.ISODATETIME6)    // 0x12: date and time of last modification
@@ -140,35 +158,41 @@ export default class ISO {
         .field('interleave',    Struct.BYTE)            // 0x1B: interleave gap size for interleaved files
         .field('volSeq',        Struct.UINT16CE)        // 0x1C: volume sequence number for interleaved files
         .field('lenName',       Struct.BYTE)            // 0x20: length of name (maximum 31)
-        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory
+        .field('name',          Struct.STRLEN1)         // 0x21: name of file or directory (in ASCII)
         .verifyLength(34);
 
     static PathRecordLE = new Struct("Path Record (LE)")
         .field('lenName',       Struct.BYTE)            // 0x00: length of name (in bytes, even if 2-byte characters are used)
-        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x01: extended attribute record length (in blocks)
         .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
         .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
-        .field('name',          Struct.STRLEN8)         // 0x08: name of directory
+        .field('name',          Struct.STRLEN8)         // 0x08: name of directory (in ASCII)
         .verifyLength(8);
 
     static PathRecordLE2 = new Struct("Path Record (LE with UCS-2 BE)")
         .field('lenName',       Struct.BYTE)            // 0x00: length of name (in bytes, even though 2-byte characters are used)
-        .field('lenAttr',       Struct.BYTE)            // 0x01: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x01: extended attribute record length (in blocks)
         .field('lba',           Struct.UINT32LE)        // 0x02: logical block address of directory
         .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
-        .field('name',          Struct.UCS2BE8)         // 0x08: name of directory (in UCS-2 BE format)
+        .field('name',          Struct.UCS2BE8)         // 0x08: name of directory (in UCS-2 BE)
         .verifyLength(8);
 
     static HSPathRecordLE = new Struct("High Sierra Path Record")
         .field('lba',           Struct.UINT32LE)        // 0x00: logical block address of directory
-        .field('lenAttr',       Struct.BYTE)            // 0x04: extended attribute record length
+        .field('cbAttr',        Struct.BYTE)            // 0x04: extended attribute record length (in blocks)
         .field('lenName',       Struct.BYTE)            // 0x05: length of name
         .field('indexParent',   Struct.UINT16LE)        // 0x06: directory number of parent directory
-        .field('name',          Struct.STRLEN3)         // 0x08: name of directory
+        .field('name',          Struct.STRLEN3)         // 0x08: name of directory (in ASCII)
         .verifyLength(8);
 
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
-        .field('type',          Struct.BYTE)            // 0x0000
+        .field('type',          Struct.BYTE, {          // 0x0000
+            BOOT:       0x00,
+            PRIMARY:    0x01,                           // Primary Volume Descriptor
+            SUPP:       0x02,                           // Supplementary Volume Descriptor
+            PARTITION:  0x03,                           // Volume Partition Descriptor
+            END:        0xFF                            // End of Volume Descriptor
+        })
         .field('identifier',    Struct.STR(5))          // 0x0001: "CD001"
         .field('version',       Struct.BYTE)            // 0x0006: version of the ISO 9660 standard
         .field('flags',         Struct.BYTE)            // 0x0007: (Supplementary Volume Descriptor only)
@@ -388,13 +412,19 @@ export default class ISO {
                 break;
             }
             let type = image.cache.db.readUInt8(offset);
-            if (type == ISO.VolDesc.fields.type.END) {
+            if (type == ISO.PrimaryDesc.fields.type.END) {
                 break;
             }
-            if (type == ISO.VolDesc.fields.type.PRIMARY && !image.primary || type == ISO.VolDesc.fields.type.SUPP && !options.compat) {
+            if (type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
                 image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
-                if (image.primary.type == ISO.VolDesc.fields.type.SUPP) {
-                    if (image.primary.escSeq == "%/E") {    // 0x25 0x2f 0x45
+                if (image.primary.type == ISO.PrimaryDesc.fields.type.SUPP) {
+                    if (image.primary.escSeq == "%/@" || image.primary.escSeq == "%/C" || image.primary.escSeq == "%/E") {
+                        //
+                        // TODO: Make a note of the escape sequence's implied level (1, 2, or 3) and how
+                        // that affects our interpretation of character data.  For now, all we do is switch
+                        // to structure definitions that assume UCS2BE (UCS-2 BE) instead of STRLEN (ASCII)
+                        // encodings.
+                        //
                         image.dirClass = ISO.DirRecord2;
                         image.pathClass = ISO.PathRecordLE2;
                     }
@@ -582,7 +612,7 @@ export default class ISO {
                 image.paths = await this.readPathRecords(image, image.primary.lbaPaths, image.primary.lenPaths);
             }
             if (!image.records) {
-                image.records = await this.readDirRecords(image, image.primary.rootDir.lba, image.primary.rootDir.size);
+                image.records = await this.readDirRecords(image, image.primary.rootDir.lba + image.primary.rootDir.cbAttr, image.primary.rootDir.size);
             }
             for (let index = 0; index < image.records.length; index++) {
                 let record = image.records[index];
@@ -666,14 +696,14 @@ export default class ISO {
                 position += record.length;
                 ISO.assert(record.name && length >= record.length);
                 if (record.name == ".") {           // skip the first directory record, which should always be "."
-                    ISO.assert(record.lba == lba);
+                    ISO.assert(record.lba + record.cbAttr == lba);
                     continue;
                 }
                 if (record.name == "..") {          // skip the second directory record, which should always be ".."
                     ISO.assert(record.lenName == 1);
                     continue;
                 }
-                if (record.lba >= image.lbaMax) {
+                if (record.lba + record.cbAttr >= image.lbaMax) {
                     throw new Error(`Invalid record in directory "${subdir}" at position ${position}`);
                 }
                 //
@@ -684,7 +714,7 @@ export default class ISO {
             } while (position < positionEnd);
             for (let record of records) {
                 if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                    let recs = await this.readDirRecords(image, record.lba, record.size, record.name);
+                    let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, record.name);
                     subrecs.push(recs);
                 }
             }
@@ -723,7 +753,7 @@ export default class ISO {
                     continue;                       // if the entry is its own parent (ie, the root), skip it
                 }
                 ISO.assert(record.name);
-                if (record.lba >= image.lbaMax) {
+                if (record.lba + record.cbAttr >= image.lbaMax) {
                     throw new Error(`Invalid path record at position ${position}`);
                 }
                 paths.push(record);
@@ -749,7 +779,7 @@ export default class ISO {
         if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
             throw new Error(`No file entry at index ${index}`);
         }
-        let db = await this.readImage(image, record.lba * image.primary.blockSize, record.size);
+        let db = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
         if (writeData) {
             await writeData(db);
             await writeData();
