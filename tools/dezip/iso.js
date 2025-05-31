@@ -399,42 +399,47 @@ export default class ISO {
         image.dirClass = ISO.DirRecord;
         image.pathClass = ISO.PathRecordLE;
         let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
-        do {
-            let [offset, length] = await this.readCache(image, position, extent);
-            //
-            // We're going to probe for a High Sierra Primary Volume Descriptor first...
-            //
-            if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
-                image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
-                image.dirClass = ISO.HSDirRecord;
-                image.pathClass = ISO.HSPathRecordLE;
-                image.exceptions |= ISO.EXCEPTIONS.HIGH_SIERRA;
-                break;
-            }
-            let type = image.cache.db.readUInt8(offset);
-            if (type == ISO.PrimaryDesc.fields.type.END) {
-                break;
-            }
-            if (type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
-                image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
-                if (image.primary.type == ISO.PrimaryDesc.fields.type.SUPP) {
-                    if (image.primary.escSeq == "%/@" || image.primary.escSeq == "%/C" || image.primary.escSeq == "%/E") {
-                        //
-                        // TODO: Make a note of the escape sequence's implied level (1, 2, or 3) and how
-                        // that affects our interpretation of character data.  For now, all we do is switch
-                        // to structure definitions that assume UCS2BE (UCS-2 BE) instead of STRLEN (ASCII).
-                        //
-                        // For reference: https://pismotec.com/cfs/jolspec.html
-                        //
-                        image.dirClass = ISO.DirRecord2;
-                        image.pathClass = ISO.PathRecordLE2;
-                    }
+        try {
+            do {
+                let [offset, length] = await this.readCache(image, position, extent);
+                //
+                // We're going to probe for a High Sierra Primary Volume Descriptor first...
+                //
+                if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
+                    image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
+                    image.dirClass = ISO.HSDirRecord;
+                    image.pathClass = ISO.HSPathRecordLE;
+                    image.exceptions |= ISO.EXCEPTIONS.HIGH_SIERRA;
+                    break;
                 }
-                extent = image.primary.blockSize;
-            }
-            position += extent;
-        } while (position < image.size);
-        image.lbaMax = Math.floor(image.size / (image.primary && image.primary.blockSize || ISO.BLOCK_SIZE));
+                let type = image.cache.db.readUInt8(offset);
+                if (type == ISO.PrimaryDesc.fields.type.END) {
+                    break;
+                }
+                if (type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
+                    image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
+                    if (image.primary.type == ISO.PrimaryDesc.fields.type.SUPP) {
+                        if (image.primary.escSeq == "%/@" || image.primary.escSeq == "%/C" || image.primary.escSeq == "%/E") {
+                            //
+                            // TODO: Make a note of the escape sequence's implied level (1, 2, or 3) and how
+                            // that affects our interpretation of character data.  For now, all we do is switch
+                            // to structure definitions that assume UCS2BE (UCS-2 BE) instead of STRLEN (ASCII).
+                            //
+                            // For reference: https://pismotec.com/cfs/jolspec.html
+                            //
+                            image.dirClass = ISO.DirRecord2;
+                            image.pathClass = ISO.PathRecordLE2;
+                        }
+                    }
+                    ISO.assert(image.primary.blockSize > 0 && ((image.primary.blockSize - 1) & image.primary.blockSize) === 0, `Block size ${image.primary.blockSize} is not a power of 2`);
+                    extent = image.primary.blockSize || ISO.BLOCK_SIZE;
+                }
+                position += extent;
+            } while (position < image.size);
+            image.lbaMax = Math.floor(image.size / (image.primary && image.primary.blockSize || ISO.BLOCK_SIZE));
+        } catch (error) {
+            image.warnings.push(error.message);
+        }
         return image;
     }
 
@@ -662,8 +667,8 @@ export default class ISO {
         let records = [], subrecs = [];
         let position = lba * image.primary.blockSize;
         let positionEnd = position + size;
-        ISO.assert(positionEnd <= image.size);
         try {
+            ISO.assert(positionEnd <= image.size, `Directory at LBA ${lba} out of range`);
             do {
                 //
                 // To make sure we always get the full directory record, adjust the size of our request
@@ -690,14 +695,14 @@ export default class ISO {
                 // up to the next block boundary and try again.
                 //
                 if (!record.length) {
-                    position = Math.ceil(position / image.primary.blockSize) * image.primary.blockSize;
+                    position = Math.ceil((position + 1) / image.primary.blockSize) * image.primary.blockSize;
                     continue;
                 }
-                if (ISO.DEBUG) record.position = position.toString(16);
+                if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += record.length;
                 ISO.assert(record.name && length >= record.length);
                 if (record.name == ".") {           // skip the first directory record, which should always be "."
-                    ISO.assert(record.lba + record.cbAttr == lba);
+                    ISO.assert(record.lba + record.cbAttr == lba, `Directory record "${record.name}" at position ${record.position} has invalid LBA (${record.lba + record.cbAttr})`);
                     continue;
                 }
                 if (record.name == "..") {          // skip the second directory record, which should always be ".."
@@ -705,7 +710,7 @@ export default class ISO {
                     continue;
                 }
                 if (record.lba + record.cbAttr >= image.lbaMax) {
-                    throw new Error(`Invalid record in directory "${subdir}" at position ${position}`);
+                    throw new Error(`Invalid record in directory "${subdir}" at position ${record.position}`);
                 }
                 //
                 // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
@@ -748,14 +753,14 @@ export default class ISO {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
                 let record = image.pathClass.readStruct(image.cache.db, offset);
                 if (!record.lenName) break;         // if we've hit zero-padding, presumably that's the end
-                if (ISO.DEBUG) record.position = position.toString(16);
+                if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
                 if (++index == record.indexParent) {
                     continue;                       // if the entry is its own parent (ie, the root), skip it
                 }
                 ISO.assert(record.name);
                 if (record.lba + record.cbAttr >= image.lbaMax) {
-                    throw new Error(`Invalid path record at position ${position}`);
+                    throw new Error(`Invalid path record at position ${record.position}`);
                 }
                 paths.push(record);
             } while (position < positionEnd);
