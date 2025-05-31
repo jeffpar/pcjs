@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-lc archive/100_Great_Games.iso"
+        "-l archive/100_Great_Games.iso"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

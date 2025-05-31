@@ -71,7 +71,6 @@ export default class ISO {
     static BLOCK_SIZE = 2048;           // default block size
     static SYSTEM_SIZE = 32768;         // size of system area
     static PATHREC_SIZE = 255;          // maximum size of a path record
-    static DIRREC_SIZE = 255;           // maximum size of a directory record
 
     static VolDesc = new Struct("Volume Descriptor")
         .field('type',          Struct.BYTE, {
@@ -176,7 +175,7 @@ export default class ISO {
         .field('sysID',         Struct.STR(32))         // 0x0008
         .field('volID',         Struct.STR(32))         // 0x0028: volume identifier
         .field('.unused2',      Struct.BSS(8))          // 0x0048
-        .field('volBlocks',     Struct.UINT32CE)        // 0x0050: size of the volume in 2048-byte sectors
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0050: size of the volume in blocks
         .field('escSeq',        Struct.STR(32))         // 0x0058: (Supplementary Volume Descriptor only)
         .field('volSet',        Struct.UINT16CE)        // 0x0078: number of volumes in the volume set
         .field('volSeq',        Struct.UINT16CE)        // 0x007C: sequence number of this volume in the volume set
@@ -213,7 +212,7 @@ export default class ISO {
         .field('sysID',         Struct.STR(32))         // 0x0010
         .field('volID',         Struct.STR(32))         // 0x0030: eg, "PC_SIG_4_88"
         .field('.unused2',      Struct.BSS(8))          // 0x0050
-        .field('volBlocks',     Struct.UINT32CE)        // 0x0058: size of the volume in 2048-byte sectors
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0058: size of the volume in blocks
         .field('.unused3',      Struct.BSS(32))         // 0x0060
         .field('volSet',        Struct.UINT16CE)        // 0x0080: number of volumes in the volume set
         .field('volSeq',        Struct.UINT16CE)        // 0x0084: sequence number of this volume in the volume set
@@ -580,10 +579,10 @@ export default class ISO {
         let entries = [];
         if (image.primary) {
             if (!image.paths) {
-                image.paths = await this.readPathRecords(image, image.primary.lbaPaths);
+                image.paths = await this.readPathRecords(image, image.primary.lbaPaths, image.primary.lenPaths);
             }
             if (!image.records) {
-                image.records = await this.readDirRecords(image, image.primary.rootDir.lba);
+                image.records = await this.readDirRecords(image, image.primary.rootDir.lba, image.primary.rootDir.size);
             }
             for (let index = 0; index < image.records.length; index++) {
                 let record = image.records[index];
@@ -614,26 +613,58 @@ export default class ISO {
     }
 
     /**
-     * readDirRecords(image, lba, subdir)
+     * readDirRecords(image, lba, size, subdir)
+     *
+     * NOTE: In my extremely limited experience with ISO 9660 images, the size of a directory
+     * (in bytes) is always the total number of blocks multiplied by the block size, so it
+     * encompasses all padding in all the blocks, including the unused space in the last block.
      *
      * @this {ISO}
      * @param {Image} image
      * @param {number} lba
+     * @param {number} size (of the all the directory blocks, in bytes)
      * @param {string} [subdir]
      * @returns {Array}
      */
-    async readDirRecords(image, lba, subdir = "")
+    async readDirRecords(image, lba, size, subdir = "")
     {
         let records = [], subrecs = [];
         let position = lba * image.primary.blockSize;
+        let positionEnd = position + size;
+        ISO.assert(positionEnd <= image.size);
         try {
             do {
-                let [offset, length] = await this.readCache(image, position, ISO.DIRREC_SIZE);
+                //
+                // To make sure we always get the full directory record, we adjust the size of our request
+                // to the amount of data remaining in the current block.  That may be larger than the largest
+                // allowed directory record, but that's okay; that's simply cached data we can use later.
+                //
+                let extent = image.primary.blockSize - (position % image.primary.blockSize);
+                //
+                // If that extent is smaller than the minimum size of a directory record, we know we should
+                // advance to the next block first.  Alternatively, we could proceed with the read and assume
+                // we will get a zero-length record, but that would waste time AND risk calling readStruct()
+                // with insufficient data (and that would be our fault, not the CD-ROM's).
+                //
+                if (extent < image.dirClass.length) {
+                    position = Math.ceil(position / image.primary.blockSize) * image.primary.blockSize;
+                    continue;
+                }
+                let [offset, length] = await this.readCache(image, position, extent);
+                ISO.assert(length >= image.dirClass.length);
                 let record = image.dirClass.readStruct(image.cache.db, offset);
-                if (!record.length) break;          // end-of-directory record
+                //
+                // Directory records are not allowed to span block boundaries, and any padding between records
+                // is supposed to be zeroed, so if we encounter a zero-length record, then we round the position
+                // up to the next block boundary and try again.
+                //
+                if (!record.length) {
+                    position = Math.ceil(position / image.primary.blockSize) * image.primary.blockSize;
+                    continue;
+                }
                 if (ISO.DEBUG) record.position = position.toString(16);
                 position += record.length;
-                ISO.assert(record.name);
+                ISO.assert(record.name && length >= record.length);
                 if (record.name == ".") {           // skip the first directory record, which should always be "."
                     ISO.assert(record.lba == lba);
                     continue;
@@ -650,10 +681,10 @@ export default class ISO {
                 //
                 record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
                 records.push(record);
-            } while (position < image.size);
+            } while (position < positionEnd);
             for (let record of records) {
                 if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                    let recs = await this.readDirRecords(image, record.lba, record.name);
+                    let recs = await this.readDirRecords(image, record.lba, record.size, record.name);
                     subrecs.push(recs);
                 }
             }
@@ -667,19 +698,20 @@ export default class ISO {
     }
 
     /**
-     * readPathRecords(image, lba)
+     * readPathRecords(image, lba, size)
      *
      * @this {ISO}
      * @param {Image} image
      * @param {number} lba
+     * @param {number} size (of the path table, in bytes)
      * @returns {Array}
      */
-    async readPathRecords(image, lba)
+    async readPathRecords(image, lba, size)
     {
         let index = 0;
         let paths = [];
         let position = lba * image.primary.blockSize;
-        let positionEnd = position + image.primary.lenPaths;
+        let positionEnd = position + size;
         try {
             do {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
