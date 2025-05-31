@@ -422,8 +422,9 @@ export default class ISO {
                         //
                         // TODO: Make a note of the escape sequence's implied level (1, 2, or 3) and how
                         // that affects our interpretation of character data.  For now, all we do is switch
-                        // to structure definitions that assume UCS2BE (UCS-2 BE) instead of STRLEN (ASCII)
-                        // encodings.
+                        // to structure definitions that assume UCS2BE (UCS-2 BE) instead of STRLEN (ASCII).
+                        //
+                        // For reference: https://pismotec.com/cfs/jolspec.html
                         //
                         image.dirClass = ISO.DirRecord2;
                         image.pathClass = ISO.PathRecordLE2;
@@ -665,16 +666,16 @@ export default class ISO {
         try {
             do {
                 //
-                // To make sure we always get the full directory record, we adjust the size of our request
+                // To make sure we always get the full directory record, adjust the size of our request
                 // to the amount of data remaining in the current block.  That may be larger than the largest
-                // allowed directory record, but that's okay; that's simply cached data we can use later.
+                // allowed directory record, but that's okay; we're simply caching data we can use later.
                 //
                 let extent = image.primary.blockSize - (position % image.primary.blockSize);
                 //
                 // If that extent is smaller than the minimum size of a directory record, we know we should
                 // advance to the next block first.  Alternatively, we could proceed with the read and assume
                 // we will get a zero-length record, but that would waste time AND risk calling readStruct()
-                // with insufficient data (and that would be our fault, not the CD-ROM's).
+                // with insufficient data (which would be our fault, not the CD-ROM's).
                 //
                 if (extent < image.dirClass.length) {
                     position = Math.ceil(position / image.primary.blockSize) * image.primary.blockSize;
@@ -746,7 +747,7 @@ export default class ISO {
             do {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
                 let record = image.pathClass.readStruct(image.cache.db, offset);
-                if (!record.lenName) break;         // end-of-path-table record?
+                if (!record.lenName) break;         // if we've hit zero-padding, presumably that's the end
                 if (ISO.DEBUG) record.position = position.toString(16);
                 position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
                 if (++index == record.indexParent) {
