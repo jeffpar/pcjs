@@ -40,7 +40,13 @@
  * 2) 350GamesWindows31.iso isn't really an ISO 9660 image; it's a dump of all the 2352-byte sectors of the
  * the original disc.  In addition, all the sectors appear to have a 24-byte header rather than the usual
  * 16-byte header.  Apparently, this means that the disc was a CD-ROM XA disc, which has an additional 8-byte
- * sub-header.  I now allow for both header sizes.
+ * sub-header.
+ *
+ * So we now have two reading modes: if sectorSize matches ISO.BLOCK_SIZE, then readImage() continues to read
+ * any amount of data directly from the image file; otherwise, it maps the requested position to the corresponding
+ * physical sector and breaks the read operation into the appropriate number of full and partial sector reads.
+ * Yes, it's a pain, but that's what happens when people don't rip their discs properly OR they intentionally
+ * wanted to preserve ALL the data on the disc (eg, audio tracks along with data tracks).
  */
 
 import DataBuffer from "./db.js";
@@ -182,7 +188,7 @@ export default class ISO {
         .field('name',          Struct.UCS2BE8)         // 0x08: name of directory (in UCS-2 BE)
         .verifyLength(8);
 
-    static HSPathRecordLE = new Struct("High Sierra Path Record")
+    static HSPathRecordLE = new Struct("High Sierra Path Record (LE)")
         .field('lba',           Struct.UINT32LE)        // 0x00: logical block address of directory
         .field('cbAttr',        Struct.BYTE)            // 0x04: extended attribute record length (in blocks)
         .field('lenName',       Struct.BYTE)            // 0x05: length of name
