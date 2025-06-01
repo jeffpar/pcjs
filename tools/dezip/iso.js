@@ -45,8 +45,9 @@
  * So we now have two reading modes: if sectorSize matches ISO.BLOCK_SIZE, then readImage() continues to read
  * any amount of data directly from the image file; otherwise, it maps the requested position to the corresponding
  * physical sector and breaks the read operation into the appropriate number of full and partial sector reads.
- * Yes, it's a pain, but that's what happens when people don't rip their discs properly OR they intentionally
- * wanted to preserve ALL the data on the disc (eg, audio tracks along with data tracks).
+ * Yes, it's a pain, but that's what happens when people don't rip their discs properly... or they intentionally
+ * wanted to preserve ALL the data on the disc (eg, audio tracks along with data tracks).  We'll give them the
+ * benefit of the doubt.
  */
 
 import DataBuffer from "./db.js";
@@ -311,6 +312,24 @@ export default class ISO {
         if (ISO.DEBUG && !condition) {
             throw new Error(message);
         }
+    }
+
+    /**
+     * check(image, condition, message)
+     *
+     * @this {ISO}
+     * @param {Image} image
+     * @param {boolean} condition
+     * @param {string} [message]
+     * @returns {boolean}
+     */
+    check(image, condition, message = "Check failed")
+    {
+        if (!condition) {
+            image.warnings.push(message);
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -719,6 +738,7 @@ export default class ISO {
      */
     async readDirRecords(image, lba, size, level = 1, subdir = "")
     {
+        let count = 0;
         let records = [], subrecs = [];
         let position = lba * image.primary.blockSize;
         let positionEnd = position + size;
@@ -726,8 +746,10 @@ export default class ISO {
             //
             // The maximum level was originally 8, but perhaps that was increased (or ignored?) over time.
             //
-            ISO.assert(level <= 16, `Directory "${subdir}" extremely nested (${level})`);
-            ISO.assert(positionEnd <= image.size, `Directory at LBA ${lba} out of range`);
+            this.check(image, level <= 16, `Directory "${subdir}" extremely nested (${level})`);
+            if (!this.check(image, positionEnd <= image.size, `Directory at LBA ${lba} out of range`)) {
+                return records;
+            }
             do {
                 //
                 // To make sure we always get the full directory record, adjust the size of our request
@@ -760,21 +782,30 @@ export default class ISO {
                 if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += record.length;
                 ISO.assert(record.name && length >= record.length);
-                if (record.name == ".") {           // skip the first directory record, which should always be "."
-                    ISO.assert(record.lba + record.cbAttr == lba, `Directory record "${record.name}" at position ${record.position} has invalid LBA (${record.lba + record.cbAttr})`);
+                count++;
+                //
+                // These next few checks are a bit relaxed; for example, in "Hot Mix 15.iso", there are some
+                // ".." records that have an ID 0x00 instead of 0x01, so they look like "." entries.
+                //
+                if (record.name == ".") {           // skip the first directory record, which should be "."
+                    this.check(image, count == 1 && record.lba + record.cbAttr == lba || count == 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
                     continue;
                 }
-                if (record.name == "..") {          // skip the second directory record, which should always be ".."
-                    ISO.assert(record.lenName == 1);
+                if (record.name == "..") {          // skip the second directory record, which should be ".."
+                    this.check(image, count == 2 && record.lenName == 1);
                     continue;
-                }
-                if (record.lba + record.cbAttr >= image.lbaMax) {
-                    throw new Error(`Invalid record in directory "${subdir}" at position ${record.position}`);
                 }
                 //
                 // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
                 //
                 record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
+                //
+                // This next check is also a bit relaxed; for example, in "0001_Big13.iso", there are some
+                // entries (eg, "ICON_") that have a zero size and, for some reason, a ridiculous LBA (eg, 0x69696969).
+                //
+                if (!this.check(image, !record.size || record.lba + record.cbAttr < image.lbaMax, `Directory record "${record.name}" at position ${record.position} has invalid LBA ${record.lba}+${record.cbAttr}`)) {
+                    break;
+                }
                 records.push(record);
             } while (position < positionEnd);
             for (let record of records) {
@@ -843,7 +874,12 @@ export default class ISO {
         if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
             throw new Error(`No file entry at index ${index}`);
         }
-        let [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
+        let db, bytesRead;
+        if (!record.size) {
+            db = new DataBuffer(bytesRead = 0);
+        } else {
+            [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
+        }
         if (writeData) {
             await writeData(db);
             await writeData();
