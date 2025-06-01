@@ -6,9 +6,9 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * Items of interest:
+ * Items of interest...
  *
- * I was intrigued by this blog post (https://multimedia.cx/eggs/iso-9660-compromise-part-2-finding-root),
+ * 1) I was intrigued by this blog post (https://multimedia.cx/eggs/iso-9660-compromise-part-2-finding-root),
  * which discussed this ISO 9660 CD-ROM image (https://archive.org/details/Power-Drive-DOS-1994), which was
  * purported to have some "corruption"... except that macOS was able to mount and read the image just fine.
  *
@@ -36,6 +36,11 @@
  *
  * I still haven't investigated the data stored in those extended attribute blocks, but it's not essential
  * to the operations performed here (ie, file listing and extraction), so that's an exercise for another day.
+ *
+ * 2) 350GamesWindows31.iso isn't really an ISO 9660 image; it's a dump of all the 2352-byte sectors of the
+ * the original disc.  In addition, all the sectors appear to have a 24-byte header rather than the usual
+ * 16-byte header.  Apparently, this means that the disc was a CD-ROM XA disc, which has an additional 8-byte
+ * sub-header.  I now allow for both header sizes.
  */
 
 import DataBuffer from "./db.js";
@@ -398,25 +403,40 @@ export default class ISO {
         }
         image.dirClass = ISO.DirRecord;
         image.pathClass = ISO.PathRecordLE;
+        image.sectorSize = ISO.BLOCK_SIZE;
+        image.sectorOffset = 0;
         let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
         try {
             do {
+                let desc;
                 let [offset, length] = await this.readCache(image, position, extent);
-                //
-                // We're going to probe for a High Sierra Primary Volume Descriptor first...
-                //
-                if (image.cache.db.readUInt32BE(offset + 8) == 0x01434452) {
-                    image.primary = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
+                desc = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
+                if (desc.identifier == "CDROM" && desc.type == 0x01) {
+                    image.primary = desc;
                     image.dirClass = ISO.HSDirRecord;
                     image.pathClass = ISO.HSPathRecordLE;
                     image.exceptions |= ISO.EXCEPTIONS.HIGH_SIERRA;
                     break;
                 }
-                let type = image.cache.db.readUInt8(offset);
-                if (type == ISO.PrimaryDesc.fields.type.END) {
+                desc = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
+                if (desc.identifier != "CD001") {
+                    if (image.sectorSize == ISO.BLOCK_SIZE) {
+                        image.sectorSize = 2352;
+                        image.sectorOffset = 16;    // 16-byte sector header
+                        image.cache.extent = 0;     // cache must be invalidated when changing sector format
+                        continue;
+                    }
+                    if (image.sectorOffset == 16) {
+                        image.sectorOffset += 8;    // allow for an 8-byte sub-header as well
+                        image.cache.extent = 0;     // cache must be invalidated when changing sector format
+                        continue;
+                    }
                     break;
                 }
-                if (type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
+                if (desc.type == ISO.PrimaryDesc.fields.type.END) {
+                    break;
+                }
+                if (desc.type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || desc.type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
                     image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
                     if (image.primary.type == ISO.PrimaryDesc.fields.type.SUPP) {
                         if (image.primary.escSeq == "%/@" || image.primary.escSeq == "%/C" || image.primary.escSeq == "%/E") {
@@ -436,10 +456,15 @@ export default class ISO {
                 }
                 position += extent;
             } while (position < image.size);
-            image.lbaMax = Math.floor(image.size / (image.primary && image.primary.blockSize || ISO.BLOCK_SIZE));
         } catch (error) {
-            image.warnings.push(error.message);
+            await this.close(image);
+            throw error.message;
         }
+        if (!image.primary || !image.primary.blockSize || ((image.primary.blockSize - 1) & image.primary.blockSize) !== 0) {
+            await this.close(image);
+            throw new Error("Unrecognized disc image");
+        }
+        image.lbaMax = Math.floor(image.size / image.primary.blockSize);
         return image;
     }
 
@@ -474,7 +499,7 @@ export default class ISO {
     }
 
     /**
-     * readImage(image, position, extent)
+     * readImage(image, position, extent, db, offset)
      *
      * NOTE: When reading from a file, this function deliberately bypasses the cache,
      * on the assumption that we're reading unstructured chunks of data which don't need
@@ -486,21 +511,44 @@ export default class ISO {
      * @param {Image} image
      * @param {number} position
      * @param {number} extent
-     * @returns {DataBuffer}
+     * @param {DataBuffer} [db]
+     * @param {number} [offset]
+     * @returns {Array} ([db, bytesRead])
      */
-    async readImage(image, position, extent)
+    async readImage(image, position, extent, db = null, offset = 0)
     {
-        let db;
+        let bytesRead = 0;
         if (!image.file) {
             db = image.cache.db.slice(position, position + extent);
+            bytesRead = extent;
         } else {
-            db = new DataBuffer(extent);
-            let result = await image.file.read(db.buffer, 0, extent, position);
-            if (result.bytesRead < extent) {
-                db = db.slice(0, result.bytesRead);
+            if (!db) {
+                db = new DataBuffer(extent);
+            }
+            if (image.sectorSize == ISO.BLOCK_SIZE) {
+                let result = await image.file.read(db.buffer, offset, extent, position);
+                bytesRead = result.bytesRead;
+            } else {
+                let sector = Math.floor(position / ISO.BLOCK_SIZE);
+                let secpos = position % ISO.BLOCK_SIZE;
+                do {
+                    let cb = ISO.BLOCK_SIZE - secpos;
+                    if (cb > extent - bytesRead) {
+                        cb = extent - bytesRead;
+                    }
+                    position = sector * image.sectorSize + secpos + image.sectorOffset;
+                    let result = await image.file.read(db.buffer, offset, cb, position);
+                    bytesRead += result.bytesRead;
+                    if (result.bytesRead < cb) {
+                        break;
+                    }
+                    sector++;
+                    secpos = 0;
+                    offset += cb;
+                } while (bytesRead < extent);
             }
         }
-        return db;
+        return [db, bytesRead];
     }
 
     /**
@@ -580,8 +628,8 @@ export default class ISO {
             if (readExtent > 0) {
                 ISO.assert(image.file);
                 if (image.file) {
-                    let result = await image.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
-                    if (result.bytesRead != readExtent) {
+                    let [db, bytesRead] = await this.readImage(image, readPosition, readExtent, cache.db, readOffset);
+                    if (bytesRead != readExtent) {
                         throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
                     }
                 } else {
@@ -613,7 +661,7 @@ export default class ISO {
     async readDirectory(image, filespec = "*")
     {
         let entries = [];
-        if (image.primary) {
+        if (image.primary && image.primary.blockSize) {
             if (!image.paths) {
                 image.paths = await this.readPathRecords(image, image.primary.lbaPaths, image.primary.lenPaths);
             }
@@ -649,7 +697,7 @@ export default class ISO {
     }
 
     /**
-     * readDirRecords(image, lba, size, subdir)
+     * readDirRecords(image, lba, size, level, subdir)
      *
      * NOTE: In my extremely limited experience with ISO 9660 images, the size of a directory
      * (in bytes) is always the total number of blocks multiplied by the block size, so it
@@ -659,15 +707,20 @@ export default class ISO {
      * @param {Image} image
      * @param {number} lba
      * @param {number} size (of all the directory blocks, in bytes)
+     * @param {number} [level] (used internally to track recursion depth)
      * @param {string} [subdir]
      * @returns {Array}
      */
-    async readDirRecords(image, lba, size, subdir = "")
+    async readDirRecords(image, lba, size, level = 1, subdir = "")
     {
         let records = [], subrecs = [];
         let position = lba * image.primary.blockSize;
         let positionEnd = position + size;
         try {
+            //
+            // The maximum level was originally 8, but perhaps that was increased (or ignored?) over time.
+            //
+            ISO.assert(level <= 16, `Directory "${subdir}" extremely nested (${level})`);
             ISO.assert(positionEnd <= image.size, `Directory at LBA ${lba} out of range`);
             do {
                 //
@@ -720,7 +773,7 @@ export default class ISO {
             } while (position < positionEnd);
             for (let record of records) {
                 if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                    let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, record.name);
+                    let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, level + 1, record.name);
                     subrecs.push(recs);
                 }
             }
@@ -758,8 +811,7 @@ export default class ISO {
                 if (++index == record.indexParent) {
                     continue;                       // if the entry is its own parent (ie, the root), skip it
                 }
-                ISO.assert(record.name);
-                if (record.lba + record.cbAttr >= image.lbaMax) {
+                if (!record.name || record.lba + record.cbAttr >= image.lbaMax) {
                     throw new Error(`Invalid path record at position ${record.position}`);
                 }
                 paths.push(record);
@@ -785,7 +837,7 @@ export default class ISO {
         if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
             throw new Error(`No file entry at index ${index}`);
         }
-        let db = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
+        let [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
         if (writeData) {
             await writeData(db);
             await writeData();

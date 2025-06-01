@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "-l ~/Downloads/Power-Drive.iso"
+        "--batch archive/iso.txt"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,
