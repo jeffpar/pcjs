@@ -43,11 +43,8 @@
  * sub-header.
  *
  * So we now have two reading modes: if sectorSize matches ISO.BLOCK_SIZE, then readImage() continues to read
- * any amount of data directly from the image file; otherwise, it maps the requested position to the corresponding
+ * data directly from the image file or buffer; otherwise, it maps the requested position to the corresponding
  * physical sector and breaks the read operation into the appropriate number of full and partial sector reads.
- * Yes, it's a pain, but that's what happens when people don't rip their discs properly... or they intentionally
- * wanted to preserve ALL the data on the disc (eg, audio tracks along with data tracks).  We'll give them the
- * benefit of the doubt.
  */
 
 import DataBuffer from "./db.js";
@@ -762,7 +759,7 @@ export default class ISO {
                 // If that extent is smaller than the minimum size of a directory record, we know we should
                 // advance to the next block first.  Alternatively, we could proceed with the read and assume
                 // we will get a zero-length record, but that would waste time AND risk calling readStruct()
-                // with insufficient data (which would be our fault, not the CD-ROM's).
+                // with insufficient data.
                 //
                 if (extent < image.dirClass.length) {
                     position = Math.ceil(position / image.primary.blockSize) * image.primary.blockSize;
@@ -785,11 +782,11 @@ export default class ISO {
                 //
                 // Sanity check the directory record.
                 //
-                // There are lots of issues with "Otherware_1_SB_Development.iso", such as directories with
-                // enormous sizes.
+                // There are many issues with "Otherware_1_SB_Development.iso", like directories
+                // with enormous sizes.
                 //
-                // For example, in "0001_Big13.iso", there are some entries (eg, "ICON_") that have
-                // a zero size and, for some reason, a ridiculous LBA (eg, 0x69696969).
+                // And in "0001_Big13.iso", there are some entries (eg, "ICON_") that have zero size
+                // and a ridiculous LBA (eg, 0x69696969).
                 //
                 if ((record.flags & image.dirClass.fields.flags.DIRECTORY) && record.size >= 0x10000000) {
                     record.size &= 0x00ffffff;
