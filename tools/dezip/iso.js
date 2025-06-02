@@ -552,26 +552,26 @@ export default class ISO {
             let sector = Math.floor(position / ISO.BLOCK_SIZE);
             let secpos = position % ISO.BLOCK_SIZE;
             do {
-                let cbRead;
-                let cb = ISO.BLOCK_SIZE - secpos;
-                if (cb > extent - bytesRead) {
-                    cb = extent - bytesRead;
+                let lenRead;
+                let len = ISO.BLOCK_SIZE - secpos;
+                if (len > extent - bytesRead) {
+                    len = extent - bytesRead;
                 }
                 position = sector * image.sectorSize + secpos + image.sectorOffset;
                 if (!image.file) {
-                    image.db.copy(db, offset, position, position + cb);
-                    cbRead = cb;
+                    image.db.copy(db, offset, position, position + len);
+                    lenRead = len;
                 } else {
-                    let result = await image.file.read(db.buffer, offset, cb, position);
-                    cbRead = result.bytesRead;
+                    let result = await image.file.read(db.buffer, offset, len, position);
+                    lenRead = result.bytesRead;
                 }
-                bytesRead += cbRead;
-                if (cbRead < cb) {
+                bytesRead += lenRead;
+                if (lenRead < len) {
                     break;
                 }
                 sector++;
                 secpos = 0;
-                offset += cb;
+                offset += len;
             } while (bytesRead < extent);
         }
         return [db, bytesRead];
