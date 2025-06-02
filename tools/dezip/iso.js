@@ -782,15 +782,21 @@ export default class ISO {
                 }
                 if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += record.length;
-                ISO.assert(record.name && length >= record.length);
                 //
                 // Sanity check the directory record.
+                //
+                // There are lots of issues with "Otherware_1_SB_Development.iso", such as directories with
+                // enormous sizes.
                 //
                 // For example, in "0001_Big13.iso", there are some entries (eg, "ICON_") that have
                 // a zero size and, for some reason, a ridiculous LBA (eg, 0x69696969).
                 //
-                let sanity = (!record.size || record.lba + record.cbAttr < image.lbaMax) &&
-                            (image.dirClass.length + (record.lenName-1) + ((record.lenName-1) & 0x1) <= record.length);
+                if ((record.flags & image.dirClass.fields.flags.DIRECTORY) && record.size >= 0x10000000) {
+                    record.size &= 0x00ffffff;
+                }
+                let sanity = (record.name && length >= record.length) &&
+                             (!record.size || record.lba + record.cbAttr < image.lbaMax) &&
+                             (image.dirClass.length + (record.lenName-1) + ((record.lenName-1) & 0x1) <= record.length);
                 if (!this.check(image, sanity, `Directory record at position ${record.position} is invalid`)) {
                     break;
                 }
@@ -799,12 +805,18 @@ export default class ISO {
                 // The next check is a bit relaxed; for example, in "Hot Mix 15.iso", there are some ".."
                 // records that have an ID 0x00 instead of 0x01, so they look like "." entries.
                 //
+                // Also, in "101_Only_The_Best_Games_4.iso", there are a number of directories with "." and
+                // ".." entries in the middle of them; I've decided to ignore them if count > 2.
+                //
+                // TODO: Decide whether we should log them and see if they pop up in the context of another
+                // directory entry.
+                //
                 if (record.name == ".") {           // skip the first directory record, which should be "."
-                    this.check(image, count == 1 && record.lba + record.cbAttr == lba || count == 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
+                    this.check(image, count == 1 && record.lba + record.cbAttr == lba || count >= 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
                     continue;
                 }
                 if (record.name == "..") {          // skip the second directory record, which should be ".."
-                    this.check(image, count == 2 && record.lenName == 1);
+                    this.check(image, count == 2 && record.lenName == 1 || count > 2);
                     continue;
                 }
                 //

@@ -634,7 +634,11 @@ async function main(argc, argv, errors)
                 archive.warnings.push("No entries");
             }
             if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
-                printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                if (argv.verbose) {
+                    printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                } else {
+                    printf("%s: %d warning(s) detected\n", archivePath, archive.warnings.length);
+                }
                 nArchiveWarnings++;
             }
             //
