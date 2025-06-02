@@ -338,6 +338,11 @@ export default class ISO {
      * If successful, this method returns an Image object used with our other high-level methods;
      * eg, readDirectory(), readFile(), and close().
      *
+     * Also, unlike the other classes in this library (eg, Dezip), if the prefill option is used,
+     * we read the entire image into a *separate* DataBuffer.  We can't take the easy way out and
+     * piggy-back on the cache buffer, because if the image turns out to be rip of raw (2352-byte)
+     * sectors, the cache buffer must become our window on a 2048-byte sector stream.
+     *
      * @this {ISO}
      * @param {string} name
      * @param {DataBuffer} [db]
@@ -351,6 +356,7 @@ export default class ISO {
             source: "",
             modified: options.modified, // modification date of image file
             size: 0,                    // size of the image file
+            db: null,                   // DataBuffer, if any
             file: null,                 // file handle, if any
             cache: {},                  // cache data
             paths: null,                // array of path records, if any
@@ -360,13 +366,12 @@ export default class ISO {
             warnings: []                // array of image warnings, if any
         };
         //
-        // If a DataBuffer (db) is provided, then no reading is required; we also provide
-        // the option of reading the entire image into a DataBuffer.  However, the preferred
-        // approach is to read structures from the file as needed into the image's cache buffer.
+        // If a DataBuffer (db) is provided, then no reading is required.
+        // Note that every image object must have EITHER a db OR a file handle.
         //
         if (db) {
+            image.db = db;
             image.size = db.length;
-            this.initCache(image, db, image.size);
             image.source = "Buffer";
         }
         else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
@@ -384,26 +389,17 @@ export default class ISO {
             if (!image.modified) {
                 image.modified = stats.mtime;
             }
-            this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
             if (options.prefill) {
-                let db = new DataBuffer(0);
-                let cache = image.cache;
+                image.db = new DataBuffer(image.size);
+                let offset = 0, position = 0;
+                let extent = Math.min(this.cacheSize, image.size);
                 do {
-                    let result = await image.file.read(cache.db.buffer);
-                    if (result.bytesRead == 0) break;
-                    if (result.bytesRead < cache.db.length) {
-                        cache.db = cache.db.slice(0, result.bytesRead);
-                    }
-                    db = DataBuffer.concat([db, cache.db]);
-                    if (result.bytesRead < cache.db.length) break;
+                    let result = await image.file.read(image.db, offset, extent, position);
+                    if (result.bytesRead < extent) break;
+                    offset += result.bytesRead;
+                    position += result.bytesRead;
                 } while (true);
-                //
-                // We're not really done with the image yet, but we ARE done with the file handle
-                // (and by extension, the old cache buffer).  The new buffer becomes the cache buffer.
-                //
                 await this.close(image);
-                ISO.assert(image.size == db.length);
-                this.initCache(image, new DataBuffer(db), image.size);
             }
             image.source = "FS";
         }
@@ -420,12 +416,13 @@ export default class ISO {
             }
             let arrayBuffer = await response.arrayBuffer();
             image.size = arrayBuffer.byteLength;
-            this.initCache(image, new DataBuffer(new Uint8Array(arrayBuffer)), image.size);
+            image.db = new DataBuffer(new Uint8Array(arrayBuffer));
             image.source = "Network";
         }
         else {
             throw new Error("No image open interface available");
         }
+        this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
         image.dirClass = ISO.DirRecord;
         image.pathClass = ISO.PathRecordLE;
         image.sectorSize = ISO.BLOCK_SIZE;
@@ -526,11 +523,8 @@ export default class ISO {
     /**
      * readImage(image, position, extent, db, offset)
      *
-     * NOTE: When reading from a file, this function deliberately bypasses the cache,
-     * on the assumption that we're reading unstructured chunks of data which don't need
-     * to be cached and/or could exceed the size of our cache buffer.
-     *
-     * The cache is only intended for reading well-defined data structures from the image.
+     * Read from the image DataBuffer (db) or file handle (file) at the logical position,
+     * de-blocking the data as needed if the image's sector size does not match ISO.BLOCK_SIZE.
      *
      * @this {ISO}
      * @param {Image} image
@@ -543,35 +537,42 @@ export default class ISO {
     async readImage(image, position, extent, db = null, offset = 0)
     {
         let bytesRead = 0;
-        if (!image.file) {
-            db = image.cache.db.slice(position, position + extent);
-            bytesRead = extent;
-        } else {
-            if (!db) {
-                db = new DataBuffer(extent);
-            }
-            if (image.sectorSize == ISO.BLOCK_SIZE) {
+        if (!db) {
+            db = new DataBuffer(extent);
+        }
+        if (image.sectorSize == ISO.BLOCK_SIZE) {
+            if (!image.file) {
+                image.db.copy(db, offset, position, position + extent);
+                bytesRead = extent;
+            } else {
                 let result = await image.file.read(db.buffer, offset, extent, position);
                 bytesRead = result.bytesRead;
-            } else {
-                let sector = Math.floor(position / ISO.BLOCK_SIZE);
-                let secpos = position % ISO.BLOCK_SIZE;
-                do {
-                    let cb = ISO.BLOCK_SIZE - secpos;
-                    if (cb > extent - bytesRead) {
-                        cb = extent - bytesRead;
-                    }
-                    position = sector * image.sectorSize + secpos + image.sectorOffset;
-                    let result = await image.file.read(db.buffer, offset, cb, position);
-                    bytesRead += result.bytesRead;
-                    if (result.bytesRead < cb) {
-                        break;
-                    }
-                    sector++;
-                    secpos = 0;
-                    offset += cb;
-                } while (bytesRead < extent);
             }
+        } else {
+            let sector = Math.floor(position / ISO.BLOCK_SIZE);
+            let secpos = position % ISO.BLOCK_SIZE;
+            do {
+                let cbRead;
+                let cb = ISO.BLOCK_SIZE - secpos;
+                if (cb > extent - bytesRead) {
+                    cb = extent - bytesRead;
+                }
+                position = sector * image.sectorSize + secpos + image.sectorOffset;
+                if (!image.file) {
+                    image.db.copy(db, offset, position, position + cb);
+                    cbRead = cb;
+                } else {
+                    let result = await image.file.read(db.buffer, offset, cb, position);
+                    cbRead = result.bytesRead;
+                }
+                bytesRead += cbRead;
+                if (cbRead < cb) {
+                    break;
+                }
+                sector++;
+                secpos = 0;
+                offset += cb;
+            } while (bytesRead < extent);
         }
         return [db, bytesRead];
     }
@@ -782,10 +783,21 @@ export default class ISO {
                 if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += record.length;
                 ISO.assert(record.name && length >= record.length);
+                //
+                // Sanity check the directory record.
+                //
+                // For example, in "0001_Big13.iso", there are some entries (eg, "ICON_") that have
+                // a zero size and, for some reason, a ridiculous LBA (eg, 0x69696969).
+                //
+                let sanity = (!record.size || record.lba + record.cbAttr < image.lbaMax) &&
+                            (image.dirClass.length + (record.lenName-1) + ((record.lenName-1) & 0x1) <= record.length);
+                if (!this.check(image, sanity, `Directory record at position ${record.position} is invalid`)) {
+                    break;
+                }
                 count++;
                 //
-                // These next few checks are a bit relaxed; for example, in "Hot Mix 15.iso", there are some
-                // ".." records that have an ID 0x00 instead of 0x01, so they look like "." entries.
+                // The next check is a bit relaxed; for example, in "Hot Mix 15.iso", there are some ".."
+                // records that have an ID 0x00 instead of 0x01, so they look like "." entries.
                 //
                 if (record.name == ".") {           // skip the first directory record, which should be "."
                     this.check(image, count == 1 && record.lba + record.cbAttr == lba || count == 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
@@ -799,13 +811,6 @@ export default class ISO {
                 // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
                 //
                 record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
-                //
-                // This next check is also a bit relaxed; for example, in "0001_Big13.iso", there are some
-                // entries (eg, "ICON_") that have a zero size and, for some reason, a ridiculous LBA (eg, 0x69696969).
-                //
-                if (!this.check(image, !record.size || record.lba + record.cbAttr < image.lbaMax, `Directory record "${record.name}" at position ${record.position} has invalid LBA ${record.lba}+${record.cbAttr}`)) {
-                    break;
-                }
                 records.push(record);
             } while (position < positionEnd);
             for (let record of records) {
