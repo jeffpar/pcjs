@@ -2881,9 +2881,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--batch archive/iso.txt"
+        "--list",
+        "http://software/discs/MSTN-1996-02-CSD9602.iso"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dezip/archive",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

@@ -402,18 +402,17 @@ export default class ISO {
         }
         else if (this.interfaces.fetch) {
             //
-            // For remote files, prefill is the default.
+            // TODO: For remote files, consider supporting prefill.
             //
-            // TODO: Consider honoring prefill === false, provided we can obtain
-            // Content-Length from the server and it supports byte range requests.
-            //
-            let response = await this.interfaces.fetch(name);
-            if (!response.ok) {
-                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
+            let response = await this.interfaces.fetch(name, { method: "HEAD" });
+            if (response.ok) {
+                let contentLength = response.headers.get("Content-Length");
+                if (contentLength) {
+                    image.size = +contentLength;
+                } else {
+                    throw new Error("Content-Length not provided by server");
+                }
             }
-            let arrayBuffer = await response.arrayBuffer();
-            image.size = arrayBuffer.byteLength;
-            image.db = new DataBuffer(new Uint8Array(arrayBuffer));
             image.source = "Network";
         }
         else {
@@ -518,10 +517,47 @@ export default class ISO {
     }
 
     /**
+     * readData(image, position, extent, db, offset)
+     *
+     * Read data from the image at the specified physical position.
+     *
+     * @param {Image} image
+     * @param {number} position
+     * @param {number} extent
+     * @param {DataBuffer} db
+     * @param {number} offset
+     * @returns {number} [bytesRead]
+     */
+    async readData(image, position, extent, db, offset)
+    {
+        let bytesRead;
+        if (image.db) {
+            image.db.copy(db, offset, position, position + extent);
+            bytesRead = extent;
+        } else if (image.file) {
+            let result = await image.file.read(db.buffer, offset, extent, position);
+            bytesRead = result.bytesRead;
+        } else {
+            const response = await this.interfaces.fetch(image.name, {
+                headers: {
+                    "Range": `bytes=${position}-${position+extent-1}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch ${extent} bytes from ${image.name} at position ${position}: ${response.statusText}`);
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            let dbRead = new DataBuffer(new Uint8Array(arrayBuffer));
+            bytesRead = dbRead.copy(db, offset, 0, extent);
+        }
+        return bytesRead;
+    }
+
+    /**
      * readImage(image, position, extent, db, offset)
      *
-     * Read from the image DataBuffer (db) or file handle (file) at the logical position,
-     * de-blocking the data as needed if the image's sector size does not match ISO.BLOCK_SIZE.
+     * Read data from the image at the specified logical position, de-blocking the data as needed
+     * if the image's sector size does not match ISO.BLOCK_SIZE.
      *
      * @this {ISO}
      * @param {Image} image
@@ -538,37 +574,24 @@ export default class ISO {
             db = new DataBuffer(extent);
         }
         if (image.sectorSize == ISO.BLOCK_SIZE) {
-            if (!image.file) {
-                image.db.copy(db, offset, position, position + extent);
-                bytesRead = extent;
-            } else {
-                let result = await image.file.read(db.buffer, offset, extent, position);
-                bytesRead = result.bytesRead;
-            }
+            bytesRead = await this.readData(image, position, extent, db, offset);
         } else {
             let sector = Math.floor(position / ISO.BLOCK_SIZE);
             let secpos = position % ISO.BLOCK_SIZE;
             do {
-                let lenRead;
-                let len = ISO.BLOCK_SIZE - secpos;
-                if (len > extent - bytesRead) {
-                    len = extent - bytesRead;
+                let extData = ISO.BLOCK_SIZE - secpos;
+                if (extData > extent - bytesRead) {
+                    extData = extent - bytesRead;
                 }
-                position = sector * image.sectorSize + secpos + image.sectorOffset;
-                if (!image.file) {
-                    image.db.copy(db, offset, position, position + len);
-                    lenRead = len;
-                } else {
-                    let result = await image.file.read(db.buffer, offset, len, position);
-                    lenRead = result.bytesRead;
-                }
-                bytesRead += lenRead;
-                if (lenRead < len) {
+                let posData = sector * image.sectorSize + secpos + image.sectorOffset;
+                let lenData = await this.readData(image, posData, extData, db, offset);
+                bytesRead += lenData;
+                if (lenData < extData) {
                     break;
                 }
                 sector++;
                 secpos = 0;
-                offset += len;
+                offset += extData;
             } while (bytesRead < extent);
         }
         return [db, bytesRead];
@@ -649,18 +672,9 @@ export default class ISO {
                 }
             }
             if (readExtent > 0) {
-                ISO.assert(image.file);
-                if (image.file) {
-                    let [db, bytesRead] = await this.readImage(image, readPosition, readExtent, cache.db, readOffset);
-                    if (bytesRead != readExtent) {
-                        throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
-                    }
-                } else {
-                    //
-                    // As asserted above, this is an internal inconsistency, because images without handles
-                    // should be fully cached (so, technically, you should never see this error).
-                    //
-                    throw new Error(`${image.name}: No file handle available`);
+                let [db, bytesRead] = await this.readImage(image, readPosition, readExtent, cache.db, readOffset);
+                if (bytesRead != readExtent) {
+                    throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
                 }
             }
             cache.position = position;

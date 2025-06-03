@@ -15,17 +15,23 @@
 </head>
 <body>
   <h1>Fetch Byte Range Test</h1>
-  <button id="fetchButton">Fetch Bytes 128-255</button>
+  <button id="fetchButton">Fetch Bytes 32768-34815</button>
   <textarea id="output" readonly></textarea>
   <script>
     document.getElementById('fetchButton').addEventListener('click', async () => {
-      const url = "http://localhost:4000/machines/pcx86/ibm/video/mda/IBM-MDA.rom";
+      const url = "http://software/discs/MSTN-1996-02-CSD9602.iso";
       const output = document.getElementById('output');
 
       try {
+        // First make a HEAD request to get Content-Length
+        const headResponse = await fetch(url, { method: 'HEAD' });
+        const contentLength = headResponse.headers.get('Content-Length');
+        output.value = `Content-Length: ${contentLength} bytes\n\n`;
+
+        // Then proceed with the range request
         const response = await fetch(url, {
           headers: {
-            'Range': 'bytes=128-255'
+            'Range': 'bytes=32768-34815' // Fetch 2048 bytes
           }
         });
 
@@ -41,7 +47,7 @@
           .map(byte => byte.toString(16).padStart(2, '0')) // Ensure bytes are displayed in hex
           .join(' ');
 
-        output.value = hexString;
+        output.value += hexString;
       } catch (error) {
         output.value = `Error: ${error.message}`;
       }

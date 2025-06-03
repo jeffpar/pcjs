@@ -140,20 +140,21 @@ export default class DataBuffer {
      * @param {number} [offTarget]
      * @param {number} [offSource]
      * @param {number} [offSourceEnd]
+     * @returns {number} (the number of bytes copied)
      */
     copy(dbTarget, offTarget = 0, offSource = 0, offSourceEnd = this.length)
     {
         if (this.node) {
-            this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
-        } else {
-            let cbCopy = offSourceEnd - offSource;
-            let cbMax = dbTarget.length - offTarget;
-            if (cbCopy > cbMax) cbCopy = cbMax;
-            while (cbCopy-- > 0) {
-                dbTarget.buffer[offTarget++] = this.buffer[offSource++];
-                // dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
-            }
+            return this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
         }
+        let cbCopy = offSourceEnd - offSource;
+        let cbMax = dbTarget.length - offTarget;
+        if (cbCopy > cbMax) cbCopy = cbMax;
+        for (let cb = 0; cb < cbCopy; cb++) {
+            dbTarget.buffer[offTarget++] = this.buffer[offSource++];
+            // dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
+        }
+        return cbCopy;
     }
 
     /**
