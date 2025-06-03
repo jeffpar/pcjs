@@ -335,10 +335,10 @@ export default class ISO {
      * If successful, this method returns an Image object used with our other high-level methods;
      * eg, readDirectory(), readFile(), and close().
      *
-     * Also, unlike the other classes in this library (eg, Dezip), if the prefill option is used,
-     * we read the entire image into a *separate* DataBuffer.  We can't take the easy way out and
-     * piggy-back on the cache buffer, because if the image turns out to be rip of raw (2352-byte)
-     * sectors, the cache buffer must become our window on a 2048-byte sector stream.
+     * Also, unlike the other classes in this library (eg, Dezip), preloaded images are maintained
+     * in an image DataBuffer that is separate from the cache DataBuffer.  Separate buffers are required
+     * if the image turns out to be a rip of raw (2352-byte) sectors, so that we can easily transform
+     * logical sector requests into physical sector requests.
      *
      * @this {ISO}
      * @param {string} name
@@ -364,7 +364,6 @@ export default class ISO {
         };
         //
         // If a DataBuffer (db) is provided, then no reading is required.
-        // Note that every image object must have EITHER a db OR a file handle.
         //
         if (db) {
             image.db = db;
