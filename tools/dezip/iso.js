@@ -435,7 +435,7 @@ export default class ISO {
         // default is inverted.
         //
         // TODO: This logic presumes that the path table is optimized (eg, entries are in block number
-        // order).  If that's not always the case, then readPathRecords() may need to perform its own sort.
+        // order).  If that's not always the case, then readPathRecords() may want to sort them.
         //
         image.nodir = (!image.db && !image.file);
         if (options.nodir) {
@@ -775,9 +775,13 @@ export default class ISO {
     /**
      * readDirRecords(image, lba, size, level, subdir)
      *
-     * NOTE: In my extremely limited experience with ISO 9660 images, the size of a directory
-     * (in bytes) is always the total number of blocks multiplied by the block size, so it
-     * encompasses all padding in all the blocks, including any unused space in the last block.
+     * When called from readPathRecords(), size is zero, signalling that we're only interested in
+     * the current directory (ie, any nested directories will be ignored, since they will presumably
+     * appear elsewhere in the path table).
+     *
+     * The other reason size is zero is because path records do NOT contain a size, but we still
+     * need to know the size of the directory in order to know when to stop.  Fortunately, that size
+     * information is also stored in the directory's first record (".").
      *
      * @this {ISO}
      * @param {Image} image
@@ -867,7 +871,7 @@ export default class ISO {
                     // If this readDirRecords() call had no size, then it came from readPathRecords(), so
                     // we must update positionEnd according to the size stored in the directory's "." record.
                     //
-                    if (positionEnd == position - record.length) {
+                    if (!size && count == 1) {
                         positionEnd = position - record.length + record.size;
                     }
                     continue;
