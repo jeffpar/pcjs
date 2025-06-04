@@ -176,36 +176,35 @@ export default class Format {
             }
         }
         argv.push(args.slice(i++).join(' '));
-
         //
-        // console.log("parseArgs: args=%o", args);
+        // NOTE: The following code is handy for passing a series of arguments via one argument
+        // (eg, from a VSCode launch configuration); however, because it can break command-line parsing,
+        // it's performed only if that one and only argument begins with a dash (eg, "-").
         //
-        // NOTE: While the following code is handy for passing a series of arguments via one argument
-        // (eg, from a VSCode launch configuration), it breaks command-line parsing.
-        //
-        // Sanitize all the arguments first, by checking each arg for spaces outside of double quotes and
-        // splitting those args into sub args, and then checking every arg for beginning and ending quotes
-        // and removing them.
-        //
-        // for (j = i; j < args.length; j++) {
-        //     let arg = args[j];
-        //     let inQuotes = false;
-        //     for (let k = 0; k < arg.length; k++) {
-        //         let ch = arg.charAt(k);
-        //         if (ch == '"') {
-        //             inQuotes = !inQuotes;
-        //         } else if (ch == ' ' && !inQuotes) {
-        //             args[j] = arg.slice(0, k);
-        //             args.splice(j + 1, 0, arg.slice(k + 1));
-        //             break;
-        //         }
-        //     }
-        // }
-        // for (j = i; j < args.length; j++) {
-        //     args[j] = args[j].replace(/^(["'])?(.*?)(\1?)$/, "$2");
-        // }
-        //
-
+        if (args.length == i + 1 && args[i][0] == '-') {
+            //
+            // Sanitize all the argument(s), by checking each arg for spaces outside of double quotes and
+            // splitting those args into sub args, and then checking every arg for beginning and ending quotes
+            // and removing them.
+            //
+            for (j = i; j < args.length; j++) {
+                let arg = args[j];
+                let inQuotes = false;
+                for (let k = 0; k < arg.length; k++) {
+                    let ch = arg.charAt(k);
+                    if (ch == '"') {
+                        inQuotes = !inQuotes;
+                    } else if (ch == ' ' && !inQuotes) {
+                        args[j] = arg.slice(0, k);
+                        args.splice(j + 1, 0, arg.slice(k + 1));
+                        break;
+                    }
+                }
+            }
+            for (j = i; j < args.length; j++) {
+                args[j] = args[j].replace(/^(["'])?(.*?)(\1?)$/, "$2");
+            }
+        }
         //
         // Function to handle commonalities between single and double-dash options.
         //

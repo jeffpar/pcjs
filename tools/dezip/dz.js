@@ -594,6 +594,9 @@ async function main(argc, argv, errors)
             if (argv.compat) {
                 options.compat = true;
             }
+            if (argv.nodir) {
+                options.nodir = true;
+            }
             if (archivePath[0] == '~') {
                 archivePath = path.join(process.env.HOME, archivePath.slice(1));
             }

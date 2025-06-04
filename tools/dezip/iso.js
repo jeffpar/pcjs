@@ -81,6 +81,7 @@ import Struct from './struct.js';
  * @property {Date}     modified    (modification date of image file, if known)
  * @property {boolean}  prefill     (if true, read the entire image into memory on open)
  * @property {boolean}  compat      (if true, ignore any supplementary (eg, Joliet) volume descriptor
+ * @property {boolean}  nodir       (if true, read directory structure using path table)
  *
  * @typedef  {object}   Cache
  * @property {DataBuffer} db        (cache buffer)
@@ -377,11 +378,6 @@ export default class ISO {
             }
             const stats = await image.file.stat();
             image.size = stats.size;
-            //
-            // If the caller supplied a modification date for the image, then we stick with that,
-            // because the caller may have extracted the image from another image that preserved
-            // the original date.  Otherwise, we use the modification date provided by the file system.
-            //
             if (!image.modified) {
                 image.modified = stats.mtime;
             }
@@ -400,9 +396,6 @@ export default class ISO {
             image.source = "FS";
         }
         else if (this.interfaces.fetch) {
-            //
-            // TODO: For remote files, consider supporting prefill.
-            //
             let response = await this.interfaces.fetch(name, { method: "HEAD" });
             if (response.ok) {
                 let contentLength = response.headers.get("Content-Length");
@@ -410,6 +403,17 @@ export default class ISO {
                     image.size = +contentLength;
                 } else {
                     throw new Error("Content-Length not provided by server");
+                }
+                let acceptsRanges = response.headers.get("Accept-Ranges");
+                if (!acceptsRanges || acceptsRanges.toLowerCase() != "bytes") {
+                    //
+                    // We apparently have no choice but to read the entire image into memory.
+                    //
+                    response = await this.interfaces.fetch(name);
+                    if (!response.ok) {
+                        throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+                    }
+                    image.db = new DataBuffer(await response.arrayBuffer());
                 }
             }
             image.source = "Network";
@@ -422,6 +426,21 @@ export default class ISO {
         image.pathClass = ISO.PathRecordLE;
         image.sectorSize = ISO.BLOCK_SIZE;
         image.sectorOffset = 0;
+        //
+        // I am piggy-backing on the --nodir option, which was originally intended for bypassing
+        // directory records in ZIP files.  Here, it affects how we read the ISO directory structure.
+        //
+        // By default, if all we have is network access (image.source is "Network"), then we will
+        // rely on the path table; otherwise, it's ignored.  However, if --nodir (-n) is set, that
+        // default is inverted.
+        //
+        // TODO: This logic presumes that the path table is optimized (eg, entries are in block number
+        // order).  If that's not always the case, then readPathRecords() may need to perform its own sort.
+        //
+        image.nodir = (!image.db && !image.file);
+        if (options.nodir) {
+            image.nodir = !image.nodir;
+        }
         let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
         try {
             do {
@@ -542,7 +561,7 @@ export default class ISO {
                     "Range": `bytes=${position}-${position+extent-1}`
                 }
             });
-            if (!response.ok) {
+            if (!response.ok || response.status != 206) {
                 throw new Error(`Failed to fetch ${extent} bytes from ${image.name} at position ${position}: ${response.statusText}`);
             }
             const arrayBuffer = await response.arrayBuffer();
@@ -700,6 +719,27 @@ export default class ISO {
         if (image.primary && image.primary.blockSize) {
             if (!image.paths) {
                 image.paths = await this.readPathRecords(image, image.primary.lbaPaths, image.primary.lenPaths);
+                if (image.nodir) {
+                    image.records = [];
+                    for (let index = 0; index < image.paths.length; index++) {
+                        let path = image.paths[index];
+                        //
+                        // Build the subdir (and level) by walking back through the path records.
+                        //
+                        let level = 0, subdir = path.name;
+                        let parentIndex = path.indexParent;
+                        while (parentIndex > 1 && parentIndex <= image.paths.length) {
+                            let parentPath = image.paths[parentIndex-1];
+                            if (parentPath.name) {
+                                subdir = parentPath.name + (subdir? "/" + subdir : "");
+                            }
+                            parentIndex = parentPath.indexParent;
+                            level++;
+                        }
+                        let recs = await this.readDirRecords(image, path.lba + path.cbAttr, 0, level, subdir);
+                        image.records.push(...recs);
+                    }
+                }
             }
             if (!image.records) {
                 image.records = await this.readDirRecords(image, image.primary.rootDir.lba + image.primary.rootDir.cbAttr, image.primary.rootDir.size);
@@ -742,7 +782,7 @@ export default class ISO {
      * @this {ISO}
      * @param {Image} image
      * @param {number} lba
-     * @param {number} size (of all the directory blocks, in bytes)
+     * @param {number} size (of all the directory blocks, in bytes; zero if called from readPathRecords)
      * @param {number} [level] (used internally to track recursion depth)
      * @param {string} [subdir]
      * @returns {Array}
@@ -823,6 +863,13 @@ export default class ISO {
                 //
                 if (record.name == ".") {           // skip the first directory record, which should be "."
                     this.check(image, count == 1 && record.lba + record.cbAttr == lba || count >= 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
+                    //
+                    // If this readDirRecords() call had no size, then it came from readPathRecords(), so
+                    // we must update positionEnd according to the size stored in the directory's "." record.
+                    //
+                    if (positionEnd == position - record.length) {
+                        positionEnd = position - record.length + record.size;
+                    }
                     continue;
                 }
                 if (record.name == "..") {          // skip the second directory record, which should be ".."
@@ -835,10 +882,15 @@ export default class ISO {
                 record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
                 records.push(record);
             } while (position < positionEnd);
-            for (let record of records) {
-                if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                    let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, level + 1, record.name);
-                    subrecs.push(recs);
+            //
+            // If we're reading all directory records, then the size parameter should be non-zero.
+            //
+            if (size) {
+                for (let record of records) {
+                    if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
+                        let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, level + 1, record.name);
+                        subrecs.push(recs);
+                    }
                 }
             }
         } catch (error) {
@@ -872,10 +924,7 @@ export default class ISO {
                 if (!record.lenName) break;         // if we've hit zero-padding, presumably that's the end
                 if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
-                if (++index == record.indexParent) {
-                    continue;                       // if the entry is its own parent (ie, the root), skip it
-                }
-                if (!record.name || record.lba + record.cbAttr >= image.lbaMax) {
+                if (record.lba + record.cbAttr >= image.lbaMax) {
                     throw new Error(`Invalid path record at position ${record.position}`);
                 }
                 paths.push(record);
