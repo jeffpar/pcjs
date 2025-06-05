@@ -720,9 +720,22 @@ export default class ISO {
             if (!image.paths) {
                 image.paths = await this.readPathRecords(image, image.primary.lbaPaths, image.primary.lenPaths);
                 if (image.nodir) {
+                    //
+                    // Create an index for the paths that is in LBA order, so that we read the
+                    // directory records in the order they appear on the disc; I know that some
+                    // path tables are already in LBA order, but I'm not sure that's guaranteed.
+                    //
+                    const pathIndexes = Array.from({ length: image.paths.length }, (_, i) => i);
+                    pathIndexes.sort((a, b) => {
+                        return image.paths[a].lba - image.paths[b].lba;
+                    });
+                    let indexDiff = 0;
                     image.records = [];
-                    for (let index = 0; index < image.paths.length; index++) {
-                        let path = image.paths[index];
+                    for (let index = 0; index < pathIndexes.length; index++) {
+                        if (!indexDiff && index != pathIndexes[index]) {
+                            indexDiff = index + 1;
+                        }
+                        let path = image.paths[pathIndexes[index]];
                         //
                         // Build the subdir (and level) by walking back through the path records.
                         //
@@ -738,6 +751,9 @@ export default class ISO {
                         }
                         let recs = await this.readDirRecords(image, path.lba + path.cbAttr, 0, level, subdir);
                         image.records.push(...recs);
+                    }
+                    if (indexDiff) {
+                        image.warnings.push(`path record(s) (eg, ${indexDiff}) not in LBA order`);
                     }
                 }
             }
