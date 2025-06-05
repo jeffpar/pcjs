@@ -428,14 +428,17 @@ export default class ISO {
         image.sectorOffset = 0;
         //
         // I am piggy-backing on the --nodir option, which was originally intended for bypassing
-        // directory records in ZIP files.  Here, it affects how we read the ISO directory structure.
+        // directory records in ZIP files.  Here, it affects how we read ISO directory structure.
         //
-        // By default, if all we have is network access (image.source is "Network"), then we will
-        // rely on the path table; otherwise, it's ignored.  However, if --nodir (-n) is set, that
-        // default is inverted.
+        // By default, we perform a recursive read of all the directories and ignore the path table,
+        // unless --nodir (-n) is set.  The exception is when we only have network access, in which
+        // case we DO use the path table.  However, if --nodir (-n) is set, that default is inverted.
         //
-        // TODO: This logic presumes that the path table is optimized (eg, entries are in block number
-        // order).  If that's not always the case, then readPathRecords() may want to sort them.
+        // Note that the path table preference originally relied on the assumption that path records
+        // list the directories in LBA order, and that directories tend to be stored together, all of
+        // which allows our cache to function better.  Whether or not the latter is generally true
+        // remains to be seen, but as far as the order of the path table records, readDirectory() now
+        // creates an LBA index, so even if records aren't ordered by LBA, that's how we read them.
         //
         image.nodir = (!image.db && !image.file);
         if (options.nodir) {
