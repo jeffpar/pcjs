@@ -758,6 +758,23 @@ export default class ISO {
                     if (indexDiff) {
                         image.warnings.push(`path record(s) (eg, ${indexDiff}) not in LBA order`);
                     }
+                    //
+                    // If we built all the directory records from the path records, that could result in an order
+                    // that differs from a simple recursive call to readDirRecords(), so in order to smooth over any
+                    // inconsistencies between the two methods, we sort the records by path, and then by entry type
+                    // (files first, then directories) within paths, and then by name within each type.
+                    //
+                    image.records.sort((a, b) => {
+                        let aType = a.flags & image.dirClass.fields.flags.DIRECTORY;
+                        let bType = b.flags & image.dirClass.fields.flags.DIRECTORY;
+                        if (a.path < b.path) return -1;
+                        if (a.path > b.path) return 1;
+                        if (!aType && bType) return -1;
+                        if (aType && !bType) return 1;
+                        if (a.name < b.name) return -1;
+                        if (a.name > b.name) return 1;
+                        return 0;
+                    });
                 }
             }
             if (!image.records) {
@@ -765,7 +782,7 @@ export default class ISO {
             }
             for (let index = 0; index < image.records.length; index++) {
                 let record = image.records[index];
-                let name = record.name;
+                let name = record.path? record.path + '/' + record.name : record.name;
                 if (filespec && filespec != "*") {
                     let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
                     if (!name.match(re)) continue;
@@ -899,10 +916,8 @@ export default class ISO {
                     this.check(image, count == 2 && record.lenName == 1 || count > 2);
                     continue;
                 }
-                //
-                // Massage the name by prepending any subdir and stripping any "version" suffix (eg, ";1").
-                //
-                record.name = (subdir? subdir + "/" : "") + record.name.replace(/;[0-9]+$/, "");
+                record.name = record.name.replace(/;[0-9]+$/, "");
+                record.path = subdir;
                 records.push(record);
             } while (position < positionEnd);
             //
@@ -911,7 +926,8 @@ export default class ISO {
             if (size) {
                 for (let record of records) {
                     if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                        let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, level + 1, record.name);
+                        let subdir = record.path? record.path + '/' + record.name : record.name;
+                        let recs = await this.readDirRecords(image, record.lba + record.cbAttr, record.size, level + 1, subdir);
                         subrecs.push(recs);
                     }
                 }
