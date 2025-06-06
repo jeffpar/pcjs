@@ -2759,11 +2759,11 @@
       "name": "dz.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "--help"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2779,11 +2779,11 @@
       "name": "dz.js all",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "-ltr --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/**/*.{ZIP,ARC}"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2799,11 +2799,11 @@
       "name": "dz.js csv",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "--path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download*/**/* --fileID=20000001 --itemID=10000001 --setID=1001 --recurse --test --csv ibm.csv"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2819,11 +2819,11 @@
       "name": "dz.js dirty",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "-lt --batch tests/dirty-archives.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2839,11 +2839,11 @@
       "name": "dz.js filter",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "--list --filter squeeze --batch tests/clean-archives.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2859,11 +2859,11 @@
       "name": "dz.js split",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
         "--list --filter split --batch tests/dirty-archives.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2879,11 +2879,11 @@
       "name": "dz.js test",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "-ln http://software/discs/Education_Platinum.iso"
+        "-lt http://software/archives/ibm0001/ACADELE.ZIP"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip/archive",
+      "cwd": "${workspaceFolder}/tools/dz/archive",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2896,10 +2896,10 @@
       }
     },
     {
-      "name": "dzip.html",
+      "name": "dz.html",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/dezip/index.html",
+      "url": "http://localhost:4000/tools/dz/index.html",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -2911,11 +2911,11 @@
       "name": "import.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/import.js",
+      "program": "${workspaceFolder}/tools/dz/import.js",
       "args": [
         "--download archive/shareware.csv"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

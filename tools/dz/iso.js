@@ -396,25 +396,29 @@ export default class ISO {
             image.source = "FS";
         }
         else if (this.interfaces.fetch) {
-            let response = await this.interfaces.fetch(name, { method: "HEAD" });
-            if (response.ok) {
-                let contentLength = response.headers.get("Content-Length");
-                if (contentLength) {
-                    image.size = +contentLength;
-                } else {
-                    throw new Error("Content-Length not provided by server");
-                }
-                let acceptsRanges = response.headers.get("Accept-Ranges");
-                if (!acceptsRanges || acceptsRanges.toLowerCase() != "bytes") {
-                    //
-                    // We apparently have no choice but to read the entire image into memory.
-                    //
-                    response = await this.interfaces.fetch(name);
-                    if (!response.ok) {
-                        throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+            image.size = NaN;
+            if (!options.preload) {
+                let response = await this.interfaces.fetch(name, { method: "HEAD" });
+                if (response.ok) {
+                    let contentLength = response.headers.get("Content-Length");
+                    if (contentLength) {
+                        let acceptsRanges = response.headers.get("Accept-Ranges");
+                        if (acceptsRanges && acceptsRanges.toLowerCase() == "bytes") {
+                            image.size = +contentLength;
+                        }
                     }
-                    image.db = new DataBuffer(await response.arrayBuffer());
                 }
+            }
+            if (isNaN(image.size)) {
+                //
+                // We apparently have no choice but to read the entire image into memory.
+                //
+                let response = await this.interfaces.fetch(name);
+                if (!response.ok) {
+                    throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+                }
+                image.db = new DataBuffer(await response.arrayBuffer());
+                image.size = image.db.length;
             }
             image.source = "Network";
         }
@@ -538,9 +542,9 @@ export default class ISO {
     }
 
     /**
-     * readData(image, position, extent, db, offset)
+     * readBytes(image, position, extent, db, offset)
      *
-     * Read data from the image at the specified physical position.
+     * Read bytes from the image at the specified physical position.
      *
      * @param {Image} image
      * @param {number} position
@@ -549,7 +553,7 @@ export default class ISO {
      * @param {number} offset
      * @returns {number} [bytesRead]
      */
-    async readData(image, position, extent, db, offset)
+    async readBytes(image, position, extent, db, offset)
     {
         let bytesRead;
         if (image.db) {
@@ -577,7 +581,7 @@ export default class ISO {
     /**
      * readImage(image, position, extent, db, offset)
      *
-     * Read data from the image at the specified logical position, de-blocking the data as needed
+     * Read bytes from the image at the specified logical position, de-blocking the data as needed
      * if the image's sector size does not match ISO.BLOCK_SIZE.
      *
      * @this {ISO}
@@ -595,7 +599,7 @@ export default class ISO {
             db = new DataBuffer(extent);
         }
         if (image.sectorSize == ISO.BLOCK_SIZE) {
-            bytesRead = await this.readData(image, position, extent, db, offset);
+            bytesRead = await this.readBytes(image, position, extent, db, offset);
         } else {
             let sector = Math.floor(position / ISO.BLOCK_SIZE);
             let secpos = position % ISO.BLOCK_SIZE;
@@ -605,7 +609,7 @@ export default class ISO {
                     extData = extent - bytesRead;
                 }
                 let posData = sector * image.sectorSize + secpos + image.sectorOffset;
-                let lenData = await this.readData(image, posData, extData, db, offset);
+                let lenData = await this.readBytes(image, posData, extData, db, offset);
                 bytesRead += lenData;
                 if (lenData < extData) {
                     break;
@@ -695,7 +699,7 @@ export default class ISO {
             if (readExtent > 0) {
                 let [db, bytesRead] = await this.readImage(image, readPosition, readExtent, cache.db, readOffset);
                 if (bytesRead != readExtent) {
-                    throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
+                    throw new Error(`Received ${bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
                 }
             }
             cache.position = position;

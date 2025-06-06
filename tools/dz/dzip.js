@@ -407,19 +407,33 @@ export default class DZip {
             archive.source = "FS";
         }
         else if (this.interfaces.fetch) {
-            //
-            // For remote files, preload is the default.
-            //
-            // TODO: Consider honoring preload === false, provided we can obtain
-            // Content-Length from the server and it supports byte range requests.
-            //
-            let response = await this.interfaces.fetch(name);
-            if (!response.ok) {
-                throw new Error(`Unable to fetch ${name} (${response.statusText})`);
+            archive.size = NaN;
+            if (!options.preload) {
+                let response = await this.interfaces.fetch(name, { method: "HEAD" });
+                if (response.ok) {
+                    let contentLength = response.headers.get("Content-Length");
+                    if (contentLength) {
+                        let acceptsRanges = response.headers.get("Accept-Ranges");
+                        if (acceptsRanges && acceptsRanges.toLowerCase() == "bytes") {
+                            archive.size = +contentLength;
+                        }
+                    }
+                }
             }
-            let arrayBuffer = await response.arrayBuffer();
-            archive.size = arrayBuffer.byteLength;
-            this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
+            if (isNaN(archive.size)) {
+                //
+                // We apparently have no choice but to read the entire archive into memory.
+                //
+                let response = await this.interfaces.fetch(name);
+                if (!response.ok) {
+                    throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+                }
+                let arrayBuffer = await response.arrayBuffer();
+                archive.size = arrayBuffer.byteLength;
+                this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
+            } else {
+                this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.size)));
+            }
             archive.source = "Network";
         }
         else {
@@ -702,11 +716,9 @@ export default class DZip {
     /**
      * readArchive(archive, position, extent)
      *
-     * NOTE: When reading from a file, this function deliberately bypasses the cache,
-     * on the assumption that we're reading unstructured (eg, compressed) chunks of data
-     * which don't need to be cached and/or could exceed the size of our cache buffer.
-     *
-     * The cache is only intended for reading well-defined data structures from the archive.
+     * Read data from the archive, extracting it directly from the cache if the archive
+     * is fully cached, or reading it through the cache if the request fits within the cache;
+     * otherwise, read directly from the local or network file, bypassing the cache.
      *
      * @this {DZip}
      * @param {Archive} archive
@@ -717,16 +729,55 @@ export default class DZip {
     async readArchive(archive, position, extent)
     {
         let db;
-        if (!archive.file) {
+        if (archive.cache.db.length == archive.size) {
             db = archive.cache.db.slice(position, position + extent);
-        } else {
+        }
+        else if (extent <= archive.cache.db.length) {
+            let [offset, length] = await this.readCache(archive, position, extent);
+            db = archive.cache.db.slice(offset, offset + length);
+        }
+        else {
             db = new DataBuffer(extent);
-            let result = await archive.file.read(db.buffer, 0, extent, position);
-            if (result.bytesRead < extent) {
-                db = db.slice(0, result.bytesRead);
+            let bytesRead = await this.readBytes(archive, position, extent, db, 0);
+            if (bytesRead < extent) {
+                db = db.slice(0, bytesRead);
             }
         }
         return db;
+    }
+
+    /**
+     * readBytes(archive, position, extent, db, offset)
+     *
+     * Read bytes from the archive at the specified position.
+     *
+     * @param {Archive} archive
+     * @param {number} position
+     * @param {number} extent
+     * @param {DataBuffer} db
+     * @param {number} offset
+     * @returns {number} [bytesRead]
+     */
+    async readBytes(archive, position, extent, db, offset)
+    {
+        let bytesRead;
+        if (archive.file) {
+            let result = await archive.file.read(db.buffer, offset, extent, position);
+            bytesRead = result.bytesRead;
+        } else {
+            const response = await this.interfaces.fetch(archive.name, {
+                headers: {
+                    "Range": `bytes=${position}-${position+extent-1}`
+                }
+            });
+            if (!response.ok || response.status != 206) {
+                throw new Error(`Failed to fetch ${extent} bytes from ${archive.name} at position ${position}: ${response.statusText}`);
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            let dbRead = new DataBuffer(new Uint8Array(arrayBuffer));
+            bytesRead = dbRead.copy(db, offset, 0, extent);
+        }
+        return bytesRead;
     }
 
     /**
@@ -804,18 +855,9 @@ export default class DZip {
                 }
             }
             if (readExtent > 0) {
-                DZip.assert(archive.file);
-                if (archive.file) {
-                    let result = await archive.file.read(cache.db.buffer, readOffset, readExtent, readPosition);
-                    if (result.bytesRead != readExtent) {
-                        throw new Error(`Received ${result.bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
-                    }
-                } else {
-                    //
-                    // As asserted above, this is an internal inconsistency, because archives without handles
-                    // should be fully cached (so, technically, you should never see this error).
-                    //
-                    throw new Error(`${archive.name}: No file handle available`);
+                let bytesRead = await this.readBytes(archive, readPosition, readExtent, cache.db, readOffset);
+                if (bytesRead != readExtent) {
+                    throw new Error(`Received ${bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
                 }
             }
             cache.position = position;

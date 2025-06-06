@@ -105,7 +105,7 @@ const options = {
         type: "boolean",
         usage: "--compat",
         alias: "-c",
-        description: "enable CD-ROM compatibility mode"
+        description: "enable CD-ROM compatibility mode"         // ie, ignore any supplementary (eg, "Joliet") volume descriptors
     },
     "csv": {
         type: "string",
@@ -181,7 +181,11 @@ const options = {
         description: "skip archive directory (scan for files)"
         //
         // Yes, scanning for file entries instead of relying on directory entries goes against ZIP protocol,
-        // but sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures...
+        // but sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures....
+        //
+        // For ISO containers, this option tells readDirectory() to use the path table to build the directory,
+        // instead of relying solely on directory records.  Normally, we ignore the path table, because it's
+        // redundant, but using it can improve performance when accessing an ISO image over a network connection.
         //
     },
     "overwrite": {
