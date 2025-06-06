@@ -2881,8 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/dz.js",
       "args": [
-        "--list",
-        "http://software/discs/MSTN-1996-02-CSD9602.iso"
+        "-ln http://software/discs/Education_Platinum.iso"
       ],
       "cwd": "${workspaceFolder}/tools/dezip/archive",
       "stopOnEntry": false,
@@ -2914,7 +2913,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dezip/import.js",
       "args": [
-        "archive/shareware.csv --download"
+        "--download archive/shareware.csv"
       ],
       "cwd": "${workspaceFolder}/tools/dezip",
       "stopOnEntry": false,

@@ -55,7 +55,7 @@ import path from "path";
 import zlib from "zlib";
 import crypto from "crypto";
 import Format from "./format.js";
-import Dezip from "./dezip.js";
+import DZip from "./dzip.js";
 import Disk from "./disk.js";
 import ISO from "./iso.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
@@ -67,12 +67,12 @@ const printf = function(...args) {
 };
 
 //
-// Normally, a client will provide either a fetch interface or an open interface, not both; for example, browsers
-// don't have access to the file system, so they will provide only fetch.  But here, we DO provide both, because we
-// have access to both; our open() API defaults to open but will fall back to fetch if the filename starts with a
-// network prefix (eg, "http://").
+// Normally, a client will provide either a fetch interface or open interface, not both; for example, browsers
+// don't have access to the file system, so they will provide only fetch.  But as a Node client, we DO have both,
+// so we provide both; our open() API defaults to open but will fall back to fetch if the filename starts with
+// a network prefix (eg, "http://").
 //
-const dezip = new Dezip({
+const dzip = new DZip({
     fetch: fetch,               // async interface for opening remote files ('fetch' works fine for Node, but browsers need 'window.fetch.bind(window)')
     open: fs.open,              // async interface for opening local files
     inflate: zlib.inflateRaw,   // async interface for ZIP_DEFLATE data
@@ -147,23 +147,23 @@ const options = {
                 description: "list available filters"
             },
             "banner": {
-                value: Dezip.EXCEPTIONS.BANNER,
+                value: DZip.EXCEPTIONS.BANNER,
                 description: "process only commented archives"
             },
             "comment": {
-                value: Dezip.EXCEPTIONS.COMMENT,
+                value: DZip.EXCEPTIONS.COMMENT,
                 description: "process only commented entries"
             },
             "encrypted": {
-                value: Dezip.EXCEPTIONS.ENCRYPTED,
+                value: DZip.EXCEPTIONS.ENCRYPTED,
                 description: "process only encrypted entries"
             },
             "split": {
-                value: Dezip.EXCEPTIONS.SPLIT,
+                value: DZip.EXCEPTIONS.SPLIT,
                 description: "process only split archives"
             },
             "wrong": {
-                value: Dezip.EXCEPTIONS.WRONGTYPE,
+                value: DZip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with the wrong type"
             }
         }
@@ -296,7 +296,7 @@ async function main(argc, argv, errors)
     let fromDisk = {};
     let itemPaths = [];
 
-    printf("dz.js %s\n%s\n\nArguments: %s\n", Dezip.VERSION, Dezip.COPYRIGHT, argv[0]);
+    printf("dz.js %s\n%s\n\nArguments: %s\n", DZip.VERSION, DZip.COPYRIGHT, argv[0]);
     if (argv.help) {
         options.help.handler();
     }
@@ -443,7 +443,7 @@ async function main(argc, argv, errors)
     // its primary purpose is still processing archives, we're leaving it as-is for now.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let container = dezip;
+        let container = dzip;
         let archive, doCSV = false;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
@@ -544,7 +544,7 @@ async function main(argc, argv, errors)
             // will also be the same as the entryPath; reduce them.
             //
             if (!archiveEntry) {
-                Dezip.assert(entryName == entryPath);
+                DZip.assert(entryName == entryPath);
                 entryDisk = fromDisk[entryName];
                 if (entryDisk) {
                     entryDisk = path.basename(entryDisk);
@@ -586,7 +586,7 @@ async function main(argc, argv, errors)
             }
             if (argv.csv && !archiveDB) {
                 doCSV = true;
-                options.prefill = true;
+                options.preload = true;
             }
             if (argv.password) {
                 options.password = argv.password;
@@ -625,12 +625,12 @@ async function main(argc, argv, errors)
             // to flag the archive as having already scanned them, so that readDirectory() won't bother.
             //
             if (isArchive && argv.nodir) {
-                archive.exceptions |= Dezip.EXCEPTIONS.NODIRS;
+                archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
             }
             if (isArchive || isDisk) {
                 entries = await container.readDirectory(archive, argv.files, filterExceptions, filterMethod);
             }
-            if (archive.exceptions & Dezip.EXCEPTIONS.NOFILES) {
+            if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
             }
             else if ((isArchive || isDisk) && !entries.length) {
@@ -684,7 +684,7 @@ async function main(argc, argv, errors)
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
                 // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
                 //
-                if (!argv.extract && argv.dir && (filterExceptions & Dezip.EXCEPTIONS.BANNER)) {
+                if (!argv.extract && argv.dir && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
                     let hash = crypto.createHash('md5').update(archive.comment).digest('hex');
                     if (bannerHashes[hash]) {
                         bannerHashes[hash]++;
@@ -789,7 +789,7 @@ async function main(argc, argv, errors)
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
                 //
-                if ((argv.extract || argv.dir && !(filterExceptions & Dezip.EXCEPTIONS.BANNER)) && !recurse) {
+                if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
                     writeData = async function(db) {
                         if (db) {
                             if (!targetFile) {
@@ -844,7 +844,7 @@ async function main(argc, argv, errors)
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
-                if (entry.flags & Dezip.FileHeader.fields.flags.ENCRYPTED) {
+                if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                     method += '*';
                 }
                 if (argv.list) {
@@ -859,7 +859,7 @@ async function main(argc, argv, errors)
                     }
                     if (comment.length) comment = "  " + comment;
                     printf("%-14s %9d   %-9s %9d   %3d%%   %#04x   %T   %0*x%s\n",
-                            name, entry.size, method, entry.compressedSize, ratio, entryAttr, entry.modified, archive.type == Dezip.TYPE_ARC? 4 : 8, entry.crc, comment);
+                            name, entry.size, method, entry.compressedSize, ratio, entryAttr, entry.modified, archive.type == DZip.TYPE_ARC? 4 : 8, entry.crc, comment);
                 }
                 else if (argv.debug && !printed) {
                     printf("listing %s\n", entry.name);

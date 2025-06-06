@@ -148,6 +148,10 @@ export default class Disk {
      *
      * Returns an DiskInfo object to be used with various read functions.
      *
+     * TODO: This open() method, unlike open() for DZip and ISO, always reads the entire disk image into memory
+     * before returning the DiskInfo object, which is not ideal for large disk images, but it's a side-effect of
+     * the code being adapted from the older PCjs diskinfo.js module.  Consider improving this code someday.
+     *
      * @this {Disk}
      * @param {string} name
      * @param {DataBuffer} [db]
@@ -209,7 +213,7 @@ export default class Disk {
             throw new Error(`Unrecognized disk image`);
         }
         //
-        // Add some properties that open() callers may expect to find, consistent with the Dezip class.
+        // Add properties that open() callers may expect, consistent with DZip and ISO classes.
         //
         // TODO: Consider renaming cbDiskData to size, and perhaps others, for more consistency.
         //
@@ -314,9 +318,14 @@ export default class Disk {
  */
 export class DiskInfo {
 
+    /**
+     * This is our arbitrary size threshold for any disk image considered to be partitioned
+     * (ie, a fixed disk image with a partition table); conversely, anything smaller is assumed
+     * to be a diskette image.
+     */
     static MIN_PARTITION = 3000000;     // ~3MB (used in lieu of any partitioned media indicator)
 
-    /*
+    /**
      * Top-level descriptors in PCjs "v2" JSON disk images.
      */
     static DESC = {
@@ -326,14 +335,14 @@ export class DiskInfo {
         DISKDATA:   'diskData'
     };
 
-    /*
+    /**
      * Supported image types.
      */
     static TYPE = {
         CHS:        'CHS'
     };
 
-    /*
+    /**
      * Image descriptor properties.
      */
     static IMAGE = {
@@ -354,7 +363,7 @@ export class DiskInfo {
         SOURCE:     'source'            // the source of the data (eg, archive.org, pcjs.org, etc)
     };
 
-    /*
+    /**
      * Volume descriptor properties.
      */
     static VOLDESC = {
@@ -374,7 +383,7 @@ export class DiskInfo {
         CLUS_TOTAL: 'clusTotal'         // total clusters
     };
 
-    /*
+    /**
      * File descriptor properties.
      */
     static FILEDESC = {
@@ -393,7 +402,7 @@ export class DiskInfo {
         ORIGIN:     'origin'            // path of original file (if the file originated from non-DOS media)
     };
 
-    /*
+    /**
      * Sector object "public" properties.
      */
     static SECTOR = {
@@ -405,7 +414,7 @@ export class DiskInfo {
         FILE_INDEX: 'f',                // PCjs "v2" JSON disk images only [formerly 'file']
         FILE_OFFSET:'o',                // PCjs "v2" JSON disk images only [formerly 'offFile' or 'offset']
                                         // [no longer used: 'pattern']
-        /*
+        /**
          * The following properties occur very infrequently (and usually only in copy-protected or degraded disk images),
          * hence the longer, more meaningful IDs.
          */
@@ -455,7 +464,7 @@ export class DiskInfo {
         SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
     };
 
-    /*
+    /**
      * Boot sector offsets (and assorted constants) in DOS-compatible boot sectors (DOS 2.0 and up)
      *
      * WARNING: I've heard apocryphal stories about SIGNATURE being improperly reversed on some systems
@@ -466,7 +475,7 @@ export class DiskInfo {
         SIGNATURE:      0xAA55          // to be clear, the low byte (at offset 0x1FE) is 0x55 and the high byte (at offset 0x1FF) is 0xAA
     };
 
-    /*
+    /**
      * PCJS_LABEL is our default label, used whenever a more suitable label (eg, the disk image's folder name)
      * is not available (or not supplied), and PCJS_OEM is inserted into any DiskInfo-generated diskette images.
      */
@@ -474,7 +483,7 @@ export class DiskInfo {
     static PCJS_OEM   = "PCJS.ORG";
     static PCJS_VALUE = 0x534a4350;     // "PCJS"
 
-    /*
+    /**
      * BIOS Parameter Block (BPB) offsets in DOS-compatible boot sectors (DOS 2.x and up)
      *
      * Technically, OPCODE and OEM are not part of a BPB, but some operating systems test one or both those fields as part
@@ -504,14 +513,14 @@ export class DiskInfo {
         HIDDENSECS:     0x01C,      // 2 bytes (DOS 2.x) or 4 bytes (DOS 3.31 and up): number of hidden sectors (0 for non-partitioned media)
         BOOTDRIVE:      0x01E,      // 1 byte (DOS 2.x): BIOS boot drive # (eg, 0x00 or 0x80)
         BOOTHEAD:       0x01F,      // 1 byte (DOS 2.x): BIOS boot head # (0-based)
-        /*
+        /**
          * NOTE: DOS 2.0 also stores the number of sectors in the BIOS file (eg, IO.SYS, IBMBIO.COM) in the byte at offset
          * 0x020 (LARGESECS), followed by a custom 11-byte Diskette Parameter Table (DPT) at offsets 0x021 through 0x0x2B, which
          * it promptly points the DPT vector 0x1E (0:0078h) to.
          */
         LARGESECS:      0x020,      // 4 bytes (DOS 3.31 and up): number of sectors if DISKSECS is zero
         END:            0x024,      // end of standard BPB
-        /*
+        /**
          * The rest of these definitions are part of our extended (BASIC-DOS) BPB.  They are not part of a standard DOS BPB.
          *
          * Although, coincidentally, DOS 4.x DID begin storing the boot drive in the same location as our DRIVE field.  It seems
@@ -525,7 +534,7 @@ export class DiskInfo {
         ENDEX:          0x2B        // end of extended BPB
     };
 
-    /*
+    /**
      * Common (supported) diskette geometries.
      *
      * Each entry in GEOMETRIES is an array of values in "CHS" order:
@@ -545,13 +554,13 @@ export class DiskInfo {
         1228800: [80,2,15,512,0xF9],    // media ID 0xF9: 80 cylinders, 2 heads (double-sided), 15 sectors/track, (2400 total sectors x 512 bytes/sector == 1228800)
         1474560: [80,2,18,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 18 sectors/track, (2880 total sectors x 512 bytes/sector == 1474560)
         2949120: [80,2,36,512,0xF0],    // media ID 0xF0: 80 cylinders, 2 heads (double-sided), 36 sectors/track, (5760 total sectors x 512 bytes/sector == 2949120)
-        /*
+        /**
          * The following are some common disk sizes and their CHS values, since missing or bogus MBR and/or BPB values
          * might mislead us when attempting to determine the exact disk geometry.
          */
         10653696:[306, 4, 17],          // PC XT 10Mb hard drive (type 3)
         21411840:[615, 4, 17],          // PC AT 20Mb hard drive (type 2)
-        /*
+        /**
          * Other assorted disk formats, used by DEC and others.
          * For example, the 256256-byte format was also used on early CP/M and SCP (Seattle Computer Products) systems
          */
@@ -562,7 +571,7 @@ export class DiskInfo {
         10485760:[512, 2, 40, 256]      // RL02K single-platter disk cartridge: 512 tracks, 2 heads, 40 sectors/track, 256 bytes/sector, for a total of 10485760 bytes
     };
 
-    /*
+    /**
      * Media ID (descriptor) bytes for DOS-compatible FAT-formatted disks (stored in the first byte of the FAT)
      */
     static FAT = {
@@ -577,7 +586,7 @@ export class DiskInfo {
         MEDIA_2880KB:   0xF0        //  3.5-inch, 2-sided, 36-sector, 80-track
     };
 
-    /*
+    /**
      * Cluster constants for 12-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
      */
     static FAT12 = {
@@ -590,7 +599,7 @@ export class DiskInfo {
         CLUSNUM_EOC:    0xFF8       // end of chain (actually, anything from 0xFF8-0xFFF indicates EOC)
     };
 
-    /*
+    /**
      * Cluster constants for 16-bit FATs (CLUSNUM_FREE, CLUSNUM_RES and CLUSNUM_MIN are the same for all FATs)
      */
     static FAT16 = {
@@ -603,7 +612,7 @@ export class DiskInfo {
         CLUSNUM_EOC:    0xFFF8      // end of chain (actually, anything from 0xFFF8-0xFFFF indicates EOC)
     };
 
-    /*
+    /**
      * Directory Entry offsets (and assorted constants) in FAT disk images
      *
      * NOTE: Versions of DOS prior to 2.0 used INVALID exclusively to mark available directory entries; any entry marked
@@ -626,7 +635,7 @@ export class DiskInfo {
         INVALID:        0xE5        // indicates this directory entry is unused
     };
 
-    /*
+    /**
      * Possible values for DIRENT.ATTR
      */
     static ATTR = {
@@ -641,7 +650,7 @@ export class DiskInfo {
         METADATA:     0x0100        // for internal use only (used to mark "pseudo" file table entries that list compressed archive contents)
     };
 
-    /*
+    /**
      * The BPBs that buildDiskFromBuffer() currently supports; these BPBs should be in order of smallest/oldest to largest/newest
      * capacity, to help ensure we don't select a disk format larger (or newer) than necessary.
      *
@@ -784,7 +793,7 @@ export class DiskInfo {
         0x02, 0x00,                 // 0x1A: number of heads (2)
         0x00, 0x00, 0x00, 0x00      // 0x1C: number of hidden sectors (always 0 for non-partitioned media)
       ],
-        /*
+        /**
          * Here's some useful background information on a 10Mb PC XT fixed disk, partitioned with a single DOS partition.
          *
          * The BPB for a 10Mb "type 3" PC XT hard disk specifies 0x5103 or 20739 for DISKSECS, which is the partition
@@ -992,7 +1001,7 @@ export class DiskInfo {
         if (cbDiskData >= DiskInfo.MIN_PARTITION) {
             let wSig = dbDisk.readUInt16LE(DiskInfo.BOOT.SIG_OFFSET);
             if (wSig == DiskInfo.BOOT.SIGNATURE) {
-                /*
+                /**
                  * In this case, the first sector should be an MBR; find the active partition entry,
                  * then read the LBA of the first partition sector to calculate the boot sector offset.
                  */
@@ -1004,7 +1013,7 @@ export class DiskInfo {
                     }
                 }
             }
-            /*
+            /**
              * If we failed to find an active entry, we'll fall into the BPB detection code, which
              * should fail if the first sector really was an MBR.  Otherwise, the BPB should give us
              * the geometry info we need to dump the entire disk image, including the MBR and any
@@ -1016,7 +1025,7 @@ export class DiskInfo {
         let bByte1 = dbDisk.readUInt8(offBootSector + DiskInfo.BPB.OPCODE + 1);
         let cbSectorBPB = dbDisk.readUInt16LE(offBootSector + DiskInfo.BPB.SECBYTES);
 
-        /*
+        /**
          * These checks are not only necessary for DOS 1.x diskette images (and other pre-BPB images),
          * but also non-DOS diskette images (eg, CPM-86 diskettes).
          *
@@ -1031,7 +1040,7 @@ export class DiskInfo {
         let fXDFOutput = false;
         let defaultGeometry = DiskInfo.GEOMETRIES[cbDiskData];
         if (!defaultGeometry) {
-            /*
+            /**
              * I've come across some disk images that were .IMD files that I had converted to .IMG using HxC,
              * and everything was fine except that there was 128 bytes of extra "stuff" af the end of the image,
              * defeating our simple geometry check.
@@ -1049,7 +1058,7 @@ export class DiskInfo {
             bMediaID = defaultGeometry[4] || bMediaID;
         }
 
-        /*
+        /**
          * I used to do these BPB tests only if defaultGeometry was undefined, but now I always do them, because
          * I want to make sure they're in agreement (and if not, then figure out why not).
          *
@@ -1112,7 +1121,7 @@ export class DiskInfo {
                     bMediaID = bMediaIDBPB;
                 }
 
-                /*
+                /**
                  * OK, great, the disk appears to contain a valid BPB.  But so do XDF disk images, which are
                  * diskette images with tracks containing:
                  *
@@ -1145,7 +1154,7 @@ export class DiskInfo {
             }
         }
 
-        /*
+        /**
          * Let's see if we can find a corresponding BPB in our table of default BPBs.
          */
         let iBPB = -1;
@@ -1153,7 +1162,7 @@ export class DiskInfo {
             if (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.MEDIA] == bMediaID) {
                 let cbDiskBPB = (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.DISKSECS] + (DiskInfo.aDefaultBPBs[i][DiskInfo.BPB.DISKSECS + 1] * 0x100)) * cbSector;
                 if (cbDiskBPB == cbDiskData) {
-                    /*
+                    /**
                         * This code was added to deal with variations in sectors/cluster.  Most software manufacturers
                         * were happy with the defaults that FORMAT chooses for a given diskette size, but in a few cases
                         * (eg, PC DOS 4.00 360K diskettes, PC DOS 4.01 720K diskettes, etc), the manufacturer (IBM) opted
@@ -1170,7 +1179,7 @@ export class DiskInfo {
         let nLogicalSectorsPerTrack = nSectorsPerTrack;
 
         if (iBPB >= 0) {
-            /*
+            /**
              * Sometimes we come across a physical 360Kb disk image that contains a logical 320Kb image (and similarly,
              * a physical 180Kb disk image that contains a logical 160Kb disk image), presumably because it was possible
              * for someone to take a diskette formatted with 9 sectors/track and then use FORMAT or DISKCOPY to create
@@ -1185,7 +1194,7 @@ export class DiskInfo {
             }
             let fBPBWarning = false;
             if (fBPBExists) {
-                /*
+                /**
                  * In deference to the PC DOS 2.0 BPB behavior discussed above, we stop our BPB verification after
                  * the first word of HIDDENSECS.
                  */
@@ -1194,7 +1203,7 @@ export class DiskInfo {
                     let bActual = dbDisk.readUInt8(offBootSector + off);
                     if (bDefault != bActual) {
                         this.warnings.push(`BPB byte ${off} default (${bDefault}) does not match actual byte: ${bActual}`);
-                        /*
+                        /**
                          * Silly me for thinking that a given media ID (eg, 0xF9) AND a given disk size (eg, 720K)
                          * AND a given number of sectors/cluster (eg, 2) would always map to the same BPB.  I had already
                          * added *two* 720K BPBs -- one for the common case of 2 sectors/cluster and another for 720K
@@ -1219,7 +1228,7 @@ export class DiskInfo {
 
         offTrack = 0;
         if (!nHeads) {
-            /*
+            /**
              * Next, check for a DSK header (an old private format I used to use, which begins with either
              * 0x00 (read-write) or 0x01 (write-protected), followed by 7 more bytes):
              *
@@ -1266,7 +1275,7 @@ export class DiskInfo {
         }
 
         if (nHeads) {
-            /*
+            /**
              * Output the disk data as an array of cylinders, each containing an array of tracks (one track per head),
              * and each track containing an array of sectors.
              */
@@ -1296,7 +1305,7 @@ export class DiskInfo {
                     aHeads[iHead] = aSectors;
                     this.nSectors = nLogicalSectorsPerTrack;
 
-                    /*
+                    /**
                      * For most disks, the size of every sector and the number of sectors/track are consistent, and the
                      * sector number encoded in every sector (nSector) matches the 1-based sector index (iSector) we use
                      * to "track" our progress through the current track.  However, for XDF disk images, the above is
@@ -1307,7 +1316,7 @@ export class DiskInfo {
                     let nSectorsThisTrack = nLogicalSectorsPerTrack;
                     this.cbSector = cbSector;
 
-                    /*
+                    /**
                      * Notes regarding XDF track layouts, from http://forum.kryoflux.com/viewtopic.php?f=3&t=234:
                      *
                      *      Track 0, side 0: 19x512 bytes per sector, with standard numbering for the first 8 sectors, then custom numbering
@@ -1358,14 +1367,14 @@ export class DiskInfo {
                             sectorID = (cbSectorThisTrack == 512? 2 : (cbSectorThisTrack == 1024? 3 : (cbSectorThisTrack == 2048? 4 : 6)));
                         }
 
-                        /*
+                        /**
                          * Check for any sector ID edits that must be applied to the disk (eg, "--sectorID=C:H:S:ID").
                          *
                          * For example, when building the IBM Multiplan 1.00 Program disk, "--sectorID=11:0:8:61" must be specified.
                          */
                         dbSector = dbTrack.slice(offSector, offSector + cbSectorThisTrack);
 
-                        /*
+                        /**
                          * NOTE: This code is broken if the disks's reserved sector count is anything other than 1, because
                          * it assumes that the first FAT sector immediately follows the boot sector.  However, we never use
                          * a value other than 1 anyway, because I've yet to find a version DOS (at least DOS 2.x or 3.x) that
@@ -1424,7 +1433,7 @@ export class DiskInfo {
         }
 
         if (imageData) {
-            /*
+            /**
              * We now differentiate between "legacy" JSON images (which were simply arrays of CHS data)
              * and "v2" JSON images, which are objects with a CHS diskData property, among other things.
              */
@@ -1442,7 +1451,7 @@ export class DiskInfo {
             }
             let aDiskData = imageData[DiskInfo.DESC.DISKDATA] || imageData;
             if (aDiskData && aDiskData.length) {
-                /*
+                /**
                  * If fCopyData is false (the default), then we take aDiskData as-is (presumably it was freshly loaded);
                  * otherwise, we copy all the sector objects, in case the data came from a running machine that added its
                  * own properties to the sector objects.
@@ -1526,7 +1535,7 @@ export class DiskInfo {
                     let name = desc[DiskInfo.FILEDESC.PATH].replace(/^.*?\/?([^/]*)$/, "$1");
                     let path = desc[DiskInfo.FILEDESC.PATH].replace(/\//g, '\\');
                     let attr = +desc[DiskInfo.FILEDESC.ATTR];
-                    /*
+                    /**
                      * parseDate() *must* return local time (the second parameter must be true), because we've changed
                      * everything else to use local time (eg, getFileListing()).
                      */
@@ -1570,7 +1579,7 @@ export class DiskInfo {
     {
         if (!this.fileTable.length && !this.tablesBuilt) {
 
-            /*
+            /**
              * The built flag avoids rebuilding tables needlessly for volumes that simply have zero files.
              */
             this.tablesBuilt = true;
@@ -1581,7 +1590,7 @@ export class DiskInfo {
                 return -1;
             }
 
-            /*
+            /**
              * Process all recognized volumes.
              *
              * NOTE: Our file table currently supports only files on FAT volumes, and there is only one file
@@ -1594,7 +1603,7 @@ export class DiskInfo {
                 iVolume++;
             }
 
-            /*
+            /**
              * For all files in the file table, create the sector-to-file mappings now.
              */
             for (let iFile = 0; iFile < this.fileTable.length; iFile++) {
@@ -1631,7 +1640,7 @@ export class DiskInfo {
             vol.cbSector = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
 
             if (vol.cbSector != this.cbSector || !this.checkMediaID(vol.idMedia)) {
-                /*
+                /**
                  * When the first sector doesn't appear to contain a valid BPB, the most likely explanations are:
                  *
                  *      1. The image is from a diskette formatted by DOS 1.x, which didn't use BPBs
@@ -1651,7 +1660,7 @@ export class DiskInfo {
                     let bpb = DiskInfo.aDefaultBPBs[i];
                     if (bpb[DiskInfo.BPB.MEDIA] == idMedia || !bpb[DiskInfo.BPB.MEDIA] && idMedia >= 0xF8) {
                         let cbDiskBPB = (bpb[DiskInfo.BPB.DISKSECS] + (bpb[DiskInfo.BPB.DISKSECS + 1] * 0x100)) * this.cbSector;
-                        /*
+                        /**
                          * With such a heavy reliance on a single byte (idMedia) from the first FAT sector, we're going to
                          * believe this BPB match only for disks <= 360K.  I would have limited it to 320K (the largest
                          * that DOS 1.x supported), but there's the 360K Microsoft Chart 2.02 disk image (and a few others),
@@ -1659,7 +1668,7 @@ export class DiskInfo {
                          */
                         if (cbDiskBPB == cbDisk && (cbDisk <= 360 * 1024 || !bpb[DiskInfo.BPB.MEDIA])) {
                             vol.idMedia = idMedia;
-                            /*
+                            /**
                              * NOTE: Like DISKSECS, FATSECS and DIRENTS are 2-byte fields; but unlike DISKSECS,
                              * their upper byte is zero in all our default (diskette) BPBs, so there's no need to fetch them.
                              */
@@ -1682,7 +1691,7 @@ export class DiskInfo {
             vol.nFATBits = 0;
             vol.cbSector = this.cbSector;
 
-            /*
+            /**
              * So, this is either a fixed (partitioned) disk, or a disk using a non-standard sector size.
              *
              * Let's assume the former (ie, we have an MBR) and check for partition records.  We will do this check
@@ -1758,7 +1767,7 @@ export class DiskInfo {
         vol.vbaData = vol.vbaRoot + (((vol.rootEntries * DiskInfo.DIRENT.LENGTH + (vol.cbSector - 1)) / vol.cbSector) | 0);
         vol.clusTotal = (((vol.lbaTotal - vol.vbaData) / vol.clusSecs) | 0);
 
-        /*
+        /**
          * In all FATs, the first valid cluster number is 2, as 0 is used to indicate a free cluster and 1 is reserved.
          *
          * In a 12-bit FAT chain, the largest valid cluster number (clusMax) is 0xFF6; 0xFF7 is reserved for marking
@@ -1796,7 +1805,7 @@ export class DiskInfo {
             return null;
         }
 
-        /*
+        /**
          * The following assertion is here only to catch anomalies; it is NOT a requirement that the number of data sectors
          * be a perfect multiple of clusSecs, but if it ever happens, it's worth verifying we didn't miscalculate something.
          */
@@ -1805,7 +1814,7 @@ export class DiskInfo {
             this.messages.push(`volume ${iVolume} contains ${vol.lbaTotal}, wasting ${nWasted} sectors`);
         }
 
-        /*
+        /**
          * Similarly, it is NOT a requirement that the size of all root directory entries be a perfect multiple of the sector
          * size (cbSector), but it may indicate a problem if it's not.  Note that when it comes time to read the root directory,
          * we treat it exactly like any other directory; that is, we ignore the rootEntries value and scan the entire contents of
@@ -1820,7 +1829,7 @@ export class DiskInfo {
         for (let vba = vol.vbaRoot; vba < vol.vbaData; vba++) aLBA.push(vol.lbaStart + vba);
         this.getDir(vol, aLBA);
 
-        /*
+        /**
          * Calculate free (unused) space, as well as total "bad" space.
          *
          * Some disks, like FLICKERFREE.img, mark all their unused clusters as bad, perhaps to discourage anyone
@@ -2077,7 +2086,7 @@ export class DiskInfo {
         if (iCylinder < this.nCylinders) {
             let nSectorsRemaining = (lba % nSectorsPerCylinder);
             iHead = (nSectorsRemaining / this.nSectors) | 0;
-            /*
+            /**
              * LBA numbers are 0-based, but the sector numbers in CHS addressing are 1-based, so add 1 to the sector index.
              */
             idSector = (nSectorsRemaining % this.nSectors) + 1;
@@ -2117,7 +2126,7 @@ export class DiskInfo {
                         if (sector) {
                             let iFile = sector[DiskInfo.SECTOR.FILE_INDEX];
                             if (iFile != undefined) {
-                                /*
+                                /**
                                  * When the caller specifies a particular file, it is tempting to do this:
                                  *
                                  *      if (file.index === iFile) ...
@@ -2128,7 +2137,7 @@ export class DiskInfo {
                                 Disk.assert(fileCur);
                                 if (!fileCur.aLBA) fileCur.aLBA = [];
                                 let iLBA = sector[DiskInfo.SECTOR.FILE_OFFSET] / this.cbSector;
-                                /*
+                                /**
                                  * Disks that have known errors (like the APL-100 disk image we received) can trigger this
                                  * assertion, so it should be a DEBUG-only check.
                                  */
@@ -2419,7 +2428,7 @@ export class DiskInfo {
             }
         }
         adw.length -= cPrev;
-        /*
+        /**
          * To be backward-compatible with the checksumming logic used with older JSON disk images (where
          * any ending pattern was stored in a separate 'pattern' property and omitted from the 'data' array),
          * we must omit the final data value from *our* checksum as well, but only if it's the final value
@@ -2518,7 +2527,7 @@ export class DiskInfo {
         if (cylinder) {
             let i;
             let track = cylinder[iHead];
-            /*
+            /**
              * The following code allows a single-sided diskette image to be reformatted (ie, "expanded")
              * as a double-sided image, provided the drive has more than one head (see drive.nHeads).
              *
@@ -2531,7 +2540,7 @@ export class DiskInfo {
                 for (i = 0; i < track.length; i++) {
                     track[i] = this.buildSector(iCylinder, iHead, i + 1, drive.nBytes);
                 }
-                /*
+                /**
                  * TODO: This is more dodginess, because we can't be certain that every cylinder on the disk
                  * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                  * properties (eg, this.nHeads), on the assumption that the disk's geometry is homogeneous.
@@ -2545,7 +2554,7 @@ export class DiskInfo {
                 for (i = 0; i < track.length; i++) {
                     if (track[i] && track[i][DiskInfo.SECTOR.ID] == idSector) {
                         sector = track[i];
-                        /*
+                        /**
                          * When confronted with a series of sectors with the same sector ID (as found, for example, on
                          * the 1984 King's Quest copy-protected diskette), we're supposed to advance to another sector in
                          * the series.  So if the current sector matches the previous sector, we'll peek at the next sector
@@ -2567,12 +2576,12 @@ export class DiskInfo {
                         break;
                     }
                 }
-                /*
+                /**
                  * The following code allows an 8-sector track to be reformatted (ie, "expanded") as a 9-sector track.
                  */
                 if (!sector && drive && drive.bFormatting && drive.bSector == 9) {
                     sector = track[i] = this.buildSector(iCylinder, iHead, drive.bSector, drive.nBytes);
-                    /*
+                    /**
                      * TODO: This is more dodginess, because we can't be certain that every track on the disk
                      * will receive the same "expanded" treatment, but functions like getSector() rely on instance
                      * properties (eg, this.nSectors), on the assumption that the disk's geometry is homogeneous.

@@ -348,7 +348,6 @@ async function main(argc, argv, errors)
             if (csvRow == null) {
                 break;
             }
-            csvID++;
             let siteURL = csvRow['siteURL'];
             if (urlCache[siteURL]) {
                 continue;
@@ -356,21 +355,28 @@ async function main(argc, argv, errors)
             urlCache[siteURL] = true;
             let response = await fetch(siteURL);
             if (!response.ok) {
-                printf("error: unable to fetch %s (%s)\n", siteURL, response.statusText);
+                printf("# unable to fetch %s (%s)\n", siteURL, response.statusText);
                 continue;
             }
             //
             // Get the response as a string
             //
+            let matches = 0;
+            let url = new URL(siteURL);
             let text = await response.text();
-            // printf("Downloaded %s (%d bytes)\n", siteURL, text.length);
-            //
-            // Find an href in the text that ends with ".torrent"
-            //
-            let match = text.match(/href="([^"]+\.torrent)"/);
-            if (match) {
-                let url = new URL(siteURL);
-                printf("curl -L %s%s -o shareware-%04d.torrent\n", url.origin, match[1], csvID);
+            let titleMatch = text.match(/<h1 class="sr-only">\s*(.*?)\s*<\/h1>/);
+            let matchAll = text.matchAll(/<a.* href="(\/download\/[^"]+.iso)"[^>]*>([^<]*)</g);
+            for (let match of matchAll) {
+                let desc = match[2].trim();
+                if (!desc) {
+                    desc = titleMatch && titleMatch[1] || "unknown";
+                }
+                desc += ".iso";
+                printf("curl -s -I -L %s%s | grep -E \"^location:\" | sed -E \"s|location: (.*)\\r|%d,\\\"%s\\\",\\\"%s%s\\\",\\\"%s\\\",\\\"\\1\\\"|\"\n", url.origin, match[1], ++csvID, siteURL, url.origin, match[1], desc);
+                matches++;
+            }
+            if (!matches) {
+                printf("# unable to find any download links in %s\n", siteURL);
             }
         }
         await file.close();

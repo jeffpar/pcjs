@@ -79,7 +79,7 @@ import Struct from './struct.js';
  *
  * @typedef  {object}   ImageOptions
  * @property {Date}     modified    (modification date of image file, if known)
- * @property {boolean}  prefill     (if true, read the entire image into memory on open)
+ * @property {boolean}  preload     (if true, read the entire image into memory on open)
  * @property {boolean}  compat      (if true, ignore any supplementary (eg, Joliet) volume descriptor
  * @property {boolean}  nodir       (if true, read directory structure using path table)
  *
@@ -336,7 +336,7 @@ export default class ISO {
      * If successful, this method returns an Image object used with our other high-level methods;
      * eg, readDirectory(), readFile(), and close().
      *
-     * Also, unlike the other classes in this library (eg, Dezip), preloaded images are maintained
+     * Also, unlike the other classes in this library (eg, DZip), preloaded images are maintained
      * in an image DataBuffer that is separate from the cache DataBuffer.  Separate buffers are required
      * if the image turns out to be a rip of raw (2352-byte) sectors, so that we can easily transform
      * logical sector requests into physical sector requests.
@@ -381,7 +381,7 @@ export default class ISO {
             if (!image.modified) {
                 image.modified = stats.mtime;
             }
-            if (options.prefill) {
+            if (options.preload) {
                 image.db = new DataBuffer(image.size);
                 let offset = 0, position = 0;
                 let extent = Math.min(this.cacheSize, image.size);
