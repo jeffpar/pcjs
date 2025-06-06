@@ -2881,9 +2881,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "-lt http://software/archives/ibm0001/ACADELE.ZIP"
+        "-ltr --batch archive/network.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dz/archive",
+      "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

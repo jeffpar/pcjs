@@ -872,7 +872,12 @@ async function main(argc, argv, errors)
                     await csvFile.write(getCSVLine(entry, archive.volTable? "None" : method, db, true));
                 }
                 if (recurse && db) {
-                    let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath, path.basename(archivePath), entry.name), dstPath, db, entry.modified);
+                    //
+                    // path.join() doesn't like path elements like "http://" (it considers the double-slash
+                    // redundant and converts it to a single slash), so we replace all double-slashes with a
+                    // pipe, and then convert all pipes back into double-slashes after the join.
+                    //
+                    let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//"), dstPath, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
@@ -917,6 +922,17 @@ async function main(argc, argv, errors)
     // And finally: the main loop.
     //
     for (let itemPath of itemPaths) {
+        //
+        // This was a hack for testing purposes, but it should not be required in general,
+        // because it's up to the caller to ensure that all characters in a URL are properly encoded.
+        //
+        //      if (itemPath.match(/^https?:\/\//)) {
+        //          itemPath = itemPath.replace(/#/g, "%23");
+        //      }
+        //
+        // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
+        // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
+        //
         let [nFiles, nWarnings] = await processArchive(itemID++, itemPath);
         if ((argv.list || argv.test) && (!argv.csv || argv.verbose) && nFiles && nWarnings >= 0) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && nFiles? "\n" : "", itemPath, nFiles, nFiles, nWarnings, nWarnings);
