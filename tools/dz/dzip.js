@@ -904,7 +904,7 @@ export default class DZip {
      * @param {string} [filespec]
      * @param {number} [filterExceptions] (0 if none)
      * @param {number} [filterMethod] (-1 if none)
-     * @returns {Array}
+     * @returns {Array.<ArchiveEntry>} (array of archive entries)
      */
     async readDirectory(archive, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
@@ -1304,18 +1304,18 @@ export default class DZip {
     }
 
     /**
-     * readFile(archive, index, writeData)
+     * readFile(archive, entry, writeData)
      *
      * @this {DZip}
      * @param {Archive} archive
-     * @param {number} index
+     * @param {ArchiveEntry} entry
      * @param {function} [writeData]
      * @returns {DataBuffer|undefined}
      */
-    async readFile(archive, index, writeData)
+    async readFile(archive, entry, writeData)
     {
         let expandedDB;
-        let record = archive.records[index];
+        let record = archive.records[entry.index];
         try {
             let fileHeader = record.fileHeader;
             if (!fileHeader) {
@@ -1472,7 +1472,7 @@ export default class DZip {
                 }
                 if (expandedDB) {
                     if (expandedSize != expandedDB.length) {
-                        record.warnings.push(`Received ${expandedDB.length} bytes`);
+                        record.warnings.push(`Read ${expandedDB.length} bytes, expected ${expandedSize}`);
                     }
                     if (fileHeader.crc) {
                         this.updateCRC(record, expandedDB, archive.type, true);

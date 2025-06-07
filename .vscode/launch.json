@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "-ln /Volumes/MacSSD/Archives/sets/Power-Drive/Power-Drive.iso"
+        "-lx -d archive/test /Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/Misc/MSFT-CD065-AOE2_Age_Of_Empires_2.iso"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,

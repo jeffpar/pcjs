@@ -794,7 +794,7 @@ async function main(argc, argv, errors)
                 // has been enabled; this will take care of writing the received data to the appropriate file.
                 //
                 if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
-                    writeData = async function(db) {
+                    writeData = async function(db, length) {
                         if (db) {
                             if (!targetFile) {
                                 targetPath = path.join(dstPath, entry.name);
@@ -826,7 +826,7 @@ async function main(argc, argv, errors)
                                     return false;
                                 }
                             }
-                            await targetFile.write(db.buffer);
+                            await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
                             return true;
                         }
                         if (targetFile) {
@@ -844,7 +844,7 @@ async function main(argc, argv, errors)
                         printf("reading %s\n", entry.name);
                         printed = true;
                     }
-                    db = await container.readFile(archive, entry.index, writeData);
+                    db = await container.readFile(archive, entry, writeData);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];

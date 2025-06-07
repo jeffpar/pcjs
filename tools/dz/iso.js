@@ -989,19 +989,19 @@ export default class ISO {
     }
 
     /**
-     * readFile(image, index, writeData)
+     * readFile(image, entry, writeData)
      *
      * @this {ISO}
      * @param {Image} image
-     * @param {number} index
+     * @param {object} entry (an entry from readDirectory())
      * @param {function} [writeData]
      * @returns {DataBuffer|undefined}
      */
-    async readFile(image, index, writeData)
+    async readFile(image, entry, writeData)
     {
-        let record = image.records && image.records[index];
+        let record = image.records && image.records[entry.index];
         if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
-            throw new Error(`No file entry at index ${index}`);
+            throw new Error(`No file record for entry ${entry.name} (${entry.index})`);
         }
         let db, bytesRead;
         if (!record.size) {
@@ -1009,8 +1009,11 @@ export default class ISO {
         } else {
             [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
         }
+        if (bytesRead != record.size) {
+            entry.warnings.push(`Read ${bytesRead} bytes, expected ${record.size}`);
+        }
         if (writeData) {
-            await writeData(db);
+            await writeData(db, bytesRead);
             await writeData();
         }
         return db;

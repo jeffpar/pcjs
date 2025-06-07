@@ -267,22 +267,25 @@ export default class Disk {
     }
 
     /**
-     * readFile(diskInfo, index, writeData)
+     * readFile(diskInfo, entry, writeData)
      *
      * @this {Disk}
      * @param {DiskInfo} diskInfo
-     * @param {number} index
+     * @param {object} entry (an entry from readDirectory())
      * @param {function} [writeData]
      * @returns {DataBuffer|undefined}
      */
-    async readFile(diskInfo, index, writeData)
+    async readFile(diskInfo, entry, writeData)
     {
         let db;
-        let file = diskInfo.fileTable[index];
+        let file = diskInfo.fileTable[entry.index];
         if (file && file.name.length && file.size < diskInfo.cbDiskData) {
             let ab = new Array(file.size);
-            let cb = diskInfo.readSectorArray(file, ab);
-            db = new DataBuffer(ab, 0, cb);
+            let size = diskInfo.readSectorArray(file, ab);
+            if (size != file.size) {
+                entry.warnings.push(`Read ${size} bytes, expected ${file.size}`);
+            }
+            db = new DataBuffer(ab, 0, size);
             if (writeData) {
                 await writeData(db);
                 await writeData();
