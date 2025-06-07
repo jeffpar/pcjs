@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "-ltr --batch archive/network.log"
+        "-ln /Volumes/MacSSD/Archives/sets/Power-Drive/Power-Drive.iso"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,

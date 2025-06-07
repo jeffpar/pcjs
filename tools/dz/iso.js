@@ -729,8 +729,8 @@ export default class ISO {
                 if (image.nodir) {
                     //
                     // Create an index for the paths that is in LBA order, so that we read the
-                    // directory records in the order they appear on the disc; I know that some
-                    // path tables are already in LBA order, but I'm not sure that's guaranteed.
+                    // directory records in the order they appear on the disc; path records are
+                    // often already (mostly) in LBA order, but not always.
                     //
                     const pathIndexes = Array.from({ length: image.paths.length }, (_, i) => i);
                     pathIndexes.sort((a, b) => {
@@ -759,9 +759,12 @@ export default class ISO {
                         let recs = await this.readDirRecords(image, path.lba + path.cbAttr, 0, level, subdir);
                         image.records.push(...recs);
                     }
-                    if (indexDiff) {
-                        image.warnings.push(`path record(s) (eg, ${indexDiff}) not in LBA order`);
-                    }
+                    //
+                    // This is of mild interest to me, but it doesn't really rise to the level of a warning.
+                    //
+                    //      if (indexDiff) {
+                    //          image.warnings.push(`path record(s) (eg, ${indexDiff}) not in LBA order`);
+                    //      }
                     //
                     // If we built all the directory records from the path records, that could result in an order
                     // that differs from a simple recursive call to readDirRecords(), so in order to smooth over any
