@@ -880,23 +880,30 @@ export default class ISO {
                 if (ISO.DEBUG) record.position = "0x" + position.toString(16);
                 position += record.length;
                 //
-                // Sanity check the directory record.
+                // Sanity check the directory record, just to make sure we're not reading garbage.
                 //
-                // There are many issues with "Otherware_1_SB_Development.iso", like directories
-                // with enormous sizes.
-                //
-                // And in "0001_Big13.iso", there are some entries (eg, "ICON_") that have zero size
-                // and a ridiculous LBA (eg, 0x69696969).
-                //
-                if ((record.flags & image.dirClass.fields.flags.DIRECTORY) && record.size >= 0x10000000) {
-                    record.size &= 0x00ffffff;
-                }
                 let sanity = (record.name && length >= record.length) &&
-                             (!record.size || record.lba + record.cbAttr < image.lbaMax) &&
                              (image.dirClass.length + (record.lenName-1) + ((record.lenName-1) & 0x1) <= record.length);
                 if (!this.check(image, sanity, `Directory record at position ${record.position} is invalid`)) {
                     break;
                 }
+                //
+                // There are many issues with "Otherware_1_SB_Development.iso", like directories with
+                // enormous sizes.
+                //
+                // And in "0001_Big13.iso", there are some entries (eg, "ICON_") that have zero size and
+                // a ridiculous LBA (eg, 0x69696969).
+                //
+                if ((record.flags & image.dirClass.fields.flags.DIRECTORY) && record.size >= 0x10000000) {
+                    record.size &= 0x00ffffff;
+                }
+                //
+                // TODO: For now, I'm not going to complain or bail when encountering out-of-bound directory
+                // records, because maybe you already know the image is broken, and you just want to see the entries.
+                //
+                // if (!this.check(image, (!record.size || record.lba + record.cbAttr < image.lbaMax), `Directory record at position ${record.position} exceeds image bounds`)) {
+                //     break;
+                // }
                 count++;
                 //
                 // The next check is a bit relaxed; for example, in "Hot Mix 15.iso", there are some ".."
@@ -909,7 +916,7 @@ export default class ISO {
                 // directory entry.
                 //
                 if (record.name == ".") {           // skip the first directory record, which should be "."
-                    this.check(image, count == 1 && record.lba + record.cbAttr == lba || count >= 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba}+${record.cbAttr}, expected ${lba}`);
+                    this.check(image, count == 1 && record.lba + record.cbAttr == lba || count >= 2, `Directory record "${record.name}" at position ${record.position} has LBA ${record.lba + record.cbAttr}, expected ${lba}`);
                     //
                     // If this readDirRecords() call had no size, then it came from readPathRecords(), so
                     // we must update positionEnd according to the size stored in the directory's "." record.
