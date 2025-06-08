@@ -543,7 +543,7 @@ async function main(argc, argv, errors)
             [archivePhoto, widthPhoto, heightPhoto] = await getPhotoInfo(archivePath, archiveExt);
         }
         let getCSVLine = function(entry, method, db, archiveEntry) {
-            let hash = db? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
+            let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let comment = entry.comment || "";
             //
@@ -857,6 +857,7 @@ async function main(argc, argv, errors)
                         printed = true;
                     }
                     db = await container.readFile(archive, entry, writeData);
+                    entry.size = db && db.length || 0;
                     if (!db && !argv.list) {
                         printf("%s: %s\n", path.join(dstPath, entry.name), entry.warnings.join("; ") || "no data");
                     }

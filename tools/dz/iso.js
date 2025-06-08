@@ -555,10 +555,15 @@ export default class ISO {
      */
     async readBytes(image, position, extent, db, offset)
     {
-        let bytesRead;
+        let bytesRead = 0;
         if (image.db) {
-            image.db.copy(db, offset, position, position + extent);
-            bytesRead = extent;
+            if (position < image.db.length) {
+                if (position + extent > image.db.length) {
+                    extent = image.db.length - position;
+                }
+                image.db.copy(db, offset, position, position + extent);
+                bytesRead = extent;
+            }
         } else if (image.file) {
             let result = await image.file.read(db.buffer, offset, extent, position);
             bytesRead = result.bytesRead;
@@ -995,7 +1000,7 @@ export default class ISO {
      * @param {Image} image
      * @param {object} entry (an entry from readDirectory())
      * @param {function} [writeData]
-     * @returns {DataBuffer|undefined}
+     * @returns {DataBuffer}
      */
     async readFile(image, entry, writeData)
     {
@@ -1011,6 +1016,7 @@ export default class ISO {
         }
         if (bytesRead != record.size) {
             entry.warnings.push(`Received ${bytesRead} bytes, expected ${record.size}`);
+            db = db.slice(0, bytesRead);
         }
         if (writeData) {
             await writeData(db, bytesRead);
