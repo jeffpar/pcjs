@@ -1495,6 +1495,27 @@ export default class DZip {
     }
 
     /**
+     * readLabel(archive)
+     *
+     * NOTE: This should not be called until after readDirectory() has been called.
+     *
+     * @param {Archive} archive
+     * @returns {string}
+     */
+    readLabel(archive)
+    {
+        let match = archive.name.match(/([^\\/.]*)\.[^.]*$/);
+        let label = match? match[1].trim() : "";
+        for (let record of archive.records) {
+            if (record.dirHeader && (record.dirHeader.attr & 0x08)) {
+                label = record.dirHeader.name;
+                break;
+            }
+        }
+        return label;
+    }
+
+    /**
      * updateCRC(record, db, type, final)
      *
      * @this {DZip}

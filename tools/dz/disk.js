@@ -296,6 +296,28 @@ export default class Disk {
     }
 
     /**
+     * readLabel(diskInfo)
+     *
+     * NOTE: This should not be called until after readDirectory() has been called.
+     *
+     * @param {DiskInfo} diskInfo
+     * @returns {string}
+     */
+    readLabel(diskInfo)
+    {
+        let match = diskInfo.name.match(/([^\\/.]*)\.[^.]*$/);
+        let label = match? match[1].trim() : "";
+        for (let i = 0; i < diskInfo.fileTable.length; i++) {
+            let file = diskInfo.fileTable[i];
+            if (file.attr & DiskInfo.ATTR.VOLUME) {
+                label = file.name;
+                break;
+            }
+        }
+        return label;
+    }
+
+    /**
      * close(diskInfo)
      *
      * @this {Disk}

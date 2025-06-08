@@ -629,6 +629,7 @@ async function main(argc, argv, errors)
         }
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
+            let label = "";
             let entries = [];
             let heading = false;
             //
@@ -640,6 +641,7 @@ async function main(argc, argv, errors)
             }
             if (isArchive || isDisk) {
                 entries = await container.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
+                label = container.readLabel(archive);
             }
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -772,7 +774,7 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
                         if (argv.list) printf("\n");
                         if (!nArchiveFiles || argv.list) {
-                            printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
+                            printf("%s%s%s\n", archivePath, label? ` [${label}]` : "", nArchiveFiles? " (continued)" : "");
                         }
                     }
                     //

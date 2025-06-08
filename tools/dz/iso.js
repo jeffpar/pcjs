@@ -1018,4 +1018,22 @@ export default class ISO {
         }
         return db;
     }
+
+    /**
+     * readLabel(image)
+     *
+     * NOTE: While other container classes should wait until after readDirectory() has been called,
+     * we need not, because open() has already read the primary volume descriptor, which is all we need.
+     *
+     * @param {Image} image
+     * @returns {string} (the volume label, if any)
+     */
+    readLabel(image)
+    {
+        let label = "";
+        if (image.primary) {
+            label = image.primary.volID.trim();
+        }
+        return label;
+    }
 }
