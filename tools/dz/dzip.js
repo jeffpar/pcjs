@@ -352,6 +352,7 @@ export default class DZip {
             modified: options.modified, // modification date of archive file
             password: options.password, // password for encrypted archives
             size: 0,                    // size of the archive file
+            db: null,                   // DataBuffer, if any
             file: null,                 // file handle, if any
             cache: {},                  // cache data
             records: [],                // array of archive records
@@ -364,6 +365,7 @@ export default class DZip {
         // approach is to read structures from the file as needed into the archive's cache buffer.
         //
         if (db) {
+            archive.db = db;
             archive.size = db.length;
             this.initCache(archive, db, archive.size);
             archive.source = "Buffer";
@@ -402,7 +404,8 @@ export default class DZip {
                 //
                 await this.close(archive);
                 DZip.assert(archive.size == db.length);
-                this.initCache(archive, new DataBuffer(db), archive.size);
+                this.initCache(archive, db, archive.size);
+                archive.db = db;
             }
             archive.source = "FS";
         }
@@ -429,8 +432,9 @@ export default class DZip {
                     throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
                 }
                 let arrayBuffer = await response.arrayBuffer();
-                archive.size = arrayBuffer.byteLength;
-                this.initCache(archive, new DataBuffer(new Uint8Array(arrayBuffer)), archive.size);
+                archive.db = new DataBuffer(new Uint8Array(arrayBuffer));
+                archive.size = archive.db.length;
+                this.initCache(archive, archive.db, archive.size);
             } else {
                 this.initCache(archive, new DataBuffer(Math.min(this.cacheSize, archive.size)));
             }
@@ -1522,7 +1526,7 @@ export default class DZip {
                 // we must also convert the calculated crc to a positive 32-bit value before comparing.
                 //
                 if ((crc >>> 0) != crcFile) {
-                    record.warnings.push(`Received CRC ${(crc >>> 0).toString(16)}`);
+                    record.warnings.push(`Calculated CRC ${(crc >>> 0).toString(16)}, expected ${crcFile.toString(16)}`);
                 }
             }
         }

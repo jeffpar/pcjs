@@ -381,7 +381,7 @@ export default class ISO {
             if (!image.modified) {
                 image.modified = stats.mtime;
             }
-            if (options.preload) {
+            if (options.preload && image.size < 740 * 1024 * 1024) {
                 image.db = new DataBuffer(image.size);
                 let offset = 0, position = 0;
                 let extent = Math.min(this.cacheSize, image.size);
@@ -1010,7 +1010,7 @@ export default class ISO {
             [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
         }
         if (bytesRead != record.size) {
-            entry.warnings.push(`Read ${bytesRead} bytes, expected ${record.size}`);
+            entry.warnings.push(`Received ${bytesRead} bytes, expected ${record.size}`);
         }
         if (writeData) {
             await writeData(db, bytesRead);

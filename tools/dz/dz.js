@@ -67,15 +67,18 @@ const printf = function(...args) {
 };
 
 //
-// Normally, a client will provide either a fetch interface or open interface, not both; for example, browsers
-// don't have access to the file system, so they will provide only fetch.  But as a Node client, we DO have both,
-// so we provide both; our open() API defaults to open but will fall back to fetch if the filename starts with
-// a network prefix (eg, "http://").
+// Normally, a client will provide either a fetch interface or open interface, not both; for example,
+// browsers don't have access to the file system, so they will provide only fetch.  But as a Node client,
+// we DO have both, so we provide both; our open() API defaults to open but will fall back to fetch if
+// the filename starts with a network prefix (eg, "http://").
+//
+// NOTE: While 'fetch' works fine for Node, browsers apparently require 'window.fetch.bind(window)' instead.
 //
 const dzip = new DZip({
-    fetch: fetch,               // async interface for opening remote files ('fetch' works fine for Node, but browsers need 'window.fetch.bind(window)')
-    open: fs.open,              // async interface for opening local files
-    inflate: zlib.inflateRaw,   // async interface for ZIP_DEFLATE data
+    fetch: fetch,                       // async interface for opening remote files
+    open: fs.open,                      // async interface for opening local files
+ // inflate: zlib.inflateRaw,           // async interface for ZIP_DEFLATE data
+    inflateSync: zlib.inflateRawSync    // sync interface for ZIP_DEFLATE data
 });
 
 const disk = new Disk({
@@ -220,6 +223,10 @@ const options = {
         usage: "--recurse",
         alias: "-r",
         description: "process items within items"
+        //
+        // NOTE: To avoid any unwanted interplay between --recurse and --files, we ignore any file filter
+        // for archives processed recursively.
+        //
     },
     "test": {
         type: "boolean",
@@ -632,7 +639,7 @@ async function main(argc, argv, errors)
                 archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
             }
             if (isArchive || isDisk) {
-                entries = await container.readDirectory(archive, argv.files, filterExceptions, filterMethod);
+                entries = await container.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
             }
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -723,7 +730,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (doCSV) {
-                await csvFile.write(getCSVLine(archive, archive.source, archive.cache.db, false));
+                await csvFile.write(getCSVLine(archive, archive.source, archive.db, false));
             }
             let nEntries = 0;
             let dirTimestamps = {};
@@ -764,7 +771,9 @@ async function main(argc, argv, errors)
                 if (!heading) {
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
                         if (argv.list) printf("\n");
-                        printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
+                        if (!nArchiveFiles || argv.list) {
+                            printf("%s%s\n", archivePath, nArchiveFiles? " (continued)" : "");
+                        }
                     }
                     //
                     // We also refer to the archive comment as the archive's "banner", which is an archive
@@ -815,10 +824,11 @@ async function main(argc, argv, errors)
                                         // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
                                         // since extraction has been enabled.
                                         //
+                                        let warning = targetPath + ": already exists";
                                         if (argv.list) {
-                                            entry.warnings.unshift(targetPath + " already exists");
+                                            entry.warnings.unshift(warning);
                                         } else {
-                                            printf("%s already exists\n", targetPath);
+                                            printf("%s\n", warning);
                                         }
                                     } else {
                                         printf("%s: %s\n", targetPath, error.message);
@@ -845,6 +855,9 @@ async function main(argc, argv, errors)
                         printed = true;
                     }
                     db = await container.readFile(archive, entry, writeData);
+                    if (!db && !argv.list) {
+                        printf("%s: %s\n", path.join(dstPath, entry.name), entry.warnings.join("; ") || "no data");
+                    }
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 let method = entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method];
@@ -877,7 +890,9 @@ async function main(argc, argv, errors)
                     // redundant and converts it to a single slash), so we replace all double-slashes with a
                     // pipe, and then convert all pipes back into double-slashes after the join.
                     //
-                    let [nFiles, nWarnings] = await processArchive(itemID++, path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//"), dstPath, db, entry.modified);
+                    let recursePath = path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//");
+                    let recurseTarget = path.join(dstPath || "", path.dirname(entry.name));
+                    let [nFiles, nWarnings] = await processArchive(itemID++, recursePath, recurseTarget, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }

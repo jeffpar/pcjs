@@ -162,6 +162,7 @@ export default class Disk {
     {
         let diskInfo = new DiskInfo(name, options.modified);
         if (db) {
+            diskInfo.db = db;
             diskInfo.source = "Buffer";
         }
         else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
@@ -182,12 +183,13 @@ export default class Disk {
             if (!diskInfo.modified) {
                 diskInfo.modified = stats.mtime;
             }
-            db = new DataBuffer(stats.size);
+            let db = new DataBuffer(stats.size);
             let result = await file.read(db.buffer);
             if (result.bytesRead < db.length) {
                 db = db.slice(0, result.bytesRead);
             }
             await file.close();
+            diskInfo.db = db;
             diskInfo.source = "FS";
         }
         else if (this.interfaces.fetch) {
@@ -196,7 +198,7 @@ export default class Disk {
                 throw new Error(`Unable to fetch ${name} (${response.statusText})`);
             }
             let arrayBuffer = await response.arrayBuffer();
-            db = new DataBuffer(new Uint8Array(arrayBuffer));
+            diskInfo.db = new DataBuffer(new Uint8Array(arrayBuffer));
             diskInfo.source = "Network";
         }
         else {
@@ -204,20 +206,19 @@ export default class Disk {
         }
         let success = false;
         if (name.match(/\.json$/i)) {
-            let json = db.toString();
+            let json = diskInfo.db.toString();
             success = diskInfo.buildDiskFromJSON(json);
         } else {
-            success = diskInfo.buildDiskFromBuffer(db);
+            success = diskInfo.buildDiskFromBuffer(diskInfo.db);
         }
         if (!success) {
             throw new Error(`Unrecognized disk image`);
         }
         //
-        // Add properties that open() callers may expect, consistent with DZip and ISO classes.
+        // Add properties that open() callers expect, consistent with DZip and ISO classes.
         //
         // TODO: Consider renaming cbDiskData to size, and perhaps others, for more consistency.
         //
-        diskInfo.cache = {db};
         diskInfo.name = diskInfo.diskName;
         diskInfo.size = diskInfo.cbDiskData;
         return diskInfo;
@@ -283,7 +284,7 @@ export default class Disk {
             let ab = new Array(file.size);
             let size = diskInfo.readSectorArray(file, ab);
             if (size != file.size) {
-                entry.warnings.push(`Read ${size} bytes, expected ${file.size}`);
+                entry.warnings.push(`Received ${size} bytes, expected ${file.size}`);
             }
             db = new DataBuffer(ab, 0, size);
             if (writeData) {
