@@ -300,13 +300,92 @@ function enquote(string) {
 }
 
 /**
+ * getPhotoInfo(basePath, baseExt)
+ *
+ * @param {string} basePath
+ * @param {string} baseExt
+ * @returns {Array} [photoPath, width, height]
+ */
+async function getPhotoInfo(basePath, baseExt)
+{
+    const imageExts = ['.jpg', '.png'];
+    for (const ext of imageExts) {
+        const photoPath = path.join(path.dirname(basePath), path.basename(basePath, baseExt) + ext);
+        try {
+            //
+            // Read file header to determine dimensions (courtesy of CoPilot).
+            //
+            let width = 0, height = 0;
+            const file = await fs.open(photoPath, 'r');
+            const stats = await file.stat();
+            const buffer = Buffer.alloc(stats.size);
+            await file.read(buffer, 0, buffer.length, 0);
+            await file.close();
+            if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
+                //
+                // JPEG file: Parse JPEG segments to find SOF marker (Start of Frame)
+                //
+                let offset = 2; // Skip the initial SOI marker (0xFF, 0xD8)
+                while (offset < buffer.length - 8) {
+                    //
+                    // Check if we've found a marker
+                    //
+                    if (buffer[offset] === 0xFF) {
+                        const markerCode = buffer[offset + 1];
+                        //
+                        // SOF markers are in range 0xC0-0xCF, excluding 0xC4 (DHT), 0xC8 (JPG), and 0xCC (DAC)
+                        //
+                        if (markerCode >= 0xC0 && markerCode <= 0xCF &&
+                            markerCode !== 0xC4 && markerCode !== 0xC8 && markerCode !== 0xCC) {
+                            //
+                            // SOF marker found, extract dimensions
+                            // Format: FF xx SIZE(2 bytes) PRECISION(1 byte) HEIGHT(2 bytes) WIDTH(2 bytes) ...
+                            //
+                            height = (buffer[offset + 5] << 8) | buffer[offset + 6];
+                            width = (buffer[offset + 7] << 8) | buffer[offset + 8];
+                            break;
+                        }
+                        //
+                        // If not an SOF marker, skip this segment using its length
+                        //
+                        if (markerCode !== 0xFF && markerCode !== 0x00) {
+                            //
+                            // Segment length includes the 2 bytes for the length field itself
+                            //
+                            const segmentLength = (buffer[offset + 2] << 8) | buffer[offset + 3];
+                            if (segmentLength < 2) break; // Invalid segment length
+                            offset += segmentLength + 2;
+                        } else {
+                            //
+                            // Skip padding bytes or continue to next byte
+                            //
+                            offset++;
+                        }
+                    } else {
+                        offset++;
+                    }
+                }
+            }
+            else if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
+                //
+                // PNG file
+                //
+                width = (buffer[16] << 24) | (buffer[17] << 16) | (buffer[18] << 8) | buffer[19];
+                height = (buffer[20] << 24) | (buffer[21] << 16) | (buffer[22] << 8) | buffer[23];
+            }
+            return [photoPath, width, height];
+        } catch (error) {
+            // console.log(error);
+        }
+    }
+    return [null, 0, 0];
+}
+
+/**
  * main(argc, argv, errors)
  */
 async function main(argc, argv, errors)
 {
-    let fromDisk = {};
-    let itemPaths = [];
-
     printf("dz.js %s\n%s\n\nArguments: %s\n", DZip.VERSION, DZip.COPYRIGHT, argv[0]);
     if (argv.help) {
         options.help.handler();
@@ -374,6 +453,8 @@ async function main(argc, argv, errors)
             filterExceptions |= option.value;
         }
     }
+    let fromDisk = {};
+    let itemPaths = [];
     //
     // Build a list of items to process, starting with items listed in the batch file, if any.
     //
@@ -463,83 +544,10 @@ async function main(argc, argv, errors)
         if (argv.verbose) {
             printf("processing %s\n", archivePath);
         }
-        if (!archiveDB && archiveExt.match(/(\.img|\.json)$/i)) {
+        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
-            let getPhotoInfo = async function(basePath, baseExt) {
-                const imageExts = ['.jpg', '.png'];
-                for (const ext of imageExts) {
-                    const photoPath = path.join(path.dirname(basePath), path.basename(basePath, baseExt) + ext);
-                    try {
-                        //
-                        // Read file header to determine dimensions (courtesy of CoPilot).
-                        //
-                        let width = 0, height = 0;
-                        const file = await fs.open(photoPath, 'r');
-                        const stats = await file.stat();
-                        const buffer = Buffer.alloc(stats.size);
-                        await file.read(buffer, 0, buffer.length, 0);
-                        await file.close();
-                        if (buffer[0] === 0xFF && buffer[1] === 0xD8) {
-                            //
-                            // JPEG file: Parse JPEG segments to find SOF marker (Start of Frame)
-                            //
-                            let offset = 2; // Skip the initial SOI marker (0xFF, 0xD8)
-                            while (offset < buffer.length - 8) {
-                                //
-                                // Check if we've found a marker
-                                //
-                                if (buffer[offset] === 0xFF) {
-                                    const markerCode = buffer[offset + 1];
-                                    //
-                                    // SOF markers are in range 0xC0-0xCF, excluding 0xC4 (DHT), 0xC8 (JPG), and 0xCC (DAC)
-                                    //
-                                    if (markerCode >= 0xC0 && markerCode <= 0xCF &&
-                                        markerCode !== 0xC4 && markerCode !== 0xC8 && markerCode !== 0xCC) {
-                                        //
-                                        // SOF marker found, extract dimensions
-                                        // Format: FF xx SIZE(2 bytes) PRECISION(1 byte) HEIGHT(2 bytes) WIDTH(2 bytes) ...
-                                        //
-                                        height = (buffer[offset + 5] << 8) | buffer[offset + 6];
-                                        width = (buffer[offset + 7] << 8) | buffer[offset + 8];
-                                        break;
-                                    }
-                                    //
-                                    // If not an SOF marker, skip this segment using its length
-                                    //
-                                    if (markerCode !== 0xFF && markerCode !== 0x00) {
-                                        //
-                                        // Segment length includes the 2 bytes for the length field itself
-                                        //
-                                        const segmentLength = (buffer[offset + 2] << 8) | buffer[offset + 3];
-                                        if (segmentLength < 2) break; // Invalid segment length
-                                        offset += segmentLength + 2;
-                                    } else {
-                                        //
-                                        // Skip padding bytes or continue to next byte
-                                        //
-                                        offset++;
-                                    }
-                                } else {
-                                    offset++;
-                                }
-                            }
-                        }
-                        else if (buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4E && buffer[3] === 0x47) {
-                            //
-                            // PNG file
-                            //
-                            width = (buffer[16] << 24) | (buffer[17] << 16) | (buffer[18] << 8) | buffer[19];
-                            height = (buffer[20] << 24) | (buffer[21] << 16) | (buffer[22] << 8) | buffer[23];
-                        }
-                        return [photoPath, width, height];
-                    } catch (error) {
-                        // console.log(error);
-                    }
-                }
-                return [null, 0, 0];
-            };
             [archivePhoto, widthPhoto, heightPhoto] = await getPhotoInfo(archivePath, archiveExt);
         }
         let getCSVLine = function(entry, method, db, archiveEntry) {
