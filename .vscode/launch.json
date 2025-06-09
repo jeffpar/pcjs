@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "-lx -d archive/test /Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/Misc/MSFT-CD065-AOE2_Age_Of_Empires_2.iso"
+        "--csv archive/onedrive-software-discs.csv -rv --batch archive/onedrive-software-discs.txt"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,

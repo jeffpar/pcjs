@@ -559,6 +559,8 @@ async function main(argc, argv, errors)
                 entryDisk = fromDisk[entryName];
                 if (entryDisk) {
                     entryDisk = path.basename(entryDisk);
+                } else {
+                    entryDisk = entry.label || "";
                 }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
@@ -629,7 +631,6 @@ async function main(argc, argv, errors)
         }
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
-            let label = "";
             let entries = [];
             let heading = false;
             //
@@ -641,7 +642,7 @@ async function main(argc, argv, errors)
             }
             if (isArchive || isDisk) {
                 entries = await container.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
-                label = container.readLabel(archive);
+                archive.label = container.readLabel(archive);
             }
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -741,6 +742,12 @@ async function main(argc, argv, errors)
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
                 //
+                // path.join() doesn't like path elements like "http://" (it considers the double-slash
+                // redundant and converts it to a single slash), so we replace all double-slashes with a
+                // pipe, and then convert all pipes back into double-slashes after the join.
+                //
+                let entryPath = path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//");
+                //
                 // TODO: Consider an option for including volume labels in the output, for completeness.
                 //
                 if (entryAttr & 0x08) {
@@ -774,7 +781,7 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
                         if (argv.list) printf("\n");
                         if (!nArchiveFiles || argv.list) {
-                            printf("%s%s%s\n", archivePath, label? ` [${label}]` : "", nArchiveFiles? " (continued)" : "");
+                            printf("%s%s%s\n", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
                         }
                     }
                     //
@@ -853,13 +860,13 @@ async function main(argc, argv, errors)
                 }
                 if (argv.csv || argv.dir || argv.extract || argv.test || recurse) {
                     if (argv.debug) {
-                        printf("reading %s\n", entry.name);
+                        printf("reading %s\n", entryPath);
                         printed = true;
                     }
                     db = await container.readFile(archive, entry, writeData);
                     entry.size = db && db.length || 0;
                     if (!db && !argv.list) {
-                        printf("%s: %s\n", path.join(dstPath, entry.name), entry.warnings.join("; ") || "no data");
+                        printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                     }
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
@@ -888,14 +895,8 @@ async function main(argc, argv, errors)
                     await csvFile.write(getCSVLine(entry, archive.volTable? "None" : method, db, true));
                 }
                 if (recurse && db) {
-                    //
-                    // path.join() doesn't like path elements like "http://" (it considers the double-slash
-                    // redundant and converts it to a single slash), so we replace all double-slashes with a
-                    // pipe, and then convert all pipes back into double-slashes after the join.
-                    //
-                    let recursePath = path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//");
-                    let recurseTarget = path.join(dstPath || "", path.dirname(entry.name));
-                    let [nFiles, nWarnings] = await processArchive(itemID++, recursePath, recurseTarget, db, entry.modified);
+                    let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
+                    let [nFiles, nWarnings] = await processArchive(itemID++, entryPath, entryTarget, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }

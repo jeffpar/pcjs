@@ -47,7 +47,8 @@ import DataBuffer from "./db.js";
  */
 export default class Struct {
 
-    static STRING           = "string";         // string (null-terminated)
+    static STRING           = "string";         // string (up to field length, null-terminated)
+    static UCS2BE           = "ucs2be";         // string (up to field length, UCS-2 big-endian, null-terminated)
     static STRLEN1          = "strlen1";        // string preceded by a 1-byte length
     static STRLEN3          = "strlen3";        // string with a 1-byte length 3 bytes earlier
     static STRLEN8          = "strlen8";        // string with a 1-byte length 8 bytes earlier
@@ -93,6 +94,10 @@ export default class Struct {
 
     static STR = function(length) {
         return length;
+    };
+
+    static UCS2 = function(length) {
+        return -length;
     };
 
     static SIZES = {
@@ -178,8 +183,13 @@ export default class Struct {
             }
         }
         else if (typeof type == "number") {
-            size = type;
-            type = Struct.STRING;
+            if (type < 0) {
+                size = -type;
+                type = Struct.UCS2BE;
+            } else {
+                size = type;
+                type = Struct.STRING;
+            }
         }
         else {
             size = type.length;
@@ -223,6 +233,16 @@ export default class Struct {
         if (offset + length > db.length) {
             throw new Error(`Field ${name} limit exceeds buffer limit (${(offset + length)} > ${db.length})`);
         }
+        let trimString = function(s) {
+            for (let i = 0; i < length; i++) {
+                if (s.charCodeAt(i) == 0) {
+                    s = s.slice(0, i);
+                    break;
+                }
+            }
+            s = s.trim();
+            return s;
+        };
         if (typeof field.type != "string") {
             v = field.type.readStruct(db, offset, encoding);
         }
@@ -265,15 +285,12 @@ export default class Struct {
                 if (v == undefined) {
                     v = this.readString(db, offset, length, encoding);
                 }
-                for (let i = 0; i < length; i++) {
-                    if (v.charCodeAt(i) == 0) {
-                        v = v.slice(0, i);
-                        break;
-                    }
-                }
-                v = v.trim();
+                v = trimString(v);
                 break;
-            case Struct.UCS2BE8:      // UCS-2 big-endian string with 1-byte length 8 bytes earlier
+            case Struct.UCS2BE:         // UCS-2 big-endian string (null-terminated)
+                v = trimString(db.toString("ucs2be", offset, offset + length));
+                break;
+            case Struct.UCS2BE8:        // UCS-2 big-endian string with 1-byte length 8 bytes earlier
                 length = db.readUInt8(offset - 8);
                 v = db.toString("ucs2be", offset, offset + length);
                 break;

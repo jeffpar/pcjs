@@ -195,6 +195,46 @@ export default class ISO {
         .field('name',          Struct.STRLEN3)         // 0x08: name of directory (in ASCII)
         .verifyLength(8);
 
+    static HSPrimaryDesc = new Struct("High Sierra Primary Volume Descriptor")
+        .field('lbaVol',        Struct.UINT32CE)        // 0x0000: eg, 0x00000010
+        .field('type',          Struct.BYTE)            // 0x0008: eg, 0x01
+        .field('identifier',    Struct.STR(5))          // 0x0009: "CDROM"
+        .field('version',       Struct.BYTE)            // 0x000E: eg, 0x01
+        .field('.unused1',      Struct.BYTE)            // 0x000F
+        .field('sysID',         Struct.STR(32))         // 0x0010
+        .field('volID',         Struct.STR(32))         // 0x0030: eg, "PC_SIG_4_88"
+        .field('.unused2',      Struct.BSS(8))          // 0x0050
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0058: size of the volume in blocks
+        .field('.unused3',      Struct.BSS(32))         // 0x0060
+        .field('volSet',        Struct.UINT16CE)        // 0x0080: number of volumes in the volume set
+        .field('volSeq',        Struct.UINT16CE)        // 0x0084: sequence number of this volume in the volume set
+        .field('blockSize',     Struct.UINT16CE)        // 0x0088: logical block size in bytes, usually 2048 (0x0800)
+        .field('lenPaths',      Struct.UINT32CE)        // 0x008C: size of the path table in bytes
+        .field('lbaPaths',      Struct.UINT32LE)        // 0x0094: LBA location of the little-endian path table
+        .field('.lbaOptPath1',  Struct.UINT32LE)        // 0x0098: LBA location of the optional little-endian path table
+        .field('.lbaOptPath2',  Struct.UINT32LE)        // 0x009C: LBA location of the optional little-endian path table
+        .field('.lbaOptPath3',  Struct.UINT32LE)        // 0x00A0: LBA location of the optional little-endian path table
+        .field('.lbaPathsBE',   Struct.UINT32BE)        // 0x00A4: LBA location of the big-endian path table
+        .field('.lbaOptPath1BE',Struct.UINT32BE)        // 0x00A8: LBA location of the optional big-endian path table
+        .field('.lbaOptPath2BE',Struct.UINT32BE)        // 0x00AC: LBA location of the optional big-endian path table
+        .field('.lbaOptPath3BE',Struct.UINT32BE)        // 0x00B0: LBA location of the optional big-endian path table
+        .field('rootDir',       ISO.HSDirRecord)        // 0x00B4: root directory entry
+        .field('volSetID',      Struct.STR(128))        // 0x00D6: volume set identifier
+        .field('publisherID',   Struct.STR(128))        // 0x0156: publisher identifier
+        .field('preparerID',    Struct.STR(128))        // 0x01D6: preparer identifier
+        .field('appID',         Struct.STR(128))        // 0x0256: application identifier
+        .field('copyright',     Struct.STR(32))         // 0x02D6: copyright file identifier
+        .field('abstract',      Struct.STR(32))         // 0x02F6: abstract file identifier
+        .field('created',       Struct.ISODATETIME16)   // 0x0316: creation date of the volume
+        .field('modified',      Struct.ISODATETIME16)   // 0x0326: modification date of the volume
+        .field('expiration',    Struct.ISODATETIME16)   // 0x0336: expiration date of the volume
+        .field('effective',     Struct.ISODATETIME16)   // 0x0346: effective date of the volume
+        .field('fileStructure', Struct.BYTE)            // 0x0356: eg, 0x00
+        .field('.unused4',      Struct.BYTE)            // 0x0357
+        .field('appData',       Struct.BSS(512))        // 0x0358: reserved for future use
+        .field('.unused5',      Struct.BSS(680))        // 0x0558-0x07FF
+        .verifyLength(2048);
+
     static PrimaryDesc = new Struct("Primary Volume Descriptor")
         .field('type',          Struct.BYTE, {          // 0x0000
             BOOT:       0x00,
@@ -237,44 +277,46 @@ export default class ISO {
         .field('.unused5',      Struct.BSS(653))        // 0x0573-0x07FF
         .verifyLength(2048);
 
-    static HSPrimaryDesc = new Struct("High Sierra Primary Volume Descriptor")
-        .field('lbaVol',        Struct.UINT32CE)        // 0x0000: eg, 0x00000010
-        .field('type',          Struct.BYTE)            // 0x0008: eg, 0x01
-        .field('identifier',    Struct.STR(5))          // 0x0009: "CDROM"
-        .field('version',       Struct.BYTE)            // 0x000E: eg, 0x01
-        .field('.unused1',      Struct.BYTE)            // 0x000F
-        .field('sysID',         Struct.STR(32))         // 0x0010
-        .field('volID',         Struct.STR(32))         // 0x0030: eg, "PC_SIG_4_88"
-        .field('.unused2',      Struct.BSS(8))          // 0x0050
-        .field('volBlocks',     Struct.UINT32CE)        // 0x0058: size of the volume in blocks
-        .field('.unused3',      Struct.BSS(32))         // 0x0060
-        .field('volSet',        Struct.UINT16CE)        // 0x0080: number of volumes in the volume set
-        .field('volSeq',        Struct.UINT16CE)        // 0x0084: sequence number of this volume in the volume set
-        .field('blockSize',     Struct.UINT16CE)        // 0x0088: logical block size in bytes, usually 2048 (0x0800)
-        .field('lenPaths',      Struct.UINT32CE)        // 0x008C: size of the path table in bytes
-        .field('lbaPaths',      Struct.UINT32LE)        // 0x0094: LBA location of the little-endian path table
-        .field('.lbaOptPath1',  Struct.UINT32LE)        // 0x0098: LBA location of the optional little-endian path table
-        .field('.lbaOptPath2',  Struct.UINT32LE)        // 0x009C: LBA location of the optional little-endian path table
-        .field('.lbaOptPath3',  Struct.UINT32LE)        // 0x00A0: LBA location of the optional little-endian path table
-        .field('.lbaPathsBE',   Struct.UINT32BE)        // 0x00A4: LBA location of the big-endian path table
-        .field('.lbaOptPath1BE',Struct.UINT32BE)        // 0x00A8: LBA location of the optional big-endian path table
-        .field('.lbaOptPath2BE',Struct.UINT32BE)        // 0x00AC: LBA location of the optional big-endian path table
-        .field('.lbaOptPath3BE',Struct.UINT32BE)        // 0x00B0: LBA location of the optional big-endian path table
-        .field('rootDir',       ISO.HSDirRecord)        // 0x00B4: root directory entry
-        .field('volSetID',      Struct.STR(128))        // 0x00D6: volume set identifier
-        .field('publisherID',   Struct.STR(128))        // 0x0156: publisher identifier
-        .field('preparerID',    Struct.STR(128))        // 0x01D6: preparer identifier
-        .field('appID',         Struct.STR(128))        // 0x0256: application identifier
-        .field('copyright',     Struct.STR(32))         // 0x02D6: copyright file identifier
-        .field('abstract',      Struct.STR(32))         // 0x02F6: abstract file identifier
-        .field('created',       Struct.ISODATETIME16)   // 0x0316: creation date of the volume
-        .field('modified',      Struct.ISODATETIME16)   // 0x0326: modification date of the volume
-        .field('expiration',    Struct.ISODATETIME16)   // 0x0336: expiration date of the volume
-        .field('effective',     Struct.ISODATETIME16)   // 0x0346: effective date of the volume
-        .field('fileStructure', Struct.BYTE)            // 0x0356: eg, 0x00
-        .field('.unused4',      Struct.BYTE)            // 0x0357
-        .field('appData',       Struct.BSS(512))        // 0x0358: reserved for future use
-        .field('.unused5',      Struct.BSS(680))        // 0x0558-0x07FF
+    static SuppDesc = new Struct("Supplementary Volume Descriptor")
+        .field('type',          Struct.BYTE, {          // 0x0000
+            BOOT:       0x00,
+            PRIMARY:    0x01,                           // Primary Volume Descriptor
+            SUPP:       0x02,                           // Supplementary Volume Descriptor
+            PARTITION:  0x03,                           // Volume Partition Descriptor
+            END:        0xFF                            // End of Volume Descriptor
+        })
+        .field('identifier',    Struct.STR(5))          // 0x0001: "CD001"
+        .field('version',       Struct.BYTE)            // 0x0006: version of the ISO 9660 standard
+        .field('flags',         Struct.BYTE)            // 0x0007: (Supplementary Volume Descriptor only)
+        .field('sysID',         Struct.UCS2(32))        // 0x0008
+        .field('volID',         Struct.UCS2(32))        // 0x0028: volume identifier
+        .field('.unused2',      Struct.BSS(8))          // 0x0048
+        .field('volBlocks',     Struct.UINT32CE)        // 0x0050: size of the volume in blocks
+        .field('escSeq',        Struct.STR(32))         // 0x0058: (Supplementary Volume Descriptor only)
+        .field('volSet',        Struct.UINT16CE)        // 0x0078: number of volumes in the volume set
+        .field('volSeq',        Struct.UINT16CE)        // 0x007C: sequence number of this volume in the volume set
+        .field('blockSize',     Struct.UINT16CE)        // 0x0080: logical block size in bytes, usually 2048 (0x0800)
+        .field('lenPaths',      Struct.UINT32CE)        // 0x0084: size of the path table in bytes
+        .field('lbaPaths',      Struct.UINT32LE)        // 0x008C: LBA location of the little-endian path table
+        .field('.lbaOptPaths',  Struct.UINT32LE)        // 0x0090: LBA location of the optional little-endian path table
+        .field('.lbaPathsBE',   Struct.UINT32BE)        // 0x0094: LBA location of the big-endian path table
+        .field('.lbaOptPathsBE',Struct.UINT32BE)        // 0x0098: LBA location of the optional big-endian path table
+        .field('rootDir',       ISO.DirRecord)          // 0x009C: root directory entry
+        .field('volSetID',      Struct.UCS2(128))       // 0x00BE: volume set identifier
+        .field('publisherID',   Struct.UCS2(128))       // 0x013E: publisher identifier
+        .field('preparerID',    Struct.UCS2(128))       // 0x01BE: preparer identifier
+        .field('appID',         Struct.UCS2(128))       // 0x023E: application identifier
+        .field('copyright',     Struct.UCS2(37))        // 0x02BE: copyright file identifier
+        .field('abstract',      Struct.UCS2(37))        // 0x02E3: abstract file identifier
+        .field('bibliographic', Struct.UCS2(37))        // 0x0308: bibliographic file identifier
+        .field('created',       Struct.ISODATETIME17)   // 0x032D: creation date of the volume
+        .field('modified',      Struct.ISODATETIME17)   // 0x033E: modification date of the volume
+        .field('expiration',    Struct.ISODATETIME17)   // 0x034F: expiration date of the volume
+        .field('effective',     Struct.ISODATETIME17)   // 0x0360: effective date of the volume
+        .field('fileStructure', Struct.BYTE)            // 0x0371
+        .field('.unused4',      Struct.BYTE)            // 0x0372
+        .field('appData',       Struct.BSS(512))        // 0x0373: reserved for future use
+        .field('.unused5',      Struct.BSS(653))        // 0x0573-0x07FF
         .verifyLength(2048);
 
     static EXCEPTIONS = {
@@ -480,8 +522,11 @@ export default class ISO {
                     break;
                 }
                 if (desc.type == ISO.PrimaryDesc.fields.type.PRIMARY && !image.primary || desc.type == ISO.PrimaryDesc.fields.type.SUPP && !options.compat) {
-                    image.primary = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
-                    if (image.primary.type == ISO.PrimaryDesc.fields.type.SUPP) {
+                    if (desc.type == ISO.PrimaryDesc.fields.type.PRIMARY) {
+                        image.primary = desc;
+                    }
+                    else {
+                        image.primary = ISO.SuppDesc.readStruct(image.cache.db, offset);
                         if (image.primary.escSeq == "%/@" || image.primary.escSeq == "%/C" || image.primary.escSeq == "%/E") {
                             //
                             // TODO: Make a note of the escape sequence's implied level (1, 2, or 3) and how
@@ -849,7 +894,8 @@ export default class ISO {
             //
             // The maximum level was originally 8, but perhaps that was increased (or ignored?) over time.
             //
-            this.check(image, level <= 16, `Directory "${subdir}" extremely nested (${level})`);
+            //      this.check(image, level <= 8, `Directory "${subdir}" extremely nested (${level})`);
+            //
             if (!this.check(image, positionEnd <= image.size, `Directory at LBA ${lba} out of range`)) {
                 return records;
             }
