@@ -1489,7 +1489,10 @@ export default class DZip {
             }
         }
         catch (error) {
-            record.warnings.push(error.message);
+            //
+            // Pako apparently throws strings instead of Error objects, so we need to handle that case.
+            //
+            record.warnings.push(typeof error == "string"? error : error.message);
         }
         return expandedDB;
     }

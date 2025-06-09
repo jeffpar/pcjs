@@ -88,17 +88,17 @@ export default class Struct {
     static ISODATETIME7     = "isodatetime7";   // 7-byte date/time format (includes 1-byte time zone offset, used in ISO 9660 directories)
     static ISODATETIME17    = "isodatetime17";  // 17-byte date/time format (includes 1-byte time zone offset, used in ISO 9660 descriptors)
 
-    static BSS = function(length) {
+    static BSS = function(length) {             // length is field length (in bytes)
         return length;
     };
 
-    static STR = function(length) {
+    static STR = function(length) {             // length is field length (in bytes)
         return length;
     };
 
-    static UCS2 = function(length) {
-        return -length;
-    };
+    static UCS2 = function(length) {            // length is field length (in bytes), not character length
+        return -length;                         // field length is negated to indicate 16-bit character encoding
+    };                                          // (may use other negative biases to differentiate other encodings in the future)
 
     static SIZES = {
         [Struct.STRING]:         0,

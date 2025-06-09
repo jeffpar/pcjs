@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Fetch Byte Range Test</title>
+  <title>DZip Browser Test</title>
   <style>
     textarea {
       width: 100%;
@@ -14,52 +14,12 @@
   </style>
 </head>
 <body>
-  <h1>Fetch Byte Range Test</h1>
-  <button id="fetchButton">Fetch Bytes 32768-34815</button>
-  <textarea id="output" readonly></textarea>
-  <script>
-    document.getElementById('fetchButton').addEventListener('click', async () => {
-      const url = "http://software/discs/MSTN-1996-02-CSD9602.iso";
-      const output = document.getElementById('output');
-
-      try {
-        // First make a HEAD request to get Content-Length
-        const headResponse = await fetch(url, { method: 'HEAD' });
-        const contentLength = headResponse.headers.get('Content-Length');
-        output.value = `Content-Length: ${contentLength} bytes\n\n`;
-
-        // Then proceed with the range request
-        const response = await fetch(url, {
-          headers: {
-            'Range': 'bytes=32768-34815' // Fetch 2048 bytes
-          }
-        });
-
-        if (!response.ok && response.status !== 206) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const arrayBuffer = await response.arrayBuffer();
-        const byteArray = new Uint8Array(arrayBuffer);
-
-        // Convert bytes to a readable format (hexadecimal)
-        const hexString = Array.from(byteArray)
-          .map(byte => byte.toString(16).padStart(2, '0')) // Ensure bytes are displayed in hex
-          .join(' ');
-
-        output.value += hexString;
-      } catch (error) {
-        output.value = `Error: ${error.message}`;
-      }
-    });
-  </script>
-  <h1>DZip Test</h1>
+  <h1>DZip Browser Test</h1>
   <button id="dzipButton">DZip</button>
   <textarea id="zipOutput" readonly></textarea>
   <script type="module">
     import Format from "./format.js";
     import DZip from "./dzip.js";
-    import Disk from "./disk.js";
     import * as pako from "./pako.esm.mjs";
     document.getElementById('dzipButton').addEventListener('click', async () => {
       const dzip = new DZip({
@@ -71,7 +31,8 @@
           let s = format.sprintf(...args);
           zipOutput.value += s;
       };
-      const urlZIP = "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
+      const urlZIP = "http://software/archives/DEFAULT_FILES.ZIP";
+      // const urlZIP = "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
       try {
           printf("Fetching ZIP file...\n");
           let archive = await dzip.open(urlZIP);
@@ -82,8 +43,11 @@
           let entries = await dzip.readDirectory(archive);
           printf("Found %d entries in ZIP archive\n", entries.length);
           for (let entry of entries) {
-              let db = await dzip.readFile(archive, entry.index);
-              printf("entry: %s, compressed size: %d bytes, original size: %d bytes\n", entry.name, entry.compressedSize, db.length);
+              if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
+                  continue;
+              }
+              let db = await dzip.readFile(archive, entry);
+              printf("entry: %s, compressed size: %d -> %d bytes [%s]\n", entry.name, entry.compressedSize, db && db.length || 0, entry.warnings.join("; "));
           }
           dzip.close(archive);
       } catch (error) {
