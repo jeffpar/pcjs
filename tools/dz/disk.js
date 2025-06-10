@@ -1931,7 +1931,7 @@ export class DiskInfo {
                 let name = CharSet.fromCP437(dir.name);
                 let path = CharSet.fromCP437(dir.path) + name;
                 let warnings = [];
-                let dateMod = DiskInfo.DirEntry.parseDateTime(dir.modDate, dir.modTime, warnings);
+                let dateMod = DiskInfo.DirEntry.parseDOSDateTime(dir.modDate, dir.modTime, warnings);
                 file = new FileInfo(this, vol.iVolume, path, name, dir.attr, dateMod, dir.size, dir.cluster, dir.aLBA);
                 file.warnings = file.warnings.concat(warnings);
                 file.index = this.fileTable.length;

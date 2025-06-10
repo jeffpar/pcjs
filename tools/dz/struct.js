@@ -373,12 +373,12 @@ export default class Struct {
             case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
                 time = db.readUInt16LE(offset);
                 date = db.readUInt16LE(offset + 2);
-                v = this.parseDateTime(date, time, warnings);
+                v = this.parseDOSDateTime(date, time, warnings);
                 break;
             case Struct.DOSDATETIME:        // since this is defined as a DOS field, we assume little-endian
                 date = db.readUInt16LE(offset);
                 time = db.readUInt16LE(offset + 2);
-                v = this.parseDateTime(date, time, warnings);
+                v = this.parseDOSDateTime(date, time, warnings);
                 break;
             case Struct.ISODATETIME6:
                 time = db.readUInt16LE(offset + 4);
@@ -460,7 +460,7 @@ export default class Struct {
     }
 
     /**
-     * parseDateTime(date, time, warnings)
+     * parseDOSDateTime(date, time, warnings)
      *
      * ZIP/ARC archives contain local times, so we return a Date object in local time.
      *
@@ -470,7 +470,7 @@ export default class Struct {
      * @param {Array} [warnings]
      * @returns {Date}
      */
-    parseDateTime(date, time, warnings = [])
+    parseDOSDateTime(date, time, warnings = [])
     {
         let monthDays = [31,28,31,30,31,30,31,31,30,31,30,31];
         let d = {
@@ -492,8 +492,8 @@ export default class Struct {
          *
          * Unfortunately, while files without dates were zipped by PKZIP with a date of zero,
          * when such files are unzipped with a modern `unzip` utility, the date is set to the
-         * UNIX epoch, and when such files are re-zipped with a modern `zip` utility, the date
-         * is set to Jan 1 1980, which is NOT zero.  By "rounding up" invalid dates to the
+         * UNIX epoch (Jan 1 1970), and when such files are re-zipped with a modern `zip` utility,
+         * the date becomes Jan 1 1980, which is NOT zero.  By "rounding up" invalid dates to the
          * oldest valid MS-DOS date, modern zip utilities fail to preserve original timestamps
          * (or rather, the lack thereof); they should have re-zipped any date < 1980 as zero.
          */
