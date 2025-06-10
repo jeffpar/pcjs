@@ -837,29 +837,28 @@ export default class ISO {
             if (!image.records) {
                 image.records = await this.readDirRecords(image, image.primary.rootDir.lba + image.primary.rootDir.cbAttr, image.primary.rootDir.size);
             }
+            const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
             for (let index = 0; index < image.records.length; index++) {
                 let record = image.records[index];
                 let name = record.path? record.path + '/' + record.name : record.name;
-                if (filespec && filespec != "*") {
-                    let re = new RegExp(filespec.replace(/\./g, "\\.").replace(/\*/g, ".*"));
-                    if (!name.match(re)) continue;
+                if (regex.test(name)) {
+                    let attr = 0;
+                    if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
+                        attr |= 0x10;
+                    }
+                    entries.push({
+                        index,
+                        name,
+                        attr,
+                        modified: record.dateTime,
+                        size: record.size,
+                        compressedSize: record.size,
+                        flags: 0,
+                        method: 0,
+                        crc: 0,
+                        warnings: []
+                    });
                 }
-                let attr = 0;
-                if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
-                    attr |= 0x10;
-                }
-                entries.push({
-                    index,
-                    name,
-                    attr,
-                    modified: record.dateTime,
-                    size: record.size,
-                    compressedSize: record.size,
-                    flags: 0,
-                    method: 0,
-                    crc: 0,
-                    warnings: []
-                });
             }
         }
         return entries;
