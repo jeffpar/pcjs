@@ -502,12 +502,11 @@ async function main(argc, argv, errors)
     let csvFile;
     if (argv.csv) {
         try {
-            csvFile = await fs.open(argv.csv, "w");
-            //
-            // The first three columns come from variables of the same name, and all start at 1,
-            // but you can override them with the internal --fileID and --setID options.
-            //
-            await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings\n");
+            csvFile = await fs.open(argv.csv, "a");
+            let stats = await fs.stat(argv.csv);
+            if (!stats.size) {
+                await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings\n");
+            }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
             nErrors++;
@@ -538,7 +537,7 @@ async function main(argc, argv, errors)
         if (argv.debug) {
             printf("%s\n", archivePath);
         }
-        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso)$/i)) {
+        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
@@ -555,7 +554,7 @@ async function main(argc, argv, errors)
             let entryMethod = entry.methodName || entry.source;
             let comment = entry.comment || "";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
-            let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "00000000000000000000000000000000";
+            let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "";
             let newest = "", entries = 0;
             //
             // If we're being passed an archive object rather than an entry object, then entryName
@@ -608,7 +607,12 @@ async function main(argc, argv, errors)
             }
             if (argv.csv && !archiveDB) {
                 doCSV = true;
-                options.preload = true;
+                //
+                // NOTE: preload is required if you want hashes of the archives, but it slows things down,
+                // so I don't enable it unless you also want a list of the contents.  If there are cases where
+                // you want the CSV to have hashes WITHOUT listing the contents, then we'll need a new option.
+                //
+                options.preload = !!argv.list;
             }
             if (argv.password) {
                 options.password = argv.password;
@@ -629,7 +633,7 @@ async function main(argc, argv, errors)
                 isDisk = true;
                 container = disk;
             }
-            if (archiveExt.match(/(\.iso)$/i)) {
+            if (archiveExt.match(/(\.iso|\.mdf)$/i)) {
                 isDisk = true;
                 container = iso;
             }

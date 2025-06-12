@@ -1,5 +1,5 @@
 /**
- * @fileoverview ISO Extraction Library
+ * @fileoverview ISO 9660 Extraction Library
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -110,6 +110,7 @@ export default class ISO {
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
     static BLOCK_SIZE = 2048;           // default block size
+    static SECTOR_SIZE = 2352;          // default sector size
     static SYSTEM_SIZE = 32768;         // size of system area
     static PATHREC_SIZE = 255;          // maximum size of a path record
 
@@ -506,13 +507,25 @@ export default class ISO {
                 desc = ISO.PrimaryDesc.readStruct(image.cache.db, offset);
                 if (desc.identifier != "CD001") {
                     if (image.sectorSize == ISO.BLOCK_SIZE) {
-                        image.sectorSize = 2352;
+                        image.sectorSize = ISO.SECTOR_SIZE;
                         image.sectorOffset = 16;    // 16-byte sector header
                         image.cache.extent = 0;     // cache must be invalidated when changing sector format
                         continue;
                     }
-                    if (image.sectorOffset == 16) {
+                    if (image.sectorSize == ISO.SECTOR_SIZE && image.sectorOffset == 16) {
                         image.sectorOffset += 8;    // allow for an 8-byte sub-header as well
+                        image.cache.extent = 0;     // cache must be invalidated when changing sector format
+                        continue;
+                    }
+                    //
+                    // All the .mdf files I've examined (eg, 1999-09_X05-01280_X04-96696_Bork4.5Intla/image/X04-96696.mdf)
+                    // so far have a sector size of 2448 bytes (2352 + 96 bytes for sub-channel data).  I'm guessing that no
+                    // sub-channel data was actually present on the original CDs, and that perhaps the associated .mds file
+                    // could tell us more about it, but I'll worry about that later (if at all).
+                    //
+                    if (image.sectorSize == ISO.SECTOR_SIZE && image.sectorOffset == 24) {
+                        image.sectorSize = 2448;
+                        image.sectorOffset = 16;    // revert to 16-byte sector header
                         image.cache.extent = 0;     // cache must be invalidated when changing sector format
                         continue;
                     }
