@@ -41,12 +41,12 @@
  *      XGALOAD0.SYS     14993   Implode      3554    76%   1991-06-06 11:14:12   d94fd9d5
  *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
  *
- * And there are no warnings.  So judicious use of -n can reveal hidden treasures (well, hidden *something*).
+ * And there are no warnings.  So judicious use of -n can access otherwise inaccessible content.
  *
  * Interestingly, when you search for "AVC-8.ZIP" on discmaster.textfiles.com, you'll notice that they
  * display the archive's comment (aka "banner"), which comes from the directory, but they don't display
- * the files in the directory, so perhaps they have some logic that "falls back" to the file listing
- * whenever the directory listing appears corrupt.
+ * the entries in the directory, so perhaps they have some logic that "falls back" to the file headers
+ * whenever the directory headers appear corrupt.
  */
 
 import fs from "fs/promises";
@@ -184,7 +184,7 @@ const options = {
         description: "skip archive directory (scan for files)"
         //
         // Yes, scanning for file entries instead of relying on directory entries goes against ZIP protocol,
-        // but sometimes an archive is screwed up, and sometimes you just want to look for hidden treasures....
+        // but sometimes an archive is screwed up or is part of a multi-disk archive that's missing some parts.
         //
         // For ISO containers, this option tells readDirectory() to use the path table to build the directory,
         // instead of relying solely on directory records.  Normally, we ignore the path table, because it's
@@ -516,7 +516,7 @@ async function main(argc, argv, errors)
         return;
     }
     let bannerHashes = {};
-    let nTotalItems = 0, nTotalFiles = 0;
+    let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     //
     // Define a function to process an individual archive, which then allows us to recursively process nested
@@ -966,6 +966,7 @@ async function main(argc, argv, errors)
             printf("error processing %s: %s\n", archivePath, error.message);
         }
         await container.close(archive);
+        nTotalWarnings += nArchiveWarnings;
         return [nArchiveFiles, nArchiveWarnings];
     };
     //
@@ -988,7 +989,7 @@ async function main(argc, argv, errors)
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", itemPath, nFiles, nFiles, nWarnings, nWarnings);
         }
     }
-    printf("\n%d item%s examined, %d file%s processed\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles);
+    printf("\n%d item%s examined, %d file%s processed, %d warnings\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings);
     if (csvFile) {
         await csvFile.close();
         if (argv.fileID) {
