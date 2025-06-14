@@ -522,10 +522,10 @@ async function main(argc, argv, errors)
     // Define a function to process an individual archive, which then allows us to recursively process nested
     // archives if --recurse is been specified.
     //
-    // Note that processArchive() has evolved into container processing, with the added support for disk images,
-    // as well as generic file processing, with the added support for cataloging any specified files, container or
-    // otherwise, so it might be more appropriately named processContainer() or simply processItem(), but since
-    // its primary purpose is still processing archives, we're leaving it as-is for now.
+    // Note that processArchive() has evolved into container processing, with the added support for FAT disk
+    // and ISO 9660 images (as well as generic file processing, with the added support for cataloging any specified
+    // files, container or otherwise), so it might be more appropriately named processContainer(), but since its
+    // primary purpose is still processing ZIP and ARC archives, we're leaving it as-is for now.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
         let container = dzip;
@@ -544,9 +544,6 @@ async function main(argc, argv, errors)
             [archivePhoto, widthPhoto, heightPhoto] = await getPhotoInfo(archivePath, archiveExt);
         }
         let getCSVLine = function(entry, db) {
-            //
-            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings
-            //
             let itemID = entry.source? archiveID : fileID++;
             let entryName = entry.name;
             let entryPath = archivePath;
@@ -589,6 +586,9 @@ async function main(argc, argv, errors)
                     }
                 }
             }
+            //
+            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings
+            //
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
                 itemID, archiveID, setID, hash, entry.modified, newest, entries, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
@@ -920,7 +920,7 @@ async function main(argc, argv, errors)
                 }
                 archive.totalFiles++;
                 //
-                // Perform recursion 1) if requested and 2) if we have a DataBuffer the archive.
+                // Perform recursion 1) if requested and 2) if we have a DataBuffer for the archive.
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
