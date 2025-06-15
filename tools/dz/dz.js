@@ -13,33 +13,33 @@
  *
  *      dz.js -lt https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP
  *
- * lists 9 files, two of which have warnings:
+ * lists 9 files, two of which trigger warnings due to the --test (-t) option:
  *
- *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
- *      --------        ------   ------       ----  -----   ----       ----       ---
- *      SAMPSHOW._ST     54082   Store       54082     0%   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
- *      SAMPSND._AD     350840   Implode    318710     9%   1991-05-22 01:03:00   e74e80bf  [Missing FileHeader at 54160]
- *      SAMPSND._AU       1690   Store        1690     0%   1991-05-22 01:03:00   790b9590
- *      SAMPSND2._AD    508760   Implode    484636     5%   1991-05-22 01:03:00   9351eec9
- *      SAMPSND2._AU      2920   Implode      1697    42%   1991-05-22 01:03:00   1138d881
- *      SAMPVOIC._AD     52448   Implode     50099     4%   1991-05-22 01:03:00   1e1a9d7f
- *      SPROTECT.EXE     20627   Implode     12461    40%   1991-05-22 01:03:00   918616b2
- *      VOICE._AD       428672   Implode    410777     4%   1991-05-22 01:03:00   3a53989f
- *      VOICE._AU         3190   Store        3190     0%   1991-05-22 01:03:00   15a9741a
+ *      Filename        External   Internal   Method   Ratio   Attr   Date       Time       CRC
+ *      --------        --------   --------   ------   -----   ----   ----       ----       ---
+ *      SAMPSHOW._ST       54082      54082   Store       0%   0x20   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
+ *      SAMPSND._AD       350840     318710   Implode     9%   0x20   1991-05-22 01:03:00   e74e80bf  [Missing FileHeader at 54160]
+ *      SAMPSND._AU         1690       1690   Store       0%   0x20   1991-05-22 01:03:00   790b9590
+ *      SAMPSND2._AD      508760     484636   Implode     5%   0x20   1991-05-22 01:03:00   9351eec9
+ *      SAMPSND2._AU        2920       1697   Implode    42%   0x20   1991-05-22 01:03:00   1138d881
+ *      SAMPVOIC._AD       52448      50099   Implode     4%   0x20   1991-05-22 01:03:00   1e1a9d7f
+ *      SPROTECT.EXE       20627      12461   Implode    40%   0x20   1991-05-22 01:03:00   918616b2
+ *      VOICE._AD         428672     410777   Implode     4%   0x20   1991-05-22 01:03:00   3a53989f
+ *      VOICE._AU           3190       3190   Store       0%   0x20   1991-05-22 01:03:00   15a9741a
  *
- * Since the archive's DirHeaders appear to have "issues", let's bypass them using -n (aka --nodir)
+ * Since the archive's DirHeaders appear to have "issues", let's bypass them with --nodir (-n)
  * and rely on a scan of the archive's FileHeaders instead.  Now we see a different set of (8) files:
  *
- *      Filename        Length   Method       Size  Ratio   Date       Time       CRC
- *      --------        ------   ------       ----  -----   ----       ----       ---
- *      BVHXGA.DLL        4330   Implode      2638    39%   1991-04-22 09:28:30   39d50b6b
- *      DISPLAY.DLL     424864   Implode    161490    62%   1991-04-22 09:21:44   d595a00f
- *      EXOS2.DLL        35481   Implode     15040    58%   1991-06-06 08:59:16   ea2ee879
- *      README.XGA        1199   Implode       608    49%   1991-06-06 17:02:38   1069fd3d
- *      XGA.DDP            336   Implode       211    37%   1991-05-30 13:03:58   76513e7e
- *      XGALOAD.DLL       5592   Implode      2127    62%   1991-06-06 10:01:08   d3fac5b3
- *      XGALOAD0.SYS     14993   Implode      3554    76%   1991-06-06 11:14:12   d94fd9d5
- *      XGARING0.SYS     15001   Implode      3567    76%   1991-04-05 11:47:36   ac04a726
+ *      Filename        External   Internal   Method   Ratio   Attr   Date       Time       CRC
+ *      --------        --------   --------   ------   -----   ----   ----       ----       ---
+ *      BVHXGA.DLL          4330       2638   Implode    39%   0x00   1991-04-22 09:28:30   39d50b6b
+ *      DISPLAY.DLL       424864     161490   Implode    62%   0x00   1991-04-22 09:21:44   d595a00f
+ *      EXOS2.DLL          35481      15040   Implode    58%   0x00   1991-06-06 08:59:16   ea2ee879
+ *      README.XGA          1199        608   Implode    49%   0x00   1991-06-06 17:02:38   1069fd3d
+ *      XGA.DDP              336        211   Implode    37%   0x00   1991-05-30 13:03:58   76513e7e
+ *      XGALOAD.DLL         5592       2127   Implode    62%   0x00   1991-06-06 10:01:08   d3fac5b3
+ *      XGALOAD0.SYS       14993       3554   Implode    76%   0x00   1991-06-06 11:14:12   d94fd9d5
+ *      XGARING0.SYS       15001       3567   Implode    76%   0x00   1991-04-05 11:47:36   ac04a726
  *
  * And there are no warnings.  So judicious use of -n can access otherwise inaccessible content.
  *
@@ -879,7 +879,16 @@ async function main(argc, argv, errors)
                         printed = true;
                     }
                     db = await container.readFile(archive, entry, writeData);
-                    entry.size = db && db.length || 0;
+                    //
+                    // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
+                    // the file header size differs from the DataBuffer size, and any differences between file
+                    // and directory header values (in the absence of other warnings) should be noted as well.
+                    //
+                    //      entry.size = db && db.length || 0;
+                    //
+                    if (!entry.warnings.length && db && db.length != entry.size) {
+                        entry.warnings.push(`Received ${db.length} bytes`);
+                    }
                     if (!db && !argv.list) {
                         printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                     }
@@ -920,7 +929,7 @@ async function main(argc, argv, errors)
                 }
                 archive.totalFiles++;
                 //
-                // Perform recursion 1) if requested and 2) if we have a DataBuffer for the archive.
+                // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
