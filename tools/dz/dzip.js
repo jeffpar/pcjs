@@ -328,6 +328,16 @@ export default class DZip {
     }
 
     /**
+     * enableWarnings()
+     */
+    enableWarnings()
+    {
+        DZip.FileHeader.enableWarnings();
+        DZip.DirHeader.enableWarnings();
+        DZip.ArcHeader.enableWarnings();
+    }
+
+    /**
      * open(name, db, options)
      *
      * If successful, this method returns an Archive object used with our other high-level methods;

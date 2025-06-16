@@ -438,7 +438,7 @@ export default class Struct {
                 record[name] = this.read(db, offset, name, encoding, warnings);
             }
         }
-        if (warnings.length) {
+        if (warnings.length && this.warnings) {
             record.warnings = warnings;
         }
         return record;
@@ -546,6 +546,18 @@ export default class Struct {
         if (length != this.length) {
             throw new Error(`${this.name} length is ${this.length}, expected ${length}`);
         }
+        return this;
+    }
+
+    /**
+     * enableWarnings()
+     *
+     * @this {Struct}
+     * @returns {Struct}
+     */
+    enableWarnings()
+    {
+        this.warnings = true;
         return this;
     }
 }

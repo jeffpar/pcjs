@@ -240,6 +240,12 @@ const options = {
         alias: "-v",
         description: "display additional information"
     },
+    "warnings": {
+        type: "boolean",
+        usage: "--warnings",
+        alias: "-w",
+        description: "display additional warnings (eg, date errors)",
+    },
     "fileID": {
         type: "number",
         usage: "--fileID [id]",
@@ -515,6 +521,9 @@ async function main(argc, argv, errors)
     if (nErrors) {
         return;
     }
+    if (argv.warnings) {
+        dzip.enableWarnings();
+    }
     let bannerHashes = {};
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
@@ -523,12 +532,12 @@ async function main(argc, argv, errors)
     // archives if --recurse is been specified.
     //
     // Note that processArchive() has evolved into container processing, with the added support for FAT disk
-    // and ISO 9660 images (as well as generic file processing, with the added support for cataloging any specified
+    // and ISO 9660 images (as well as generic file processing, with added support for cataloging any specified
     // files, container or otherwise), so it might be more appropriately named processContainer(), but since its
-    // primary purpose is still processing ZIP and ARC archives, we're leaving it as-is for now.
+    // original purpose was processing ZIP and ARC archives, the name has stuck.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let container = dzip;
+        let containerClass;
         let archive, doCSV = false;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
@@ -537,7 +546,7 @@ async function main(argc, argv, errors)
         if (argv.debug) {
             printf("%s\n", archivePath);
         }
-        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf)$/i)) {
+        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf|\.bin|\.cdr)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
@@ -628,16 +637,20 @@ async function main(argc, argv, errors)
             }
             if (archiveExt.match(/(\.zip|\.arc)$/i)) {
                 isArchive = true;
+                containerClass = dzip;
             }
             if (archiveExt.match(/(\.img|\.json)$/i)) {
                 isDisk = true;
-                container = disk;
+                containerClass = disk;
             }
-            if (archiveExt.match(/(\.iso|\.mdf)$/i)) {
+            if (archiveExt.match(/(\.iso|\.mdf|\.bin|\.cdr)$/i)) {
                 isDisk = true;
-                container = iso;
+                containerClass = iso;
             }
-            archive = await container.open(archivePath, archiveDB, options);
+            if (!containerClass) {
+                throw new Error(`unrecognized archive type (${archiveExt})`);
+            }
+            archive = await containerClass.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("error opening %s: %s\n", archivePath, error.message);
             return [0, 1];
@@ -653,8 +666,8 @@ async function main(argc, argv, errors)
                 archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
             }
             if (isArchive || isDisk) {
-                entries = await container.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
-                archive.label = container.readLabel(archive);
+                entries = await containerClass.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
+                archive.label = containerClass.readLabel(archive);
             }
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -762,8 +775,8 @@ async function main(argc, argv, errors)
                         printf("%s\n", archive.comment);
                     }
                     if (argv.list) {
-                        printf("\nFilename        External   Internal   Method   Ratio   Attr   Date       Time       CRC\n");
-                        printf(  "--------        --------   --------   ------   -----   ----   ----       ----       ---\n");
+                        printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
+                        printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
                     }
                     heading = true;
                 }
@@ -821,7 +834,7 @@ async function main(argc, argv, errors)
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
                 // IMG and JSON extensions tend be used more broadly for other purposes.
                 //
-                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc)$/i));
+                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc|\.iso)$/i));
                 //
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
@@ -878,7 +891,7 @@ async function main(argc, argv, errors)
                         printf("reading %s\n", entryPath);
                         printed = true;
                     }
-                    db = await container.readFile(archive, entry, writeData);
+                    db = await containerClass.readFile(archive, entry, writeData);
                     //
                     // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
                     // the file header size differs from the DataBuffer size, and any differences between file
@@ -913,7 +926,7 @@ async function main(argc, argv, errors)
                             comment = '[' + entry.warnings.join("; ") + ']';
                         }
                         if (comment.length) comment = "  " + comment;
-                        printf("%-14s %9d  %9d   %-9s %3d%%   %#04x   %T   %0*x%s\n",
+                        printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %0*x%s\n",
                                 name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, archive.type == DZip.TYPE_ARC? 4 : 8, entry.crc, comment);
                     }
                 }
@@ -974,8 +987,7 @@ async function main(argc, argv, errors)
         } catch (error) {
             printf("error processing %s: %s\n", archivePath, error.message);
         }
-        await container.close(archive);
-        nTotalWarnings += nArchiveWarnings;
+        await containerClass.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
     };
     //
@@ -997,8 +1009,9 @@ async function main(argc, argv, errors)
         if ((argv.list || argv.test) && !argv.csv && nFiles && nWarnings >= 0 || argv.verbose) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", itemPath, nFiles, nFiles, nWarnings, nWarnings);
         }
+        nTotalWarnings += nWarnings;
     }
-    printf("\n%d item%s examined, %d file%s processed, %d warnings\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings);
+    printf("\n%d total item%s, %d total file%s, %d total warning%s\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     if (csvFile) {
         await csvFile.close();
         if (argv.fileID) {
