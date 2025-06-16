@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "--csv archive/onedrive-software-discs.csv -rv --batch archive/onedrive-software-discs.txt"
+        "-lr https://ia904602.us.archive.org/19/items/Simtel20_Sept92/Simtel20_Sept92.cdr"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,

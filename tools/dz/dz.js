@@ -1012,7 +1012,9 @@ async function main(argc, argv, errors)
         }
         nTotalWarnings += nWarnings;
     }
-    printf("\n%d total item%s, %d total file%s, %d total warning%s\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
+    if (nTotalItems > 1) {
+        printf("\n%d total item%s, %d total file%s, %d total warning%s\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
+    }
     if (csvFile) {
         await csvFile.close();
         if (argv.fileID) {

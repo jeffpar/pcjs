@@ -327,6 +327,10 @@ export default class ISO {
     /**
      * constructor(interfaces)
      *
+     * TODO: Consider making the Struct objects instance properties instead of static properties,
+     * which would then make it easy to initialize their "warning" state in our constructor based on
+     * an interface option, which would in turn be based on caller preferences (eg, command-line options).
+     *
      * @this {ISO}
      * @param {Interfaces} [interfaces]
      * @param {InterfaceOptions} [interfaceOptions]

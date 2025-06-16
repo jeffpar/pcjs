@@ -409,7 +409,8 @@ export default class Struct {
                 if (isNaN(v.getTime())) {
                     //
                     // TODO: Better ISO date validation might be nice (see parseDOSDateTime()) but at least we're checking
-                    // for egregious errors now.
+                    // for egregious errors now.  Note that errors like this will happen regularly when ISO.open() is probing
+                    // for the location and type of volume descriptor in an ISO 9660 image, so don't panic.
                     //
                     warnings.push(`Invalid date (${date})`);
                     v = new Date(0);    // Use epoch as fallback
