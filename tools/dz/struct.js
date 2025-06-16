@@ -406,6 +406,14 @@ export default class Struct {
                 // up to interval 52 (east), spanning time zones GMT-12 through GMT+13.
                 //
                 v = new Date(date);
+                if (isNaN(v.getTime())) {
+                    //
+                    // TODO: Better ISO date validation might be nice (see parseDOSDateTime()) but at least we're checking
+                    // for egregious errors now.
+                    //
+                    warnings.push(`Invalid date (${date})`);
+                    v = new Date(0);    // Use epoch as fallback
+                }
                 if (tz < -48 || tz > 52) {
                     warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);
                     tz = 0;

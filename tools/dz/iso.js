@@ -374,6 +374,19 @@ export default class ISO {
     }
 
     /**
+     * enableWarnings()
+     */
+    enableWarnings()
+    {
+        ISO.DirRecord.enableWarnings();
+        ISO.DirRecord2.enableWarnings();
+        ISO.HSDirRecord.enableWarnings();
+        ISO.HSPrimaryDesc.enableWarnings();
+        ISO.PrimaryDesc.enableWarnings();
+        ISO.SuppDesc.enableWarnings();
+    }
+
+    /**
      * open(name, db, options)
      *
      * If successful, this method returns an Image object used with our other high-level methods;

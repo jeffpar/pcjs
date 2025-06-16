@@ -523,6 +523,7 @@ async function main(argc, argv, errors)
     }
     if (argv.warnings) {
         dzip.enableWarnings();
+        iso.enableWarnings();
     }
     let bannerHashes = {};
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
