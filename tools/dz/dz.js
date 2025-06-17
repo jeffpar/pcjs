@@ -462,7 +462,7 @@ async function main(argc, argv, errors)
         try {
             let archives = await fs.readFile(argv.batch, "utf8");
             archivePaths = archivePaths.concat(archives.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
-            printf("Found %d archive(s) in specified batch file\n", archivePaths.length);
+            printf("Found %d archive%s in specified batch file\n", archivePaths.length);
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
@@ -494,7 +494,7 @@ async function main(argc, argv, errors)
             }
         }
         archivePaths = archivePaths.concat(archives);
-        printf("Found %d archive(s) in specified path\n", archives.length);
+        printf("Found %d archive%s in specified path\n", archives.length);
     }
     //
     // Finally, include any explicitly listed archives.
@@ -508,7 +508,7 @@ async function main(argc, argv, errors)
     let csvFile;
     if (argv.csv) {
         try {
-            csvFile = await fs.open(argv.csv, "a");
+            csvFile = await fs.open(argv.csv, "w");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
                 await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings\n");
@@ -539,8 +539,7 @@ async function main(argc, argv, errors)
     // original purpose was processing ZIP and ARC archives, the name has stuck.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let archiveClass;
-        let archive, doCSV = false;
+        let archive, archiveClass;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
@@ -579,7 +578,7 @@ async function main(argc, argv, errors)
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
                 entryPhoto = archivePhoto? path.basename(archivePhoto) : null;
-                newest = format.sprintf("%T", new Date(entry.newestFileTime));
+                newest = entry.newestFileTime? format.sprintf("%T", new Date(entry.newestFileTime)) : "";
                 entries = entry.totalFiles;
             }
             //
@@ -617,7 +616,6 @@ async function main(argc, argv, errors)
                 options.modified = modified;
             }
             if (argv.csv && !archiveDB) {
-                doCSV = true;
                 //
                 // NOTE: preload is required if you want hashes of the archives, but it slows things down,
                 // so I don't enable it unless you also want a list of the contents.  If there are cases where
@@ -681,7 +679,7 @@ async function main(argc, argv, errors)
                 if (argv.verbose) {
                     printf("%s: %s\n", archivePath, archive.warnings.join("; "));
                 } else {
-                    printf("%s: %d warning(s) detected\n", archivePath, archive.warnings.length);
+                    printf("%s: %d issue%s detected\n", archivePath, archive.warnings.length);
                 }
                 nArchiveWarnings++;
             }
@@ -765,6 +763,20 @@ async function main(argc, argv, errors)
                     }
                 }
             }
+            if (argv.csv) {
+                //
+                // Update archive stats
+                //
+                archive.newestFileTime = 0;
+                archive.totalFiles = entries.length;
+                for (let entry of entries) {
+                    let fileTime = entry.modified.getTime();
+                    if (archive.newestFileTime < fileTime) {
+                        archive.newestFileTime = fileTime;
+                    }
+                }
+                await csvFile.write(getCSVLine(archive, archive.db));
+            }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
@@ -790,8 +802,6 @@ async function main(argc, argv, errors)
             };
             let nEntries = 0;
             let dirTimestamps = {};
-            archive.totalFiles = 0;
-            archive.newestFileTime = 0;
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
@@ -824,9 +834,9 @@ async function main(argc, argv, errors)
                 // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
                 // recursive archive processing, we want the option of reprinting it on return from a recursive call;
                 // otherwise, the output might give the wrong impression that subsequent entries are part of the
-                // previous archive.  Currently, the additional headings are displayed only if --verbose is used.
+                // previous archive.  Currently, the additional headings are displayed only if --debug is used.
                 //
-                // The obvious alternative would be to process all non-recursive entries first, followed by a
+                // One obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
                 // because the best time to process a recursive entry is when we already have its buffered data in
                 // hand (and we WILL have it in hand when extracting or even just testing files in the archive).
@@ -944,20 +954,12 @@ async function main(argc, argv, errors)
                     printf("listing %s\n", entry.name);
                 }
                 //
-                // Update archive stats.
-                //
-                let fileTime = entry.modified.getTime();
-                if (archive.newestFileTime < fileTime) {
-                    archive.newestFileTime = fileTime;
-                }
-                archive.totalFiles++;
-                //
                 // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processArchive(fileID++, entryPath, entryTarget, db, entry.modified);
-                    if (nFiles && argv.verbose) {
+                    if (nFiles && argv.debug) {
                         heading = false;
                     }
                     //
@@ -987,9 +989,6 @@ async function main(argc, argv, errors)
                 } catch (error) {
                     printf("%s: %s\n", dirPath, error.message);
                 }
-            }
-            if (doCSV) {
-                await csvFile.write(getCSVLine(archive, archive.db));
             }
             //
             // TODO: If argv.list, consider displaying entry totals as well (including the total size of the archive)
