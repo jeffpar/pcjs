@@ -876,18 +876,25 @@ export default class ISO {
                     if (record.flags & image.dirClass.fields.flags.DIRECTORY) {
                         attr |= 0x10;
                     }
-                    entries.push({
-                        index,
-                        name,
-                        attr,
-                        modified: record.dateTime,
-                        size: record.size,
-                        compressedSize: record.size,
-                        flags: 0,
-                        method: 0,
-                        crc: 0,
-                        warnings: []
-                    });
+                    //
+                    // Sometimes names in ISO directory records end with a period, which I believe the 9660 standard says
+                    // is not allowed, but that doesn't stop it from happening in the wild.
+                    //
+                    name = name.replace(/\.$/, "");
+                    if (name) {
+                        entries.push({
+                            index,
+                            name,
+                            attr,
+                            modified: record.dateTime,
+                            size: record.size,
+                            compressedSize: record.size,
+                            flags: 0,
+                            method: 0,
+                            crc: 0,
+                            warnings: []
+                        });
+                    }
                 }
             }
         }

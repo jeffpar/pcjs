@@ -1,5 +1,5 @@
 /**
- * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO containers
+ * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO archives
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -96,7 +96,7 @@ const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
-        description: "process items listed in file"
+        description: "process archives listed in file"
     },
     "banner": {
         type: "boolean",
@@ -175,7 +175,7 @@ const options = {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of specified item(s)"
+        description: "list contents of specified archive(s)"
     },
     "nodir": {
         type: "boolean",
@@ -186,7 +186,7 @@ const options = {
         // Yes, scanning for file entries instead of relying on directory entries goes against ZIP protocol,
         // but sometimes an archive is screwed up or is part of a multi-disk archive that's missing some parts.
         //
-        // For ISO containers, this option tells readDirectory() to use the path table to build the directory,
+        // For ISO images, this option tells readDirectory() to use the path table to build the directory,
         // instead of relying solely on directory records.  Normally, we ignore the path table, because it's
         // redundant, but using it can improve performance when accessing an ISO image over a network connection.
         //
@@ -210,7 +210,7 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "item path specification (eg, \"**/*.zip\")",
+        description: "archive path specification (eg, \"**/*.zip\")",
     },
     "pcjs": {
         type: "boolean",
@@ -222,7 +222,7 @@ const options = {
         type: "boolean",
         usage: "--recurse",
         alias: "-r",
-        description: "process items within items"
+        description: "process archives within archives"
         //
         // NOTE: To avoid any unwanted interplay between --recurse and --files, we ignore any file filter
         // for archives processed recursively.
@@ -232,7 +232,7 @@ const options = {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of specified items(s)"
+        description: "test contents of specified archive(s)"
     },
     "verbose": {
         type: "boolean",
@@ -264,8 +264,8 @@ const options = {
         alias: "-h",
         description: "display this help message",
         handler: function() {
-            printf("\nUsage:\n    %s [options] [items]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, JSON, ISO containers and other items\n");
+            printf("\nUsage:\n    %s [options] [archives]\n", path.basename(process.argv[1]));
+            printf("\nProcesses ZIP, ARC, IMG, ISO and other archives\n");
             printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];
@@ -454,53 +454,53 @@ async function main(argc, argv, errors)
         }
     }
     let fromDisk = {};
-    let itemPaths = [];
+    let archivePaths = [];
     //
-    // Build a list of items to process, starting with items listed in the batch file, if any.
+    // Build a list of archives to process, starting with archives listed in the batch file, if any.
     //
     if (argv.batch) {
         try {
-            let items = await fs.readFile(argv.batch, "utf8");
-            itemPaths = itemPaths.concat(items.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
-            printf("Found %d item(s) in specified batch file\n", itemPaths.length);
+            let archives = await fs.readFile(argv.batch, "utf8");
+            archivePaths = archivePaths.concat(archives.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
+            printf("Found %d archive(s) in specified batch file\n", archivePaths.length);
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
         }
     }
     //
-    // Add any items matching --path patterns.
+    // Add any archives matching --path patterns.
     //
     if (argv.path) {
-        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
+        let archives = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
         // removed from the list and the .json file is added to the fromDisk list.
         //
         if (argv.pcjs) {
-            for (let i = 0; i < items.length; i++) {
-                let itemPath = items[i];
-                if (path.basename(itemPath) == "diskettes.json" || path.basename(itemPath) == "diskettes-annotated.json") {
-                    items.splice(i--, 1);
+            for (let i = 0; i < archives.length; i++) {
+                let archivePath = archives[i];
+                if (path.basename(archivePath) == "diskettes.json" || path.basename(archivePath) == "diskettes-annotated.json") {
+                    archives.splice(i--, 1);
                 }
-                else if (itemPath.endsWith(".img")) {
-                    let jsonPath = itemPath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
-                    if (jsonPath != itemPath && items.includes(jsonPath)) {
-                        items.splice(i--, 1);
-                        fromDisk[jsonPath] = itemPath;
+                else if (archivePath.endsWith(".img")) {
+                    let jsonPath = archivePath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
+                    if (jsonPath != archivePath && archives.includes(jsonPath)) {
+                        archives.splice(i--, 1);
+                        fromDisk[jsonPath] = archivePath;
                     }
                 }
             }
         }
-        itemPaths = itemPaths.concat(items);
-        printf("Found %d item(s) in specified path\n", items.length);
+        archivePaths = archivePaths.concat(archives);
+        printf("Found %d archive(s) in specified path\n", archives.length);
     }
     //
-    // Finally, include any explicitly listed items.
+    // Finally, include any explicitly listed archives.
     //
     for (let i = 1; i < argv.length; i++) {
-        itemPaths.push(argv[i]);
+        archivePaths.push(argv[i]);
     }
     //
     // If CSV output is enabled, then open the specified file for writing.
@@ -527,18 +527,18 @@ async function main(argc, argv, errors)
     }
     let bannerHashes = {};
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
-    let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
+    let nTotalArchives = 0, nTotalFiles = 0, nTotalWarnings = 0;
     //
     // Define a function to process an individual archive, which then allows us to recursively process nested
     // archives if --recurse is been specified.
     //
-    // Note that processArchive() has evolved into container processing, with the added support for FAT disk
+    // Note that processArchive() has evolved into image processing, with the added support for FAT disk
     // and ISO 9660 images (as well as generic file processing, with added support for cataloging any specified
-    // files, container or otherwise), so it might be more appropriately named processContainer(), but since its
+    // files, archive or otherwise), so it might be more appropriately named processImage(), but since its
     // original purpose was processing ZIP and ARC archives, the name has stuck.
     //
     let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
-        let containerClass;
+        let archiveClass;
         let archive, doCSV = false;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
@@ -607,9 +607,9 @@ async function main(argc, argv, errors)
             return line;
         };
         try {
-            nTotalItems++;
-            if (nTotalItems % 10000 == 0 && !argv.verbose && !argv.list) {
-                printf("%d items processed\n", nTotalItems);
+            nTotalArchives++;
+            if (nTotalArchives % 10000 == 0 && !argv.verbose && !argv.list) {
+                printf("%d archives processed\n", nTotalArchives);
             }
             let options = {};
             if (modified) {
@@ -638,20 +638,20 @@ async function main(argc, argv, errors)
             }
             if (archiveExt.match(/(\.zip|\.arc)$/i)) {
                 isArchive = true;
-                containerClass = dzip;
+                archiveClass = dzip;
             }
             if (archiveExt.match(/(\.img|\.json)$/i)) {
                 isDisk = true;
-                containerClass = disk;
+                archiveClass = disk;
             }
             if (archiveExt.match(/(\.iso|\.mdf|\.bin|\.cdr)$/i)) {
                 isDisk = true;
-                containerClass = iso;
+                archiveClass = iso;
             }
-            if (!containerClass) {
+            if (!archiveClass) {
                 throw new Error(`unrecognized archive type (${archiveExt})`);
             }
-            archive = await containerClass.open(archivePath, archiveDB, options);
+            archive = await archiveClass.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("error opening %s: %s\n", archivePath, error.message);
             return [0, 1];
@@ -667,8 +667,8 @@ async function main(argc, argv, errors)
                 archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
             }
             if (isArchive || isDisk) {
-                entries = await containerClass.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
-                archive.label = containerClass.readLabel(archive);
+                entries = await archiveClass.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
+                archive.label = archiveClass.readLabel(archive);
             }
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
@@ -713,8 +713,17 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (dstPath != ".") {
-                    if (!dstPath || archiveTarget || itemPaths.length > 1) {
-                        dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                    if (!dstPath || archiveTarget || archivePaths.length > 1) {
+                        //
+                        // TODO: Consider an option that determines whether or not to strip the archive extension
+                        // from the destination path.  The danger is that it can result in extraction conflicts,
+                        // because a folder may contain multiple archives with the same name but different extensions
+                        // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
+                        // with a conflicting name (eg, "CONTEST").
+                        //
+                        //      dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                        //
+                        dstPath = path.join(dstPath, path.basename(archivePath));
                     }
                 }
                 bannerPath = path.join(argv.dir || "", path.basename(archivePath, archiveExt) + ".BAN");
@@ -831,7 +840,7 @@ async function main(argc, argv, errors)
                 nArchiveFiles++;
                 let db, targetFile, writeData, printed = false;
                 //
-                // TODO: Consider whether we should include IMG and JSON files in the list of containers
+                // TODO: Consider whether we should include IMG and JSON files in the list of images
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
                 // IMG and JSON extensions tend be used more broadly for other purposes.
                 //
@@ -892,7 +901,7 @@ async function main(argc, argv, errors)
                         printf("reading %s\n", entryPath);
                         printed = true;
                     }
-                    db = await containerClass.readFile(archive, entry, writeData);
+                    db = await archiveClass.readFile(archive, entry, writeData);
                     //
                     // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
                     // the file header size differs from the DataBuffer size, and any differences between file
@@ -988,32 +997,32 @@ async function main(argc, argv, errors)
         } catch (error) {
             printf("error processing %s: %s\n", archivePath, error.message);
         }
-        await containerClass.close(archive);
+        await archiveClass.close(archive);
         return [nArchiveFiles, nArchiveWarnings];
     };
     //
     // And finally: the main loop.
     //
-    for (let itemPath of itemPaths) {
+    for (let archivePath of archivePaths) {
         //
         // This was a hack for testing purposes, but it should not be required in general,
         // because it's up to the caller to ensure that all characters in a URL are properly encoded.
         //
-        //      if (itemPath.match(/^https?:\/\//)) {
-        //          itemPath = itemPath.replace(/#/g, "%23");
+        //      if (archivePath.match(/^https?:\/\//)) {
+        //          archivePath = archivePath.replace(/#/g, "%23");
         //      }
         //
         // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
-        let [nFiles, nWarnings] = await processArchive(fileID++, itemPath);
+        let [nFiles, nWarnings] = await processArchive(fileID++, archivePath);
         if ((argv.list || argv.test) && !argv.csv && nFiles && nWarnings >= 0 || argv.verbose) {
-            printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", itemPath, nFiles, nFiles, nWarnings, nWarnings);
+            printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
         }
         nTotalWarnings += nWarnings;
     }
-    if (nTotalItems > 1) {
-        printf("\n%d total item%s, %d total file%s, %d total warning%s\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
+    if (nTotalArchives > 1) {
+        printf("\n%d total archive%s, %d total file%s, %d total warning%s\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     }
     if (csvFile) {
         await csvFile.close();
