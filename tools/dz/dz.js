@@ -525,6 +525,7 @@ async function main(argc, argv, errors)
         dzip.enableWarnings();
         iso.enableWarnings();
     }
+    let heading = false;
     let bannerHashes = {};
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalArchives = 0, nTotalFiles = 0, nTotalWarnings = 0;
@@ -764,7 +765,6 @@ async function main(argc, argv, errors)
                     }
                 }
             }
-            let heading = false;
             let printHeading = function() {
                 if (!heading && !argv.csv) {
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
@@ -822,9 +822,9 @@ async function main(argc, argv, errors)
                 }
                 //
                 // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
-                // recursive archive processing, we need to be able to reprint it on return from a recursive call;
-                // otherwise, the output would give the wrong impression that subsequent entries are part of the
-                // previous archive.
+                // recursive archive processing, we want the option of reprinting it on return from a recursive call;
+                // otherwise, the output might give the wrong impression that subsequent entries are part of the
+                // previous archive.  Currently, the additional headings are displayed only if --verbose is used.
                 //
                 // The obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
@@ -931,8 +931,13 @@ async function main(argc, argv, errors)
                         }
                         if (comment.length) comment = "  " + comment;
                         let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
-                        printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %0*x%s\n",
-                                name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, archive.type == DZip.TYPE_ARC? 4 : 8, entry.crc, comment);
+                        //
+                        // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
+                        // using "%0*x" instead of "%08x", but when archives contain a mixture of ARC and ZIP archives,
+                        // that results in inconsistent output, so now I always display 8 hex digits.
+                        //
+                        printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s\n",
+                                name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, entry.crc, comment);
                     }
                 }
                 else if (argv.debug && !printed) {
@@ -952,7 +957,7 @@ async function main(argc, argv, errors)
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processArchive(fileID++, entryPath, entryTarget, db, entry.modified);
-                    if (nFiles) {
+                    if (nFiles && argv.verbose) {
                         heading = false;
                     }
                     //
