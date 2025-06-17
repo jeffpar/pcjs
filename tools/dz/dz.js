@@ -699,35 +699,32 @@ async function main(argc, argv, errors)
             // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
             // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
             //
-            let dstPath, bannerPath;
             let srcPath = path.dirname(archivePath);
-            if (argv.dir || argv.extract) {
-                dstPath = archiveTarget || argv.dir || "";
-                let chgPath = dstPath.split("=");
-                if (chgPath.length > 1) {
-                    if (srcPath.indexOf(chgPath[0]) >= 0) {
-                        dstPath = srcPath.replace(chgPath[0], chgPath[1]);
-                    } else {
-                        printf("warning: source path %s does not contain '%s'\n", srcPath, chgPath[0]);
-                        dstPath = chgPath[1];
-                    }
+            let dstPath = archiveTarget || argv.dir || "";
+            let chgPath = dstPath.split("=");
+            if (chgPath.length > 1) {
+                if (srcPath.indexOf(chgPath[0]) >= 0) {
+                    dstPath = srcPath.replace(chgPath[0], chgPath[1]);
+                } else {
+                    printf("warning: source path %s does not contain '%s'\n", srcPath, chgPath[0]);
+                    dstPath = chgPath[1];
                 }
-                if (dstPath != ".") {
-                    if (!dstPath || archiveTarget || archivePaths.length > 1) {
-                        //
-                        // TODO: Consider an option that determines whether or not to strip the archive extension
-                        // from the destination path.  The danger is that it can result in extraction conflicts,
-                        // because a folder may contain multiple archives with the same name but different extensions
-                        // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
-                        // with a conflicting name (eg, "CONTEST").
-                        //
-                        //      dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
-                        //
-                        dstPath = path.join(dstPath, path.basename(archivePath));
-                    }
-                }
-                bannerPath = path.join(argv.dir || "", path.basename(archivePath, archiveExt) + ".BAN");
             }
+            if (dstPath != ".") {
+                if (!dstPath || archiveTarget || archivePaths.length > 1) {
+                    //
+                    // TODO: Consider an option that determines whether or not to strip the archive extension
+                    // from the destination path.  The danger is that it can result in extraction conflicts,
+                    // because a folder may contain multiple archives with the same name but different extensions
+                    // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
+                    // with a conflicting name (eg, "CONTEST").
+                    //
+                    //      dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                    //
+                    dstPath = path.join(dstPath, path.basename(archivePath, archiveDB? undefined : archiveExt));
+                }
+            }
+            let bannerPath = path.join(argv.dir || "", path.basename(archivePath, archiveExt) + ".BAN");
             if (archive.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
@@ -749,7 +746,7 @@ async function main(argc, argv, errors)
                         await fs.mkdir(path.dirname(bannerPath), { recursive: true });
                         try {
                             await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
-                            if (argv.verbose) printf("created %s\n", targetPath);
+                            if (argv.verbose) printf("created %s\n", entry.target);
                             if (archive.modified) {
                                 await fs.utimes(bannerPath, archive.modified, archive.modified);
                             }
@@ -796,7 +793,6 @@ async function main(argc, argv, errors)
             archive.totalFiles = 0;
             archive.newestFileTime = 0;
             while (nEntries < entries.length) {
-                let targetPath;
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
                 //
@@ -805,6 +801,7 @@ async function main(argc, argv, errors)
                 // pipe, and then convert all pipes back into double-slashes after the join.
                 //
                 let entryPath = path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//");
+                entry.target = path.join(dstPath, entry.name);
                 //
                 // TODO: Consider an option for including volume labels in the output, for completeness.
                 //
@@ -819,8 +816,7 @@ async function main(argc, argv, errors)
                 //
                 if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
                     if (argv.extract || argv.dir) {
-                        targetPath = path.join(dstPath, entry.name);
-                        dirTimestamps[targetPath] = entry.modified;
+                        dirTimestamps[entry.target] = entry.modified;
                     }
                     continue;           // skip directory entries
                 }
@@ -853,17 +849,14 @@ async function main(argc, argv, errors)
                     writeData = async function(db, length) {
                         if (db) {
                             if (!targetFile) {
-                                targetPath = path.join(dstPath, entry.name);
                                 //
                                 // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
                                 //
-                                await fs.mkdir(path.dirname(targetPath), { recursive: true });
+                                await fs.mkdir(path.dirname(entry.target), { recursive: true });
                                 try {
-                                    targetFile = await fs.open(targetPath, argv.overwrite? "w" : "wx");
-                                    if (argv.list) {
-                                        entry.comment = targetPath;
-                                    } else if (argv.verbose) {
-                                        printf("created %s\n", targetPath);
+                                    targetFile = await fs.open(entry.target, argv.overwrite? "w" : "wx");
+                                    if (!argv.list && argv.verbose) {
+                                        printf("created %s\n", entry.target);
                                     }
                                 } catch (error) {
                                     if (error.code == "EEXIST") {
@@ -871,14 +864,14 @@ async function main(argc, argv, errors)
                                         // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
                                         // since extraction has been enabled.
                                         //
-                                        let warning = targetPath + ": already exists";
+                                        let warning = entry.target + ": already exists";
                                         if (argv.list) {
                                             entry.warnings.unshift(warning);
                                         } else {
                                             printf("%s\n", warning);
                                         }
                                     } else {
-                                        printf("%s: %s\n", targetPath, error.message);
+                                        printf("%s: %s\n", entry.target, error.message);
                                     }
                                     return false;
                                 }
@@ -889,7 +882,7 @@ async function main(argc, argv, errors)
                         if (targetFile) {
                             await targetFile.close();
                             if (entry.modified) {
-                                await fs.utimes(targetPath, entry.modified, entry.modified);
+                                await fs.utimes(entry.target, entry.modified, entry.modified);
                             }
                             return true;
                         }
@@ -926,16 +919,18 @@ async function main(argc, argv, errors)
                         await csvFile.write(getCSVLine(entry, db));
                     }
                     else {
-                        let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
                         let name = path.basename(entry.name);
                         if (name.length > 14) {
                             name = "…" + name.slice(-13);
                         }
-                        let comment = entry.comment || (name == entry.name? "" : entry.name);
+                        let comment;
                         if (entry.warnings.length) {
                             comment = '[' + entry.warnings.join("; ") + ']';
+                        } else {
+                            comment = entry.comment || (name == entry.target? "" : entry.target);
                         }
                         if (comment.length) comment = "  " + comment;
+                        let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
                         printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %0*x%s\n",
                                 name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, archive.type == DZip.TYPE_ARC? 4 : 8, entry.crc, comment);
                     }
