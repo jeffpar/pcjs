@@ -15,31 +15,35 @@
  *
  * lists 9 files, two of which trigger warnings due to the --test (-t) option:
  *
- *      Filename        External   Internal   Method   Ratio   Attr   Date       Time       CRC
- *      --------        --------   --------   ------   -----   ----   ----       ----       ---
- *      SAMPSHOW._ST       54082      54082   Store       0%   0x20   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
- *      SAMPSND._AD       350840     318710   Implode     9%   0x20   1991-05-22 01:03:00   e74e80bf  [Missing FileHeader at 54160]
- *      SAMPSND._AU         1690       1690   Store       0%   0x20   1991-05-22 01:03:00   790b9590
- *      SAMPSND2._AD      508760     484636   Implode     5%   0x20   1991-05-22 01:03:00   9351eec9
- *      SAMPSND2._AU        2920       1697   Implode    42%   0x20   1991-05-22 01:03:00   1138d881
- *      SAMPVOIC._AD       52448      50099   Implode     4%   0x20   1991-05-22 01:03:00   1e1a9d7f
- *      SPROTECT.EXE       20627      12461   Implode    40%   0x20   1991-05-22 01:03:00   918616b2
- *      VOICE._AD         428672     410777   Implode     4%   0x20   1991-05-22 01:03:00   3a53989f
- *      VOICE._AU           3190       3190   Store       0%   0x20   1991-05-22 01:03:00   15a9741a
+ *      Filename         External    Internal   Method   Ratio   Attr   Date       Time       CRC
+ *      --------         --------    --------   ------   -----   ----   ----       ----       ---
+ *      SAMPSHOW._ST        54082       54082   Store       0%   0x20   1991-05-22 01:03:00   9791da66  [FileHeader name: BVHXGA.DLL]
+ *      SAMPSND._AD        350840      318710   Implode     9%   0x20   1991-05-22 01:03:00   e74e80bf  [Missing FileHeader at 54160]
+ *      SAMPSND._AU          1690        1690   Store       0%   0x20   1991-05-22 01:03:00   790b9590  AVC-8/SAMPSND._AU
+ *      SAMPSND2._AD       508760      484636   Implode     5%   0x20   1991-05-22 01:03:00   9351eec9  AVC-8/SAMPSND2._AD
+ *      SAMPSND2._AU         2920        1697   Implode    42%   0x20   1991-05-22 01:03:00   1138d881  AVC-8/SAMPSND2._AU
+ *      SAMPVOIC._AD        52448       50099   Implode     4%   0x20   1991-05-22 01:03:00   1e1a9d7f  AVC-8/SAMPVOIC._AD
+ *      SPROTECT.EXE        20627       12461   Implode    40%   0x20   1991-05-22 01:03:00   918616b2  AVC-8/SPROTECT.EXE
+ *      VOICE._AD          428672      410777   Implode     4%   0x20   1991-05-22 01:03:00   3a53989f  AVC-8/VOICE._AD
+ *      VOICE._AU            3190        3190   Store       0%   0x20   1991-05-22 01:03:00   15a9741a  AVC-8/VOICE._AU
+ *
+ *      https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP: 9 files, 2 warnings
  *
  * Since the archive's DirHeaders appear to have "issues", let's bypass them with --nodir (-n)
  * and rely on a scan of the archive's FileHeaders instead.  Now we see a different set of (8) files:
  *
- *      Filename        External   Internal   Method   Ratio   Attr   Date       Time       CRC
- *      --------        --------   --------   ------   -----   ----   ----       ----       ---
- *      BVHXGA.DLL          4330       2638   Implode    39%   0x00   1991-04-22 09:28:30   39d50b6b
- *      DISPLAY.DLL       424864     161490   Implode    62%   0x00   1991-04-22 09:21:44   d595a00f
- *      EXOS2.DLL          35481      15040   Implode    58%   0x00   1991-06-06 08:59:16   ea2ee879
- *      README.XGA          1199        608   Implode    49%   0x00   1991-06-06 17:02:38   1069fd3d
- *      XGA.DDP              336        211   Implode    37%   0x00   1991-05-30 13:03:58   76513e7e
- *      XGALOAD.DLL         5592       2127   Implode    62%   0x00   1991-06-06 10:01:08   d3fac5b3
- *      XGALOAD0.SYS       14993       3554   Implode    76%   0x00   1991-06-06 11:14:12   d94fd9d5
- *      XGARING0.SYS       15001       3567   Implode    76%   0x00   1991-04-05 11:47:36   ac04a726
+ *      Filename         External    Internal   Method   Ratio   Attr   Date       Time       CRC
+ *      --------         --------    --------   ------   -----   ----   ----       ----       ---
+ *      BVHXGA.DLL           4330        2638   Implode    39%   0x00   1991-04-22 09:28:30   39d50b6b  AVC-8/BVHXGA.DLL
+ *      DISPLAY.DLL        424864      161490   Implode    62%   0x00   1991-04-22 09:21:44   d595a00f  AVC-8/DISPLAY.DLL
+ *      EXOS2.DLL           35481       15040   Implode    58%   0x00   1991-06-06 08:59:16   ea2ee879  AVC-8/EXOS2.DLL
+ *      README.XGA           1199         608   Implode    49%   0x00   1991-06-06 17:02:38   1069fd3d  AVC-8/README.XGA
+ *      XGA.DDP               336         211   Implode    37%   0x00   1991-05-30 13:03:58   76513e7e  AVC-8/XGA.DDP
+ *      XGALOAD.DLL          5592        2127   Implode    62%   0x00   1991-06-06 10:01:08   d3fac5b3  AVC-8/XGALOAD.DLL
+ *      XGALOAD0.SYS        14993        3554   Implode    76%   0x00   1991-06-06 11:14:12   d94fd9d5  AVC-8/XGALOAD0.SYS
+ *      XGARING0.SYS        15001        3567   Implode    76%   0x00   1991-04-05 11:47:36   ac04a726  AVC-8/XGARING0.SYS
+ *
+ *      https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP: 8 files, 0 warnings
  *
  * And there are no warnings.  So judicious use of -n can access otherwise inaccessible content.
  *
@@ -658,30 +662,37 @@ async function main(argc, argv, errors)
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
             let entries = [];
-            //
-            // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
-            // to flag the archive as having already scanned them, so that readDirectory() won't bother.
-            //
-            if (isArchive && argv.nodir) {
-                archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
-            }
             if (isArchive || isDisk) {
-                entries = await archiveClass.readDirectory(archive, archiveDB? undefined : argv.files, filterExceptions, filterMethod);
-                archive.label = archiveClass.readLabel(archive);
-            }
-            if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
-                archive.warnings.push("Unrecognized archive");
-            }
-            else if ((isArchive || isDisk) && !entries.length && !filterExceptions && filterMethod == -1) {
-                archive.warnings.push("No entries");
-            }
-            if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
-                if (argv.verbose) {
-                    printf("%s: %s\n", archivePath, archive.warnings.join("; "));
-                } else {
-                    printf("%s: %d issue%s detected\n", archivePath, archive.warnings.length);
+                //
+                // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
+                // to flag the archive as having already scanned them, so that readDirectory() won't bother.
+                //
+                if (argv.nodir) {
+                    archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
                 }
-                nArchiveWarnings++;
+                //
+                // This next line is just shorthand for saying that if we're recursively processing archives,
+                // then any file filters will be ignored at the top level (ie, file filters will be applied
+                // to archives' contents, not the archives themselves), and conversely, if we're not recursing,
+                // then any file filters will only be applied to the archives themselves.
+                //
+                let filterFiles = (!argv.recurse == !archiveDB? argv.files : undefined);
+                entries = await archiveClass.readDirectory(archive, filterFiles, filterExceptions, filterMethod);
+                archive.label = archiveClass.readLabel(archive);
+                if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
+                    archive.warnings.push("Unrecognized archive");
+                }
+                else if ((isArchive || isDisk) && !entries.length && !filterFiles && !filterExceptions && filterMethod == -1) {
+                    archive.warnings.push("No entries");
+                }
+                if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
+                    if (argv.verbose) {
+                        printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                    } else {
+                        printf("%s: %d issue%s detected\n", archivePath, archive.warnings.length);
+                    }
+                    nArchiveWarnings++;
+                }
             }
             //
             // Set dstPath as needed (for file and/or banner extraction).
