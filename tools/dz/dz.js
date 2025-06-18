@@ -605,7 +605,7 @@ async function main(argc, argv, errors)
             //
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                itemID, archiveID, setID, hash, entry.modified, newest, entries, entry.attr || 0, entry.size, entry.compressedSize || entry.size,
+                itemID, archiveID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
                 entryMethod, enquote(entryName), enquote(entryPath), enquote(entryDisk), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(comment), enquote(warnings)
             );
             return line;
