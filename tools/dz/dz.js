@@ -672,7 +672,7 @@ async function main(argc, argv, errors)
             if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
                 archive.warnings.push("Unrecognized archive");
             }
-            else if ((isArchive || isDisk) && !entries.length) {
+            else if ((isArchive || isDisk) && !entries.length && !filterExceptions && filterMethod == -1) {
                 archive.warnings.push("No entries");
             }
             if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
@@ -944,7 +944,7 @@ async function main(argc, argv, errors)
                         //
                         // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
                         // using "%0*x" instead of "%08x", but when archives contain a mixture of ARC and ZIP archives,
-                        // that results in inconsistent output, so now I always display 8 hex digits.
+                        // that results in irregular output, so now I always display 8 hex digits.
                         //
                         printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s\n",
                                 name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, entry.crc, comment);
