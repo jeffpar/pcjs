@@ -709,7 +709,10 @@ async function main(argc, argv, errors)
             // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
             // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
             //
-            let srcPath = path.dirname(archivePath);
+            let srcPath = decodeURIComponent(archivePath);
+            let srcName = path.basename(srcPath);
+            let srcBase = path.basename(srcPath, archiveExt);
+            srcPath = path.dirname(srcPath);
             let dstPath = archiveTarget || argv.dir || "";
             let chgPath = dstPath.split("=");
             if (chgPath.length > 1) {
@@ -729,12 +732,12 @@ async function main(argc, argv, errors)
                     // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
                     // with a conflicting name (eg, "CONTEST").
                     //
-                    //      dstPath = path.join(dstPath, path.basename(archivePath, archiveExt));
+                    //      dstPath = path.join(dstPath, srcBase);
                     //
-                    dstPath = path.join(dstPath, path.basename(archivePath, archiveDB? undefined : archiveExt));
+                    dstPath = path.join(dstPath, archiveDB? srcName : srcBase);
                 }
             }
-            let bannerPath = path.join(argv.dir || "", path.basename(archivePath, archiveExt) + ".BAN");
+            let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
             if (archive.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
@@ -821,7 +824,7 @@ async function main(argc, argv, errors)
                 // redundant and converts it to a single slash), so we replace all double-slashes with a
                 // pipe, and then convert all pipes back into double-slashes after the join.
                 //
-                let entryPath = path.join(srcPath.replace(/\/\//g, "|"), path.basename(archivePath), entry.name).replace(/\|/g, "//");
+                let entryPath = path.join(srcPath.replace(/\/\//g, "|"), srcName, entry.name).replace(/\|/g, "//");
                 entry.target = path.join(dstPath, entry.name);
                 //
                 // TODO: Consider an option for including volume labels in the output, for completeness.
