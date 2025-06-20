@@ -62,7 +62,7 @@ export default class CSV {
                 this.bytesRead += result.bytesRead;
                 const chunk = this.remainingLine + this.buffer.subarray(0, result.bytesRead).toString("utf8");
                 this.remainingLine = "";
-                lines = chunk.split(/\r?(\n)/);
+                lines = chunk.split(/(\r?\n)/);
                 if (this.bytesRead < this.fileSize && !lines[lines.length - 1].match(/\r?\n$/)) {
                     this.remainingLine = lines.pop();
                 }
@@ -97,7 +97,7 @@ export default class CSV {
     async getNextRow()
     {
         let line = await this.getNextLine();
-        if (line == "\n") {
+        if (line == "\n" || line == "\r\n") {
             line = await this.getNextLine();
         }
         if (!line) {
@@ -106,7 +106,7 @@ export default class CSV {
         if (!this.fields.length) {
             this.fields = line.split(",");
             line = await this.getNextLine();
-            if (line == "\n") {
+            if (line == "\n" || line == "\r\n") {
                 line = await this.getNextLine();
             }
             if (!line) {
