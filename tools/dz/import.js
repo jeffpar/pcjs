@@ -109,12 +109,6 @@ const options = {
         alias: "-d",
         description: "specify the database name"
     },
-    "download": {
-        type: "boolean",
-        usage: "--download",
-        description: "download the site URLs in the CSV file",
-        default: false
-    },
     "drop": {
         type: "boolean",
         usage: "--drop",
@@ -339,48 +333,6 @@ async function main(argc, argv, errors)
         }
         return csvRow;
     };
-
-    if (argv.download) {
-        let csvID = 0;
-        let urlCache = {};
-        while (true) {
-            let csvRow = await getNextRow();
-            if (csvRow == null) {
-                break;
-            }
-            let siteURL = csvRow['siteURL'];
-            if (urlCache[siteURL]) {
-                continue;
-            }
-            urlCache[siteURL] = true;
-            let response = await fetch(siteURL);
-            if (!response.ok) {
-                printf("# unable to fetch %s (%s)\n", siteURL, response.statusText);
-                continue;
-            }
-            //
-            // Get the response as a string
-            //
-            let matches = 0;
-            let url = new URL(siteURL);
-            let text = await response.text();
-            let titleMatch = text.match(/<h1 class="sr-only">\s*(.*?)\s*<\/h1>/);
-            let matchAll = text.matchAll(/<a.* href="(\/download\/[^"]+.iso)"[^>]*>([^<]*)</g);
-            for (let match of matchAll) {
-                let desc = match[2].trim();
-                if (!desc) {
-                    desc = titleMatch && titleMatch[1] || "unknown";
-                }
-                desc += ".iso";
-                printf("curl -s -I -L %s%s | grep -E \"^location:\" | sed -E \"s|location: (.*)\\r|%d,\\\"%s\\\",\\\"%s%s\\\",\\\"%s\\\",\\\"\\1\\\"|\"\n", url.origin, match[1], ++csvID, siteURL, url.origin, match[1], desc);
-                matches++;
-            }
-            if (!matches) {
-                printf("# unable to find any download links in %s\n", siteURL);
-            }
-        }
-        await file.close();
-    }
 
     if (argv.database && argv.table) {
         let db = dbInit(dbConfig, argv.database);

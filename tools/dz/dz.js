@@ -386,6 +386,81 @@ async function getPhotoInfo(basePath, baseExt)
 }
 
 /**
+ * getList(text)
+ *
+ * @param {string} text
+ * @returns {Array} (of objects containing 'path' and optional 'photo' and 'thumb' properties)
+ */
+function getList(text)
+{
+    let list;
+    if (text[0] != '-') {
+        list = text.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")).map(path => ({ path }));
+    } else {
+        list = [];
+        let items = text.split(/(^|\n)- /);
+        items.splice(0, 2);
+        for (let item of items) {
+            item = item.trim();
+            if (!item) continue;
+            let lines = item.split(/\n/);
+            let id = lines[0].trim();
+            let fileNames = [], photoNames = [], thumbNames = [];
+            for (let i = 1; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (line) {
+                    let match = line.match(/^([-+]) (.*)$/);
+                    if (match) {
+                        if (match[1] == "-") {
+                            let matchFile = match[2].match(/^([^_].*)(\.iso|\.cdr|\.mdf|\.7z)$/i);
+                            if (matchFile) {
+                                fileNames.push(matchFile[1] + matchFile[2]);
+                            } else {
+                                let matchPhoto = match[2].match(/^([^_].*)(\.jpe?g|\.png|\.tiff?)$/i);
+                                if (matchPhoto) {
+                                    if (matchPhoto[1].endsWith("_thumb")) {
+                                        thumbNames.push(matchPhoto[1] + matchPhoto[2]);
+                                    } else {
+                                        photoNames.push(matchPhoto[1] + matchPhoto[2]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        printf("warning: unrecognized line in item %s: %s\n", id, line);
+                    }
+                } else {
+                    printf("warning: empty line in item %s\n", id);
+                }
+            }
+            if (!fileNames.length) {
+                printf("warning: no file name(s) in item %s\n", id);
+                continue;
+            }
+            for (let fileName of fileNames) {
+                let fileURL = "", photoURL = "", thumbURL = "";
+                fileURL = "https://archive.org/download/" + id + "/" + encodeURIComponent(fileName);
+                //
+                // Find a photo in photoNames that has the same base name as fileName.
+                //
+                let baseName = fileName.replace(/(\.iso|\.cdr|\.mdf|\.7z)$/i, "");
+                let photoName = photoNames.find(name => name.startsWith(baseName)) || photoNames[0] ||"";
+                let thumbName = thumbNames.find(name => name.startsWith(baseName + "_thumb")) || thumbNames[0] || "";
+                if (photoName) {
+                    photoURL = "https://archive.org/download/" + id + "/" + encodeURIComponent(photoName);
+                }
+                if (thumbName) {
+                    thumbURL = "https://archive.org/download/" + id + "/" + encodeURIComponent(thumbName);
+                }
+                list.push({path: fileURL, photo: photoURL, thumb: thumbURL});
+            }
+        }
+    }
+    return list;
+}
+
+/**
  * main(argc, argv, errors)
  */
 async function main(argc, argv, errors)
@@ -457,16 +532,17 @@ async function main(argc, argv, errors)
             filterExceptions |= option.value;
         }
     }
-    let fromDisk = {};
-    let archivePaths = [];
+    let fromPCJS = {};
+    let itemList = [];
     //
     // Build a list of archives to process, starting with archives listed in the batch file, if any.
     //
     if (argv.batch) {
         try {
-            let archives = await fs.readFile(argv.batch, "utf8");
-            archivePaths = archivePaths.concat(archives.split(/\r?\n/).filter(line => line.length > 0 && !line.startsWith("#")));
-            printf("Found %d archive%s in specified batch file\n", archivePaths.length);
+            let text = await fs.readFile(argv.batch, "utf8");
+            let list = getList(text);
+            itemList = itemList.concat(list);
+            printf("Found %d archive%s in specified batch file\n", list.length);
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
@@ -476,35 +552,35 @@ async function main(argc, argv, errors)
     // Add any archives matching --path patterns.
     //
     if (argv.path) {
-        let archives = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
+        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
-        // removed from the list and the .json file is added to the fromDisk list.
+        // removed from the list and the .json file is added to the fromPCJS list.
         //
         if (argv.pcjs) {
-            for (let i = 0; i < archives.length; i++) {
-                let archivePath = archives[i];
-                if (path.basename(archivePath) == "diskettes.json" || path.basename(archivePath) == "diskettes-annotated.json") {
-                    archives.splice(i--, 1);
+            for (let i = 0; i < items.length; i++) {
+                let itemPath = items[i];
+                if (path.basename(itemPath) == "diskettes.json" || path.basename(itemPath) == "diskettes-annotated.json") {
+                    items.splice(i--, 1);
                 }
-                else if (archivePath.endsWith(".img")) {
-                    let jsonPath = archivePath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
-                    if (jsonPath != archivePath && archives.includes(jsonPath)) {
-                        archives.splice(i--, 1);
-                        fromDisk[jsonPath] = archivePath;
+                else if (itemPath.endsWith(".img")) {
+                    let jsonPath = itemPath.replace(/\/archive\/([^/]*)\.img$/, "/$1.json");
+                    if (jsonPath != itemPath && items.includes(jsonPath)) {
+                        items.splice(i--, 1);
+                        fromPCJS[jsonPath] = itemPath;
                     }
                 }
             }
         }
-        archivePaths = archivePaths.concat(archives);
-        printf("Found %d archive%s in specified path\n", archives.length);
+        itemList = itemList.concat(items.map(path => ({ path })));
+        printf("Found %d item%s in specified path\n", items.length);
     }
     //
     // Finally, include any explicitly listed archives.
     //
     for (let i = 1; i < argv.length; i++) {
-        archivePaths.push(argv[i]);
+        itemList.push({path: argv[i]});
     }
     //
     // If CSV output is enabled, then open the specified file for writing.
@@ -512,10 +588,10 @@ async function main(argc, argv, errors)
     let csvFile;
     if (argv.csv) {
         try {
-            csvFile = await fs.open(argv.csv, "w");
+            csvFile = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings\n");
+                await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings\n");
             }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
@@ -542,16 +618,16 @@ async function main(argc, argv, errors)
     // files, archive or otherwise), so it might be more appropriately named processImage(), but since its
     // original purpose was processing ZIP and ARC archives, the name has stuck.
     //
-    let processArchive = async function(archiveID, archivePath, archiveTarget, archiveDB = null, modified = null) {
+    let processArchive = async function(archiveID, archivePath, archivePhoto = null, archiveThumb = null, archiveTarget = null, archiveDB = null, modified = null) {
         let archive, archiveClass;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
-        let archivePhoto = null, widthPhoto = 0, heightPhoto = 0;
+        let widthPhoto = 0, heightPhoto = 0;
         if (argv.debug) {
             printf("%s\n", archivePath);
         }
-        if (!archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf|\.bin|\.cdr)$/i)) {
+        if (!archivePhoto && !archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf|\.bin|\.cdr)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
@@ -561,7 +637,7 @@ async function main(argc, argv, errors)
             let itemID = entry.source? archiveID : fileID++;
             let entryName = entry.name;
             let entryPath = archivePath;
-            let entryPhoto = null, entryDisk = null;
+            let entryPhoto = null, entryThumb = null, entryDisk = null;
             let entryMethod = entry.methodName || entry.source;
             let comment = entry.comment || "";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
@@ -573,7 +649,7 @@ async function main(argc, argv, errors)
             //
             if (entry.source) {
                 DZip.assert(entryName == entryPath);
-                entryDisk = fromDisk[entryName];
+                entryDisk = fromPCJS[entryName];
                 if (entryDisk) {
                     entryDisk = path.basename(entryDisk);
                 } else {
@@ -581,7 +657,14 @@ async function main(argc, argv, errors)
                 }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
-                entryPhoto = archivePhoto? path.basename(archivePhoto) : null;
+                entryPhoto = archivePhoto;
+                if (entryPhoto && !entryPhoto.match(/^https?:\/\//)) {
+                    entryPhoto = path.basename(entryPhoto);
+                }
+                entryThumb = archiveThumb;
+                if (entryThumb && !entryThumb.match(/^https?:\/\//)) {
+                    entryThumb = path.basename(entryThumb);
+                }
                 newest = entry.newestFileTime? format.sprintf("%T", new Date(entry.newestFileTime)) : "";
                 entries = entry.totalFiles;
             }
@@ -601,12 +684,12 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,comment,warnings
+            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings
             //
             let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                 itemID, archiveID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
-                entryMethod, enquote(entryName), enquote(entryPath), enquote(entryDisk), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(comment), enquote(warnings)
+                entryMethod, enquote(entryName), enquote(entryPath), enquote(entryDisk), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
             );
             return line;
         };
@@ -724,7 +807,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (dstPath != ".") {
-                if (!dstPath || archiveTarget || archivePaths.length > 1) {
+                if (!dstPath || archiveTarget || itemList.length > 1) {
                     //
                     // TODO: Consider an option that determines whether or not to strip the archive extension
                     // from the destination path.  The danger is that it can result in extraction conflicts,
@@ -972,7 +1055,7 @@ async function main(argc, argv, errors)
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
-                    let [nFiles, nWarnings] = await processArchive(fileID++, entryPath, entryTarget, db, entry.modified);
+                    let [nFiles, nWarnings] = await processArchive(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
                     if (nFiles && argv.debug) {
                         heading = false;
                     }
@@ -1016,21 +1099,21 @@ async function main(argc, argv, errors)
     //
     // And finally: the main loop.
     //
-    for (let archivePath of archivePaths) {
+    for (let item of itemList) {
         //
         // This was a hack for testing purposes, but it should not be required in general,
         // because it's up to the caller to ensure that all characters in a URL are properly encoded.
         //
-        //      if (archivePath.match(/^https?:\/\//)) {
-        //          archivePath = archivePath.replace(/#/g, "%23");
+        //      if (item.path.match(/^https?:\/\//)) {
+        //          item.path = item.path.replace(/#/g, "%23");
         //      }
         //
         // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
-        let [nFiles, nWarnings] = await processArchive(fileID++, archivePath);
+        let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
         if ((argv.list || argv.test) && !argv.csv && nFiles && nWarnings >= 0 || argv.verbose) {
-            printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", archivePath, nFiles, nFiles, nWarnings, nWarnings);
+            printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
         }
         nTotalWarnings += nWarnings;
     }
