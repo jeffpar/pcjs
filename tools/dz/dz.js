@@ -58,6 +58,7 @@ import glob from "glob";
 import path from "path";
 import zlib from "zlib";
 import crypto from "crypto";
+import CSV from "./csv.js";
 import Format from "./format.js";
 import DZip from "./dzip.js";
 import Disk from "./disk.js";
@@ -532,17 +533,41 @@ async function main(argc, argv, errors)
             filterExceptions |= option.value;
         }
     }
-    let fromPCJS = {};
-    let itemList = [];
     //
-    // Build a list of archives to process, starting with archives listed in the batch file, if any.
+    // Build a list of items to process, starting with files listed in a batch file.
     //
+    let itemList = [], fromPCJS = {};
     if (argv.batch) {
         try {
-            let text = await fs.readFile(argv.batch, "utf8");
-            let list = getList(text);
-            itemList = itemList.concat(list);
-            printf("Found %d archive%s in specified batch file\n", list.length);
+            if (argv.batch.match(/\.csv$/i)) {
+                let items = 0;
+                let csv = new CSV();
+                await csv.open(argv.batch);
+                do {
+                    let row = await csv.getNextRow();
+                    if (!row) break;
+                    //
+                    // TODO: Remove the next line once we have processed all TechNet CDs...
+                    //
+                    if (!row.path || !+row.setID || row.path.match(/^https?:\/\//i)) continue;
+                    let item = {path: row.path + "/" + row.name};
+                    if (row.photo) {
+                        item.photo = row.photo;
+                    }
+                    if (row.thumb) {
+                        item.thumb = row.thumb;
+                    }
+                    itemList.push(item);
+                    items++;
+                } while (true);
+                await csv.close();
+                printf("Found %d archive%s in specified CSV file\n", items);
+            } else {
+                let text = await fs.readFile(argv.batch, "utf8");
+                let list = getList(text);
+                itemList = itemList.concat(list);
+                printf("Found %d archive%s in specified batch file\n", list.length);
+            }
         } catch (error) {
             printf("%s\n", error.message);
             nErrors++;
@@ -585,13 +610,13 @@ async function main(argc, argv, errors)
     //
     // If CSV output is enabled, then open the specified file for writing.
     //
-    let csvFile;
+    let csv;
     if (argv.csv) {
         try {
-            csvFile = await fs.open(argv.csv, "a");
+            csv = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                await csvFile.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings\n");
+                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings\n");
             }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
@@ -872,7 +897,7 @@ async function main(argc, argv, errors)
                         archive.newestFileTime = fileTime;
                     }
                 }
-                await csvFile.write(getCSVLine(archive, archive.db));
+                await csv.write(getCSVLine(archive, archive.db));
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
@@ -1023,7 +1048,7 @@ async function main(argc, argv, errors)
                 }
                 if (argv.list) {
                     if (argv.csv) {
-                        await csvFile.write(getCSVLine(entry, db));
+                        await csv.write(getCSVLine(entry, db));
                     }
                     else {
                         let name = path.basename(entry.name);
@@ -1121,8 +1146,8 @@ async function main(argc, argv, errors)
     if (nTotalArchives > 1) {
         printf("\n%d total archive%s, %d total file%s, %d total warning%s\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     }
-    if (csvFile) {
-        await csvFile.close();
+    if (csv) {
+        await csv.close();
         if (argv.fileID) {
             printf("Use --fileID=%d --setID=%d for the next CSV\n", fileID, ++setID);
         }

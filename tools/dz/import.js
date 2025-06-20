@@ -5,8 +5,8 @@
  *
  * Usage: node import.js [CSV file]
  */
-import fs from "fs/promises";
 import path from "path";
+import CSV from "./csv.js";
 import Format from "./format.js";
 import { Sequelize, DataTypes } from "sequelize";
 
@@ -34,7 +34,7 @@ const dbFields = {
         primaryKey: true,
         autoIncrement: true
     },
-    itemID: {
+    archiveID: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
@@ -48,6 +48,14 @@ const dbFields = {
     },
     modified: {
         type: DataTypes.DATE,
+        allowNull: false
+    },
+    newest: {
+        type: DataTypes.DATE,
+        allowNull: true
+    },
+    entries: {
+        type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
     attr: {
@@ -70,6 +78,14 @@ const dbFields = {
         type: DataTypes.STRING(128),
         allowNull: false
     },
+    path: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    disk: {
+        type: DataTypes.STRING(255),
+        allowNull: true
+    },
     photo: {
         type: DataTypes.STRING(128),
         allowNull: true
@@ -78,12 +94,8 @@ const dbFields = {
         type: DataTypes.STRING(16),
         allowNull: true
     },
-    path: {
-        type: DataTypes.STRING(255),
-        allowNull: false
-    },
-    disk: {
-        type: DataTypes.STRING(255),
+    thumb: {
+        type: DataTypes.STRING(128),
         allowNull: true
     },
     comment: {
@@ -215,7 +227,7 @@ async function addRows(db, table, rows)
  */
 async function main(argc, argv, errors)
 {
-    let file;
+    let csv;
     printf("import.js %s\n%s\n\nArguments: %s\n", "1.0", "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>", argv[0]);
     if (argv.help) {
         options.help.handler();
@@ -225,11 +237,12 @@ async function main(argc, argv, errors)
         errors.push("Missing CSV file");
     } else {
         try {
-            file = await fs.open(argv[1], 'r');
+            csv = new CSV();
+            await csv.open(argv[1]);
         }
         catch (error) {
             errors.push("Unable to open CSV file: " + error.message);
-        };
+        }
     }
     if (errors.length) {
         for (let error of errors) {
@@ -237,102 +250,6 @@ async function main(argc, argv, errors)
         }
         return;
     }
-
-    let csvLines = [];
-    let csvFields = [];
-    const chunkSize = 512 * 1024;
-    const stats = await file.stat();
-    const fileSize = stats.size;
-    let buffer = Buffer.alloc(chunkSize), bytesRead = 0, remainingLine = "";
-
-    let getMoreLines = async function() {
-        let lines = [];
-        if (bytesRead < fileSize) {
-            const result = await file.read(buffer, 0, chunkSize, bytesRead);
-            if (result.bytesRead) {
-                bytesRead += result.bytesRead;
-                const chunk = remainingLine + buffer.subarray(0, result.bytesRead).toString("utf8");
-                remainingLine = "";
-                lines = chunk.split(/(\r?\n)/);
-                if (bytesRead < fileSize && !lines[lines.length - 1].match(/\r?\n$/)) {
-                    remainingLine = lines.pop();
-                }
-            }
-        }
-        return lines;
-    };
-
-    let getNextLine = async function() {
-        if (!csvLines.length) {
-            csvLines = await getMoreLines();
-        }
-        if (!csvLines.length) {
-            return null;
-        }
-        return csvLines.shift();
-    };
-
-    let getNextRow = async function(fields) {
-        let line = await getNextLine();
-        if (line == "\n") {
-            line = await getNextLine();
-        }
-        if (line == null) {
-            return null;
-        }
-        if (!csvFields.length) {
-            csvFields = line.split(",");
-            line = await getNextLine();
-            if (line == "\n") {
-                line = await getNextLine();
-            }
-            if (line == null) {
-                return null;
-            }
-        }
-        let csvRow = {};
-        let i = 0, field = "";
-        let nextField = 0, inQuotes = false, inField = false;
-        while (i < line.length || inField) {
-            if (i >= line.length) {
-                if (!inQuotes) break;
-                line = await getNextLine();
-                if (line == null) break;
-                i = 0;
-                continue;
-            }
-            let char = line[i++];
-            if (!inQuotes) {
-                if (char == ',') {
-                    csvRow[csvFields[nextField++]] = field;
-                    field = "";
-                    inField = false;
-                } else if (char == '"' && !inField) {
-                    inQuotes = inField = true;
-                } else {
-                    field += char;
-                    inField = true;
-                }
-            }
-            else if (char == '"') {
-                let nextChar = line[i];
-                if (nextChar == '"') {
-                    field += '"';
-                    i++;
-                } else if (nextChar == ',' || nextChar == undefined) {
-                    inField = inQuotes = false;
-                } else {
-                    printf("error in line: '%s'\n", line);
-                }
-            } else {
-                field += char;
-            }
-        }
-        if (field) {
-            csvRow[csvFields[nextField++]] = field;
-        }
-        return csvRow;
-    };
 
     if (argv.database && argv.table) {
         let db = dbInit(dbConfig, argv.database);
@@ -346,37 +263,47 @@ async function main(argc, argv, errors)
             //
             let table = argv.table;
             let drop = argv.drop || false;
-            db.models[table] = db.sequelize.define(table, dbFields, {timestamps: false});
+            //
+            // Set 'timestamps' to false so that sequelize doesn't add 'createdAt' and 'updatedAt' fields,
+            // and set 'freezeTableName' to true so that sequelize doesn't pluralize the table name.
+            //
+            db.models[table] = db.sequelize.define(table, dbFields, {timestamps: false, freezeTableName: true});
             await db.models[table].sync( { force: drop });
-            let csvRows = [];
+            let rows = [];
             let totalRows = 0;
 
             while (true) {
-                let csvRow = await getNextRow();
-                if (csvRow == null) {
+                let row = await csv.getNextRow();
+                if (row == null) {
                     break;
                 }
                 //
                 // We do some data sanity checks and fixups next...
                 //
-                if (csvRow.name && csvRow.name.length <= 255) {
-                    if (!csvRow.photo) {
-                        csvRow.photo = null;
+                if (row.name && row.name.length <= 255) {
+                    if (!row.newest) {
+                        row.newest = null;
                     }
-                    if (!csvRow.dimensions) {
-                        csvRow.dimensions = null;
+                    if (!row.photo) {
+                        row.photo = null;
                     }
-                    if (csvRow.warnings && csvRow.warnings.length > 128) {
-                        csvRow.warnings = csvRow.warnings.substring(0, 128);
+                    if (!row.thumb) {
+                        row.thumb = null;
                     }
-                    if (!csvRow.comment) {
-                        csvRow.comment = null;
+                    if (!row.dimensions) {
+                        row.dimensions = null;
                     }
-                    if (csvRow.modified && db.config.utc) {
-                        csvRow.modified = new Date(csvRow.modified + db.config.timeZone);
+                    if (row.warnings && row.warnings.length > 128) {
+                        row.warnings = row.warnings.substring(0, 128);
                     }
-                    if (csvRow.attr) {
-                        csvRow.attr &= 0xff;
+                    if (!row.comment) {
+                        row.comment = null;
+                    }
+                    if (row.modified && db.config.utc) {
+                        row.modified = new Date(row.modified + db.config.timeZone);
+                    }
+                    if (row.attr) {
+                        row.attr &= 0xff;
                     }
                     //
                     // This code is no longer needed, since we now set 'timestamps' to false,
@@ -385,19 +312,22 @@ async function main(argc, argv, errors)
                     // if (db.config.utc) {
                     //     let date = new Date();
                     //     date = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
-                    //     csvRow.createdAt = csvRow.updatedAt = date;
+                    //     row.createdAt = row.updatedAt = date;
                     // }
-                    csvRows.push(csvRow);
+                    rows.push(row);
                 }
-                if (csvRows.length % 10000 == 0) {
-                    totalRows += await addRows(db, table, csvRows);
+                else {
+                    printf("warning: skipping row %s\n", JSON.stringify(row));
+                }
+                if (rows.length % 10000 == 0) {
+                    totalRows += await addRows(db, table, rows);
                     printf("Added %d rows...\n", totalRows);
-                    csvRows = [];
+                    rows = [];
                 }
             }
-            totalRows += await addRows(db, table, csvRows);
+            totalRows += await addRows(db, table, rows);
             printf("Added %d rows...\n", totalRows);
-            await file.close();
+            await csv.close();
         })
         .catch(error => {
             printf(error.message);
