@@ -1114,6 +1114,7 @@ async function main(argc, argv, errors)
         let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
         if ((argv.list || argv.test) && !argv.csv && nFiles && nWarnings >= 0 || argv.verbose) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+            heading = false;
         }
         nTotalWarnings += nWarnings;
     }
