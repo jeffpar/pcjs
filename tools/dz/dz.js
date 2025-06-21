@@ -126,6 +126,15 @@ const options = {
         description: "display debug information",
         internal: true
     },
+    "desc": {
+        type: "boolean",
+        usage: "--desc",
+        description: "generate an archive description",
+        internal: true
+        //
+        // NOTE: This generated "description" is currently nothing more than a directory listing (slightly more compact than --list)
+        //
+    },
     "dir": {
         type: "string",
         usage: "--dir [dir]",
@@ -238,6 +247,12 @@ const options = {
         usage: "--test",
         alias: "-t",
         description: "test contents of specified archive(s)"
+    },
+    "upload": {
+        type: "boolean",
+        usage: "--upload",
+        alias: "-u",
+        description: "generate an upload script for the Internet Archive"
     },
     "verbose": {
         type: "boolean",
@@ -466,9 +481,11 @@ function getList(text)
  */
 async function main(argc, argv, errors)
 {
-    printf("dz.js %s\n%s\n\nArguments: %s\n", DZip.VERSION, DZip.COPYRIGHT, argv[0]);
-    if (argv.help) {
-        options.help.handler();
+    if (argv.help || argv.verbose) {
+        printf("dz.js %s\n%s\n\nArguments: %s\n", DZip.VERSION, DZip.COPYRIGHT, argv[0]);
+        if (argv.help) {
+            options.help.handler();
+        }
     }
     //
     // Before we get started, display any usage errors encountered by parseArgs().
@@ -561,12 +578,16 @@ async function main(argc, argv, errors)
                     items++;
                 } while (true);
                 await csv.close();
-                printf("Found %d archive%s in specified CSV file\n", items);
+                if (!argv.upload) {
+                    printf("Found %d archive%s in specified CSV file\n", items);
+                }
             } else {
                 let text = await fs.readFile(argv.batch, "utf8");
                 let list = getList(text);
                 itemList = itemList.concat(list);
-                printf("Found %d archive%s in specified batch file\n", list.length);
+                if (!argv.upload) {
+                    printf("Found %d archive%s in specified batch file\n", list.length);
+                }
             }
         } catch (error) {
             printf("%s\n", error.message);
@@ -616,7 +637,7 @@ async function main(argc, argv, errors)
             csv = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings\n");
+                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,disk,path,name,photo,dimensions,thumb,comment,warnings\n");
             }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
@@ -709,12 +730,12 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,name,path,disk,photo,dimensions,thumb,comment,warnings
+            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,disk,path,name,photo,dimensions,thumb,comment,warnings
             //
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                 itemID, archiveID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
-                entryMethod, enquote(entryName), enquote(entryPath), enquote(entryDisk), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
+                entryMethod, enquote(entryDisk), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
             );
             return line;
         };
@@ -760,7 +781,7 @@ async function main(argc, argv, errors)
                 archiveClass = iso;
             }
             if (!archiveClass) {
-                throw new Error(`unrecognized archive type (${archiveExt})`);
+                throw new Error(`unrecognized archive type ${archiveExt}`);
             }
             archive = await archiveClass.open(archivePath, archiveDB, options);
         } catch (error) {
@@ -899,6 +920,28 @@ async function main(argc, argv, errors)
                 }
                 await csv.write(getCSVLine(archive, archive.db));
             }
+            if (argv.upload) {
+                let label = (archive.label || srcBase).replace(/ /g, "-").toUpperCase();
+                let id = "ms-technet-" + label.toLowerCase();
+                let title = format.sprintf("Microsoft TechNet %s Disc - %F %Y", label, archive.modified);
+                let files = [];
+                printf("# uploading %s\n", archive.name);
+                printf("cp \"%s\" \"%s%s\"\n", archive.name, label, archiveExt);
+                files.push(`${label}${archiveExt}`);
+                if (archivePhoto) {
+                    let match = archivePhoto.match(/^(.*?)(\.[^.]+)$/);
+                    if (match) {
+                        let photoExt = match[2].toLowerCase();
+                        printf("cp \"%s/%s\" \"%s%s\"\n", path.dirname(archive.name), archivePhoto, label, photoExt);
+                        files.push(`${label}${photoExt}`);
+                    }
+                }
+                printf("node dz.js \"%s%s\" --list > desc.txt\n", label, archiveExt);
+                printf("upload.py %s \"%s\" %Y-%02M-%02D desc.txt %s\n", id, title, archive.modified, archive.modified, archive.modified, files.join(" "));
+                for (let fileName of files) {
+                    printf("rm \"%s\"\n", fileName);
+                }
+            }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
                     if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
@@ -915,7 +958,11 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment && !nArchiveFiles) {
                         printf("%s\n", archive.comment);
                     }
-                    if (argv.list) {
+                    if (argv.desc) {
+                        // printf("\nFilename             Size   Date       Time       Path\n");
+                        // printf(  "--------             ----   ----       ----       ----\n");
+                    }
+                    else if (argv.list) {
                         printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
                         printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
                     }
@@ -1041,20 +1088,24 @@ async function main(argc, argv, errors)
                         printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                     }
                 }
-                nArchiveWarnings += entry.warnings.length? 1 : 0;
-                entry.methodName = archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
-                if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
-                    entry.methodName += '*';
+                let name = path.basename(entry.name);
+                if (name.length > 14) {
+                    name = "…" + name.slice(-13);
                 }
-                if (argv.list) {
+                nArchiveWarnings += entry.warnings.length? 1 : 0;
+                if (argv.desc) {
+                    let entryName = name == entry.name? "" : "   " + entry.name;
+                    printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                }
+                else if (argv.list) {
+                    entry.methodName = archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
+                    if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
+                        entry.methodName += '*';
+                    }
                     if (argv.csv) {
                         await csv.write(getCSVLine(entry, db));
                     }
                     else {
-                        let name = path.basename(entry.name);
-                        if (name.length > 14) {
-                            name = "…" + name.slice(-13);
-                        }
                         let comment;
                         if (entry.warnings.length) {
                             comment = '[' + entry.warnings.join("; ") + ']';
@@ -1137,19 +1188,23 @@ async function main(argc, argv, errors)
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
         let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
-        if ((argv.list || argv.test) && !argv.csv && nFiles && nWarnings >= 0 || argv.verbose) {
+        if (!argv.csv && !argv.upload) {
             printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
             heading = false;
         }
         nTotalWarnings += nWarnings;
     }
-    if (nTotalArchives > 1) {
+    if (nTotalArchives > 1 && !argv.upload) {
         printf("\n%d total archive%s, %d total file%s, %d total warning%s\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     }
     if (csv) {
         await csv.close();
         if (argv.fileID) {
             printf("Use --fileID=%d --setID=%d for the next CSV\n", fileID, ++setID);
+        }
+    } else {
+        if (!itemList.length) {
+            printf("nothing to do\n");
         }
     }
 }

@@ -413,7 +413,7 @@ export default class Struct {
                     // for the location and type of volume descriptor in an ISO 9660 image, so don't panic.
                     //
                     warnings.push(`Invalid date (${date})`);
-                    v = new Date(0);    // Use epoch as fallback
+                    v = null;
                 }
                 if (tz < -48 || tz > 52) {
                     warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);

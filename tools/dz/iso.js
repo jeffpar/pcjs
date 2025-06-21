@@ -412,7 +412,7 @@ export default class ISO {
         let image = {
             name,                       // name of the image file
             source: "",
-            modified: options.modified, // modification date of image file
+            modified: null,             // modification date of image file
             size: 0,                    // size of the image file
             db: null,                   // DataBuffer, if any
             file: null,                 // file handle, if any
@@ -423,6 +423,7 @@ export default class ISO {
             exceptions: 0,              // see ISO.EXCEPTIONS.*
             warnings: []                // array of image warnings, if any
         };
+        image.modified = options.modified;
         //
         // If a DataBuffer (db) is provided, then no reading is required.
         //
@@ -583,6 +584,7 @@ export default class ISO {
             throw new Error("Unrecognized disc image");
         }
         image.lbaMax = Math.floor(image.size / image.primary.blockSize);
+        image.modified = image.primary.created || image.modified;
         return image;
     }
 
