@@ -12,7 +12,7 @@ This directory contains [DZ](dz.js), a stand-alone JavaScript command-line utili
 
 [DZip](dzip.js) in turn relies on the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
 
-This tool also assists with uploads to the [Internet Archive](https://archive.org).  More details on the [Upload Process](#uploading-files-to-the-internet-archive) are below.
+This tool can also assist with [uploading files](#uploading-files-to-the-internet-archive) to the [Internet Archive](https://archive.org).
 
 ### Basic Usage
 
