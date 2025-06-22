@@ -284,7 +284,7 @@ const options = {
         alias: "-h",
         description: "display this help message",
         handler: function() {
-            printf("\nUsage:\n    %s [options] [archives]\n", path.basename(process.argv[1]));
+            printf("\nUsage:\n    %s [option(s)] [archive(s)]\n", path.basename(process.argv[1]));
             printf("\nProcesses ZIP, ARC, IMG, ISO and other archives\n");
             printf("\nOptions:\n");
             for (let key in options) {
@@ -960,6 +960,7 @@ async function main(argc, argv, errors)
                 files.unshift("desc.txt");
                 printf("python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
                 printf("rm %s\n", files.join(" "));
+                printf("sleep 600\n");      // TODO: consider a --wait option, because I have no idea what upload rate they consider "too fast"
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
