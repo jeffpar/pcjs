@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DZip Browser Test</title>
+  <title>DZ Browser Test Page</title>
   <style>
     textarea {
       width: 100%;
@@ -15,13 +15,13 @@
 </head>
 <body>
   <h1>DZip Browser Test</h1>
-  <button id="dzipButton">DZip</button>
-  <textarea id="zipOutput" readonly></textarea>
+  <button id="dzButton">Read File</button>
+  <textarea id="dzOutput" readonly></textarea>
   <script type="module">
     import Format from "./format.js";
     import DZip from "./dzip.js";
     import * as pako from "./pako.esm.mjs";
-    document.getElementById('dzipButton').addEventListener('click', async () => {
+    document.getElementById('dzButton').addEventListener('click', async () => {
       const dzip = new DZip({
           fetch: window.fetch.bind(window),
           inflateSync: pako.inflateRaw
@@ -29,19 +29,18 @@
       const format = new Format();
       const printf = function(...args) {
           let s = format.sprintf(...args);
-          zipOutput.value += s;
+          dzOutput.value += s;
       };
-      const urlZIP = "http://software/archives/DEFAULT_FILES.ZIP";
-      // const urlZIP = "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
+      const urlArchive = "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
       try {
-          printf("Fetching ZIP file...\n");
-          let archive = await dzip.open(urlZIP);
+          printf("Fetching archive...\n");
+          let archive = await dzip.open(urlArchive);
           if (!archive) {
-              printf("Failed to open ZIP archive\n");
+              printf("Failed to open archive\n");
               return;
           }
           let entries = await dzip.readDirectory(archive);
-          printf("Found %d entries in ZIP archive\n", entries.length);
+          printf("Found %d entries in archive\n", entries.length);
           for (let entry of entries) {
               if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
                   continue;

@@ -132,7 +132,7 @@ const options = {
         description: "generate an archive description",
         internal: true
         //
-        // NOTE: This generated "description" is currently nothing more than a directory listing (slightly more compact than --list)
+        // NOTE: This generated "description" is currently nothing more than a truncated directory listing (more compact than --list)
         //
     },
     "dir": {
@@ -651,8 +651,8 @@ async function main(argc, argv, errors)
         dzip.enableWarnings();
         iso.enableWarnings();
     }
-    let heading = false;
     let bannerHashes = {};
+    let heading = false, truncateDesc = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalArchives = 0, nTotalFiles = 0, nTotalWarnings = 0;
     //
@@ -921,33 +921,43 @@ async function main(argc, argv, errors)
                 await csv.write(getCSVLine(archive, archive.db));
             }
             if (argv.upload) {
+                //
+                // We require that archive.name refer to a file in a path of the form:
+                //
+                //      .../[publisher]/[category]/filename.ext
+                //
+                // So let's extract the publisher and category values from the path now.
+                //
+                let pathParts = path.dirname(archive.name).split(path.sep);
+                let publisher = pathParts[pathParts.length - 2] || "Unknown Publisher";     // eg. Microsoft
+                let category = pathParts[pathParts.length - 1] || "Unknown Category";       // eg. TechNet
                 let label = (archive.label || srcBase).replace(/ /g, "-").toUpperCase();
                 let id = "ms-technet-" + label.toLowerCase();
-                let title = format.sprintf("Microsoft TechNet %s Disc - %F %Y", label, archive.modified);
-                let files = [];
-                printf("# uploading %s\n", archive.name);
-                printf("cp \"%s\" \"%s%s\"\n", archive.name, label, archiveExt);
-                files.push(`${label}${archiveExt}`);
+                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified);
+                let files = [], targetName = label + archiveExt;
+                printf("# uploading %s\n", path.basename(archive.name));
+                printf("cp \"%s\" %s\n", archive.name, targetName);
+                files.push(targetName);
                 if (archivePhoto) {
                     let match = archivePhoto.match(/^(.*?)(\.[^.]+)$/);
                     if (match) {
-                        let photoExt = match[2].toLowerCase();
-                        printf("cp \"%s/%s\" \"%s%s\"\n", path.dirname(archive.name), archivePhoto, label, photoExt);
-                        files.push(`${label}${photoExt}`);
+                        let targetExt = match[2].toLowerCase();
+                        let targetName = label + targetExt;
+                        printf("cp \"%s/%s\" %s\n", path.dirname(archive.name), archivePhoto, targetName);
+                        files.push(targetName);
                     }
                 }
-                printf("node dz.js \"%s%s\" --list > desc.txt\n", label, archiveExt);
-                printf("upload.py %s \"%s\" %Y-%02M-%02D desc.txt %s\n", id, title, archive.modified, archive.modified, archive.modified, files.join(" "));
-                for (let fileName of files) {
-                    printf("rm \"%s\"\n", fileName);
-                }
+                printf("node dz.js \"%s%s\" --desc > desc.txt\n", label, archiveExt);
+                files.unshift("desc.txt");
+                printf("python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                printf("rm %s\n", files.join(" "));
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
-                    if (argv.banner && archive.comment || argv.list || (argv.extract || argv.dir)) {
-                        if (argv.list) printf("\n");
+                    if (argv.banner && archive.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
+                        if (argv.desc || argv.list) printf("\n");
                         if (!nArchiveFiles || argv.list) {
-                            printf("%s%s%s\n", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
+                            printf("%s%s%s%s\n", argv.desc? "Directory of " : "", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
                         }
                     }
                     //
@@ -959,6 +969,7 @@ async function main(argc, argv, errors)
                         printf("%s\n", archive.comment);
                     }
                     if (argv.desc) {
+                        printf("\n");
                         // printf("\nFilename             Size   Date       Time       Path\n");
                         // printf(  "--------             ----   ----       ----       ----\n");
                     }
@@ -1095,7 +1106,15 @@ async function main(argc, argv, errors)
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.desc) {
                     let entryName = name == entry.name? "" : "   " + entry.name;
-                    printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                    if (entryName) {
+                        if (!truncateDesc) {
+                            printf("...\n");
+                        }
+                        truncateDesc = true;
+                    }
+                    if (!truncateDesc) {
+                        printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                    }
                 }
                 else if (argv.list) {
                     entry.methodName = archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
@@ -1189,7 +1208,10 @@ async function main(argc, argv, errors)
         //
         let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
         if (!argv.csv && !argv.upload) {
-            printf("%s%s: %d file%s, %d warning%s\n", argv.list && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+            printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+            if (argv.desc) {
+                printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dz\n");
+            }
             heading = false;
         }
         nTotalWarnings += nWarnings;
