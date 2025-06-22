@@ -929,11 +929,20 @@ async function main(argc, argv, errors)
                 // So let's extract the publisher and category values from the path now.
                 //
                 let pathParts = path.dirname(archive.name).split(path.sep);
-                let publisher = pathParts[pathParts.length - 2] || "Unknown Publisher";     // eg. Microsoft
-                let category = pathParts[pathParts.length - 1] || "Unknown Category";       // eg. TechNet
+                let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
+                let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
                 let label = (archive.label || srcBase).replace(/ /g, "-").toUpperCase();
-                let id = "ms-technet-" + label.toLowerCase();
-                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified);
+                let id = "";
+                if (publisher) {
+                    id += publisher.toLowerCase().replace(/ /g, '-');
+                    if (id == "microsoft") id = "ms";
+                    id += '-';
+                }
+                if (category) {
+                    id += category.toLowerCase().replace(/ /g, '-') + '-';
+                }
+                id += label.toLowerCase();
+                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified).trim();
                 let files = [], targetName = label + archiveExt;
                 printf("# uploading %s\n", path.basename(archive.name));
                 printf("cp \"%s\" %s\n", archive.name, targetName);
