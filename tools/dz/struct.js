@@ -415,12 +415,14 @@ export default class Struct {
                     warnings.push(`Invalid date (${date})`);
                     v = null;
                 }
-                if (tz < -48 || tz > 52) {
-                    warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);
-                    tz = 0;
-                }
-                if (tz) {
-                    v.setTime(v.getTime() + tz * 15 * 60 * 1000);
+                if (v) {
+                    if (tz < -48 || tz > 52) {
+                        warnings.push(`Time zone offset ${tz} outside valid range (-48 to +52)`);
+                        tz = 0;
+                    }
+                    if (tz) {
+                        v.setTime(v.getTime() + tz * 15 * 60 * 1000);
+                    }
                 }
                 break;
             default:

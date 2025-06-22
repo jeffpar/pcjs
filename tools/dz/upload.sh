@@ -1,4 +1,403 @@
 set -x
+# # uploading MSTN-CD034-9908BetaCD1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.iso" 9908BETACD1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.png" 9908BETACD1.png
+# node dz.js "9908BETACD1.iso" --desc > desc.txt
+# python upload.py ms-technet-9908-betacd1 "Microsoft TechNet 9908BETACD1 Disc (July 1999)" 1999-07-14 "Microsoft" "TechNet" desc.txt 9908BETACD1.iso 9908BETACD1.png
+# rm desc.txt 9908BETACD1.iso 9908BETACD1.png
+# sleep 600
+# # uploading MSTN-CD177-ARMEFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.png" ARMEFPP_EN.png
+# node dz.js "ARMEFPP_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" 2005-03-25 "Microsoft" "TechNet" desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
+# rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
+# sleep 600
+# # uploading MSTN-CD194-BETA_EN_0223.05.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.iso" BETA_EN_0223.05.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.png" BETA_EN_0223.05.png
+# node dz.js "BETA_EN_0223.05.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.05 "Microsoft TechNet BETA_EN_0223.05 Disc (November 2005)" 2005-11-09 "Microsoft" "TechNet" desc.txt BETA_EN_0223.05.iso BETA_EN_0223.05.png
+# rm desc.txt BETA_EN_0223.05.iso BETA_EN_0223.05.png
+# sleep 600
+# # uploading MSTN-CD202-BETA_EN_0223.06.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD202-BETA_EN_0223.06.iso" BETA_EN_0223.06.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD202-BETA_EN_0223.06.png" BETA_EN_0223.06.png
+# node dz.js "BETA_EN_0223.06.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.06 "Microsoft TechNet BETA_EN_0223.06 Disc (December 2005)" 2005-12-11 "Microsoft" "TechNet" desc.txt BETA_EN_0223.06.iso BETA_EN_0223.06.png
+# rm desc.txt BETA_EN_0223.06.iso BETA_EN_0223.06.png
+# sleep 600
+# # uploading MSTN-CD217-BETA_EN_0223.07.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD217-BETA_EN_0223.07.iso" BETA_EN_0223.07.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD217-BETA_EN_0223.07.png" BETA_EN_0223.07.png
+# node dz.js "BETA_EN_0223.07.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.07 "Microsoft TechNet BETA_EN_0223.07 Disc (January 2006)" 2006-01-09 "Microsoft" "TechNet" desc.txt BETA_EN_0223.07.iso BETA_EN_0223.07.png
+# rm desc.txt BETA_EN_0223.07.iso BETA_EN_0223.07.png
+# sleep 600
+# # uploading MSTN-CD231-BETA_EN_0223.08.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD231-BETA_EN_0223.08.iso" BETA_EN_0223.08.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD231-BETA_EN_0223.08.png" BETA_EN_0223.08.png
+# node dz.js "BETA_EN_0223.08.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.08 "Microsoft TechNet BETA_EN_0223.08 Disc (March 2006)" 2006-03-06 "Microsoft" "TechNet" desc.txt BETA_EN_0223.08.iso BETA_EN_0223.08.png
+# rm desc.txt BETA_EN_0223.08.iso BETA_EN_0223.08.png
+# sleep 600
+# # uploading MSTN-CD240-BETA_EN_0223.09.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD240-BETA_EN_0223.09.iso" BETA_EN_0223.09.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD240-BETA_EN_0223.09.png" BETA_EN_0223.09.png
+# node dz.js "BETA_EN_0223.09.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.09 "Microsoft TechNet BETA_EN_0223.09 Disc (April 2006)" 2006-04-06 "Microsoft" "TechNet" desc.txt BETA_EN_0223.09.iso BETA_EN_0223.09.png
+# rm desc.txt BETA_EN_0223.09.iso BETA_EN_0223.09.png
+# sleep 600
+# # uploading MSTN-CD248-BETA_EN_0223.10.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD248-BETA_EN_0223.10.iso" BETA_EN_0223.10.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD248-BETA_EN_0223.10.png" BETA_EN_0223.10.png
+# node dz.js "BETA_EN_0223.10.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.10 "Microsoft TechNet BETA_EN_0223.10 Disc (May 2006)" 2006-05-08 "Microsoft" "TechNet" desc.txt BETA_EN_0223.10.iso BETA_EN_0223.10.png
+# rm desc.txt BETA_EN_0223.10.iso BETA_EN_0223.10.png
+# sleep 600
+# # uploading MSTN-CD255-BETA_EN_0223.11.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD255-BETA_EN_0223.11.iso" BETA_EN_0223.11.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD255-BETA_EN_0223.11.png" BETA_EN_0223.11.png
+# node dz.js "BETA_EN_0223.11.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.11 "Microsoft TechNet BETA_EN_0223.11 Disc (June 2006)" 2006-06-05 "Microsoft" "TechNet" desc.txt BETA_EN_0223.11.iso BETA_EN_0223.11.png
+# rm desc.txt BETA_EN_0223.11.iso BETA_EN_0223.11.png
+# sleep 600
+# # uploading MSTN-CD259-BETA_EN_0223.12.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD259-BETA_EN_0223.12.iso" BETA_EN_0223.12.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD259-BETA_EN_0223.12.png" BETA_EN_0223.12.png
+# node dz.js "BETA_EN_0223.12.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.12 "Microsoft TechNet BETA_EN_0223.12 Disc (June 2006)" 2006-06-28 "Microsoft" "TechNet" desc.txt BETA_EN_0223.12.iso BETA_EN_0223.12.png
+# rm desc.txt BETA_EN_0223.12.iso BETA_EN_0223.12.png
+# sleep 600
+# # uploading MSTN-CD274-BETA_EN_0223.13.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD274-BETA_EN_0223.13.iso" BETA_EN_0223.13.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD274-BETA_EN_0223.13.png" BETA_EN_0223.13.png
+# node dz.js "BETA_EN_0223.13.iso" --desc > desc.txt
+# python upload.py ms-technet-beta_en_0223.13 "Microsoft TechNet BETA_EN_0223.13 Disc (August 2006)" 2006-08-01 "Microsoft" "TechNet" desc.txt BETA_EN_0223.13.iso BETA_EN_0223.13.png
+# rm desc.txt BETA_EN_0223.13.iso BETA_EN_0223.13.png
+# sleep 600
+# # uploading MSTN-CD070-BetaCD10310.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.iso" BETACD10310.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.png" BETACD10310.png
+# node dz.js "BETACD10310.iso" --desc > desc.txt
+# python upload.py ms-technet-betacd10310 "Microsoft TechNet BETACD10310 Disc (September 2003)" 2003-09-09 "Microsoft" "TechNet" desc.txt BETACD10310.iso BETACD10310.png
+# rm desc.txt BETACD10310.iso BETACD10310.png
+# sleep 600
+# # uploading MSTN-CD080-BetaCD10312.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.iso" BETACD10312.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.png" BETACD10312.png
+# node dz.js "BETACD10312.iso" --desc > desc.txt
+# python upload.py ms-technet-betacd10312 "Microsoft TechNet BETACD10312 Disc (November 2003)" 2003-11-06 "Microsoft" "TechNet" desc.txt BETACD10312.iso BETACD10312.png
+# rm desc.txt BETACD10312.iso BETACD10312.png
+# sleep 600
+# # uploading MSTN-CD099-BetaCD10403.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.iso" BETACD10403.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.png" BETACD10403.png
+# node dz.js "BETACD10403.iso" --desc > desc.txt
+# python upload.py ms-technet-betacd10403 "Microsoft TechNet BETACD10403 Disc (February 2004)" 2004-02-11 "Microsoft" "TechNet" desc.txt BETACD10403.iso BETACD10403.png
+# rm desc.txt BETACD10403.iso BETACD10403.png
+# sleep 600
+# # uploading MSTN-CD114-BetaCD10405.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.iso" BETACD10405.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.png" BETACD10405.png
+# node dz.js "BETACD10405.iso" --desc > desc.txt
+# python upload.py ms-technet-betacd10405 "Microsoft TechNet BETACD10405 Disc (April 2004)" 2004-04-11 "Microsoft" "TechNet" desc.txt BETACD10405.iso BETACD10405.png
+# rm desc.txt BETACD10405.iso BETACD10405.png
+# sleep 600
+# # uploading MSTN-CD046-betaCD19911.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.iso" BETACD19911.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.png" BETACD19911.png
+# node dz.js "BETACD19911.iso" --desc > desc.txt
+# python upload.py ms-technet-betacd19911 "Microsoft TechNet BETACD19911 Disc (October 1999)" 1999-10-12 "Microsoft" "TechNet" desc.txt BETACD19911.iso BETACD19911.png
+# rm desc.txt BETACD19911.iso BETACD19911.png
+# sleep 600
+# # uploading MSTN-CD009-BORK2ND_ED.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD009-BORK2ND_ED.iso" BORK2ND_ED.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD009-BORK2ND_ED.png" BORK2ND_ED.png
+# node dz.js "BORK2ND_ED.iso" --desc > desc.txt
+# python upload.py ms-technet-bork2nd_ed "Microsoft TechNet BORK2ND_ED Disc (February 1998)" 1998-02-24 "Microsoft" "TechNet" desc.txt BORK2ND_ED.iso BORK2ND_ED.png
+# rm desc.txt BORK2ND_ED.iso BORK2ND_ED.png
+# sleep 600
+# # uploading MSTN-CD024-Bork4.5Intla.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD024-Bork4.5Intla.iso" BORK4.5INTLA.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD024-Bork4.5Intla.png" BORK4.5INTLA.png
+# node dz.js "BORK4.5INTLA.iso" --desc > desc.txt
+# python upload.py ms-technet-bork4.5intla "Microsoft TechNet BORK4.5INTLA Disc (May 1999)" 1999-05-19 "Microsoft" "TechNet" desc.txt BORK4.5INTLA.iso BORK4.5INTLA.png
+# rm desc.txt BORK4.5INTLA.iso BORK4.5INTLA.png
+# sleep 600
+# # uploading MSTN-CD178-BR0ECD2FRE_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD178-BR0ECD2FRE_EN.iso" BR0ECD2FRE_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD178-BR0ECD2FRE_EN.png" BR0ECD2FRE_EN.png
+# node dz.js "BR0ECD2FRE_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-br0ecd2fre_en "Microsoft TechNet BR0ECD2FRE_EN Disc (August 2005)" 2005-08-26 "Microsoft" "TechNet" desc.txt BR0ECD2FRE_EN.iso BR0ECD2FRE_EN.png
+# rm desc.txt BR0ECD2FRE_EN.iso BR0ECD2FRE_EN.png
+# sleep 600
+# # uploading MSTN-CD216-BRMECD2XFRE_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD216-BRMECD2XFRE_EN.iso" BRMECD2XFRE_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD216-BRMECD2XFRE_EN.png" BRMECD2XFRE_EN.png
+# node dz.js "BRMECD2XFRE_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-brmecd2xfre_en "Microsoft TechNet BRMECD2XFRE_EN Disc (November 2005)" 2005-11-23 "Microsoft" "TechNet" desc.txt BRMECD2XFRE_EN.iso BRMECD2XFRE_EN.png
+# rm desc.txt BRMECD2XFRE_EN.iso BRMECD2XFRE_EN.png
+# sleep 600
+# # uploading MSTN-CD203-BRMEFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD203-BRMEFPP_EN.iso" BRMEFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD203-BRMEFPP_EN.png" BRMEFPP_EN.png
+# node dz.js "BRMEFPP_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-brmefpp_en "Microsoft TechNet BRMEFPP_EN Disc (November 2005)" 2005-11-30 "Microsoft" "TechNet" desc.txt BRMEFPP_EN.iso BRMEFPP_EN.png
+# rm desc.txt BRMEFPP_EN.iso BRMEFPP_EN.png
+# sleep 600
+# # uploading MSTN-CD215-BRMEXFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD215-BRMEXFPP_EN.iso" BRMEXFPP_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD215-BRMEXFPP_EN.png" BRMEXFPP_EN.png
+# node dz.js "BRMEXFPP_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-brmexfpp_en "Microsoft TechNet BRMEXFPP_EN Disc (November 2005)" 2005-11-30 "Microsoft" "TechNet" desc.txt BRMEXFPP_EN.iso BRMEXFPP_EN.png
+# rm desc.txt BRMEXFPP_EN.iso BRMEXFPP_EN.png
+# sleep 600
+# # uploading MSTN-CD066-BTS2002EVAL_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD066-BTS2002EVAL_EN.iso" BTS2002EVAL_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD066-BTS2002EVAL_EN.png" BTS2002EVAL_EN.png
+# node dz.js "BTS2002EVAL_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-bts2002eval_en "Microsoft TechNet BTS2002EVAL_EN Disc (December 2001)" 2001-12-04 "Microsoft" "TechNet" desc.txt BTS2002EVAL_EN.iso BTS2002EVAL_EN.png
+# rm desc.txt BTS2002EVAL_EN.iso BTS2002EVAL_EN.png
+# sleep 600
+# # uploading MSTN-CD176-BTS2004_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.iso" BTS2004_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.png" BTS2004_EN.png
+# node dz.js "BTS2004_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-bts2004_en "Microsoft TechNet BTS2004_EN Disc (October 2005)" 2005-10-09 "Microsoft" "TechNet" desc.txt BTS2004_EN.iso BTS2004_EN.png
+# rm desc.txt BTS2004_EN.iso BTS2004_EN.png
+# sleep 600
+# # uploading MSTN-CD108-BTS2004Eval_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD108-BTS2004Eval_EN.iso" BTS2004EVAL_EN.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD108-BTS2004Eval_EN.png" BTS2004EVAL_EN.png
+# node dz.js "BTS2004EVAL_EN.iso" --desc > desc.txt
+# python upload.py ms-technet-bts2004eval_en "Microsoft TechNet BTS2004EVAL_EN Disc (January 2004)" 2004-01-29 "Microsoft" "TechNet" desc.txt BTS2004EVAL_EN.iso BTS2004EVAL_EN.png
+# rm desc.txt BTS2004EVAL_EN.iso BTS2004EVAL_EN.png
+# sleep 600
+# # uploading MSTN-1996-02-CSD9602.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-02-CSD9602.iso" CSD9602.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-02-CSD9602.png" CSD9602.png
+# node dz.js "CSD9602.iso" --desc > desc.txt
+# python upload.py ms-technet-csd9602 "Microsoft TechNet CSD9602 Disc (January 1996)" 1996-01-17 "Microsoft" "TechNet" desc.txt CSD9602.iso CSD9602.png
+# rm desc.txt CSD9602.iso CSD9602.png
+# sleep 600
+# # uploading MSTN-1996-04-CSD9604.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-04-CSD9604.iso" CSD9604.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-04-CSD9604.jpg" CSD9604.jpg
+# node dz.js "CSD9604.iso" --desc > desc.txt
+# python upload.py ms-technet-csd9604 "Microsoft TechNet CSD9604 Disc (March 1996)" 1996-03-17 "Microsoft" "TechNet" desc.txt CSD9604.iso CSD9604.jpg
+# rm desc.txt CSD9604.iso CSD9604.jpg
+# sleep 600
+# # uploading MSTN-CD336-DL_C0294.01.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD336-DL_C0294.01.iso" DL_C0294.01.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD336-DL_C0294.01.png" DL_C0294.01.png
+# node dz.js "DL_C0294.01.iso" --desc > desc.txt
+# python upload.py ms-technet-dl_c0294.01 "Microsoft TechNet DL_C0294.01 Disc (May 2007)" 2007-05-28 "Microsoft" "TechNet" desc.txt DL_C0294.01.iso DL_C0294.01.png
+# rm desc.txt DL_C0294.01.iso DL_C0294.01.png
+# sleep 600
+# # uploading MSTN-CD049-DOM35ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD049-DOM35ENUC1.iso" DOM35ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD049-DOM35ENUC1.png" DOM35ENUC1.png
+# node dz.js "DOM35ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom35enuc1 "Microsoft TechNet DOM35ENUC1 Disc (October 2002)" 2002-10-15 "Microsoft" "TechNet" desc.txt DOM35ENUC1.iso DOM35ENUC1.png
+# rm desc.txt DOM35ENUC1.iso DOM35ENUC1.png
+# sleep 600
+# # uploading MSTN-CD050-DOM35ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD050-DOM35ENUC2.iso" DOM35ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD050-DOM35ENUC2.png" DOM35ENUC2.png
+# node dz.js "DOM35ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom35enuc2 "Microsoft TechNet DOM35ENUC2 Disc (October 2002)" 2002-10-15 "Microsoft" "TechNet" desc.txt DOM35ENUC2.iso DOM35ENUC2.png
+# rm desc.txt DOM35ENUC2.iso DOM35ENUC2.png
+# sleep 600
+# # uploading MSTN-CD055-DOM46ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD055-DOM46ENUC1.iso" DOM46ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD055-DOM46ENUC1.png" DOM46ENUC1.png
+# node dz.js "DOM46ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom46enuc1 "Microsoft TechNet DOM46ENUC1 Disc (September 2003)" 2003-09-10 "Microsoft" "TechNet" desc.txt DOM46ENUC1.iso DOM46ENUC1.png
+# rm desc.txt DOM46ENUC1.iso DOM46ENUC1.png
+# sleep 600
+# # uploading MSTN-CD056-DOM46ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD056-DOM46ENUC2.iso" DOM46ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD056-DOM46ENUC2.png" DOM46ENUC2.png
+# node dz.js "DOM46ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom46enuc2 "Microsoft TechNet DOM46ENUC2 Disc (September 2003)" 2003-09-10 "Microsoft" "TechNet" desc.txt DOM46ENUC2.iso DOM46ENUC2.png
+# rm desc.txt DOM46ENUC2.iso DOM46ENUC2.png
+# sleep 600
+# # uploading MSTN-CD071-DOM47ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD071-DOM47ENUC1.iso" DOM47ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD071-DOM47ENUC1.png" DOM47ENUC1.png
+# node dz.js "DOM47ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom47enuc1 "Microsoft TechNet DOM47ENUC1 Disc (October 2003)" 2003-10-13 "Microsoft" "TechNet" desc.txt DOM47ENUC1.iso DOM47ENUC1.png
+# rm desc.txt DOM47ENUC1.iso DOM47ENUC1.png
+# sleep 600
+# # uploading MSTN-CD072-DOM47ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD072-DOM47ENUC2.iso" DOM47ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD072-DOM47ENUC2.png" DOM47ENUC2.png
+# node dz.js "DOM47ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom47enuc2 "Microsoft TechNet DOM47ENUC2 Disc (October 2003)" 2003-10-13 "Microsoft" "TechNet" desc.txt DOM47ENUC2.iso DOM47ENUC2.png
+# rm desc.txt DOM47ENUC2.iso DOM47ENUC2.png
+# sleep 600
+# # uploading MSTN-CD084-DOM48ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD084-DOM48ENUC1.iso" DOM48ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD084-DOM48ENUC1.png" DOM48ENUC1.png
+# node dz.js "DOM48ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom48enuc1 "Microsoft TechNet DOM48ENUC1 Disc (November 2003)" 2003-11-11 "Microsoft" "TechNet" desc.txt DOM48ENUC1.iso DOM48ENUC1.png
+# rm desc.txt DOM48ENUC1.iso DOM48ENUC1.png
+# sleep 600
+# # uploading MSTN-CD083-DOM48ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD083-DOM48ENUC2.iso" DOM48ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD083-DOM48ENUC2.png" DOM48ENUC2.png
+# node dz.js "DOM48ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom48enuc2 "Microsoft TechNet DOM48ENUC2 Disc (November 2003)" 2003-11-11 "Microsoft" "TechNet" desc.txt DOM48ENUC2.iso DOM48ENUC2.png
+# rm desc.txt DOM48ENUC2.iso DOM48ENUC2.png
+# sleep 600
+# # uploading MSTN-CD091-DOM49ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD091-DOM49ENUC1.iso" DOM49ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD091-DOM49ENUC1.png" DOM49ENUC1.png
+# node dz.js "DOM49ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom49enuc1 "Microsoft TechNet DOM49ENUC1 Disc (December 2003)" 2003-12-15 "Microsoft" "TechNet" desc.txt DOM49ENUC1.iso DOM49ENUC1.png
+# rm desc.txt DOM49ENUC1.iso DOM49ENUC1.png
+# sleep 600
+# # uploading MSTN-CD090-DOM49ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD090-DOM49ENUC2.iso" DOM49ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD090-DOM49ENUC2.png" DOM49ENUC2.png
+# node dz.js "DOM49ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom49enuc2 "Microsoft TechNet DOM49ENUC2 Disc (December 2003)" 2003-12-15 "Microsoft" "TechNet" desc.txt DOM49ENUC2.iso DOM49ENUC2.png
+# rm desc.txt DOM49ENUC2.iso DOM49ENUC2.png
+# sleep 600
+# # uploading MSTN-CD093-DOM50ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD093-DOM50ENUC1.iso" DOM50ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD093-DOM50ENUC1.png" DOM50ENUC1.png
+# node dz.js "DOM50ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom50enuc1 "Microsoft TechNet DOM50ENUC1 Disc (January 2004)" 2004-01-15 "Microsoft" "TechNet" desc.txt DOM50ENUC1.iso DOM50ENUC1.png
+# rm desc.txt DOM50ENUC1.iso DOM50ENUC1.png
+# sleep 600
+# # uploading MSTN-CD094-DOM50ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD094-DOM50ENUC2.iso" DOM50ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD094-DOM50ENUC2.png" DOM50ENUC2.png
+# node dz.js "DOM50ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom50enuc2 "Microsoft TechNet DOM50ENUC2 Disc (January 2004)" 2004-01-15 "Microsoft" "TechNet" desc.txt DOM50ENUC2.iso DOM50ENUC2.png
+# rm desc.txt DOM50ENUC2.iso DOM50ENUC2.png
+# sleep 600
+# # uploading MSTN-CD103-DOM51ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD103-DOM51ENUC1.iso" DOM51ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD103-DOM51ENUC1.png" DOM51ENUC1.png
+# node dz.js "DOM51ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom51enuc1 "Microsoft TechNet DOM51ENUC1 Disc (February 2004)" 2004-02-12 "Microsoft" "TechNet" desc.txt DOM51ENUC1.iso DOM51ENUC1.png
+# rm desc.txt DOM51ENUC1.iso DOM51ENUC1.png
+# sleep 600
+# # uploading MSTN-CD102-DOM51ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD102-DOM51ENUC2.iso" DOM51ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD102-DOM51ENUC2.png" DOM51ENUC2.png
+# node dz.js "DOM51ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom51enuc2 "Microsoft TechNet DOM51ENUC2 Disc (February 2004)" 2004-02-12 "Microsoft" "TechNet" desc.txt DOM51ENUC2.iso DOM51ENUC2.png
+# rm desc.txt DOM51ENUC2.iso DOM51ENUC2.png
+# sleep 600
+# # uploading MSTN-CD110-DOM52ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD110-DOM52ENUC1.iso" DOM52ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD110-DOM52ENUC1.png" DOM52ENUC1.png
+# node dz.js "DOM52ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom52enuc1 "Microsoft TechNet DOM52ENUC1 Disc (March 2004)" 2004-03-11 "Microsoft" "TechNet" desc.txt DOM52ENUC1.iso DOM52ENUC1.png
+# rm desc.txt DOM52ENUC1.iso DOM52ENUC1.png
+# sleep 600
+# # uploading MSTN-CD109-DOM52ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD109-DOM52ENUC2.iso" DOM52ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD109-DOM52ENUC2.png" DOM52ENUC2.png
+# node dz.js "DOM52ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom52enuc2 "Microsoft TechNet DOM52ENUC2 Disc (March 2004)" 2004-03-11 "Microsoft" "TechNet" desc.txt DOM52ENUC2.iso DOM52ENUC2.png
+# rm desc.txt DOM52ENUC2.iso DOM52ENUC2.png
+# sleep 600
+# # uploading MSTN-CD118-DOM53ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD118-DOM53ENUC1.iso" DOM53ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD118-DOM53ENUC1.png" DOM53ENUC1.png
+# node dz.js "DOM53ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom53enuc1 "Microsoft TechNet DOM53ENUC1 Disc (April 2004)" 2004-04-13 "Microsoft" "TechNet" desc.txt DOM53ENUC1.iso DOM53ENUC1.png
+# rm desc.txt DOM53ENUC1.iso DOM53ENUC1.png
+# sleep 600
+# # uploading MSTN-CD117-DOM53ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD117-DOM53ENUC2.iso" DOM53ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD117-DOM53ENUC2.png" DOM53ENUC2.png
+# node dz.js "DOM53ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom53enuc2 "Microsoft TechNet DOM53ENUC2 Disc (April 2004)" 2004-04-13 "Microsoft" "TechNet" desc.txt DOM53ENUC2.iso DOM53ENUC2.png
+# rm desc.txt DOM53ENUC2.iso DOM53ENUC2.png
+# sleep 600
+# # uploading MSTN-CD123-DOM54ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD123-DOM54ENUC1.iso" DOM54ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD123-DOM54ENUC1.png" DOM54ENUC1.png
+# node dz.js "DOM54ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom54enuc1 "Microsoft TechNet DOM54ENUC1 Disc (May 2004)" 2004-05-12 "Microsoft" "TechNet" desc.txt DOM54ENUC1.iso DOM54ENUC1.png
+# rm desc.txt DOM54ENUC1.iso DOM54ENUC1.png
+# sleep 600
+# # uploading MSTN-CD122-DOM54ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD122-DOM54ENUC2.iso" DOM54ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD122-DOM54ENUC2.png" DOM54ENUC2.png
+# node dz.js "DOM54ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom54enuc2 "Microsoft TechNet DOM54ENUC2 Disc (May 2004)" 2004-05-12 "Microsoft" "TechNet" desc.txt DOM54ENUC2.iso DOM54ENUC2.png
+# rm desc.txt DOM54ENUC2.iso DOM54ENUC2.png
+# sleep 600
+# # uploading MSTN-CD131-Dom55ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD131-Dom55ENUC1.iso" DOM55ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD131-Dom55ENUC1.png" DOM55ENUC1.png
+# node dz.js "DOM55ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom55enuc1 "Microsoft TechNet DOM55ENUC1 Disc (June 2004)" 2004-06-14 "Microsoft" "TechNet" desc.txt DOM55ENUC1.iso DOM55ENUC1.png
+# rm desc.txt DOM55ENUC1.iso DOM55ENUC1.png
+# sleep 600
+# # uploading MSTN-CD129-Dom55ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD129-Dom55ENUC2.iso" DOM55ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD129-Dom55ENUC2.png" DOM55ENUC2.png
+# node dz.js "DOM55ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom55enuc2 "Microsoft TechNet DOM55ENUC2 Disc (June 2004)" 2004-06-14 "Microsoft" "TechNet" desc.txt DOM55ENUC2.iso DOM55ENUC2.png
+# rm desc.txt DOM55ENUC2.iso DOM55ENUC2.png
+# sleep 600
+# # uploading MSTN-CD136-DOM56ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD136-DOM56ENUC1.iso" DOM56ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD136-DOM56ENUC1.png" DOM56ENUC1.png
+# node dz.js "DOM56ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom56enuc1 "Microsoft TechNet DOM56ENUC1 Disc (July 2004)" 2004-07-13 "Microsoft" "TechNet" desc.txt DOM56ENUC1.iso DOM56ENUC1.png
+# rm desc.txt DOM56ENUC1.iso DOM56ENUC1.png
+# sleep 600
+# # uploading MSTN-CD135-DOM56ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD135-DOM56ENUC2.iso" DOM56ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD135-DOM56ENUC2.png" DOM56ENUC2.png
+# node dz.js "DOM56ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom56enuc2 "Microsoft TechNet DOM56ENUC2 Disc (July 2004)" 2004-07-13 "Microsoft" "TechNet" desc.txt DOM56ENUC2.iso DOM56ENUC2.png
+# rm desc.txt DOM56ENUC2.iso DOM56ENUC2.png
+# sleep 600
+# # uploading MSTN-CD146-DOM68ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD146-DOM68ENUC1.iso" DOM68ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD146-DOM68ENUC1.png" DOM68ENUC1.png
+# node dz.js "DOM68ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom68enuc1 "Microsoft TechNet DOM68ENUC1 Disc (July 2005)" 2005-07-12 "Microsoft" "TechNet" desc.txt DOM68ENUC1.iso DOM68ENUC1.png
+# rm desc.txt DOM68ENUC1.iso DOM68ENUC1.png
+# sleep 600
+# # uploading MSTN-CD147-DOM68ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD147-DOM68ENUC2.iso" DOM68ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD147-DOM68ENUC2.png" DOM68ENUC2.png
+# node dz.js "DOM68ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom68enuc2 "Microsoft TechNet DOM68ENUC2 Disc (July 2005)" 2005-07-12 "Microsoft" "TechNet" desc.txt DOM68ENUC2.iso DOM68ENUC2.png
+# rm desc.txt DOM68ENUC2.iso DOM68ENUC2.png
+# sleep 600
+# # uploading MSTN-CD154-DOM69ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD154-DOM69ENUC1.iso" DOM69ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD154-DOM69ENUC1.png" DOM69ENUC1.png
+# node dz.js "DOM69ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom69enuc1 "Microsoft TechNet DOM69ENUC1 Disc (August 2005)" 2005-08-11 "Microsoft" "TechNet" desc.txt DOM69ENUC1.iso DOM69ENUC1.png
+# rm desc.txt DOM69ENUC1.iso DOM69ENUC1.png
+# sleep 600
+# # uploading MSTN-CD155-DOM69ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD155-DOM69ENUC2.iso" DOM69ENUC2.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD155-DOM69ENUC2.png" DOM69ENUC2.png
+# node dz.js "DOM69ENUC2.iso" --desc > desc.txt
+# python upload.py ms-technet-dom69enuc2 "Microsoft TechNet DOM69ENUC2 Disc (August 2005)" 2005-08-11 "Microsoft" "TechNet" desc.txt DOM69ENUC2.iso DOM69ENUC2.png
+# rm desc.txt DOM69ENUC2.iso DOM69ENUC2.png
+# sleep 600
+# # uploading MSTN-CD163-DOM70ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD163-DOM70ENUC1.iso" DOM70ENUC1.iso
+# cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD163-DOM70ENUC1.png" DOM70ENUC1.png
+# node dz.js "DOM70ENUC1.iso" --desc > desc.txt
+# python upload.py ms-technet-dom70enuc1 "Microsoft TechNet DOM70ENUC1 Disc (September 2005)" 2005-09-14 "Microsoft" "TechNet" desc.txt DOM70ENUC1.iso DOM70ENUC1.png
+# rm desc.txt DOM70ENUC1.iso DOM70ENUC1.png
+# sleep 600
 # # uploading MSTN-CD164-DOM70ENUC2.iso
 # cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD164-DOM70ENUC2.iso" DOM70ENUC2.iso
 # cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD164-DOM70ENUC2.png" DOM70ENUC2.png
@@ -13,7 +412,7 @@ set -x
 # python upload.py ms-technet-dom71enuc1 "Microsoft TechNet DOM71ENUC1 Disc (October 2005)" 2005-10-11 "Microsoft" "TechNet" desc.txt DOM71ENUC1.iso DOM71ENUC1.png
 # rm desc.txt DOM71ENUC1.iso DOM71ENUC1.png
 # sleep 600
-# uploading MSTN-CD172-DOM71ENUC2.iso
+# # uploading MSTN-CD172-DOM71ENUC2.iso
 # cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD172-DOM71ENUC2.iso" DOM71ENUC2.iso
 # cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD172-DOM71ENUC2.png" DOM71ENUC2.png
 # node dz.js "DOM71ENUC2.iso" --desc > desc.txt
@@ -495,7 +894,6 @@ cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/
 node dz.js "MSPROJECT11.iso" --desc > desc.txt
 python upload.py ms-technet-msproject11 "Microsoft TechNet MSPROJECT11 Disc (August 2003)" 2003-08-15 "Microsoft" "TechNet" desc.txt MSPROJECT11.iso MSPROJECT11.png
 rm desc.txt MSPROJECT11.iso MSPROJECT11.png
-/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD119-MSSENT04.iso: 2 issues detected
 sleep 600
 # uploading MSTN-CD119-MSSENT04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD119-MSSENT04.iso" MSSENT04.iso
@@ -503,15 +901,13 @@ cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/
 node dz.js "MSSENT04.iso" --desc > desc.txt
 python upload.py ms-technet-mssent04 "Microsoft TechNet MSSENT04 Disc (April 2004)" 2004-04-23 "Microsoft" "TechNet" desc.txt MSSENT04.iso MSSENT04.png
 rm desc.txt MSSENT04.iso MSSENT04.png
-/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD128-MSSENT04.iso: 2 issues detected
 sleep 600
 # uploading MSTN-CD128-MSSENT04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD128-MSSENT04.iso" MSSENT04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD128-MSSENT04.png" MSSENT04.png
 node dz.js "MSSENT04.iso" --desc > desc.txt
-python upload.py ms-technet-mssent04 "Microsoft TechNet MSSENT04 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt MSSENT04.iso MSSENT04.png
+python upload.py ms-technet-mssent04-1 "Microsoft TechNet MSSENT04 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt MSSENT04.iso MSSENT04.png
 rm desc.txt MSSENT04.iso MSSENT04.png
-/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD120-MSSSTD04.iso: 2 issues detected
 sleep 600
 # uploading MSTN-CD120-MSSSTD04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD120-MSSSTD04.iso" MSSSTD04.iso
@@ -519,13 +915,12 @@ cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/
 node dz.js "MSSSTD04.iso" --desc > desc.txt
 python upload.py ms-technet-mssstd04 "Microsoft TechNet MSSSTD04 Disc (April 2004)" 2004-04-23 "Microsoft" "TechNet" desc.txt MSSSTD04.iso MSSSTD04.png
 rm desc.txt MSSSTD04.iso MSSSTD04.png
-/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD127-MSSSTD04.iso: 2 issues detected
 sleep 600
 # uploading MSTN-CD127-MSSSTD04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD127-MSSSTD04.iso" MSSSTD04.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD127-MSSSTD04.png" MSSSTD04.png
 node dz.js "MSSSTD04.iso" --desc > desc.txt
-python upload.py ms-technet-mssstd04 "Microsoft TechNet MSSSTD04 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt MSSSTD04.iso MSSSTD04.png
+python upload.py ms-technet-mssstd04-1 "Microsoft TechNet MSSSTD04 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt MSSSTD04.iso MSSSTD04.png
 rm desc.txt MSSSTD04.iso MSSSTD04.png
 sleep 600
 # uploading MSTN-CD054-NRCFRE3_EN.iso
@@ -553,42 +948,42 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (December 2005)" 2005-12-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-1 "Microsoft TechNet OFFICE11 Disc (December 2005)" 2005-12-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD149-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-2 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD158-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (August 2005)" 2005-08-02 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-3 "Microsoft TechNet OFFICE11 Disc (August 2005)" 2005-08-02 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD343-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (June 2007)" 2007-06-26 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-4 "Microsoft TechNet OFFICE11 Disc (June 2007)" 2007-06-26 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD281-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD281-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD281-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (August 2006)" 2006-08-28 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-5 "Microsoft TechNet OFFICE11 Disc (August 2006)" 2006-08-28 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD150-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD150-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD150-OFFICE11.png" OFFICE11.png
 node dz.js "OFFICE11.iso" --desc > desc.txt
-python upload.py ms-technet-office11 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+python upload.py ms-technet-office11-6 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
 rm desc.txt OFFICE11.iso OFFICE11.png
 sleep 600
 # uploading MSTN-CD308-OFFICE12.iso
@@ -602,28 +997,28 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD309-Office12.iso" OFFICE12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD309-Office12.png" OFFICE12.png
 node dz.js "OFFICE12.iso" --desc > desc.txt
-python upload.py ms-technet-office12 "Microsoft TechNet OFFICE12 Disc (December 2006)" 2006-12-11 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
+python upload.py ms-technet-office12-1 "Microsoft TechNet OFFICE12 Disc (December 2006)" 2006-12-11 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
 rm desc.txt OFFICE12.iso OFFICE12.png
 sleep 600
 # uploading MSTN-CD311-Office12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD311-Office12.iso" OFFICE12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD311-Office12.png" OFFICE12.png
 node dz.js "OFFICE12.iso" --desc > desc.txt
-python upload.py ms-technet-office12 "Microsoft TechNet OFFICE12 Disc (November 2006)" 2006-11-27 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
+python upload.py ms-technet-office12-2 "Microsoft TechNet OFFICE12 Disc (November 2006)" 2006-11-27 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
 rm desc.txt OFFICE12.iso OFFICE12.png
 sleep 600
 # uploading MSTN-CD331-OFFICE12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD331-OFFICE12.iso" OFFICE12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD331-OFFICE12.png" OFFICE12.png
 node dz.js "OFFICE12.iso" --desc > desc.txt
-python upload.py ms-technet-office12 "Microsoft TechNet OFFICE12 Disc (April 2007)" 2007-04-30 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
+python upload.py ms-technet-office12-3 "Microsoft TechNet OFFICE12 Disc (April 2007)" 2007-04-30 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
 rm desc.txt OFFICE12.iso OFFICE12.png
 sleep 600
 # uploading MSTN-CD310-Office12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD310-Office12.iso" OFFICE12.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD310-Office12.png" OFFICE12.png
 node dz.js "OFFICE12.iso" --desc > desc.txt
-python upload.py ms-technet-office12 "Microsoft TechNet OFFICE12 Disc (December 2006)" 2006-12-11 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
+python upload.py ms-technet-office12-4 "Microsoft TechNet OFFICE12 Disc (December 2006)" 2006-12-11 "Microsoft" "TechNet" desc.txt OFFICE12.iso OFFICE12.png
 rm desc.txt OFFICE12.iso OFFICE12.png
 sleep 600
 # uploading MSTN-CD035-PD002CD1.iso
@@ -665,49 +1060,49 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD100-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD100-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (February 2004)" 2004-02-05 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-1 "Microsoft TechNet SB0CD003 Disc (February 2004)" 2004-02-05 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD105-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD105-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD105-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (March 2004)" 2004-03-03 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-2 "Microsoft TechNet SB0CD003 Disc (March 2004)" 2004-03-03 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD116-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD116-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD116-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (April 2004)" 2004-04-11 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-3 "Microsoft TechNet SB0CD003 Disc (April 2004)" 2004-04-11 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD121-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD121-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD121-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (May 2004)" 2004-05-09 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-4 "Microsoft TechNet SB0CD003 Disc (May 2004)" 2004-05-09 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD126-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD126-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD126-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-5 "Microsoft TechNet SB0CD003 Disc (June 2004)" 2004-06-03 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD133-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD133-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD133-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (July 2004)" 2004-07-05 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-6 "Microsoft TechNet SB0CD003 Disc (July 2004)" 2004-07-05 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD143-SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD143-SB0CD003.iso" SB0CD003.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD143-SB0CD003.png" SB0CD003.png
 node dz.js "SB0CD003.iso" --desc > desc.txt
-python upload.py ms-technet-sb0cd003 "Microsoft TechNet SB0CD003 Disc (August 2004)" 2004-08-04 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
+python upload.py ms-technet-sb0cd003-7 "Microsoft TechNet SB0CD003 Disc (August 2004)" 2004-08-04 "Microsoft" "TechNet" desc.txt SB0CD003.iso SB0CD003.png
 rm desc.txt SB0CD003.iso SB0CD003.png
 sleep 600
 # uploading MSTN-CD151-SB0CD005.03.iso
@@ -896,7 +1291,7 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD190-SQLSRVRS.iso" SQLSRVRS.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD190-SQLSRVRS.png" SQLSRVRS.png
 node dz.js "SQLSRVRS.iso" --desc > desc.txt
-python upload.py ms-technet-sqlsrvrs "Microsoft TechNet SQLSRVRS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLSRVRS.iso SQLSRVRS.png
+python upload.py ms-technet-sqlsrvrs-1 "Microsoft TechNet SQLSRVRS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLSRVRS.iso SQLSRVRS.png
 rm desc.txt SQLSRVRS.iso SQLSRVRS.png
 sleep 600
 # uploading MSTN-CD192-SQLTOOLS.iso
@@ -910,7 +1305,7 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.iso" SQLTOOLS.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.png" SQLTOOLS.png
 node dz.js "SQLTOOLS.iso" --desc > desc.txt
-python upload.py ms-technet-sqltools "Microsoft TechNet SQLTOOLS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLTOOLS.iso SQLTOOLS.png
+python upload.py ms-technet-sqltools-1 "Microsoft TechNet SQLTOOLS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLTOOLS.iso SQLTOOLS.png
 rm desc.txt SQLTOOLS.iso SQLTOOLS.png
 sleep 600
 # uploading MSTN-CD153-SQLWKGPx86.iso
@@ -1407,7 +1802,7 @@ sleep 600
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD125-ttt28.iso" TTT28.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD125-ttt28.png" TTT28.png
 node dz.js "TTT28.iso" --desc > desc.txt
-python upload.py ms-technet-ttt28 "Microsoft TechNet TTT28 Disc (June 2004)" 2004-06-07 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
+python upload.py ms-technet-ttt28-1 "Microsoft TechNet TTT28 Disc (June 2004)" 2004-06-07 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
 rm desc.txt TTT28.iso TTT28.png
 sleep 600
 # uploading MSTN-CD041-utility1.iso

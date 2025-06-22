@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "--desc /Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD045-Y2K9911.iso"
+        "--batch technet.csv --upload"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,

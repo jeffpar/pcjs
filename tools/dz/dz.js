@@ -553,7 +553,7 @@ async function main(argc, argv, errors)
     //
     // Build a list of items to process, starting with files listed in a batch file.
     //
-    let itemList = [], fromPCJS = {};
+    let itemList = [], fromPCJS = {}, uploadIDs = [];
     if (argv.batch) {
         try {
             if (argv.batch.match(/\.csv$/i)) {
@@ -922,7 +922,7 @@ async function main(argc, argv, errors)
             }
             if (argv.upload) {
                 //
-                // We require that archive.name refer to a file in a path of the form:
+                // I expect archive.name to refer to a file with a path of the form:
                 //
                 //      .../[publisher]/[category]/filename.ext
                 //
@@ -942,6 +942,11 @@ async function main(argc, argv, errors)
                     id += category.toLowerCase().replace(/ /g, '-') + '-';
                 }
                 id += label.toLowerCase();
+                let origID = id, nextID = 1;
+                while (uploadIDs.includes(id)) {
+                    id = origID + "-" + nextID++;
+                }
+                uploadIDs.push(id);
                 let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified).trim();
                 let files = [], targetName = label + archiveExt;
                 printf("# uploading %s\n", path.basename(archive.name));
