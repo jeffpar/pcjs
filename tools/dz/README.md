@@ -70,7 +70,7 @@ I started by using this utility's `--csv` option to produce a spreadsheet of all
 
 Then I sorted my spreadsheet by volume name, number of entries on the volume, etc, and flagged all the duplicates.  Then I fed the filtered CSV list back into `DZ` with the `--batch` option again, and generated an upload script with the `--upload` option.
 
-Here's an example of what `--upload` produced (which in turn relies upon [upload.py](upload.py)):
+Here's an example of what `--upload` produced:
 
     # uploading MSTN-CD177-ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
@@ -79,6 +79,8 @@ Here's an example of what `--upload` produced (which in turn relies upon [upload
     python upload.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" 2005-03-25 desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
     rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
 
-The upload script modifies my original disc image filename to match the disc's volume name, includes any matching photo image, and uses the `Creation Date` stored in the volume's descriptor as the YYYY-MM-DD to use for the date of the new item.  Note that the `Creation Date` usually pre-dates whatever Microsoft decided to print on the face of the CD-ROM, but I decided that manually extracting and entering all the printed dates from the photo images was an exercise for another day.
+The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](upload.py) to create a new item in the Internet Archive.
+
+NOTE: It uses the `Creation Date` stored in the volume's descriptor as the YYYY-MM-DD to use for the date of the item.  Unfortunately, `Creation Date` usually pre-dates whatever Microsoft decided to print on the face of the CD-ROM, but I decided that manually extracting and entering all the printed dates from the photo images was an exercise for another day.
 
 You can browse the results [here](https://archive.org/details/@jeffpar).
