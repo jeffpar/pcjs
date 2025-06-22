@@ -81,6 +81,6 @@ Here's an example of what `--upload` produced:
 
 The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](upload.py) to create a new item in the Internet Archive.
 
-NOTE: It uses the `Creation Date` stored in the volume's descriptor as the YYYY-MM-DD to use for the date of the item.  Unfortunately, `Creation Date` usually pre-dates whatever Microsoft decided to print on the face of the CD-ROM, but I decided that manually extracting and entering all the printed dates from the photo images was an exercise for another day.
+NOTE: It uses the `Creation Date` stored in the CD-ROM volume's descriptor as the YYYY-MM-DD to use for the date of the item.  Unfortunately, `Creation Date` usually pre-dates whatever Microsoft decided to print on the face of the CD-ROM, but I decided that manually extracting and entering all the printed dates from the photo images was an exercise for another day.
 
 You can browse the results [here](https://archive.org/details/@jeffpar).
