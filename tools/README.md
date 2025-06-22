@@ -8,6 +8,10 @@ permalink: /tools/
 
 [PC.js](pc/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
 
+### DZ.js
+
+[DZ](dz.js) is a JavaScript command-line utility that displays and/or extracts the contents of assorted archives and disk images.
+
 ### DiskImage.js
 
 [DiskImage.js](diskimage/) is a JavaScript command-line application that reads/writes PCjs v2 disk images, using the [DiskInfo](../machines/pcx86/modules/v3/diskinfo.js) module to parse the data.  It supersedes the older PCjs [DiskDump](old/diskdump/) utility.
