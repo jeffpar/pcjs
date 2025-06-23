@@ -2916,10 +2916,10 @@
       }
     },
     {
-      "name": "dz index.html",
+      "name": "dz dzip.html",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/dz/index.html",
+      "url": "http://localhost:4000/tools/dz/dzip.html",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,

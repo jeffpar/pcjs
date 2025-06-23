@@ -26,8 +26,8 @@ Topics covered in the repository itself include:
 
   - [PCjs Disk Images](/tools/diskimage/)
   - [PCjs File Images](/tools/fileimage/)
+  - [PCjs Archive Utility](/tools/dz/)
   - [PCjs Machine Utility](/tools/pc/)
-  - [PCjs Archive Extraction Utility](/tools/dz/)
 
 ### License
 
