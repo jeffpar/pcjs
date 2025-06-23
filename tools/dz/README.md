@@ -4,13 +4,13 @@ title: PCjs Archive Utility
 permalink: /tools/dz/
 ---
 
-This directory contains [DZ](dz.js), a stand-alone JavaScript command-line utility I created for displaying and extracting the contents of assorted archives and disk images.  It is built upon several other stand-alone JavaScript classes, the key ones being:
+This directory contains [DZ.js](dz.js), a stand-alone JavaScript command-line utility I created for displaying and extracting the contents of assorted archives and disk images.  It is built upon several other stand-alone JavaScript classes, the key ones being:
 
-  - [DZip](dzip.js) (to read ZIP and ARC archive files)
-  - [Disk](disk.js) (to read IMG and JSON-encoded disk images used by PCjs)
-  - [ISO](iso.js) (to read ISO, MDF, and other ISO 9660 disc images)
+  - [DZip.js](dzip.js) (to read ZIP and ARC archive files)
+  - [Disk.js](disk.js) (to read IMG and JSON-encoded disk images used by PCjs)
+  - [ISO.js](iso.js) (to read ISO, MDF, and other ISO 9660 disc images)
 
-[DZip](dzip.js) in turn relies on the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
+[DZip.js](dzip.js) in turn relies on the `LegacyARC` and `LegacyZIP` classes in [Legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
 
 This tool can also assist with [uploading files](#uploading-files-to-the-internet-archive) to the [Internet Archive](https://archive.org).
 
