@@ -10,7 +10,7 @@ permalink: /tools/
 
 ### DZ.js
 
-[DZ](dz.js) is a JavaScript command-line utility that displays and/or extracts the contents of assorted archives and disk images.
+[DZ.js](dz/) is a JavaScript command-line utility that can read/list/test/extract the contents of assorted archives and disk images, and can recursively process any number of archives/images within other archives/images.  It also offers a variety of output options, like the ability to produce spreadsheets (CSV files), as well as upload scripts for use with the Internet Archive.
 
 ### DiskImage.js
 
