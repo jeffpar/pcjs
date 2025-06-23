@@ -963,9 +963,12 @@ async function main(argc, argv, errors)
                 }
                 printf("node dz.js \"%s%s\" --desc > desc.txt\n", label, archiveExt);
                 files.unshift("desc.txt");
-                printf("python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                printf("while true; do\n");
+                printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                printf("    if [ $? -eq 0 ]; then break; fi\n");
+                printf("    sleep 300\n");
+                printf("done\n");
                 printf("rm %s\n", files.join(" "));
-                printf("sleep 300\n");      // TODO: consider a --wait option, because I have no idea what upload rate is considered "too fast"
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {

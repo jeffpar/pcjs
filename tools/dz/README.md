@@ -62,15 +62,13 @@ Here is the complete help text:
 
 ### Uploading Files to the Internet Archive
 
-In 2018 and 2019, I digitized lots of CD-ROMs, including hundreds of Microsoft TechNet CD-ROMs, all with the intention of uploading them to the Internet Archive.  However, I was unfamiliar with the process *and* I wanted to avoid uploading images that already existed in the archive.
-
-Having finally written this utility in 2025, I decided it was time to leverage it and start filling gaps in the Internet Archive's collection.
+In 2018 and 2019, I digitized lots of CD-ROMs, including hundreds of Microsoft TechNet CD-ROMs, with the intention of eventually uploading them to the Internet Archive.  However, I was unfamiliar with the process *and* I wanted to avoid uploading images that already existed in the archive, so it wasn't until 2025, with the help of this utility, that I finally began looking for gaps that I could help fill in the Internet Archive's collection.
 
 I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `DZ` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
 
 Then I sorted my spreadsheet by volume name, number of entries on the volume, etc, and flagged all the duplicates.  Then I fed the filtered CSV list back into `DZ` with the `--batch` option again, and generated an upload script with the `--upload` option.
 
-Here's an example of what `--upload` produced:
+Here's an example of what `--upload` produces:
 
     # uploading MSTN-CD177-ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
