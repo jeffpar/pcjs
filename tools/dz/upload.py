@@ -47,14 +47,21 @@ ITEM_METADATA = {
 # for key, value in ITEM_METADATA.items():
 # 	print(f"  {key}: {value}")
 
-r = internetarchive.upload(
-	ITEM_ID,
-	ITEM_FILES,
-	metadata=ITEM_METADATA,
-	verbose=True
-)
+try:
+	r = internetarchive.upload(
+		ITEM_ID,
+		ITEM_FILES,
+		metadata=ITEM_METADATA,
+		verbose=True
+	)
 
-if r[0].status_code == 200:
-	print(f"Upload successful: https://archive.org/details/{ITEM_ID}")
-else:
-	print(f"Upload failed: {r[0].status_code} {r[0].text}")
+	if r[0].status_code == 200:
+		print(f"Upload successful: https://archive.org/details/{ITEM_ID}")
+		sys.exit(0)
+	else:
+		print(f"Upload failed: {r[0].status_code} {r[0].text}")
+		sys.exit(1)
+
+except Exception as e:
+	print(f"Upload error: {e}")
+	sys.exit(1)

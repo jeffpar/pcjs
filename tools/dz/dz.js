@@ -965,7 +965,7 @@ async function main(argc, argv, errors)
                 files.unshift("desc.txt");
                 printf("python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
                 printf("rm %s\n", files.join(" "));
-                printf("sleep 600\n");      // TODO: consider a --wait option, because I have no idea what upload rate they consider "too fast"
+                printf("sleep 300\n");      // TODO: consider a --wait option, because I have no idea what upload rate is considered "too fast"
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
