@@ -1,6 +1,6 @@
 ---
 layout: page
-title: PCjs DZ Utility
+title: PCjs Archive Utility
 permalink: /tools/dz/
 ---
 
