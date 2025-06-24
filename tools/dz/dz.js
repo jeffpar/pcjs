@@ -666,6 +666,7 @@ async function main(argc, argv, errors)
     //
     let processArchive = async function(archiveID, archivePath, archivePhoto = null, archiveThumb = null, archiveTarget = null, archiveDB = null, modified = null) {
         let archive, archiveClass;
+        let dirListing = argv.desc;
         let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
@@ -791,6 +792,9 @@ async function main(argc, argv, errors)
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
             let entries = [];
+            if (!isArchive && !argv.recurse && !archiveDB) {
+                dirListing = true;
+            }
             if (isArchive || isDisk) {
                 //
                 // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
@@ -975,7 +979,7 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
                         if (argv.desc || argv.list) printf("\n");
                         if (!nArchiveFiles || argv.list) {
-                            printf("%s%s%s%s\n", argv.desc? "Directory of " : "", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
+                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
                         }
                     }
                     //
@@ -986,7 +990,7 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment && !nArchiveFiles) {
                         printf("%s\n", archive.comment);
                     }
-                    if (argv.desc) {
+                    if (dirListing) {
                         printf("\n");
                         // printf("\nFilename             Size   Date       Time       Path\n");
                         // printf(  "--------             ----   ----       ----       ----\n");
@@ -1122,9 +1126,9 @@ async function main(argc, argv, errors)
                     name = "…" + name.slice(-13);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
-                if (argv.desc) {
+                if (dirListing) {
                     let entryName = name == entry.name? "" : "   " + entry.name;
-                    if (entryName) {
+                    if (entryName && argv.desc) {
                         if (!truncateDesc) {
                             printf("...\n");
                         }
