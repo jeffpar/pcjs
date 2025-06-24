@@ -156,4 +156,26 @@ export default class CSV {
         }
         return row;
     }
+
+    /**
+     * hasFields(...fields)
+     *
+     * Returns true if the CSV has the specified field(s).
+     *
+     * @this {CSV}
+     * @param {...string} fields
+     * @returns {boolean}
+     */
+    hasFields()
+    {
+        if (!this.fields || !this.fields.length) {
+            return false;
+        }
+        for (let i = 0; i < arguments.length; i++) {
+            if (this.fields.indexOf(arguments[i]) < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

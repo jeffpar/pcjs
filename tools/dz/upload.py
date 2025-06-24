@@ -1,7 +1,7 @@
 import internetarchive
 import sys
 
-if len(sys.argv) < 4:
+if len(sys.argv) < 8:
 	print("Usage: python upload.py [id] [title] [date] [publisher] [category] [description file] [upload file(s)]")
 	sys.exit(1)
 
@@ -14,7 +14,7 @@ ITEM_DESC_FILE = sys.argv[6]
 
 try:
 	with open(ITEM_DESC_FILE, 'r', encoding='utf-8') as f:
-		description_content = f.read().strip()
+		description_content = f.read().strip().replace("Program Files", "Program&nbsp;Files").replace("<", "[").replace(">", "]")
 except FileNotFoundError:
 	print(f"Error: description file '{ITEM_DESC_FILE}' not found")
 	sys.exit(1)

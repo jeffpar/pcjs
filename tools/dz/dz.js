@@ -71,6 +71,18 @@ const printf = function(...args) {
     process.stdout.write(s);
 };
 
+/**
+ * @class DZ
+ *
+ * TODO: Refactor some of the command-line logic from main() into this class, so that it can be
+ * used by other clients.
+ */
+class DZ {
+    static EXCEPTIONS = {               // use bits 16-31 (bits 0-15 are reserved for other classes)
+        CSV:            0x10000
+    };
+}
+
 //
 // Normally, a client will provide either a fetch interface or open interface, not both; for example,
 // browsers don't have access to the file system, so they will provide only fetch.  But as a Node client,
@@ -182,6 +194,10 @@ const options = {
             "wrong": {
                 value: DZip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with the wrong type"
+            },
+            "csv": {
+                value: DZ.EXCEPTIONS.CSV,
+                description: "process only unique archives listed in CSV"
             }
         }
     },
@@ -563,11 +579,12 @@ async function main(argc, argv, errors)
                 do {
                     let row = await csv.getNextRow();
                     if (!row) break;
-                    //
-                    // TODO: Remove the next line once we have processed all TechNet CDs...
-                    //
-                    if (!row.path || !+row.setID || row.path.match(/^https?:\/\//i)) continue;
-                    let item = {path: row.path + "/" + row.name};
+                    let item = {
+                        volume: row.volume || "",
+                        entries: row.entries || 0,
+                        newest: row.newest? new Date(row.newest) : new Date(0),
+                        path: row.path + "/" + row.name
+                    };
                     if (row.photo) {
                         item.photo = row.photo;
                     }
@@ -578,15 +595,50 @@ async function main(argc, argv, errors)
                     items++;
                 } while (true);
                 await csv.close();
+                //
+                // If filterExceptions & DZ.EXCEPTIONS.CSV, we want to weed out duplicates.
+                //
+                // The process begins by sorting itemList by volume, then by entries, then by newest, and finally by path.
+                //
+                let cDuplicates = 0;
+                if ((filterExceptions & DZ.EXCEPTIONS.CSV) && csv.hasFields("volume", "entries", "newest")) {
+                    itemList.sort((a, b) => {
+                        if (a.volume < b.volume) return -1;
+                        if (a.volume > b.volume) return 1;
+                        if (a.entries < b.entries) return -1;
+                        if (a.entries > b.entries) return 1;
+                        if (a.newest.getTime() < b.newest.getTime()) return -1;
+                        if (a.newest.getTime() > b.newest.getTime()) return 1;
+                        if (a.path < b.path) return -1;
+                        if (a.path > b.path) return 1;
+                        return 0;
+                    });
+                    //
+                    // Let the weeding begin.
+                    //
+                    let lastItem = null;
+                    itemList = itemList.filter(item => {
+                        if (!lastItem || item.volume != lastItem.volume || item.entries != lastItem.entries || item.newest.getTime() != lastItem.newest.getTime()) {
+                            lastItem = item;
+                            return true;
+                        }
+                        if (argv.verbose && lastItem.path.match(/^https?:\/\//) && item.path.match(/^https?:\/\//)) {
+                            printf("possible website duplicates:\n\t%s\n\t%s\n", item.path, lastItem.path);
+                        }
+                        lastItem = item;
+                        cDuplicates++;
+                        return false;
+                    });
+                }
                 if (!argv.upload) {
-                    printf("Found %d archive%s in specified CSV file\n", items);
+                    printf("Found %d archive%s in CSV file (%d duplicates removed)\n", itemList.length, cDuplicates);
                 }
             } else {
                 let text = await fs.readFile(argv.batch, "utf8");
                 let list = getList(text);
                 itemList = itemList.concat(list);
                 if (!argv.upload) {
-                    printf("Found %d archive%s in specified batch file\n", list.length);
+                    printf("Found %d archive%s in batch file\n", list.length);
                 }
             }
         } catch (error) {
@@ -637,7 +689,7 @@ async function main(argc, argv, errors)
             csv = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,disk,path,name,photo,dimensions,thumb,comment,warnings\n");
+                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n");
             }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
@@ -684,7 +736,7 @@ async function main(argc, argv, errors)
             let itemID = entry.source? archiveID : fileID++;
             let entryName = entry.name;
             let entryPath = archivePath;
-            let entryPhoto = null, entryThumb = null, entryDisk = null;
+            let entryPhoto = null, entryThumb = null, entryVolume = null;
             let entryMethod = entry.methodName || entry.source;
             let comment = entry.comment || "";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
@@ -696,11 +748,11 @@ async function main(argc, argv, errors)
             //
             if (entry.source) {
                 DZip.assert(entryName == entryPath);
-                entryDisk = fromPCJS[entryName];
-                if (entryDisk) {
-                    entryDisk = path.basename(entryDisk);
+                entryVolume = fromPCJS[entryName];
+                if (entryVolume) {
+                    entryVolume = path.basename(entryVolume);
                 } else {
-                    entryDisk = entry.label || "";
+                    entryVolume = entry.label || "";
                 }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
@@ -731,12 +783,12 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,disk,path,name,photo,dimensions,thumb,comment,warnings
+            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings
             //
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                 itemID, archiveID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
-                entryMethod, enquote(entryDisk), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
+                entryMethod, enquote(entryVolume), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
             );
             return line;
         };

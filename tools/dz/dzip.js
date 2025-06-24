@@ -263,12 +263,12 @@ export default class DZip {
         WRONGTYPE:              0x00000004,             // eg, a ZIP appears to be an ARC, or vice versa
         SPLIT:                  0x00000008,             // the archive contains entries referring to another ("split") archive
         BANNER:                 0x00000010,             // the archive contains an archive comment (aka "banner")
-        COMMENT:                0x00010000,             // the entry has a comment / the archive contains commented entries
-        ENCRYPTED:              0x00020000              // the entry is encrypted ("garbled") / the archive contains encrypted entries
+        COMMENT:                0x00000100,             // the entry has a comment / the archive contains commented entries
+        ENCRYPTED:              0x00000200              // the entry is encrypted ("garbled") / the archive contains encrypted entries
     };
 
-    static ARCHIVE_EXCEPTIONS = 0x0000ffff;
-    static RECORD_EXCEPTIONS  = 0xffff0000;
+    static ARCHIVE_EXCEPTIONS = 0x000000ff;
+    static RECORD_EXCEPTIONS  = 0x0000ff00;
 
     /**
      * constructor(interfaces)

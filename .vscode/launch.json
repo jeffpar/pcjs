@@ -2881,7 +2881,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dz/dz.js",
       "args": [
-        "--batch technet.csv --upload"
+        "--batch technet.csv --filter csv --list"
       ],
       "cwd": "${workspaceFolder}/tools/dz",
       "stopOnEntry": false,
