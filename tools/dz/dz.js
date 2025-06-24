@@ -1027,10 +1027,13 @@ async function main(argc, argv, errors)
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
                 if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
-                    if (argv.extract || argv.dir) {
-                        dirTimestamps[entry.target] = entry.modified;
+                    if (!dirListing) {
+                        if (argv.extract || argv.dir) {
+                            dirTimestamps[entry.target] = entry.modified;
+                        }
+                        continue;       // skip directory entries
                     }
-                    continue;           // skip directory entries
+                    entryAttr |= 0x10;  // ensure all directory entries are consistently marked
                 }
                 //
                 // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
@@ -1135,7 +1138,11 @@ async function main(argc, argv, errors)
                         truncateDesc = true;
                     }
                     if (!truncateDesc) {
-                        printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                        if (entryAttr & 0x10) {
+                            printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
+                        } else {
+                            printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                        }
                     }
                 }
                 else if (argv.list) {
