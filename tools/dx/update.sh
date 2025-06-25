@@ -1,9 +1,8 @@
-set -x
 # updating MSTN-CD034-9908BetaCD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.iso" 9908BETACD1.iso
 node dx.js "9908BETACD1.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-9908-betacd1 "Microsoft TechNet 9908BETACD1 Disc (August 1999)" desc.txt
+    python update.py ms-technet-9908-betacd1 "Microsoft TechNet 9908BETACD1 Disc (July 1999)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -12,97 +11,16 @@ rm desc.txt 9908BETACD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
 node dx.js "ARMEFPP_EN.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (November 2005)" desc.txt
+    python update.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
 rm desc.txt ARMEFPP_EN.iso
-# updating MSTN-CD194-BETA_EN_0223.05.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.iso" BETA_EN_0223.05.iso
-node dx.js "BETA_EN_0223.05.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.05 "Microsoft TechNet BETA_EN_0223.05 Disc (December 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.05.iso
-# updating MSTN-CD202-BETA_EN_0223.06.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD202-BETA_EN_0223.06.iso" BETA_EN_0223.06.iso
-node dx.js "BETA_EN_0223.06.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.06 "Microsoft TechNet BETA_EN_0223.06 Disc (January 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.06.iso
-# updating MSTN-CD217-BETA_EN_0223.07.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD217-BETA_EN_0223.07.iso" BETA_EN_0223.07.iso
-node dx.js "BETA_EN_0223.07.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.07 "Microsoft TechNet BETA_EN_0223.07 Disc (February 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.07.iso
-# updating MSTN-CD231-BETA_EN_0223.08.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD231-BETA_EN_0223.08.iso" BETA_EN_0223.08.iso
-node dx.js "BETA_EN_0223.08.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.08 "Microsoft TechNet BETA_EN_0223.08 Disc (April 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.08.iso
-# updating MSTN-CD240-BETA_EN_0223.09.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD240-BETA_EN_0223.09.iso" BETA_EN_0223.09.iso
-node dx.js "BETA_EN_0223.09.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.09 "Microsoft TechNet BETA_EN_0223.09 Disc (May 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.09.iso
-# updating MSTN-CD248-BETA_EN_0223.10.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD248-BETA_EN_0223.10.iso" BETA_EN_0223.10.iso
-node dx.js "BETA_EN_0223.10.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.10 "Microsoft TechNet BETA_EN_0223.10 Disc (June 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.10.iso
-# updating MSTN-CD255-BETA_EN_0223.11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD255-BETA_EN_0223.11.iso" BETA_EN_0223.11.iso
-node dx.js "BETA_EN_0223.11.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.11 "Microsoft TechNet BETA_EN_0223.11 Disc (July 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.11.iso
-# updating MSTN-CD259-BETA_EN_0223.12.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD259-BETA_EN_0223.12.iso" BETA_EN_0223.12.iso
-node dx.js "BETA_EN_0223.12.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.12 "Microsoft TechNet BETA_EN_0223.12 Disc (August 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.12.iso
-# updating MSTN-CD274-BETA_EN_0223.13.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD274-BETA_EN_0223.13.iso" BETA_EN_0223.13.iso
-node dx.js "BETA_EN_0223.13.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-beta_en_0223.13 "Microsoft TechNet BETA_EN_0223.13 Disc (October 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETA_EN_0223.13.iso
 # updating MSTN-CD070-BetaCD10310.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.iso" BETACD10310.iso
 node dx.js "BETACD10310.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-betacd10310 "Microsoft TechNet BETACD10310 Disc (December 2003)" desc.txt
+    python update.py ms-technet-betacd10310 "Microsoft TechNet BETACD10310 Disc (September 2003)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -111,7 +29,7 @@ rm desc.txt BETACD10310.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.iso" BETACD10312.iso
 node dx.js "BETACD10312.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-betacd10312 "Microsoft TechNet BETACD10312 Disc (December 2003)" desc.txt
+    python update.py ms-technet-betacd10312 "Microsoft TechNet BETACD10312 Disc (November 2003)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -120,7 +38,7 @@ rm desc.txt BETACD10312.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.iso" BETACD10403.iso
 node dx.js "BETACD10403.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-betacd10403 "Microsoft TechNet BETACD10403 Disc (March 2004)" desc.txt
+    python update.py ms-technet-betacd10403 "Microsoft TechNet BETACD10403 Disc (February 2004)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -129,7 +47,7 @@ rm desc.txt BETACD10403.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.iso" BETACD10405.iso
 node dx.js "BETACD10405.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-betacd10405 "Microsoft TechNet BETACD10405 Disc (May 2004)" desc.txt
+    python update.py ms-technet-betacd10405 "Microsoft TechNet BETACD10405 Disc (April 2004)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -138,16 +56,97 @@ rm desc.txt BETACD10405.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.iso" BETACD19911.iso
 node dx.js "BETACD19911.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-betacd19911 "Microsoft TechNet BETACD19911 Disc (November 1999)" desc.txt
+    python update.py ms-technet-betacd19911 "Microsoft TechNet BETACD19911 Disc (October 1999)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
 rm desc.txt BETACD19911.iso
+# updating MSTN-CD194-BETA_EN_0223.05.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.iso" BETA_EN_0223.05.iso
+node dx.js "BETA_EN_0223.05.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.05 "Microsoft TechNet BETA_EN_0223.05 Disc (November 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.05.iso
+# updating MSTN-CD202-BETA_EN_0223.06.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD202-BETA_EN_0223.06.iso" BETA_EN_0223.06.iso
+node dx.js "BETA_EN_0223.06.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.06 "Microsoft TechNet BETA_EN_0223.06 Disc (December 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.06.iso
+# updating MSTN-CD217-BETA_EN_0223.07.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD217-BETA_EN_0223.07.iso" BETA_EN_0223.07.iso
+node dx.js "BETA_EN_0223.07.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.07 "Microsoft TechNet BETA_EN_0223.07 Disc (January 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.07.iso
+# updating MSTN-CD231-BETA_EN_0223.08.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD231-BETA_EN_0223.08.iso" BETA_EN_0223.08.iso
+node dx.js "BETA_EN_0223.08.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.08 "Microsoft TechNet BETA_EN_0223.08 Disc (March 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.08.iso
+# updating MSTN-CD240-BETA_EN_0223.09.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD240-BETA_EN_0223.09.iso" BETA_EN_0223.09.iso
+node dx.js "BETA_EN_0223.09.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.09 "Microsoft TechNet BETA_EN_0223.09 Disc (April 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.09.iso
+# updating MSTN-CD248-BETA_EN_0223.10.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD248-BETA_EN_0223.10.iso" BETA_EN_0223.10.iso
+node dx.js "BETA_EN_0223.10.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.10 "Microsoft TechNet BETA_EN_0223.10 Disc (May 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.10.iso
+# updating MSTN-CD255-BETA_EN_0223.11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD255-BETA_EN_0223.11.iso" BETA_EN_0223.11.iso
+node dx.js "BETA_EN_0223.11.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.11 "Microsoft TechNet BETA_EN_0223.11 Disc (June 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.11.iso
+# updating MSTN-CD259-BETA_EN_0223.12.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD259-BETA_EN_0223.12.iso" BETA_EN_0223.12.iso
+node dx.js "BETA_EN_0223.12.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.12 "Microsoft TechNet BETA_EN_0223.12 Disc (June 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.12.iso
+# updating MSTN-CD274-BETA_EN_0223.13.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD274-BETA_EN_0223.13.iso" BETA_EN_0223.13.iso
+node dx.js "BETA_EN_0223.13.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-beta_en_0223.13 "Microsoft TechNet BETA_EN_0223.13 Disc (August 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETA_EN_0223.13.iso
 # updating MSTN-CD009-BORK2ND_ED.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD009-BORK2ND_ED.iso" BORK2ND_ED.iso
 node dx.js "BORK2ND_ED.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-bork2nd_ed "Microsoft TechNet BORK2ND_ED Disc (September 1998)" desc.txt
+    python update.py ms-technet-bork2nd_ed "Microsoft TechNet BORK2ND_ED Disc (February 1998)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -156,7 +155,7 @@ rm desc.txt BORK2ND_ED.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD024-Bork4.5Intla.iso" BORK4.5INTLA.iso
 node dx.js "BORK4.5INTLA.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-bork4.5intla "Microsoft TechNet BORK4.5INTLA Disc (August 1999)" desc.txt
+    python update.py ms-technet-bork4.5intla "Microsoft TechNet BORK4.5INTLA Disc (May 1999)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -165,7 +164,7 @@ rm desc.txt BORK4.5INTLA.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD178-BR0ECD2FRE_EN.iso" BR0ECD2FRE_EN.iso
 node dx.js "BR0ECD2FRE_EN.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-br0ecd2fre_en "Microsoft TechNet BR0ECD2FRE_EN Disc (November 2005)" desc.txt
+    python update.py ms-technet-br0ecd2fre_en "Microsoft TechNet BR0ECD2FRE_EN Disc (August 2005)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -174,7 +173,7 @@ rm desc.txt BR0ECD2FRE_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD216-BRMECD2XFRE_EN.iso" BRMECD2XFRE_EN.iso
 node dx.js "BRMECD2XFRE_EN.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-brmecd2xfre_en "Microsoft TechNet BRMECD2XFRE_EN Disc (February 2006)" desc.txt
+    python update.py ms-technet-brmecd2xfre_en "Microsoft TechNet BRMECD2XFRE_EN Disc (November 2005)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -183,7 +182,7 @@ rm desc.txt BRMECD2XFRE_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD203-BRMEFPP_EN.iso" BRMEFPP_EN.iso
 node dx.js "BRMEFPP_EN.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-brmefpp_en "Microsoft TechNet BRMEFPP_EN Disc (January 2006)" desc.txt
+    python update.py ms-technet-brmefpp_en "Microsoft TechNet BRMEFPP_EN Disc (November 2005)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -192,7 +191,7 @@ rm desc.txt BRMEFPP_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD215-BRMEXFPP_EN.iso" BRMEXFPP_EN.iso
 node dx.js "BRMEXFPP_EN.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-brmexfpp_en "Microsoft TechNet BRMEXFPP_EN Disc (February 2006)" desc.txt
+    python update.py ms-technet-brmexfpp_en "Microsoft TechNet BRMEXFPP_EN Disc (November 2005)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -206,15 +205,6 @@ while true; do
     sleep 300
 done
 rm desc.txt BTS2002EVAL_EN.iso
-# updating MSTN-CD176-BTS2004_EN.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.iso" BTS2004_EN.iso
-node dx.js "BTS2004_EN.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-bts2004_en "Microsoft TechNet BTS2004_EN Disc (October 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BTS2004_EN.iso
 # updating MSTN-CD108-BTS2004Eval_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD108-BTS2004Eval_EN.iso" BTS2004EVAL_EN.iso
 node dx.js "BTS2004EVAL_EN.iso" --desc > desc.txt
@@ -224,6 +214,15 @@ while true; do
     sleep 300
 done
 rm desc.txt BTS2004EVAL_EN.iso
+# updating MSTN-CD176-BTS2004_EN.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.iso" BTS2004_EN.iso
+node dx.js "BTS2004_EN.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-bts2004_en "Microsoft TechNet BTS2004_EN Disc (October 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BTS2004_EN.iso
 # updating MSTN-1996-02-CSD9602.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-02-CSD9602.iso" CSD9602.iso
 node dx.js "CSD9602.iso" --desc > desc.txt
@@ -1214,47 +1213,11 @@ while true; do
     sleep 300
 done
 rm desc.txt OFFICE11.iso
-# updating MSTN-CD201-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.iso" OFFICE11.iso
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-office11-1 "Microsoft TechNet OFFICE11 Disc (December 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso
-# updating MSTN-CD149-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.iso" OFFICE11.iso
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-office11-2 "Microsoft TechNet OFFICE11 Disc (July 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso
-# updating MSTN-CD158-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.iso" OFFICE11.iso
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-office11-3 "Microsoft TechNet OFFICE11 Disc (August 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso
-# updating MSTN-CD343-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.iso" OFFICE11.iso
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-office11-4 "Microsoft TechNet OFFICE11 Disc (June 2007)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso
 # updating MSTN-CD281-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD281-OFFICE11.iso" OFFICE11.iso
 node dx.js "OFFICE11.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-office11-5 "Microsoft TechNet OFFICE11 Disc (August 2006)" desc.txt
+    python update.py ms-technet-office11-1 "Microsoft TechNet OFFICE11 Disc (August 2006)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -1263,7 +1226,43 @@ rm desc.txt OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD150-OFFICE11.iso" OFFICE11.iso
 node dx.js "OFFICE11.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-office11-6 "Microsoft TechNet OFFICE11 Disc (July 2005)" desc.txt
+    python update.py ms-technet-office11-2 "Microsoft TechNet OFFICE11 Disc (July 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso
+# updating MSTN-CD201-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.iso" OFFICE11.iso
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-office11-3 "Microsoft TechNet OFFICE11 Disc (December 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso
+# updating MSTN-CD149-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.iso" OFFICE11.iso
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-office11-4 "Microsoft TechNet OFFICE11 Disc (July 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso
+# updating MSTN-CD158-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.iso" OFFICE11.iso
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-office11-5 "Microsoft TechNet OFFICE11 Disc (August 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso
+# updating MSTN-CD343-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.iso" OFFICE11.iso
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-office11-6 "Microsoft TechNet OFFICE11 Disc (June 2007)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -1655,8 +1654,8 @@ while true; do
     sleep 300
 done
 rm desc.txt SQLSRVRS.iso
-# updating MSTN-CD192-SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.iso" SQLTOOLS.iso
+# updating MSTN-CD191-SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.iso" SQLTOOLS.iso
 node dx.js "SQLTOOLS.iso" --desc > desc.txt
 while true; do
     python update.py ms-technet-sqltools "Microsoft TechNet SQLTOOLS Disc (October 2005)" desc.txt
@@ -1664,8 +1663,8 @@ while true; do
     sleep 300
 done
 rm desc.txt SQLTOOLS.iso
-# updating MSTN-CD191-SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.iso" SQLTOOLS.iso
+# updating MSTN-CD192-SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.iso" SQLTOOLS.iso
 node dx.js "SQLTOOLS.iso" --desc > desc.txt
 while true; do
     python update.py ms-technet-sqltools-1 "Microsoft TechNet SQLTOOLS Disc (October 2005)" desc.txt
@@ -1709,177 +1708,6 @@ while true; do
     sleep 300
 done
 rm desc.txt TECHNET_INDEX_2005-08.iso
-# updating MSTN-CD173-TN_INDEX_0511.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.iso" TN_INDEX_0511.iso
-node dx.js "TN_INDEX_0511.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0511 "Microsoft TechNet TN_INDEX_0511 Disc (October 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0511.iso
-# updating MSTN-CD181-TN_INDEX_0512.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.iso" TN_INDEX_0512.iso
-node dx.js "TN_INDEX_0512.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0512 "Microsoft TechNet TN_INDEX_0512 Disc (November 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0512.iso
-# updating MSTN-CD197-TN_INDEX_0601.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.iso" TN_INDEX_0601.iso
-node dx.js "TN_INDEX_0601.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0601 "Microsoft TechNet TN_INDEX_0601 Disc (December 2005)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0601.iso
-# updating MSTN-CD209-TN_INDEX_0602.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.iso" TN_INDEX_0602.iso
-node dx.js "TN_INDEX_0602.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0602 "Microsoft TechNet TN_INDEX_0602 Disc (January 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0602.iso
-# updating MSTN-CD220-TN_INDEX_0603.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.iso" TN_INDEX_0603.iso
-node dx.js "TN_INDEX_0603.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0603 "Microsoft TechNet TN_INDEX_0603 Disc (February 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0603.iso
-# updating MSTN-CD226-TN_INDEX_0604.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.iso" TN_INDEX_0604.iso
-node dx.js "TN_INDEX_0604.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0604 "Microsoft TechNet TN_INDEX_0604 Disc (March 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0604.iso
-# updating MSTN-CD234-TN_INDEX_0605.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.iso" TN_INDEX_0605.iso
-node dx.js "TN_INDEX_0605.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0605 "Microsoft TechNet TN_INDEX_0605 Disc (April 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0605.iso
-# updating MSTN-CD243-TN_INDEX_0606.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.iso" TN_INDEX_0606.iso
-node dx.js "TN_INDEX_0606.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0606 "Microsoft TechNet TN_INDEX_0606 Disc (May 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0606.iso
-# updating MSTN-CD251-TN_INDEX_0607.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.iso" TN_INDEX_0607.iso
-node dx.js "TN_INDEX_0607.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0607 "Microsoft TechNet TN_INDEX_0607 Disc (June 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0607.iso
-# updating MSTN-CD258-TN_INDEX_0608.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.iso" TN_INDEX_0608.iso
-node dx.js "TN_INDEX_0608.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0608 "Microsoft TechNet TN_INDEX_0608 Disc (July 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0608.iso
-# updating MSTN-CD270-TN_INDEX_0609.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.iso" TN_INDEX_0609.iso
-node dx.js "TN_INDEX_0609.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0609 "Microsoft TechNet TN_INDEX_0609 Disc (August 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0609.iso
-# updating MSTN-CD278-TN_INDEX_0610.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.iso" TN_INDEX_0610.iso
-node dx.js "TN_INDEX_0610.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0610 "Microsoft TechNet TN_INDEX_0610 Disc (September 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0610.iso
-# updating MSTN-CD287-TN_INDEX_0611.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.iso" TN_INDEX_0611.iso
-node dx.js "TN_INDEX_0611.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0611 "Microsoft TechNet TN_INDEX_0611 Disc (October 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0611.iso
-# updating MSTN-CD293-TN_INDEX_0612.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.iso" TN_INDEX_0612.iso
-node dx.js "TN_INDEX_0612.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0612 "Microsoft TechNet TN_INDEX_0612 Disc (November 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0612.iso
-# updating MSTN-CD299-TN_INDEX_0701.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.iso" TN_INDEX_0701.iso
-node dx.js "TN_INDEX_0701.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0701 "Microsoft TechNet TN_INDEX_0701 Disc (December 2006)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0701.iso
-# updating MSTN-CD315-TN_INDEX_0703.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.iso" TN_INDEX_0703.iso
-node dx.js "TN_INDEX_0703.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0703 "Microsoft TechNet TN_INDEX_0703 Disc (February 2007)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0703.iso
-# updating MSTN-CD335-TN_INDEX_0707.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.iso" TN_INDEX_0707.iso
-node dx.js "TN_INDEX_0707.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0707 "Microsoft TechNet TN_INDEX_0707 Disc (June 2007)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0707.iso
-# updating MSTN-CD342-TN_INDEX_0708.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.iso" TN_INDEX_0708.iso
-node dx.js "TN_INDEX_0708.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0708 "Microsoft TechNet TN_INDEX_0708 Disc (July 2007)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0708.iso
-# updating MSTN-CD346-TN_INDEX_0712.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.iso" TN_INDEX_0712.iso
-node dx.js "TN_INDEX_0712.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-tn_index_0712 "Microsoft TechNet TN_INDEX_0712 Disc (November 2007)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0712.iso
 # updating MSTN-CD104-tn00403c.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD104-tn00403c.iso" TN00403C.iso
 node dx.js "TN00403C.iso" --desc > desc.txt
@@ -2168,6 +1996,15 @@ while true; do
     sleep 300
 done
 rm desc.txt TNSG9809.iso
+# updating MSTN-CD004-TNUA9809.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD004-TNUA9809.iso" TNUA9809.iso
+node dx.js "TNUA9809.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tnua9809 "Microsoft TechNet TNUA9809 Disc (August 1998)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TNUA9809.iso
 # updating MSTN-CD005-TNUB9809.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD005-TNUB9809.iso" TNUB9809.iso
 node dx.js "TNUB9809.iso" --desc > desc.txt
@@ -2213,6 +2050,177 @@ while true; do
     sleep 300
 done
 rm desc.txt TNUF9809.iso
+# updating MSTN-CD173-TN_INDEX_0511.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.iso" TN_INDEX_0511.iso
+node dx.js "TN_INDEX_0511.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0511 "Microsoft TechNet TN_INDEX_0511 Disc (October 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0511.iso
+# updating MSTN-CD181-TN_INDEX_0512.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.iso" TN_INDEX_0512.iso
+node dx.js "TN_INDEX_0512.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0512 "Microsoft TechNet TN_INDEX_0512 Disc (November 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0512.iso
+# updating MSTN-CD197-TN_INDEX_0601.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.iso" TN_INDEX_0601.iso
+node dx.js "TN_INDEX_0601.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0601 "Microsoft TechNet TN_INDEX_0601 Disc (December 2005)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0601.iso
+# updating MSTN-CD209-TN_INDEX_0602.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.iso" TN_INDEX_0602.iso
+node dx.js "TN_INDEX_0602.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0602 "Microsoft TechNet TN_INDEX_0602 Disc (January 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0602.iso
+# updating MSTN-CD220-TN_INDEX_0603.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.iso" TN_INDEX_0603.iso
+node dx.js "TN_INDEX_0603.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0603 "Microsoft TechNet TN_INDEX_0603 Disc (February 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0603.iso
+# updating MSTN-CD226-TN_INDEX_0604.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.iso" TN_INDEX_0604.iso
+node dx.js "TN_INDEX_0604.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0604 "Microsoft TechNet TN_INDEX_0604 Disc (March 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0604.iso
+# updating MSTN-CD234-TN_INDEX_0605.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.iso" TN_INDEX_0605.iso
+node dx.js "TN_INDEX_0605.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0605 "Microsoft TechNet TN_INDEX_0605 Disc (April 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0605.iso
+# updating MSTN-CD243-TN_INDEX_0606.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.iso" TN_INDEX_0606.iso
+node dx.js "TN_INDEX_0606.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0606 "Microsoft TechNet TN_INDEX_0606 Disc (May 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0606.iso
+# updating MSTN-CD251-TN_INDEX_0607.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.iso" TN_INDEX_0607.iso
+node dx.js "TN_INDEX_0607.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0607 "Microsoft TechNet TN_INDEX_0607 Disc (June 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0607.iso
+# updating MSTN-CD258-TN_INDEX_0608.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.iso" TN_INDEX_0608.iso
+node dx.js "TN_INDEX_0608.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0608 "Microsoft TechNet TN_INDEX_0608 Disc (July 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0608.iso
+# updating MSTN-CD270-TN_INDEX_0609.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.iso" TN_INDEX_0609.iso
+node dx.js "TN_INDEX_0609.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0609 "Microsoft TechNet TN_INDEX_0609 Disc (August 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0609.iso
+# updating MSTN-CD278-TN_INDEX_0610.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.iso" TN_INDEX_0610.iso
+node dx.js "TN_INDEX_0610.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0610 "Microsoft TechNet TN_INDEX_0610 Disc (September 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0610.iso
+# updating MSTN-CD287-TN_INDEX_0611.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.iso" TN_INDEX_0611.iso
+node dx.js "TN_INDEX_0611.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0611 "Microsoft TechNet TN_INDEX_0611 Disc (October 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0611.iso
+# updating MSTN-CD293-TN_INDEX_0612.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.iso" TN_INDEX_0612.iso
+node dx.js "TN_INDEX_0612.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0612 "Microsoft TechNet TN_INDEX_0612 Disc (November 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0612.iso
+# updating MSTN-CD299-TN_INDEX_0701.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.iso" TN_INDEX_0701.iso
+node dx.js "TN_INDEX_0701.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0701 "Microsoft TechNet TN_INDEX_0701 Disc (December 2006)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0701.iso
+# updating MSTN-CD315-TN_INDEX_0703.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.iso" TN_INDEX_0703.iso
+node dx.js "TN_INDEX_0703.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0703 "Microsoft TechNet TN_INDEX_0703 Disc (February 2007)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0703.iso
+# updating MSTN-CD335-TN_INDEX_0707.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.iso" TN_INDEX_0707.iso
+node dx.js "TN_INDEX_0707.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0707 "Microsoft TechNet TN_INDEX_0707 Disc (June 2007)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0707.iso
+# updating MSTN-CD342-TN_INDEX_0708.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.iso" TN_INDEX_0708.iso
+node dx.js "TN_INDEX_0708.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0708 "Microsoft TechNet TN_INDEX_0708 Disc (July 2007)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0708.iso
+# updating MSTN-CD346-TN_INDEX_0712.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.iso" TN_INDEX_0712.iso
+node dx.js "TN_INDEX_0712.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-tn_index_0712 "Microsoft TechNet TN_INDEX_0712 Disc (November 2007)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0712.iso
 # updating MSTN-CD206-TTCD_JAN06.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD206-TTCD_JAN06.iso" TTCD_JAN06.iso
 node dx.js "TTCD_JAN06.iso" --desc > desc.txt
@@ -2294,20 +2302,20 @@ while true; do
     sleep 300
 done
 rm desc.txt TTT27.iso
-# updating MSTN-CD106-ttt28.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.iso" TTT28.iso
-node dx.js "TTT28.iso" --desc > desc.txt
-while true; do
-    python update.py ms-technet-ttt28 "Microsoft TechNet TTT28 Disc (March 2004)" desc.txt
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TTT28.iso
 # updating MSTN-CD125-ttt28.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD125-ttt28.iso" TTT28.iso
 node dx.js "TTT28.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-ttt28-1 "Microsoft TechNet TTT28 Disc (June 2004)" desc.txt
+    python update.py ms-technet-ttt28 "Microsoft TechNet TTT28 Disc (June 2004)" desc.txt
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TTT28.iso
+# updating MSTN-CD106-ttt28.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.iso" TTT28.iso
+node dx.js "TTT28.iso" --desc > desc.txt
+while true; do
+    python update.py ms-technet-ttt28-1 "Microsoft TechNet TTT28 Disc (March 2004)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -2397,7 +2405,7 @@ rm desc.txt Y2K9908.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD045-Y2K9911.iso" Y2K9911.iso
 node dx.js "Y2K9911.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-y2k9911 "Microsoft TechNet Y2K9911 Disc (November 1999)" desc.txt
+    python update.py ms-technet-y2k9911 "Microsoft TechNet Y2K9911 Disc (October 1999)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done

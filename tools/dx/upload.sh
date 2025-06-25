@@ -1,4 +1,3 @@
-set -x
 # uploading MSTN-CD034-9908BetaCD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.iso" 9908BETACD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.png" 9908BETACD1.png
@@ -19,6 +18,56 @@ while true; do
     sleep 300
 done
 rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
+# uploading MSTN-CD070-BetaCD10310.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.iso" BETACD10310.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.png" BETACD10310.png
+node dx.js "BETACD10310.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-betacd10310 "Microsoft TechNet BETACD10310 Disc (September 2003)" 2003-09-09 "Microsoft" "TechNet" desc.txt BETACD10310.iso BETACD10310.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETACD10310.iso BETACD10310.png
+# uploading MSTN-CD080-BetaCD10312.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.iso" BETACD10312.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.png" BETACD10312.png
+node dx.js "BETACD10312.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-betacd10312 "Microsoft TechNet BETACD10312 Disc (November 2003)" 2003-11-06 "Microsoft" "TechNet" desc.txt BETACD10312.iso BETACD10312.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETACD10312.iso BETACD10312.png
+# uploading MSTN-CD099-BetaCD10403.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.iso" BETACD10403.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.png" BETACD10403.png
+node dx.js "BETACD10403.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-betacd10403 "Microsoft TechNet BETACD10403 Disc (February 2004)" 2004-02-11 "Microsoft" "TechNet" desc.txt BETACD10403.iso BETACD10403.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETACD10403.iso BETACD10403.png
+# uploading MSTN-CD114-BetaCD10405.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.iso" BETACD10405.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.png" BETACD10405.png
+node dx.js "BETACD10405.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-betacd10405 "Microsoft TechNet BETACD10405 Disc (April 2004)" 2004-04-11 "Microsoft" "TechNet" desc.txt BETACD10405.iso BETACD10405.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETACD10405.iso BETACD10405.png
+# uploading MSTN-CD046-betaCD19911.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.iso" BETACD19911.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.png" BETACD19911.png
+node dx.js "BETACD19911.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-betacd19911 "Microsoft TechNet BETACD19911 Disc (October 1999)" 1999-10-12 "Microsoft" "TechNet" desc.txt BETACD19911.iso BETACD19911.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BETACD19911.iso BETACD19911.png
 # uploading MSTN-CD194-BETA_EN_0223.05.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.iso" BETA_EN_0223.05.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD194-BETA_EN_0223.05.png" BETA_EN_0223.05.png
@@ -109,56 +158,6 @@ while true; do
     sleep 300
 done
 rm desc.txt BETA_EN_0223.13.iso BETA_EN_0223.13.png
-# uploading MSTN-CD070-BetaCD10310.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.iso" BETACD10310.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD070-BetaCD10310.png" BETACD10310.png
-node dx.js "BETACD10310.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-betacd10310 "Microsoft TechNet BETACD10310 Disc (September 2003)" 2003-09-09 "Microsoft" "TechNet" desc.txt BETACD10310.iso BETACD10310.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETACD10310.iso BETACD10310.png
-# uploading MSTN-CD080-BetaCD10312.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.iso" BETACD10312.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD080-BetaCD10312.png" BETACD10312.png
-node dx.js "BETACD10312.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-betacd10312 "Microsoft TechNet BETACD10312 Disc (November 2003)" 2003-11-06 "Microsoft" "TechNet" desc.txt BETACD10312.iso BETACD10312.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETACD10312.iso BETACD10312.png
-# uploading MSTN-CD099-BetaCD10403.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.iso" BETACD10403.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD099-BetaCD10403.png" BETACD10403.png
-node dx.js "BETACD10403.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-betacd10403 "Microsoft TechNet BETACD10403 Disc (February 2004)" 2004-02-11 "Microsoft" "TechNet" desc.txt BETACD10403.iso BETACD10403.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETACD10403.iso BETACD10403.png
-# uploading MSTN-CD114-BetaCD10405.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.iso" BETACD10405.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD114-BetaCD10405.png" BETACD10405.png
-node dx.js "BETACD10405.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-betacd10405 "Microsoft TechNet BETACD10405 Disc (April 2004)" 2004-04-11 "Microsoft" "TechNet" desc.txt BETACD10405.iso BETACD10405.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETACD10405.iso BETACD10405.png
-# uploading MSTN-CD046-betaCD19911.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.iso" BETACD19911.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD046-betaCD19911.png" BETACD19911.png
-node dx.js "BETACD19911.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-betacd19911 "Microsoft TechNet BETACD19911 Disc (October 1999)" 1999-10-12 "Microsoft" "TechNet" desc.txt BETACD19911.iso BETACD19911.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BETACD19911.iso BETACD19911.png
 # uploading MSTN-CD009-BORK2ND_ED.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD009-BORK2ND_ED.iso" BORK2ND_ED.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD009-BORK2ND_ED.png" BORK2ND_ED.png
@@ -229,16 +228,6 @@ while true; do
     sleep 300
 done
 rm desc.txt BTS2002EVAL_EN.iso BTS2002EVAL_EN.png
-# uploading MSTN-CD176-BTS2004_EN.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.iso" BTS2004_EN.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.png" BTS2004_EN.png
-node dx.js "BTS2004_EN.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-bts2004_en "Microsoft TechNet BTS2004_EN Disc (October 2005)" 2005-10-09 "Microsoft" "TechNet" desc.txt BTS2004_EN.iso BTS2004_EN.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt BTS2004_EN.iso BTS2004_EN.png
 # uploading MSTN-CD108-BTS2004Eval_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD108-BTS2004Eval_EN.iso" BTS2004EVAL_EN.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD108-BTS2004Eval_EN.png" BTS2004EVAL_EN.png
@@ -249,6 +238,16 @@ while true; do
     sleep 300
 done
 rm desc.txt BTS2004EVAL_EN.iso BTS2004EVAL_EN.png
+# uploading MSTN-CD176-BTS2004_EN.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.iso" BTS2004_EN.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD176-BTS2004_EN.png" BTS2004_EN.png
+node dx.js "BTS2004_EN.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-bts2004_en "Microsoft TechNet BTS2004_EN Disc (October 2005)" 2005-10-09 "Microsoft" "TechNet" desc.txt BTS2004_EN.iso BTS2004_EN.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt BTS2004_EN.iso BTS2004_EN.png
 # uploading MSTN-1996-02-CSD9602.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-02-CSD9602.iso" CSD9602.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-1996-02-CSD9602.png" CSD9602.png
@@ -1349,52 +1348,12 @@ while true; do
     sleep 300
 done
 rm desc.txt OFFICE11.iso OFFICE11.png
-# uploading MSTN-CD201-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.iso" OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.png" OFFICE11.png
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-office11-1 "Microsoft TechNet OFFICE11 Disc (December 2005)" 2005-12-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso OFFICE11.png
-# uploading MSTN-CD149-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.iso" OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.png" OFFICE11.png
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-office11-2 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso OFFICE11.png
-# uploading MSTN-CD158-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.iso" OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.png" OFFICE11.png
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-office11-3 "Microsoft TechNet OFFICE11 Disc (August 2005)" 2005-08-02 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso OFFICE11.png
-# uploading MSTN-CD343-OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.iso" OFFICE11.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.png" OFFICE11.png
-node dx.js "OFFICE11.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-office11-4 "Microsoft TechNet OFFICE11 Disc (June 2007)" 2007-06-26 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt OFFICE11.iso OFFICE11.png
 # uploading MSTN-CD281-OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD281-OFFICE11.iso" OFFICE11.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD281-OFFICE11.png" OFFICE11.png
 node dx.js "OFFICE11.iso" --desc > desc.txt
 while true; do
-    python upload.py ms-technet-office11-5 "Microsoft TechNet OFFICE11 Disc (August 2006)" 2006-08-28 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    python upload.py ms-technet-office11-1 "Microsoft TechNet OFFICE11 Disc (August 2006)" 2006-08-28 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -1404,7 +1363,47 @@ cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD150-OFFICE11.png" OFFICE11.png
 node dx.js "OFFICE11.iso" --desc > desc.txt
 while true; do
-    python upload.py ms-technet-office11-6 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    python upload.py ms-technet-office11-2 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso OFFICE11.png
+# uploading MSTN-CD201-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.iso" OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD201-OFFICE11.png" OFFICE11.png
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-office11-3 "Microsoft TechNet OFFICE11 Disc (December 2005)" 2005-12-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso OFFICE11.png
+# uploading MSTN-CD149-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.iso" OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD149-OFFICE11.png" OFFICE11.png
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-office11-4 "Microsoft TechNet OFFICE11 Disc (July 2005)" 2005-07-07 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso OFFICE11.png
+# uploading MSTN-CD158-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.iso" OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD158-OFFICE11.png" OFFICE11.png
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-office11-5 "Microsoft TechNet OFFICE11 Disc (August 2005)" 2005-08-02 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt OFFICE11.iso OFFICE11.png
+# uploading MSTN-CD343-OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.iso" OFFICE11.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD343-OFFICE11.png" OFFICE11.png
+node dx.js "OFFICE11.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-office11-6 "Microsoft TechNet OFFICE11 Disc (June 2007)" 2007-06-26 "Microsoft" "TechNet" desc.txt OFFICE11.iso OFFICE11.png
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
@@ -1839,9 +1838,9 @@ while true; do
     sleep 300
 done
 rm desc.txt SQLSRVRS.iso SQLSRVRS.png
-# uploading MSTN-CD192-SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.iso" SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.png" SQLTOOLS.png
+# uploading MSTN-CD191-SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.iso" SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.png" SQLTOOLS.png
 node dx.js "SQLTOOLS.iso" --desc > desc.txt
 while true; do
     python upload.py ms-technet-sqltools "Microsoft TechNet SQLTOOLS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLTOOLS.iso SQLTOOLS.png
@@ -1849,9 +1848,9 @@ while true; do
     sleep 300
 done
 rm desc.txt SQLTOOLS.iso SQLTOOLS.png
-# uploading MSTN-CD191-SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.iso" SQLTOOLS.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD191-SQLTOOLS.png" SQLTOOLS.png
+# uploading MSTN-CD192-SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.iso" SQLTOOLS.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD192-SQLTOOLS.png" SQLTOOLS.png
 node dx.js "SQLTOOLS.iso" --desc > desc.txt
 while true; do
     python upload.py ms-technet-sqltools-1 "Microsoft TechNet SQLTOOLS Disc (October 2005)" 2005-10-14 "Microsoft" "TechNet" desc.txt SQLTOOLS.iso SQLTOOLS.png
@@ -1899,196 +1898,6 @@ while true; do
     sleep 300
 done
 rm desc.txt TECHNET_INDEX_2005-08.iso TECHNET_INDEX_2005-08.png
-# uploading MSTN-CD173-TN_INDEX_0511.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.iso" TN_INDEX_0511.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.png" TN_INDEX_0511.png
-node dx.js "TN_INDEX_0511.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0511 "Microsoft TechNet TN_INDEX_0511 Disc (October 2005)" 2005-10-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0511.iso TN_INDEX_0511.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0511.iso TN_INDEX_0511.png
-# uploading MSTN-CD181-TN_INDEX_0512.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.iso" TN_INDEX_0512.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.png" TN_INDEX_0512.png
-node dx.js "TN_INDEX_0512.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0512 "Microsoft TechNet TN_INDEX_0512 Disc (November 2005)" 2005-11-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0512.iso TN_INDEX_0512.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0512.iso TN_INDEX_0512.png
-# uploading MSTN-CD197-TN_INDEX_0601.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.iso" TN_INDEX_0601.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.png" TN_INDEX_0601.png
-node dx.js "TN_INDEX_0601.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0601 "Microsoft TechNet TN_INDEX_0601 Disc (December 2005)" 2005-12-19 "Microsoft" "TechNet" desc.txt TN_INDEX_0601.iso TN_INDEX_0601.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0601.iso TN_INDEX_0601.png
-# uploading MSTN-CD209-TN_INDEX_0602.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.iso" TN_INDEX_0602.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.png" TN_INDEX_0602.png
-node dx.js "TN_INDEX_0602.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0602 "Microsoft TechNet TN_INDEX_0602 Disc (January 2006)" 2006-01-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0602.iso TN_INDEX_0602.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0602.iso TN_INDEX_0602.png
-# uploading MSTN-CD220-TN_INDEX_0603.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.iso" TN_INDEX_0603.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.png" TN_INDEX_0603.png
-node dx.js "TN_INDEX_0603.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0603 "Microsoft TechNet TN_INDEX_0603 Disc (February 2006)" 2006-02-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0603.iso TN_INDEX_0603.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0603.iso TN_INDEX_0603.png
-# uploading MSTN-CD226-TN_INDEX_0604.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.iso" TN_INDEX_0604.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.png" TN_INDEX_0604.png
-node dx.js "TN_INDEX_0604.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0604 "Microsoft TechNet TN_INDEX_0604 Disc (March 2006)" 2006-03-26 "Microsoft" "TechNet" desc.txt TN_INDEX_0604.iso TN_INDEX_0604.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0604.iso TN_INDEX_0604.png
-# uploading MSTN-CD234-TN_INDEX_0605.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.iso" TN_INDEX_0605.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.png" TN_INDEX_0605.png
-node dx.js "TN_INDEX_0605.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0605 "Microsoft TechNet TN_INDEX_0605 Disc (April 2006)" 2006-04-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0605.iso TN_INDEX_0605.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0605.iso TN_INDEX_0605.png
-# uploading MSTN-CD243-TN_INDEX_0606.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.iso" TN_INDEX_0606.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.png" TN_INDEX_0606.png
-node dx.js "TN_INDEX_0606.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0606 "Microsoft TechNet TN_INDEX_0606 Disc (May 2006)" 2006-05-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0606.iso TN_INDEX_0606.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0606.iso TN_INDEX_0606.png
-# uploading MSTN-CD251-TN_INDEX_0607.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.iso" TN_INDEX_0607.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.png" TN_INDEX_0607.png
-node dx.js "TN_INDEX_0607.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0607 "Microsoft TechNet TN_INDEX_0607 Disc (June 2006)" 2006-06-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0607.iso TN_INDEX_0607.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0607.iso TN_INDEX_0607.png
-# uploading MSTN-CD258-TN_INDEX_0608.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.iso" TN_INDEX_0608.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.png" TN_INDEX_0608.png
-node dx.js "TN_INDEX_0608.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0608 "Microsoft TechNet TN_INDEX_0608 Disc (July 2006)" 2006-07-17 "Microsoft" "TechNet" desc.txt TN_INDEX_0608.iso TN_INDEX_0608.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0608.iso TN_INDEX_0608.png
-# uploading MSTN-CD270-TN_INDEX_0609.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.iso" TN_INDEX_0609.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.png" TN_INDEX_0609.png
-node dx.js "TN_INDEX_0609.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0609 "Microsoft TechNet TN_INDEX_0609 Disc (August 2006)" 2006-08-10 "Microsoft" "TechNet" desc.txt TN_INDEX_0609.iso TN_INDEX_0609.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0609.iso TN_INDEX_0609.png
-# uploading MSTN-CD278-TN_INDEX_0610.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.iso" TN_INDEX_0610.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.png" TN_INDEX_0610.png
-node dx.js "TN_INDEX_0610.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0610 "Microsoft TechNet TN_INDEX_0610 Disc (September 2006)" 2006-09-13 "Microsoft" "TechNet" desc.txt TN_INDEX_0610.iso TN_INDEX_0610.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0610.iso TN_INDEX_0610.png
-# uploading MSTN-CD287-TN_INDEX_0611.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.iso" TN_INDEX_0611.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.png" TN_INDEX_0611.png
-node dx.js "TN_INDEX_0611.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0611 "Microsoft TechNet TN_INDEX_0611 Disc (October 2006)" 2006-10-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0611.iso TN_INDEX_0611.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0611.iso TN_INDEX_0611.png
-# uploading MSTN-CD293-TN_INDEX_0612.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.iso" TN_INDEX_0612.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.png" TN_INDEX_0612.png
-node dx.js "TN_INDEX_0612.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0612 "Microsoft TechNet TN_INDEX_0612 Disc (November 2006)" 2006-11-07 "Microsoft" "TechNet" desc.txt TN_INDEX_0612.iso TN_INDEX_0612.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0612.iso TN_INDEX_0612.png
-# uploading MSTN-CD299-TN_INDEX_0701.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.iso" TN_INDEX_0701.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.png" TN_INDEX_0701.png
-node dx.js "TN_INDEX_0701.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0701 "Microsoft TechNet TN_INDEX_0701 Disc (December 2006)" 2006-12-17 "Microsoft" "TechNet" desc.txt TN_INDEX_0701.iso TN_INDEX_0701.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0701.iso TN_INDEX_0701.png
-# uploading MSTN-CD315-TN_INDEX_0703.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.iso" TN_INDEX_0703.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.png" TN_INDEX_0703.png
-node dx.js "TN_INDEX_0703.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0703 "Microsoft TechNet TN_INDEX_0703 Disc (February 2007)" 2007-02-13 "Microsoft" "TechNet" desc.txt TN_INDEX_0703.iso TN_INDEX_0703.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0703.iso TN_INDEX_0703.png
-# uploading MSTN-CD335-TN_INDEX_0707.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.iso" TN_INDEX_0707.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.png" TN_INDEX_0707.png
-node dx.js "TN_INDEX_0707.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0707 "Microsoft TechNet TN_INDEX_0707 Disc (June 2007)" 2007-06-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0707.iso TN_INDEX_0707.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0707.iso TN_INDEX_0707.png
-# uploading MSTN-CD342-TN_INDEX_0708.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.iso" TN_INDEX_0708.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.png" TN_INDEX_0708.png
-node dx.js "TN_INDEX_0708.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0708 "Microsoft TechNet TN_INDEX_0708 Disc (July 2007)" 2007-07-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0708.iso TN_INDEX_0708.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0708.iso TN_INDEX_0708.png
-# uploading MSTN-CD346-TN_INDEX_0712.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.iso" TN_INDEX_0712.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.png" TN_INDEX_0712.png
-node dx.js "TN_INDEX_0712.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-tn_index_0712 "Microsoft TechNet TN_INDEX_0712 Disc (November 2007)" 2007-11-05 "Microsoft" "TechNet" desc.txt TN_INDEX_0712.iso TN_INDEX_0712.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TN_INDEX_0712.iso TN_INDEX_0712.png
 # uploading MSTN-CD104-tn00403c.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD104-tn00403c.iso" TN00403C.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD104-tn00403c.png" TN00403C.png
@@ -2409,6 +2218,16 @@ while true; do
     sleep 300
 done
 rm desc.txt TNSG9809.iso TNSG9809.png
+# uploading MSTN-CD004-TNUA9809.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD004-TNUA9809.iso" TNUA9809.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD004-TNUA9809.png" TNUA9809.png
+node dx.js "TNUA9809.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tnua9809 "Microsoft TechNet TNUA9809 Disc (August 1998)" 1998-08-11 "Microsoft" "TechNet" desc.txt TNUA9809.iso TNUA9809.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TNUA9809.iso TNUA9809.png
 # uploading MSTN-CD005-TNUB9809.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD005-TNUB9809.iso" TNUB9809.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD005-TNUB9809.png" TNUB9809.png
@@ -2459,6 +2278,196 @@ while true; do
     sleep 300
 done
 rm desc.txt TNUF9809.iso TNUF9809.png
+# uploading MSTN-CD173-TN_INDEX_0511.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.iso" TN_INDEX_0511.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD173-TN_INDEX_0511.png" TN_INDEX_0511.png
+node dx.js "TN_INDEX_0511.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0511 "Microsoft TechNet TN_INDEX_0511 Disc (October 2005)" 2005-10-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0511.iso TN_INDEX_0511.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0511.iso TN_INDEX_0511.png
+# uploading MSTN-CD181-TN_INDEX_0512.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.iso" TN_INDEX_0512.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD181-TN_INDEX_0512.png" TN_INDEX_0512.png
+node dx.js "TN_INDEX_0512.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0512 "Microsoft TechNet TN_INDEX_0512 Disc (November 2005)" 2005-11-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0512.iso TN_INDEX_0512.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0512.iso TN_INDEX_0512.png
+# uploading MSTN-CD197-TN_INDEX_0601.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.iso" TN_INDEX_0601.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD197-TN_INDEX_0601.png" TN_INDEX_0601.png
+node dx.js "TN_INDEX_0601.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0601 "Microsoft TechNet TN_INDEX_0601 Disc (December 2005)" 2005-12-19 "Microsoft" "TechNet" desc.txt TN_INDEX_0601.iso TN_INDEX_0601.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0601.iso TN_INDEX_0601.png
+# uploading MSTN-CD209-TN_INDEX_0602.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.iso" TN_INDEX_0602.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD209-TN_INDEX_0602.png" TN_INDEX_0602.png
+node dx.js "TN_INDEX_0602.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0602 "Microsoft TechNet TN_INDEX_0602 Disc (January 2006)" 2006-01-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0602.iso TN_INDEX_0602.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0602.iso TN_INDEX_0602.png
+# uploading MSTN-CD220-TN_INDEX_0603.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.iso" TN_INDEX_0603.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD220-TN_INDEX_0603.png" TN_INDEX_0603.png
+node dx.js "TN_INDEX_0603.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0603 "Microsoft TechNet TN_INDEX_0603 Disc (February 2006)" 2006-02-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0603.iso TN_INDEX_0603.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0603.iso TN_INDEX_0603.png
+# uploading MSTN-CD226-TN_INDEX_0604.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.iso" TN_INDEX_0604.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD226-TN_INDEX_0604.png" TN_INDEX_0604.png
+node dx.js "TN_INDEX_0604.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0604 "Microsoft TechNet TN_INDEX_0604 Disc (March 2006)" 2006-03-26 "Microsoft" "TechNet" desc.txt TN_INDEX_0604.iso TN_INDEX_0604.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0604.iso TN_INDEX_0604.png
+# uploading MSTN-CD234-TN_INDEX_0605.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.iso" TN_INDEX_0605.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD234-TN_INDEX_0605.png" TN_INDEX_0605.png
+node dx.js "TN_INDEX_0605.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0605 "Microsoft TechNet TN_INDEX_0605 Disc (April 2006)" 2006-04-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0605.iso TN_INDEX_0605.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0605.iso TN_INDEX_0605.png
+# uploading MSTN-CD243-TN_INDEX_0606.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.iso" TN_INDEX_0606.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD243-TN_INDEX_0606.png" TN_INDEX_0606.png
+node dx.js "TN_INDEX_0606.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0606 "Microsoft TechNet TN_INDEX_0606 Disc (May 2006)" 2006-05-16 "Microsoft" "TechNet" desc.txt TN_INDEX_0606.iso TN_INDEX_0606.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0606.iso TN_INDEX_0606.png
+# uploading MSTN-CD251-TN_INDEX_0607.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.iso" TN_INDEX_0607.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD251-TN_INDEX_0607.png" TN_INDEX_0607.png
+node dx.js "TN_INDEX_0607.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0607 "Microsoft TechNet TN_INDEX_0607 Disc (June 2006)" 2006-06-18 "Microsoft" "TechNet" desc.txt TN_INDEX_0607.iso TN_INDEX_0607.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0607.iso TN_INDEX_0607.png
+# uploading MSTN-CD258-TN_INDEX_0608.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.iso" TN_INDEX_0608.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD258-TN_INDEX_0608.png" TN_INDEX_0608.png
+node dx.js "TN_INDEX_0608.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0608 "Microsoft TechNet TN_INDEX_0608 Disc (July 2006)" 2006-07-17 "Microsoft" "TechNet" desc.txt TN_INDEX_0608.iso TN_INDEX_0608.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0608.iso TN_INDEX_0608.png
+# uploading MSTN-CD270-TN_INDEX_0609.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.iso" TN_INDEX_0609.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD270-TN_INDEX_0609.png" TN_INDEX_0609.png
+node dx.js "TN_INDEX_0609.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0609 "Microsoft TechNet TN_INDEX_0609 Disc (August 2006)" 2006-08-10 "Microsoft" "TechNet" desc.txt TN_INDEX_0609.iso TN_INDEX_0609.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0609.iso TN_INDEX_0609.png
+# uploading MSTN-CD278-TN_INDEX_0610.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.iso" TN_INDEX_0610.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD278-TN_INDEX_0610.png" TN_INDEX_0610.png
+node dx.js "TN_INDEX_0610.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0610 "Microsoft TechNet TN_INDEX_0610 Disc (September 2006)" 2006-09-13 "Microsoft" "TechNet" desc.txt TN_INDEX_0610.iso TN_INDEX_0610.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0610.iso TN_INDEX_0610.png
+# uploading MSTN-CD287-TN_INDEX_0611.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.iso" TN_INDEX_0611.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD287-TN_INDEX_0611.png" TN_INDEX_0611.png
+node dx.js "TN_INDEX_0611.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0611 "Microsoft TechNet TN_INDEX_0611 Disc (October 2006)" 2006-10-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0611.iso TN_INDEX_0611.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0611.iso TN_INDEX_0611.png
+# uploading MSTN-CD293-TN_INDEX_0612.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.iso" TN_INDEX_0612.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD293-TN_INDEX_0612.png" TN_INDEX_0612.png
+node dx.js "TN_INDEX_0612.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0612 "Microsoft TechNet TN_INDEX_0612 Disc (November 2006)" 2006-11-07 "Microsoft" "TechNet" desc.txt TN_INDEX_0612.iso TN_INDEX_0612.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0612.iso TN_INDEX_0612.png
+# uploading MSTN-CD299-TN_INDEX_0701.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.iso" TN_INDEX_0701.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD299-TN_INDEX_0701.png" TN_INDEX_0701.png
+node dx.js "TN_INDEX_0701.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0701 "Microsoft TechNet TN_INDEX_0701 Disc (December 2006)" 2006-12-17 "Microsoft" "TechNet" desc.txt TN_INDEX_0701.iso TN_INDEX_0701.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0701.iso TN_INDEX_0701.png
+# uploading MSTN-CD315-TN_INDEX_0703.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.iso" TN_INDEX_0703.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD315-TN_INDEX_0703.png" TN_INDEX_0703.png
+node dx.js "TN_INDEX_0703.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0703 "Microsoft TechNet TN_INDEX_0703 Disc (February 2007)" 2007-02-13 "Microsoft" "TechNet" desc.txt TN_INDEX_0703.iso TN_INDEX_0703.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0703.iso TN_INDEX_0703.png
+# uploading MSTN-CD335-TN_INDEX_0707.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.iso" TN_INDEX_0707.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD335-TN_INDEX_0707.png" TN_INDEX_0707.png
+node dx.js "TN_INDEX_0707.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0707 "Microsoft TechNet TN_INDEX_0707 Disc (June 2007)" 2007-06-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0707.iso TN_INDEX_0707.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0707.iso TN_INDEX_0707.png
+# uploading MSTN-CD342-TN_INDEX_0708.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.iso" TN_INDEX_0708.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD342-TN_INDEX_0708.png" TN_INDEX_0708.png
+node dx.js "TN_INDEX_0708.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0708 "Microsoft TechNet TN_INDEX_0708 Disc (July 2007)" 2007-07-11 "Microsoft" "TechNet" desc.txt TN_INDEX_0708.iso TN_INDEX_0708.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0708.iso TN_INDEX_0708.png
+# uploading MSTN-CD346-TN_INDEX_0712.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.iso" TN_INDEX_0712.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD346-TN_INDEX_0712.png" TN_INDEX_0712.png
+node dx.js "TN_INDEX_0712.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-tn_index_0712 "Microsoft TechNet TN_INDEX_0712 Disc (November 2007)" 2007-11-05 "Microsoft" "TechNet" desc.txt TN_INDEX_0712.iso TN_INDEX_0712.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TN_INDEX_0712.iso TN_INDEX_0712.png
 # uploading MSTN-CD206-TTCD_JAN06.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD206-TTCD_JAN06.iso" TTCD_JAN06.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD206-TTCD_JAN06.png" TTCD_JAN06.png
@@ -2549,22 +2558,22 @@ while true; do
     sleep 300
 done
 rm desc.txt TTT27.iso TTT27.png
-# uploading MSTN-CD106-ttt28.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.iso" TTT28.iso
-cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.png" TTT28.png
-node dx.js "TTT28.iso" --desc > desc.txt
-while true; do
-    python upload.py ms-technet-ttt28 "Microsoft TechNet TTT28 Disc (March 2004)" 2004-03-11 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
-    if [ $? -eq 0 ]; then break; fi
-    sleep 300
-done
-rm desc.txt TTT28.iso TTT28.png
 # uploading MSTN-CD125-ttt28.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD125-ttt28.iso" TTT28.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD125-ttt28.png" TTT28.png
 node dx.js "TTT28.iso" --desc > desc.txt
 while true; do
-    python upload.py ms-technet-ttt28-1 "Microsoft TechNet TTT28 Disc (June 2004)" 2004-06-07 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
+    python upload.py ms-technet-ttt28 "Microsoft TechNet TTT28 Disc (June 2004)" 2004-06-07 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
+    if [ $? -eq 0 ]; then break; fi
+    sleep 300
+done
+rm desc.txt TTT28.iso TTT28.png
+# uploading MSTN-CD106-ttt28.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.iso" TTT28.iso
+cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD106-ttt28.png" TTT28.png
+node dx.js "TTT28.iso" --desc > desc.txt
+while true; do
+    python upload.py ms-technet-ttt28-1 "Microsoft TechNet TTT28 Disc (March 2004)" 2004-03-11 "Microsoft" "TechNet" desc.txt TTT28.iso TTT28.png
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done

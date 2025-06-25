@@ -586,7 +586,7 @@ async function main(argc, argv, errors)
                     let row = await csv.getNextRow();
                     if (!row) break;
                     let item = {
-                        volume: row.volume || "",
+                        volume: row.volume.toUpperCase() || "",
                         entries: row.entries || 0,
                         newest: row.newest? new Date(row.newest) : new Date(0),
                         size: row.size? +row.size : 0,
@@ -616,8 +616,8 @@ async function main(argc, argv, errors)
                         if (a.entries > b.entries) return 1;
                         if (a.newest.getTime() < b.newest.getTime()) return -1;
                         if (a.newest.getTime() > b.newest.getTime()) return 1;
-                        if (a.path < b.path) return -1;
-                        if (a.path > b.path) return 1;
+                        if (a.path < b.path) return 1;
+                        if (a.path > b.path) return -1;
                         return 0;
                     });
                     //
@@ -627,7 +627,7 @@ async function main(argc, argv, errors)
                     itemList = itemList.filter(item => {
                         if (!lastItem || item.volume != lastItem.volume || item.entries != lastItem.entries || item.newest.getTime() != lastItem.newest.getTime()) {
                             lastItem = item;
-                            return true;
+                            return !item.path.match(/^https?:\/\//);
                         }
                         if (argv.verbose && item.path.match(/^https?:\/\//) && lastItem.path.match(/^https?:\/\//)) {
                             printf("possible website duplicates:\n\t%s\n\t%s\n", item.path, lastItem.path);
@@ -640,14 +640,14 @@ async function main(argc, argv, errors)
                         return false;
                     });
                 }
-                if (!argv.upload && !argv.update) {
+                if (!argv.upload && !argv.update || argv.verbose) {
                     printf("Found %d archive%s in CSV file (%d duplicates removed)\n", itemList.length, cDuplicates);
                 }
             } else {
                 let text = await fs.readFile(argv.batch, "utf8");
                 let list = getList(text);
                 itemList = itemList.concat(list);
-                if (!argv.upload && !argv.update) {
+                if (!argv.upload && !argv.update || argv.verbose) {
                     printf("Found %d archive%s in batch file\n", list.length);
                 }
             }
@@ -854,7 +854,7 @@ async function main(argc, argv, errors)
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
             let entries = [];
-            if (!isArchive && !argv.recurse && !archiveDB) {
+            if (!isArchive && !argv.recurse && !archiveDB && (argv.desc || argv.list)) {
                 dirListing = true;
             }
             if (isArchive || isDisk) {
@@ -1008,6 +1008,7 @@ async function main(argc, argv, errors)
                     id += category.toLowerCase().replace(/ /g, '-') + '-';
                 }
                 id += label.toLowerCase();
+                id = id.replace("ms-technet-9908betacd1", "ms-technet-9908-betacd1");
                 let origID = id, nextID = 1;
                 while (uploadIDs.includes(id)) {
                     id = origID + "-" + nextID++;
