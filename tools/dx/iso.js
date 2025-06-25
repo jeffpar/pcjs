@@ -577,7 +577,7 @@ export default class ISO {
             } while (position < image.size);
         } catch (error) {
             await this.close(image);
-            throw error.message;
+            throw error;
         }
         if (!image.primary || !image.primary.blockSize || ((image.primary.blockSize - 1) & image.primary.blockSize) !== 0) {
             await this.close(image);
