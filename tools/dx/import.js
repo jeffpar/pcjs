@@ -1,7 +1,7 @@
 /**
  * import.js
  *
- * Imports CSV files produced by dz.js into a database
+ * Imports CSV files produced by dx.js into a database
  *
  * Usage: node import.js [CSV file]
  */

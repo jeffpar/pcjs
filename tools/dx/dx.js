@@ -11,7 +11,7 @@
  *
  * This command:
  *
- *      dz.js -lt https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP
+ *      dx.js -lt https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0047.tar/ibm0047/AVC-8.ZIP
  *
  * lists 9 files, two of which trigger warnings due to the --test (-t) option:
  *
@@ -62,6 +62,7 @@ import CSV from "./csv.js";
 import Format from "./format.js";
 import DZip from "./dzip.js";
 import Disk from "./disk.js";
+import { DiskInfo } from "./disk.js";
 import ISO from "./iso.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
@@ -72,15 +73,19 @@ const printf = function(...args) {
 };
 
 /**
- * @class DZ
+ * @class DX
  *
  * TODO: Refactor some of the command-line logic from main() into this class, so that it can be
  * used by other clients.
  */
-class DZ {
-    static EXCEPTIONS = {               // use bits 16-31 (bits 0-15 are reserved for other classes)
-        CSV:            0x10000
-    };
+export default class DX {
+
+    /**
+     * Public class fields
+     */
+    static DEBUG = false;
+    static VERSION = "1.0";
+    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 }
 
 //
@@ -194,10 +199,6 @@ const options = {
             "wrong": {
                 value: DZip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with the wrong type"
-            },
-            "csv": {
-                value: DZ.EXCEPTIONS.CSV,
-                description: "process only unique archives listed in CSV"
             }
         }
     },
@@ -264,10 +265,15 @@ const options = {
         alias: "-t",
         description: "test contents of specified archive(s)"
     },
+    "update": {
+        type: "boolean",
+        usage: "--update",
+        description: "generate an update script for the Internet Archive",
+        internal: true
+    },
     "upload": {
         type: "boolean",
         usage: "--upload",
-        alias: "-u",
         description: "generate an upload script for the Internet Archive"
     },
     "verbose": {
@@ -498,7 +504,7 @@ function getList(text)
 async function main(argc, argv, errors)
 {
     if (argv.help || argv.verbose) {
-        printf("dz.js %s\n%s\n\nArguments: %s\n", DZip.VERSION, DZip.COPYRIGHT, argv[0]);
+        printf("dx.js %s\n%s\n\nArguments: %s\n", DX.VERSION, DX.COPYRIGHT, argv[0]);
         if (argv.help) {
             options.help.handler();
         }
@@ -583,6 +589,7 @@ async function main(argc, argv, errors)
                         volume: row.volume || "",
                         entries: row.entries || 0,
                         newest: row.newest? new Date(row.newest) : new Date(0),
+                        size: row.size? +row.size : 0,
                         path: row.path + "/" + row.name
                     };
                     if (row.photo) {
@@ -596,12 +603,12 @@ async function main(argc, argv, errors)
                 } while (true);
                 await csv.close();
                 //
-                // If filterExceptions & DZ.EXCEPTIONS.CSV, we want to weed out duplicates.
+                // If we're generating scripts for the Internet Archive, we want to weed out duplicates first.
                 //
                 // The process begins by sorting itemList by volume, then by entries, then by newest, and finally by path.
                 //
                 let cDuplicates = 0;
-                if ((filterExceptions & DZ.EXCEPTIONS.CSV) && csv.hasFields("volume", "entries", "newest")) {
+                if ((argv.upload || argv.update) && csv.hasFields("volume", "entries", "newest", "size")) {
                     itemList.sort((a, b) => {
                         if (a.volume < b.volume) return -1;
                         if (a.volume > b.volume) return 1;
@@ -622,22 +629,25 @@ async function main(argc, argv, errors)
                             lastItem = item;
                             return true;
                         }
-                        if (argv.verbose && lastItem.path.match(/^https?:\/\//) && item.path.match(/^https?:\/\//)) {
+                        if (argv.verbose && item.path.match(/^https?:\/\//) && lastItem.path.match(/^https?:\/\//)) {
                             printf("possible website duplicates:\n\t%s\n\t%s\n", item.path, lastItem.path);
+                        }
+                        if (argv.verbose && item.size != lastItem.size) {
+                            printf("size mismatch in presumed duplicates:\n\t%s (%d)\n\t%s (%d)\n", item.path, item.size, lastItem.path, lastItem.size);
                         }
                         lastItem = item;
                         cDuplicates++;
                         return false;
                     });
                 }
-                if (!argv.upload) {
+                if (!argv.upload && !argv.update) {
                     printf("Found %d archive%s in CSV file (%d duplicates removed)\n", itemList.length, cDuplicates);
                 }
             } else {
                 let text = await fs.readFile(argv.batch, "utf8");
                 let list = getList(text);
                 itemList = itemList.concat(list);
-                if (!argv.upload) {
+                if (!argv.upload && !argv.update) {
                     printf("Found %d archive%s in batch file\n", list.length);
                 }
             }
@@ -976,7 +986,7 @@ async function main(argc, argv, errors)
                 }
                 await csv.write(getCSVLine(archive, archive.db));
             }
-            if (argv.upload) {
+            if (argv.upload || argv.update) {
                 //
                 // I expect archive.name to refer to a file with a path of the form:
                 //
@@ -1005,10 +1015,10 @@ async function main(argc, argv, errors)
                 uploadIDs.push(id);
                 let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified).trim();
                 let files = [], targetName = label + archiveExt;
-                printf("# uploading %s\n", path.basename(archive.name));
+                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(archive.name));
                 printf("cp \"%s\" %s\n", archive.name, targetName);
                 files.push(targetName);
-                if (archivePhoto) {
+                if (argv.upload && archivePhoto) {
                     let match = archivePhoto.match(/^(.*?)(\.[^.]+)$/);
                     if (match) {
                         let targetExt = match[2].toLowerCase();
@@ -1017,10 +1027,14 @@ async function main(argc, argv, errors)
                         files.push(targetName);
                     }
                 }
-                printf("node dz.js \"%s%s\" --desc > desc.txt\n", label, archiveExt);
+                printf("node dx.js \"%s%s\" --desc > desc.txt\n", label, archiveExt);
                 files.unshift("desc.txt");
                 printf("while true; do\n");
-                printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                if (argv.update) {
+                    printf("    python update.py %s \"%s\" desc.txt\n", id, title);
+                } else {
+                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                }
                 printf("    if [ $? -eq 0 ]; then break; fi\n");
                 printf("    sleep 300\n");
                 printf("done\n");
@@ -1070,7 +1084,7 @@ async function main(argc, argv, errors)
                 // TODO: Consider an option for including volume labels in the output, for completeness.
                 //
                 if (entryAttr & 0x08) {
-                    continue;           // skip volume labels
+                    continue;                           // skip volume labels
                 }
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
@@ -1078,14 +1092,14 @@ async function main(argc, argv, errors)
                 // that entries inside one or more directories have those directories explicitly specified in
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
-                if ((entryAttr & 0x10) || entry.name.endsWith("/")) {
-                    if (!dirListing) {
-                        if (argv.extract || argv.dir) {
-                            dirTimestamps[entry.target] = entry.modified;
-                        }
-                        continue;       // skip directory entries
+                if ((entryAttr & DiskInfo.ATTR.SUBDIR) || entry.name.endsWith("/")) {
+                    if (argv.extract || argv.dir) {
+                        dirTimestamps[entry.target] = entry.modified;
                     }
-                    entryAttr |= 0x10;  // ensure all directory entries are consistently marked
+                    if (!dirListing) {
+                        continue;                       // skip directory entries
+                    }
+                    entryAttr |= DiskInfo.ATTR.SUBDIR;  // ensure all directory entries are consistently marked
                 }
                 //
                 // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
@@ -1112,68 +1126,70 @@ async function main(argc, argv, errors)
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
                 //
-                if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
-                    writeData = async function(db, length) {
-                        if (db) {
-                            if (!targetFile) {
-                                //
-                                // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
-                                //
-                                await fs.mkdir(path.dirname(entry.target), { recursive: true });
-                                try {
-                                    targetFile = await fs.open(entry.target, argv.overwrite? "w" : "wx");
-                                    if (!argv.list && argv.verbose) {
-                                        printf("created %s\n", entry.target);
-                                    }
-                                } catch (error) {
-                                    if (error.code == "EEXIST") {
-                                        //
-                                        // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
-                                        // since extraction has been enabled.
-                                        //
-                                        let warning = entry.target + ": already exists";
-                                        if (argv.list) {
-                                            entry.warnings.unshift(warning);
-                                        } else {
-                                            printf("%s\n", warning);
+                if (!(entryAttr & DiskInfo.ATTR.SUBDIR)) {
+                    if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
+                        writeData = async function(db, length) {
+                            if (db) {
+                                if (!targetFile) {
+                                    //
+                                    // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
+                                    //
+                                    await fs.mkdir(path.dirname(entry.target), { recursive: true });
+                                    try {
+                                        targetFile = await fs.open(entry.target, argv.overwrite? "w" : "wx");
+                                        if (!argv.list && argv.verbose) {
+                                            printf("created %s\n", entry.target);
                                         }
-                                    } else {
-                                        printf("%s: %s\n", entry.target, error.message);
+                                    } catch (error) {
+                                        if (error.code == "EEXIST") {
+                                            //
+                                            // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
+                                            // since extraction has been enabled.
+                                            //
+                                            let warning = entry.target + ": already exists";
+                                            if (argv.list) {
+                                                entry.warnings.unshift(warning);
+                                            } else {
+                                                printf("%s\n", warning);
+                                            }
+                                        } else {
+                                            printf("%s: %s\n", entry.target, error.message);
+                                        }
+                                        return false;
                                     }
-                                    return false;
                                 }
+                                await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
+                                return true;
                             }
-                            await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
-                            return true;
-                        }
-                        if (targetFile) {
-                            await targetFile.close();
-                            if (entry.modified) {
-                                await fs.utimes(entry.target, entry.modified, entry.modified);
+                            if (targetFile) {
+                                await targetFile.close();
+                                if (entry.modified) {
+                                    await fs.utimes(entry.target, entry.modified, entry.modified);
+                                }
+                                return true;
                             }
-                            return true;
+                            return false;
+                        };
+                    }
+                    if (argv.csv && argv.list || argv.dir || argv.extract || argv.test || recurse) {
+                        if (argv.debug) {
+                            printf("reading %s\n", entryPath);
+                            printed = true;
                         }
-                        return false;
-                    };
-                }
-                if ((argv.csv && argv.list) || argv.dir || argv.extract || argv.test || recurse) {
-                    if (argv.debug) {
-                        printf("reading %s\n", entryPath);
-                        printed = true;
-                    }
-                    db = await archiveClass.readFile(archive, entry, writeData);
-                    //
-                    // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
-                    // the file header size differs from the DataBuffer size, and any differences between file
-                    // and directory header values (in the absence of other warnings) should be noted as well.
-                    //
-                    //      entry.size = db && db.length || 0;
-                    //
-                    if (!entry.warnings.length && db && db.length != entry.size) {
-                        entry.warnings.push(`Received ${db.length} bytes`);
-                    }
-                    if (!db && !argv.list) {
-                        printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
+                        db = await archiveClass.readFile(archive, entry, writeData);
+                        //
+                        // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
+                        // the file header size differs from the DataBuffer size, and any differences between file
+                        // and directory header values (in the absence of other warnings) should be noted as well.
+                        //
+                        //      entry.size = db && db.length || 0;
+                        //
+                        if (!entry.warnings.length && db && db.length != entry.size) {
+                            entry.warnings.push(`Received ${db.length} bytes`);
+                        }
+                        if (!db && !argv.list) {
+                            printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
+                        }
                     }
                 }
                 let name = path.basename(entry.name);
@@ -1190,7 +1206,7 @@ async function main(argc, argv, errors)
                         truncateDesc = true;
                     }
                     if (!truncateDesc) {
-                        if (entryAttr & 0x10) {
+                        if (entryAttr & DiskInfo.ATTR.SUBDIR) {
                             printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
                         } else {
                             printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
@@ -1288,16 +1304,16 @@ async function main(argc, argv, errors)
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
         let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
-        if (!argv.csv && !argv.upload) {
+        if (!argv.csv && !argv.upload && !argv.update) {
             printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
             if (argv.desc) {
-                printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dz\n");
+                printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
             }
             heading = false;
         }
         nTotalWarnings += nWarnings;
     }
-    if (nTotalArchives > 1 && !argv.upload) {
+    if (nTotalArchives > 1 && !argv.upload && !argv.update) {
         printf("\n%d total archive%s, %d total file%s, %d total warning%s\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     }
     if (csv) {

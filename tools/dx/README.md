@@ -1,10 +1,10 @@
 ---
 layout: page
 title: PCjs Archive Utility
-permalink: /tools/dz/
+permalink: /tools/dx/
 ---
 
-This directory contains [DZ.js](dz.js), a stand-alone JavaScript command-line utility I created for displaying and extracting the contents of assorted archives and disk images.  It is built upon several other stand-alone JavaScript classes, the key ones being:
+This directory contains [DX.js](dx.js), a stand-alone JavaScript command-line utility I created for displaying and extracting the contents of assorted archives and disk images.  It is built upon several other stand-alone JavaScript classes, the key ones being:
 
   - [DZip.js](dzip.js) (to read ZIP and ARC archive files)
   - [Disk.js](disk.js) (to read IMG and JSON-encoded disk images used by PCjs)
@@ -21,21 +21,21 @@ Here are the prerequisites:
   1. Install [Node and NPM](https://nodejs.org)
   2. Clone the [pcjs](https://github.com/jeffpar/pcjs) repository (eg, `git clone https://github.com/jeffpar/pcjs.git`)
   3. CD into `pcjs` and run `npm install`
-  4. From the `pcjs` directory, CD to the `tools/dz` directory
+  4. From the `pcjs` directory, CD to the `tools/dx` directory
 
-The format of a `dz.js` command (as `--help` will also tell you) is:
+The format of a `dx.js` command (as `--help` will also tell you) is:
 
-    [node] dz.js [options] [archive(s)]
+    [node] dx.js [options] [archive(s)]
 
 Here is the complete help text:
 
-    dz.js 1.0
+    dx.js 1.0
     Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
 
-    Arguments: /Users/jeff/Sites/pcjs/tools/dz/dz.js -h
+    Arguments: /Users/jeff/Sites/pcjs/tools/dx/dx.js -h
 
     Usage:
-        dz.js [option(s)] [archive(s)]
+        dx.js [option(s)] [archive(s)]
 
     Processes ZIP, ARC, IMG, ISO and other archives
 
@@ -64,16 +64,16 @@ Here is the complete help text:
 
 In 2018 and 2019, I digitized lots of CD-ROMs, including hundreds of Microsoft TechNet CD-ROMs, with the intention of eventually uploading them to the Internet Archive.  However, I was unfamiliar with the process *and* I wanted to avoid uploading images that already existed in the archive, so it wasn't until 2025, with the help of this utility, that I finally began looking for gaps that I could help fill in the Internet Archive's collection.
 
-I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `DZ` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
+I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `DX` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
 
-Then I sorted my spreadsheet by volume name, number of entries on the volume, etc, and flagged all the duplicates.  Then I fed the filtered CSV list back into `DZ` with the `--batch` option again, and generated an upload script with the `--upload` option.
+Then I sorted my spreadsheet by volume name, number of entries on the volume, etc, and flagged all the duplicates.  Then I fed the filtered CSV list back into `DX` with the `--batch` option again, and generated an upload script with the `--upload` option.
 
 Here's an example of what `--upload` produces:
 
     # uploading MSTN-CD177-ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.png" ARMEFPP_EN.png
-    node dz.js "ARMEFPP_EN.iso" --desc > desc.txt
+    node dx.js "ARMEFPP_EN.iso" --desc > desc.txt
     python upload.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" 2005-03-25 desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
     rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
 
