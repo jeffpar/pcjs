@@ -79,8 +79,8 @@ Here's a stripped-down example of what `--upload` produces:
 
 The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](upload.py) to create a new item in the Internet Archive.
 
-Later, I added an `--update` option to generate another `bash` script to update selected metadata (eg, *title* and *description*), which I then modified by hand, changing all the title dates to match those printed on the faces of the CDs.
+Later, I added an `--update` option to generate another `bash` script that calls [update.py](update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.
 
-For the initial upload dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, usually by at least one month.
+For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, usually by at least one month.
 
 You can browse the results [here](https://archive.org/details/@jeffpar).
