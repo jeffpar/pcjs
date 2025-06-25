@@ -1,6 +1,14 @@
 import internetarchive
+import sys
 
-search_results = internetarchive.search_items('subject:technet AND mediatype:software')
+if len(sys.argv) < 3:
+	print("Usage: python search.py [mediatype] [subject]")
+	sys.exit(1)
+
+ITEM_MEDIATYPE = sys.argv[1]
+ITEM_SUBJECT = sys.argv[2]
+
+search_results = internetarchive.search_items(f'mediatype:{ITEM_MEDIATYPE} AND subject:{ITEM_SUBJECT}')
 
 for item in search_results:
     item_id = item['identifier']

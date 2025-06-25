@@ -2397,7 +2397,7 @@ rm desc.txt Y2K9908.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD045-Y2K9911.iso" Y2K9911.iso
 node dz.js "Y2K9911.iso" --desc > desc.txt
 while true; do
-    python update.py ms-technet-y2k9911 "Microsoft TechNet Y2K9911 Disc (October 1999)" desc.txt
+    python update.py ms-technet-y2k9911 "Microsoft TechNet Y2K9911 Disc (November 1999)" desc.txt
     if [ $? -eq 0 ]; then break; fi
     sleep 300
 done
