@@ -1,3 +1,4 @@
+set -x
 # uploading MSTN-CD034-9908BetaCD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.iso" 9908BETACD1.iso
 cp "/Users/jeff/Library/CloudStorage/OneDrive-Personal/Software/Discs/Microsoft/TechNet/MSTN-CD034-9908BetaCD1.png" 9908BETACD1.png
