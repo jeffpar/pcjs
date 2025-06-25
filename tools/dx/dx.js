@@ -86,6 +86,9 @@ export default class DX {
     static DEBUG = false;
     static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
+    static EXCEPTIONS = {               // use bits 16-31 (bits 0-15 are reserved for other classes)
+        UNIQUE:         0x10000
+    };
 }
 
 //
@@ -149,7 +152,9 @@ const options = {
         description: "generate an archive description",
         internal: true
         //
-        // NOTE: This generated "description" is currently nothing more than a truncated directory listing (more compact than --list)
+        // NOTE: This generated "description" is currently nothing more than a truncated directory listing
+        // (more compact than --list); however, if you use --desc instead of --list in conjunction with --csv,
+        // the CSV will include the full list of files but WITHOUT reading and hashing their contents.
         //
     },
     "dir": {
@@ -199,6 +204,10 @@ const options = {
             "wrong": {
                 value: DZip.EXCEPTIONS.WRONGTYPE,
                 description: "process only archives with the wrong type"
+            },
+            "unique": {
+                value: DX.EXCEPTIONS.UNIQUE,
+                description: "process only unique archives (CSV only)"
             }
         }
     },
@@ -608,7 +617,7 @@ async function main(argc, argv, errors)
                 // The process begins by sorting itemList by volume, then by entries, then by newest, and finally by path.
                 //
                 let cDuplicates = 0;
-                if ((argv.upload || argv.update) && csv.hasFields("volume", "entries", "newest", "size")) {
+                if ((argv.upload || argv.update || (filterExceptions & DX.EXCEPTIONS.UNIQUE)) && csv.hasFields("volume", "entries", "newest", "size")) {
                     itemList.sort((a, b) => {
                         if (a.volume < b.volume) return -1;
                         if (a.volume > b.volume) return 1;
@@ -627,12 +636,12 @@ async function main(argc, argv, errors)
                     itemList = itemList.filter(item => {
                         if (!lastItem || item.volume != lastItem.volume || item.entries != lastItem.entries || item.newest.getTime() != lastItem.newest.getTime()) {
                             lastItem = item;
-                            return !item.path.match(/^https?:\/\//);
+                            return argv.upload || argv.update? !item.path.match(/^https?:\/\//) : true;
                         }
                         if (argv.verbose && item.path.match(/^https?:\/\//) && lastItem.path.match(/^https?:\/\//)) {
                             printf("possible website duplicates:\n\t%s\n\t%s\n", item.path, lastItem.path);
                         }
-                        if (argv.verbose && item.size != lastItem.size) {
+                        if (argv.verbose && argv.debug && item.size != lastItem.size) {
                             printf("size mismatch in presumed duplicates:\n\t%s (%d)\n\t%s (%d)\n", item.path, item.size, lastItem.path, lastItem.size);
                         }
                         lastItem = item;
@@ -1008,7 +1017,6 @@ async function main(argc, argv, errors)
                     id += category.toLowerCase().replace(/ /g, '-') + '-';
                 }
                 id += label.toLowerCase();
-                id = id.replace("ms-technet-9908betacd1", "ms-technet-9908-betacd1");
                 let origID = id, nextID = 1;
                 while (uploadIDs.includes(id)) {
                     id = origID + "-" + nextID++;
@@ -1057,14 +1065,16 @@ async function main(argc, argv, errors)
                     if (argv.banner && archive.comment && !nArchiveFiles) {
                         printf("%s\n", archive.comment);
                     }
-                    if (dirListing) {
-                        printf("\n");
-                        // printf("\nFilename             Size   Date       Time       Path\n");
-                        // printf(  "--------             ----   ----       ----       ----\n");
-                    }
-                    else if (argv.list) {
-                        printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
-                        printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
+                    if (argv.desc || argv.list) {
+                        if (dirListing) {
+                            printf("\n");
+                            // printf("\nFilename             Size   Date       Time       Path\n");
+                            // printf(  "--------             ----   ----       ----       ----\n");
+                        }
+                        else {
+                            printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
+                            printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
+                        }
                     }
                     heading = true;
                 }
@@ -1198,29 +1208,29 @@ async function main(argc, argv, errors)
                     name = "…" + name.slice(-13);
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
-                if (dirListing) {
-                    let entryName = name == entry.name? "" : "   " + entry.name;
-                    if (entryName && argv.desc) {
-                        if (!truncateDesc) {
-                            printf("...\n");
-                        }
-                        truncateDesc = true;
-                    }
-                    if (!truncateDesc) {
-                        if (entryAttr & DiskInfo.ATTR.SUBDIR) {
-                            printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
-                        } else {
-                            printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
-                        }
-                    }
-                }
-                else if (argv.list) {
+                if (argv.desc || argv.list) {
                     entry.methodName = archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
                     if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                         entry.methodName += '*';
                     }
                     if (argv.csv) {
                         await csv.write(getCSVLine(entry, db));
+                    }
+                    else if (dirListing) {
+                        let entryName = name == entry.name? "" : "   " + entry.name;
+                        if (entryName && argv.desc) {
+                            if (!truncateDesc) {
+                                printf("...\n");
+                            }
+                            truncateDesc = true;
+                        }
+                        if (!truncateDesc) {
+                            if (entryAttr & DiskInfo.ATTR.SUBDIR) {
+                                printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
+                            } else {
+                                printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                            }
+                        }
                     }
                     else {
                         let comment;
@@ -1305,9 +1315,9 @@ async function main(argc, argv, errors)
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
         let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
-        if (!argv.csv && !argv.upload && !argv.update) {
+        if (!argv.upload && !argv.update) {
             printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
-            if (argv.desc) {
+            if (argv.desc && !argv.csv) {
                 printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
             }
             heading = false;
