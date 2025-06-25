@@ -66,9 +66,9 @@ In 2018 and 2019, I digitized lots of CD-ROMs, including hundreds of Microsoft T
 
 I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `dx.js` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
 
-Then I sorted my spreadsheet by volume name, number of entries on the volume, etc, and flagged all the duplicates.  Then I fed the filtered CSV list back into `dx.js` with the `--batch` option again, and generated an upload script with the `--upload` option.
+Then I added an `--upload` option to sort the CDs in my spreadsheet by volume name, number of entries on the volume, etc, filter out all the duplicates, and then generate a `bash` script to upload the remaining items.
 
-Here's an example of what `--upload` produces:
+Here's a stripped-down example of what `--upload` produces:
 
     # uploading MSTN-CD177-ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
@@ -78,5 +78,9 @@ Here's an example of what `--upload` produces:
     rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
 
 The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](upload.py) to create a new item in the Internet Archive.
+
+Later, I added an `--update` option to generate another `bash` script to update selected metadata (eg, *title* and *description*), which I then modified by hand, changing all the title dates to match those printed on the faces of the CDs.
+
+For the initial upload dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, usually by at least one month.
 
 You can browse the results [here](https://archive.org/details/@jeffpar).
