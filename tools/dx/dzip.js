@@ -271,7 +271,7 @@ export default class DZip {
     static RECORD_EXCEPTIONS  = 0x0000ff00;
 
     /**
-     * constructor(interfaces)
+     * constructor(interfaces, interfaceOptions)
      *
      * TODO: Consider making the Struct objects instance properties instead of static properties,
      * which would then make it easy to initialize their "warning" state in our constructor based on

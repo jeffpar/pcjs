@@ -58,7 +58,6 @@ import Struct from './struct.js';
  * @typedef  {object}   Interfaces
  * @property {function} fetch       (fetch() interface to read remote files)
  * @property {function} open        (open() interface to open local files)
- * @property {function} printf      (printf() interface to write messages; default is console.log)
  *
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
@@ -325,7 +324,7 @@ export default class ISO {
     };
 
     /**
-     * constructor(interfaces)
+     * constructor(interfaces, interfaceOptions)
      *
      * TODO: Consider making the Struct objects instance properties instead of static properties,
      * which would then make it easy to initialize their "warning" state in our constructor based on
@@ -338,7 +337,6 @@ export default class ISO {
     constructor(interfaces = {}, interfaceOptions = {})
     {
         this.interfaces = interfaces;
-        this.printf = interfaces.printf || console.log.bind(console);
         //
         // Set default interface options.
         //

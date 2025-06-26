@@ -61,9 +61,8 @@ import crypto from "crypto";
 import CSV from "./csv.js";
 import Format from "./format.js";
 import DZip from "./dzip.js";
-import Disk from "./disk.js";
+import DXC from "./dxc.js";
 import { DiskInfo } from "./disk.js";
-import ISO from "./iso.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
 const format = new Format();
@@ -71,51 +70,6 @@ const printf = function(...args) {
     let s = format.sprintf(...args);
     process.stdout.write(s);
 };
-
-/**
- * @class DX
- *
- * TODO: Refactor some of the command-line logic from main() into this class, so that it can be
- * used by other clients.
- */
-export default class DX {
-
-    /**
-     * Public class fields
-     */
-    static DEBUG = false;
-    static VERSION = "1.0";
-    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
-    static EXCEPTIONS = {               // use bits 16-31 (bits 0-15 are reserved for other classes)
-        UNIQUE:         0x10000
-    };
-}
-
-//
-// Normally, a client will provide either a fetch interface or open interface, not both; for example,
-// browsers don't have access to the file system, so they will provide only fetch.  But as a Node client,
-// we DO have both, so we provide both; our open() API defaults to open but will fall back to fetch if
-// the filename starts with a network prefix (eg, "http://").
-//
-// NOTE: While 'fetch' works fine for Node, browsers apparently require 'window.fetch.bind(window)' instead.
-//
-const dzip = new DZip({
-    fetch: fetch,                       // async interface for opening remote files
-    open: fs.open,                      // async interface for opening local files
- // inflate: zlib.inflateRaw,           // async interface for ZIP_DEFLATE data
-    inflateSync: zlib.inflateRawSync    // sync interface for ZIP_DEFLATE data
-});
-
-const disk = new Disk({
-    fetch: fetch,
-    open: fs.open
-});
-
-const iso = new ISO({
-    fetch: fetch,
-    open: fs.open,
-    printf: printf
-});
 
 const options = {
     "batch": {
@@ -206,7 +160,7 @@ const options = {
                 description: "process only archives with the wrong type"
             },
             "unique": {
-                value: DX.EXCEPTIONS.UNIQUE,
+                value: DXC.EXCEPTIONS.UNIQUE,
                 description: "process only unique archives (CSV only)"
             }
         }
@@ -316,7 +270,7 @@ const options = {
         description: "display this help message",
         handler: function() {
             printf("\nUsage:\n    %s [option(s)] [archive(s)]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, ISO and other archives\n");
+            printf("\nProcesses ZIP, ARC, IMG, ISO, MDF and other archives\n");
             printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];
@@ -718,9 +672,22 @@ async function main(argc, argv, errors)
     if (nErrors) {
         return;
     }
+    //
+    // Normally, a client will provide either a fetch interface or open interface, not both; for example,
+    // browsers don't have access to the file system, so they will provide only fetch.  But as a Node client,
+    // we DO have both, so we provide both; our open() API defaults to open but will fall back to fetch if
+    // the filename starts with a network prefix (eg, "http://").
+    //
+    // NOTE: While 'fetch' works fine for Node, browsers apparently require 'window.fetch.bind(window)' instead.
+    //
+    let dxc = new DXC({
+        fetch: fetch,                       // async interface for opening remote files
+        open: fs.open,                      // async interface for opening local files
+     // inflate: zlib.inflateRaw,           // async interface for ZIP_DEFLATE data
+        inflateSync: zlib.inflateRawSync    // sync interface for ZIP_DEFLATE data
+    });
     if (argv.warnings) {
-        dzip.enableWarnings();
-        iso.enableWarnings();
+        dxc.enableWarnings();
     }
     let bannerHashes = {};
     let heading = false, truncateDesc = false;
@@ -736,9 +703,8 @@ async function main(argc, argv, errors)
     // original purpose was processing ZIP and ARC archives, the name has stuck.
     //
     let processArchive = async function(archiveID, archivePath, archivePhoto = null, archiveThumb = null, archiveTarget = null, archiveDB = null, modified = null) {
-        let archive, archiveClass;
+        let handle;
         let dirListing = argv.desc;
-        let isArchive = false, isDisk = false;
         let archiveName = path.basename(archivePath);
         let archiveExt = path.extname(archiveName);
         let widthPhoto = 0, heightPhoto = 0;
@@ -840,22 +806,7 @@ async function main(argc, argv, errors)
             if (archivePath[0] == '~') {
                 archivePath = path.join(process.env.HOME, archivePath.slice(1));
             }
-            if (archiveExt.match(/(\.zip|\.arc)$/i)) {
-                isArchive = true;
-                archiveClass = dzip;
-            }
-            if (archiveExt.match(/(\.img|\.json)$/i)) {
-                isDisk = true;
-                archiveClass = disk;
-            }
-            if (archiveExt.match(/(\.iso|\.mdf|\.bin|\.cdr)$/i)) {
-                isDisk = true;
-                archiveClass = iso;
-            }
-            if (!archiveClass) {
-                throw new Error(`unrecognized archive type ${archiveExt}`);
-            }
-            archive = await archiveClass.open(archivePath, archiveDB, options);
+            handle = await dxc.open(archivePath, archiveDB, options);
         } catch (error) {
             printf("error opening %s: %s\n", archivePath, error.message);
             return [0, 1];
@@ -863,16 +814,16 @@ async function main(argc, argv, errors)
         let nArchiveFiles = 0, nArchiveWarnings = 0;
         try {
             let entries = [];
-            if (!isArchive && !argv.recurse && !archiveDB && (argv.desc || argv.list)) {
+            if (!handle.isArchive && !argv.recurse && !archiveDB && (argv.desc || argv.list)) {
                 dirListing = true;
             }
-            if (isArchive || isDisk) {
+            if (handle.isArchive || handle.isDisk) {
                 //
                 // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
                 // to flag the archive as having already scanned them, so that readDirectory() won't bother.
                 //
                 if (argv.nodir) {
-                    archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
+                    handle.archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
                 }
                 //
                 // This next line is just shorthand for saying that if we're recursively processing archives,
@@ -881,19 +832,18 @@ async function main(argc, argv, errors)
                 // then any file filters will only be applied to the archives themselves.
                 //
                 let filterFiles = (!argv.recurse == !archiveDB? argv.files : undefined);
-                entries = await archiveClass.readDirectory(archive, filterFiles, filterExceptions, filterMethod);
-                archive.label = archiveClass.readLabel(archive);
-                if (archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
-                    archive.warnings.push("Unrecognized archive");
+                entries = await dxc.readDirectory(handle, filterFiles, filterExceptions, filterMethod);
+                if (handle.archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
+                    handle.archive.warnings.push("Unrecognized archive");
                 }
-                else if ((isArchive || isDisk) && !entries.length && !filterFiles && !filterExceptions && filterMethod == -1) {
-                    archive.warnings.push("No entries");
+                else if ((handle.isArchive || handle.isDisk) && !entries.length && !filterFiles && !filterExceptions && filterMethod == -1) {
+                    handle.archive.warnings.push("No entries");
                 }
-                if (archive.warnings.length && (!archive.volTable || archive.volTable.length)) {
+                if (handle.archive.warnings.length && (!handle.archive.volTable || handle.archive.volTable.length)) {
                     if (argv.verbose) {
-                        printf("%s: %s\n", archivePath, archive.warnings.join("; "));
+                        printf("%s: %s\n", archivePath, handle.archive.warnings.join("; "));
                     } else {
-                        printf("%s: %d issue%s detected\n", archivePath, archive.warnings.length);
+                        printf("%s: %d issue%s detected\n", archivePath, handle.archive.warnings.length);
                     }
                     nArchiveWarnings++;
                 }
@@ -942,13 +892,13 @@ async function main(argc, argv, errors)
                 }
             }
             let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
-            if (archive.comment) {
+            if (handle.archive.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
                 // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
                 //
                 if (!argv.extract && argv.dir && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
-                    let hash = crypto.createHash('md5').update(archive.comment).digest('hex');
+                    let hash = crypto.createHash('md5').update(handle.archive.comment).digest('hex');
                     if (bannerHashes[hash]) {
                         bannerHashes[hash]++;
                     } else {
@@ -962,10 +912,10 @@ async function main(argc, argv, errors)
                         //
                         await fs.mkdir(path.dirname(bannerPath), { recursive: true });
                         try {
-                            await fs.writeFile(bannerPath, archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
+                            await fs.writeFile(bannerPath, handle.archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
                             if (argv.verbose) printf("created %s\n", entry.target);
-                            if (archive.modified) {
-                                await fs.utimes(bannerPath, archive.modified, archive.modified);
+                            if (handle.archive.modified) {
+                                await fs.utimes(bannerPath, handle.archive.modified, handle.archive.modified);
                             }
                         } catch (error) {
                             if (error.code == "EEXIST") {
@@ -985,15 +935,15 @@ async function main(argc, argv, errors)
                 //
                 // Update archive stats
                 //
-                archive.newestFileTime = 0;
-                archive.totalFiles = entries.length;
+                handle.archive.newestFileTime = 0;
+                handle.archive.totalFiles = entries.length;
                 for (let entry of entries) {
                     let fileTime = entry.modified.getTime();
-                    if (archive.newestFileTime < fileTime) {
-                        archive.newestFileTime = fileTime;
+                    if (handle.archive.newestFileTime < fileTime) {
+                        handle.archive.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(getCSVLine(archive, archive.db));
+                await csv.write(getCSVLine(handle.archive, handle.archive.db));
             }
             if (argv.upload || argv.update) {
                 //
@@ -1003,10 +953,10 @@ async function main(argc, argv, errors)
                 //
                 // So let's extract the publisher and category values from the path now.
                 //
-                let pathParts = path.dirname(archive.name).split(path.sep);
+                let pathParts = path.dirname(handle.archive.name).split(path.sep);
                 let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
                 let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
-                let label = (archive.label || srcBase).replace(/ /g, "-").toUpperCase();
+                let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
                 let id = "";
                 if (publisher) {
                     id += publisher.toLowerCase().replace(/ /g, '-');
@@ -1022,17 +972,17 @@ async function main(argc, argv, errors)
                     id = origID + "-" + nextID++;
                 }
                 uploadIDs.push(id);
-                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, archive.modified).trim();
+                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, handle.archive.modified).trim();
                 let files = [], targetName = label + archiveExt;
-                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(archive.name));
-                printf("cp \"%s\" %s\n", archive.name, targetName);
+                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(handle.archive.name));
+                printf("cp \"%s\" %s\n", handle.archive.name, targetName);
                 files.push(targetName);
                 if (argv.upload && archivePhoto) {
                     let match = archivePhoto.match(/^(.*?)(\.[^.]+)$/);
                     if (match) {
                         let targetExt = match[2].toLowerCase();
                         let targetName = label + targetExt;
-                        printf("cp \"%s/%s\" %s\n", path.dirname(archive.name), archivePhoto, targetName);
+                        printf("cp \"%s/%s\" %s\n", path.dirname(handle.archive.name), archivePhoto, targetName);
                         files.push(targetName);
                     }
                 }
@@ -1042,7 +992,7 @@ async function main(argc, argv, errors)
                 if (argv.update) {
                     printf("    python update.py %s \"%s\" desc.txt\n", id, title);
                 } else {
-                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, archive.modified, archive.modified, archive.modified, publisher, category, files.join(" "));
+                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, handle.archive.modified, handle.archive.modified, handle.archive.modified, publisher, category, files.join(" "));
                 }
                 printf("    if [ $? -eq 0 ]; then break; fi\n");
                 printf("    sleep 300\n");
@@ -1051,10 +1001,10 @@ async function main(argc, argv, errors)
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
-                    if (argv.banner && archive.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
+                    if (argv.banner && handle.archive.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
                         if (argv.desc || argv.list) printf("\n");
                         if (!nArchiveFiles || argv.list) {
-                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", archivePath, archive.label? ` [${archive.label}]` : "", nArchiveFiles? " (continued)" : "");
+                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", archivePath, handle.label? ` [${handle.label}]` : "", nArchiveFiles? " (continued)" : "");
                         }
                     }
                     //
@@ -1062,8 +1012,8 @@ async function main(argc, argv, errors)
                     // filtering condition (--filter banner), but if you also want to SEE the banners, then
                     // you must also specify --banner.
                     //
-                    if (argv.banner && archive.comment && !nArchiveFiles) {
-                        printf("%s\n", archive.comment);
+                    if (argv.banner && handle.archive.comment && !nArchiveFiles) {
+                        printf("%s\n", handle.archive.comment);
                     }
                     if (argv.desc || argv.list) {
                         if (dirListing) {
@@ -1187,7 +1137,7 @@ async function main(argc, argv, errors)
                             printf("reading %s\n", entryPath);
                             printed = true;
                         }
-                        db = await archiveClass.readFile(archive, entry, writeData);
+                        db = await dxc.readFile(handle, entry, writeData);
                         //
                         // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
                         // the file header size differs from the DataBuffer size, and any differences between file
@@ -1209,7 +1159,7 @@ async function main(argc, argv, errors)
                 }
                 nArchiveWarnings += entry.warnings.length? 1 : 0;
                 if (argv.desc || argv.list) {
-                    entry.methodName = archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
+                    entry.methodName = handle.archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
                     if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                         entry.methodName += '*';
                     }
@@ -1296,7 +1246,7 @@ async function main(argc, argv, errors)
         } catch (error) {
             printf("error processing %s: %s\n", archivePath, error.message);
         }
-        await archiveClass.close(archive);
+        await dxc.close(handle);
         return [nArchiveFiles, nArchiveWarnings];
     };
     //

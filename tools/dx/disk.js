@@ -114,7 +114,7 @@ export default class Disk {
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
     /**
-     * constructor(interfaces)
+     * constructor(interfaces, interfaceOptions)
      *
      * @this {Disk}
      * @param {Interfaces} [interfaces]
