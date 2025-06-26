@@ -10,7 +10,14 @@ This directory contains [dx.js](dx.js), a stand-alone JavaScript command-line ut
   - [disk.js](disk.js) (to read IMG and JSON-encoded disk images used by PCjs)
   - [iso.js](iso.js) (to read ISO, MDF, and other ISO 9660 disc images)
 
-[dzip.js](dzip.js) in turn uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
+[dzip.js](dzip.js) uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
+
+To simplify operation for both command-line and browser clients, there is also a [dxc.js](dxc.js) wrapper class that calls the appropriate container class via these functions:
+
+  - open()
+  - readDirectory()
+  - readFile()
+  - close()
 
 This tool can also assist with [uploading files](#uploading-files-to-the-internet-archive) to the [Internet Archive](https://archive.org).
 
@@ -81,6 +88,6 @@ The upload script modifies my original image filename to match the disc's volume
 
 Later, I added an `--update` option to generate another `bash` script that calls [update.py](update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.
 
-For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, usually by at least one month.
+For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, often by one month or more.
 
-You can browse the results [here](https://archive.org/details/@jeffpar).
+The upload of TechNet CDs is now complete, and you can browse the results [here](https://archive.org/details/@jeffpar).
