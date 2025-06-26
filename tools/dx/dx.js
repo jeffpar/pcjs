@@ -467,7 +467,7 @@ function getList(text)
 async function main(argc, argv, errors)
 {
     if (argv.help || argv.verbose) {
-        printf("dx.js %s\n%s\n\nArguments: %s\n", DX.VERSION, DX.COPYRIGHT, argv[0]);
+        printf("dx.js %s\n%s\n\nArguments: %s\n", DXC.VERSION, DXC.COPYRIGHT, argv[0]);
         if (argv.help) {
             options.help.handler();
         }
@@ -571,7 +571,7 @@ async function main(argc, argv, errors)
                 // The process begins by sorting itemList by volume, then by entries, then by newest, and finally by path.
                 //
                 let cDuplicates = 0;
-                if ((argv.upload || argv.update || (filterExceptions & DX.EXCEPTIONS.UNIQUE)) && csv.hasFields("volume", "entries", "newest", "size")) {
+                if ((argv.upload || argv.update || (filterExceptions & DXC.EXCEPTIONS.UNIQUE)) && csv.hasFields("volume", "entries", "newest", "size")) {
                     itemList.sort((a, b) => {
                         if (a.volume < b.volume) return -1;
                         if (a.volume > b.volume) return 1;
