@@ -445,7 +445,7 @@ function getList(text)
                 //
                 // Find a photo in photoNames that has the same base name as fileName.
                 //
-                let baseName = fileName.replace(/(\.iso|\.cdr|\.mdf|\.7z)$/i, "");
+                let baseName = fileName.replace(/\.(iso|cdr|mdf|7z)$/i, "");
                 let photoName = photoNames.find(name => name.startsWith(baseName)) || photoNames[0] ||"";
                 let thumbName = thumbNames.find(name => name.startsWith(baseName + "_thumb")) || thumbNames[0] || "";
                 if (photoName) {
@@ -711,7 +711,7 @@ async function main(argc, argv, errors)
         if (argv.debug) {
             printf("%s\n", archivePath);
         }
-        if (!archivePhoto && !archiveDB && archiveExt.match(/(\.img|\.json|\.iso|\.mdf|\.bin|\.cdr)$/i)) {
+        if (!archivePhoto && !archiveDB && archiveExt.match(/\.(img|json|iso|mdf|bin|cdr)$/i)) {
             //
             // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
             //
@@ -1082,7 +1082,7 @@ async function main(argc, argv, errors)
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
                 // IMG and JSON extensions tend be used more broadly for other purposes.
                 //
-                let recurse = (argv.recurse && entry.name.match(/^(.*)(\.zip|\.arc|\.iso)$/i));
+                let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc|iso)$/i));
                 //
                 // Define a writeData() function within processArchive() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.

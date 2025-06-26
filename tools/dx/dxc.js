@@ -62,7 +62,7 @@ export default class DXC {
      * @this {DXC}
      * @param {string} name
      * @param {DataBuffer} [db]
-     * @param {ArchiveOptions} [options]
+     * @param {*} [options]
      * @returns {Handle}
      */
     async open(name, db = null, options = {})
@@ -74,15 +74,15 @@ export default class DXC {
             isArchive: false,
             isDisk: false
         };
-        if (name.match(/(\.zip|\.arc)$/i)) {
+        if (name.match(/\.(zip|arc)$/i)) {
             handle.isArchive = true;
             handle.class = this.dzip;
         }
-        if (name.match(/(\.img|\.json)$/i)) {
+        if (name.match(/\.(img|json)$/i)) {
             handle.isDisk = true;
             handle.class = this.disk;
         }
-        if (name.match(/(\.iso|\.mdf|\.bin|\.cdr)$/i)) {
+        if (name.match(/\.(iso|mdf|bin|cdr)$/i)) {
             handle.isDisk = true;
             handle.class = this.iso;
         }
@@ -115,7 +115,7 @@ export default class DXC {
      * @param {string} [filespec]
      * @param {number} [filterExceptions] (0 if none)
      * @param {number} [filterMethod] (-1 if none)
-     * @returns {Array.<ArchiveEntry>} (array of archive entries)
+     * @returns {Array.<Entry>} (array of archive entries)
      */
     async readDirectory(handle, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
@@ -132,8 +132,8 @@ export default class DXC {
      * readFile(archive, entry, writeData)
      *
      * @this {DXC}
-     * @param {Archive} archive
-     * @param {ArchiveEntry} entry
+     * @param {Handle} handle
+     * @param {Entry} entry
      * @param {function} [writeData]
      * @returns {DataBuffer|undefined}
      */

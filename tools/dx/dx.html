@@ -41,7 +41,7 @@
       const urlInput = document.getElementById('urlInput');
       const urlArchive = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
       try {
-          printf(`Fetching ${urlArchive}\n`);
+          printf("Fetching %s\n", urlArchive);
           let archive = await dxc.open(urlArchive);
           if (!archive) {
               printf("Failed to open archive\n");
