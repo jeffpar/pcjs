@@ -1488,17 +1488,17 @@ export default class DZip {
                         }
                     }
                 }
-                if (expandedDB) {
-                    if (expandedSize != expandedDB.length) {
-                        record.warnings.push(`Read ${expandedDB.length} bytes, expected ${expandedSize}`);
-                    }
-                    if (fileHeader.crc) {
-                        this.updateCRC(record, expandedDB, archive.type, true);
-                    }
-                    if (writeData) {
-                        await writeData(expandedDB);
-                        await writeData();
-                    }
+            }
+            if (expandedDB) {
+                if (expandedSize != expandedDB.length) {
+                    record.warnings.push(`Read ${expandedDB.length} bytes, expected ${expandedSize}`);
+                }
+                if (fileHeader.crc) {
+                    this.updateCRC(record, expandedDB, archive.type, true);
+                }
+                if (writeData) {
+                    await writeData(expandedDB);
+                    await writeData();
                 }
             }
         }
