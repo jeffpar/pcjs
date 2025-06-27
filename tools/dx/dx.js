@@ -604,14 +604,14 @@ async function main(argc, argv, errors)
                     });
                 }
                 if (!argv.upload && !argv.update || argv.verbose) {
-                    printf("Found %d archive%s in CSV file (%d duplicates removed)\n", itemList.length, cDuplicates);
+                    printf("Found %d item%s in %s (%d duplicate%s removed)\n", itemList.length, itemList.length, path.basename(argv.batch), cDuplicates);
                 }
             } else {
                 let text = await fs.readFile(argv.batch, "utf8");
                 let list = getList(text);
                 itemList = itemList.concat(list);
                 if (!argv.upload && !argv.update || argv.verbose) {
-                    printf("Found %d archive%s in batch file\n", list.length);
+                    printf("Found %d item%s in %s\n", list.length, list.length, path.basename(argv.batch));
                 }
             }
         } catch (error) {
