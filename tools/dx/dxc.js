@@ -87,9 +87,9 @@ export default class DXC {
             handle.class = this.iso;
         }
         if (!handle.class) {
-            throw new Error(`unrecognized archive extension`);
+            throw new Error(`unrecognized item extension`);
         }
-        handle.archive = await handle.class.open(name, db, options);
+        handle.item = await handle.class.open(name, db, options);
         return handle;
     }
 
@@ -101,35 +101,35 @@ export default class DXC {
      */
     async close(handle)
     {
-        await handle.class.close(handle.archive);
+        await handle.class.close(handle.item);
     }
 
     /**
      * readDirectory(handle, filespec, filterExceptions, filterMethod)
      *
-     * This function always returns a new list of archive entries, based on any filtering
-     * that has been requested (the archive always maintains a complete and unfiltered list).
+     * This function always returns a new list of item entries, based on any filtering that
+     * has been requested (the underlying item always maintains a complete and unfiltered list).
      *
      * @this {DXC}
      * @param {Handle} handle
      * @param {string} [filespec]
      * @param {number} [filterExceptions] (0 if none)
      * @param {number} [filterMethod] (-1 if none)
-     * @returns {Array.<Entry>} (array of archive entries)
+     * @returns {Array.<Entry>} (array of item entries)
      */
     async readDirectory(handle, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
-        let entries = await handle.class.readDirectory(handle.archive, filespec, filterExceptions, filterMethod);
+        let entries = await handle.class.readDirectory(handle.item, filespec, filterExceptions, filterMethod);
         //
         // We automatically read any label as well; some containers already know the label at
         // the time of open(), whereas others won't know until the root directory has been read.
         //
-        handle.label = handle.class.readLabel(handle.archive);
+        handle.label = handle.class.readLabel(handle.item);
         return entries;
     }
 
     /**
-     * readFile(archive, entry, writeData)
+     * readFile(handle, entry, writeData)
      *
      * @this {DXC}
      * @param {Handle} handle
@@ -139,6 +139,6 @@ export default class DXC {
      */
     async readFile(handle, entry, writeData)
     {
-        return await handle.class.readFile(handle.archive, entry, writeData);
+        return await handle.class.readFile(handle.item, entry, writeData);
     }
 }

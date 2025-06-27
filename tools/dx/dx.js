@@ -1,5 +1,5 @@
 /**
- * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO archives
+ * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO containers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2025 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -75,7 +75,7 @@ const options = {
     "batch": {
         type: "string",
         usage: "--batch [file]",
-        description: "process archives listed in file"
+        description: "process items listed in file"
     },
     "banner": {
         type: "boolean",
@@ -103,7 +103,7 @@ const options = {
     "desc": {
         type: "boolean",
         usage: "--desc",
-        description: "generate an archive description",
+        description: "generate description of contents",
         internal: true
         //
         // NOTE: This generated "description" is currently nothing more than a truncated directory listing
@@ -161,7 +161,7 @@ const options = {
             },
             "unique": {
                 value: DXC.EXCEPTIONS.UNIQUE,
-                description: "process only unique archives (CSV only)"
+                description: "process only unique items (CSV only)"
             }
         }
     },
@@ -169,7 +169,7 @@ const options = {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of specified archive(s)"
+        description: "list contents of specified item(s)"
     },
     "nodir": {
         type: "boolean",
@@ -204,7 +204,7 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "archive path specification (eg, \"**/*.zip\")",
+        description: "item path specification (eg, \"**/*.zip\")",
     },
     "pcjs": {
         type: "boolean",
@@ -216,17 +216,17 @@ const options = {
         type: "boolean",
         usage: "--recurse",
         alias: "-r",
-        description: "process archives within archives"
+        description: "process items within items"
         //
         // NOTE: To avoid any unwanted interplay between --recurse and --files, we ignore any file filter
-        // for archives processed recursively.
+        // for items processed recursively.
         //
     },
     "test": {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of specified archive(s)"
+        description: "test contents of specified item(s)"
     },
     "update": {
         type: "boolean",
@@ -269,8 +269,8 @@ const options = {
         alias: "-h",
         description: "display this help message",
         handler: function() {
-            printf("\nUsage:\n    %s [option(s)] [archive(s)]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, ISO, MDF and other archives\n");
+            printf("\nUsage:\n    %s [option(s)] [item(s)]\n", path.basename(process.argv[1]));
+            printf("\nProcesses ZIP, ARC, IMG, ISO, MDF and other containers\n");
             printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];
@@ -620,7 +620,7 @@ async function main(argc, argv, errors)
         }
     }
     //
-    // Add any archives matching --path patterns.
+    // Add any items matching --path patterns.
     //
     if (argv.path) {
         let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
@@ -648,7 +648,7 @@ async function main(argc, argv, errors)
         printf("Found %d item%s in specified path\n", items.length);
     }
     //
-    // Finally, include any explicitly listed archives.
+    // Finally, include any explicitly listed items.
     //
     for (let i = 1; i < argv.length; i++) {
         itemList.push({path: argv[i]});
@@ -662,7 +662,7 @@ async function main(argc, argv, errors)
             csv = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                await csv.write("fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n");
+                await csv.write("fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n");
             }
         } catch (error) {
             printf("%s: %s\n", argv.csv, error.message);
@@ -692,35 +692,30 @@ async function main(argc, argv, errors)
     let bannerHashes = {};
     let heading = false, truncateDesc = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
-    let nTotalArchives = 0, nTotalFiles = 0, nTotalWarnings = 0;
+    let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     //
-    // Define a function to process an individual archive, which then allows us to recursively process nested
-    // archives if --recurse is been specified.
+    // Define a function to process an individual container item, which then allows us to recursively process
+    // nested containers if --recurse is been specified.
     //
-    // Note that processArchive() has evolved into image processing, with the added support for FAT disk
-    // and ISO 9660 images (as well as generic file processing, with added support for cataloging any specified
-    // files, archive or otherwise), so it might be more appropriately named processImage(), but since its
-    // original purpose was processing ZIP and ARC archives, the name has stuck.
-    //
-    let processArchive = async function(archiveID, archivePath, archivePhoto = null, archiveThumb = null, archiveTarget = null, archiveDB = null, modified = null) {
+    let processItem = async function(itemID, itemPath, itemPhoto = null, itemThumb = null, itemTarget = null, itemDB = null, modified = null) {
         let handle;
         let dirListing = argv.desc;
-        let archiveName = path.basename(archivePath);
-        let archiveExt = path.extname(archiveName);
+        let itemName = path.basename(itemPath);
+        let itemExt = path.extname(itemName);
         let widthPhoto = 0, heightPhoto = 0;
         if (argv.debug) {
-            printf("%s\n", archivePath);
+            printf("%s\n", itemPath);
         }
-        if (!archivePhoto && !archiveDB && archiveExt.match(/\.(img|json|iso|mdf|bin|cdr)$/i)) {
+        if (!itemPhoto && !itemDB && itemExt.match(/\.(img|json|iso|mdf|bin|cdr)$/i)) {
             //
-            // A top-level archive (specifically, a disk image) may have an associated photo in the file system.
+            // A top-level item (specifically, a disk image) may have an associated photo in the file system.
             //
-            [archivePhoto, widthPhoto, heightPhoto] = await getPhotoInfo(archivePath, archiveExt);
+            [itemPhoto, widthPhoto, heightPhoto] = await getPhotoInfo(itemPath, itemExt);
         }
         let getCSVLine = function(entry, db) {
-            let itemID = entry.source? archiveID : fileID++;
+            let entryID = entry.source? itemID : fileID++;
             let entryName = entry.name;
-            let entryPath = archivePath;
+            let entryPath = itemPath;
             let entryPhoto = null, entryThumb = null, entryVolume = null;
             let entryMethod = entry.methodName || entry.source;
             let comment = entry.comment || "";
@@ -728,7 +723,7 @@ async function main(argc, argv, errors)
             let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "";
             let newest = "", entries = 0;
             //
-            // If we're being passed an archive object rather than an entry object, then entryName
+            // If we're being passed an item object rather than an entry object, then entryName
             // will also be the same as the entryPath; reduce them.
             //
             if (entry.source) {
@@ -741,11 +736,11 @@ async function main(argc, argv, errors)
                 }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
-                entryPhoto = archivePhoto;
+                entryPhoto = itemPhoto;
                 if (entryPhoto && !entryPhoto.match(/^https?:\/\//)) {
                     entryPhoto = path.basename(entryPhoto);
                 }
-                entryThumb = archiveThumb;
+                entryThumb = itemThumb;
                 if (entryThumb && !entryThumb.match(/^https?:\/\//)) {
                     entryThumb = path.basename(entryThumb);
                 }
@@ -768,27 +763,27 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // CSV fields: fileID,archiveID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings
+            // CSV fields: fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings
             //
             let line = format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                itemID, archiveID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
+                entryID, itemID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
                 entryMethod, enquote(entryVolume), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
             );
             return line;
         };
         try {
-            nTotalArchives++;
-            if (nTotalArchives % 10000 == 0 && !argv.verbose && !argv.list) {
-                printf("%d archives processed\n", nTotalArchives);
+            nTotalItems++;
+            if (nTotalItems % 10000 == 0 && !argv.verbose && !argv.list) {
+                printf("%d item%s processed\n", nTotalItems);
             }
             let options = {};
             if (modified) {
                 options.modified = modified;
             }
-            if (argv.csv && !archiveDB) {
+            if (argv.csv && !itemDB) {
                 //
-                // NOTE: preload is required if you want hashes of the archives, but it slows things down,
+                // NOTE: preload is required if you want hashes of the items, but it slows things down,
                 // so I don't enable it unless you also want a list of the contents.  If there are cases where
                 // you want the CSV to have hashes WITHOUT listing the contents, then we'll need a new option.
                 //
@@ -803,18 +798,18 @@ async function main(argc, argv, errors)
             if (argv.nodir) {
                 options.nodir = true;
             }
-            if (archivePath[0] == '~') {
-                archivePath = path.join(process.env.HOME, archivePath.slice(1));
+            if (itemPath[0] == '~') {
+                itemPath = path.join(process.env.HOME, itemPath.slice(1));
             }
-            handle = await dxc.open(archivePath, archiveDB, options);
+            handle = await dxc.open(itemPath, itemDB, options);
         } catch (error) {
-            printf("error opening %s: %s\n", archivePath, error.message);
+            printf("error opening %s: %s\n", itemPath, error.message);
             return [0, 1];
         }
-        let nArchiveFiles = 0, nArchiveWarnings = 0;
+        let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
-            if (!handle.isArchive && !argv.recurse && !archiveDB && (argv.desc || argv.list)) {
+            if (!handle.isArchive && !argv.recurse && !itemDB && (argv.desc || argv.list)) {
                 dirListing = true;
             }
             if (handle.isArchive || handle.isDisk) {
@@ -823,29 +818,29 @@ async function main(argc, argv, errors)
                 // to flag the archive as having already scanned them, so that readDirectory() won't bother.
                 //
                 if (argv.nodir) {
-                    handle.archive.exceptions |= DZip.EXCEPTIONS.NODIRS;
+                    handle.item.exceptions |= DZip.EXCEPTIONS.NODIRS;
                 }
                 //
-                // This next line is just shorthand for saying that if we're recursively processing archives,
+                // This next line is just shorthand for saying that if we're recursively processing items,
                 // then any file filters will be ignored at the top level (ie, file filters will be applied
-                // to archives' contents, not the archives themselves), and conversely, if we're not recursing,
-                // then any file filters will only be applied to the archives themselves.
+                // to items' contents, not the items themselves), and conversely, if we're not recursing,
+                // then any file filters will only be applied to the items themselves.
                 //
-                let filterFiles = (!argv.recurse == !archiveDB? argv.files : undefined);
+                let filterFiles = (!argv.recurse == !itemDB? argv.files : undefined);
                 entries = await dxc.readDirectory(handle, filterFiles, filterExceptions, filterMethod);
-                if (handle.archive.exceptions & DZip.EXCEPTIONS.NOFILES) {
-                    handle.archive.warnings.push("Unrecognized archive");
+                if (handle.item.exceptions & DZip.EXCEPTIONS.NOFILES) {
+                    handle.item.warnings.push("Unrecognized archive");
                 }
                 else if ((handle.isArchive || handle.isDisk) && !entries.length && !filterFiles && !filterExceptions && filterMethod == -1) {
-                    handle.archive.warnings.push("No entries");
+                    handle.item.warnings.push("No entries");
                 }
-                if (handle.archive.warnings.length && (!handle.archive.volTable || handle.archive.volTable.length)) {
+                if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
                     if (argv.verbose) {
-                        printf("%s: %s\n", archivePath, handle.archive.warnings.join("; "));
+                        printf("%s: %s\n", itemPath, handle.item.warnings.join("; "));
                     } else {
-                        printf("%s: %d issue%s detected\n", archivePath, handle.archive.warnings.length);
+                        printf("%s: %d issue%s detected\n", itemPath, handle.item.warnings.length);
                     }
-                    nArchiveWarnings++;
+                    nItemWarnings++;
                 }
             }
             //
@@ -858,16 +853,16 @@ async function main(argc, argv, errors)
             // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
             // then the current directory is used.
             //
-            // If multiple archives are being processed and/or extraction was enabled without a specific directory,
-            // then extraction will occur inside a directory with the name of the archive (which will be created if
-            // necessary).  The only way to bypass that behavior is to process archives one at a time OR explicitly
+            // If multiple items are being processed and/or extraction was enabled without a specific directory,
+            // then extraction will occur inside a directory with the name of the item (which will be created if
+            // necessary).  The only way to bypass that behavior is to process items one at a time OR explicitly
             // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
             //
-            let srcPath = decodeURIComponent(archivePath);
+            let srcPath = decodeURIComponent(itemPath);
             let srcName = path.basename(srcPath);
-            let srcBase = path.basename(srcPath, archiveExt);
+            let srcBase = path.basename(srcPath, itemExt);
             srcPath = path.dirname(srcPath);
-            let dstPath = archiveTarget || argv.dir || "";
+            let dstPath = itemTarget || argv.dir || "";
             let chgPath = dstPath.split("=");
             if (chgPath.length > 1) {
                 if (srcPath.indexOf(chgPath[0]) >= 0) {
@@ -878,44 +873,44 @@ async function main(argc, argv, errors)
                 }
             }
             if (dstPath != ".") {
-                if (!dstPath || archiveTarget || itemList.length > 1) {
+                if (!dstPath || itemTarget || itemList.length > 1) {
                     //
-                    // TODO: Consider an option that determines whether or not to strip the archive extension
+                    // TODO: Consider an option that determines whether or not to strip the item extension
                     // from the destination path.  The danger is that it can result in extraction conflicts,
-                    // because a folder may contain multiple archives with the same name but different extensions
+                    // because a folder may contain multiple items with the same name but different extensions
                     // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
                     // with a conflicting name (eg, "CONTEST").
                     //
                     //      dstPath = path.join(dstPath, srcBase);
                     //
-                    dstPath = path.join(dstPath, archiveDB? srcName : srcBase);
+                    dstPath = path.join(dstPath, itemDB? srcName : srcBase);
                 }
             }
             let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
-            if (handle.archive.comment) {
+            if (handle.item.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
                 // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
                 //
                 if (!argv.extract && argv.dir && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
-                    let hash = crypto.createHash('md5').update(handle.archive.comment).digest('hex');
+                    let hash = crypto.createHash('md5').update(handle.item.comment).digest('hex');
                     if (bannerHashes[hash]) {
                         bannerHashes[hash]++;
                     } else {
                         bannerHashes[hash] = 1;
                         //
-                        // For display purposes, we use archive.comment, which is translated to UTF-8,
-                        // but for extraction purposes, we use archive.commentRaw, which is untranslated.
+                        // For display purposes, we use item.comment, which is translated to UTF-8,
+                        // but for extraction purposes, we use item.commentRaw, which is untranslated.
                         //
                         // TODO: Add options to 1) override the input encoding (assumed to be "cp437")
                         // and 2) select the desired output encoding (assumed to be "utf8").
                         //
                         await fs.mkdir(path.dirname(bannerPath), { recursive: true });
                         try {
-                            await fs.writeFile(bannerPath, handle.archive.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
+                            await fs.writeFile(bannerPath, handle.item.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
                             if (argv.verbose) printf("created %s\n", entry.target);
-                            if (handle.archive.modified) {
-                                await fs.utimes(bannerPath, handle.archive.modified, handle.archive.modified);
+                            if (handle.item.modified) {
+                                await fs.utimes(bannerPath, handle.item.modified, handle.item.modified);
                             }
                         } catch (error) {
                             if (error.code == "EEXIST") {
@@ -933,27 +928,27 @@ async function main(argc, argv, errors)
             }
             if (argv.csv) {
                 //
-                // Update archive stats
+                // Update item stats
                 //
-                handle.archive.newestFileTime = 0;
-                handle.archive.totalFiles = entries.length;
+                handle.item.newestFileTime = 0;
+                handle.item.totalFiles = entries.length;
                 for (let entry of entries) {
                     let fileTime = entry.modified.getTime();
-                    if (handle.archive.newestFileTime < fileTime) {
-                        handle.archive.newestFileTime = fileTime;
+                    if (handle.item.newestFileTime < fileTime) {
+                        handle.item.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(getCSVLine(handle.archive, handle.archive.db));
+                await csv.write(getCSVLine(handle.item, handle.item.db));
             }
             if (argv.upload || argv.update) {
                 //
-                // I expect archive.name to refer to a file with a path of the form:
+                // I expect item.name to refer to a file with a path of the form:
                 //
                 //      .../[publisher]/[category]/filename.ext
                 //
                 // So let's extract the publisher and category values from the path now.
                 //
-                let pathParts = path.dirname(handle.archive.name).split(path.sep);
+                let pathParts = path.dirname(handle.item.name).split(path.sep);
                 let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
                 let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
                 let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
@@ -972,27 +967,27 @@ async function main(argc, argv, errors)
                     id = origID + "-" + nextID++;
                 }
                 uploadIDs.push(id);
-                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, handle.archive.modified).trim();
-                let files = [], targetName = label + archiveExt;
-                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(handle.archive.name));
-                printf("cp \"%s\" %s\n", handle.archive.name, targetName);
+                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, handle.item.modified).trim();
+                let files = [], targetName = label + itemExt;
+                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(handle.item.name));
+                printf("cp \"%s\" %s\n", handle.item.name, targetName);
                 files.push(targetName);
-                if (argv.upload && archivePhoto) {
-                    let match = archivePhoto.match(/^(.*?)(\.[^.]+)$/);
+                if (argv.upload && itemPhoto) {
+                    let match = itemPhoto.match(/^(.*?)(\.[^.]+)$/);
                     if (match) {
                         let targetExt = match[2].toLowerCase();
                         let targetName = label + targetExt;
-                        printf("cp \"%s/%s\" %s\n", path.dirname(handle.archive.name), archivePhoto, targetName);
+                        printf("cp \"%s/%s\" %s\n", path.dirname(handle.item.name), itemPhoto, targetName);
                         files.push(targetName);
                     }
                 }
-                printf("node dx.js \"%s%s\" --desc > desc.txt\n", label, archiveExt);
+                printf("node dx.js \"%s%s\" --desc > desc.txt\n", label, itemExt);
                 files.unshift("desc.txt");
                 printf("while true; do\n");
                 if (argv.update) {
                     printf("    python update.py %s \"%s\" desc.txt\n", id, title);
                 } else {
-                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, handle.archive.modified, handle.archive.modified, handle.archive.modified, publisher, category, files.join(" "));
+                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, handle.item.modified, handle.item.modified, handle.item.modified, publisher, category, files.join(" "));
                 }
                 printf("    if [ $? -eq 0 ]; then break; fi\n");
                 printf("    sleep 300\n");
@@ -1001,10 +996,10 @@ async function main(argc, argv, errors)
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
-                    if (argv.banner && handle.archive.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
+                    if (argv.banner && handle.item.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
                         if (argv.desc || argv.list) printf("\n");
-                        if (!nArchiveFiles || argv.list) {
-                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", archivePath, handle.label? ` [${handle.label}]` : "", nArchiveFiles? " (continued)" : "");
+                        if (!nItemFiles || argv.list) {
+                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", itemPath, handle.label? ` [${handle.label}]` : "", nItemFiles? " (continued)" : "");
                         }
                     }
                     //
@@ -1012,8 +1007,8 @@ async function main(argc, argv, errors)
                     // filtering condition (--filter banner), but if you also want to SEE the banners, then
                     // you must also specify --banner.
                     //
-                    if (argv.banner && handle.archive.comment && !nArchiveFiles) {
-                        printf("%s\n", handle.archive.comment);
+                    if (argv.banner && handle.item.comment && !nItemFiles) {
+                        printf("%s\n", handle.item.comment);
                     }
                     if (argv.desc || argv.list) {
                         if (dirListing) {
@@ -1049,7 +1044,7 @@ async function main(argc, argv, errors)
                 }
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
-                // archives and whether, for example, they should always end with a slash; for now, I'm trusting
+                // items and whether, for example, they should always end with a slash; for now, I'm trusting
                 // that entries inside one or more directories have those directories explicitly specified in
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
@@ -1063,19 +1058,19 @@ async function main(argc, argv, errors)
                     entryAttr |= DiskInfo.ATTR.SUBDIR;  // ensure all directory entries are consistently marked
                 }
                 //
-                // While it might seem odd to print the archive heading inside the entry loop, if you've enabled
-                // recursive archive processing, we want the option of reprinting it on return from a recursive call;
+                // While it might seem odd to print the item heading inside the entry loop, if you've enabled
+                // recursive item processing, we want the option of reprinting it on return from a recursive call;
                 // otherwise, the output might give the wrong impression that subsequent entries are part of the
-                // previous archive.  Currently, the additional headings are displayed only if --debug is used.
+                // previous item.  Currently, the additional headings are displayed only if --debug is used.
                 //
                 // One obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
                 // because the best time to process a recursive entry is when we already have its buffered data in
-                // hand (and we WILL have it in hand when extracting or even just testing files in the archive).
+                // hand (and we WILL have it in hand when extracting or even just testing files in the item).
                 //
                 printHeading();
                 nTotalFiles++;
-                nArchiveFiles++;
+                nItemFiles++;
                 let db, targetFile, writeData, printed = false;
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of images
@@ -1084,7 +1079,7 @@ async function main(argc, argv, errors)
                 //
                 let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc|iso)$/i));
                 //
-                // Define a writeData() function within processArchive() to receive data ONLY if extraction
+                // Define a writeData() function within processItem() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
                 //
                 if (!(entryAttr & DiskInfo.ATTR.SUBDIR)) {
@@ -1157,9 +1152,9 @@ async function main(argc, argv, errors)
                 if (name.length > 14) {
                     name = "…" + name.slice(-13);
                 }
-                nArchiveWarnings += entry.warnings.length? 1 : 0;
+                nItemWarnings += entry.warnings.length? 1 : 0;
                 if (argv.desc || argv.list) {
-                    entry.methodName = handle.archive.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
+                    entry.methodName = handle.item.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
                     if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                         entry.methodName += '*';
                     }
@@ -1208,17 +1203,17 @@ async function main(argc, argv, errors)
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
-                    let [nFiles, nWarnings] = await processArchive(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
+                    let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
                     if (nFiles && argv.debug) {
                         heading = false;
                     }
                     //
                     // We now propagate all downstream totals upstream, so that the main loop can accurately
-                    // report which archives are completely free of warnings (any nested archive(s) with warnings
-                    // are disqualifying).
+                    // report which items are completely free of warnings (any nested items with warnings are
+                    // disqualifying).
                     //
-                    nArchiveFiles += nFiles;
-                    nArchiveWarnings += nWarnings;
+                    nItemFiles += nFiles;
+                    nItemWarnings += nWarnings;
                 }
             }
             //
@@ -1241,13 +1236,13 @@ async function main(argc, argv, errors)
                 }
             }
             //
-            // TODO: If argv.list, consider displaying entry totals as well (including the total size of the archive)
+            // TODO: If argv.list, consider displaying entry totals as well (including the total size of the item)
             //
         } catch (error) {
-            printf("error processing %s: %s\n", archivePath, error.message);
+            printf("error processing %s: %s\n", itemPath, error.message);
         }
         await dxc.close(handle);
-        return [nArchiveFiles, nArchiveWarnings];
+        return [nItemFiles, nItemWarnings];
     };
     //
     // And finally: the main loop.
@@ -1264,7 +1259,7 @@ async function main(argc, argv, errors)
         // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
-        let [nFiles, nWarnings] = await processArchive(fileID++, item.path, item.photo, item.thumb);
+        let [nFiles, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
         if (!argv.upload && !argv.update) {
             printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
             if (argv.desc && !argv.csv) {
@@ -1274,8 +1269,8 @@ async function main(argc, argv, errors)
         }
         nTotalWarnings += nWarnings;
     }
-    if (nTotalArchives > 1 && !argv.upload && !argv.update) {
-        printf("\n%d total archive%s, %d total file%s, %d total warning%s\n", nTotalArchives, nTotalArchives, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
+    if (nTotalItems > 1 && !argv.upload && !argv.update) {
+        printf("\n%d total item%s, %d total file%s, %d total warning%s\n", nTotalItems, nTotalItems, nTotalFiles, nTotalFiles, nTotalWarnings, nTotalWarnings);
     }
     if (csv) {
         await csv.close();

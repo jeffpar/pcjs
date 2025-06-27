@@ -39,24 +39,24 @@
           dxOutput.value += s;
       };
       const urlInput = document.getElementById('urlInput');
-      const urlArchive = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
+      const urlItem = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
       try {
-          printf("Fetching %s\n", urlArchive);
-          let archive = await dxc.open(urlArchive);
-          if (!archive) {
-              printf("Failed to open archive\n");
+          printf("Fetching %s\n", urlItem);
+          let handle = await dxc.open(urlItem);
+          if (!handle) {
+              printf("Failed to open item\n");
               return;
           }
-          let entries = await dxc.readDirectory(archive);
-          printf("Found %d entries in archive\n", entries.length);
+          let entries = await dxc.readDirectory(handle);
+          printf("Found %d entries in item\n", entries.length);
           for (let entry of entries) {
               if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
                   continue;
               }
-              let db = await dxc.readFile(archive, entry);
+              let db = await dxc.readFile(handle, entry);
               printf("entry: %s, compressed size: %d -> %d bytes [%s]\n", entry.name, entry.compressedSize, db && db.length || 0, entry.warnings.join("; "));
           }
-          dxc.close(archive);
+          dxc.close(handle);
       } catch (error) {
           printf("Error: %s\n", error.message);
       }
