@@ -712,11 +712,11 @@ async function main(argc, argv, errors)
             //
             [itemPhoto, widthPhoto, heightPhoto] = await getPhotoInfo(itemPath, itemExt);
         }
-        let getCSVLine = function(entry, db) {
+        let getCSVLine = function(entry, db, entryVolume) {
             let entryID = entry.source? itemID : fileID++;
             let entryName = entry.name;
             let entryPath = itemPath;
-            let entryPhoto = null, entryThumb = null, entryVolume = null;
+            let entryPhoto = null, entryThumb = null;
             let entryMethod = entry.methodName || entry.source;
             let comment = entry.comment || "";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
@@ -728,11 +728,11 @@ async function main(argc, argv, errors)
             //
             if (entry.source) {
                 DZip.assert(entryName == entryPath);
-                entryVolume = fromPCJS[entryName];
-                if (entryVolume) {
-                    entryVolume = path.basename(entryVolume);
-                } else {
-                    entryVolume = entry.label || "";
+                if (!entryVolume) {
+                    entryVolume = fromPCJS[entryName];
+                    if (entryVolume) {
+                        entryVolume = path.basename(entryVolume);
+                    }
                 }
                 entryName = path.basename(entryName);
                 entryPath = path.dirname(entryPath);
@@ -938,7 +938,7 @@ async function main(argc, argv, errors)
                         handle.item.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(getCSVLine(handle.item, handle.item.db));
+                await csv.write(getCSVLine(handle.item, handle.item.db, handle.label));
             }
             if (argv.upload || argv.update) {
                 //
@@ -1052,7 +1052,7 @@ async function main(argc, argv, errors)
                     if (argv.extract || argv.dir) {
                         dirTimestamps[entry.target] = entry.modified;
                     }
-                    if (!dirListing) {
+                    if (!dirListing || argv.csv) {
                         continue;                       // skip directory entries
                     }
                     entryAttr |= DiskInfo.ATTR.SUBDIR;  // ensure all directory entries are consistently marked
@@ -1159,7 +1159,7 @@ async function main(argc, argv, errors)
                         entry.methodName += '*';
                     }
                     if (argv.csv) {
-                        await csv.write(getCSVLine(entry, db));
+                        await csv.write(getCSVLine(entry, db, handle.label));
                     }
                     else if (dirListing) {
                         let entryName = name == entry.name? "" : "   " + entry.name;

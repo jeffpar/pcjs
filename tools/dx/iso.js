@@ -112,6 +112,7 @@ export default class ISO {
     static SECTOR_SIZE = 2352;          // default sector size
     static SYSTEM_SIZE = 32768;         // size of system area
     static PATHREC_SIZE = 255;          // maximum size of a path record
+    static MAX_SIZE = 2448 * 333000;
 
     static DirRecord = new Struct("Directory Record")
         .field('length',        Struct.BYTE)            // 0x00: length of this record in bytes
@@ -440,7 +441,7 @@ export default class ISO {
             if (!image.modified) {
                 image.modified = stats.mtime;
             }
-            if (options.preload && image.size < 740 * 1024 * 1024) {
+            if (options.preload && image.size <= ISO.MAX_SIZE) {
                 image.db = new DataBuffer(image.size);
                 let offset = 0, position = 0;
                 let extent = Math.min(this.cacheSize, image.size);
@@ -483,6 +484,9 @@ export default class ISO {
         }
         else {
             throw new Error("No image open interface available");
+        }
+        if (image.size > ISO.MAX_SIZE) {
+            throw new Error(`Image size (${image.size}) exceeds maximum`);
         }
         this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
         image.dirClass = ISO.DirRecord;
