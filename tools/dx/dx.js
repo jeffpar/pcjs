@@ -224,6 +224,12 @@ const options = {
         alias: "-t",
         description: "test contents of specified item(s)"
     },
+    "truncate": {
+        type: "boolean",
+        usage: "--truncate",
+        description: "truncate description of contents",
+        internal: true
+    },
     "update": {
         type: "boolean",
         usage: "--update",
@@ -686,7 +692,7 @@ async function main(argc, argv, errors)
         dxc.enableWarnings();
     }
     let bannerHashes = {};
-    let heading = false, truncateDesc = false;
+    let heading = false, truncate = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     //
@@ -969,7 +975,7 @@ async function main(argc, argv, errors)
                         files.push(targetName);
                     }
                 }
-                printf("node dx.js \"%s%s\" --desc > desc.txt\n", label, itemExt);
+                printf("node dx.js \"%s%s\" --desc --truncate > desc.txt\n", label, itemExt);
                 files.unshift("desc.txt");
                 printf("while true; do\n");
                 if (argv.update) {
@@ -982,21 +988,44 @@ async function main(argc, argv, errors)
                 printf("done\n");
                 printf("rm %s\n", files.join(" "));
             }
-            let printHeading = function() {
-                if (!heading && !argv.csv) {
+            let printHeading = function(entry) {
+                let label = !prevPath? ` [${itemPath}]` : "";
+                let continued = nItemFiles > 0;
+                let entryPath = path.dirname(entry.name);
+                if (entryPath == ".") {
+                    entryPath = "";
+                }
+                if (!entryPath) {
+                    entryPath = handle.label;
+                } else {
+                    entryPath = handle.label + path.sep + entryPath;
+                }
+                if (prevPath != entryPath) {
+                    if (prevPath && argv.truncate) {
+                        if (!truncate) {
+                            printf("...\n");
+                        }
+                        truncate = true;
+                    }
+                    prevPath = entryPath;
+                    if (dirListing) {
+                        heading = false;
+                        continued = false;
+                    }
+                }
+                if (!heading && !truncate && !argv.csv) {
                     let itemPrinted = false;
                     if (argv.banner && handle.item.comment || argv.desc || argv.list) {
-                        if (argv.desc || argv.list) printf("\n");
-                        if (!nItemFiles || argv.list) {
-                            printf("%s%s%s%s\n", dirListing? "Directory of " : "", itemPath, handle.label? ` [${handle.label}]` : "", nItemFiles? " (continued)" : "");
+                        if (!nItemFiles || argv.desc || argv.list) {
+                            printf("\n%s%s%s%s\n", dirListing? "Directory of " : "", entryPath, label, continued? " (continued)" : "");
                             itemPrinted = true;
                         }
                     }
                     if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
                         if (argv.verbose || handle.item.warnings.length == 1) {
-                            printf("%s: %s\n", itemPrinted? "Warning" : itemPath, handle.item.warnings.join("; "));
+                            printf("%s: %s\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.join("; "));
                         } else {
-                            printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : itemPath, handle.item.warnings.length);
+                            printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.length);
                         }
                         nItemWarnings += handle.item.warnings.length;
                     }
@@ -1019,11 +1048,14 @@ async function main(argc, argv, errors)
                             printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
                         }
                     }
-                    heading = true;
                 }
+                heading = true;
+                nTotalFiles++;
+                nItemFiles++;
             };
             let nEntries = 0;
             let dirTimestamps = {};
+            let prevPath = "";
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
@@ -1066,9 +1098,7 @@ async function main(argc, argv, errors)
                 // because the best time to process a recursive entry is when we already have its buffered data in
                 // hand (and we WILL have it in hand when extracting or even just testing files in the item).
                 //
-                printHeading();
-                nTotalFiles++;
-                nItemFiles++;
+                printHeading(entry);
                 let db, targetFile, writeData, printed = false;
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of images
@@ -1160,14 +1190,8 @@ async function main(argc, argv, errors)
                         await csv.write(getCSVLine(entry, db, handle.label));
                     }
                     else if (dirListing) {
-                        let entryName = name == entry.name? "" : "   " + entry.name;
-                        if (entryName.indexOf('/') > 0 && argv.desc) {
-                            if (!truncateDesc) {
-                                printf("...\n");
-                            }
-                            truncateDesc = true;
-                        }
-                        if (!truncateDesc) {
+                        if (!truncate) {
+                            let entryName = name == entry.name? "" : "   " + entry.name;
                             if (entryAttr & DiskInfo.ATTR.SUBDIR) {
                                 printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
                             } else {
@@ -1202,7 +1226,7 @@ async function main(argc, argv, errors)
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
-                    if (nFiles && argv.debug) {
+                    if (nFiles) {
                         heading = false;
                     }
                     //
