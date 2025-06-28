@@ -34,7 +34,7 @@ const dbFields = {
         primaryKey: true,
         autoIncrement: true
     },
-    archiveID: {
+    itemID: {
         type: DataTypes.INTEGER.UNSIGNED,
         allowNull: false
     },
@@ -74,17 +74,17 @@ const dbFields = {
         type: DataTypes.STRING(16),
         allowNull: false
     },
-    name: {
+    volume: {
         type: DataTypes.STRING(128),
-        allowNull: false
+        allowNull: true
     },
     path: {
         type: DataTypes.STRING(255),
         allowNull: false
     },
-    disk: {
-        type: DataTypes.STRING(255),
-        allowNull: true
+    name: {
+        type: DataTypes.STRING(128),
+        allowNull: false
     },
     photo: {
         type: DataTypes.STRING(128),
