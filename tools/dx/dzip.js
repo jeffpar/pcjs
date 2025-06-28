@@ -1351,7 +1351,7 @@ export default class DZip {
             let compressedSize = fileHeader.compressedSize;
             let expandedSize = fileHeader.size;
             if ((record.fileHeader.flags & DZip.FileHeader.fields.flags.ENCRYPTED) && !archive.password) {
-                throw new Error(`Encrypted file, but no password supplied`);
+                throw new Error(`Encrypted file`);
             }
             if (!compressedSize) {
                 expandedDB = new DataBuffer(0);

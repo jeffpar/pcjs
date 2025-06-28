@@ -217,10 +217,6 @@ const options = {
         usage: "--recurse",
         alias: "-r",
         description: "process items within items"
-        //
-        // NOTE: To avoid any unwanted interplay between --recurse and --files, we ignore any file filter
-        // for items processed recursively.
-        //
     },
     "test": {
         type: "boolean",
@@ -834,14 +830,6 @@ async function main(argc, argv, errors)
                 else if ((handle.isArchive || handle.isDisk) && !entries.length && !filterFiles && !filterExceptions && filterMethod == -1) {
                     handle.item.warnings.push("No entries");
                 }
-                if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
-                    if (argv.verbose) {
-                        printf("%s: %s\n", itemPath, handle.item.warnings.join("; "));
-                    } else {
-                        printf("%s: %d issue%s detected\n", itemPath, handle.item.warnings.length);
-                    }
-                    nItemWarnings++;
-                }
             }
             //
             // Set dstPath as needed (for file and/or banner extraction).
@@ -951,7 +939,6 @@ async function main(argc, argv, errors)
                 let pathParts = path.dirname(handle.item.name).split(path.sep);
                 let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
                 let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
-                let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
                 let id = "";
                 if (publisher) {
                     id += publisher.toLowerCase().replace(/ /g, '-');
@@ -961,6 +948,7 @@ async function main(argc, argv, errors)
                 if (category) {
                     id += category.toLowerCase().replace(/ /g, '-') + '-';
                 }
+                let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
                 id += label.toLowerCase();
                 let origID = id, nextID = 1;
                 while (uploadIDs.includes(id)) {
@@ -996,11 +984,21 @@ async function main(argc, argv, errors)
             }
             let printHeading = function() {
                 if (!heading && !argv.csv) {
+                    let itemPrinted = false;
                     if (argv.banner && handle.item.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
                         if (argv.desc || argv.list) printf("\n");
                         if (!nItemFiles || argv.list) {
                             printf("%s%s%s%s\n", dirListing? "Directory of " : "", itemPath, handle.label? ` [${handle.label}]` : "", nItemFiles? " (continued)" : "");
+                            itemPrinted = true;
                         }
+                    }
+                    if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
+                        if (argv.verbose || handle.item.warnings.length == 1) {
+                            printf("%s: %s\n", itemPrinted? "Warning" : itemPath, handle.item.warnings.join("; "));
+                        } else {
+                            printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : itemPath, handle.item.warnings.length);
+                        }
+                        nItemWarnings += handle.item.warnings.length;
                     }
                     //
                     // We also refer to the archive comment as the archive's "banner", which is an archive
@@ -1044,7 +1042,7 @@ async function main(argc, argv, errors)
                 }
                 //
                 // TODO: I'm not sure I fully understand all the idiosyncrasies of directory entries inside
-                // items and whether, for example, they should always end with a slash; for now, I'm trusting
+                // archives and whether, for example, they should always end with a slash; for now, I'm trusting
                 // that entries inside one or more directories have those directories explicitly specified in
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
@@ -1152,7 +1150,7 @@ async function main(argc, argv, errors)
                 if (name.length > 14) {
                     name = "…" + name.slice(-13);
                 }
-                nItemWarnings += entry.warnings.length? 1 : 0;
+                nItemWarnings += entry.warnings.length;
                 if (argv.desc || argv.list) {
                     entry.methodName = handle.item.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
                     if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
@@ -1163,7 +1161,7 @@ async function main(argc, argv, errors)
                     }
                     else if (dirListing) {
                         let entryName = name == entry.name? "" : "   " + entry.name;
-                        if (entryName && argv.desc) {
+                        if (entryName.indexOf('/') > 0 && argv.desc) {
                             if (!truncateDesc) {
                                 printf("...\n");
                             }
