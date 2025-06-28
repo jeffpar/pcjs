@@ -985,7 +985,7 @@ async function main(argc, argv, errors)
             let printHeading = function() {
                 if (!heading && !argv.csv) {
                     let itemPrinted = false;
-                    if (argv.banner && handle.item.comment || argv.desc || argv.list || (argv.extract || argv.dir)) {
+                    if (argv.banner && handle.item.comment || argv.desc || argv.list) {
                         if (argv.desc || argv.list) printf("\n");
                         if (!nItemFiles || argv.list) {
                             printf("%s%s%s%s\n", dirListing? "Directory of " : "", itemPath, handle.label? ` [${handle.label}]` : "", nItemFiles? " (continued)" : "");
