@@ -218,6 +218,12 @@ const options = {
         alias: "-r",
         description: "process items within items"
     },
+    "retries": {
+        type: "number",
+        usage: "--retries [n]",
+        description: "number of retries for network requests (default: 3)",
+        internal: true
+    },
     "test": {
         type: "boolean",
         usage: "--test",
@@ -701,6 +707,7 @@ async function main(argc, argv, errors)
     //
     let processItem = async function(itemID, itemPath, itemPhoto = null, itemThumb = null, itemTarget = null, itemDB = null, modified = null) {
         let handle;
+        let prevPath = "";
         let dirListing = argv.desc;
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
@@ -708,13 +715,57 @@ async function main(argc, argv, errors)
         if (argv.debug) {
             printf("%s\n", itemPath);
         }
+        //
+        // Generate paths we may need later (for file and/or banner extraction).
+        //
+        // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
+        // destination path is the source path with the first occurrence of <search> replaced with <replace>.
+        //
+        // Otherwise, destination path is whatever follows "--dir".  The presence of "--dir" automatically
+        // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
+        // then the current directory is used.
+        //
+        // If multiple items are being processed and/or extraction was enabled without a specific directory,
+        // then extraction will occur inside a directory with the name of the item (which will be created if
+        // necessary).  The only way to bypass that behavior is to process items one at a time OR explicitly
+        // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
+        //
+        let srcPath = decodeURIComponent(itemPath);
+        let srcName = path.basename(srcPath);
+        let srcBase = path.basename(srcPath, itemExt);
+        srcPath = path.dirname(srcPath);
+        let dstPath = itemTarget || argv.dir || "";
+        let chgPath = dstPath.split("=");
+        if (chgPath.length > 1) {
+            if (srcPath.indexOf(chgPath[0]) >= 0) {
+                dstPath = srcPath.replace(chgPath[0], chgPath[1]);
+            } else {
+                printf("warning: source path %s does not contain '%s'\n", srcPath, chgPath[0]);
+                dstPath = chgPath[1];
+            }
+        }
+        if (dstPath != ".") {
+            if (!dstPath || itemTarget || itemList.length > 1) {
+                //
+                // TODO: Consider an option that determines whether or not to strip the item extension
+                // from the destination path.  The danger is that it can result in extraction conflicts,
+                // because a folder may contain multiple items with the same name but different extensions
+                // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
+                // with a conflicting name (eg, "CONTEST").
+                //
+                //      dstPath = path.join(dstPath, srcBase);
+                //
+                dstPath = path.join(dstPath, itemDB? srcName : srcBase);
+            }
+        }
+        let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
         if (!itemPhoto && !itemDB && itemExt.match(/\.(img|json|iso|mdf|bin|cdr)$/i)) {
             //
             // A top-level item (specifically, a disk image) may have an associated photo in the file system.
             //
             [itemPhoto, widthPhoto, heightPhoto] = await getPhotoInfo(itemPath, itemExt);
         }
-        let getCSVLine = function(entry, db, entryVolume) {
+        let printCSV = function(entry, db, entryVolume) {
             let entryID = entry.source? itemID : fileID++;
             let entryName = entry.name;
             let entryPath = itemPath;
@@ -774,40 +825,166 @@ async function main(argc, argv, errors)
             );
             return line;
         };
-        try {
-            nTotalItems++;
-            if (nTotalItems % 10000 == 0 && !argv.verbose && !argv.list) {
-                printf("%d item%s processed\n", nTotalItems);
+        let printHeading = function(entry) {
+            let label = !prevPath? ` [${itemPath}]` : "";
+            let continued = nItemFiles > 0;
+            let entryPath = path.dirname(entry.name);
+            if (entryPath == ".") {
+                entryPath = "";
             }
-            let options = {};
-            if (modified) {
-                options.modified = modified;
+            if (!entryPath) {
+                entryPath = handle.label;
+            } else {
+                entryPath = handle.label + path.sep + entryPath;
             }
-            if (argv.csv && !itemDB) {
+            if (prevPath != entryPath) {
+                if (prevPath && argv.truncate) {
+                    if (!truncate) {
+                        printf("...\n");
+                    }
+                    truncate = true;
+                }
+                prevPath = entryPath;
+                if (dirListing) {
+                    heading = false;
+                    continued = false;
+                }
+            }
+            if (!heading && !truncate && !argv.csv) {
+                let itemPrinted = false;
+                if (argv.banner && handle.item.comment || argv.desc || argv.list) {
+                    if (!nItemFiles || argv.desc || argv.list) {
+                        printf("\n%s%s%s%s\n", dirListing? "Directory of " : "", entryPath, label, continued? " (continued)" : "");
+                        itemPrinted = true;
+                    }
+                }
+                if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
+                    if (argv.verbose || handle.item.warnings.length == 1) {
+                        printf("%s: %s\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.join("; "));
+                    } else {
+                        printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.length);
+                    }
+                    nItemWarnings += handle.item.warnings.length;
+                }
                 //
-                // NOTE: preload is required if you want hashes of the items, but it slows things down,
-                // so I don't enable it unless you also want a list of the contents.  If there are cases where
-                // you want the CSV to have hashes WITHOUT listing the contents, then we'll need a new option.
+                // We also refer to the archive comment as the archive's "banner", which is an archive
+                // filtering condition (--filter banner), but if you also want to SEE the banners, then
+                // you must also specify --banner.
                 //
-                options.preload = !!argv.list;
+                if (argv.banner && handle.item.comment && !nItemFiles) {
+                    printf("%s\n", handle.item.comment);
+                }
+                if (argv.desc || argv.list) {
+                    if (dirListing) {
+                        printf("\n");
+                        // printf("\nFilename             Size   Date       Time       Path\n");
+                        // printf(  "--------             ----   ----       ----       ----\n");
+                    }
+                    else {
+                        printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
+                        printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
+                    }
+                }
             }
-            if (argv.password) {
-                options.password = argv.password;
+            heading = true;
+            nTotalFiles++;
+            nItemFiles++;
+        };
+        let printScript = function() {
+            //
+            // I expect item.name to refer to a file with a path of the form:
+            //
+            //      .../[publisher]/[category]/filename.ext
+            //
+            // So let's extract the publisher and category values from the path now.
+            //
+            let pathParts = path.dirname(handle.item.name).split(path.sep);
+            let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
+            let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
+            let id = "";
+            if (publisher) {
+                id += publisher.toLowerCase().replace(/ /g, '-');
+                if (id == "microsoft") id = "ms";
+                id += '-';
             }
-            if (argv.compat) {
-                options.compat = true;
+            if (category) {
+                id += category.toLowerCase().replace(/ /g, '-') + '-';
             }
-            if (argv.nodir) {
-                options.nodir = true;
+            let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
+            id += label.toLowerCase();
+            let origID = id, nextID = 1;
+            while (uploadIDs.includes(id)) {
+                id = origID + "-" + nextID++;
             }
-            if (itemPath[0] == '~') {
-                itemPath = path.join(process.env.HOME, itemPath.slice(1));
+            uploadIDs.push(id);
+            let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, handle.item.modified).trim();
+            let files = [], targetName = label + itemExt;
+            printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(handle.item.name));
+            printf("cp \"%s\" %s\n", handle.item.name, targetName);
+            files.push(targetName);
+            if (argv.upload && itemPhoto) {
+                let match = itemPhoto.match(/^(.*?)(\.[^.]+)$/);
+                if (match) {
+                    let targetExt = match[2].toLowerCase();
+                    let targetName = label + targetExt;
+                    printf("cp \"%s/%s\" %s\n", path.dirname(handle.item.name), itemPhoto, targetName);
+                    files.push(targetName);
+                }
             }
-            handle = await dxc.open(itemPath, itemDB, options);
-        } catch (error) {
-            printf("error opening %s: %s\n", itemPath, error.message);
-            return [0, 1];
+            printf("node dx.js \"%s%s\" --desc --truncate > desc.txt\n", label, itemExt);
+            files.unshift("desc.txt");
+            printf("while true; do\n");
+            if (argv.update) {
+                printf("    python update.py %s \"%s\" desc.txt\n", id, title);
+            } else {
+                printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, handle.item.modified, handle.item.modified, handle.item.modified, publisher, category, files.join(" "));
+            }
+            printf("    if [ $? -eq 0 ]; then break; fi\n");
+            printf("    sleep 300\n");
+            printf("done\n");
+            printf("rm %s\n", files.join(" "));
+        };
+        nTotalItems++;
+        if (nTotalItems % 10000 == 0 && !argv.verbose && !argv.list) {
+            printf("%d item%s processed\n", nTotalItems);
         }
+        let options = {};
+        if (modified) {
+            options.modified = modified;
+        }
+        if (argv.csv && !itemDB) {
+            //
+            // NOTE: preload is required if you want hashes of the items, but it slows things down,
+            // so I don't enable it unless you also want a list of the contents.  If there are cases where
+            // you want the CSV to have hashes WITHOUT listing the contents, then we'll need a new option.
+            //
+            options.preload = !!argv.list;
+        }
+        if (argv.password) {
+            options.password = argv.password;
+        }
+        if (argv.compat) {
+            options.compat = true;
+        }
+        if (argv.nodir) {
+            options.nodir = true;
+        }
+        if (itemPath[0] == '~') {
+            itemPath = path.join(process.env.HOME, itemPath.slice(1));
+        }
+        let retries = +argv.retries || 3;
+        do {
+            try {
+                handle = await dxc.open(itemPath, itemDB, options);
+                break;
+            } catch (error) {
+                printf("error opening %s: %s\n", itemPath, error.message);
+                if (!retries || error.message.match(/^(Unrecognized|ENOENT)/)) {
+                    return [0, -1];
+                }
+                printf("retrying...\n");
+            }
+        } while (retries-- > 0);
         let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
@@ -837,50 +1014,6 @@ async function main(argc, argv, errors)
                     handle.item.warnings.push("No entries");
                 }
             }
-            //
-            // Set dstPath as needed (for file and/or banner extraction).
-            //
-            // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
-            // destination path is the source path with the first occurrence of <search> replaced with <replace>.
-            //
-            // Otherwise, destination path is whatever follows "--dir".  The presence of "--dir" automatically
-            // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
-            // then the current directory is used.
-            //
-            // If multiple items are being processed and/or extraction was enabled without a specific directory,
-            // then extraction will occur inside a directory with the name of the item (which will be created if
-            // necessary).  The only way to bypass that behavior is to process items one at a time OR explicitly
-            // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
-            //
-            let srcPath = decodeURIComponent(itemPath);
-            let srcName = path.basename(srcPath);
-            let srcBase = path.basename(srcPath, itemExt);
-            srcPath = path.dirname(srcPath);
-            let dstPath = itemTarget || argv.dir || "";
-            let chgPath = dstPath.split("=");
-            if (chgPath.length > 1) {
-                if (srcPath.indexOf(chgPath[0]) >= 0) {
-                    dstPath = srcPath.replace(chgPath[0], chgPath[1]);
-                } else {
-                    printf("warning: source path %s does not contain '%s'\n", srcPath, chgPath[0]);
-                    dstPath = chgPath[1];
-                }
-            }
-            if (dstPath != ".") {
-                if (!dstPath || itemTarget || itemList.length > 1) {
-                    //
-                    // TODO: Consider an option that determines whether or not to strip the item extension
-                    // from the destination path.  The danger is that it can result in extraction conflicts,
-                    // because a folder may contain multiple items with the same name but different extensions
-                    // (eg, "CONTEST.ZIP" and "CONTEST.ARC") or there might simply be another file or folder
-                    // with a conflicting name (eg, "CONTEST").
-                    //
-                    //      dstPath = path.join(dstPath, srcBase);
-                    //
-                    dstPath = path.join(dstPath, itemDB? srcName : srcBase);
-                }
-            }
-            let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
             if (handle.item.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
@@ -932,130 +1065,13 @@ async function main(argc, argv, errors)
                         handle.item.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(getCSVLine(handle.item, handle.item.db, handle.label));
+                await csv.write(printCSV(handle.item, handle.item.db, handle.label));
             }
             if (argv.upload || argv.update) {
-                //
-                // I expect item.name to refer to a file with a path of the form:
-                //
-                //      .../[publisher]/[category]/filename.ext
-                //
-                // So let's extract the publisher and category values from the path now.
-                //
-                let pathParts = path.dirname(handle.item.name).split(path.sep);
-                let publisher = pathParts[pathParts.length - 2] || "";      // eg. Microsoft
-                let category = pathParts[pathParts.length - 1] || "";       // eg. TechNet
-                let id = "";
-                if (publisher) {
-                    id += publisher.toLowerCase().replace(/ /g, '-');
-                    if (id == "microsoft") id = "ms";
-                    id += '-';
-                }
-                if (category) {
-                    id += category.toLowerCase().replace(/ /g, '-') + '-';
-                }
-                let label = (handle.label || srcBase).replace(/ /g, "-").toUpperCase();
-                id += label.toLowerCase();
-                let origID = id, nextID = 1;
-                while (uploadIDs.includes(id)) {
-                    id = origID + "-" + nextID++;
-                }
-                uploadIDs.push(id);
-                let title = format.sprintf("%s %s %s Disc (%F %Y)", publisher, category, label, handle.item.modified).trim();
-                let files = [], targetName = label + itemExt;
-                printf("# %s %s\n", argv.upload? "uploading" : "updating", path.basename(handle.item.name));
-                printf("cp \"%s\" %s\n", handle.item.name, targetName);
-                files.push(targetName);
-                if (argv.upload && itemPhoto) {
-                    let match = itemPhoto.match(/^(.*?)(\.[^.]+)$/);
-                    if (match) {
-                        let targetExt = match[2].toLowerCase();
-                        let targetName = label + targetExt;
-                        printf("cp \"%s/%s\" %s\n", path.dirname(handle.item.name), itemPhoto, targetName);
-                        files.push(targetName);
-                    }
-                }
-                printf("node dx.js \"%s%s\" --desc --truncate > desc.txt\n", label, itemExt);
-                files.unshift("desc.txt");
-                printf("while true; do\n");
-                if (argv.update) {
-                    printf("    python update.py %s \"%s\" desc.txt\n", id, title);
-                } else {
-                    printf("    python upload.py %s \"%s\" %Y-%02M-%02D \"%s\" \"%s\" %s\n", id, title, handle.item.modified, handle.item.modified, handle.item.modified, publisher, category, files.join(" "));
-                }
-                printf("    if [ $? -eq 0 ]; then break; fi\n");
-                printf("    sleep 300\n");
-                printf("done\n");
-                printf("rm %s\n", files.join(" "));
+                printScript();
             }
-            let printHeading = function(entry) {
-                let label = !prevPath? ` [${itemPath}]` : "";
-                let continued = nItemFiles > 0;
-                let entryPath = path.dirname(entry.name);
-                if (entryPath == ".") {
-                    entryPath = "";
-                }
-                if (!entryPath) {
-                    entryPath = handle.label;
-                } else {
-                    entryPath = handle.label + path.sep + entryPath;
-                }
-                if (prevPath != entryPath) {
-                    if (prevPath && argv.truncate) {
-                        if (!truncate) {
-                            printf("...\n");
-                        }
-                        truncate = true;
-                    }
-                    prevPath = entryPath;
-                    if (dirListing) {
-                        heading = false;
-                        continued = false;
-                    }
-                }
-                if (!heading && !truncate && !argv.csv) {
-                    let itemPrinted = false;
-                    if (argv.banner && handle.item.comment || argv.desc || argv.list) {
-                        if (!nItemFiles || argv.desc || argv.list) {
-                            printf("\n%s%s%s%s\n", dirListing? "Directory of " : "", entryPath, label, continued? " (continued)" : "");
-                            itemPrinted = true;
-                        }
-                    }
-                    if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
-                        if (argv.verbose || handle.item.warnings.length == 1) {
-                            printf("%s: %s\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.join("; "));
-                        } else {
-                            printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.length);
-                        }
-                        nItemWarnings += handle.item.warnings.length;
-                    }
-                    //
-                    // We also refer to the archive comment as the archive's "banner", which is an archive
-                    // filtering condition (--filter banner), but if you also want to SEE the banners, then
-                    // you must also specify --banner.
-                    //
-                    if (argv.banner && handle.item.comment && !nItemFiles) {
-                        printf("%s\n", handle.item.comment);
-                    }
-                    if (argv.desc || argv.list) {
-                        if (dirListing) {
-                            printf("\n");
-                            // printf("\nFilename             Size   Date       Time       Path\n");
-                            // printf(  "--------             ----   ----       ----       ----\n");
-                        }
-                        else {
-                            printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
-                            printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
-                        }
-                    }
-                }
-                heading = true;
-                nTotalFiles++;
-                nItemFiles++;
-            };
             let nEntries = 0;
             let dirTimestamps = {};
-            let prevPath = "";
             while (nEntries < entries.length) {
                 let entry = entries[nEntries++];
                 let entryAttr = (entry.attr || 0) & 0xff;
@@ -1099,12 +1115,12 @@ async function main(argc, argv, errors)
                 // hand (and we WILL have it in hand when extracting or even just testing files in the item).
                 //
                 printHeading(entry);
-                let db, targetFile, writeData, printed = false;
                 //
                 // TODO: Consider whether we should include IMG and JSON files in the list of images
                 // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
                 // IMG and JSON extensions tend be used more broadly for other purposes.
                 //
+                let db, targetFile, writeData, printed = false;
                 let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc|iso)$/i));
                 //
                 // Define a writeData() function within processItem() to receive data ONLY if extraction
@@ -1187,7 +1203,7 @@ async function main(argc, argv, errors)
                         entry.methodName += '*';
                     }
                     if (argv.csv) {
-                        await csv.write(getCSVLine(entry, db, handle.label));
+                        await csv.write(printCSV(entry, db, handle.label));
                     }
                     else if (dirListing) {
                         if (!truncate) {
@@ -1283,9 +1299,13 @@ async function main(argc, argv, errors)
         //
         let [nFiles, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
         if (!argv.upload && !argv.update) {
-            printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
-            if (argv.desc && !argv.csv) {
-                printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
+            if (nWarnings >= 0) {
+                printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+                if (argv.desc && !argv.csv) {
+                    printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
+                }
+            } else {
+                nWarnings = -nWarnings;;
             }
             heading = false;
         }

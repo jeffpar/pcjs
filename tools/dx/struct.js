@@ -329,8 +329,8 @@ export default class Struct {
                  * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
                  */
                 v = (this.littleEndian || field.type == Struct.INT64LE) && field.type != Struct.INT64BE?
-                    (db.readInt32LE(offset) + db.readInt32LE(offset + 4) * 0x0000000100000000) :
-                    (db.readInt32BE(offset) * 0x0000000100000000 + db.readInt32BE(offset + 4));
+                    (db.readInt32LE(offset) + db.readInt32LE(offset + 4) * 0x100000000) :
+                    (db.readInt32BE(offset) * 0x100000000 + db.readInt32BE(offset + 4));
                 break;
             case Struct.UINT8:
                 v = db.readUInt8(offset);
@@ -367,8 +367,8 @@ export default class Struct {
                  * currently doing cannot accurately handle integer values larger than 2^53 (Number.MAX_SAFE_INTEGER).
                  */
                 v = (this.littleEndian || field.type == Struct.UINT64LE) && field.type != Struct.UINT64BE?
-                    (db.readUInt32LE(offset) + db.readUInt32LE(offset + 4) * 0x0000000100000000) :
-                    (db.readUInt32BE(offset) * 0x0000000100000000 + db.readUInt32BE(offset + 4));
+                    (db.readUInt32LE(offset) + db.readUInt32LE(offset + 4) * 0x100000000) :
+                    (db.readUInt32BE(offset) * 0x100000000 + db.readUInt32BE(offset + 4));
                 break;
             case Struct.DOSTIMEDATE:        // since this is defined as a DOS field, we assume little-endian
                 time = db.readUInt16LE(offset);

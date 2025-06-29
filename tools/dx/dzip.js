@@ -125,7 +125,7 @@ export default class DZip {
         .field('lenExtra',      Struct.UINT16)          // extra field length
         .verifyLength(30);
         //
-        // NOTE: After we read a FileHeader, we also a 'length' field to it, to simplify locating the data
+        // NOTE: After we read a FileHeader, we add a 'length' field to it, to simplify locating the data
         // that follows it.
         //
 
@@ -185,7 +185,7 @@ export default class DZip {
 
     static Dir64Header = new Struct("Dir64Header")
         .field('signature',     Struct.UINT32,{
-            ENDL64SIG:  0x07064b50                      // "PK\006\007" (ZIP64 end of directory locator)
+            DIRSIG:  0x07064b50                         // "PK\006\007" (ZIP64 end of directory locator)
         })
         .field('diskNum',       Struct.UINT32)          // number of this disk
         .field('headerOffset',  Struct.UINT64)          // offset of the ZIP64 end of directory header
@@ -194,9 +194,9 @@ export default class DZip {
 
     static Dir64EndHeader = new Struct("Dir64EndHeader")
         .field('signature',     Struct.UINT32, {
-            END64SIG:   0x06064b50                      // "PK\006\006" (ZIP64 end of directory header)
+            DIREND:     0x06064b50                      // "PK\006\006" (ZIP64 end of directory header)
         })
-        .field('sizeEOCD',      Struct.UINT64)          // size of zip64 end of directory header
+        .field('sizeEOCD',      Struct.UINT64)          // size of this header (minus 12 bytes)
         .field('verMade',       Struct.UINT16)          // version made by
         .field('version',       Struct.UINT16)          // version needed to extract
         .field('diskNum',       Struct.UINT32)          // number of this disk
@@ -789,7 +789,7 @@ export default class DZip {
                 }
             });
             if (!response.ok || response.status != 206) {
-                throw new Error(`Failed to fetch ${extent} bytes from ${archive.name} at position ${position}: ${response.statusText}`);
+                throw new Error(`Failed to fetch ${extent} bytes from ${archive.name} at position 0x${(position >>> 0).toString(16)}: ${response.statusText}`);
             }
             const arrayBuffer = await response.arrayBuffer();
             let dbRead = new DataBuffer(new Uint8Array(arrayBuffer));
@@ -824,7 +824,7 @@ export default class DZip {
     {
         DZip.assert(position >= 0 && extent >= 0);
         if (position > archive.size) {
-            throw new Error(`Position ${position} exceeds limit (${archive.size})`);
+            throw new Error(`Position 0x${(position >>> 0).toString(16)} exceeds limit 0x${(archive.size >>> 0).toString(16)}`);
         }
         if (position + extent > archive.size) {
             extent = archive.size - position;
@@ -875,7 +875,7 @@ export default class DZip {
             if (readExtent > 0) {
                 let bytesRead = await this.readBytes(archive, readPosition, readExtent, cache.db, readOffset);
                 if (bytesRead != readExtent) {
-                    throw new Error(`Received ${bytesRead} bytes, expected ${readExtent} at ${readPosition}`);
+                    throw new Error(`Received ${bytesRead} bytes, expected ${readExtent} at 0x${(readPosition >>> 0).toString(16)}`);
                 }
             }
             cache.position = position;
@@ -1047,16 +1047,22 @@ export default class DZip {
             // starting with the last chunk in the archive, until we find a DirEndHeader signature.
             //
             let posArchive = archive.size - cache.db.length;
+            let targetStruct = DZip.DirEndHeader;
             while (true) {
                 let [offset, length] = await this.readCache(archive, posArchive, cache.db.length);
-                let offsetEnd = offset + length - DZip.DirEndHeader.length;
+                let offsetEnd = offset + length - targetStruct.length;
                 while (offsetEnd >= offset) {
                     //
                     // To save the expense of readStruct(), probe the signature first.
                     //
-                    if (cache.db.readUInt32LE(offsetEnd) == DZip.DirEndHeader.fields.signature.DIREND) {
-                        let endHeader = DZip.DirEndHeader.readStruct(cache.db, offsetEnd, this.encoding);
-                        DZip.assert(endHeader.signature == DZip.DirEndHeader.fields.signature.DIREND);
+                    if (cache.db.readUInt32LE(offsetEnd) == targetStruct.fields.signature.DIREND) {
+                        let endHeader = targetStruct.readStruct(cache.db, offsetEnd, this.encoding);
+                        DZip.assert(endHeader.signature == targetStruct.fields.signature.DIREND);
+                        if (endHeader.position == 0xffffffff) {
+                            targetStruct = DZip.Dir64EndHeader;
+                            offsetEnd--;
+                            continue;
+                        }
                         //
                         // We've got the DirEndHeader, so save it in the archive object.
                         //
@@ -1066,14 +1072,17 @@ export default class DZip {
                         // If there's comment, read it and save it in the archive object.
                         //
                         let lenComment = endHeader.lenComment;
+                        if (lenComment == undefined) {  // TODO: Test ZIP64 archive with comment...
+                            lenComment = (endHeader.sizeEOCD + 12) - targetStruct.length;
+                        }
                         if (lenComment) {
-                            let posComment = posArchive + offsetEnd - offset + DZip.DirEndHeader.length;
+                            let posComment = posArchive + offsetEnd - offset + targetStruct.length;
                             [offset, length] = await this.readCache(archive, posComment, lenComment);
                             if (length < lenComment) {
                                 archive.warnings.push(`Archive comment length (${lenComment}) exceeds available length (${length})`);
                             }
-                            archive.comment = DZip.DirEndHeader.readString(cache.db, offset, length, this.encoding);
-                            archive.commentRaw = DZip.DirEndHeader.readString(cache.db, offset, length, "binary");
+                            archive.comment = targetStruct.readString(cache.db, offset, length, this.encoding);
+                            archive.commentRaw = targetStruct.readString(cache.db, offset, length, "binary");
                             archive.exceptions |= DZip.EXCEPTIONS.BANNER;
                         }
                         break;
@@ -1085,7 +1094,7 @@ export default class DZip {
                 // Move backward another chunk, but less than the full cache size, to ensure that we don't fail
                 // to find a signature (and the structure containing it) that happens to straddle a cache boundary.
                 //
-                posArchive -= (cache.db.length - DZip.DirEndHeader.length * 2);
+                posArchive -= (cache.db.length - targetStruct.length * 2);
                 if (posArchive < 0) posArchive = 0;
             }
         }
@@ -1095,12 +1104,12 @@ export default class DZip {
             //
             let [offset, length] = await this.readCache(archive, position, DZip.DirHeader.length);
             let signature = cache.db.readUInt32LE(offset);
-            if (signature == (DZip.DirEndHeader.fields.signature.DIREND)) {
+            if (signature == DZip.DirEndHeader.fields.signature.DIREND || signature == DZip.Dir64EndHeader.fields.signature.DIREND) {
                 return null;
             }
             let dirHeader = DZip.DirHeader.readStruct(cache.db, offset, this.encoding);
             if (dirHeader.signature != DZip.DirHeader.fields.signature.DIRSIG) {
-                throw new Error(`Missing DirHeader at ${position}`);
+                throw new Error(`Missing DirHeader at 0x${(position >>> 0).toString(16)}`);
             }
             record = this.newRecord(archive);
             record.dirHeader = dirHeader;
@@ -1111,10 +1120,48 @@ export default class DZip {
                 record.warnings.push(`Name length (${dirHeader.lenName}) exceeds available length (${length})`);
             }
             dirHeader.name = DZip.DirHeader.readString(cache.db, offset, length, this.encoding);
-            //
-            // TODO: Find examples of archives with "lenExtra" data and figure out what to do with it.
-            //
-            position += dirHeader.lenName + dirHeader.lenExtra;
+            position += dirHeader.lenName;
+            if (dirHeader.lenExtra) {
+                [offset, length] = await this.readCache(archive, position, dirHeader.lenExtra);
+                //
+                // The "Extra" data is a series of one or more blocks, where each block begins with a 2-byte ID
+                // and a 2-byte length, followed by the number of bytes specified by that length.  The only ID we
+                // care about is the "Zip64 Extended Information" block, which has an ID of 0x0001.
+                //
+                while (length >= 4) {
+                    let idBlock = cache.db.readUInt16LE(offset);
+                    let lenBlock = cache.db.readUInt16LE(offset + 2);
+                    offset += 4;
+                    length -= 4;
+                    if (idBlock == 0x0001) {
+                        if (dirHeader.size == 0xffffffff) {
+                            dirHeader.size = cache.db.readUInt64LE(offset);
+                            offset += 8;
+                            lenBlock -= 8;
+                        }
+                        if (dirHeader.compressedSize == 0xffffffff) {
+                            dirHeader.compressedSize = cache.db.readUInt64LE(offset);
+                            offset += 8;
+                            lenBlock -= 8;
+                        }
+                        if (dirHeader.position == 0xffffffff) {
+                            dirHeader.position = cache.db.readUInt64LE(offset);
+                            offset += 8;
+                            lenBlock -= 8;
+                        }
+                        if (dirHeader.diskStart == 0xffff) {
+                            dirHeader.diskStart = cache.db.readUInt32LE(offset);
+                            offset += 4;
+                            lenBlock -= 4;
+                        }
+                        DZip.assert(lenBlock == 0);
+                        break;
+                    }
+                    offset += lenBlock;
+                    length -= lenBlock;
+                }
+            }
+            position += dirHeader.lenExtra;
             if (dirHeader.lenComment) {
                 [offset, length] = await this.readCache(archive, position, dirHeader.lenComment);
                 if (length < dirHeader.lenComment) {
@@ -1282,6 +1329,14 @@ export default class DZip {
                         //
                         for (let field of ["name", "size", "compressedSize"]) {
                             if (zipHeader[field] != record.dirHeader[field]) {
+                                //
+                                // TODO: The first time I saw discrepancies here was in a ZIP64 file: the size and
+                                // compressedSize fields in the FileHeader were 0.  Determine if that's normal behavior.
+                                //
+                                if (!zipHeader[field]) {
+                                    zipHeader[field] = record.dirHeader[field];
+                                    continue;
+                                }
                                 warnings.push(`FileHeader ${field}: ${zipHeader[field]}`);
                                 break;
                             }
@@ -1341,7 +1396,7 @@ export default class DZip {
                 let position = record.dirHeader.position;
                 await this.readFileHeader(archive, record, position);
                 if (!record.fileHeader) {
-                    throw new Error(`Missing FileHeader at ${position}`);
+                    throw new Error(`Missing FileHeader at 0x${(position >>> 0).toString(16)}`);
                 }
                 fileHeader = record.fileHeader;
             }
@@ -1564,7 +1619,7 @@ export default class DZip {
                 // we must also convert the calculated crc to a positive 32-bit value before comparing.
                 //
                 if ((crc >>> 0) != crcFile) {
-                    record.warnings.push(`Calculated CRC ${(crc >>> 0).toString(16)}, expected ${crcFile.toString(16)}`);
+                    record.warnings.push(`Calculated CRC 0x${(crc >>> 0).toString(16)}, expected 0x${crcFile.toString(16)}`);
                 }
             }
         }

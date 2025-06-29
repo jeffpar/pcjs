@@ -486,7 +486,7 @@ export default class ISO {
             throw new Error("No image open interface available");
         }
         if (image.size > ISO.MAX_SIZE) {
-            throw new Error(`Image size (${image.size}) exceeds maximum`);
+            throw new Error(`Unrecognized disc image (${image.size})`);
         }
         this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
         image.dirClass = ISO.DirRecord;

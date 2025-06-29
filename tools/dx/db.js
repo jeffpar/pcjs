@@ -406,6 +406,30 @@ export default class DataBuffer {
     }
 
     /**
+     * readUInt64LE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readUInt64LE(off)
+    {
+        return this.readUInt32LE(off) + this.readUInt32LE(off + 4) * 0x100000000;
+    }
+
+    /**
+     * readUInt64BE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readUInt64BE(off)
+    {
+        return this.readUInt32BE(off) * 0x100000000 + this.readUInt32BE(off + 4);
+    }
+
+    /**
      * toString(encoding, start, end)
      *
      * @this {DataBuffer}
