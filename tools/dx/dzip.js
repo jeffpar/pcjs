@@ -1121,47 +1121,7 @@ export default class DZip {
             }
             dirHeader.name = DZip.DirHeader.readString(cache.db, offset, length, this.encoding);
             position += dirHeader.lenName;
-            if (dirHeader.lenExtra) {
-                [offset, length] = await this.readCache(archive, position, dirHeader.lenExtra);
-                //
-                // The "Extra" data is a series of one or more blocks, where each block begins with a 2-byte ID
-                // and a 2-byte length, followed by the number of bytes specified by that length.  The only ID we
-                // care about is the "Zip64 Extended Information" block, which has an ID of 0x0001.
-                //
-                while (length >= 4) {
-                    let idBlock = cache.db.readUInt16LE(offset);
-                    let lenBlock = cache.db.readUInt16LE(offset + 2);
-                    offset += 4;
-                    length -= 4;
-                    if (idBlock == 0x0001) {
-                        if (dirHeader.size == 0xffffffff) {
-                            dirHeader.size = cache.db.readUInt64LE(offset);
-                            offset += 8;
-                            lenBlock -= 8;
-                        }
-                        if (dirHeader.compressedSize == 0xffffffff) {
-                            dirHeader.compressedSize = cache.db.readUInt64LE(offset);
-                            offset += 8;
-                            lenBlock -= 8;
-                        }
-                        if (dirHeader.position == 0xffffffff) {
-                            dirHeader.position = cache.db.readUInt64LE(offset);
-                            offset += 8;
-                            lenBlock -= 8;
-                        }
-                        if (dirHeader.diskStart == 0xffff) {
-                            dirHeader.diskStart = cache.db.readUInt32LE(offset);
-                            offset += 4;
-                            lenBlock -= 4;
-                        }
-                        DZip.assert(lenBlock == 0);
-                        break;
-                    }
-                    offset += lenBlock;
-                    length -= lenBlock;
-                }
-            }
-            position += dirHeader.lenExtra;
+            position += await this.readExtraData(archive, position, dirHeader);
             if (dirHeader.lenComment) {
                 [offset, length] = await this.readCache(archive, position, dirHeader.lenComment);
                 if (length < dirHeader.lenComment) {
@@ -1181,6 +1141,61 @@ export default class DZip {
             }
         }
         return record;
+    }
+
+    /**
+     * readExtraData(archive, position, header)
+     *
+     * @this {DZip}
+     * @param {Archive} archive
+     * @param {number} position
+     * @param {*} header
+     * @returns {number} (length of extra data read)
+     */
+    async readExtraData(archive, position, header)
+    {
+        if (header.lenExtra) {
+            let cache = archive.cache;
+            let [offset, length] = await this.readCache(archive, position, header.lenExtra);
+            //
+            // The "Extra" data is a series of one or more blocks, where each block begins with a 2-byte ID
+            // and a 2-byte length, followed by the number of bytes specified by that length.  The only ID we
+            // care about is the "Zip64 Extended Information" block, which has an ID of 0x0001.
+            //
+            while (length >= 4) {
+                let idBlock = cache.db.readUInt16LE(offset);
+                let lenBlock = cache.db.readUInt16LE(offset + 2);
+                offset += 4;
+                length -= 4;
+                if (idBlock == 0x0001) {
+                    if (header.size == 0xffffffff) {
+                        header.size = cache.db.readUInt64LE(offset);
+                        offset += 8;
+                        lenBlock -= 8;
+                    }
+                    if (header.compressedSize == 0xffffffff) {
+                        header.compressedSize = cache.db.readUInt64LE(offset);
+                        offset += 8;
+                        lenBlock -= 8;
+                    }
+                    if (header.position == 0xffffffff) {
+                        header.position = cache.db.readUInt64LE(offset);
+                        offset += 8;
+                        lenBlock -= 8;
+                    }
+                    if (header.diskStart == 0xffff) {
+                        header.diskStart = cache.db.readUInt32LE(offset);
+                        offset += 4;
+                        lenBlock -= 4;
+                    }
+                    DZip.assert(lenBlock == 0);
+                    break;
+                }
+                offset += lenBlock;
+                length -= lenBlock;
+            }
+        }
+        return header.lenExtra;
     }
 
     /**
@@ -1304,12 +1319,13 @@ export default class DZip {
                     }
                     zipHeader.name = DZip.FileHeader.readString(archive.cache.db, offset, length, this.encoding);
                     zipHeader.length = DZip.FileHeader.length + zipHeader.lenName + zipHeader.lenExtra;
+                    position += zipHeader.lenName;
+                    position += await this.readExtraData(archive, position, zipHeader);
                     if (zipHeader.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                         //
                         // There should be an additional 12 bytes of data for encrypted files (ie, the "Encryption Header"),
                         // which we need to read and skip as well.
                         //
-                        position += zipHeader.lenName + zipHeader.lenExtra;
                         [offset, length] = await this.readCache(archive, position, 12);
                         if (length < 12) {
                             warnings.push(`Encryption header length (${12}) exceeds available length (${length})`);
