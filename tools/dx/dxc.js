@@ -21,7 +21,6 @@ export default class DXC {
     /**
      * Public class fields
      */
-    static DEBUG = false;
     static VERSION = "1.0";
     static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
     static EXCEPTIONS = {               // use bits 16-31 (bits 0-15 are reserved for other classes)
@@ -40,17 +39,6 @@ export default class DXC {
         this.dzip = new DZip(interfaces, interfaceOptions);
         this.disk = new Disk(interfaces, interfaceOptions);
         this.iso = new ISO(interfaces, interfaceOptions);
-    }
-
-    /**
-     * enableWarnings()
-     *
-     * @this {DXC}
-     */
-    enableWarnings()
-    {
-        this.dzip.enableWarnings();
-        this.iso.enableWarnings();
     }
 
     /**

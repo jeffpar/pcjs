@@ -103,15 +103,9 @@ const CPUx86 = {
  * @property {Interfaces} interfaces
  * @property {number} cacheSize (default is 64K)
  * @property {string} encoding (default is "cp437")
+ * @property {boolean} debug (if true, enable additional checks/warnings; default is false)
  */
 export default class Disk {
-
-    /**
-     * Public class fields
-     */
-    static DEBUG = false;
-    static VERSION = "1.0";
-    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
 
     /**
      * constructor(interfaces, interfaceOptions)
@@ -128,19 +122,7 @@ export default class Disk {
         //
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
         this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
-    }
-
-    /**
-     * assert(condition, message)
-     *
-     * @param {boolean} condition
-     * @param {string} [message]
-     */
-    static assert(condition, message = "Assertion failed")
-    {
-        if (Disk.DEBUG && !condition) {
-            throw new Error(message);
-        }
+        this.debug = (interfaceOptions.debug || false);
     }
 
     /**
@@ -160,7 +142,7 @@ export default class Disk {
      */
     async open(name, db = null, options = {})
     {
-        let diskInfo = new DiskInfo(name, options.modified);
+        let diskInfo = new DiskInfo(name, options.modified, this.debug);
         if (db) {
             diskInfo.db = db;
             diskInfo.source = "Buffer";
@@ -947,18 +929,20 @@ export class DiskInfo {
         .verifyLength(32);
 
     /**
-     * DiskInfo(diskName, modified)
+     * DiskInfo(diskName, modified, debug)
      *
      * Returns a DiskInfo object used to build a disk images.
      *
      * @this {DiskInfo}
      * @param {string} [diskName]
      * @param {Date} [modified]
+     * @param {boolean} [debug]
      */
-    constructor(diskName = "", modified = null)
+    constructor(diskName = "", modified = null, debug = false)
     {
         this.diskName = diskName;
         this.modified = modified;
+        this.debug = debug;
         this.volTable = [];
         this.fileTable = [];
         this.tablesBuilt = false;
@@ -966,6 +950,20 @@ export class DiskInfo {
         this.dwChecksum = 0;
         this.warnings = [];
         this.messages = [];
+    }
+
+    /**
+     * assert(condition, message)
+     *
+     * @this {DiskInfo}
+     * @param {boolean} condition
+     * @param {string} [message]
+     */
+    assert(condition, message = "Assertion failed")
+    {
+        if (this.debug && !condition) {
+            throw new Error(message);
+        }
     }
 
     /**
@@ -1650,6 +1648,7 @@ export class DiskInfo {
     /**
      * buildVolume(iVolume, sectorBoot)
      *
+     * @this {DiskInfo}
      * @param {number} iVolume
      * @param {Sector} sectorBoot
      * @returns {VolInfo|null}
@@ -1847,7 +1846,7 @@ export class DiskInfo {
          * every sector allocated to the directory.  TODO: Determine whether DOS reads all root sector contents or only rootEntries
          * (ie, create a test volume where rootEntries * 32 is NOT a multiple of cbSector and watch what happens).
          */
-        Disk.assert(!((vol.rootEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
+        this.assert(!((vol.rootEntries * DiskInfo.DIRENT.LENGTH) % vol.cbSector));
 
         this.volTable.push(vol);
 
@@ -2085,7 +2084,7 @@ export class DiskInfo {
                 if (vol.nFATBits == 16) {
                     w <<= 8;
                 } else {
-                    Disk.assert(vol.nFATBits == 12);
+                    this.assert(vol.nFATBits == 12);
                     if (offBits & 0x7) {
                         w <<= 4;
                     } else {
@@ -2160,14 +2159,14 @@ export class DiskInfo {
                                  * but if we have to scan every sector for a single file, we may as well do ALL files.
                                  */
                                 let fileCur = this.fileTable[iFile];
-                                Disk.assert(fileCur);
+                                this.assert(fileCur);
                                 if (!fileCur.aLBA) fileCur.aLBA = [];
                                 let iLBA = sector[DiskInfo.SECTOR.FILE_OFFSET] / this.cbSector;
                                 /**
                                  * Disks that have known errors (like the APL-100 disk image we received) can trigger this
                                  * assertion, so it should be a DEBUG-only check.
                                  */
-                                if (Disk.DEBUG) Disk.assert(fileCur.aLBA[iLBA] == undefined || fileCur.aLBA[iLBA] == iLBA);
+                                this.assert(fileCur.aLBA[iLBA] == undefined || fileCur.aLBA[iLBA] == iLBA);
                                 fileCur.aLBA[iLBA] = lba;
                                 if (!file || file.index == iFile) nSectors++;
                             }
@@ -2232,11 +2231,11 @@ export class DiskInfo {
     {
         let dw = 0;
         let nShift = 0;
-        Disk.assert(len > 0 && len <= 4);
+        this.assert(len > 0 && len <= 4);
         while (len--) {
-            Disk.assert(off < sector[DiskInfo.SECTOR.LENGTH]);
+            this.assert(off < sector[DiskInfo.SECTOR.LENGTH]);
             let b = this.read(sector, off++);
-            Disk.assert(b >= 0);
+            this.assert(b >= 0);
             if (b < 0) break;
             dw |= (b << nShift);
             nShift += 8;
@@ -2370,12 +2369,12 @@ export class DiskInfo {
     rebuildSector(iCylinder, iHead, sector)
     {
         if (sector[DiskInfo.SECTOR.CYLINDER] != undefined) {
-            Disk.assert(sector[DiskInfo.SECTOR.CYLINDER] == iCylinder);
+            this.assert(sector[DiskInfo.SECTOR.CYLINDER] == iCylinder);
             delete sector[DiskInfo.SECTOR.CYLINDER];
         }
 
         if (sector[DiskInfo.SECTOR.HEAD] != undefined) {
-            Disk.assert(sector[DiskInfo.SECTOR.HEAD] == iHead);
+            this.assert(sector[DiskInfo.SECTOR.HEAD] == iHead);
             delete sector[DiskInfo.SECTOR.HEAD];
         }
 
@@ -2401,7 +2400,7 @@ export class DiskInfo {
 
         let adw = sector[DiskInfo.SECTOR.DATA];
         if (adw) {
-            // Disk.assert(adw.length);                 // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
+            // this.assert(adw.length);                 // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
             delete sector[DiskInfo.SECTOR.DATA];
         } else {
             adw = sector['data'];
@@ -2442,7 +2441,7 @@ export class DiskInfo {
                     dw = dwPattern;
                 } else {
                     dw = adw[adw.length-1];
-                    // Disk.assert(dw != undefined);    // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
+                    // this.assert(dw != undefined);    // SOFTWARE-CAROUSEL.json contains fake zero-length sectors
                 }
                 adw[idw] = dw;
             }
@@ -2490,14 +2489,14 @@ export class DiskInfo {
                             let n = sector[DiskInfo.SECTOR.LENGTH];
                             for (let i = 0; i < n; i++) {
                                 let b = this.read(sector, i);
-                                Disk.assert(b >= 0);
+                                this.assert(b >= 0);
                                 dbDisk.writeUInt8(b, ib++);
                             }
                         }
                     }
                 }
             }
-            Disk.assert(ib == dbDisk.length);
+            this.assert(ib == dbDisk.length);
             return true;
         }
         return false;

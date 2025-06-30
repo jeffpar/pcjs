@@ -62,6 +62,7 @@ import Struct from './struct.js';
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
  * @property {string}   encoding    (encoding to use for strings in image; default is "cp437")
+ * @property {boolean}  debug       (if true, enable additional checks/warnings)
  *
  * @typedef  {object}   Image
  * @property {string}   name        (name of the image file)
@@ -98,16 +99,13 @@ import Struct from './struct.js';
  * @property {Interfaces} interfaces
  * @property {number} cacheSize (default is 64K)
  * @property {string} encoding (default is "cp437")
+ * @property {boolean} debug (if true, enable additional checks/warnings; default is false)
  */
 export default class ISO {
 
     /**
      * Public class fields
      */
-    static DEBUG = true;
-    static VERSION = "1.0";
-    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
-
     static BLOCK_SIZE = 2048;           // default block size
     static SECTOR_SIZE = 2352;          // default sector size
     static SYSTEM_SIZE = 32768;         // size of system area
@@ -343,17 +341,27 @@ export default class ISO {
         //
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
         this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
+        this.debug = (interfaceOptions.debug || false);
+        if (this.debug) {
+            ISO.DirRecord.enableWarnings();
+            ISO.DirRecord2.enableWarnings();
+            ISO.HSDirRecord.enableWarnings();
+            ISO.HSPrimaryDesc.enableWarnings();
+            ISO.PrimaryDesc.enableWarnings();
+            ISO.SuppDesc.enableWarnings();
+        }
     }
 
     /**
      * assert(condition, message)
      *
+     * @this {ISO}
      * @param {boolean} condition
      * @param {string} [message]
      */
-    static assert(condition, message = "Assertion failed")
+    assert(condition, message = "Assertion failed")
     {
-        if (ISO.DEBUG && !condition) {
+        if (this.debug && !condition) {
             throw new Error(message);
         }
     }
@@ -374,19 +382,6 @@ export default class ISO {
             return false;
         }
         return true;
-    }
-
-    /**
-     * enableWarnings()
-     */
-    enableWarnings()
-    {
-        ISO.DirRecord.enableWarnings();
-        ISO.DirRecord2.enableWarnings();
-        ISO.HSDirRecord.enableWarnings();
-        ISO.HSPrimaryDesc.enableWarnings();
-        ISO.PrimaryDesc.enableWarnings();
-        ISO.SuppDesc.enableWarnings();
     }
 
     /**
@@ -572,7 +567,7 @@ export default class ISO {
                             image.pathClass = ISO.PathRecordLE2;
                         }
                     }
-                    ISO.assert(image.primary.blockSize > 0 && ((image.primary.blockSize - 1) & image.primary.blockSize) === 0, `Block size ${image.primary.blockSize} is not a power of 2`);
+                    this.assert(image.primary.blockSize > 0 && ((image.primary.blockSize - 1) & image.primary.blockSize) === 0, `Block size ${image.primary.blockSize} is not a power of 2`);
                     extent = image.primary.blockSize || ISO.BLOCK_SIZE;
                 }
                 position += extent;
@@ -730,7 +725,7 @@ export default class ISO {
      */
     async readCache(image, position, extent)
     {
-        ISO.assert(position >= 0 && extent >= 0);
+        this.assert(position >= 0 && extent >= 0);
         if (position > image.size) {
             throw new Error(`Position ${position} exceeds limit (${image.size})`);
         }
@@ -957,7 +952,7 @@ export default class ISO {
                     continue;
                 }
                 let [offset, length] = await this.readCache(image, position, extent);
-                ISO.assert(length >= image.dirClass.length);
+                this.assert(length >= image.dirClass.length);
                 let record = image.dirClass.readStruct(image.cache.db, offset);
                 //
                 // Directory records are not allowed to span block boundaries, and any padding between records
@@ -968,7 +963,7 @@ export default class ISO {
                     position = Math.ceil((position + 1) / image.primary.blockSize) * image.primary.blockSize;
                     continue;
                 }
-                if (ISO.DEBUG) record.position = "0x" + position.toString(16);
+                if (this.debug) record.position = "0x" + position.toString(16);
                 position += record.length;
                 //
                 // Sanity check the directory record, just to make sure we're not reading garbage.
@@ -1066,7 +1061,7 @@ export default class ISO {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
                 let record = image.pathClass.readStruct(image.cache.db, offset);
                 if (!record.lenName) break;         // if we've hit zero-padding, presumably that's the end
-                if (ISO.DEBUG) record.position = "0x" + position.toString(16);
+                if (this.debug) record.position = "0x" + position.toString(16);
                 position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
                 if (record.lba + record.cbAttr >= image.lbaMax) {
                     throw new Error(`Invalid path record at position ${record.position}`);

@@ -25,6 +25,7 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * @typedef  {object}   InterfaceOptions
  * @property {number}   cacheSize   (size of cache buffer, if needed; default is 64K)
  * @property {string}   encoding    (encoding to use for strings in archives; default is "cp437")
+ * @property {boolean}  debug       (if true, enable additional checks/warnings)
  *
  * @typedef  {object}   Archive
  * @property {string}   name        (name of the archive file)
@@ -89,16 +90,13 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
  * @property {Interfaces} interfaces
  * @property {number} cacheSize (default is 64K)
  * @property {string} encoding (default is "cp437")
+ * @property {boolean} debug (if true, enable additional checks/warnings; default is false)
  */
 export default class DZip {
 
     /**
      * Public class fields
      */
-    static DEBUG = true;
-    static VERSION = "1.0";
-    static COPYRIGHT = "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>";
-
     static TYPE_ARC = 1;
     static TYPE_ZIP = 2;
 
@@ -316,29 +314,26 @@ export default class DZip {
         //
         this.cacheSize = interfaceOptions.cacheSize || 64 * 1024;
         this.encoding = (interfaceOptions.encoding || "cp437").toLowerCase();
+        this.debug = (interfaceOptions.debug || false);
+        if (this.debug) {
+            DZip.FileHeader.enableWarnings();
+            DZip.DirHeader.enableWarnings();
+            DZip.ArcHeader.enableWarnings();
+        }
     }
 
     /**
      * assert(condition, message)
      *
+     * @this {DZip}
      * @param {boolean} condition
      * @param {string} [message]
      */
-    static assert(condition, message = "Assertion failed")
+    assert(condition, message = "Assertion failed")
     {
-        if (DZip.DEBUG && !condition) {
+        if (this.debug && !condition) {
             throw new Error(message);
         }
-    }
-
-    /**
-     * enableWarnings()
-     */
-    enableWarnings()
-    {
-        DZip.FileHeader.enableWarnings();
-        DZip.DirHeader.enableWarnings();
-        DZip.ArcHeader.enableWarnings();
     }
 
     /**
@@ -417,7 +412,7 @@ export default class DZip {
                 // (and by extension, the old cache buffer).  The new buffer becomes the cache buffer.
                 //
                 await this.close(archive);
-                DZip.assert(archive.size == db.length);
+                this.assert(archive.size == db.length);
                 this.initCache(archive, db, archive.size);
                 archive.db = db;
             }
@@ -822,7 +817,7 @@ export default class DZip {
      */
     async readCache(archive, position, extent)
     {
-        DZip.assert(position >= 0 && extent >= 0);
+        this.assert(position >= 0 && extent >= 0);
         if (position > archive.size) {
             throw new Error(`Position 0x${(position >>> 0).toString(16)} exceeds limit 0x${(archive.size >>> 0).toString(16)}`);
         }
@@ -958,7 +953,7 @@ export default class DZip {
                 try {
                     record = await this.readDirRecord(archive, record);
                     if (!record) break;
-                    DZip.assert(archive.endHeader && record.dirHeader);
+                    this.assert(archive.endHeader && record.dirHeader);
                 } catch (error) {
                     archive.warnings.push(error.message);
                     break;
@@ -1057,7 +1052,7 @@ export default class DZip {
                     //
                     if (cache.db.readUInt32LE(offsetEnd) == targetStruct.fields.signature.DIREND) {
                         let endHeader = targetStruct.readStruct(cache.db, offsetEnd, this.encoding);
-                        DZip.assert(endHeader.signature == targetStruct.fields.signature.DIREND);
+                        this.assert(endHeader.signature == targetStruct.fields.signature.DIREND);
                         if (endHeader.position == 0xffffffff) {
                             targetStruct = DZip.Dir64EndHeader;
                             offsetEnd--;
@@ -1188,7 +1183,7 @@ export default class DZip {
                         offset += 4;
                         lenBlock -= 4;
                     }
-                    DZip.assert(lenBlock == 0);
+                    this.assert(lenBlock == 0);
                     break;
                 }
                 offset += lenBlock;
@@ -1229,7 +1224,7 @@ export default class DZip {
         } else {
             record = null;
             if (prevRecord) {
-                DZip.assert(prevRecord.fileHeader != null);
+                this.assert(prevRecord.fileHeader != null);
                 position = prevRecord.filePosition + prevRecord.fileHeader.length + prevRecord.fileHeader.compressedSize;
                 if (position >= archive.size) {
                     return null;
@@ -1408,7 +1403,7 @@ export default class DZip {
         try {
             let fileHeader = record.fileHeader;
             if (!fileHeader) {
-                DZip.assert(record.dirHeader);
+                this.assert(record.dirHeader);
                 let position = record.dirHeader.position;
                 await this.readFileHeader(archive, record, position);
                 if (!record.fileHeader) {

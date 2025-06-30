@@ -253,12 +253,6 @@ const options = {
         alias: "-v",
         description: "display additional information"
     },
-    "warnings": {
-        type: "boolean",
-        usage: "--warnings",
-        alias: "-w",
-        description: "display additional warnings (eg, date errors)",
-    },
     "fileID": {
         type: "number",
         usage: "--fileID [id]",
@@ -693,10 +687,10 @@ async function main(argc, argv, errors)
         open: fs.open,                      // async interface for opening local files
      // inflate: zlib.inflateRaw,           // async interface for ZIP_DEFLATE data
         inflateSync: zlib.inflateRawSync    // sync interface for ZIP_DEFLATE data
+    },
+    {
+        debug: argv.debug                   // enable debug mode (includes additional warnings)
     });
-    if (argv.warnings) {
-        dxc.enableWarnings();
-    }
     let bannerHashes = {};
     let heading = false, truncate = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
@@ -780,7 +774,6 @@ async function main(argc, argv, errors)
             // will also be the same as the entryPath; reduce them.
             //
             if (entry.source) {
-                DZip.assert(entryName == entryPath);
                 if (!entryVolume) {
                     entryVolume = fromPCJS[entryName];
                     if (entryVolume) {
@@ -854,7 +847,7 @@ async function main(argc, argv, errors)
                 let itemPrinted = false;
                 if (argv.banner && handle.item.comment || argv.desc || argv.list) {
                     if (!nItemFiles || argv.desc || argv.list) {
-                        printf("\n%s%s%s%s\n", dirListing? "Directory of " : "", entryPath, label, continued? " (continued)" : "");
+                        printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
                         itemPrinted = true;
                     }
                 }

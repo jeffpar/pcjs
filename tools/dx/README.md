@@ -15,7 +15,6 @@ This directory contains [dx.js](dx.js), a stand-alone JavaScript command-line ut
 To simplify operation for both command-line and browser clients, there is also a [dxc.js](dxc.js) wrapper class that calls the appropriate container class via these functions:
 
   - open()
-  - enableWarnings()
   - readDirectory()
   - readFile()
   - close()
