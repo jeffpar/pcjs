@@ -94,7 +94,7 @@ const options = {
     "csv": {
         type: "string",
         usage: "--csv [file]",
-        description: "output file listings in CSV format"
+        description: "write list of item contents to CSV file"
     },
     "debug": {
         type: "boolean",
@@ -122,7 +122,7 @@ const options = {
     "dump": {
         type: "string",
         usage: "--dump [spec]",
-        description: "dump contents of matching files(s)"
+        description: "dump contents of matching files"
     },
     "extract": {
         type: "boolean",
@@ -175,13 +175,13 @@ const options = {
     "in": {
         type: "string",
         usage: "--in [encoding]",
-        description: "input encoding (default is \"cp437\")"
+        description: "select input encoding (default is cp437)"
     },
     "list": {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of all item(s)"
+        description: "print list of item contents"
     },
     "nodir": {
         type: "boolean",
@@ -200,7 +200,7 @@ const options = {
     "out": {
         type: "string",
         usage: "--out [encoding]",
-        description: "output encoding (default is input encoding)"
+        description: "select output encoding (default is --in)"
     },
     "overwrite": {
         type: "boolean",
@@ -221,7 +221,7 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "process matching item(s) (eg, \"**/*.zip\")",
+        description: "process matching items (eg, \"**/*.zip\")",
     },
     "pcjs": {
         type: "boolean",
@@ -245,7 +245,7 @@ const options = {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of all item(s)"
+        description: "test contents of all items"
     },
     "truncate": {
         type: "boolean",
@@ -256,7 +256,7 @@ const options = {
     "type": {
         type: "string",
         usage: "--type [spec]",
-        description: "type contents of matching file(s)"
+        description: "type contents of matching files"
     },
     "update": {
         type: "boolean",
