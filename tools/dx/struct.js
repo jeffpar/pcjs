@@ -467,7 +467,7 @@ export default class Struct {
      */
     readString(db, offset, length, encoding = "cp437")
     {
-        return encoding == "cp437"? CharSet.fromCP437(db, offset, length, true) : db.toString(encoding, offset, offset+length);
+        return encoding == "cp437"? CharSet.fromCP437(db, true, offset, length) : db.toString(encoding, offset, offset+length);
     }
 
     /**

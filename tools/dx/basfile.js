@@ -225,17 +225,16 @@ export default class BASFile {
      * BASFile(db, toUTF8, name, print)
      *
      * @this {BASFile}
-     * @param {ArrayBuffer|DataBuffer|string} db
+     * @param {DataBuffer} db
      * @param {boolean} [toUTF8] (also implies CR/LF to LF conversion and EOF filtering)
      * @param {string} [name]
-     * @param {function} [print]
      */
-    constructor(db, toUTF8, name, print)
+    constructor(db, toUTF8, name)
     {
-        this.db = new DataBuffer(db);
+        this.db = db;
         this.toUTF8 = toUTF8;
         this.name = name || "unknown";
-        this.print = print || console.log;
+        this.warnings = [];
     }
 
     /**
@@ -495,7 +494,7 @@ export default class BASFile {
                             token = CharSet.fromCP437(token, true);
                         }
                         if (this.lineWarning != lineNum) {
-                            this.print("warning: " + this.name + " contained unusual bytes (eg, " + u + "  on line " + lineNum + ")\n");
+                            this.warnings.push(this.name + " contained unusual bytes (eg, " + u + " on line " + lineNum + ")");
                             this.lineWarning = lineNum; // one such warning per line is enough...
                         }
                     }
@@ -634,7 +633,7 @@ export default class BASFile {
                     if (this.peekU8(0x1A)) {
                         if (!this.toUTF8) s += String.fromCharCode(0x1A);
                     } else if (!this.eof()) {
-                        this.print("warning: " + this.name + " contains non-EOF at offset " + this.off + " (" + this.readU8() + ")\n");
+                        this.warnings.push(this.name + " contains non-EOF at offset " + this.off + " (" + this.readU8() + ")");
                     }
                     break;
                 }

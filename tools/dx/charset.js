@@ -21,7 +21,7 @@ import DataBuffer from "./db.js";
 export default class CharSet {
 
     /**
-     * fromCP437(data, offset, length, translateControl)
+     * fromCP437(data, translateControl, offset, length)
      *
      * This version of fromCP437() differs from the original, by allowing (or rather requiring)
      * the caller to specify a range within the source, excluding TAB and ESC (along with CR and
@@ -29,12 +29,12 @@ export default class CharSet {
      * EOF (26) as terminators.
      *
      * @param {number|Array|string|DataBuffer} data
+     * @param {boolean} [translateControl] (true to translate control characters; default is false)
      * @param {number} [offset] (optional offset into data; default is 0)
      * @param {number} [length] (optional length of data; default is data.length)
-     * @param {boolean} [translateControl] (true to translate control characters; default is false)
      * @returns {string}
      */
-    static fromCP437(data, offset = 0, length = data.length, translateControl = false)
+    static fromCP437(data, translateControl = false, offset = 0, length = data.length)
     {
         let u = "";
         if (typeof data == "number") data = [data];

@@ -62,6 +62,8 @@ import CSV from "./csv.js";
 import Format from "./format.js";
 import DZip from "./dzip.js";
 import DXC from "./dxc.js";
+import BASFile from "./basfile.js";
+import DataBuffer from "./db.js";
 import { DiskInfo } from "./disk.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
@@ -115,7 +117,12 @@ const options = {
         type: "string",
         usage: "--dir [dir]",
         alias: "-d",
-        description: "extract files into specified directory"
+        description: "extract files into directory"
+    },
+    "dump": {
+        type: "string",
+        usage: "--dump [spec]",
+        description: "dump contents of matching files(s)"
     },
     "extract": {
         type: "boolean",
@@ -126,7 +133,7 @@ const options = {
     "files": {
         type: "string",
         usage: "--files [spec]",
-        description: "file specification (eg, \"*.txt\")",
+        description: "filter on matching files (eg, \"*.txt\")"
     },
     "filter": {
         type: "string",
@@ -165,11 +172,17 @@ const options = {
             }
         }
     },
+    "incoding": {
+        type: "string",
+        usage: "--incoding [encoding]",
+        description: "input encoding (default is \"cp437\")",
+        internal: true
+    },
     "list": {
         type: "boolean",
         usage: "--list",
         alias: "-l",
-        description: "list contents of specified item(s)"
+        description: "list contents of all item(s)"
     },
     "nodir": {
         type: "boolean",
@@ -184,6 +197,12 @@ const options = {
         // instead of relying solely on directory records.  Normally, we ignore the path table, because it's
         // redundant, but using it can improve performance when accessing an ISO image over a network connection.
         //
+    },
+    "outcoding": {
+        type: "string",
+        usage: "--outcoding [encoding]",
+        description: "output encoding (default is incoding)",
+        internal: true
     },
     "overwrite": {
         type: "boolean",
@@ -204,7 +223,7 @@ const options = {
     "path": {
         type: "string",
         usage: "--path [spec]",
-        description: "item path specification (eg, \"**/*.zip\")",
+        description: "process matching item(s) (eg, \"**/*.zip\")",
     },
     "pcjs": {
         type: "boolean",
@@ -228,13 +247,18 @@ const options = {
         type: "boolean",
         usage: "--test",
         alias: "-t",
-        description: "test contents of specified item(s)"
+        description: "test contents of all item(s)"
     },
     "truncate": {
         type: "boolean",
         usage: "--truncate",
-        description: "truncate description of contents",
+        description: "truncate description of contents (see --desc)",
         internal: true
+    },
+    "type": {
+        type: "string",
+        usage: "--type [spec]",
+        description: "type contents of matching file(s)"
     },
     "update": {
         type: "boolean",
@@ -283,6 +307,29 @@ const options = {
         }
     }
 };
+
+/**
+ * displayFile(name, outcoding, db, dump)
+ *
+ * Display file contents as specified.
+ *
+ * @param {string} name
+ * @param {string} outcoding
+ * @param {DataBuffer} db
+ * @param {boolean} [dump]
+ * @returns {boolean}
+ */
+function displayFile(name, outcoding, db, dump = false)
+{
+    if (!dump) {
+        printf(db.toString(outcoding));
+    } else {
+        //
+        // TODO
+        //
+        printf("%s: %d bytes\n", name, db.length);
+    }
+}
 
 /**
  * enquote(string)
@@ -695,6 +742,11 @@ async function main(argc, argv, errors)
     let heading = false, truncate = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
+    let incoding = (argv.incoding || "cp437").replace(/[-_]/g, "").toLowerCase();
+    let outcoding = (argv.outcoding || incoding).replace(/[-_]/g, "").toLowerCase();
+    if (outcoding == "cp437") {
+        outcoding = "binary";               // "cp437" is a legacy encoding, so we use "binary" instead
+    }
     //
     // Define a function to process an individual container item, which then allows us to recursively process
     // nested containers if --recurse is been specified.
@@ -998,7 +1050,7 @@ async function main(argc, argv, errors)
                 // to items' contents, not the items themselves), and conversely, if we're not recursing,
                 // then any file filters will only be applied to the items themselves.
                 //
-                let filterFiles = (!argv.recurse == !itemDB? argv.files : undefined);
+                let filterFiles = (!argv.recurse == !itemDB? (argv.files || argv.dump || argv.type): undefined);
                 entries = await dxc.readDirectory(handle, filterFiles, filterExceptions, filterMethod);
                 if (handle.item.exceptions & DZip.EXCEPTIONS.NOFILES) {
                     handle.item.warnings.push("Unrecognized archive");
@@ -1022,12 +1074,9 @@ async function main(argc, argv, errors)
                         // For display purposes, we use item.comment, which is translated to UTF-8,
                         // but for extraction purposes, we use item.commentRaw, which is untranslated.
                         //
-                        // TODO: Add options to 1) override the input encoding (assumed to be "cp437")
-                        // and 2) select the desired output encoding (assumed to be "utf8").
-                        //
                         await fs.mkdir(path.dirname(bannerPath), { recursive: true });
                         try {
-                            await fs.writeFile(bannerPath, handle.item.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
+                            await fs.writeFile(bannerPath, outcoding == "utf8"? handle.item.comment : handle.item.commentRaw, { encoding: "binary", flag: argv.overwrite? "w" : "wx" });
                             if (argv.verbose) printf("created %s\n", entry.target);
                             if (handle.item.modified) {
                                 await fs.utimes(bannerPath, handle.item.modified, handle.item.modified);
@@ -1100,7 +1149,7 @@ async function main(argc, argv, errors)
                 // While it might seem odd to print the item heading inside the entry loop, if you've enabled
                 // recursive item processing, we want the option of reprinting it on return from a recursive call;
                 // otherwise, the output might give the wrong impression that subsequent entries are part of the
-                // previous item.  Currently, the additional headings are displayed only if --debug is used.
+                // previous item.
                 //
                 // One obvious alternative would be to process all non-recursive entries first, followed by a
                 // separate entry loop to process all the recursive entries.  But that wastes time and resources,
@@ -1120,7 +1169,16 @@ async function main(argc, argv, errors)
                 // has been enabled; this will take care of writing the received data to the appropriate file.
                 //
                 if (!(entryAttr & DiskInfo.ATTR.SUBDIR)) {
+                    //
+                    // Certain files may require special handling:
+                    //
+                    // 1. BAS files: If incoding is "cp437" and outcoding is "utf8", that implies BAS files
+                    // should be converted, and conversion requires the entire file be buffered, so we create
+                    // a DataBuffer (targetData) to capture the file contents until reading is complete.
+                    //
+                    let convertBAS = entry.name.match(/\.bas$/i) && incoding == "cp437" && outcoding == "utf8";
                     if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
+                        let targetData = convertBAS? new DataBuffer() : null;
                         writeData = async function(db, length) {
                             if (db) {
                                 if (!targetFile) {
@@ -1151,10 +1209,22 @@ async function main(argc, argv, errors)
                                         return false;
                                     }
                                 }
-                                await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
+                                if (targetData) {
+                                    targetData = DataBuffer.concat([targetData, db]);
+                                } else {
+                                    await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
+                                }
                                 return true;
                             }
                             if (targetFile) {
+                                if (targetData) {
+                                    if (convertBAS) {
+                                        let basfile = new BASFile(targetData, outcoding == "utf8", entry.name);
+                                        targetData = basfile.convert();
+                                    }
+                                    await targetFile.write(targetData.buffer, 0, targetData.length);
+                                    targetData = null;
+                                }
                                 await targetFile.close();
                                 if (entry.modified) {
                                     await fs.utimes(entry.target, entry.modified, entry.modified);
@@ -1164,7 +1234,7 @@ async function main(argc, argv, errors)
                             return false;
                         };
                     }
-                    if (argv.csv && argv.list || argv.dir || argv.extract || argv.test || recurse) {
+                    if (argv.csv && argv.list || argv.dir || argv.extract || argv.type || argv.dump || argv.test || recurse) {
                         if (argv.debug) {
                             printf("reading %s\n", entryPath);
                             printed = true;
@@ -1182,6 +1252,10 @@ async function main(argc, argv, errors)
                         }
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
+                        }
+                        if (db && convertBAS) {
+                            let basfile = new BASFile(db, outcoding == "utf8", entry.name);
+                            db = basfile.convert();
                         }
                     }
                 }
@@ -1228,6 +1302,9 @@ async function main(argc, argv, errors)
                 }
                 else if (argv.debug && !printed) {
                     printf("listing %s\n", entry.name);
+                }
+                if (argv.type || argv.dump) {
+                    displayFile(entry.target, outcoding, db, argv.dump);
                 }
                 //
                 // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
