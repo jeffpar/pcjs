@@ -175,6 +175,10 @@ export default class Format {
                 usedAliases[alias] = keys[j];
             }
         }
+        let match = args[i].match(/([^/]*$)/);
+        if (match) {
+            args[i] = match[1];
+        }
         argv.push(args.slice(i++).join(' '));
         //
         // NOTE: The following code is handy for passing a series of arguments via one argument
