@@ -307,25 +307,55 @@ const options = {
 };
 
 /**
- * displayFile(name, outcoding, db, dump)
+ * displayFile(name, encoding, db, dump)
  *
  * Display file contents as specified.
  *
- * @param {string} name
- * @param {string} outcoding
+ * @param {string|null} name
+ * @param {string} encoding
  * @param {DataBuffer} db
  * @param {boolean} [dump]
- * @returns {boolean}
  */
-function displayFile(name, outcoding, db, dump = false)
+function displayFile(name, encoding, db, dump = false)
 {
+    if (name) {
+        printf("%s:\n", name);
+    }
     if (!dump) {
-        printf(db.toString(outcoding));
-    } else {
-        //
-        // TODO
-        //
-        printf("%s: %d bytes\n", name, db.length);
+        printf(db.toString(encoding));
+        return;
+    }
+    //
+    // Dump the file contents in hex format, with a 4-byte offset at the start of each line,
+    // using the same format as "hexdump"; eg:
+    //
+    //      00000000  50 4b 03 04 0a 00 00 00  00 00 a4 48 da 5a 00 00  |PK.........H.Z..|
+    //
+    for (let i = 0; i < db.length; i += 16) {
+        let line = format.sprintf("%08x  ", i);
+        for (let j = 0; j < 16; j++) {
+            if (j == 8) {
+                line += " ";
+            }
+            if (i + j < db.length) {
+                line += format.sprintf("%02x ", db.buffer[i + j]);
+            } else {
+                line += "   ";
+            }
+        }
+        line += " |";
+        for (let j = 0; j < 16; j++) {
+            let c = 32;
+            if (i + j < db.length) {
+                c = db.buffer[i + j];
+                if (c < 32 || c > 126) {
+                    c = 46;
+                }
+            }
+            line += format.sprintf("%c", c);
+        }
+        line += "|";
+        printf("%s\n", line);
     }
 }
 
@@ -1331,7 +1361,7 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (argv.type || argv.dump) {
-                    displayFile(entry.target, outcoding, db, argv.dump);
+                    displayFile(argv.desc || argv.list? null : entry.target, outcoding, db, argv.dump);
                 }
                 //
                 // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
