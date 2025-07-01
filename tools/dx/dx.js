@@ -511,6 +511,22 @@ function getList(text)
 }
 
 /**
+ * isTextFile(name)
+ *
+ * @param {string} name
+ * @returns {number} 0 if false, 1 if true, 2 if BAS file
+ */
+function isTextFile(name)
+{
+    const asTextFileExts = [
+        ".md",  ".me",  ".bas", ".bat", ".rat", ".asm", ".inc", ".lrf", ".nfo", ".diz",
+        ".mak", ".txt", ".xml", ".mac", ".inf", ".skl", ".dat", ".c",   ".h"
+    ];
+    let ext = path.extname(name).toLowerCase();
+    return (asTextFileExts.includes(ext)? 1 : 0) + (ext == ".bas"? 1 : 0);
+}
+
+/**
  * main(argc, argv, errors)
  */
 async function main(argc, argv, errors)
@@ -743,7 +759,7 @@ async function main(argc, argv, errors)
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     let incoding = (argv.incoding || "cp437").replace(/[-_]/g, "").toLowerCase();
-    let outcoding = (argv.outcoding || incoding).replace(/[-_]/g, "").toLowerCase();
+    let outcoding = (argv.outcoding || (argv.type? "utf8" : incoding)).replace(/[-_]/g, "").toLowerCase();
     if (outcoding == "cp437") {
         outcoding = "binary";               // "cp437" is a legacy encoding, so we use "binary" instead
     }
@@ -1170,15 +1186,16 @@ async function main(argc, argv, errors)
                 //
                 if (!(entryAttr & DiskInfo.ATTR.SUBDIR)) {
                     //
-                    // Certain files may require special handling:
+                    // Certain files may require special handling....
                     //
-                    // 1. BAS files: If incoding is "cp437" and outcoding is "utf8", that implies BAS files
-                    // should be converted, and conversion requires the entire file be buffered, so we create
-                    // a DataBuffer (targetData) to capture the file contents until reading is complete.
+                    // If incoding is "cp437" and outcoding is "utf8", that implies certain text files
+                    // should be converted, and in the case of BAS files, conversion requires the entire
+                    // file be buffered, so we create a DataBuffer (targetData) to capture the file
+                    // contents until reading is complete.
                     //
-                    let convertBAS = entry.name.match(/\.bas$/i) && incoding == "cp437" && outcoding == "utf8";
+                    let convertText = incoding == "cp437" && outcoding == "utf8" && isTextFile(entry.name);
                     if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
-                        let targetData = convertBAS? new DataBuffer() : null;
+                        let targetData = convertText == 2? new DataBuffer() : null;
                         writeData = async function(db, length) {
                             if (db) {
                                 if (!targetFile) {
@@ -1212,16 +1229,17 @@ async function main(argc, argv, errors)
                                 if (targetData) {
                                     targetData = DataBuffer.concat([targetData, db]);
                                 } else {
+                                    if (convertText) {
+                                        db = BASFile.normalize(db, true);
+                                    }
                                     await targetFile.write(db.buffer, 0, length != undefined? length : db.length);
                                 }
                                 return true;
                             }
                             if (targetFile) {
                                 if (targetData) {
-                                    if (convertBAS) {
-                                        let basfile = new BASFile(targetData, outcoding == "utf8", entry.name);
-                                        targetData = basfile.convert();
-                                    }
+                                    let basfile = new BASFile(targetData, true, entry.name);
+                                    targetData = basfile.convert();
                                     await targetFile.write(targetData.buffer, 0, targetData.length);
                                     targetData = null;
                                 }
@@ -1253,9 +1271,14 @@ async function main(argc, argv, errors)
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                         }
-                        if (db && convertBAS) {
-                            let basfile = new BASFile(db, outcoding == "utf8", entry.name);
-                            db = basfile.convert();
+                        if (db) {
+                            if (convertText == 1) {
+                                db = BASFile.normalize(db, true);
+                            }
+                            else if (convertText == 2) {
+                                let basfile = new BASFile(db, true, entry.name);
+                                db = basfile.convert();
+                            }
                         }
                     }
                 }
