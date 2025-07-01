@@ -172,9 +172,9 @@ const options = {
             }
         }
     },
-    "incoding": {
+    "in": {
         type: "string",
-        usage: "--incoding [encoding]",
+        usage: "--in [encoding]",
         description: "input encoding (default is \"cp437\")",
         internal: true
     },
@@ -198,10 +198,10 @@ const options = {
         // redundant, but using it can improve performance when accessing an ISO image over a network connection.
         //
     },
-    "outcoding": {
+    "out": {
         type: "string",
-        usage: "--outcoding [encoding]",
-        description: "output encoding (default is incoding)",
+        usage: "--out [encoding]",
+        description: "output encoding (default is input encoding)",
         internal: true
     },
     "overwrite": {
@@ -758,8 +758,8 @@ async function main(argc, argv, errors)
     let heading = false, truncate = false;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
-    let incoding = (argv.incoding || "cp437").replace(/[-_]/g, "").toLowerCase();
-    let outcoding = (argv.outcoding || (argv.type? "utf8" : incoding)).replace(/[-_]/g, "").toLowerCase();
+    let incoding = (argv.in || "cp437").replace(/[-_]/g, "").toLowerCase();
+    let outcoding = (argv.out || (argv.type? "utf8" : incoding)).replace(/[-_]/g, "").toLowerCase();
     if (outcoding == "cp437") {
         outcoding = "binary";               // "cp437" is a legacy encoding, so we use "binary" instead
     }
@@ -1193,9 +1193,12 @@ async function main(argc, argv, errors)
                     // file be buffered, so we create a DataBuffer (targetData) to capture the file
                     // contents until reading is complete.
                     //
+                    let targetData = null;
                     let convertText = incoding == "cp437" && outcoding == "utf8" && isTextFile(entry.name);
                     if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
-                        let targetData = convertText == 2? new DataBuffer() : null;
+                        if (convertText == 2) {
+                            targetData = new DataBuffer();
+                        }
                         writeData = async function(db, length) {
                             if (db) {
                                 if (!targetFile) {
@@ -1240,8 +1243,10 @@ async function main(argc, argv, errors)
                                 if (targetData) {
                                     let basfile = new BASFile(targetData, true, entry.name);
                                     targetData = basfile.convert();
+                                    if (basfile.warnings.length) {
+                                        entry.warnings = entry.warnings.concat(basfile.warnings);
+                                    }
                                     await targetFile.write(targetData.buffer, 0, targetData.length);
-                                    targetData = null;
                                 }
                                 await targetFile.close();
                                 if (entry.modified) {
@@ -1271,13 +1276,16 @@ async function main(argc, argv, errors)
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                         }
-                        if (db) {
+                        if (db && (argv.dump || argv.type)) {
                             if (convertText == 1) {
                                 db = BASFile.normalize(db, true);
                             }
                             else if (convertText == 2) {
                                 let basfile = new BASFile(db, true, entry.name);
                                 db = basfile.convert();
+                                if (!targetData && basfile.warnings.length) {
+                                    entry.warnings = entry.warnings.concat(basfile.warnings);
+                                }
                             }
                         }
                     }
