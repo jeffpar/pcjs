@@ -83,13 +83,13 @@ const options = {
         type: "boolean",
         usage: "--banner",
         alias: "-b",
-        description: "display archive comments (banners)"
+        description: "print archive comments (banners)"
     },
     "compat": {
         type: "boolean",
         usage: "--compat",
         alias: "-c",
-        description: "enable CD-ROM compatibility mode"         // ie, ignore any supplementary (eg, "Joliet") volume descriptors
+        description: "use CD-ROM 8.3 filenames only"    // ie, ignore any supplementary (eg, "Joliet") volume descriptors
     },
     "csv": {
         type: "string",
@@ -175,7 +175,7 @@ const options = {
     "in": {
         type: "string",
         usage: "--in [encoding]",
-        description: "select input encoding (default is cp437)"
+        description: "set input encoding (default is cp437)"
     },
     "list": {
         type: "boolean",
@@ -200,13 +200,13 @@ const options = {
     "out": {
         type: "string",
         usage: "--out [encoding]",
-        description: "select output encoding (default is --in)"
+        description: "set output encoding (default is --in)"
     },
     "overwrite": {
         type: "boolean",
         usage: "--overwrite",
         alias: "-o",
-        description: "overwrite existing files when extracting"
+        description: "overwrite existing files on extract"
     },
     "password": {
         type: "string",
