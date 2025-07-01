@@ -737,6 +737,15 @@ async function main(argc, argv, errors)
     if (nErrors) {
         return;
     }
+    let bannerHashes = {};
+    let heading = false, truncate = false;
+    let fileID = +argv.fileID || 1, setID = argv.setID || 1;
+    let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
+    let incoding = (argv.in || "cp437").replace(/[-_]/g, "").toLowerCase();
+    let outcoding = (argv.out || (argv.type? "utf8" : incoding)).replace(/[-_]/g, "").toLowerCase();
+    if (outcoding == "cp437") {
+        outcoding = "binary";               // "cp437" is a legacy encoding, so we use "binary" instead
+    }
     //
     // Normally, a client will provide either a fetch interface or open interface, not both; for example,
     // browsers don't have access to the file system, so they will provide only fetch.  But as a Node client,
@@ -752,17 +761,9 @@ async function main(argc, argv, errors)
         inflateSync: zlib.inflateRawSync    // sync interface for ZIP_DEFLATE data
     },
     {
+        encoding: incoding,                 // input encoding (default is "cp437")
         debug: argv.debug                   // enable debug mode (includes additional warnings)
     });
-    let bannerHashes = {};
-    let heading = false, truncate = false;
-    let fileID = +argv.fileID || 1, setID = argv.setID || 1;
-    let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
-    let incoding = (argv.in || "cp437").replace(/[-_]/g, "").toLowerCase();
-    let outcoding = (argv.out || (argv.type? "utf8" : incoding)).replace(/[-_]/g, "").toLowerCase();
-    if (outcoding == "cp437") {
-        outcoding = "binary";               // "cp437" is a legacy encoding, so we use "binary" instead
-    }
     //
     // Define a function to process an individual container item, which then allows us to recursively process
     // nested containers if --recurse is been specified.
@@ -1330,9 +1331,6 @@ async function main(argc, argv, errors)
                         printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s\n",
                                 name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, entry.crc, comment);
                     }
-                }
-                else if (argv.debug && !printed) {
-                    printf("listing %s\n", entry.name);
                 }
                 if (argv.type || argv.dump) {
                     displayFile(entry.target, outcoding, db, argv.dump);
