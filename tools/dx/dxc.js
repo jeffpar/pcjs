@@ -75,7 +75,7 @@ export default class DXC {
             handle.class = this.iso;
         }
         if (!handle.class) {
-            throw new Error(`unrecognized item extension`);
+            throw new Error(`Unrecognized item extension`);
         }
         handle.item = await handle.class.open(name, db, options);
         return handle;
