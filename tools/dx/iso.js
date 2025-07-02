@@ -1081,27 +1081,31 @@ export default class ISO {
      * @param {Image} image
      * @param {object} entry (an entry from readDirectory())
      * @param {function} [writeData]
-     * @returns {DataBuffer}
+     * @returns {DataBuffer|undefined}
      */
     async readFile(image, entry, writeData)
     {
-        let record = image.records && image.records[entry.index];
-        if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
-            throw new Error(`No file record for entry ${entry.name} (${entry.index})`);
-        }
         let db, bytesRead;
-        if (!record.size) {
-            db = new DataBuffer(bytesRead = 0);
-        } else {
-            [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
-        }
-        if (bytesRead != record.size) {
-            entry.warnings.push(`Received ${bytesRead} bytes, expected ${record.size}`);
-            db = db.slice(0, bytesRead);
-        }
-        if (writeData) {
-            await writeData(db, bytesRead);
-            await writeData();
+        try {
+            let record = image.records && image.records[entry.index];
+            if (!record || (record.flags & image.dirClass.fields.flags.DIRECTORY)) {
+                throw new Error(`No file record for entry ${entry.name} (${entry.index})`);
+            }
+            if (!record.size) {
+                db = new DataBuffer(bytesRead = 0);
+            } else {
+                [db, bytesRead] = await this.readImage(image, (record.lba + record.cbAttr) * image.primary.blockSize, record.size);
+            }
+            if (bytesRead != record.size) {
+                entry.warnings.push(`Received ${bytesRead} bytes, expected ${record.size}`);
+                db = db.slice(0, bytesRead);
+            }
+            if (writeData) {
+                await writeData(db, bytesRead);
+                await writeData();
+            }
+        } catch (error) {
+            entry.warnings.push(typeof error == "string"? error : error.message);
         }
         return db;
     }
