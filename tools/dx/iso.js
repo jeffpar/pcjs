@@ -418,96 +418,96 @@ export default class ISO {
             warnings: []                // array of image warnings, if any
         };
         image.modified = options.modified;
-        //
-        // If a DataBuffer (db) is provided, then no reading is required.
-        //
-        if (db) {
-            image.db = db;
-            image.size = db.length;
-            image.source = "Buffer";
-        }
-        else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
-            image.file = await this.interfaces.open(name, "r");
-            if (!image.file) {
-                throw new Error(`Unable to open ${name}`);
+        try {
+            //
+            // If a DataBuffer (db) is provided, then no reading is required.
+            //
+            if (db) {
+                image.db = db;
+                image.size = db.length;
+                image.source = "Buffer";
             }
-            const stats = await image.file.stat();
-            image.size = stats.size;
-            if (!image.modified) {
-                image.modified = stats.mtime;
+            else if (this.interfaces.open && !name.match(/^https?:\/\//i)) {
+                image.file = await this.interfaces.open(name, "r");
+                if (!image.file) {
+                    throw new Error(`Unable to open ${name}`);
+                }
+                const stats = await image.file.stat();
+                image.size = stats.size;
+                if (!image.modified) {
+                    image.modified = stats.mtime;
+                }
+                if (options.preload && image.size <= ISO.MAX_SIZE) {
+                    image.db = new DataBuffer(image.size);
+                    let offset = 0, position = 0;
+                    let extent = Math.min(this.cacheSize, image.size);
+                    do {
+                        let result = await image.file.read(image.db, offset, extent, position);
+                        if (result.bytesRead < extent) break;
+                        offset += result.bytesRead;
+                        position += result.bytesRead;
+                    } while (true);
+                    await this.close(image);
+                }
+                image.source = "FS";
             }
-            if (options.preload && image.size <= ISO.MAX_SIZE) {
-                image.db = new DataBuffer(image.size);
-                let offset = 0, position = 0;
-                let extent = Math.min(this.cacheSize, image.size);
-                do {
-                    let result = await image.file.read(image.db, offset, extent, position);
-                    if (result.bytesRead < extent) break;
-                    offset += result.bytesRead;
-                    position += result.bytesRead;
-                } while (true);
-                await this.close(image);
-            }
-            image.source = "FS";
-        }
-        else if (this.interfaces.fetch) {
-            image.size = NaN;
-            if (!options.preload) {
-                let response = await this.interfaces.fetch(name, { method: "HEAD" });
-                if (response.ok) {
-                    let contentLength = response.headers.get("Content-Length");
-                    if (contentLength) {
-                        let acceptsRanges = response.headers.get("Accept-Ranges");
-                        if (acceptsRanges && acceptsRanges.toLowerCase() == "bytes") {
-                            image.size = +contentLength;
+            else if (this.interfaces.fetch) {
+                image.size = NaN;
+                if (!options.preload) {
+                    let response = await this.interfaces.fetch(name, { method: "HEAD" });
+                    if (response.ok) {
+                        let contentLength = response.headers.get("Content-Length");
+                        if (contentLength) {
+                            let acceptsRanges = response.headers.get("Accept-Ranges");
+                            if (acceptsRanges && acceptsRanges.toLowerCase() == "bytes") {
+                                image.size = +contentLength;
+                            }
                         }
                     }
                 }
-            }
-            if (isNaN(image.size)) {
-                //
-                // We apparently have no choice but to read the entire image into memory.
-                //
-                let response = await this.interfaces.fetch(name);
-                if (!response.ok) {
-                    throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+                if (isNaN(image.size)) {
+                    //
+                    // We apparently have no choice but to read the entire image into memory.
+                    //
+                    let response = await this.interfaces.fetch(name);
+                    if (!response.ok) {
+                        throw new Error(`Unable to fetch ${name}: ${response.status} ${response.statusText}`);
+                    }
+                    image.db = new DataBuffer(await response.arrayBuffer());
+                    image.size = image.db.length;
                 }
-                image.db = new DataBuffer(await response.arrayBuffer());
-                image.size = image.db.length;
+                image.source = "Network";
             }
-            image.source = "Network";
-        }
-        else {
-            throw new Error("No image open interface available");
-        }
-        if (image.size > ISO.MAX_SIZE) {
-            throw new Error(`Unrecognized disc image (${image.size})`);
-        }
-        this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
-        image.dirClass = ISO.DirRecord;
-        image.pathClass = ISO.PathRecordLE;
-        image.sectorSize = ISO.BLOCK_SIZE;
-        image.sectorOffset = 0;
-        //
-        // I am piggy-backing on the --nodir option, which was originally intended for bypassing
-        // directory records in ZIP files.  Here, it affects how we read ISO directory structure.
-        //
-        // By default, we perform a recursive read of all the directories and ignore the path table,
-        // unless --nodir (-n) is set.  The exception is when we only have network access, in which
-        // case we DO use the path table.  However, if --nodir (-n) is set, that default is inverted.
-        //
-        // Note that the path table preference originally relied on the assumption that path records
-        // list the directories in LBA order, and that directories tend to be stored together, all of
-        // which allows our cache to function better.  Whether or not the latter is generally true
-        // remains to be seen, but as far as the order of the path table records, readDirectory() now
-        // creates an LBA index, so even if records aren't ordered by LBA, that's how we read them.
-        //
-        image.nodir = (!image.db && !image.file);
-        if (options.nodir) {
-            image.nodir = !image.nodir;
-        }
-        let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
-        try {
+            else {
+                throw new Error("No image open interface available");
+            }
+            if (image.size > ISO.MAX_SIZE) {
+                throw new Error(`Unrecognized CD-ROM image (${image.size})`);
+            }
+            this.initCache(image, new DataBuffer(Math.min(this.cacheSize, image.size)));
+            image.dirClass = ISO.DirRecord;
+            image.pathClass = ISO.PathRecordLE;
+            image.sectorSize = ISO.BLOCK_SIZE;
+            image.sectorOffset = 0;
+            //
+            // I am piggy-backing on the --nodir option, which was originally intended for bypassing
+            // directory records in ZIP files.  Here, it affects how we read ISO directory structure.
+            //
+            // By default, we perform a recursive read of all the directories and ignore the path table,
+            // unless --nodir (-n) is set.  The exception is when we only have network access, in which
+            // case we DO use the path table.  However, if --nodir (-n) is set, that default is inverted.
+            //
+            // Note that the path table preference originally relied on the assumption that path records
+            // list the directories in LBA order, and that directories tend to be stored together, all of
+            // which allows our cache to function better.  Whether or not the latter is generally true
+            // remains to be seen, but as far as the order of the path table records, readDirectory() now
+            // creates an LBA index, so even if records aren't ordered by LBA, that's how we read them.
+            //
+            image.nodir = (!image.db && !image.file);
+            if (options.nodir) {
+                image.nodir = !image.nodir;
+            }
+            let position = ISO.SYSTEM_SIZE, extent = ISO.BLOCK_SIZE;
             do {
                 let desc;
                 let [offset, length] = await this.readCache(image, position, extent);
@@ -572,13 +572,12 @@ export default class ISO {
                 }
                 position += extent;
             } while (position < image.size);
+            if (!image.primary || !image.primary.blockSize || ((image.primary.blockSize - 1) & image.primary.blockSize) !== 0) {
+                throw new Error("Unrecognized CD-ROM image");
+            }
         } catch (error) {
             await this.close(image);
             throw error;
-        }
-        if (!image.primary || !image.primary.blockSize || ((image.primary.blockSize - 1) & image.primary.blockSize) !== 0) {
-            await this.close(image);
-            throw new Error("Unrecognized disc image");
         }
         image.lbaMax = Math.floor(image.size / image.primary.blockSize);
         image.modified = image.primary.created || image.modified;

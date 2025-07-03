@@ -76,7 +76,7 @@ const pause = async function(prompt) {
     if (!process.stdin.isTTY) {
         return false;
     }
-    printf("%s", prompt || "Press any key to continue...");
+    printf("%s", prompt || "Press return to continue...");
     process.stdin.resume();
     return new Promise(resolve => {
         process.stdin.once('data', () => {
@@ -841,7 +841,10 @@ async function main(argc, argv, errors)
         // necessary).  The only way to bypass that behavior is to process items one at a time OR explicitly
         // use "." as the directory; the goal is to avoid unintentional merging of extracted files.
         //
-        let srcPath = decodeURIComponent(itemPath);
+        let srcPath = itemPath;
+        try {
+            srcPath = decodeURIComponent(srcPath);
+        } catch (e) {}          // Interesting that a simple function like this can throw a URIError...
         let srcName = path.basename(srcPath);
         let srcBase = path.basename(srcPath, itemExt);
         srcPath = path.dirname(srcPath);
@@ -1354,18 +1357,22 @@ async function main(argc, argv, errors)
                     }
                     else if (dirListing) {
                         if (!truncate) {
+                            let comment = "";
+                            if (entry.warnings.length) {
+                                comment = "  [" + entry.warnings.join("; ") + "]";
+                            }
                             let entryName = name == entry.name? "" : "   " + entry.name;
                             if (entryAttr & DiskInfo.ATTR.SUBDIR) {
-                                printf("%-14s %10s   %T%s\n", name, "<DIR>", entry.modified, entryName);
+                                printf("%-14s %10s   %T%s%s\n", name, "<DIR>", entry.modified, entryName, comment);
                             } else {
-                                printf("%-14s %10d   %T%s\n", name, entry.size, entry.modified, entryName);
+                                printf("%-14s %10d   %T%s%s\n", name, entry.size, entry.modified, entryName, comment);
                             }
                         }
                     }
                     else {
                         let comment;
                         if (entry.warnings.length) {
-                            comment = '[' + entry.warnings.join("; ") + ']';
+                            comment = "[" + entry.warnings.join("; ") + "]";
                         } else {
                             comment = entry.comment || (name == entry.target? "" : entry.target);
                         }
@@ -1452,7 +1459,7 @@ async function main(argc, argv, errors)
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
                 }
                 if (argv.pause) {
-                    await pause("Press any key to continue...");
+                    await pause();
                 }
             } else {
                 nWarnings = -nWarnings;;
