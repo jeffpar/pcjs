@@ -72,6 +72,20 @@ const printf = function(...args) {
     let s = format.sprintf(...args);
     process.stdout.write(s);
 };
+const pause = async function(prompt) {
+    if (!process.stdin.isTTY) {
+        return false;
+    }
+    printf("%s", prompt || "Press any key to continue...");
+    process.stdin.resume();
+    return new Promise(resolve => {
+        process.stdin.once('data', () => {
+            process.stdin.pause();
+            printf("\n");
+            resolve(true);
+        });
+    });
+};
 
 const options = {
     "batch": {
@@ -222,6 +236,12 @@ const options = {
         type: "string",
         usage: "--path [spec]",
         description: "process matching items (eg, \"**/*.zip\")",
+    },
+    "pause": {
+        type: "boolean",
+        usage: "--pause",
+        alias: "-p",
+        description: "pause after each item until a key is pressed"
     },
     "pcjs": {
         type: "boolean",
@@ -1430,6 +1450,9 @@ async function main(argc, argv, errors)
                 printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
                 if (argv.desc && !argv.csv) {
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
+                }
+                if (argv.pause) {
+                    await pause("Press any key to continue...");
                 }
             } else {
                 nWarnings = -nWarnings;;
