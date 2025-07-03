@@ -1226,12 +1226,12 @@ async function main(argc, argv, errors)
                 //
                 printHeading(entry);
                 //
-                // TODO: Consider whether we should include IMG and JSON files in the list of images
-                // to process recursively.  For now, we're doing that only for ZIP and ARC files, because
-                // IMG and JSON extensions tend be used more broadly for other purposes.
+                // TODO: Consider whether we should include .IMG and .JSON files in the list of images
+                // to process recursively.  For now, we're doing that only for .ZIP and .ARC files, because
+                // .IMG and .JSON (and .ISO) extensions tend be used more broadly for other purposes.
                 //
                 let db, targetFile, writeData, printed = false;
-                let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc|iso)$/i));
+                let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc)$/i));
                 //
                 // Define a writeData() function within processItem() to receive data ONLY if extraction
                 // has been enabled; this will take care of writing the received data to the appropriate file.
