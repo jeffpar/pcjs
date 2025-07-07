@@ -122,9 +122,10 @@ const options = {
         description: "generate description of contents",
         internal: true
         //
-        // NOTE: This generated "description" is currently nothing more than a truncated directory listing
-        // (more compact than --list); however, if you use --desc instead of --list in conjunction with --csv,
-        // the CSV will include the full list of files but WITHOUT reading and hashing their contents.
+        // NOTE: This generated "description" is currently little more than a directory listing, albeit
+        // a bit more compact than --list (and even more compact if you include --truncate).  Also note that
+        // if you use --desc instead of --list in conjunction with --csv, the CSV will include the full list
+        // of files but WITHOUT reading and hashing their contents.
         //
     },
     "dir": {
@@ -787,6 +788,7 @@ async function main(argc, argv, errors)
     }
     let bannerHashes = {};
     let heading = false, truncate = false;
+    let listing = argv.desc || argv.list;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     let incoding = (argv.in || "cp437").replace(/[-_]/g, "").toLowerCase();
@@ -820,6 +822,7 @@ async function main(argc, argv, errors)
         let handle;
         let prevPath = "";
         let dirListing = argv.desc;
+        let nDirFiles = 0, nDirBytes = 0;
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
         let widthPhoto = 0, heightPhoto = 0;
@@ -938,7 +941,7 @@ async function main(argc, argv, errors)
             );
             return line;
         };
-        let printHeading = function(entry) {
+        let printHeading = function(entry, isFile) {
             let label = !prevPath? ` [${itemPath}]` : "";
             let continued = nItemFiles > 0;
             let entryPath = path.dirname(entry.name);
@@ -963,11 +966,18 @@ async function main(argc, argv, errors)
                     continued = false;
                 }
             }
-            if (!heading && !truncate && !argv.csv) {
+            if (!heading && (!truncate || !isFile) && !argv.csv) {
                 let itemPrinted = false;
-                if (argv.banner && handle.item.comment || argv.desc || argv.list) {
-                    if (!nItemFiles || argv.desc || argv.list) {
+                if (listing || argv.banner && handle.item.comment) {
+                    if (listing || !nItemFiles) {
+                        if (nDirFiles && !truncate) {
+                            printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
+                            nDirFiles = nDirBytes = 0;
+                        }
                         printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
+                        if (truncate) {
+                            printf("...\n");
+                        }
                         itemPrinted = true;
                     }
                 }
@@ -987,9 +997,11 @@ async function main(argc, argv, errors)
                 if (argv.banner && handle.item.comment && !nItemFiles) {
                     printf("%s\n", handle.item.comment);
                 }
-                if (argv.desc || argv.list) {
+                if (listing) {
                     if (dirListing) {
-                        printf("\n");
+                        if (!truncate) {
+                            printf("\n");
+                        }
                         // printf("\nFilename             Size   Date       Time       Path\n");
                         // printf(  "--------             ----   ----       ----       ----\n");
                     }
@@ -1000,8 +1012,12 @@ async function main(argc, argv, errors)
                 }
             }
             heading = true;
-            nTotalFiles++;
-            nItemFiles++;
+            if (isFile) {
+                nDirFiles++;
+                nDirBytes += entry.size;
+                nItemFiles++;
+                nTotalFiles++;
+            }
         };
         let printScript = function() {
             //
@@ -1091,17 +1107,17 @@ async function main(argc, argv, errors)
                 handle = await dxc.open(itemPath, itemDB, options);
                 break;
             } catch (error) {
-                printf("error opening %s: %s\n", itemPath, error.message);
                 if (!retries || error.message.match(/^(Unrecognized|ENOENT)/)) {
+                    printf("error opening %s: %s\n", itemPath, error.message);
                     return [0, -1];
                 }
-                printf("retrying...\n");
+                printf("retrying %s...\n", itemPath);
             }
         } while (retries-- > 0);
         let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
-            if (!handle.isArchive && !argv.recurse && !itemDB && (argv.desc || argv.list)) {
+            if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
                 dirListing = true;
             }
             if (handle.isArchive || handle.isDisk) {
@@ -1224,7 +1240,7 @@ async function main(argc, argv, errors)
                 // because the best time to process a recursive entry is when we already have its buffered data in
                 // hand (and we WILL have it in hand when extracting or even just testing files in the item).
                 //
-                printHeading(entry);
+                printHeading(entry, !(entryAttr & DiskInfo.ATTR.SUBDIR));
                 //
                 // TODO: Consider whether we should include .IMG and .JSON files in the list of images
                 // to process recursively.  For now, we're doing that only for .ZIP and .ARC files, because
@@ -1347,7 +1363,7 @@ async function main(argc, argv, errors)
                     name = "…" + name.slice(-13);
                 }
                 nItemWarnings += entry.warnings.length;
-                if (argv.desc || argv.list) {
+                if (listing) {
                     entry.methodName = handle.item.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
                     if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
                         entry.methodName += '*';
@@ -1388,7 +1404,7 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (argv.type || argv.dump) {
-                    displayFile(argv.desc || argv.list? null : entry.target, outcoding, db, argv.dump);
+                    displayFile(listing? null : entry.target, outcoding, db, argv.dump);
                 }
                 //
                 // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
@@ -1407,6 +1423,9 @@ async function main(argc, argv, errors)
                     nItemFiles += nFiles;
                     nItemWarnings += nWarnings;
                 }
+            }
+            if (listing && nDirFiles) {
+                printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
             }
             //
             // If we squirreled away any directory timestamps, now is the time to set them.
@@ -1454,7 +1473,7 @@ async function main(argc, argv, errors)
         let [nFiles, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
         if (!argv.upload && !argv.update) {
             if (nWarnings >= 0) {
-                printf("%s%s: %d file%s, %d warning%s\n", (argv.desc || argv.list) && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+                printf("%s%s: %d file%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
                 if (argv.desc && !argv.csv) {
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
                 }
