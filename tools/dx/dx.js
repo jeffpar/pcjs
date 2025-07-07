@@ -787,7 +787,7 @@ async function main(argc, argv, errors)
         return;
     }
     let bannerHashes = {};
-    let heading = false, truncate = false;
+    let heading = false;
     let listing = argv.desc || argv.list;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
@@ -821,6 +821,7 @@ async function main(argc, argv, errors)
     let processItem = async function(itemID, itemPath, itemPhoto = null, itemThumb = null, itemTarget = null, itemDB = null, modified = null) {
         let handle;
         let prevPath = "";
+        let truncate = false;
         let dirListing = argv.desc;
         let nDirFiles = 0, nDirBytes = 0;
         let itemName = path.basename(itemPath);
