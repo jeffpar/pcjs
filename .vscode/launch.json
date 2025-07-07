@@ -2147,12 +2147,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/pcsigdisks/pcx86/sw/misc/pcsig/2000-2999/DISK2620/archive/DISK2620.ZIP",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP",
         "--extract",
+        "--normalize",
         "--overwrite",
         "--verbose"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/dx/archive/testfiles",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

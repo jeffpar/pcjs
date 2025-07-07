@@ -821,8 +821,8 @@ async function main(argc, argv, errors)
     let processItem = async function(itemID, itemPath, itemPhoto = null, itemThumb = null, itemTarget = null, itemDB = null, modified = null) {
         let handle;
         let prevPath = "";
-        let truncate = false;
         let dirListing = argv.desc;
+        let dirLimit = argv.truncate? 11 : -1;
         let nDirFiles = 0, nDirBytes = 0;
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
@@ -955,11 +955,8 @@ async function main(argc, argv, errors)
                 entryPath = handle.label + path.sep + entryPath;
             }
             if (prevPath != entryPath) {
-                if (prevPath && argv.truncate) {
-                    if (!truncate) {
-                        printf("...\n");
-                    }
-                    truncate = true;
+                if (argv.truncate) {
+                    dirLimit = nItemFiles >= 100? 0 : 11;
                 }
                 prevPath = entryPath;
                 if (dirListing) {
@@ -967,17 +964,19 @@ async function main(argc, argv, errors)
                     continued = false;
                 }
             }
-            if (!heading && (!truncate || !isFile) && !argv.csv) {
+            if (!heading && (dirLimit || !isFile) && !argv.csv) {
                 let itemPrinted = false;
                 if (listing || argv.banner && handle.item.comment) {
                     if (listing || !nItemFiles) {
-                        if (nDirFiles && !truncate) {
+                        if (nDirFiles && dirLimit < 0) {
                             printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
                             nDirFiles = nDirBytes = 0;
                         }
-                        printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
-                        if (truncate) {
-                            printf("...\n");
+                        if (dirLimit) {
+                            printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
+                        }
+                        if (argv.truncate) {
+                            dirLimit = nItemFiles >= 100? 0 : 11;
                         }
                         itemPrinted = true;
                     }
@@ -1000,7 +999,7 @@ async function main(argc, argv, errors)
                 }
                 if (listing) {
                     if (dirListing) {
-                        if (!truncate) {
+                        if (dirLimit < 0) {
                             printf("\n");
                         }
                         // printf("\nFilename             Size   Date       Time       Path\n");
@@ -1373,17 +1372,22 @@ async function main(argc, argv, errors)
                         await csv.write(printCSV(entry, db, handle.label));
                     }
                     else if (dirListing) {
-                        if (!truncate) {
-                            let comment = "";
-                            if (entry.warnings.length) {
-                                comment = "  [" + entry.warnings.join("; ") + "]";
+                        if (dirLimit) {
+                            if (dirLimit > 1 || dirLimit < 0) {
+                                let comment = "";
+                                if (entry.warnings.length) {
+                                    comment = "  [" + entry.warnings.join("; ") + "]";
+                                }
+                                let entryName = name == entry.name? "" : "   " + entry.name;
+                                if (entryAttr & DiskInfo.ATTR.SUBDIR) {
+                                    printf("%-14s %10s   %T%s%s\n", name, "<DIR>", entry.modified, entryName, comment);
+                                } else {
+                                    printf("%-14s %10d   %T%s%s\n", name, entry.size, entry.modified, entryName, comment);
+                                }
+                            } else if (dirLimit == 1) {
+                                printf("...\n");
                             }
-                            let entryName = name == entry.name? "" : "   " + entry.name;
-                            if (entryAttr & DiskInfo.ATTR.SUBDIR) {
-                                printf("%-14s %10s   %T%s%s\n", name, "<DIR>", entry.modified, entryName, comment);
-                            } else {
-                                printf("%-14s %10d   %T%s%s\n", name, entry.size, entry.modified, entryName, comment);
-                            }
+                            dirLimit--;
                         }
                     }
                     else {
@@ -1426,7 +1430,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (listing && nDirFiles) {
-                printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
+                printf("\n%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
             }
             //
             // If we squirreled away any directory timestamps, now is the time to set them.

@@ -1,5 +1,6 @@
 import internetarchive
 import sys
+import re
 
 if len(sys.argv) < 4:
 	print("Usage: python update.py [id] [title] [description file]")
@@ -11,7 +12,9 @@ ITEM_DESC_FILE = sys.argv[3]
 
 try:
 	with open(ITEM_DESC_FILE, 'r', encoding='utf-8') as f:
-		description_content = f.read().strip().replace("Program Files", "Program&nbsp;Files").replace("<", "[").replace(">", "]")
+		description_content = f.read().strip().replace("<", "[").replace(">", "]")
+		description_content = re.sub(r'(Program)\s+(Files)', r'\1&nbsp;\2', description_content, flags=re.IGNORECASE)
+		description_content = re.sub(r'(Windows)/(System32)', r'\1&#47;\2', description_content, flags=re.IGNORECASE)
 except FileNotFoundError:
 	print(f"Error: description file '{ITEM_DESC_FILE}' not found")
 	sys.exit(1)
