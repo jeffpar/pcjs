@@ -10,6 +10,8 @@
 import DZip from "./dzip.js";
 import Disk from "./disk.js";
 import ISO from "./iso.js";
+import Format from "./format.js";
+import { LegacyArc, LegacyZip } from "./legacy.js";
 
 /**
  * @class DXC
@@ -36,6 +38,7 @@ export default class DXC {
      */
     constructor(interfaces = {}, interfaceOptions = {})
     {
+        this.format = new Format();
         this.dzip = new DZip(interfaces, interfaceOptions);
         this.disk = new Disk(interfaces, interfaceOptions);
         this.iso = new ISO(interfaces, interfaceOptions);
@@ -109,8 +112,8 @@ export default class DXC {
     {
         let entries = await handle.class.readDirectory(handle.item, filespec, filterExceptions, filterMethod);
         //
-        // We automatically read any label as well; some containers already know the label at
-        // the time of open(), whereas others won't know until the root directory has been read.
+        // We automatically read any label as well; some containers already know the label at the
+        // time of open(), whereas others can't know until at least the root directory has been read.
         //
         handle.label = handle.class.readLabel(handle.item);
         return entries;
@@ -128,5 +131,53 @@ export default class DXC {
     async readFile(handle, entry, writeData)
     {
         return await handle.class.readFile(handle.item, entry, writeData);
+    }
+
+    /**
+     * formatEntry(handle, entry, parent)
+     *
+     * @this {DXC}
+     * @param {Handle} handle
+     * @param {Entry} entry
+     * @param {string} [parent]
+     * @returns {string}
+     */
+    formatEntry(handle, entry, parent = "")
+    {
+        let name = entry.name;
+        let matchName = name.match(/([^/]+)\/?$/);
+        if (matchName) {
+            name = matchName[1];
+        }
+        if (name.length > 14) {
+            name = "…" + name.slice(-13);
+        }
+        let nameMethod = handle.item.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
+        if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
+            nameMethod += '*';
+        }
+        let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
+        let comment;
+        if (entry.warnings.length) {
+            comment = "[" + entry.warnings.join("; ") + "]";
+        } else if (entry.comment) {
+            comment = entry.comment;
+        } else {
+            comment = entry.target || (parent? parent + "/" + entry.name : entry.name);
+            if (comment == name) {
+                comment = "";
+            }
+        }
+        if (comment.length) comment = "  " + comment;
+        //
+        // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
+        // using "%0*x" instead of "%08x" and passing 4 for ARC and 8 for ZIP, but when archives contain
+        // a mixture of ARC and ZIP archives, that results in irregular output, so I always display
+        // 8 hex digits now.
+        //
+        // Also note that ARC file entries do not have an 'attr' field, so we must have a default of 0.
+        //
+        return this.format.sprintf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s",
+                name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
     }
 }

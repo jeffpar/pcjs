@@ -38,25 +38,30 @@
           let s = format.sprintf(...args);
           dxOutput.value += s;
       };
-      const urlInput = document.getElementById('urlInput');
-      const urlItem = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
-      try {
-          printf("Fetching %s\n", urlItem);
-          let handle = await dxc.open(urlItem);
+      let readItem = async function(name, db = null, parent = "") {
+          let handle = await dxc.open(name, db);
           if (!handle) {
               printf("Failed to open item\n");
               return;
           }
           let entries = await dxc.readDirectory(handle);
-          printf("Found %d entries in item\n", entries.length);
           for (let entry of entries) {
               if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
                   continue;
               }
-              let db = await dxc.readFile(handle, entry);
-              printf("entry: %s, compressed size: %d -> %d bytes [%s]\n", entry.name, entry.compressedSize, db && db.length || 0, entry.warnings.join("; "));
+              printf("%s\n", dxc.formatEntry(handle, entry, parent));
+              if (entry.name.match(/\.(zip|arc)$/i)) {
+                  let db = await dxc.readFile(handle, entry);
+                  await readItem(entry.name, db, parent? parent + "/" + entry.name : entry.name);
+              }
           }
           dxc.close(handle);
+      }
+      const urlInput = document.getElementById('urlInput');
+      const urlItem = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
+      try {
+          printf("Fetching %s\n", urlItem);
+          await readItem(urlItem);
       } catch (error) {
           printf("Error: %s\n", error.message);
       }

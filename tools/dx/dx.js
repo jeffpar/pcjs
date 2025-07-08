@@ -978,11 +978,11 @@ async function main(argc, argv, errors)
                 let itemPrinted = false;
                 if (listing || argv.banner && handle.item.comment) {
                     if (listing || !nItemFiles) {
-                        if (nDirFiles && dirLimit < 0) {
+                        if (dirListing && dirLimit < 0 && nDirFiles) {
                             printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
                             nDirFiles = nDirBytes = 0;
                         }
-                        if (dirLimit) {
+                        if (dirListing && dirLimit) {
                             printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
                         }
                         if (argv.truncate) {
@@ -1409,21 +1409,7 @@ async function main(argc, argv, errors)
                         }
                     }
                     else {
-                        let comment;
-                        if (entry.warnings.length) {
-                            comment = "[" + entry.warnings.join("; ") + "]";
-                        } else {
-                            comment = entry.comment || (name == entry.target? "" : entry.target);
-                        }
-                        if (comment.length) comment = "  " + comment;
-                        let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
-                        //
-                        // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
-                        // using "%0*x" instead of "%08x", but when archives contain a mixture of ARC and ZIP archives,
-                        // that results in irregular output, so now I always display 8 hex digits.
-                        //
-                        printf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s\n",
-                                name, entry.size, entry.compressedSize, entry.methodName, ratio, entryAttr, entry.modified, entry.crc, comment);
+                        printf("%s\n", dxc.formatEntry(handle, entry));
                     }
                 }
                 if (argv.type || argv.dump) {
@@ -1435,9 +1421,10 @@ async function main(argc, argv, errors)
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
-                    if (nFiles) {
-                        heading = false;
-                    }
+                    //
+                    // if (nFiles) {
+                    //     heading = false;
+                    // }
                     //
                     // We now propagate all downstream totals upstream, so that the main loop can accurately
                     // report which items are completely free of warnings (any nested items with warnings are
@@ -1447,8 +1434,8 @@ async function main(argc, argv, errors)
                     nItemWarnings += nWarnings;
                 }
             }
-            if (listing && nDirFiles) {
-                printf("\n%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
+            if (dirListing && nDirFiles) {
+                printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
             }
             //
             // If we squirreled away any directory timestamps, now is the time to set them.
