@@ -70,7 +70,7 @@ export default class DXC {
             handle.isDisk = true;
             handle.class = this.disk;
         }
-        if (name.match(/\.(iso|mdf|bin|cdr)$/i)) {
+        if (name.match(/\.(iso|mdf|bin|cdr)$/i) || options.agnostic) {
             handle.isDisk = true;
             handle.class = this.iso;
         }

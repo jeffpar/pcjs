@@ -435,6 +435,12 @@ export default class Struct {
     /**
      * readStruct(db, offset, encoding)
      *
+     * TODO: Consider adding a length parameter after the offset parameter, so that we can verify
+     * there is enough data in the DataBuffer to read the entire structure, and return null if not.
+     *
+     * At the moment, some classes perform that check themselves (see the readStruct() calls in iso.js),
+     * but it would be cleaner to do it here.
+     *
      * @this {Struct}
      * @param {DataBuffer} db
      * @param {number} [offset]

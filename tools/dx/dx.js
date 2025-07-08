@@ -737,7 +737,11 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
+        let pathArg = argv.path;
+        if (pathArg[0] == '~') {
+            pathArg = path.join(process.env.HOME, pathArg.slice(1));
+        }
+        let items = glob.sync(pathArg, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
@@ -785,6 +789,12 @@ async function main(argc, argv, errors)
     }
     if (nErrors) {
         return;
+    }
+    let dumpItem = false;
+    if (!itemList.length && argv.dump) {
+        itemList.push({path: argv.dump});
+        dumpItem = true;
+        delete argv.dump;
     }
     let bannerHashes = {};
     let heading = false;
@@ -1083,9 +1093,10 @@ async function main(argc, argv, errors)
         }
         if (argv.csv && !itemDB) {
             //
-            // NOTE: preload is required if you want hashes of the items, but it slows things down,
-            // so I don't enable it unless you also want a list of the contents.  If there are cases where
-            // you want the CSV to have hashes WITHOUT listing the contents, then we'll need a new option.
+            // NOTE: preload is required if you want hashes of the items themselves, not just the files
+            // inside the items, but it slows things down, so I don't enable it unless you also want a list
+            // of the contents.  If there are cases where you want the CSV to have hashes WITHOUT listing
+            // the contents, then we'll need a new option.
             //
             options.preload = !!argv.list;
         }
@@ -1097,6 +1108,10 @@ async function main(argc, argv, errors)
         }
         if (argv.nodir) {
             options.nodir = true;
+        }
+        if (dumpItem) {
+            options.preload = true;
+            options.agnostic = true;
         }
         if (itemPath[0] == '~') {
             itemPath = path.join(process.env.HOME, itemPath.slice(1));
@@ -1195,6 +1210,9 @@ async function main(argc, argv, errors)
             }
             if (argv.upload || argv.update) {
                 printScript();
+            }
+            if (dumpItem) {
+                displayFile(handle.item.name, outcoding, handle.item.db, true);
             }
             let nEntries = 0;
             let dirTimestamps = {};

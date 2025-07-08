@@ -81,7 +81,8 @@ import Struct from './struct.js';
  * @property {Date}     modified    (modification date of image file, if known)
  * @property {boolean}  preload     (if true, read the entire image into memory on open)
  * @property {boolean}  compat      (if true, ignore any supplementary (eg, Joliet) volume descriptor
- * @property {boolean}  nodir       (if true, read directory structure using path table)
+ * @property {boolean}  nodir       (if true, read directory structure using path table instead of directory records)
+ * @property {boolean}  agnostic    (if true, open() will not fail if the image is unrecognized)
  *
  * @typedef  {object}   Cache
  * @property {DataBuffer} db        (cache buffer)
@@ -507,6 +508,9 @@ export default class ISO {
             do {
                 let desc;
                 let [offset, length] = await this.readCache(image, position, extent);
+                if (length < ISO.HSPrimaryDesc.length) {
+                    break;
+                }
                 desc = ISO.HSPrimaryDesc.readStruct(image.cache.db, offset);
                 if (desc.identifier == "CDROM" && desc.type == 0x01) {
                     image.primary = desc;
@@ -569,14 +573,16 @@ export default class ISO {
                 position += extent;
             } while (position < image.size);
             if (!image.primary || !image.primary.blockSize || ((image.primary.blockSize - 1) & image.primary.blockSize) !== 0) {
-                throw new Error("Unrecognized CD-ROM image");
+                if (!options.agnostic) {
+                    throw new Error("Unrecognized CD-ROM image");
+                }
             }
         } catch (error) {
             await this.close(image);
             throw error;
         }
-        image.lbaMax = Math.floor(image.size / image.primary.blockSize);
-        image.modified = image.primary.created || image.modified;
+        image.lbaMax = Math.floor(image.size / (image.primary?.blockSize || ISO.BLOCK_SIZE));
+        image.modified = image.primary?.created || image.modified;
         return image;
     }
 
@@ -720,15 +726,33 @@ export default class ISO {
      */
     async readCache(image, position, extent)
     {
+        let cache = image.cache;
+        let maxExtent = cache.db.length;
         this.assert(position >= 0 && extent >= 0);
+        //
+        // If the position starts past the end of the image, we used to throw an error,
+        // but now I want the caller to honor the returned length (which will be zero).
+        // This is more consistent with how we handle extents beyond the end of the image,
+        // which return a partial length (ie, less than extent).
+        //
+        // What position we record and what buffer offset we return is less important,
+        // but we do return a buffer offset just past the end of the cache, to ensure that
+        // any improper buffer access will fail.
+        //
+        //      throw new Error(`Position ${position} exceeds limit (${image.size})`);
+        //
+        // TODO: Consider making this a feature of all other readCache() implementations;
+        // in fact, consider moving readCache() into a module like struct.js, so that there's
+        // only one implementation of readCache().
+        //
         if (position > image.size) {
-            throw new Error(`Position ${position} exceeds limit (${image.size})`);
+            cache.position = position;
+            cache.extent = 0;
+            return [maxExtent, 0];
         }
         if (position + extent > image.size) {
             extent = image.size - position;
         }
-        let cache = image.cache;
-        let maxExtent = cache.db.length;
         if (extent > maxExtent) {
             extent = maxExtent;
         }
@@ -947,7 +971,9 @@ export default class ISO {
                     continue;
                 }
                 let [offset, length] = await this.readCache(image, position, extent);
-                this.assert(length >= image.dirClass.length);
+                if (length < image.dirClass.length) {
+                    break;
+                }
                 let record = image.dirClass.readStruct(image.cache.db, offset);
                 //
                 // Directory records are not allowed to span block boundaries, and any padding between records
@@ -1054,8 +1080,13 @@ export default class ISO {
         try {
             do {
                 let [offset, length] = await this.readCache(image, position, ISO.PATHREC_SIZE);
+                if (length < image.pathClass.length) {
+                    break;              // if we can't read a full path record, we're done
+                }
                 let record = image.pathClass.readStruct(image.cache.db, offset);
-                if (!record.lenName) break;         // if we've hit zero-padding, presumably that's the end
+                if (!record.lenName) {
+                    break;              // if we've hit zero-padding, presumably that's the end
+                }
                 if (this.debug) record.position = "0x" + position.toString(16);
                 position += image.pathClass.length + record.lenName + (record.lenName & 0x1);
                 if (record.lba + record.cbAttr >= image.lbaMax) {
