@@ -134,13 +134,14 @@ export default class DXC {
     }
 
     /**
-     * formatHeading(handle)
+     * formatHeading(handle, parent)
      *
      * @this {DXC}
      * @param {Handle} handle
+     * @param {string} [parent]
      * @returns {string}
      */
-    formatHeading(handle)
+    formatHeading(handle, parent = "")
     {
         let s = "\n";
         s += "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
@@ -190,7 +191,7 @@ export default class DXC {
         // a mixture of ARC and ZIP archives, that results in irregular output, so I always display
         // 8 hex digits now.
         //
-        // Also note that ARC file entries do not have an 'attr' field, so we must have a default of 0.
+        // Also note that ARC file entries do not have an 'attr' field, so we default to 0.
         //
         return this.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                 name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
