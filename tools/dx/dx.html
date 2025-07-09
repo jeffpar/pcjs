@@ -44,7 +44,9 @@
               printf("Failed to open item\n");
               return;
           }
-          printf("%s\n", dxc.formatHeading(handle, parent));
+          if (!db) {
+              printf("%s\n", dxc.formatHeading(handle, parent));
+          }
           let entries = await dxc.readDirectory(handle);
           for (let entry of entries) {
               if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
