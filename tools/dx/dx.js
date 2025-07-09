@@ -116,23 +116,21 @@ const options = {
         description: "display debug information",
         internal: true
     },
-    "desc": {
-        type: "boolean",
-        usage: "--desc",
-        description: "generate description of contents",
-        internal: true
-        //
-        // NOTE: This generated "description" is currently little more than a directory listing, albeit
-        // a bit more compact than --list (and even more compact if you include --truncate).  Also note that
-        // if you use --desc instead of --list in conjunction with --csv, the CSV will include the full list
-        // of files but WITHOUT reading and hashing their contents.
-        //
+    "dest": {
+        type: "string",
+        usage: "--dest [dir]",
+        alias: "-d",
+        description: "extract files into destination directory",
     },
     "dir": {
-        type: "string",
-        usage: "--dir [dir]",
-        alias: "-d",
-        description: "extract files into directory"
+        type: "boolean",
+        usage: "--dir",
+        description: "print directory of item contents"
+        //
+        // NOTE: Directory listings can be truncated with --truncate.  Also note that if you use --dir
+        // instead of --list in conjunction with --csv, the CSV will include the full list of files but
+        // WITHOUT reading and hashing their contents.
+        //
     },
     "dump": {
         type: "string",
@@ -271,7 +269,7 @@ const options = {
     "truncate": {
         type: "boolean",
         usage: "--truncate",
-        description: "truncate description of contents (see --desc)",
+        description: "truncate description of contents (see --dir)",
         internal: true
     },
     "type": {
@@ -797,8 +795,7 @@ async function main(argc, argv, errors)
         delete argv.dump;
     }
     let bannerHashes = {};
-    let heading = false;
-    let listing = argv.desc || argv.list;
+    let listing = argv.dir || argv.list;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
     let nTotalItems = 0, nTotalFiles = 0, nTotalWarnings = 0;
     let incoding = (argv.in || "cp437").replace(/[-_]/g, "").toLowerCase();
@@ -830,8 +827,9 @@ async function main(argc, argv, errors)
     //
     let processItem = async function(itemID, itemPath, itemPhoto = null, itemThumb = null, itemTarget = null, itemDB = null, modified = null) {
         let handle;
+        let heading = false;
         let prevPath = "";
-        let dirListing = argv.desc;
+        let dirListing = argv.dir;
         let dirLimit = argv.truncate? 11 : -1;
         let nDirFiles = 0, nDirBytes = 0;
         let itemName = path.basename(itemPath);
@@ -862,7 +860,7 @@ async function main(argc, argv, errors)
         let srcName = path.basename(srcPath);
         let srcBase = path.basename(srcPath, itemExt);
         srcPath = path.dirname(srcPath);
-        let dstPath = itemTarget || argv.dir || "";
+        let dstPath = itemTarget || argv.dest || "";
         let chgPath = dstPath.split("=");
         if (chgPath.length > 1) {
             if (srcPath.indexOf(chgPath[0]) >= 0) {
@@ -886,7 +884,7 @@ async function main(argc, argv, errors)
                 dstPath = path.join(dstPath, itemDB? srcName : srcBase);
             }
         }
-        let bannerPath = path.join(argv.dir || "", srcBase + ".BAN");
+        let bannerPath = path.join(argv.dest || "", srcBase + ".BAN");
         if (!itemPhoto && !itemDB && itemExt.match(/\.(img|json|iso|mdf|bin|cdr)$/i)) {
             //
             // A top-level item (specifically, a disk image) may have an associated photo in the file system.
@@ -954,7 +952,7 @@ async function main(argc, argv, errors)
         };
         let printHeading = function(entry, isFile) {
             let label = !prevPath? ` [${itemPath}]` : "";
-            let continued = nItemFiles > 0;
+            let continued = nItemFiles > 0? "(continued)" : "";
             let entryPath = path.dirname(entry.name);
             if (entryPath == ".") {
                 entryPath = "";
@@ -971,7 +969,6 @@ async function main(argc, argv, errors)
                 prevPath = entryPath;
                 if (dirListing) {
                     heading = false;
-                    continued = false;
                 }
             }
             if (!heading && (dirLimit || !isFile) && !argv.csv) {
@@ -983,7 +980,10 @@ async function main(argc, argv, errors)
                             nDirFiles = nDirBytes = 0;
                         }
                         if (dirListing && dirLimit) {
-                            printf("\nDirectory of %s%s%s\n", entryPath, label, continued? " (continued)" : "");
+                            printf("\nDirectory of %s%s\n", entryPath, label);
+                        }
+                        if (!dirListing) {
+                            printf("\n%s [%s] %s\n", itemPath, entryPath, continued);
                         }
                         if (argv.truncate) {
                             dirLimit = nItemFiles >= 100? 0 : 11;
@@ -1070,7 +1070,7 @@ async function main(argc, argv, errors)
                     files.push(targetName);
                 }
             }
-            printf("node dx.js \"%s%s\" --desc --truncate > desc.txt\n", label, itemExt);
+            printf("node dx.js \"%s%s\" --dir --truncate > desc.txt\n", label, itemExt);
             files.unshift("desc.txt");
             printf("while true; do\n");
             if (argv.update) {
@@ -1163,7 +1163,7 @@ async function main(argc, argv, errors)
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
                 // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
                 //
-                if (!argv.extract && argv.dir && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
+                if (!argv.extract && argv.dest && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
                     let hash = crypto.createHash('md5').update(handle.item.comment).digest('hex');
                     if (bannerHashes[hash]) {
                         bannerHashes[hash]++;
@@ -1239,7 +1239,7 @@ async function main(argc, argv, errors)
                 // entry.name (ie, entry.name is always a complete relative path).
                 //
                 if ((entryAttr & DiskInfo.ATTR.SUBDIR) || entry.name.endsWith("/")) {
-                    if (argv.extract || argv.dir) {
+                    if (argv.extract || argv.dest) {
                         dirTimestamps[entry.target] = entry.modified;
                     }
                     if (!dirListing || argv.csv) {
@@ -1281,7 +1281,7 @@ async function main(argc, argv, errors)
                     //
                     let targetData = null;
                     let convertText = incoding == "cp437" && outcoding == "utf8" && isTextFile(entry.name);
-                    if ((argv.extract || argv.dir && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
+                    if ((argv.extract || argv.dest && !(filterExceptions & DZip.EXCEPTIONS.BANNER)) && !recurse) {
                         if (convertText == 2) {
                             targetData = new DataBuffer();
                         }
@@ -1343,7 +1343,7 @@ async function main(argc, argv, errors)
                             return false;
                         };
                     }
-                    if (argv.csv && argv.list || argv.dir || argv.extract || argv.type || argv.dump || argv.test || recurse) {
+                    if (argv.csv && argv.list || argv.dest || argv.extract || argv.type || argv.dump || argv.test || recurse) {
                         if (argv.debug) {
                             printf("reading %s\n", entryPath);
                             printed = true;
@@ -1421,10 +1421,9 @@ async function main(argc, argv, errors)
                 if (recurse && db) {
                     let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
-                    //
-                    // if (nFiles) {
-                    //     heading = false;
-                    // }
+                    if (nFiles) {
+                        heading = false;
+                    }
                     //
                     // We now propagate all downstream totals upstream, so that the main loop can accurately
                     // report which items are completely free of warnings (any nested items with warnings are
@@ -1484,7 +1483,7 @@ async function main(argc, argv, errors)
         if (!argv.upload && !argv.update) {
             if (nWarnings >= 0) {
                 printf("%s%s: %d file%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
-                if (argv.desc && !argv.csv) {
+                if (argv.dir && argv.truncate && !argv.csv) {
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
                 }
                 if (argv.pause) {
@@ -1493,7 +1492,6 @@ async function main(argc, argv, errors)
             } else {
                 nWarnings = -nWarnings;;
             }
-            heading = false;
         }
         nTotalWarnings += nWarnings;
     }
