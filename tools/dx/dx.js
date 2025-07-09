@@ -1012,12 +1012,9 @@ async function main(argc, argv, errors)
                         if (dirLimit < 0) {
                             printf("\n");
                         }
-                        // printf("\nFilename             Size   Date       Time       Path\n");
-                        // printf(  "--------             ----   ----       ----       ----\n");
                     }
                     else {
-                        printf("\nFilename         External    Internal   Method   Ratio   Attr   Date       Time       CRC\n");
-                        printf(  "--------         --------    --------   ------   -----   ----   ----       ----       ---\n");
+                        printf("%s\n", dxc.formatHeading(handle));
                     }
                 }
             }

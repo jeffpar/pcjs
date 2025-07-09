@@ -134,6 +134,21 @@ export default class DXC {
     }
 
     /**
+     * formatHeading(handle)
+     *
+     * @this {DXC}
+     * @param {Handle} handle
+     * @returns {string}
+     */
+    formatHeading(handle)
+    {
+        let s = "\n";
+        s += "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
+        s += "--------         --------    --------   ------   -----  ----  ----       ----      ---";
+        return s;
+    }
+
+    /**
      * formatEntry(handle, entry, parent)
      *
      * @this {DXC}
@@ -177,7 +192,7 @@ export default class DXC {
         //
         // Also note that ARC file entries do not have an 'attr' field, so we must have a default of 0.
         //
-        return this.format.sprintf("%-14s %10d  %10d   %-9s %3d%%   %#04x   %T   %08x%s",
+        return this.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                 name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
     }
 }
