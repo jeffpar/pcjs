@@ -975,6 +975,9 @@ async function main(argc, argv, errors)
                 }
                 prevPath = entryPath;
                 if (dirListing) {
+                    if (heading) {
+                        continued = "";
+                    }
                     heading = false;
                 }
             }
