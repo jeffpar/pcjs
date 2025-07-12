@@ -341,7 +341,7 @@ function displayFile(name, encoding, db, dump = false)
         printf("%s:\n", name);
     }
     if (!dump) {
-        printf(db.toString(encoding));
+        printf("%s\n", db.toString(encoding));
         return;
     }
     //
@@ -950,17 +950,24 @@ async function main(argc, argv, errors)
             );
             return line;
         };
-        let printHeading = function(entry, isFile) {
-            let label = !prevPath? ` [${itemPath}]` : "";
-            let continued = nItemFiles > 0? "(continued)" : "";
-            let entryPath = path.dirname(entry.name);
-            if (entryPath == ".") {
-                entryPath = "";
-            }
-            if (!entryPath) {
-                entryPath = handle.label;
+        let printHeading = function(entry, isFile, isNested) {
+            let entryPath, fullPath = "";
+            let continued = nItemFiles > 0? " (continued)" : "";
+            if (entry.target) {
+                entryPath = path.dirname(entry.target);
             } else {
-                entryPath = handle.label + path.sep + entryPath;
+                entryPath = path.dirname(entry.name);
+                if (entryPath == ".") {
+                    entryPath = "";
+                }
+                if (!entryPath) {
+                    entryPath = handle.label;
+                } else {
+                    entryPath = handle.label + path.sep + entryPath;
+                }
+            }
+            if (!prevPath && !isNested) {
+                fullPath = ` [${itemPath}]`;
             }
             if (prevPath != entryPath) {
                 if (argv.truncate) {
@@ -980,10 +987,10 @@ async function main(argc, argv, errors)
                             nDirFiles = nDirBytes = 0;
                         }
                         if (dirListing && dirLimit) {
-                            printf("\nDirectory of %s%s\n", entryPath, label);
+                            printf("\nDirectory of %s%s%s\n", entryPath, fullPath, continued);
                         }
                         if (!dirListing) {
-                            printf("\n%s [%s] %s\n", itemPath, entryPath, continued);
+                            printf("\n%s%s\n", itemPath, continued);
                         }
                         if (argv.truncate) {
                             dirLimit = nItemFiles >= 100? 0 : 11;
@@ -1255,7 +1262,7 @@ async function main(argc, argv, errors)
                 // because the best time to process a recursive entry is when we already have its buffered data in
                 // hand (and we WILL have it in hand when extracting or even just testing files in the item).
                 //
-                printHeading(entry, !(entryAttr & DiskInfo.ATTR.SUBDIR));
+                printHeading(entry, !(entryAttr & DiskInfo.ATTR.SUBDIR), !!itemDB);
                 //
                 // TODO: Consider whether we should include .IMG and .JSON files in the list of images
                 // to process recursively.  For now, we're doing that only for .ZIP and .ARC files, because
@@ -1430,7 +1437,7 @@ async function main(argc, argv, errors)
                     nItemWarnings += nWarnings;
                 }
             }
-            if (dirListing && nDirFiles) {
+            if (dirListing && nDirFiles && !argv.csv) {
                 printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
             }
             //

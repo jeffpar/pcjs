@@ -16,7 +16,7 @@ import { LegacyArc, LegacyZip } from "./legacy.js";
 /**
  * @class DXC
  *
- * Wrapper class for all supported container classes (DZip, Disk, ISO).
+ * Wrapper class for all supported container items (DZip, Disk, ISO).
  */
 export default class DXC {
 
@@ -78,7 +78,7 @@ export default class DXC {
             handle.class = this.iso;
         }
         if (!handle.class) {
-            throw new Error(`Unrecognized item extension`);
+            throw new Error(`Unrecognized container extension`);
         }
         handle.item = await handle.class.open(name, db, options);
         return handle;
@@ -98,15 +98,15 @@ export default class DXC {
     /**
      * readDirectory(handle, filespec, filterExceptions, filterMethod)
      *
-     * This function always returns a new list of item entries, based on any filtering that
-     * has been requested (the underlying item always maintains a complete and unfiltered list).
+     * This function always returns a new list of container entries, based on any filtering that
+     * has been requested (the underlying container always maintains a complete and unfiltered list).
      *
      * @this {DXC}
      * @param {Handle} handle
      * @param {string} [filespec]
      * @param {number} [filterExceptions] (0 if none)
      * @param {number} [filterMethod] (-1 if none)
-     * @returns {Array.<Entry>} (array of item entries)
+     * @returns {Array.<Entry>} (array of container entries)
      */
     async readDirectory(handle, filespec = "*", filterExceptions = 0, filterMethod = -1)
     {
