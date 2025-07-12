@@ -54,7 +54,7 @@ Here is the complete help text:
         --dest [dir]       extract files into destination directory [-d]
         --dir              print directory of item contents
         --dump [spec]      dump contents of matching files
-        --extract          extract files (implied by --dir) [-e,-x]
+        --extract          extract files (implied by --dest) [-e,-x]
         --files [spec]     filter on matching files (eg, "*.txt")
         --filter [...]     filter on criteria (see --filter list) [-f]
         --in [encoding]    set input encoding (default is cp437)

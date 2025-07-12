@@ -141,7 +141,7 @@ const options = {
         type: "boolean",
         usage: "--extract",
         alias: ["-e", "-x"],
-        description: "extract files (implied by --dir)"
+        description: "extract files (implied by --dest)"
     },
     "files": {
         type: "string",
@@ -269,7 +269,7 @@ const options = {
     "truncate": {
         type: "boolean",
         usage: "--truncate",
-        description: "truncate description of contents (see --dir)",
+        description: "truncate directory of contents (see --dir)",
         internal: true
     },
     "type": {
@@ -841,10 +841,10 @@ async function main(argc, argv, errors)
         //
         // Generate paths we may need later (for file and/or banner extraction).
         //
-        // If you use the search-and-replace form of the dir option (ie, "--dir <search>=<replace>"), the
+        // If you use the search-and-replace form of the dest option (ie, "--dest <search>=<replace>"), the
         // destination path is the source path with the first occurrence of <search> replaced with <replace>.
         //
-        // Otherwise, destination path is whatever follows "--dir".  The presence of "--dir" automatically
+        // Otherwise, destination path is whatever follows "--dest".  The presence of "--dest" automatically
         // enables extraction.  If no directory is specified but extraction is still enabled via "--extract",
         // then the current directory is used.
         //
@@ -1168,7 +1168,7 @@ async function main(argc, argv, errors)
             if (handle.item.comment) {
                 //
                 // A special case: if we're filtering on archives with banners AND banner extraction is enabled
-                // (by virtue of --dir without --extract), then we will ALSO track banners and bypass duplicates.
+                // (by virtue of --dest without --extract), then we will ALSO track banners and bypass duplicates.
                 //
                 if (!argv.extract && argv.dest && (filterExceptions & DZip.EXCEPTIONS.BANNER)) {
                     let hash = crypto.createHash('md5').update(handle.item.comment).digest('hex');
