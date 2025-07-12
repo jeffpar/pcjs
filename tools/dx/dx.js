@@ -313,7 +313,7 @@ const options = {
         description: "display this help message",
         handler: function() {
             printf("\nUsage:\n    %s [option(s)] [item(s)]\n", path.basename(process.argv[1]));
-            printf("\nProcesses ZIP, ARC, IMG, ISO, MDF and other file container items\n");
+            printf("\nProcesses ZIP, ARC, IMG, ISO, MDF and other container items\n");
             printf("\nOptions:\n");
             for (let key in options) {
                 let option = options[key];

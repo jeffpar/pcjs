@@ -39,32 +39,37 @@ Here is the complete help text:
     dx.js 1.0
     Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
 
-    Arguments: /Users/jeff/Sites/pcjs/tools/dx/dx.js -h
+    Arguments: dx.js -h
 
     Usage:
-        dx.js [option(s)] [archive(s)]
+        dx.js [option(s)] [item(s)]
 
-    Processes ZIP, ARC, IMG, ISO and other archives
+    Processes ZIP, ARC, IMG, ISO, MDF and other container items
 
     Options:
-        --batch [file]     process archives listed in file
-        --banner           display archive comments (banners) [-b]
-        --compat           enable CD-ROM compatibility mode [-c]
-        --csv [file]       output file listings in CSV format
-        --dir [dir]        extract files into specified directory [-d]
+        --batch [file]     process items listed in file
+        --banner           print archive comments (banners) [-b]
+        --compat           use CD-ROM 8.3 filenames only [-c]
+        --csv [file]       write list of item contents to CSV file
+        --dest [dir]       extract files into destination directory [-d]
+        --dir              print directory of item contents
+        --dump [spec]      dump contents of matching files
         --extract          extract files (implied by --dir) [-e,-x]
-        --files [spec]     file specification (eg, "*.txt")
+        --files [spec]     filter on matching files (eg, "*.txt")
         --filter [...]     filter on criteria (see --filter list) [-f]
-        --list             list contents of specified archive(s) [-l]
+        --in [encoding]    set input encoding (default is cp437)
+        --list             print list of item contents [-l]
         --nodir            skip archive directory (scan for files) [-n]
-        --overwrite        overwrite existing files when extracting [-o]
+        --out [encoding]   set output encoding (default is --in)
+        --overwrite        overwrite existing files on extract [-o]
         --password [...]   decrypt garbled entries using password [-g,-s]
-        --path [spec]      archive path specification (eg, "**/*.zip")
-        --recurse          process archives within archives [-r]
-        --test             test contents of specified archive(s) [-t]
-        --upload           generate an upload script for the Internet Archive [-u]
+        --path [spec]      process matching items (eg, "**/*.zip")
+        --pause            pause after each item until a key is pressed [-p]
+        --recurse          process items within items [-r]
+        --test             test contents of all items [-t]
+        --type [spec]      type contents of matching files
+        --upload           generate an upload script for the Internet Archive
         --verbose          display additional information [-v]
-        --warnings         display additional warnings (eg, date errors) [-w]
         --help             display this help message [-h]
 
 ### Uploading Files to the Internet Archive
@@ -80,7 +85,7 @@ Here's a stripped-down example of what `--upload` produces:
     # uploading MSTN-CD177-ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.iso" ARMEFPP_EN.iso
     cp "/Software/Discs/Microsoft/TechNet/MSTN-CD177-ARMEFPP_EN.png" ARMEFPP_EN.png
-    node dx.js "ARMEFPP_EN.iso" --desc > desc.txt
+    node dx.js ARMEFPP_EN.iso --dir --truncate > desc.txt
     python upload.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" 2005-03-25 desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
     rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
 
