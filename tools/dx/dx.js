@@ -861,6 +861,7 @@ async function main(argc, argv, errors)
         let srcBase = path.basename(srcPath, itemExt);
         srcPath = path.dirname(srcPath);
         let dstPath = itemTarget || argv.dest || "";
+        let dstDefault = !dstPath;
         let chgPath = dstPath.split("=");
         if (chgPath.length > 1) {
             if (srcPath.indexOf(chgPath[0]) >= 0) {
@@ -967,7 +968,7 @@ async function main(argc, argv, errors)
                 }
             }
             if (!prevPath && !isNested) {
-                fullPath = ` [${itemPath}]`;
+                fullPath = `    [${itemPath}]`;
             }
             if (prevPath != entryPath) {
                 if (argv.truncate) {
@@ -1231,8 +1232,9 @@ async function main(argc, argv, errors)
                 // redundant and converts it to a single slash), so we replace all double-slashes with a
                 // pipe, and then convert all pipes back into double-slashes after the join.
                 //
+                let dirPath = dstDefault && handle.label || dstPath;
                 let entryPath = path.join(srcPath.replace(/\/\//g, "|"), srcName, entry.name).replace(/\|/g, "//");
-                entry.target = path.join(dstPath, entry.name);
+                entry.target = path.join(dirPath, entry.name);
                 //
                 // TODO: Consider an option for including volume labels in the output, for completeness.
                 //
@@ -1295,17 +1297,17 @@ async function main(argc, argv, errors)
                         writeData = async function(db, length) {
                             if (db) {
                                 if (!targetFile) {
-                                    //
-                                    // NOTE: Use of the "recursive" option also disables errors if the director(ies) exist.
-                                    //
-                                    await fs.mkdir(path.dirname(entry.target), { recursive: true });
                                     try {
+                                        //
+                                        // NOTE: mkdir's "recursive" option inhibits any directory-already-exists errors.
+                                        //
+                                        await fs.mkdir(path.dirname(entry.target), { recursive: true });
                                         targetFile = await fs.open(entry.target, argv.overwrite? "w" : "wx");
                                         if (!argv.list && argv.verbose) {
                                             printf("created %s\n", entry.target);
                                         }
                                     } catch (error) {
-                                        if (error.code == "EEXIST") {
+                                        if (error.code == "EEXIST" && error.syscall == "open") {
                                             //
                                             // TODO: Consider ALWAYS warning about the need for --overwrite when a file exists,
                                             // since extraction has been enabled.
@@ -1315,9 +1317,11 @@ async function main(argc, argv, errors)
                                                 entry.warnings.unshift(warning);
                                             } else {
                                                 printf("%s\n", warning);
+                                                nItemWarnings++;
                                             }
                                         } else {
                                             printf("%s: %s\n", entry.target, error.message);
+                                            nItemWarnings++;
                                         }
                                         return false;
                                     }
@@ -1418,6 +1422,10 @@ async function main(argc, argv, errors)
                     else {
                         printf("%s\n", dxc.formatEntry(handle, entry));
                     }
+                } else {
+                    if (entry.warnings.length && argv.verbose) {
+                        printf("%s: %s\n", entryPath, entry.warnings.join("; "));
+                    }
                 }
                 if (argv.type || argv.dump) {
                     displayFile(listing? null : entry.target, outcoding, db, argv.dump);
@@ -1426,7 +1434,7 @@ async function main(argc, argv, errors)
                 // Perform recursion 1) if requested and 2) if we have a DataBuffer to recurse into.
                 //
                 if (recurse && db) {
-                    let entryTarget = path.join(dstPath || "", path.dirname(entry.name));
+                    let entryTarget = path.join(dirPath, path.dirname(entry.name));
                     let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
                     if (nFiles) {
                         heading = false;
