@@ -233,7 +233,8 @@ export default class Disk {
                 method: 0,
                 crc: 0,
                 warnings: file.warnings,
-                cluster: file.cluster
+                cluster: file.cluster,
+                blocks: file.aLBA
             };
             entries.push(entry);
         };

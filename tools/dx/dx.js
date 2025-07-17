@@ -1406,6 +1406,49 @@ async function main(argc, argv, errors)
                                 let comment = "";
                                 if (entry.warnings.length) {
                                     comment = "  [" + entry.warnings.join("; ") + "]";
+                                } else if (argv.debug) {
+                                    //
+                                    // If the entry has an array of 'blocks', then display them.  However, we want to display
+                                    // them "smartly", so for example, any sequence of blocks that is contiguous should appear
+                                    // as a single range.
+                                    //
+                                    // And since the handle item should also have a 'disk' object with 'nCylinders', 'nHeads',
+                                    // and 'nSectors' properties, we can use those to calculate the C:H:S values of the start and
+                                    // end values of the starting and ending block of each range, effectively converting blocks
+                                    // into sector addresses.
+                                    //
+                                    if (entry.blocks) {
+                                        let disk = handle.item;
+                                        let blocks = entry.blocks;
+                                        let chs = function(block) {
+                                            let cylinder = block / (disk.nHeads * disk.nSectors)|0;
+                                            let head = ((block % (disk.nHeads * disk.nSectors)) / disk.nSectors)|0;
+                                            let sector = block % disk.nSectors;
+                                            return format.sprintf("%02d:%02d:%02d", cylinder, head, sector + 1);
+                                        };
+                                        if (blocks.length) {
+                                            let ranges = [];
+                                            let start = blocks[0], end = start;
+                                            let addRange = function() {
+                                                if (start == end) {
+                                                    ranges.push(chs(start));
+                                                } else {
+                                                    ranges.push(chs(start) + "-" + chs(end));
+                                                }
+                                            };
+                                            for (let i = 1; i < blocks.length; i++) {
+                                                if (blocks[i] == end + 1) {
+                                                    end = blocks[i];
+                                                } else {
+                                                    addRange();
+                                                    start = blocks[i];
+                                                    end = start;
+                                                }
+                                            }
+                                            addRange();
+                                            comment = format.sprintf("  [sectors %s]", ranges.join(", "));
+                                        }
+                                    }
                                 }
                                 let entryName = name == entry.name? "" : "   " + entry.name;
                                 if (entryAttr & DiskInfo.ATTR.SUBDIR) {
@@ -1450,6 +1493,11 @@ async function main(argc, argv, errors)
             }
             if (dirListing && nDirFiles && !argv.csv) {
                 printf("%8d file%s %10d byte%s\n", nDirFiles, nDirFiles == 1? " " : "s", nDirBytes);
+                if (handle.item.volTable && handle.item.volTable.length) {
+                    let volume = handle.item.volTable[0];
+                    printf("               %10d byte%s free\n", volume.clusFree * volume.clusSecs * volume.cbSector);
+                 // printf("               %10d byte%s capacity\n", (volume.clusTotal - volume.clusBad) * volume.clusSecs * volume.cbSector);
+                }
             }
             //
             // If we squirreled away any directory timestamps, now is the time to set them.
