@@ -151,6 +151,24 @@ export default class DXC {
     }
 
     /**
+     * filterEntry(handle, entry, filespec)
+     *
+     * @this {DXC}
+     * @param {Handle} handle
+     * @param {Entry} entry
+     * @param {string} filespec
+     * @returns {boolean}
+     */
+    filterEntry(handle, entry, filespec)
+    {
+        if (filespec) {
+            const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
+            return regex.test(entry.name);
+        }
+        return false;
+    }
+
+    /**
      * formatEntry(handle, entry, type, parent)
      *
      * @this {DXC}

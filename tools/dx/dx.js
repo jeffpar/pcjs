@@ -1157,7 +1157,7 @@ async function main(argc, argv, errors)
                 // to items' contents, not the items themselves), and conversely, if we're not recursing,
                 // then any file filters will only be applied to the items themselves.
                 //
-                let filterFiles = (!argv.recurse == !itemDB? (argv.files || argv.dump || argv.type): undefined);
+                let filterFiles = (!argv.recurse == !itemDB? argv.files: undefined);
                 entries = await dxc.readDirectory(handle, filterFiles, filterExceptions, filterMethod);
                 if (handle.item.exceptions & DZip.EXCEPTIONS.NOFILES) {
                     handle.item.warnings.push("Unrecognized archive");
@@ -1273,12 +1273,9 @@ async function main(argc, argv, errors)
                 // to process recursively.  For now, we're doing that only for .ZIP and .ARC files, because
                 // .IMG and .JSON (and .ISO) extensions tend be used more broadly for other purposes.
                 //
-                let db, targetFile, writeData, printed = false;
+                let db, targetFile, writeData, dumpFile = false;
                 let recurse = (argv.recurse && entry.name.match(/^(.*)\.(zip|arc)$/i));
-                //
-                // Define a writeData() function within processItem() to receive data ONLY if extraction
-                // has been enabled; this will take care of writing the received data to the appropriate file.
-                //
+                let readFile = argv.csv && argv.list || argv.dest || argv.extract || argv.test || recurse;
                 if (!(entryAttr & DiskInfo.ATTR.SUBDIR)) {
                     //
                     // Certain files may require special handling....
@@ -1294,6 +1291,10 @@ async function main(argc, argv, errors)
                         if (convertText == 2) {
                             targetData = new DataBuffer();
                         }
+                        //
+                        // Define a writeData() function within processItem() to receive data ONLY if extraction
+                        // has been enabled; this will take care of writing the received data to the appropriate file.
+                        //
                         writeData = async function(db, length) {
                             if (db) {
                                 if (!targetFile) {
@@ -1354,11 +1355,10 @@ async function main(argc, argv, errors)
                             return false;
                         };
                     }
-                    if (argv.csv && argv.list || argv.dest || argv.extract || argv.type || argv.dump || argv.test || recurse) {
-                        if (argv.debug) {
-                            printf("reading %s\n", entryPath);
-                            printed = true;
-                        }
+                    if (dxc.filterEntry(handle, entry, argv.dump || argv.type)) {
+                        dumpFile = readFile = true;
+                    }
+                    if (readFile) {
                         db = await dxc.readFile(handle, entry, writeData);
                         //
                         // Upon reflection, I'm leaving entry.size alone, because readFile() records a warning if
@@ -1373,7 +1373,7 @@ async function main(argc, argv, errors)
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                         }
-                        if (db && (argv.dump || argv.type)) {
+                        if (db && dumpFile) {
                             if (convertText == 1) {
                                 db = BASFile.normalize(db, true);
                             }
@@ -1418,7 +1418,7 @@ async function main(argc, argv, errors)
                         printf("%s: %s\n", entryPath, entry.warnings.join("; "));
                     }
                 }
-                if (argv.type || argv.dump) {
+                if (db && dumpFile) {
                     displayFile(listing? null : entry.target, outcoding, db, argv.dump);
                 }
                 //
