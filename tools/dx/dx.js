@@ -1403,59 +1403,7 @@ async function main(argc, argv, errors)
                     else if (dirListing) {
                         if (dirLimit) {
                             if (dirLimit > 1 || dirLimit < 0) {
-                                let comment = "";
-                                if (entry.warnings.length) {
-                                    comment = "  [" + entry.warnings.join("; ") + "]";
-                                } else if (argv.debug) {
-                                    //
-                                    // If the entry has an array of 'blocks', then display them.  However, we want to display
-                                    // them "smartly", so for example, any sequence of blocks that is contiguous should appear
-                                    // as a single range.
-                                    //
-                                    // And since the handle item should also have a 'disk' object with 'nCylinders', 'nHeads',
-                                    // and 'nSectors' properties, we can use those to calculate the C:H:S values of the start and
-                                    // end values of the starting and ending block of each range, effectively converting blocks
-                                    // into sector addresses.
-                                    //
-                                    if (entry.blocks) {
-                                        let disk = handle.item;
-                                        let blocks = entry.blocks;
-                                        let chs = function(block) {
-                                            let cylinder = block / (disk.nHeads * disk.nSectors)|0;
-                                            let head = ((block % (disk.nHeads * disk.nSectors)) / disk.nSectors)|0;
-                                            let sector = block % disk.nSectors;
-                                            return format.sprintf("%02d:%02d:%02d", cylinder, head, sector + 1);
-                                        };
-                                        if (blocks.length) {
-                                            let ranges = [];
-                                            let start = blocks[0], end = start;
-                                            let addRange = function() {
-                                                if (start == end) {
-                                                    ranges.push(chs(start));
-                                                } else {
-                                                    ranges.push(chs(start) + "-" + chs(end));
-                                                }
-                                            };
-                                            for (let i = 1; i < blocks.length; i++) {
-                                                if (blocks[i] == end + 1) {
-                                                    end = blocks[i];
-                                                } else {
-                                                    addRange();
-                                                    start = blocks[i];
-                                                    end = start;
-                                                }
-                                            }
-                                            addRange();
-                                            comment = format.sprintf("  [sectors %s]", ranges.join(", "));
-                                        }
-                                    }
-                                }
-                                let entryName = name == entry.name? "" : "   " + entry.name;
-                                if (entryAttr & DiskInfo.ATTR.SUBDIR) {
-                                    printf("%-14s %10s   %T%s%s\n", name, "<DIR>", entry.modified, entryName, comment);
-                                } else {
-                                    printf("%-14s %10d   %T%s%s\n", name, entry.size, entry.modified, entryName, comment);
-                                }
+                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? 2 : 1));
                             } else if (dirLimit == 1) {
                                 printf("...\n");
                             }

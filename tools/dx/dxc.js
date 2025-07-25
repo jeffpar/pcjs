@@ -11,6 +11,7 @@ import DZip from "./dzip.js";
 import Disk from "./disk.js";
 import ISO from "./iso.js";
 import Format from "./format.js";
+import { DiskInfo } from "./disk.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
 
 /**
@@ -150,16 +151,18 @@ export default class DXC {
     }
 
     /**
-     * formatEntry(handle, entry, parent)
+     * formatEntry(handle, entry, type, parent)
      *
      * @this {DXC}
      * @param {Handle} handle
      * @param {Entry} entry
+     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map)
      * @param {string} [parent]
      * @returns {string}
      */
-    formatEntry(handle, entry, parent = "")
+    formatEntry(handle, entry, type = 0, parent = "")
     {
+        let dxc = this;
         let name = entry.name;
         let matchName = name.match(/([^/]+)\/?$/);
         if (matchName) {
@@ -185,6 +188,58 @@ export default class DXC {
             }
         }
         if (comment.length) comment = "  " + comment;
+        if (type) {
+            if (type == 2) {
+                //
+                // If the entry has an array of 'blocks', then display them.  However, we want to display
+                // them "smartly", so for example, any sequence of blocks that is contiguous should appear
+                // as a single range.
+                //
+                // And since the handle item should also have a 'disk' object with 'nCylinders', 'nHeads',
+                // and 'nSectors' properties, we can use those to calculate the C:H:S values of the start and
+                // end values of the starting and ending block of each range, effectively converting blocks
+                // into sector addresses.
+                //
+                if (entry.blocks) {
+                    let disk = handle.item;
+                    let blocks = entry.blocks;
+                    let chs = function(block) {
+                        let cylinder = block / (disk.nHeads * disk.nSectors)|0;
+                        let head = ((block % (disk.nHeads * disk.nSectors)) / disk.nSectors)|0;
+                        let sector = block % disk.nSectors;
+                        return dxc.format.sprintf("%02d:%02d:%02d", cylinder, head, sector + 1);
+                    };
+                    if (blocks.length) {
+                        let ranges = [];
+                        let start = blocks[0], end = start;
+                        let addRange = function() {
+                            if (start == end) {
+                                ranges.push(chs(start));
+                            } else {
+                                ranges.push(chs(start) + "-" + chs(end));
+                            }
+                        };
+                        for (let i = 1; i < blocks.length; i++) {
+                            if (blocks[i] == end + 1) {
+                                end = blocks[i];
+                            } else {
+                                addRange();
+                                start = blocks[i];
+                                end = start;
+                            }
+                        }
+                        addRange();
+                        comment = dxc.format.sprintf("  [sectors %s]", ranges.join(", "));
+                    }
+                }
+            }
+            let entryName = name == entry.name? "" : "   " + entry.name;
+            if (entry.attr & DiskInfo.ATTR.SUBDIR) {
+                return dxc.format.sprintf("%-14s %10s   %T%s%s", name, "<DIR>", entry.modified, entryName, comment);
+            } else {
+                return dxc.format.sprintf("%-14s %10d   %T%s%s", name, entry.size, entry.modified, entryName, comment);
+            }
+        }
         //
         // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
         // using "%0*x" instead of "%08x" and passing 4 for ARC and 8 for ZIP, but when archives contain
@@ -193,7 +248,7 @@ export default class DXC {
         //
         // Also note that ARC file entries do not have an 'attr' field, so we default to 0.
         //
-        return this.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
+        return dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                 name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
     }
 }

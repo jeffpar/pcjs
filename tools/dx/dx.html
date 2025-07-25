@@ -52,7 +52,7 @@
               if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
                   continue;
               }
-              printf("%s\n", dxc.formatEntry(handle, entry, parent));
+              printf("%s\n", dxc.formatEntry(handle, entry, 0, parent));
               if (entry.name.match(/\.(zip|arc)$/i)) {
                   let db = await dxc.readFile(handle, entry);
                   await readItem(entry.name, db, parent? parent + "/" + entry.name : entry.name);
