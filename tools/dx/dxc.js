@@ -86,17 +86,6 @@ export default class DXC {
     }
 
     /**
-     * close(handle)
-     *
-     * @this {DXC}
-     * @param {Handle} handle
-     */
-    async close(handle)
-    {
-        await handle.class.close(handle.item);
-    }
-
-    /**
      * readDirectory(handle, filespec, filterExceptions, filterMethod)
      *
      * This function always returns a new list of container entries, based on any filtering that
@@ -132,22 +121,6 @@ export default class DXC {
     async readFile(handle, entry, writeData)
     {
         return await handle.class.readFile(handle.item, entry, writeData);
-    }
-
-    /**
-     * formatHeading(handle, parent)
-     *
-     * @this {DXC}
-     * @param {Handle} handle
-     * @param {string} [parent]
-     * @returns {string}
-     */
-    formatHeading(handle, parent = "")
-    {
-        let s = "\n";
-        s += "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
-        s += "--------         --------    --------   ------   -----  ----  ----       ----      ---";
-        return s;
     }
 
     /**
@@ -267,5 +240,32 @@ export default class DXC {
         //
         return dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                 name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
+    }
+
+    /**
+     * formatHeading(handle, parent)
+     *
+     * @this {DXC}
+     * @param {Handle} handle
+     * @param {string} [parent]
+     * @returns {string}
+     */
+    formatHeading(handle, parent = "")
+    {
+        let s = "\n";
+        s += "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
+        s += "--------         --------    --------   ------   -----  ----  ----       ----      ---";
+        return s;
+    }
+
+    /**
+     * close(handle)
+     *
+     * @this {DXC}
+     * @param {Handle} handle
+     */
+    async close(handle)
+    {
+        await handle.class.close(handle.item);
     }
 }
