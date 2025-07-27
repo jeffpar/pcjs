@@ -7,10 +7,10 @@
 {%- for script in page.scripts %}
     <script src="{{ script }}"></script>
 {%- endfor %}
-{%- if page.modules_init %}
+{%- if page.modules %}
     <script type="module">
-  {%- for initializer in page.modules_init %}
-      {{ initializer }}
+  {%- for module in page.modules %}
+      {{ module }}
   {%- endfor %}
     </script>
 {%- endif %}

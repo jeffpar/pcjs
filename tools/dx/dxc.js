@@ -194,7 +194,7 @@ export default class DXC {
             nameMethod += '*';
         }
         let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
-        let comment;
+        let comment = "";
         if (entry.warnings.length) {
             comment = "[" + entry.warnings.join("; ") + "]";
         } else if (entry.comment) {
@@ -251,11 +251,10 @@ export default class DXC {
                     }
                 }
             }
-            let entryName = name == entry.name? "" : "   " + entry.name;
             if (entry.attr & DiskInfo.ATTR.SUBDIR) {
-                return dxc.format.sprintf("%-14s %10s   %T%s%s", name, "<DIR>", entry.modified, entryName, comment);
+                return dxc.format.sprintf("%-14s %10s   %T%s", name, "<DIR>", entry.modified, comment);
             } else {
-                return dxc.format.sprintf("%-14s %10d   %T%s%s", name, entry.size, entry.modified, entryName, comment);
+                return dxc.format.sprintf("%-14s %10d   %T%s", name, entry.size, entry.modified, comment);
             }
         }
         //

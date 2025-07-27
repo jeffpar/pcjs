@@ -2882,7 +2882,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
-        "--batch technet.csv --update"
+        "--dir ../pc/disks/msdos.json"
       ],
       "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
