@@ -94,7 +94,7 @@ export class LegacyArc
      * squarely between "Crunch" and "Squash".
      */
     static methodNames = [
-        "Unpack", "Pack", "Squeeze", "Crunch5", "Crunch", "Crunch7", "Crush", "Squash"
+        "Unpack", "Pack", "Squeeze", "Crunch5", "Crunch6", "Crunch7", "Crush", "Squash"
     ];
 
     /**
