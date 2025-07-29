@@ -1003,10 +1003,10 @@ async function main(argc, argv, errors)
                     }
                 }
                 if (handle.item.warnings.length && (!handle.item.volTable || handle.item.volTable.length)) {
-                    if (argv.verbose || handle.item.warnings.length == 1) {
-                        printf("%s: %s\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.join("; "));
+                    if (argv.verbose) {
+                        printf("%s\n%s\n", itemPrinted? "" : entryPath, handle.item.warnings.join("\n"));
                     } else {
-                        printf("%s: %d issue%s detected\n", itemPrinted? "Warning" : entryPath, handle.item.warnings.length);
+                        printf("%s: %d issue%s detected\n", itemPrinted? "\nWarning" : entryPath, handle.item.warnings.length);
                     }
                     nItemWarnings += handle.item.warnings.length;
                 }
