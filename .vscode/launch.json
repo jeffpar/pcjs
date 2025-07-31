@@ -2147,12 +2147,13 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "/pcsigdisks/pcx86/sw/misc/pcsig/2000-2999/DISK2620/archive/DISK2620.ZIP",
+        "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP",
         "--extract",
+        "--normalize",
         "--overwrite",
         "--verbose"
       ],
-      "cwd": "${workspaceFolder}/disks/tmp",
+      "cwd": "${workspaceFolder}/tools/dx/archive/testfiles",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2756,14 +2757,14 @@
       }
     },
     {
-      "name": "dz.js",
+      "name": "dx.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
         "--help"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2776,14 +2777,14 @@
       }
     },
     {
-      "name": "dz.js all",
+      "name": "dx.js all",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
         "-ltr --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/**/*.{ZIP,ARC}"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2796,14 +2797,54 @@
       }
     },
     {
-      "name": "dz.js filter",
+      "name": "dx.js csv",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download*/**/* --fileID=20000001 --itemID=10000001 --setID=1001 --recurse --test --csv ibm.csv"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js dirty",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "-lt --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js filter",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
         "--list --filter squeeze --batch tests/clean-archives.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2816,14 +2857,14 @@
       }
     },
     {
-      "name": "dz.js split",
+      "name": "dx.js split",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
         "--list --filter split --batch tests/dirty-archives.log"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2836,19 +2877,51 @@
       }
     },
     {
-      "name": "dz.js test",
+      "name": "dx.js test",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/dezip/dz.js",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
-        "-ltr --batch tests/dirty-archives.log"
+        "--dir ../pc/disks/msdos.json"
       ],
-      "cwd": "${workspaceFolder}/tools/dezip",
+      "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx import.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/import.js",
+      "args": [
+        "--database software --table files2 --drop test.csv"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx dx.html",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/dx/dx.html",
+      "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
         "group": "utilities",

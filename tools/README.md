@@ -8,6 +8,10 @@ permalink: /tools/
 
 [PC.js](pc/) is a JavaScript command-line application that allows you to start a "headless" PCjs machine with all TTY (eg, INT 0x10) output redirected to your console, along with an automatically generated hard disk containing all the files in your current (or other specified) directory.
 
+### DX.js
+
+[DX.js](dx/) is a JavaScript command-line utility that can read/list/test/extract the contents of assorted archives and disk images, and can recursively process any number of archives/images within other archives/images.  It also offers a variety of output options, like the ability to produce spreadsheets (CSV files), as well as upload scripts for use with the Internet Archive.
+
 ### DiskImage.js
 
 [DiskImage.js](diskimage/) is a JavaScript command-line application that reads/writes PCjs v2 disk images, using the [DiskInfo](../machines/pcx86/modules/v3/diskinfo.js) module to parse the data.  It supersedes the older PCjs [DiskDump](old/diskdump/) utility.

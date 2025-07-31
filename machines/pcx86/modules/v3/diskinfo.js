@@ -1375,8 +1375,6 @@ export default class DiskInfo {
      * understanding of "what would DOS do".  For example, if a disk had 32680 or fewer sectors, supposedly DOS
      * would format it with a 12-bit FAT; otherwise, it would use a 16-bit FAT.
      *
-     * TODO: This function currently only knows how to build FAT12 disk images.  Add support for FAT16 and FAT32.
-     *
      * @this {DiskInfo}
      * @param {DataBuffer} dbDisk
      * @param {string} diskName
@@ -1528,7 +1526,7 @@ export default class DiskInfo {
              * those values, which we will try to honor, but there are no guarantees.
              *
              * Note that nearestPowerOfTwo() serves two purposes: it not only ensures a result that is always a power of 2,
-             * but it also ensures the result is less than or equal the given limit (ie, 64).  Allegedly, sectors/cluster
+             * but it also ensures the result is less than or equal to the given limit (ie, 64).  Allegedly, sectors/cluster
              * CAN be as large as 128 (the largest power of 2 that can fit in a byte), but the sector size would have to be
              * 256 instead of the usual 512, because I don't think cluster sizes > 32K are supported by DOS.  However, I'm
              * not even going to go down that rabbit hole....
@@ -1823,7 +1821,7 @@ export default class DiskInfo {
                  * with one exception: PC DOS 3.00 will still assume FAT12 if total sectors are <= 0x7FA8; in that case,
                  * the signature should remain "2.0", which will have the beneficial side-effect of PC DOS 3.00 honoring
                  * the BPB, after which it will calculate that there are too many clusters to fit on a FAT12 volume, so
-                 * it will set a FAT16 flag.  The relevant code begin at 70:14AE.
+                 * it will set a FAT16 flag.  The relevant code begins at 70:14AE.
                  *
                  * DOS versions 3.10 and higher change the rules again.  For drives with DISKSECS <= 0x7FA8, DOS will
                  * still make certain hard-coded assumptions about the formatting (ie, 12-bit FAT, 4K clusters, 512 directory

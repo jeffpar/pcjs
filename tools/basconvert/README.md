@@ -2,7 +2,7 @@
 layout: page
 title: PCjs BASIC File Conversion Utility
 permalink: /tools/basconvert/
-modules_init:
+modules:
   - import BASFileUI from "/tools/modules/web/basfileui.js";
   - new BASFileUI("convertBAS", "displayBAS");
 ---

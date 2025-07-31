@@ -50,7 +50,7 @@ export default class DataBuffer {
                 this.buffer = init.buffer.slice(start, end);
             }
             else {
-                this.buffer = Buffer.from(init);
+                this.buffer = Buffer.from(init, start || 0, end || init.length);
             }
             this.length = this.buffer.length;
         }
@@ -120,19 +120,13 @@ export default class DataBuffer {
      */
     static concat(buffers, totalLength)
     {
-        if (!Array.isArray(buffers)) {
-            throw new TypeError("Argument must be an array of DataBuffer instances");
-        }
         if (totalLength == undefined) {
             totalLength = buffers.reduce((sum, buffer) => sum + buffer.length, 0);
         }
-        let result = new DataBuffer(totalLength);
         let offset = 0;
+        let result = new DataBuffer(totalLength);
         for (let buffer of buffers) {
-            if (!(buffer instanceof DataBuffer)) {
-                throw new TypeError("All elements in the array must be DataBuffer instances");
-            }
-            result.copy(buffer, offset);
+            buffer.copy(result, offset);
             offset += buffer.length;
         }
         return result;
@@ -146,20 +140,21 @@ export default class DataBuffer {
      * @param {number} [offTarget]
      * @param {number} [offSource]
      * @param {number} [offSourceEnd]
+     * @returns {number} (the number of bytes copied)
      */
     copy(dbTarget, offTarget = 0, offSource = 0, offSourceEnd = this.length)
     {
         if (this.node) {
-            this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
-        } else {
-            let cbCopy = offSourceEnd - offSource;
-            let cbMax = dbTarget.length - offTarget;
-            if (cbCopy > cbMax) cbCopy = cbMax;
-            while (cbCopy-- > 0) {
-                dbTarget.buffer[offTarget++] = this.buffer[offSource++];
-                // dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
-            }
+            return this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
         }
+        let cbCopy = offSourceEnd - offSource;
+        let cbMax = dbTarget.length - offTarget;
+        if (cbCopy > cbMax) cbCopy = cbMax;
+        for (let cb = 0; cb < cbCopy; cb++) {
+            dbTarget.buffer[offTarget++] = this.buffer[offSource++];
+            // dbTarget.writeUInt8(this.readUInt8(offSource++), offTarget++);
+        }
+        return cbCopy;
     }
 
     /**
@@ -241,6 +236,18 @@ export default class DataBuffer {
     }
 
     /**
+     * readInt8(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readInt8(off)
+    {
+        return this.node? this.buffer.readInt8(off) : this.dv.getInt8(off);
+    }
+
+    /**
      * readUInt8(off)
      *
      * @this {DataBuffer}
@@ -251,6 +258,18 @@ export default class DataBuffer {
     {
         return this.buffer[off];
         // return this.node? this.buffer.readUInt8(off) : this.dv.getUint8(off);
+    }
+
+    /**
+     * writeInt8(b, off)
+     *
+     * @this {DataBuffer}
+     * @param {number} b
+     * @param {number} off
+     */
+    writeInt8(b, off)
+    {
+        if (this.node) this.buffer.writeInt8(b, off); else this.dv.setInt8(off, b);
     }
 
     /**
@@ -387,6 +406,30 @@ export default class DataBuffer {
     }
 
     /**
+     * readUInt64LE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readUInt64LE(off)
+    {
+        return this.readUInt32LE(off) + this.readUInt32LE(off + 4) * 0x100000000;
+    }
+
+    /**
+     * readUInt64BE(off)
+     *
+     * @this {DataBuffer}
+     * @param {number} off
+     * @returns {number}
+     */
+    readUInt64BE(off)
+    {
+        return this.readUInt32BE(off) * 0x100000000 + this.readUInt32BE(off + 4);
+    }
+
+    /**
      * toString(encoding, start, end)
      *
      * @this {DataBuffer}
@@ -398,7 +441,17 @@ export default class DataBuffer {
     toString(encoding, start = 0, end = this.length)
     {
         let s = "";
-        if (this.node) {
+        if (encoding == "ucs2be") {
+            //
+            // Node apparently supports "ucs2" as an encoding, but it assumes little-endian (because
+            // that's all v8 supported).  I use the encoding "ucs2be" to make it crystal clear what we
+            // need, and that "ucs2" ain't it.
+            //
+            for (let i = start; i < end - 1; i += 2) {
+                s += String.fromCharCode(this.buffer[i] * 256 + this.buffer[i+1]);
+            }
+        }
+        else if (this.node) {
             s = this.buffer.toString(encoding, start, end);
         } else {
             //
