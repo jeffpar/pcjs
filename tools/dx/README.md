@@ -12,7 +12,7 @@ This directory contains [dx.js](dx.js), a stand-alone JavaScript command-line ut
 
 [dzip.js](dzip.js) uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
 
-To simplify container handling for both command-line and browser clients, the [dxc.js](dxc.js) wrapper class provides functions that call the appropriate container class:
+To simplify container handling for both command-line and browser clients, the [dxc.js](dxc.js) wrapper class provides functions that deal with the appropriate container class:
 
   - *async* open()
   - *async* readDirectory()
@@ -22,11 +22,13 @@ To simplify container handling for both command-line and browser clients, the [d
   - formatHeading()
   - *async* close()
 
+And there's a [test page](test.html) to exercise `dxc.js` container processing in your web browser.
+
 Finally, there are some Python scripts here to assist with [uploading files](#uploading-files-to-the-internet-archive) to the [Internet Archive](https://archive.org).  They are designed for use with the `--upload` option in [dx.js](dx.js).
 
 ### Basic Usage
 
-Here are the prerequisites:
+Here are the prerequisites for command-line operation:
 
   1. Install [Node and NPM](https://nodejs.org)
   2. Clone the [pcjs](https://github.com/jeffpar/pcjs) repository (eg, `git clone https://github.com/jeffpar/pcjs.git`)

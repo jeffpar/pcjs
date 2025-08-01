@@ -200,4 +200,4 @@ Here's a list of the new JavaScript modules:
 
 The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
 
-Last but not least, I've also added a [BASIC Conversion Utility](/tools/basconvert/) page that loads [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).
+Last but not least, I've also added a [BASIC Conversion Utility](/tools/basx/) page that loads [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).

@@ -183,13 +183,13 @@ export default class DXC {
             if (type == 2) {
                 //
                 // If the entry has an array of 'blocks', then display them.  However, we want to display
-                // them "smartly", so for example, any sequence of blocks that is contiguous should appear
+                // them succinctly, so for example, any series of blocks that's contiguous should be listed
                 // as a single range.
                 //
                 // And since the handle item should also have a 'disk' object with 'nCylinders', 'nHeads',
                 // and 'nSectors' properties, we can use those to calculate the C:H:S values of the start and
-                // end values of the starting and ending block of each range, effectively converting blocks
-                // into sector addresses.
+                // end values of the starting and ending block of each range, converting block numbers into
+                // sector addresses.
                 //
                 if (entry.blocks) {
                     let disk = handle.item;
@@ -236,7 +236,7 @@ export default class DXC {
         // a mixture of ARC and ZIP archives, that results in irregular output, so I always display
         // 8 hex digits now.
         //
-        // Also note that ARC file entries do not have an 'attr' field, so we default to 0.
+        // Also note that ARC file entries do not have an 'attr' field, so we default to 0 to avoid "NaN".
         //
         return dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                 name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);

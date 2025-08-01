@@ -1879,7 +1879,7 @@
       "name": "PCjs BASIC Conversion Utility",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/basconvert/",
+      "url": "http://localhost:4000/tools/basx/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -2917,10 +2917,10 @@
       }
     },
     {
-      "name": "dx dx.html",
+      "name": "dx test.html",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:4000/tools/dx/dx.html",
+      "url": "http://localhost:4000/tools/dx/test.html",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,

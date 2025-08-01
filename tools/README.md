@@ -12,6 +12,12 @@ permalink: /tools/
 
 [DX.js](dx/) is a JavaScript command-line utility that can read/list/test/extract the contents of assorted archives and disk images, and can recursively process any number of archives/images within other archives/images.  It also offers a variety of output options, like the ability to produce spreadsheets (CSV files), as well as upload scripts for use with the Internet Archive.
 
+### BASFile.js
+
+[BASFile.js](modules/basfile.js) is a [module](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) used by the [BASX](basx/) page to convert binary and/or encrypted IBM PC BASIC program files to plain-text, with any CP437 non-ASCII characters converted to UTF-8.
+
+The module is also used by [DX.js](dx/) to convert `.BAS` files when extracting with `--in cp437` and `-out utf8`, and by [DiskImage.js](diskimage/) when extracting with `--normalize`.
+
 ### DiskImage.js
 
 [DiskImage.js](diskimage/) is a JavaScript command-line application that reads/writes PCjs v2 disk images, using the [DiskInfo](../machines/pcx86/modules/v3/diskinfo.js) module to parse the data.  It supersedes the older PCjs [DiskDump](old/diskdump/) utility.
@@ -19,10 +25,6 @@ permalink: /tools/
 ### FileImage.js
 
 [FileImage.js](fileimage/) is a JavaScript command-line application that reads/writes PCjs file images, producing JSON-encoded versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](old/filedump/) utility.
-
-### BASIC File Conversion
-
-The [BASConvert](basconvert/) page converts binary and/or encrypted IBM PC BASIC program files to plain-text, with any CP437 non-ASCII characters converted to UTF-8.  The [library](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) is also built into the [DiskImage.js](diskimage/) command-line utility and is used in conjunction with the `--normalize` option.
 
 ### Other Modules
 
@@ -40,7 +42,6 @@ Here are a few other JavaScript modules I've written for the project:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
-  - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v2/charset.js)
 
 The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option uses **BASFile** to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
 
