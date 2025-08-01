@@ -10,9 +10,9 @@
  * Test examples:
  *
  *      cd disks
- *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK1.json --extract --extdir=compaq331
- *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK2.json --extract --extdir=compaq331
- *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK3.json --extract --extdir=compaq331
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK1.json --extract --dest=compaq331
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK2.json --extract --dest=compaq331
+ *      diskimage.js /diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-REVG-720K-DISK3.json --extract --dest=compaq331
  *      for ((t=1; t<=99; t++)); do pc.js compaq331 "load info;chkdsk" --drivetype=$t --sys=compaq:3.31g --test; if [ $? -ne 0 ]; then break; fi; done
  */
 

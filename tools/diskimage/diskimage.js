@@ -395,7 +395,7 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
     let fExtractAll = (typeof sExtraction != "string");
 
     if (sExtraction) {
-        let extractDir = argv['extdir'];
+        let extractDir = argv['dest'];
         if (typeof extractDir != "string") {
             extractDir = "";
         } else if (diskFile.indexOf("http") != 0) {
@@ -1069,7 +1069,7 @@ function processAll(all, argv)
                 if (outdir) {
                     args['output'] = path.join(outdir.replace("%d", path.dirname(sFile)), path.parse(sFile).name + type);
                 }
-                for (let arg of ['drivetype', 'expand', 'extdir', 'extract', 'list', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
+                for (let arg of ['dest', 'drivetype', 'expand', 'extract', 'list', 'manifest', 'normalize', 'overwrite', 'quiet', 'target', 'verbose']) {
                     if (argv[arg] !== undefined) args[arg] = argv[arg];
                 }
                 processArgs(args);
@@ -1249,7 +1249,7 @@ function main(argc, argv)
         };
         let optionsOutput = {
             "--drivetype=[value]":      "set drive type (eg, AT:1 or C:H:S or \"custom\")",
-            "--extdir=[directory]":     "write extracted files to directory",
+            "--dest=[directory]":       "write extracted files to destination directory",
             "--extract (-e)\t":         "extract all files in disks or archives",
             "--extract[=filename]":     "extract specified file in disks or archives",
             "--fat=[value(s)]":         "set FAT type (12 or 16) [:cluster size[:root size]]",
@@ -1281,7 +1281,7 @@ function main(argc, argv)
             }
         }
         printf("\nEnclose option values in quotes if they contain whitespace or wildcards.\n");
-        printf("Some options (eg, --extdir) can also use %d and %f for input directory and file.\n");
+        printf("Some options (eg, --dest) can also use %d and %f for input directory and file.\n");
         return;
     }
 

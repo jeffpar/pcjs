@@ -186,7 +186,7 @@ Here's a list of the new JavaScript modules:
 
   - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
   - [Structure.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/structure.js), a helper class that provides methods for defining and reading on-disk structures
-  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by `StreamZip` that adds support for:
+  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by `StreamZip.js` that adds support for:
       - Packed files (ARC compression format #3)
       - Squeezed files (ARC compression format #4)
       - Crunched files (ARC compression formats #5, #6, and #7)
@@ -198,6 +198,6 @@ Here's a list of the new JavaScript modules:
       - Deflated files (ZIP compression format #8)
   - [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js), a BASIC file de-tokenizer that also performs [PC character conversion](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/v2/charset.js)
 
-The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
+The combination of `StreamZip.js` with `LegacyZip.js` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
 
 Last but not least, I've also added a [BASIC Conversion Utility](/tools/basx/) page that loads [BASFile.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).

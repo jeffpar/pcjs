@@ -16,7 +16,7 @@ permalink: /tools/
 
 [BASFile.js](modules/basfile.js) is a [module](https://github.com/jeffpar/pcjs/tree/master/tools/modules/basfile.js) used by the [BASX](basx/) page to convert binary and/or encrypted IBM PC BASIC program files to plain-text, with any CP437 non-ASCII characters converted to UTF-8.
 
-The module is also used by [DX.js](dx/) to convert `.BAS` files when extracting with `--in cp437` and `-out utf8`, and by [DiskImage.js](diskimage/) when extracting with `--normalize`.
+The module is also used by [DX.js](dx/) when extracting `.BAS` files with `--out utf8`, and by [DiskImage.js](diskimage/) when extracting `.BAS` files with `--normalize`.
 
 ### DiskImage.js
 
@@ -32,18 +32,21 @@ Here are a few other JavaScript modules I've written for the project:
 
   - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
   - [Structure.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/structure.js), a helper class for defining and reading on-disk structures
-  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by **StreamZip** that supports:
-      - Packed files (ARC compression format #3)
-      - Squeezed files (ARC compression format #4)
-      - Crunched files (ARC compression formats #5, #6, and #7)
-      - Crushed files (ARC compression format #8)
-      - Squashed files (ARC compression format #9)
-      - Shrinked files (ZIP compression format #1)
-      - Reduced files (ZIP compression formats #2, #3, #4, and #5)
-      - Imploded files (ZIP compression format #6)
-      - Deflated files (ZIP compression format #8)
+  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by `StreamZip.js`
 
-The [DiskImage.js](diskimage/) `--arc` and `--zip` options use **StreamZip** along with **LegacyZip** to decompress old ARC or ZIP archives, and the `--normalize` option uses **BASFile** to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
+The `LegacyZip.js` library adds support for:
+
+  - Packed files (ARC compression format #3)
+  - Squeezed files (ARC compression format #4)
+  - Crunched files (ARC compression formats #5, #6, and #7)
+  - Crushed files (ARC compression format #8)
+  - Squashed files (ARC compression format #9)
+  - Shrinked files (ZIP compression format #1)
+  - Reduced files (ZIP compression formats #2, #3, #4, and #5)
+  - Imploded files (ZIP compression format #6)
+  - Deflated files (ZIP compression format #8)
+
+The [DiskImage.js](diskimage/) `--arc` and `--zip` options use `StreamZip.js` along with `LegacyZip.js` to decompress old ARC or ZIP archives, and the `--normalize` option uses `BASFile.js` to convert old IBM PC BASIC files to plain-text during the extraction/decompression process.
 
 If you find any ARC, ZIP, or BAS files can't be decompressed or converted, [let me know](mailto:Jeff@pcjs.org).
 

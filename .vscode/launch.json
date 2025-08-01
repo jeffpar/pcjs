@@ -1974,7 +1974,7 @@
       "args": [
         "https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json",
         "--extract",
-        "--extdir",
+        "--dest",
         "foo"
       ],
       // The working directory of the program.
@@ -2035,7 +2035,7 @@
         "--normalize",
         "--overwrite",
         "--verbose",
-        "--extdir=%d",
+        "--dest=%d",
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -2126,7 +2126,7 @@
         "--arc=CSRC.ARC",
         "--verbose",
         "--extract",
-        "--extdir=CSRC",
+        "--dest=CSRC",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}/disks/tmp",
@@ -2307,7 +2307,7 @@
         "/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP",
         "--list",
         "--extract",
-        "--extdir=foo",
+        "--dest=foo",
         "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc/disks",
