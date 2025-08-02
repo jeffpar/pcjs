@@ -12,7 +12,7 @@ This directory contains [dx.js](dx.js), a stand-alone JavaScript command-line ut
 
 [dzip.js](dzip.js) uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
 
-To simplify container handling for both command-line and browser clients, the [dxc.js](dxc.js) wrapper class provides functions that call the appropriate container class:
+To simplify container handling for both command-line and browser clients, the [dxc.js](dxc.js) wrapper class provides functions that deal with the appropriate container class, based on the container's extension (eg, `.zip`, `.iso`, etc):
 
   - *async* open()
   - *async* readDirectory()
@@ -22,11 +22,13 @@ To simplify container handling for both command-line and browser clients, the [d
   - formatHeading()
   - *async* close()
 
+And there's a [test page](test.html) to exercise `dxc.js` container processing in your web browser.
+
 Finally, there are some Python scripts here to assist with [uploading files](#uploading-files-to-the-internet-archive) to the [Internet Archive](https://archive.org).  They are designed for use with the `--upload` option in [dx.js](dx.js).
 
 ### Basic Usage
 
-Here are the prerequisites:
+Here are the prerequisites for command-line operation:
 
   1. Install [Node and NPM](https://nodejs.org)
   2. Clone the [pcjs](https://github.com/jeffpar/pcjs) repository (eg, `git clone https://github.com/jeffpar/pcjs.git`)
@@ -79,7 +81,7 @@ Here is the complete help text:
 
 In 2018 and 2019, I digitized lots of CD-ROMs, including hundreds of Microsoft TechNet CD-ROMs, with the intention of eventually uploading them to the Internet Archive.  However, I was unfamiliar with the process *and* I wanted to avoid uploading images that already existed in the archive, so it wasn't until 2025, with the help of this utility, that I finally began looking for gaps that I could help fill in the Internet Archive's collection.
 
-I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `dx.js` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
+I started by using this utility's `--csv` option to produce a spreadsheet of all my own TechNet CDs, then with the help of the Internet Archive's [Python Package](https://archive.org/developers/quick-start-pip.html) and a [search.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/search.py) script, I produced a list of TechNet CDs already in the Archive.  I fed that list into `dx.js` using the `--batch` option and appended the results to the same spreadsheet using `--csv` again.
 
 Then I added an `--upload` option to sort the CDs in my spreadsheet by volume name, number of entries on the volume, etc, filter out all the duplicates, and then generate a `bash` script to upload the remaining items.
 
@@ -92,8 +94,8 @@ Here's a stripped-down example of what `--upload` produces:
     python upload.py ms-technet-armefpp_en "Microsoft TechNet ARMEFPP_EN Disc (March 2005)" 2005-03-25 desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
     rm desc.txt ARMEFPP_EN.iso ARMEFPP_EN.png
 
-The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](upload.py) to create a new item in the Internet Archive.
+The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/upload.py) to create a new item in the Internet Archive.
 
-Later, I added an `--update` option to generate another `bash` script that calls [update.py](update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.  For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, often by one month or more.
+Later, I added an `--update` option to generate another `bash` script that calls [update.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.  For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, often by one month or more.
 
 The upload of TechNet CDs is now complete, and you can browse the results [here](https://archive.org/details/@jeffpar).

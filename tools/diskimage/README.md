@@ -158,25 +158,25 @@ Finally, support for the ARC file format (ZIP's predecessor) is now available.  
 
 ### Extracting Files from PCjs Disk Images
 
-You can extract the contents of a single disk image to your current directory, or to a specific directory using `--extdir`:
+You can extract the contents of a single disk image to your current directory, or to a specific directory using `--dest`:
 
     diskimage.js DISK0001.IMG --extract
-    diskimage.js DISK0001.IMG --extract --extdir=tmp
+    diskimage.js DISK0001.IMG --extract --dest=tmp
 
 You can also extract the contents of an entire collection of disk images, placing the contents of each either in the same directory as the original disk image or in a specific directory:
 
-    diskimage.js --all="*.IMG" --extract --extdir=%d
-    diskimage.js --all="*.IMG" --extract --extdir=tmp
+    diskimage.js --all="*.IMG" --extract --dest=%d
+    diskimage.js --all="*.IMG" --extract --dest=tmp
 
 You can also expand any `ZIP` files during the extraction process, by including the `--expand` option:
 
-    diskimage.js --all="*.IMG" --extract --expand --extdir=tmp
+    diskimage.js --all="*.IMG" --extract --expand --dest=tmp
 
 Also, while the `--normalize` option was originally created to "normalize" files *read* from the host (eg, to convert LF to CR/LF in text files), it can also be used during extraction now, when files are being *written* to the host.
 
 For example, if you want any filenames with CP437 characters to be created properly on the host, or you want the contents of any CP437 text files, BASIC files, etc, to be stored in readable form on the host, use the `--normalize` option along with the `--extract` option; eg:
 
-    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --extract --expand --normalize --extdir=tmp
+    diskimage.js --all="/Volumes/PCSIG_13B/**/*.ZIP" --extract --expand --normalize --dest=tmp
 
 In addition to converting line-endings back from CR/LF to LF, `--normalize` will also convert any tokenized `.BAS` files to plain-text UTF-8 files on the host, as well as decrypt any `.BAS` files that have been "protected" by `BASIC` with the `P` option of the `SAVE` command.
 
@@ -236,7 +236,7 @@ To display the contents of a specific file in a disk image:
 
 To extract files from a disk image into a specific directory (eg, tmp):
 
-    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --extdir=tmp
+    diskimage.js https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json --extract --dest=tmp
 
 To dump a specific (C:H:S) sector from a disk image:
 

@@ -1,8 +1,9 @@
 ---
 layout: page
 title: PCjs BASIC File Conversion Utility
-permalink: /tools/basconvert/
-modules:
+permalink: /tools/basx/
+redirect_from: /tools/basconvert
+module_scripts:
   - import BASFileUI from "/tools/modules/web/basfileui.js";
   - new BASFileUI("convertBAS", "displayBAS");
 ---
