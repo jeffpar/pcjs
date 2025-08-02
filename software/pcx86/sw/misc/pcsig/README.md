@@ -16,7 +16,7 @@ machines:
       A: None
       B: "PC-SIG Library Disk #0001"
     autoType: DATE $date\rTIME $time\rDIR B:\r
-modules:
+module_scripts:
   - import DiskSearch from "/tools/modules/web/disksearch.js";
   - new DiskSearch("https://pcsigdisks.pcjs.org/pcx86/diskettes.json", "diskSearch", "diskResults", "pcsig");
 ---

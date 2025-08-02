@@ -3,7 +3,7 @@ layout: page
 title: PCjs Machine Utility
 permalink: /tools/pc/
 redirect_from: /machines/pcx86/modules/bin/
-modules:
+module_scripts:
   - import PC from "/tools/pc/pc.js";
   - new PC("terminal", "fetch https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json msdos;build msdos chkdsk;start");
 ---
