@@ -10,7 +10,7 @@ This directory contains [dx.js](dx.js), a stand-alone JavaScript command-line ut
   - [disk.js](disk.js) (to read IMG and JSON-encoded disk images used by PCjs)
   - [iso.js](iso.js) (to read ISO, MDF, and other ISO 9660 disc images)
 
-[dzip.js](dzip.js) uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
+[dzip.js](dzip.js) in turn uses the `LegacyARC` and `LegacyZIP` classes in [legacy.js](legacy.js), which add support for compression methods older than `deflate`, which is the only compression method that modern `zlib`-based utilities support.
 
 To simplify container handling for both command-line and browser clients, the [dxc.js](dxc.js) wrapper class provides functions that deal with the appropriate container class, based on the container's extension (eg, `.zip`, `.iso`, etc):
 
@@ -96,6 +96,6 @@ Here's a stripped-down example of what `--upload` produces:
 
 The upload script modifies my original image filename to match the disc's volume name (since no one else cares about my personal naming scheme), includes any matching photo image, and then passes that information to [upload.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/upload.py) to create a new item in the Internet Archive.
 
-Later, I added an `--update` option to generate another `bash` script that calls [update.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.  For the initial dates, I had relied on the `Creation Date` stored in the CD-ROM volume descriptor.  Unfortunately, `Creation Date` usually pre-dated whatever Microsoft ultimately printed on the face of the CD-ROM, often by one month or more.
+Later, I added an `--update` option to generate another `bash` script that calls [update.py](https://github.com/jeffpar/pcjs/blob/master/tools/dx/update.py) to update selected metadata (eg, *title* and *description*).  After generating the initial script, I modified it by hand, changing all the title dates to match those printed on the faces of the CDs.  For the initial dates, I had relied on the `Creation Date` field stored in the CD-ROM volume descriptor, but unfortunately, that date usually pre-dated whatever Microsoft ultimately printed on the face of the CD, often by one month or more.
 
 The upload of TechNet CDs is now complete, and you can browse the results [here](https://archive.org/details/@jeffpar).
