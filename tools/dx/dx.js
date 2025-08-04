@@ -1373,7 +1373,7 @@ async function main(argc, argv, errors)
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                         }
-                        if (db && dumpFile) {
+                        if (db && (dumpFile || argv.test)) {
                             if (convertText == 1) {
                                 db = BASFile.normalize(db, true);
                             }
