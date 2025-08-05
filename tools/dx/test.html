@@ -18,7 +18,11 @@
   <div>
     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
       <input type="text" id="urlInput" placeholder="Enter file URL" style="flex: 1; padding: 5px;">
-      <button id="dxButton">Read File</button>
+      <button id="dxFetch">Fetch</button>
+    </div>
+    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+      <input type="file" id="fileInput">
+      <button id="dxUpload">Upload</button>
     </div>
     <div style="display: flex; gap: 10px; margin-bottom: 10px;">
       <textarea id="dxOutput" readonly></textarea>
@@ -28,45 +32,62 @@
     import Format from "./format.js";
     import DXC from "./dxc.js";
     import * as pako from "./pako.esm.mjs";
-    document.getElementById('dxButton').addEventListener('click', async () => {
-      const dxc = new DXC({
-          fetch: window.fetch.bind(window),
-          inflateSync: pako.inflateRaw
-      });
-      const format = new Format();
-      const printf = function(...args) {
-          let s = format.sprintf(...args);
-          dxOutput.value += s;
-      };
-      let readItem = async function(name, db = null, parent = "") {
-          let handle = await dxc.open(name, db);
-          if (!handle) {
-              printf("Failed to open item\n");
-              return;
-          }
-          if (!db) {
-              printf("%s\n", dxc.formatHeading(handle, parent));
-          }
-          let entries = await dxc.readDirectory(handle);
-          for (let entry of entries) {
-              if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
-                  continue;
-              }
-              printf("%s\n", dxc.formatEntry(handle, entry, 0, parent));
-              if (entry.name.match(/\.(zip|arc)$/i)) {
-                  let db = await dxc.readFile(handle, entry);
-                  await readItem(entry.name, db, parent? parent + "/" + entry.name : entry.name);
-              }
-          }
-          dxc.close(handle);
-      }
+    const dxc = new DXC({
+        fetch: window.fetch.bind(window),
+        inflateSync: pako.inflateRaw
+    });
+    const format = new Format();
+    const printf = function(...args) {
+        let s = format.sprintf(...args);
+        dxOutput.value += s;
+    };
+    let readItem = async function(name, db = null, parent = "") {
+        let handle = await dxc.open(name, db);
+        if (!handle) {
+            printf("Failed to open item\n");
+            return;
+        }
+        if (!parent) {
+            printf(dxc.formatHeading());
+        }
+        let entries = await dxc.readDirectory(handle);
+        for (let entry of entries) {
+            if ((entry.attr & 0x10) || entry.name.endsWith("/")) {
+                continue;
+            }
+            printf("%s\n", dxc.formatEntry(handle, entry, 0, parent));
+            if (entry.name.match(/\.(zip|arc)$/i)) {
+                let db = await dxc.readFile(handle, entry);
+                await readItem(entry.name, db, parent? parent + "/" + entry.name : entry.name);
+            }
+        }
+        dxc.close(handle);
+    }
+    document.getElementById('dxFetch').addEventListener('click', async () => {
       const urlInput = document.getElementById('urlInput');
       const urlItem = urlInput.value.trim() || "https://discmaster.textfiles.com/file/30018/wbiz0340-0349/wbiz0349.tar/wbiz0349/BRIEF-2.ZIP";
       try {
-          printf("Fetching %s\n", urlItem);
+          printf("\nFetching %s\n", urlItem);
           await readItem(urlItem);
       } catch (error) {
           printf("Error: %s\n", error.message);
+      }
+    });
+    document.getElementById('dxUpload').addEventListener('click', function() {
+      const fileInput = document.getElementById('fileInput');
+      if (fileInput.files.length === 0) return;
+      const file = fileInput.files[0];
+      const name = file.name;
+      const reader = new FileReader();
+      try {
+        printf("\nReading %s\n", name);
+        reader.onload = function(e) {
+          const buffer = e.target.result;
+          readItem(name, buffer);
+        };
+        reader.readAsArrayBuffer(file);
+      } catch (error) {
+        printf("Error: %s\n", error.message);
       }
     });
   </script>

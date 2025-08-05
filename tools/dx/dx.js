@@ -379,28 +379,6 @@ function displayFile(name, encoding, db, dump = false)
 }
 
 /**
- * enquote(string)
- *
- * @param {string} string
- * @returns {string}
- */
-function enquote(string) {
-    //
-    // Enquote a string for CSV output, but only if necessary.
-    //
-    // We use the "double-quote" character as the quote character, and escape any double-quotes
-    // in the string with another double-quote.
-    //
-    if (!string) {
-        return "";
-    }
-    if (string.match(/[\r\n,"]/)) {
-        string = '"' + string.replace(/"/g, '""') + '"';
-    }
-    return string;
-}
-
-/**
  * getPhotoInfo(basePath, baseExt)
  *
  * @param {string} basePath
@@ -769,31 +747,6 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         itemList.push({path: argv[i]});
     }
-    //
-    // If CSV output is enabled, then open the specified file for writing.
-    //
-    let csv;
-    if (argv.csv) {
-        try {
-            csv = await fs.open(argv.csv, "a");
-            let stats = await fs.stat(argv.csv);
-            if (!stats.size) {
-                await csv.write("fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n");
-            }
-        } catch (error) {
-            printf("%s: %s\n", argv.csv, error.message);
-            nErrors++;
-        }
-    }
-    if (nErrors) {
-        return;
-    }
-    let dumpItem = false;
-    if (!itemList.length && argv.dump) {
-        itemList.push({path: argv.dump});
-        dumpItem = true;
-        delete argv.dump;
-    }
     let bannerHashes = {};
     let listing = argv.dir || argv.list;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
@@ -821,6 +774,32 @@ async function main(argc, argv, errors)
         encoding: incoding,                 // input encoding (default is "cp437")
         debug: argv.debug                   // enable debug mode (includes additional warnings)
     });
+    //
+    // If CSV output is enabled, then open the specified file for writing.
+    //
+    let csv;
+    if (argv.csv) {
+        try {
+            csv = await fs.open(argv.csv, "a");
+            let stats = await fs.stat(argv.csv);
+            if (!stats.size) {
+                let heading = dxc.formatHeading(3);
+                await csv.write(heading);
+            }
+        } catch (error) {
+            printf("%s: %s\n", argv.csv, error.message);
+            nErrors++;
+        }
+    }
+    if (nErrors) {
+        return;
+    }
+    let dumpItem = false;
+    if (!itemList.length && argv.dump) {
+        itemList.push({path: argv.dump});
+        dumpItem = true;
+        delete argv.dump;
+    }
     //
     // Define a function to process an individual container item, which then allows us to recursively process
     // nested containers if --recurse is been specified.
@@ -892,65 +871,6 @@ async function main(argc, argv, errors)
             //
             [itemPhoto, widthPhoto, heightPhoto] = await getPhotoInfo(itemPath, itemExt);
         }
-        let printCSV = function(entry, db, entryVolume) {
-            let entryID = entry.source? itemID : fileID++;
-            let entryName = entry.name;
-            let entryPath = itemPath;
-            let entryPhoto = null, entryThumb = null;
-            let entryMethod = entry.methodName || entry.source;
-            let comment = entry.comment || "";
-            let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
-            let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "";
-            let newest = "", entries = 0;
-            //
-            // If we're being passed an item object rather than an entry object, then entryName
-            // will also be the same as the entryPath; reduce them.
-            //
-            if (entry.source) {
-                if (!entryVolume) {
-                    entryVolume = fromPCJS[entryName];
-                    if (entryVolume) {
-                        entryVolume = path.basename(entryVolume);
-                    }
-                }
-                entryName = path.basename(entryName);
-                entryPath = path.dirname(entryPath);
-                entryPhoto = itemPhoto;
-                if (entryPhoto && !entryPhoto.match(/^https?:\/\//)) {
-                    entryPhoto = path.basename(entryPhoto);
-                }
-                entryThumb = itemThumb;
-                if (entryThumb && !entryThumb.match(/^https?:\/\//)) {
-                    entryThumb = path.basename(entryThumb);
-                }
-                newest = entry.newestFileTime? format.sprintf("%T", new Date(entry.newestFileTime)) : "";
-                entries = entry.totalFiles;
-            }
-            //
-            // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
-            // if so, then strip all the path components prior to "**" from entryPath.
-            //
-            if (argv.path) {
-                if (argv.pcjs) {
-                    entryPath = path.join("/pcjs", entryPath);
-                } else {
-                    let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
-                    if (doubleWild) {
-                        let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
-                        entryPath = entryPath.replace(regex, "");
-                    }
-                }
-            }
-            //
-            // CSV fields: fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings
-            //
-            let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                entryID, itemID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
-                entryMethod, enquote(entryVolume), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
-            );
-            return line;
-        };
         let printHeading = function(entry, isFile, isNested) {
             let entryPath, fullPath = "";
             let continued = nItemFiles > 0? " (continued)" : "";
@@ -1025,7 +945,7 @@ async function main(argc, argv, errors)
                         }
                     }
                     else {
-                        printf("%s\n", dxc.formatHeading(handle));
+                        printf("\n%s", dxc.formatHeading());
                     }
                 }
             }
@@ -1206,15 +1126,54 @@ async function main(argc, argv, errors)
                 //
                 // Update item stats
                 //
-                handle.item.newestFileTime = 0;
-                handle.item.totalFiles = entries.length;
+                let item = handle.item;
+                item.newestFileTime = 0;
+                item.totalFiles = entries.length;
                 for (let entry of entries) {
                     let fileTime = entry.modified.getTime();
-                    if (handle.item.newestFileTime < fileTime) {
-                        handle.item.newestFileTime = fileTime;
+                    if (item.newestFileTime < fileTime) {
+                        item.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(printCSV(handle.item, handle.item.db, handle.label));
+                item.volume = handle.label;
+                if (!item.volume) {
+                    item.volume = fromPCJS[item.name];
+                    if (item.volume) {
+                        item.volume = path.basename(item.volume);
+                    }
+                }
+                //
+                // Instead of outputting handle.name as-is, let's see if argv.path contains a "**" pattern;
+                // if so, then strip all the path components prior to "**" from handle.name.
+                //
+                // if (argv.path) {
+                //     if (argv.pcjs) {
+                //         handle.name = path.join("/pcjs", handle.name);
+                //     } else {
+                //         let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
+                //         if (doubleWild) {
+                //             let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
+                //             handle.name = handle.name.replace(regex, "");
+                //         }
+                //     }
+                // }
+                //
+                // Do a photo/thumb lookup and attach the results (if any) to the item
+                //
+                item.photo = itemPhoto;
+                if (item.photo && !item.photo.match(/^https?:\/\//)) {
+                    item.photo = path.basename(item.photo);
+                }
+                item.thumb = itemThumb;
+                if (item.thumb && !item.thumb.match(/^https?:\/\//)) {
+                    item.thumb = path.basename(item.thumb);
+                }
+                item.fileID = itemID;
+                item.itemID = itemID;
+                item.setID = setID;
+                item.hash = (item.db && item.db.length? crypto.createHash('md5').update(item.db.buffer).digest('hex') : "");
+                let line = dxc.formatEntry(handle, item, 3);
+                await csv.write(line);
             }
             if (argv.upload || argv.update) {
                 printScript();
@@ -1398,7 +1357,12 @@ async function main(argc, argv, errors)
                         entry.methodName += '*';
                     }
                     if (argv.csv) {
-                        await csv.write(printCSV(entry, db, handle.label));
+                        entry.fileID = fileID++;
+                        entry.itemID = itemID;
+                        entry.setID = setID;
+                        entry.hash = (db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "");
+                        let line = dxc.formatEntry(handle, entry, 3);
+                        await csv.write(line);
                     }
                     else if (dirListing) {
                         if (dirLimit) {

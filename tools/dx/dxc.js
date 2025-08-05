@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import DataBuffer from "./db.js";
 import DZip from "./dzip.js";
 import Disk from "./disk.js";
 import ISO from "./iso.js";
@@ -51,14 +52,19 @@ export default class DXC {
      * If successful, this method returns a Handle object used with our other high-level methods;
      * eg, readDirectory(), readFile(), and close().
      *
+     * The db parameter can be used if the named item has already been read into a buffer, and
+     * although a DataBuffer is preferred, we will automatically convert any supported data type
+     * (eg, ArrayBuffer) into a DataBuffer.
+     *
      * @this {DXC}
      * @param {string} name
-     * @param {DataBuffer} [db]
+     * @param {*} [db]
      * @param {*} [options]
      * @returns {Handle}
      */
     async open(name, db = null, options = {})
     {
+        let dxc = this;
         let handle = {
             name,
             label: "",
@@ -68,18 +74,21 @@ export default class DXC {
         };
         if (name.match(/\.(zip|arc)$/i)) {
             handle.isArchive = true;
-            handle.class = this.dzip;
+            handle.class = dxc.dzip;
         }
         if (name.match(/\.(img|json)$/i)) {
             handle.isDisk = true;
-            handle.class = this.disk;
+            handle.class = dxc.disk;
         }
         if (name.match(/\.(iso|mdf|bin|cdr)$/i) || options.agnostic) {
             handle.isDisk = true;
-            handle.class = this.iso;
+            handle.class = dxc.iso;
         }
         if (!handle.class) {
             throw new Error(`Unrecognized container extension`);
+        }
+        if (db) {
+            db = new DataBuffer(db);
         }
         handle.item = await handle.class.open(name, db, options);
         return handle;
@@ -124,6 +133,30 @@ export default class DXC {
     }
 
     /**
+     * enquote(string)
+     *
+     * @this {DXC}
+     * @param {string} string
+     * @returns {string}
+     */
+    enquote(string)
+    {
+        //
+        // Enquote a string for CSV output, but only if necessary.
+        //
+        // We use the "double-quote" character as the quote character, and escape any double-quotes
+        // in the string with another double-quote.
+        //
+        if (!string) {
+            return "";
+        }
+        if (string.match(/[\r\n,"]/)) {
+            string = '"' + string.replace(/"/g, '""') + '"';
+        }
+        return string;
+    }
+
+    /**
      * filterEntry(handle, entry, filespec)
      *
      * @this {DXC}
@@ -147,13 +180,13 @@ export default class DXC {
      * @this {DXC}
      * @param {Handle} handle
      * @param {Entry} entry
-     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map)
+     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map, 3 for CSV format)
      * @param {string} [parent]
      * @returns {string}
      */
     formatEntry(handle, entry, type = 0, parent = "")
     {
-        let dxc = this;
+        let dxc = this, line;
         let name = entry.name;
         let matchName = name.match(/([^/]+)\/?$/);
         if (matchName) {
@@ -179,7 +212,19 @@ export default class DXC {
             }
         }
         if (comment.length) comment = "  " + comment;
-        if (type) {
+        if (!type) {
+            //
+            // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
+            // using "%0*x" instead of "%08x" and passing 4 for ARC and 8 for ZIP, but when archives contain
+            // a mixture of ARC and ZIP archives, that results in irregular output, so I always display
+            // 8 hex digits now.
+            //
+            // Also note that ARC file entries do not have an 'attr' field, so we default to 0 to avoid "NaN".
+            //
+            line = dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
+                    name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
+        }
+        else if (type < 3) {
             if (type == 2) {
                 //
                 // If the entry has an array of 'blocks', then display them.  However, we want to display
@@ -225,36 +270,40 @@ export default class DXC {
                 }
             }
             if (entry.attr & DiskInfo.ATTR.SUBDIR) {
-                return dxc.format.sprintf("%-14s %10s   %T%s", name, "<DIR>", entry.modified, comment);
+                line = dxc.format.sprintf("%-14s %10s   %T%s", name, "<DIR>", entry.modified, comment);
             } else {
-                return dxc.format.sprintf("%-14s %10d   %T%s", name, entry.size, entry.modified, comment);
+                line = dxc.format.sprintf("%-14s %10d   %T%s", name, entry.size, entry.modified, comment);
             }
         }
-        //
-        // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
-        // using "%0*x" instead of "%08x" and passing 4 for ARC and 8 for ZIP, but when archives contain
-        // a mixture of ARC and ZIP archives, that results in irregular output, so I always display
-        // 8 hex digits now.
-        //
-        // Also note that ARC file entries do not have an 'attr' field, so we default to 0 to avoid "NaN".
-        //
-        return dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
-                name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
+        else {
+            let comment = entry.comment || "";
+            let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
+            let newest = entry.newestFileTime? dxc.format.sprintf("%T", new Date(entry.newestFileTime)) : "";
+            line = dxc.format.sprintf(
+                "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+                entry.fileID || 0, entry.itemID || 0, entry.setID || 0, entry.hash || "", entry.modified, newest, entry.totalFiles || 0, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
+                entry.methodName || entry.source, dxc.enquote(entry.volume), dxc.enquote(handle.name), dxc.enquote(entry.name), dxc.enquote(entry.photo), (entry.photo && entry.widthPhoto? entry.widthPhoto + 'x' + entry.heightPhoto : ""), dxc.enquote(entry.thumb), dxc.enquote(comment), dxc.enquote(warnings)
+            );
+        }
+        return line;
     }
 
     /**
-     * formatHeading(handle, parent)
+     * formatHeading(type)
      *
      * @this {DXC}
-     * @param {Handle} handle
-     * @param {string} [parent]
+     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map, 3 for CSV format)
      * @returns {string}
      */
-    formatHeading(handle, parent = "")
+    formatHeading(type = 0)
     {
-        let s = "\n";
-        s += "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
-        s += "--------         --------    --------   ------   -----  ----  ----       ----      ---";
+        let s;
+        if (!type) {
+            s =  "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
+            s += "--------         --------    --------   ------   -----  ----  ----       ----      ---\n";
+        } else if (type == 3) {
+            s = "fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n";
+        }
         return s;
     }
 
