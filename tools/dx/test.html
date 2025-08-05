@@ -48,7 +48,7 @@
             return;
         }
         if (!parent) {
-            printf(dxc.formatHeading());
+            printf("\n%s", dxc.formatHeading());
         }
         let entries = await dxc.readDirectory(handle);
         for (let entry of entries) {
