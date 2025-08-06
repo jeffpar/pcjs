@@ -713,11 +713,10 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let pathArg = argv.path;
-        if (pathArg[0] == '~') {
-            pathArg = path.join(process.env.HOME, pathArg.slice(1));
+        if (argv.path[0] == '~') {
+            argv.path = path.join(process.env.HOME, argv.path.slice(1));
         }
-        let items = glob.sync(pathArg, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
+        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
@@ -783,7 +782,7 @@ async function main(argc, argv, errors)
             csv = await fs.open(argv.csv, "a");
             let stats = await fs.stat(argv.csv);
             if (!stats.size) {
-                let heading = dxc.formatHeading(3);
+                let heading = dxc.formatHeading(DXC.FORMAT.CSV);
                 await csv.write(heading);
             }
         } catch (error) {
@@ -1143,36 +1142,44 @@ async function main(argc, argv, errors)
                     }
                 }
                 //
-                // Instead of outputting handle.name as-is, let's see if argv.path contains a "**" pattern;
-                // if so, then strip all the path components prior to "**" from handle.name.
+                // Instead of outputting handle.name as-is, let's see if argv.path contains wildcards;
+                // if so, then strip all the path components prior to them from handle.name.
                 //
-                // if (argv.path) {
-                //     if (argv.pcjs) {
-                //         handle.name = path.join("/pcjs", handle.name);
-                //     } else {
-                //         let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
-                //         if (doubleWild) {
-                //             let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
-                //             handle.name = handle.name.replace(regex, "");
-                //         }
-                //     }
-                // }
+                if (argv.path) {
+                    if (argv.pcjs) {
+                        handle.name = path.join("/pcjs", handle.name);
+                    } else {
+                        let matchWild = argv.path.match(/^(.*?\/)[^/]*\*/);
+                        if (matchWild) {
+                            let regex = new RegExp("^" + matchWild[1].replace(/\*/g, "[^/]*"));
+                            handle.name = handle.name.replace(regex, "");
+                        }
+                    }
+                }
                 //
                 // Do a photo/thumb lookup and attach the results (if any) to the item
                 //
-                item.photo = itemPhoto;
-                if (item.photo && !item.photo.match(/^https?:\/\//)) {
-                    item.photo = path.basename(item.photo);
+                if (itemPhoto) {
+                    item.photo = itemPhoto;
+                    if (item.photo && !item.photo.match(/^https?:\/\//)) {
+                        item.photo = path.basename(item.photo);
+                    }
+                    if (widthPhoto) {
+                        item.widthPhoto = widthPhoto;
+                        item.heightPhoto = heightPhoto;
+                    }
                 }
-                item.thumb = itemThumb;
-                if (item.thumb && !item.thumb.match(/^https?:\/\//)) {
-                    item.thumb = path.basename(item.thumb);
+                if (itemThumb) {
+                    item.thumb = itemThumb;
+                    if (item.thumb && !item.thumb.match(/^https?:\/\//)) {
+                        item.thumb = path.basename(item.thumb);
+                    }
                 }
                 item.fileID = itemID;
                 item.itemID = itemID;
                 item.setID = setID;
                 item.hash = (item.db && item.db.length? crypto.createHash('md5').update(item.db.buffer).digest('hex') : "");
-                let line = dxc.formatEntry(handle, item, 3);
+                let line = dxc.formatEntry(handle, item, DXC.FORMAT.CSV);
                 await csv.write(line);
             }
             if (argv.upload || argv.update) {
@@ -1361,13 +1368,13 @@ async function main(argc, argv, errors)
                         entry.itemID = itemID;
                         entry.setID = setID;
                         entry.hash = (db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "");
-                        let line = dxc.formatEntry(handle, entry, 3);
+                        let line = dxc.formatEntry(handle, entry, DXC.FORMAT.CSV);
                         await csv.write(line);
                     }
                     else if (dirListing) {
                         if (dirLimit) {
                             if (dirLimit > 1 || dirLimit < 0) {
-                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? 2 : 1));
+                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? DXC.FORMAT.XDIR : DXC.FORMAT.DIR));
                             } else if (dirLimit == 1) {
                                 printf("...\n");
                             }

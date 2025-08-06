@@ -31,6 +31,13 @@ export default class DXC {
         UNIQUE:         0x10000
     };
 
+    static FORMAT = {
+        LIST: 0,                        // archive aka "PKZIP" format
+        DIR:  1,                        // directory format
+        XDIR: 3,                        // directory format with extended information (eg, sector details)
+        CSV:  4                         // CSV format
+    };
+
     /**
      * constructor(interfaces, interfaceOptions)
      *
@@ -180,7 +187,7 @@ export default class DXC {
      * @this {DXC}
      * @param {Handle} handle
      * @param {Entry} entry
-     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map, 3 for CSV format)
+     * @param {number} [type] (see DXC.FORMAT values)
      * @param {string} [parent]
      * @returns {string}
      */
@@ -212,7 +219,7 @@ export default class DXC {
             }
         }
         if (comment.length) comment = "  " + comment;
-        if (!type) {
+        if (!type) {    // DXC.FORMAT.LIST
             //
             // Originally, I limited CRC output to either 4 or 8 hex digits based on the archive type,
             // using "%0*x" instead of "%08x" and passing 4 for ARC and 8 for ZIP, but when archives contain
@@ -224,8 +231,8 @@ export default class DXC {
             line = dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
                     name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
         }
-        else if (type < 3) {
-            if (type == 2) {
+        else if (type & DXC.FORMAT.DIR) {
+            if (type == DXC.FORMAT.XDIR) {
                 //
                 // If the entry has an array of 'blocks', then display them.  However, we want to display
                 // them succinctly, so for example, any series of blocks that's contiguous should be listed
@@ -275,7 +282,7 @@ export default class DXC {
                 line = dxc.format.sprintf("%-14s %10d   %T%s", name, entry.size, entry.modified, comment);
             }
         }
-        else {
+        else {          // DXC.FORMAT.CSV
             let comment = entry.comment || "";
             let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
             let newest = entry.newestFileTime? dxc.format.sprintf("%T", new Date(entry.newestFileTime)) : "";
@@ -292,16 +299,16 @@ export default class DXC {
      * formatHeading(type)
      *
      * @this {DXC}
-     * @param {number} [type] (0 for archive format, 1 for directory format, 2 for directory format with sector map, 3 for CSV format)
+     * @param {number} [type] (see DXC.FORMAT values)
      * @returns {string}
      */
     formatHeading(type = 0)
     {
-        let s;
-        if (!type) {
+        let s = "";
+        if (!type) {    // DXC.FORMAT.LIST
             s =  "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
             s += "--------         --------    --------   ------   -----  ----  ----       ----      ---\n";
-        } else if (type == 3) {
+        } else if (type == DXC.FORMAT.CSV) {
             s = "fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n";
         }
         return s;
