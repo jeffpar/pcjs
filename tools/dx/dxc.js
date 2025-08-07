@@ -212,7 +212,7 @@ export default class DXC {
             comment = "[" + entry.warnings.join("; ") + "]";
         } else if (entry.comment) {
             comment = entry.comment;
-        } else {
+        } else if (type != DXC.FORMAT.DIR) {
             comment = entry.target || (parent? parent + "/" + entry.name : entry.name);
             if (comment == name) {
                 comment = "";

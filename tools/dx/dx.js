@@ -1059,9 +1059,9 @@ async function main(argc, argv, errors)
         let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
-            if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
-                dirListing = true;
-            }
+            // if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
+            //     dirListing = true;
+            // }
             if (handle.isArchive || handle.isDisk) {
                 //
                 // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
