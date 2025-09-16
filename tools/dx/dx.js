@@ -88,6 +88,12 @@ const pause = async function(prompt) {
 };
 
 const options = {
+    "all": {
+        type: "boolean",
+        usage: "--all",
+        alias: "-a",
+        description: "process all items, regardless of extension"
+    },
     "batch": {
         type: "string",
         usage: "--batch [file]",
@@ -1018,6 +1024,9 @@ async function main(argc, argv, errors)
         if (modified) {
             options.modified = modified;
         }
+        if (argv.all) {
+            options.all = true;
+        }
         if (argv.csv && !itemDB) {
             //
             // NOTE: preload is required if you want hashes of the items themselves, not just the files
@@ -1145,6 +1154,9 @@ async function main(argc, argv, errors)
                 // Instead of outputting handle.name as-is, let's see if argv.path contains wildcards;
                 // if so, then strip all the path components prior to them from handle.name.
                 //
+                if (item.name == handle.name) {
+                    item.name = ""; // path.basename(item.name);
+                }
                 if (argv.path) {
                     if (argv.pcjs) {
                         handle.name = path.join("/pcjs", handle.name);
@@ -1342,10 +1354,18 @@ async function main(argc, argv, errors)
                         if (db && (dumpFile || argv.test)) {
                             if (convertText == 1) {
                                 db = BASFile.normalize(db, true);
+                                //
+                                // NOTE: db.length may now differ from entry.size, but if we change entry.size,
+                                // that will trigger a warning about size mismatch, which is potentially confusing.
+                                //
                             }
                             else if (convertText == 2) {
                                 let basfile = new BASFile(db, true, entry.name);
                                 db = basfile.convert();
+                                //
+                                // NOTE: db.length may now differ from entry.size, but if we change entry.size,
+                                // that will trigger a warning about size mismatch, which is potentially confusing.
+                                //
                                 if (!targetData && basfile.warnings.length) {
                                     entry.warnings = entry.warnings.concat(basfile.warnings);
                                 }
@@ -1374,7 +1394,7 @@ async function main(argc, argv, errors)
                     else if (dirListing) {
                         if (dirLimit) {
                             if (dirLimit > 1 || dirLimit < 0) {
-                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? DXC.FORMAT.XDIR : DXC.FORMAT.DIR));
+                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? DXC.FORMAT.DIRX : DXC.FORMAT.DIR));
                             } else if (dirLimit == 1) {
                                 printf("...\n");
                             }

@@ -11,6 +11,7 @@ import DataBuffer from "./db.js";
 import DZip from "./dzip.js";
 import Disk from "./disk.js";
 import ISO from "./iso.js";
+import Generic from "./generic.js";
 import Format from "./format.js";
 import { DiskInfo } from "./disk.js";
 import { LegacyArc, LegacyZip } from "./legacy.js";
@@ -34,7 +35,7 @@ export default class DXC {
     static FORMAT = {
         LIST: 0,                        // archive aka "PKZIP" format
         DIR:  1,                        // directory format
-        XDIR: 3,                        // directory format with extended information (eg, sector details)
+        DIRX: 3,                        // directory format with extended information (eg, sector details)
         CSV:  4                         // CSV format
     };
 
@@ -51,6 +52,7 @@ export default class DXC {
         this.dzip = new DZip(interfaces, interfaceOptions);
         this.disk = new Disk(interfaces, interfaceOptions);
         this.iso = new ISO(interfaces, interfaceOptions);
+        this.generic = new Generic(interfaces, interfaceOptions);
     }
 
     /**
@@ -62,6 +64,17 @@ export default class DXC {
      * The db parameter can be used if the named item has already been read into a buffer, and
      * although a DataBuffer is preferred, we will automatically convert any supported data type
      * (eg, ArrayBuffer) into a DataBuffer.
+     *
+     * Supported options include:
+     *
+     *      all:        true to process unrecognized items as files
+     *      agnostic:   true to process unrecognized items as ISO images
+     *      compat:     true to use only 8.3 filenames in ISO images
+     *      modified:   modification date of the item (used when the item has already been read)
+     *      nodir:      true to skip reading directory records (applies to archives and ISO images)
+     *      password:   specifies the password to use when decrypting encrypted archive entries
+     *      preload:    true to preload the entire item into memory
+     *      type:       overrides the default archive type (eg, TYPE_ZIP or TYPE_ARC)
      *
      * @this {DXC}
      * @param {string} name
@@ -92,7 +105,10 @@ export default class DXC {
             handle.class = dxc.iso;
         }
         if (!handle.class) {
-            throw new Error(`Unrecognized container extension`);
+            if (!options.all) {
+                throw new Error(`Unrecognized container extension`);
+            }
+            handle.class = dxc.generic;
         }
         if (db) {
             db = new DataBuffer(db);
@@ -202,13 +218,13 @@ export default class DXC {
         if (name.length > 14) {
             name = "…" + name.slice(-13);
         }
-        let nameMethod = handle.item.volTable? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
+        let nameMethod = entry.method == undefined? "None" : (entry.method < 0? LegacyArc.methodNames[-(entry.method + 2)] : LegacyZip.methodNames[entry.method]);
         if (entry.flags & DZip.FileHeader.fields.flags.ENCRYPTED) {
             nameMethod += '*';
         }
         let ratio = entry.size > entry.compressedSize? Math.round(100 * (entry.size - entry.compressedSize) / entry.size) : 0;
         let comment = "";
-        if (entry.warnings.length) {
+        if (entry.warnings?.length) {
             comment = "[" + entry.warnings.join("; ") + "]";
         } else if (entry.comment) {
             comment = entry.comment;
@@ -232,7 +248,7 @@ export default class DXC {
                     name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
         }
         else if (type & DXC.FORMAT.DIR) {
-            if (type == DXC.FORMAT.XDIR) {
+            if (type == DXC.FORMAT.DIRX) {
                 //
                 // If the entry has an array of 'blocks', then display them.  However, we want to display
                 // them succinctly, so for example, any series of blocks that's contiguous should be listed
@@ -284,7 +300,7 @@ export default class DXC {
         }
         else {          // DXC.FORMAT.CSV
             let comment = entry.comment || "";
-            let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
+            let warnings = entry.warnings?.length? entry.warnings.join("; ") : "";
             let newest = entry.newestFileTime? dxc.format.sprintf("%T", new Date(entry.newestFileTime)) : "";
             line = dxc.format.sprintf(
                 "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",

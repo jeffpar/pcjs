@@ -283,6 +283,7 @@ export default class Disk {
      *
      * NOTE: This should not be called until after readDirectory() has been called.
      *
+     * @this {Disk}
      * @param {DiskInfo} diskInfo
      * @returns {string}
      */

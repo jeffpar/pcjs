@@ -2882,7 +2882,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
-        "-lt --out utf8 ~/Sites/pcjs/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/archive/DISK0001.ZIP"
+        "--list --extract --overwrite --path /Users/jeff/Sites/pcjs/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/**/*.ZIP --out utf8 --csv zip2.csv"
       ],
       "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
