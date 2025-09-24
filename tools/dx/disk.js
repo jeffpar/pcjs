@@ -155,7 +155,7 @@ export default class Disk {
             const stats = await file.stat();
             if (!stats.size) {
                 await file.close();
-                throw new Error(`File is empty`);
+                throw new Error(`Empty disk image`);
             }
             //
             // If the caller supplied a modification date for the image, then we stick with that,

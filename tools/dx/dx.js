@@ -1058,7 +1058,7 @@ async function main(argc, argv, errors)
                 handle = await dxc.open(itemPath, itemDB, options);
                 break;
             } catch (error) {
-                if (!retries || error.message.match(/^(Unrecognized|ENOENT)/)) {
+                if (error.message.match(/^(ENOENT|Empty|Unrecognized)/) || !retries) {
                     printf("error opening %s: %s\n", itemPath, error.message);
                     return [0, -1];
                 }
