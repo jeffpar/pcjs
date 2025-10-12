@@ -194,10 +194,17 @@ export default class Format {
             for (j = i; j < args.length; j++) {
                 let arg = args[j];
                 let inQuotes = false;
+                let quoteChar = null;
                 for (let k = 0; k < arg.length; k++) {
                     let ch = arg.charAt(k);
-                    if (ch == '"') {
-                        inQuotes = !inQuotes;
+                    if ((ch == '"' || ch == "'") && (!inQuotes || ch == quoteChar)) {
+                        if (!inQuotes) {
+                            inQuotes = true;
+                            quoteChar = ch;
+                        } else {
+                            inQuotes = false;
+                            quoteChar = null;
+                        }
                     } else if (ch == ' ' && !inQuotes) {
                         args[j] = arg.slice(0, k);
                         args.splice(j + 1, 0, arg.slice(k + 1));

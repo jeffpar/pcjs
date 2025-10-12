@@ -819,9 +819,6 @@ async function main(argc, argv, errors)
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
         let widthPhoto = 0, heightPhoto = 0;
-        if (argv.debug) {
-            printf("%s\n", itemPath);
-        }
         //
         // Generate paths we may need later (for file and/or banner extraction).
         //
