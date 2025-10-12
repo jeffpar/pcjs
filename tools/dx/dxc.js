@@ -192,7 +192,7 @@ export default class DXC {
     {
         if (filespec) {
             const regex = new RegExp("(?:^|/)" + filespec.replace(/\./g, "\\.").replace(/\*/g, ".*").replace(/\?/g, ".") + "$", "i");
-            return regex.test(entry.name);
+            return regex.test(entry.target || entry.name);
         }
         return false;
     }
