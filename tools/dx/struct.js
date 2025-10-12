@@ -393,12 +393,14 @@ export default class Struct {
                 // TODO: What about malformed dates?  For example, "OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO"
                 // contains a directory entry for "NEWLIB.ZIP" with an ISODATETIME7 where the date portion is 0x170B055F
                 // and the time portion is 0x0000003D, resulting in a date string of "1995-05-11 23:61:00", which causes
-                // the Date constructor to return an invalid date.  As an aside, when macOS mounts the image, ls displays
-                // it as local date "May 11 17:01:00 1995".
+                // the Date constructor to return an invalid date.
+                //
+                // As an aside, when macOS mounts the image, "ls" displays the date as "May 11 17:01:00 1995", and since
+                // I'm in the PST timezone, that's probably a sensible approximation.
                 //
                 // Currently, we generate a warning and return null (which renders as "0000-00-00 00:00:00" in our
                 // directory listing and no warning is displayed); we should either try to "fix" the date or display the
-                // "Invalid date" warning we push below.
+                // "Invalid date" warning we generate below.
                 //
                 date = ((date & 0xff) + 1900) + "-" + ((date >> 8) & 0xff).toString().padStart(2, '0') + "-" + ((date >> 16) & 0xff).toString().padStart(2, '0') +
                     " " + (date >>> 24).toString().padStart(2, '0') + ":" + (time & 0xff).toString().padStart(2, '0') + ":" + ((time >> 8) & 0xff).toString().padStart(2, '0');
@@ -416,7 +418,7 @@ export default class Struct {
                 // Time zone offset from GMT is in 15 minute intervals, starting at interval -48 (west) and running
                 // up to interval 52 (east), spanning time zones GMT-12 through GMT+13.
                 //
-                v = new Date(date);
+                v = new Date(date + "Z");
                 if (isNaN(v.getTime())) {
                     //
                     // TODO: Better ISO date validation might be nice (see parseDOSDateTime()) but at least we're checking
