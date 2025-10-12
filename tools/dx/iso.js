@@ -910,7 +910,7 @@ export default class ISO {
                             flags: 0,
                             method: 0,
                             crc: 0,
-                            warnings: []
+                            warnings: record.warnings || []
                         });
                     }
                 }

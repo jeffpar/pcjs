@@ -2882,7 +2882,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/dx/dx.js",
       "args": [
-        "--list \"/Volumes/MacSSD/Archives/sets/OS2 Arsenal v1.0/OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO\""
+        "--debug --list \"/Volumes/MacSSD/Archives/sets/OS2 Arsenal v1.0/OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO\""
       ],
       "cwd": "${workspaceFolder}/tools/dx",
       "stopOnEntry": false,
