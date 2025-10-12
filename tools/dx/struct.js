@@ -389,6 +389,17 @@ export default class Struct {
                     time = db.readUInt32LE(offset + 4);
                     tz = (time << 8) >> 24;
                 }
+                //
+                // TODO: What about malformed dates?  For example, "OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO"
+                // contains a directory entry for "NEWLIB.ZIP" with an ISODATETIME7 where the date portion is 0x170B055F
+                // and the time portion is 0x0000003D, resulting in a date string of "1995-05-11 23:61:00", which causes
+                // the Date constructor to return an invalid date.  As an aside, when macOS mounts the image, ls displays
+                // it as local date "May 11 17:01:00 1995".
+                //
+                // Currently, we generate a warning and return null (which renders as "0000-00-00 00:00:00" in our
+                // directory listing and no warning is displayed); we should either try to "fix" the date or display the
+                // "Invalid date" warning we push below.
+                //
                 date = ((date & 0xff) + 1900) + "-" + ((date >> 8) & 0xff).toString().padStart(2, '0') + "-" + ((date >> 16) & 0xff).toString().padStart(2, '0') +
                     " " + (date >>> 24).toString().padStart(2, '0') + ":" + (time & 0xff).toString().padStart(2, '0') + ":" + ((time >> 8) & 0xff).toString().padStart(2, '0');
                 /* falls through */

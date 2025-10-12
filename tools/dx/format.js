@@ -89,7 +89,7 @@ export default class Format {
      */
     static isDate(date)
     {
-        return !isNaN(date.getTime());
+        return !isNaN(date?.getTime());
     }
 
     /**
@@ -494,7 +494,7 @@ export default class Format {
                 break;
 
             case 'T':
-                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
+                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : "0000-00-00 00:00:00");
                 continue;
 
             case 'W':
