@@ -222,7 +222,7 @@ export default class Struct {
      */
     read(db, offset, name, encoding = "cp437", warnings = [])
     {
-        let len, v;
+        let y, m, d, h, n, s, v;
         let date, time = -1, tz = 0;
         let field = this.fields[name];
         if (!field) {
@@ -390,20 +390,53 @@ export default class Struct {
                     tz = (time << 8) >> 24;
                 }
                 //
-                // TODO: What about malformed dates?  For example, "OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO"
+                // Sometimes we get malformed dates.  For example, "OS2 Arsenal v1.0 (Disc 1)(Arsenal Computer).ISO"
                 // contains a directory entry for "NEWLIB.ZIP" with an ISODATETIME7 where the date portion is 0x170B055F
-                // and the time portion is 0x0000003D, resulting in a date string of "1995-05-11 23:61:00", which causes
-                // the Date constructor to return an invalid date.
+                // and the time portion is 0x0000003D, resulting in a date string of "1995-05-11 23:61:00", which will
+                // cause the Date constructor to return an invalid date.
                 //
-                // As an aside, when macOS mounts the image, "ls" displays the date as "May 11 17:01:00 1995", and since
-                // I'm in the PST timezone, that's probably a sensible approximation.
+                // As an aside, when macOS mounts that image, "ls" displays that date as "May 11 17:01:00 1995", which
+                // makes sense, since I'm in the PST timezone and the original date is assumed to be UTC.
                 //
-                // Currently, we generate a warning and return null (which renders as "0000-00-00 00:00:00" in our
-                // directory listing and no warning is displayed); we should either try to "fix" the date or display the
-                // "Invalid date" warning we generate below.
+                // Anyway, the code below now attempts to fix such dates; it's not comprehensive, but given the rarity of
+                // such errors, it's probably more than adequate.
                 //
-                date = ((date & 0xff) + 1900) + "-" + ((date >> 8) & 0xff).toString().padStart(2, '0') + "-" + ((date >> 16) & 0xff).toString().padStart(2, '0') +
-                    " " + (date >>> 24).toString().padStart(2, '0') + ":" + (time & 0xff).toString().padStart(2, '0') + ":" + ((time >> 8) & 0xff).toString().padStart(2, '0');
+                y = (date & 0xff) + 1900;
+                m = (date >> 8) & 0xff;
+                d = (date >> 16) & 0xff;
+                h = (date >>> 24);
+                n = time & 0xff;
+                s = (time >> 8) & 0xff;
+                while (s >= 60) {
+                    s -= 60;
+                    n++;
+                }
+                while (n >= 60) {
+                    n -= 60;
+                    h++;
+                }
+                while (h >= 24) {
+                    h -= 24;
+                    d++;
+                }
+                //
+                // To get the last day of the month, we create a date for the 0th day of the next month
+                // (and since m is 1-based, we don't need to pass m+1, since the Date constructor expects
+                // a 0-based month).
+                //
+                if (d > 28) {
+                    let l = (new Date(y, m, 0)).getDate();
+                    if (d > l) {
+                        d -= l;
+                        m++;
+                    }
+                }
+                if (m > 12) {
+                    m -= 12;
+                    y++;
+                }
+                date = y + "-" + (m < 10? "0" : "") + m + "-" + (d < 10? "0" : "") + d + " " +
+                    (h < 10? "0" : "") + h + ":" + (n < 10? "0" : "") + n + ":" + (s < 10? "0" : "") + s;
                 /* falls through */
             case Struct.ISODATETIME16:
             case Struct.ISODATETIME17:
