@@ -1058,8 +1058,8 @@ async function main(argc, argv, errors)
                 break;
             } catch (error) {
                 if (error.message.match(/^(ENOENT|Empty|Unrecognized)/) || !retries) {
-                    printf("error opening %s: %s\n", itemPath, error.message);
-                    return [0, -1];
+                    printf("unable to open %s: %s\n", itemPath, error.message);
+                    return [0, 0, 0, -1];
                 }
                 printf("retrying %s...\n", itemPath);
             }
@@ -1460,10 +1460,14 @@ async function main(argc, argv, errors)
             // TODO: If argv.list, consider displaying entry totals as well (including the total size of the item)
             //
         } catch (error) {
-            printf("error processing %s: %s\n", itemPath, error.message);
+            printf("unable to process %s: %s\n", itemPath, error.message);
         }
         let nItemSize = handle.item.size;
         await dxc.close(handle);
+        //
+        // NOTE: If you change the return signature here, be sure to change any returns above as well
+        // (eg, when dxc.open() fails).
+        //
         return [nItemFiles, nItemBytes, nItemSize, nItemWarnings];
     };
     //
