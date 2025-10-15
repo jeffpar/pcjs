@@ -75,7 +75,7 @@ const dbFields = {
         allowNull: false
     },
     volume: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: true
     },
     path: {
@@ -83,11 +83,11 @@ const dbFields = {
         allowNull: false
     },
     name: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: false
     },
     photo: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: true
     },
     dimensions: {
@@ -95,7 +95,7 @@ const dbFields = {
         allowNull: true
     },
     thumb: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: true
     },
     comment: {
@@ -103,7 +103,7 @@ const dbFields = {
         allowNull: true
     },
     warnings: {
-        type: DataTypes.STRING(128),
+        type: DataTypes.STRING(255),
         allowNull: true
     }
 };
@@ -194,13 +194,14 @@ function dbInit(config, database)
 };
 
 /**
- * addRows(db, table, rows)
+ * addRows(db, table, rows, prevTotal)
  *
  * @param {Object} db
  * @param {string} table
  * @param {*} rows
+ * @param {number} prevTotal
  */
-async function addRows(db, table, rows)
+async function addRows(db, table, rows, prevTotal)
 {
     let totalRows = 0;
     let rowsPerChunk = 100;
@@ -212,7 +213,7 @@ async function addRows(db, table, rows)
             await db.models[table].bulkCreate(chunk);
             totalRows += chunk.length;
         } catch(error) {
-            printf("unable to import rows %d-%d: %s\n", i, j-1, error.message);
+            printf("unable to import rows %d-%d: %s\n", prevTotal + i, prevTotal + (j-1), error.message);
         }
     }
     return totalRows;
@@ -280,9 +281,12 @@ async function main(argc, argv, errors)
                 //
                 // We do some data sanity checks and fixups next...
                 //
-                if (row.name && row.name.length <= 255) {
+                if (row.name?.length <= 255) {
                     if (!row.newest) {
                         row.newest = null;
+                    }
+                    if (row.path?.length > 255) {
+                        row.path = "..." + row.path.slice(-252);
                     }
                     if (!row.photo) {
                         row.photo = null;
@@ -320,12 +324,12 @@ async function main(argc, argv, errors)
                     printf("warning: skipping row %s\n", JSON.stringify(row));
                 }
                 if (rows.length % 10000 == 0) {
-                    totalRows += await addRows(db, table, rows);
+                    totalRows += await addRows(db, table, rows, totalRows);
                     printf("Added %d rows...\n", totalRows);
                     rows = [];
                 }
             }
-            totalRows += await addRows(db, table, rows);
+            totalRows += await addRows(db, table, rows, totalRows);
             printf("Added %d rows...\n", totalRows);
             await csv.close();
         })
