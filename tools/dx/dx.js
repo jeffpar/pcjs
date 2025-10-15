@@ -819,6 +819,7 @@ async function main(argc, argv, errors)
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
         let widthPhoto = 0, heightPhoto = 0;
+        let nItemFiles = 0, nItemBytes = 0, nItemWarnings = 0;
         //
         // Generate paths we may need later (for file and/or banner extraction).
         //
@@ -956,6 +957,7 @@ async function main(argc, argv, errors)
                 nDirFiles++;
                 nDirBytes += entry.size;
                 nItemFiles++;
+                nItemBytes += entry.size;
                 nTotalFiles++;
             }
         };
@@ -1062,7 +1064,6 @@ async function main(argc, argv, errors)
                 printf("retrying %s...\n", itemPath);
             }
         } while (retries-- > 0);
-        let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
             // if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
@@ -1414,7 +1415,7 @@ async function main(argc, argv, errors)
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dirPath, path.dirname(entry.name));
-                    let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
+                    let [nFiles, nBytes, nSize, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
@@ -1424,6 +1425,7 @@ async function main(argc, argv, errors)
                     // disqualifying).
                     //
                     nItemFiles += nFiles;
+                    nItemBytes += nBytes;
                     nItemWarnings += nWarnings;
                 }
             }
@@ -1460,8 +1462,9 @@ async function main(argc, argv, errors)
         } catch (error) {
             printf("error processing %s: %s\n", itemPath, error.message);
         }
+        let nItemSize = handle.item.size;
         await dxc.close(handle);
-        return [nItemFiles, nItemWarnings];
+        return [nItemFiles, nItemBytes, nItemSize, nItemWarnings];
     };
     //
     // And finally: the main loop.
@@ -1478,10 +1481,20 @@ async function main(argc, argv, errors)
         // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
-        let [nFiles, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
+        let [nFiles, nBytes, nSize, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
         if (!argv.upload && !argv.update) {
             if (nWarnings >= 0) {
-                printf("%s%s: %d file%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+                //
+                // If nWarnings > 0 and nBytes > nSize, that's one possible red flag (unless of course the item
+                // contains compressed archives and you used --recurse to include their contents).  For example,
+                // this item in the Internet Archive's "TechNet" collection:
+                //
+                //      technet-2003-evalkit/Windows 2000 Server (Evaluation).iso
+                //
+                // appears to be a "truncated" disc image, because it's far too small to contain all the files that
+                // it claims to contain.
+                //
+                printf("%s%s: %d file%s, %d (%d) byte%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nBytes, nSize, nBytes, nWarnings, nWarnings);
                 if (argv.dir && argv.truncate && !argv.csv) {
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
                 }
