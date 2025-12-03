@@ -819,7 +819,7 @@ export default class DiskLib {
                         let desc = driveInfo.files[i];
                         desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
                         desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
-                        desc.date =diskLib.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                        desc.date = diskLib.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                         delete desc[DiskInfo.FILEDESC.HASH];
                         delete desc[DiskInfo.FILEDESC.CONTENTS];
                         let j = aFileData.findIndex((file) => (file.name === desc.name));

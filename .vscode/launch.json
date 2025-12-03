@@ -2008,10 +2008,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=ibm0020-0029",
-        "--list=csv"
+        "--all=**/*.img",
+        "--list=oem"
       ],
-      "cwd": "/Volumes/MacSSD/Downloads/ibm-wgam-wbiz-collection",
+      "cwd": "/Users/jeff/Sites/pcjs/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
