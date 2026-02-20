@@ -1,7 +1,7 @@
 /**
  * @fileoverview Command-line utility for unpacking ZIP, ARC, IMG, JSON, and ISO containers
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -88,6 +88,12 @@ const pause = async function(prompt) {
 };
 
 const options = {
+    "all": {
+        type: "boolean",
+        usage: "--all",
+        alias: "-a",
+        description: "process all items, regardless of extension"
+    },
     "batch": {
         type: "string",
         usage: "--batch [file]",
@@ -376,28 +382,6 @@ function displayFile(name, encoding, db, dump = false)
         line += "|";
         printf("%s\n", line);
     }
-}
-
-/**
- * enquote(string)
- *
- * @param {string} string
- * @returns {string}
- */
-function enquote(string) {
-    //
-    // Enquote a string for CSV output, but only if necessary.
-    //
-    // We use the "double-quote" character as the quote character, and escape any double-quotes
-    // in the string with another double-quote.
-    //
-    if (!string) {
-        return "";
-    }
-    if (string.match(/[\r\n,"]/)) {
-        string = '"' + string.replace(/"/g, '""') + '"';
-    }
-    return string;
 }
 
 /**
@@ -735,11 +719,10 @@ async function main(argc, argv, errors)
     // Add any items matching --path patterns.
     //
     if (argv.path) {
-        let pathArg = argv.path;
-        if (pathArg[0] == '~') {
-            pathArg = path.join(process.env.HOME, pathArg.slice(1));
+        if (argv.path[0] == '~') {
+            argv.path = path.join(process.env.HOME, argv.path.slice(1));
         }
-        let items = glob.sync(pathArg, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
+        let items = glob.sync(argv.path, { /* follow: true, */ nodir: true, nocase: true, ignore: [".*"] });
         //
         // If the path included both .img and .json extensions AND --pcjs was specified, then
         // we check every .img file for a neighboring .json file; if found, then the .img file is
@@ -769,31 +752,6 @@ async function main(argc, argv, errors)
     for (let i = 1; i < argv.length; i++) {
         itemList.push({path: argv[i]});
     }
-    //
-    // If CSV output is enabled, then open the specified file for writing.
-    //
-    let csv;
-    if (argv.csv) {
-        try {
-            csv = await fs.open(argv.csv, "a");
-            let stats = await fs.stat(argv.csv);
-            if (!stats.size) {
-                await csv.write("fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n");
-            }
-        } catch (error) {
-            printf("%s: %s\n", argv.csv, error.message);
-            nErrors++;
-        }
-    }
-    if (nErrors) {
-        return;
-    }
-    let dumpItem = false;
-    if (!itemList.length && argv.dump) {
-        itemList.push({path: argv.dump});
-        dumpItem = true;
-        delete argv.dump;
-    }
     let bannerHashes = {};
     let listing = argv.dir || argv.list;
     let fileID = +argv.fileID || 1, setID = argv.setID || 1;
@@ -822,6 +780,32 @@ async function main(argc, argv, errors)
         debug: argv.debug                   // enable debug mode (includes additional warnings)
     });
     //
+    // If CSV output is enabled, then open the specified file for writing.
+    //
+    let csv;
+    if (argv.csv) {
+        try {
+            csv = await fs.open(argv.csv, "a");
+            let stats = await fs.stat(argv.csv);
+            if (!stats.size) {
+                let heading = dxc.formatHeading(DXC.FORMAT.CSV);
+                await csv.write(heading);
+            }
+        } catch (error) {
+            printf("%s: %s\n", argv.csv, error.message);
+            nErrors++;
+        }
+    }
+    if (nErrors) {
+        return;
+    }
+    let dumpItem = false;
+    if (!itemList.length && argv.dump) {
+        itemList.push({path: argv.dump});
+        dumpItem = true;
+        delete argv.dump;
+    }
+    //
     // Define a function to process an individual container item, which then allows us to recursively process
     // nested containers if --recurse is been specified.
     //
@@ -835,9 +819,7 @@ async function main(argc, argv, errors)
         let itemName = path.basename(itemPath);
         let itemExt = path.extname(itemName);
         let widthPhoto = 0, heightPhoto = 0;
-        if (argv.debug) {
-            printf("%s\n", itemPath);
-        }
+        let nItemFiles = 0, nItemBytes = 0, nItemWarnings = 0;
         //
         // Generate paths we may need later (for file and/or banner extraction).
         //
@@ -892,65 +874,6 @@ async function main(argc, argv, errors)
             //
             [itemPhoto, widthPhoto, heightPhoto] = await getPhotoInfo(itemPath, itemExt);
         }
-        let printCSV = function(entry, db, entryVolume) {
-            let entryID = entry.source? itemID : fileID++;
-            let entryName = entry.name;
-            let entryPath = itemPath;
-            let entryPhoto = null, entryThumb = null;
-            let entryMethod = entry.methodName || entry.source;
-            let comment = entry.comment || "";
-            let warnings = entry.warnings.length? entry.warnings.join("; ") : "";
-            let hash = db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "";
-            let newest = "", entries = 0;
-            //
-            // If we're being passed an item object rather than an entry object, then entryName
-            // will also be the same as the entryPath; reduce them.
-            //
-            if (entry.source) {
-                if (!entryVolume) {
-                    entryVolume = fromPCJS[entryName];
-                    if (entryVolume) {
-                        entryVolume = path.basename(entryVolume);
-                    }
-                }
-                entryName = path.basename(entryName);
-                entryPath = path.dirname(entryPath);
-                entryPhoto = itemPhoto;
-                if (entryPhoto && !entryPhoto.match(/^https?:\/\//)) {
-                    entryPhoto = path.basename(entryPhoto);
-                }
-                entryThumb = itemThumb;
-                if (entryThumb && !entryThumb.match(/^https?:\/\//)) {
-                    entryThumb = path.basename(entryThumb);
-                }
-                newest = entry.newestFileTime? format.sprintf("%T", new Date(entry.newestFileTime)) : "";
-                entries = entry.totalFiles;
-            }
-            //
-            // Instead of outputting entryPath as-is, let's see if argv.path contains a "**" pattern;
-            // if so, then strip all the path components prior to "**" from entryPath.
-            //
-            if (argv.path) {
-                if (argv.pcjs) {
-                    entryPath = path.join("/pcjs", entryPath);
-                } else {
-                    let doubleWild = argv.path.match(/^(.*?)\/[^/]*\*\*/);
-                    if (doubleWild) {
-                        let regex = new RegExp("^" + doubleWild[1].replace(/\*/g, "[^/]*"));
-                        entryPath = entryPath.replace(regex, "");
-                    }
-                }
-            }
-            //
-            // CSV fields: fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings
-            //
-            let line = format.sprintf(
-                "%d,%d,%d,%s,%T,%s,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
-                entryID, itemID, setID, hash, entry.modified, newest, entries, (entry.attr || 0) & 0xff, entry.size, entry.compressedSize || entry.size,
-                entryMethod, enquote(entryVolume), enquote(entryPath), enquote(entryName), enquote(entryPhoto), (entryPhoto && widthPhoto? widthPhoto + 'x' + heightPhoto : ""), enquote(entryThumb), enquote(comment), enquote(warnings)
-            );
-            return line;
-        };
         let printHeading = function(entry, isFile, isNested) {
             let entryPath, fullPath = "";
             let continued = nItemFiles > 0? " (continued)" : "";
@@ -1025,7 +948,7 @@ async function main(argc, argv, errors)
                         }
                     }
                     else {
-                        printf("%s\n", dxc.formatHeading(handle));
+                        printf("\n%s", dxc.formatHeading());
                     }
                 }
             }
@@ -1034,6 +957,7 @@ async function main(argc, argv, errors)
                 nDirFiles++;
                 nDirBytes += entry.size;
                 nItemFiles++;
+                nItemBytes += entry.size;
                 nTotalFiles++;
             }
         };
@@ -1099,6 +1023,9 @@ async function main(argc, argv, errors)
         if (modified) {
             options.modified = modified;
         }
+        if (argv.all) {
+            options.all = true;
+        }
         if (argv.csv && !itemDB) {
             //
             // NOTE: preload is required if you want hashes of the items themselves, not just the files
@@ -1130,19 +1057,18 @@ async function main(argc, argv, errors)
                 handle = await dxc.open(itemPath, itemDB, options);
                 break;
             } catch (error) {
-                if (!retries || error.message.match(/^(Unrecognized|ENOENT)/)) {
-                    printf("error opening %s: %s\n", itemPath, error.message);
-                    return [0, -1];
+                if (error.message.match(/^(ENOENT|Empty|Unrecognized)/) || !retries) {
+                    printf("unable to open %s: %s\n", itemPath, error.message);
+                    return [0, 0, 0, -1];
                 }
                 printf("retrying %s...\n", itemPath);
             }
         } while (retries-- > 0);
-        let nItemFiles = 0, nItemWarnings = 0;
         try {
             let entries = [];
-            if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
-                dirListing = true;
-            }
+            // if (!handle.isArchive && !argv.recurse && !itemDB && listing) {
+            //     dirListing = true;
+            // }
             if (handle.isArchive || handle.isDisk) {
                 //
                 // We don't have an "official" means of bypassing an archive's DirHeaders, but it's easy
@@ -1206,15 +1132,65 @@ async function main(argc, argv, errors)
                 //
                 // Update item stats
                 //
-                handle.item.newestFileTime = 0;
-                handle.item.totalFiles = entries.length;
+                let item = handle.item;
+                item.newestFileTime = 0;
+                item.totalFiles = entries.length;
                 for (let entry of entries) {
                     let fileTime = entry.modified.getTime();
-                    if (handle.item.newestFileTime < fileTime) {
-                        handle.item.newestFileTime = fileTime;
+                    if (item.newestFileTime < fileTime) {
+                        item.newestFileTime = fileTime;
                     }
                 }
-                await csv.write(printCSV(handle.item, handle.item.db, handle.label));
+                item.volume = handle.label;
+                if (!item.volume) {
+                    item.volume = fromPCJS[item.name];
+                    if (item.volume) {
+                        item.volume = path.basename(item.volume);
+                    }
+                }
+                //
+                // Instead of outputting handle.name as-is, let's see if argv.path contains wildcards;
+                // if so, then strip all the path components prior to them from handle.name.
+                //
+                if (item.name == handle.name) {
+                    item.name = ""; // path.basename(item.name);
+                }
+                if (argv.path) {
+                    if (argv.pcjs) {
+                        handle.name = path.join("/pcjs", handle.name);
+                    } else {
+                        let matchWild = argv.path.match(/^(.*?\/)[^/]*\*/);
+                        if (matchWild) {
+                            let regex = new RegExp("^" + matchWild[1].replace(/\*/g, "[^/]*"));
+                            handle.name = handle.name.replace(regex, "");
+                        }
+                    }
+                }
+                //
+                // Do a photo/thumb lookup and attach the results (if any) to the item
+                //
+                if (itemPhoto) {
+                    item.photo = itemPhoto;
+                    if (item.photo && !item.photo.match(/^https?:\/\//)) {
+                        item.photo = path.basename(item.photo);
+                    }
+                    if (widthPhoto) {
+                        item.widthPhoto = widthPhoto;
+                        item.heightPhoto = heightPhoto;
+                    }
+                }
+                if (itemThumb) {
+                    item.thumb = itemThumb;
+                    if (item.thumb && !item.thumb.match(/^https?:\/\//)) {
+                        item.thumb = path.basename(item.thumb);
+                    }
+                }
+                item.fileID = itemID;
+                item.itemID = itemID;
+                item.setID = setID;
+                item.hash = (item.db && item.db.length? crypto.createHash('md5').update(item.db.buffer).digest('hex') : "");
+                let line = dxc.formatEntry(handle, item, DXC.FORMAT.CSV);
+                await csv.write(line);
             }
             if (argv.upload || argv.update) {
                 printScript();
@@ -1373,13 +1349,21 @@ async function main(argc, argv, errors)
                         if (!db && !argv.list) {
                             printf("%s: %s\n", entryPath, entry.warnings.join("; ") || "no data");
                         }
-                        if (db && dumpFile) {
+                        if (db && (dumpFile || argv.test)) {
                             if (convertText == 1) {
                                 db = BASFile.normalize(db, true);
+                                //
+                                // NOTE: db.length may now differ from entry.size, but if we change entry.size,
+                                // that will trigger a warning about size mismatch, which is potentially confusing.
+                                //
                             }
                             else if (convertText == 2) {
                                 let basfile = new BASFile(db, true, entry.name);
                                 db = basfile.convert();
+                                //
+                                // NOTE: db.length may now differ from entry.size, but if we change entry.size,
+                                // that will trigger a warning about size mismatch, which is potentially confusing.
+                                //
                                 if (!targetData && basfile.warnings.length) {
                                     entry.warnings = entry.warnings.concat(basfile.warnings);
                                 }
@@ -1398,12 +1382,17 @@ async function main(argc, argv, errors)
                         entry.methodName += '*';
                     }
                     if (argv.csv) {
-                        await csv.write(printCSV(entry, db, handle.label));
+                        entry.fileID = fileID++;
+                        entry.itemID = itemID;
+                        entry.setID = setID;
+                        entry.hash = (db && db.length? crypto.createHash('md5').update(db.buffer).digest('hex') : "");
+                        let line = dxc.formatEntry(handle, entry, DXC.FORMAT.CSV);
+                        await csv.write(line);
                     }
                     else if (dirListing) {
                         if (dirLimit) {
                             if (dirLimit > 1 || dirLimit < 0) {
-                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? 2 : 1));
+                                printf("%s\n", dxc.formatEntry(handle, entry, argv.debug? DXC.FORMAT.DIRX : DXC.FORMAT.DIR));
                             } else if (dirLimit == 1) {
                                 printf("...\n");
                             }
@@ -1426,7 +1415,7 @@ async function main(argc, argv, errors)
                 //
                 if (recurse && db) {
                     let entryTarget = path.join(dirPath, path.dirname(entry.name));
-                    let [nFiles, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
+                    let [nFiles, nBytes, nSize, nWarnings] = await processItem(fileID++, entryPath, null, null, entryTarget, db, entry.modified);
                     if (nFiles) {
                         heading = false;
                     }
@@ -1436,6 +1425,7 @@ async function main(argc, argv, errors)
                     // disqualifying).
                     //
                     nItemFiles += nFiles;
+                    nItemBytes += nBytes;
                     nItemWarnings += nWarnings;
                 }
             }
@@ -1470,10 +1460,15 @@ async function main(argc, argv, errors)
             // TODO: If argv.list, consider displaying entry totals as well (including the total size of the item)
             //
         } catch (error) {
-            printf("error processing %s: %s\n", itemPath, error.message);
+            printf("unable to process %s: %s\n", itemPath, error.message);
         }
+        let nItemSize = handle.item.size;
         await dxc.close(handle);
-        return [nItemFiles, nItemWarnings];
+        //
+        // NOTE: If you change the return signature here, be sure to change any returns above as well
+        // (eg, when dxc.open() fails).
+        //
+        return [nItemFiles, nItemBytes, nItemSize, nItemWarnings];
     };
     //
     // And finally: the main loop.
@@ -1490,10 +1485,20 @@ async function main(argc, argv, errors)
         // We don't want to try fixing URLs ourselves, because encodeURI() transforms too little, as it
         // considers '#' legitimate, and encodeURIComponent() transforms too much (eg, colons and slashes).
         //
-        let [nFiles, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
+        let [nFiles, nBytes, nSize, nWarnings] = await processItem(fileID++, item.path, item.photo, item.thumb);
         if (!argv.upload && !argv.update) {
             if (nWarnings >= 0) {
-                printf("%s%s: %d file%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nWarnings, nWarnings);
+                //
+                // If nWarnings > 0 and nBytes > nSize, that's one possible red flag (unless of course the item
+                // contains compressed archives and you used --recurse to include their contents).  For example,
+                // this item in the Internet Archive's "TechNet" collection:
+                //
+                //      technet-2003-evalkit/Windows 2000 Server (Evaluation).iso
+                //
+                // appears to be a "truncated" disc image, because it's far too small to contain all the files that
+                // it claims to contain.
+                //
+                printf("%s%s: %d file%s, %d (%d) byte%s, %d warning%s\n", listing && !argv.csv && nFiles? "\n" : "", item.path, nFiles, nFiles, nBytes, nSize, nBytes, nWarnings, nWarnings);
                 if (argv.dir && argv.truncate && !argv.csv) {
                     printf("\nFor more information, visit https://github.com/jeffpar/pcjs/tree/master/tools/dx\n");
                 }

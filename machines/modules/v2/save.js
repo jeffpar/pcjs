@@ -1,7 +1,7 @@
 /**
  * @fileoverview PCjs Save Functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -178,7 +178,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         let sResources = JSON.stringify(resNew);
 
         sScript += ".js";
-        sPCJS = matchScript[1] + "var resources=" + sResources + ";" + matchScript[2] + matchScript[3];
+        sPCJS = matchScript[1] + "window.resources=" + sResources + ";" + matchScript[2] + matchScript[3];
         Component.printf("saving machine: \"%s\" (%d bytes)\n", idMachine, sPCJS.length);
 
         /*

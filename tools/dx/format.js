@@ -1,7 +1,7 @@
 /**
  * @fileoverview Common formatting functions (eg, sprintf)
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -89,7 +89,7 @@ export default class Format {
      */
     static isDate(date)
     {
-        return !isNaN(date.getTime());
+        return !isNaN(date?.getTime());
     }
 
     /**
@@ -194,10 +194,17 @@ export default class Format {
             for (j = i; j < args.length; j++) {
                 let arg = args[j];
                 let inQuotes = false;
+                let quoteChar = null;
                 for (let k = 0; k < arg.length; k++) {
                     let ch = arg.charAt(k);
-                    if (ch == '"') {
-                        inQuotes = !inQuotes;
+                    if ((ch == '"' || ch == "'") && (!inQuotes || ch == quoteChar)) {
+                        if (!inQuotes) {
+                            inQuotes = true;
+                            quoteChar = ch;
+                        } else {
+                            inQuotes = false;
+                            quoteChar = null;
+                        }
                     } else if (ch == ' ' && !inQuotes) {
                         args[j] = arg.slice(0, k);
                         args.splice(j + 1, 0, arg.slice(k + 1));
@@ -494,7 +501,7 @@ export default class Format {
                 break;
 
             case 'T':
-                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
+                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : "0000-00-00 00:00:00");
                 continue;
 
             case 'W':

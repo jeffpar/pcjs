@@ -86131,7 +86131,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         let sResources = JSON.stringify(resNew);
 
         sScript += ".js";
-        sPCJS = matchScript[1] + "var resources=" + sResources + ";" + matchScript[2] + matchScript[3];
+        sPCJS = matchScript[1] + "window.resources=" + sResources + ";" + matchScript[2] + matchScript[3];
         Component.printf("saving machine: \"%s\" (%d bytes)\n", idMachine, sPCJS.length);
 
         /*

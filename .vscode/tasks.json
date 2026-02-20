@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
     {
-      "type": "gulp",
+      "type": "shell",
       "label": "gulp watch",
-      "task": "watch",
+      "command": "node_modules/.bin/gulp watch",
       "problemMatcher": [],
       "group": {
         "kind": "build",

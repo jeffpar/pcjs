@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="ibm5160" type="pcx86" border="1" pos="center" background="default" debugger="available">
-	<name pos="center">IBM PC XT, 512Kb RAM, 10Mb Hard Disk (Formatted), IBM EGA (128Kb)</name>
+	<name pos="center">IBM PC XT, 512Kb RAM, 10Mb Hard Disk (Formatted), Coprocessor, IBM EGA (128Kb)</name>
 	<computer id="xt-ega-512k" name="IBM PC XT"/>
 	<ram id="ramLow" addr="0x00000" test="false" size="0x80000" comment="0x80000 (512Kb) size overrides SW1|ROM BIOS memory test has been disabled"/>
 	<rom id="romHDC" addr="0xc8000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/hdc/IBM-XEBEC-1982.json5"/>
@@ -11,12 +11,13 @@
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.20 (Disk 1)"},B:{name:"PC DOS 3.20 (Disk 2)"}}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/10mb/pcdos200-empty-xt3.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
+	<fpu id="fpu8087" model="8087"/>
 	<cpu id="cpu8088" model="8088" pos="right" padRight="8px" padBottom="8px">
 		<control type="button" binding="run">Run</control>
 		<control type="button" binding="reset">Reset</control>
 		<control type="button" binding="setSpeed">Speed</control>
 	</cpu>
-	<chipset id="chipset" model="5160" sw1="01001101"/>
+	<chipset id="chipset" model="5160" sw1="00001101"/>
 	<serial id="com1" adapter="1"/>
 	<serial id="com2" adapter="2"/>
 	<mouse serial="com2"/>

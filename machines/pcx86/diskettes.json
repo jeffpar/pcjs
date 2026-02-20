@@ -9068,6 +9068,38 @@
 				"compiler": {
 					"@title": "Compiler",
 					"@versions": {
+						"3.20": {
+							"@title": "Microsoft Pascal Compiler 3.20",
+							"@media": [
+								{
+									"@title": "MS Pascal 3.20 (Disk 1)",
+									"@diskette": "PASCAL320-DISK1.json",
+									"@format": "PC360K"
+								},
+								{
+									"@title": "MS Pascal 3.20 (Disk 2)",
+									"@diskette": "PASCAL320-DISK2.json",
+									"@format": "PC360K"
+								}
+							]
+						},
+						"3.30": {
+							"@title": "Microsoft Pascal Compiler 3.30",
+							"@media": [
+								{
+									"@title": "MS Pascal 3.30 (Disk 1)",
+									"@diskette": "PASCAL330-DISK1.json",
+									"@format": "PC360K",
+									"@photo": "jpg"
+								},
+								{
+									"@title": "MS Pascal 3.30 (Disk 2)",
+									"@diskette": "PASCAL330-DISK2.json",
+									"@format": "PC360K",
+									"@photo": "jpg"
+								}
+							]
+						},
 						"3.31": {
 							"@title": "Microsoft Pascal Compiler 3.31",
 							"@media": [

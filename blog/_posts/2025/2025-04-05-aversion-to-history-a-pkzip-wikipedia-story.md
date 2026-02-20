@@ -160,7 +160,7 @@ Other `PKZIP.EXE` variations included versions licensed to Microsoft and IBM, su
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=http://cd.textfiles.com/originalsw/25/pkz080.zip
 [Press CTRL-D to enter command mode]
 
@@ -205,7 +205,7 @@ bears all risk as to the quality and performance of the software.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=http://cd.textfiles.com/originalsw/25/pkz090.exe
 [Press CTRL-D to enter command mode]
 
@@ -258,7 +258,7 @@ check or money order to:   PKWARE, Inc.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=http://cd.textfiles.com/originalsw/25/pkz092.exe
 [Press CTRL-D to enter command mode]
 
@@ -315,7 +315,7 @@ check or money order to:   PKWARE, Inc.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/29986/wbiz0020-0029/wbiz0021.tar/wbiz0021/PKZ100B.ZIP
 [Press CTRL-D to enter command mode]
 
@@ -370,7 +370,7 @@ check or money order to:   PKWARE, Inc.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=http://cd.textfiles.com/originalsw/25/pkz101.exe
 [Press CTRL-D to enter command mode]
 
@@ -434,7 +434,7 @@ check or money order to:   PKWARE, Inc.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/11833/sdf.org.zip/sdf.org/pub/computers/pcjr/arc/PKZ102.EXE
 [Press CTRL-D to enter command mode]
 
@@ -636,7 +636,7 @@ o Do I have to convert the .ZIP files I made with earlier version of PKZIP?
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/17384/TheUltimateSharewareCollect.cdr/ut/ut037.zip/PKZ110.EXE
 [Press CTRL-D to enter command mode]
 
@@ -761,7 +761,7 @@ of PKZIP/PKUNZIP/PKSFX etc. version 1.1 include:
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/29651/ibm0330-0339/ibm0333.tar/ibm0333/MSONLIN2.ZIP
 [Press CTRL-D to enter command mode]
 
@@ -819,7 +819,7 @@ distribution to Microsoft customers.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0040.tar/ibm0040/W3DRV12.ZIP
 [Press CTRL-D to enter command mode]
 
@@ -869,7 +869,7 @@ Glendale, WI 53217
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/29622/ibm0040-0049/ibm0044.tar/ibm0044/PKZ193A.EXE
 [Press CTRL-D to enter command mode]
 
@@ -1161,7 +1161,7 @@ R - Rename it!  This will prompt you for a new name of the file and then
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/30009/wbiz0250-0259/wbiz0250.tar/wbiz0250/PKZ201.ZIP
 [Press CTRL-D to enter command mode]
 
@@ -1431,7 +1431,7 @@ R - Rename it!  This will prompt you for a new name of the file and then
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/18224/World_Of_Computer_Software-02-386-Vol-2of3.iso/w/wxpress2.zip/PKZ204C.EXE
 [Press CTRL-D to enter command mode]
 
@@ -1568,7 +1568,7 @@ of PKZIP/PKUNZIP/PKSFX etc. version 2.04c include:
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/4695/sound_sensations.iso/utils/zipfiles/pkz204e.exe
 [Press CTRL-D to enter command mode]
 
@@ -1825,7 +1825,7 @@ PKZIP/PKUNZIP from version 2.04c.
 
 ```
 pc.js v3.00
-Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>
+Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
 Options: --disk=https://harddisks.pcjs.org/pcx86/10mb/MSDOS330-C400.json --diskette=https://discmaster.textfiles.com/file/6140/BSTETRS2.bin/utils/pkware/pkz204g/pkz204g.exe
 [Press CTRL-D to enter command mode]
 

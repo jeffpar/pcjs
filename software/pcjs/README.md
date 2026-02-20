@@ -4,10 +4,10 @@ title: PCjs Software Archive
 permalink: /software/pcjs/
 redirect_from: /disks/pcx86/personal/
 machines:
-  - id: ibm5170
+  - id: ibmpc
     type: pcx86
-    config: /machines/pcx86/ibm/5170/ega/640kb/rev3/machine.xml
-    drives: '[{name:"10Mb Hard Disk",type:1,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
+    config: /machines/pcx86/ibm/5160/ega/512kb/machine.xml
+    drives: '[{name:"10Mb Hard Disk",type:3,path:"/harddisks/pcx86/10mb/MSDOS320-C400.json"}]'
     autoMount:
       A: "None"
       B: "Jeff's MS-DOS 3.20 Tools"
@@ -44,7 +44,7 @@ You can probably find most or all of these disks on other software sites now, ju
 
 Any other disks you see [below](#directory-listings) are primarily ones that don't neatly fit into another PCjs category, usually either because the disks contain a mixture of random/personal/unique content.
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibmpc" %}
 
 ## Directory Listings
 

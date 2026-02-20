@@ -2,7 +2,7 @@
 /**
  * @fileoverview Command-line interface to disk image processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -270,7 +270,9 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
 
     if (argv['all'] || argv['collection']) {
         if (!argv['verbose']) {
-            printf("processing: %s\n", diskFile);
+            if (argv['list'] != "oem") {
+                printf("processing: %s\n", diskFile);
+            }
         } else {
             printf("processing: %s (%d bytes, hash %s)\n", diskFile /* di.getName() */, di.getSize(), di.getHash());
         }
@@ -336,12 +338,27 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
         }
     }
 
-    if (argv['list']) {
-        let listing = argv['list'];
+    let listing = argv['list'];
+    if (listing) {
         let sLines = "";
         let iVolume = +argv['volume'];
         if (isNaN(iVolume)) iVolume = -1;
-        if (listing == "unused") {
+        if (listing == "oem") {
+            //
+            // Print the contents of abOrigBPB as hex bytes
+            //
+            let s1 = "";
+            for (let i = 1; i <= 11; i++) {
+                s1 += sprintf("%02X ", di.abOrigBPB[i]);
+            }
+            let s2 = "";
+            for (let i = 4; i <= 11; i++) {
+                let ch = di.abOrigBPB[i];
+                s2 += sprintf("%c", ch >= 0x20 && ch < 0x7f? ch : ' ');
+            }
+            printf("%s \"%s\"  %s\n", s1, s2, diskFile);
+        }
+        else if (listing == "unused") {
             let lba = -1;
             while ((lba = di.getUnusedSector(iVolume, lba)) >= 0) {
                 let sector = di.getSector(lba);
@@ -374,7 +391,6 @@ function processDisk(di, diskFile, argv, diskette = null, fSingle = false)
             /**
              * "dir" is implied if no other listing option (eg, "metadata", "sorted") is specified.
              */
-            let listing = argv['list'];
             if (typeof listing != "string") listing = "dir";
             sLines = di.getFileListing(iVolume, 0, listing) || "\tno listing available\n";
         }
@@ -1055,7 +1071,7 @@ function processAll(all, argv)
 {
     if (all && typeof all == "string") {
         let max = +argv['max'] || 0;
-        let asFiles = glob.sync(diskLib.getLocalPath(all));
+        let asFiles = glob.sync(diskLib.getLocalPath(all), { follow: true });
         if (asFiles.length) {
             let outdir = argv['output'];                // if specified, --output is assumed to be a directory
             let type =  argv['type'] || "json";         // if specified, --type should be a known file extension
@@ -1131,7 +1147,7 @@ function processArgs(argv, fSingle = false)
     input = argv['dir'];
     if (input) {                    // if --dir, the directory should end with a trailing slash (but we'll make sure)
         fDir = (typeof input == "string");
-        if (input && !input.endsWith('/')) input += '/';
+        if (fDir && !input.endsWith('/')) input += '/';
     } else {
         input = argv['files'];
         if (input) {                // if --files, the list of files should be separated with commas (and NO trailing slash)

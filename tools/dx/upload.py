@@ -13,6 +13,11 @@ ITEM_PUBLISHER = sys.argv[4]
 ITEM_CATEGORY = sys.argv[5]
 ITEM_DESC_FILE = sys.argv[6]
 
+#
+# Weirdly, if the descriptive text for a new item (not the item itself, just its description) contains
+# certain strings, such as "Program Files" or "Windows/System32" directory names, Archive.org will reject
+# the upload, presumably because it believes the item could contain a virus.
+#
 try:
 	with open(ITEM_DESC_FILE, 'r', encoding='utf-8') as f:
 		description_content = f.read().strip().replace("<", "[").replace(">", "]")

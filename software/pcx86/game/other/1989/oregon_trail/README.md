@@ -4,7 +4,7 @@ title: The Oregon Trail (1989)
 permalink: /software/pcx86/game/other/1989/oregon_trail/
 preview: images/screenshot.png
 machines:
-  - id: ibm5170-oregon11
+  - id: ibm5170
     type: pcx86
     config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     autoGen: true
@@ -22,7 +22,7 @@ Newer IBM PC versions include:
 
 To start the game, type `GO` and press Enter.
 
-{% include machine.html id="ibm5170-oregon11" %}
+{% include machine.html id="ibm5170" %}
 
 ### Directory of Oregon Trail 1.1 (1989)
 

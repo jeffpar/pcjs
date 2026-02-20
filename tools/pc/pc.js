@@ -2,7 +2,7 @@
 /**
  * @fileoverview Implements the PCjs machine command-line interface
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -3652,7 +3652,7 @@ export default class PC extends PCJSLib {
                 let args = argv.slice(1).join(' ');
                 let sCommand = this.checkCommand(this.localDir, args);
                 if (!sCommand && args) {
-                    error = "command not found: " + args;
+                    error = "unrecognized command or directory: " + args;
                 } else if (!this.localDir) {
                     warning = "unable to add command '" + sCommand + "' to prebuilt disk";
                 } else {

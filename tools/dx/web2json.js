@@ -43,7 +43,7 @@ const options = {
 async function main(argc, argv, errors)
 {
     let file;
-    printf("import.js %s\n%s\n\nArguments: %s\n", "1.0", "Copyright © 2012-2025 Jeff Parsons <Jeff@pcjs.org>", argv[0]);
+    printf("import.js %s\n%s\n\nArguments: %s\n", "1.0", "Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>", argv[0]);
     if (argv.help) {
         options.help.handler();
         return;

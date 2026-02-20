@@ -1,7 +1,7 @@
 /**
  * @fileoverview Disk Image Functions
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -819,7 +819,7 @@ export default class DiskLib {
                         let desc = driveInfo.files[i];
                         desc.attr = +desc[DiskInfo.FILEDESC.ATTR];
                         desc.data = new DataBuffer(desc[DiskInfo.FILEDESC.CONTENTS]);
-                        desc.date =diskLib.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
+                        desc.date = diskLib.device.parseDate(desc[DiskInfo.FILEDESC.DATE], true);
                         delete desc[DiskInfo.FILEDESC.HASH];
                         delete desc[DiskInfo.FILEDESC.CONTENTS];
                         let j = aFileData.findIndex((file) => (file.name === desc.name));

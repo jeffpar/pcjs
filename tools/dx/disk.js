@@ -1,7 +1,7 @@
 /**
  * @fileoverview Disk processing module
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -155,7 +155,7 @@ export default class Disk {
             const stats = await file.stat();
             if (!stats.size) {
                 await file.close();
-                throw new Error(`File is empty`);
+                throw new Error(`Empty disk image`);
             }
             //
             // If the caller supplied a modification date for the image, then we stick with that,
@@ -283,6 +283,7 @@ export default class Disk {
      *
      * NOTE: This should not be called until after readDirectory() has been called.
      *
+     * @this {Disk}
      * @param {DiskInfo} diskInfo
      * @returns {string}
      */

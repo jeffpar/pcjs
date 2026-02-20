@@ -1,31 +1,31 @@
 {
   "defaults": {
-    "type": "pcx86",            // alternatives: "pdp11"
-    "sys": "msdos",             // alternatives: "pcdos", "compaq" (see "systems" below)
-    "ver": "3.30",              // alternatives: (see "versions" below)
-    "mbr": "pcjs.mbr",          // alternatives: "DOS.mbr"
-    "target": "10M",            // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
-    "maxfiles": 0,              // 0 for default: target disk size (in Kb) divided by 5 (eg, 10240Kb / 5 or 2048 files)
-    "label": ".",               // alternatives: "default"
+    "type": "pcx86",                    // alternatives: "pdp11"
+    "sys": "msdos",                     // alternatives: "pcdos", "compaq" (see "systems" below)
+    "ver": "3.30",                      // alternatives: (see "versions" below)
+    "mbr": "pcjs.mbr",                  // alternatives: "DOS.mbr"
+    "target": "10M",                    // alternatives: "160K", "320K", "180K", "360K", "1200K", "1440K", "20M", "30M", etc.
+    "maxfiles": 0,                      // 0 for default: target disk size (in Kb) divided by 5 (eg, 10240Kb / 5 or 2048 files)
+    "label": ".",                       // alternatives: "default"
     "dir": ".",
     "machine": "compaq386.json",
     "state": "state386.json",
-    "diskette": "diskette.json",// default name of local diskette image corresponding to 'diskette' option, if any
-    "disk": "pcjs.json",        // default name of local built (floppy or hard) disk image corresponding to local 'dir'
-    "messages": "",             // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
-    "normalize": false,         // true converts LF to CR/LF and translates/removes non-CP437 characters from text files
-    "config": [                 // if set (and no CONFIG.SYS already exists), then one will be created with these lines
+    "diskette": "diskette.json",        // default name of local diskette image corresponding to 'diskette' option, if any
+    "disk": "pcjs.json",                // default name of local built (floppy or hard) disk image corresponding to local 'dir'
+    "messages": "",                     // a list of debugger message categories to enable when --halt is used (eg, "int,hdc")
+    "normalize": false,                 // true converts LF to CR/LF and translates/removes non-CP437 characters from text files
+    "config": [                         // if set (and no CONFIG.SYS already exists), then one will be created with these lines
       "FILES=20",
       "BUFFERS=20"
     ],
-    "autoexec": [               // if set, these lines will be appended to AUTOEXEC.BAT
+    "autoexec": [                       // if set, these lines will be appended to AUTOEXEC.BAT
     ]
   },
   "apps": {
-    "cp": {},                   // create CP.COM
-    "ls": {},                   // create LS.COM
-    "vi": {},                   // create VI.COM
-    // ".edit": {               // create EDIT.COM that launches "vi" instead
+    "cp": {},                           // create CP.COM
+    "ls": {},                           // create LS.COM
+    "vi": {},                           // create VI.COM
+    // ".edit": {                       // create EDIT.COM that launches "vi" instead
     //   "exec": "vi $*"
     // }
   },
@@ -47,26 +47,27 @@
     },
     "bd": {
       "vendor": "pcjs.org",
-      "product": "basic-dos",   // see https://github.com/jeffpar/basicdos
+      "product": "basic-dos",           // see https://github.com/jeffpar/basicdos
       "versions": {
-        "2.00A": {              // BASIC-DOS 2.00 requires the "v2" branch (until it's merged into "master")
+        "2.00A": {                      // BASIC-DOS 2.00 requires the "v2" branch (until it's merged into "master")
           "dir": "%basicdos/software/pcx86/src",
           "boot": "os/boot/OBJ/BOOT.COM",
-          "boot1Offset": 0x550, // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
-          "boot2Offset": 0,     // use 0x760 if BASDEV.COM does NOT already contain boot code from BOOT2.COM)
+          "boot1Offset": 0x550,         // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
+          "boot2Offset": 0,             // use 0x760 if BASDEV.COM does NOT already contain boot code from BOOT2.COM
           "files": [
+            "configs/200A/CONFIG.SYS",  // NOTE: this CONFIG.SYS redirects all BASIC-DOS I/O to COM1
             "os/dev/OBJ/BASDEV.COM",
             "os/dos/OBJ/BASDOS.COM",
             "os/cmd/OBJ/COMMAND.COM"
           ],
-          "target": "bd200a"
+          "target": "BD200A"
         }
       }
     },
     "compaq": {
       "vendor": "compaq",
       "product": "compaq-dos",
-      "versions": {             // early versions of COMPAQ DOS used unusual system file names
+      "versions": {                     // early versions of COMPAQ DOS used unusual system file names
         "1.10": {
           "disk": "COMPAQ-DOS110B",
           "files": ["IOSYS.COM", "MSDOS.COM", "COMMAND.COM"]

@@ -1,7 +1,7 @@
 /**
  * @fileoverview ISO 9660 Extraction Library
  * @author Jeff Parsons <Jeff@pcjs.org>
- * @copyright © 2012-2025 Jeff Parsons
+ * @copyright © 2012-2026 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
@@ -910,7 +910,7 @@ export default class ISO {
                             flags: 0,
                             method: 0,
                             crc: 0,
-                            warnings: []
+                            warnings: record.warnings || []
                         });
                     }
                 }

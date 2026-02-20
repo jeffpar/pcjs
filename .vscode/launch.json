@@ -521,665 +521,6 @@
       }
     },
     {
-      "name": "PC.js",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "disks/msdos"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js with Bun",
-      "type": "bun",
-      "request": "launch",
-      // The path to a JavaScript or TypeScript file to run.
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      // The arguments to pass to the program, if any.
-      "args": [
-        "disks/msdos",
-        "--target=32M",
-        "--sys=msdos:3.31",
-        "--halt"
-      ],
-      // The working directory of the program.
-      "cwd": "${workspaceFolder}/tools/pc",
-      // The environment variables to pass to the program.
-      "env": {},
-      // If the environment variables should not be inherited from the parent process.
-      "strictEnv": false,
-      // If the program should be run in watch mode.
-      // This is equivalent to passing `--watch` to the `bun` executable.
-      // You can also set this to "hot" to enable hot reloading using `--hot`.
-      "watchMode": false,
-      // If the debugger should stop on the first line of the program.
-      "stopOnEntry": false,
-      // If the debugger should be disabled. (for example, breakpoints will not be hit)
-      "noDebug": false,
-      // The path to the `bun` executable, defaults to your `PATH` environment variable.
-      "runtime": "bun",
-      // The arguments to pass to the `bun` executable, if any.
-      // Unlike `args`, these are passed to the executable itself, not the program.
-      "runtimeArgs": [],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js BASIC-DOS build",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--disk=tools.json",
-        "--dir=%basicdos/software/pcx86/src",
-        "--normalize"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js BASIC-DOS boot",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5160",
-        "%basicdos/software/pcx86/src/configs/200A",
-        "--system=bd",
-        "--version=2.00A",
-        "--floppy",
-        "--serial"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js compaq386",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "disks/msdos",
-        "--sys=compaq",
-        "--ver=3.31",
-        "--target=40M"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5150",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5150",
-        "disks/empty",
-        "--floppy",
-        "--system=pcdos",
-        "--version=1.0",
-        "--halt"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5160",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5160",
-        "disks/msdos",
-        "load a: pc dos 2.0 disk 1",
-        "--sys=pcdos",
-        "--ver=2.00"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5160 (remote)",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5170",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--disk=https://harddisks.pcjs.org/pcx86/20mb/IBMOS210-EGA.json"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5170 --target=27M dir",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--target=27M",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js ibm5170 --drivetype=200:4:17 dir",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--drivetype=200:4:17",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js playground",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/tools/pc/#playground",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js scp",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "scp.json",
-        "--debug",
-        "--halt"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js test386",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=test386",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js --select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
-        "disks/msdos"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js --select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
-        "disks/msdos"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --sys=compaq --ver=3.31",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--sys=compaq",
-        "--ver=3.31",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --sys=pcdos --ver=2.00",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--sys=pcdos",
-        "--ver=2.00",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --sys=pcdos --ver=2.00 --target=20M",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--sys=pcdos",
-        "--ver=2.00",
-        "--target=20M",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --sys=pcdos --ver=3.10",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--sys=pcdos",
-        "--ver=3.10",
-        "disks/msdos",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --sys=pcdos --ver=3.10 --target=20M",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--sys=pcdos",
-        "--ver=3.10",
-        "--target=20M",
-        "ibm5170",
-        "disks/msdos",
-        "dir *.*",
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --disk=PCDOS200-DISK1.json",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --disk=PCDOS200-C400.json",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "ibm5170",
-        "--disk=https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
-        "dir"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js dir --drivetype=80:2:18 --sys=compaq --ver=3.31",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "disks/empty",
-        "dir",
-        "--drivetype=80:2:18",
-        "--sys=compaq",
-        "--ver=3.31"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js MS-DOS/v4.0 [Build]",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--system=msdos",
-        "--version=3.30",
-        "--target=30M",
-        "--normalize"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js MS-DOS/v4.0 [Boot]",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--system=custom",
-        "--version=4.00",
-        "--target=30M",
-        "--normalize"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js PDP-11/20",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=/machines/dec/pdp11/1120/basic/machine.xml",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js PDP-11/20 [Debugger]",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
-        "--dir=none",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
-      "name": "PC.js PDP-11/70 [Debugger]",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/pc/pc.js",
-      "args": [
-        "--select=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
-        "--debug"
-      ],
-      "cwd": "${workspaceFolder}/tools/pc",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "machines",
-        "order": 15
-      }
-    },
-    {
       "name": "101 Monochrome Mazes (1983)",
       "type": "chrome",
       "request": "launch",
@@ -1912,6 +1253,18 @@
       }
     },
     {
+      "name": "PCjs Software Archive",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcjs/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "tools",
+        "order": 40
+      }
+    },
+    {
       "name": "Blog: Puzzled Programmers",
       "type": "chrome",
       "request": "launch",
@@ -1934,6 +1287,96 @@
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
       "console": "internalConsole",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "diskdump.js (deprecated)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump.js",
+      "args": [
+        "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
+        "--format=json",
+        "--output=disk1.json",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "diskettes.js --collection=pcsigdisks",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "args": [
+        "--collection=pcsigdisks",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "diskettes.js /disks/pcsigdisks --folders=json",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "args": [
+        "/disks/pcsigdisks",
+        "--folders=json",
+        "--trim",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "diskettes.js /disks/private --folders",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "args": [
+        "/disks/private",
+        "--folders",
+        "--filter=group12",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
@@ -2008,10 +1451,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=ibm0020-0029",
-        "--list=csv"
+        "--all=**/*.img",
+        "--list=oem"
       ],
-      "cwd": "/Volumes/MacSSD/Downloads/ibm-wgam-wbiz-collection",
+      "cwd": "/Users/jeff/Sites/pcjs/disks",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2441,6 +1884,200 @@
       }
     },
     {
+      "name": "dx.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--help"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js all",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "-ltr --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/**/*.{ZIP,ARC}"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js csv",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download*/**/* --fileID=20000001 --itemID=10000001 --setID=1001 --recurse --test --csv ibm.csv"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js dirty",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "-lt --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js filter",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--list --filter squeeze --batch tests/clean-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js split",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--list --filter split --batch tests/dirty-archives.log"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx.js test",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/dx.js",
+      "args": [
+        "--csv test.csv --path '/Volumes/MacSSD/Discs/TechNet/**/*.{iso,mdf,bin,cdr}'"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx import.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/dx/import.js",
+      "args": [
+        "--database software --table files2 --drop test.csv"
+      ],
+      "cwd": "${workspaceFolder}/tools/dx",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "dx test.html",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/dx/test.html",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "filedump.js (deprecated)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",
+      "args": [
+        "--file=machines/palm/pilot/roms/pilot.rom",
+        "--format=bytes",
+        "--decimal"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
       "name": "fileimage.js",
       "type": "node",
       "request": "launch",
@@ -2583,15 +2220,14 @@
       }
     },
     {
-      "name": "diskettes.js --collection=pcsigdisks",
+      "name": "pc.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--collection=pcsigdisks",
-        "--overwrite"
+        "disks/msdos"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2604,17 +2240,54 @@
       }
     },
     {
-      "name": "diskettes.js /disks/pcsigdisks --folders=json",
+      "name": "pc.js with Bun",
+      "type": "bun",
+      "request": "launch",
+      // The path to a JavaScript or TypeScript file to run.
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      // The arguments to pass to the program, if any.
+      "args": [
+        "disks/msdos",
+        "--target=32M",
+        "--sys=msdos:3.31",
+        "--halt"
+      ],
+      // The working directory of the program.
+      "cwd": "${workspaceFolder}/tools/pc",
+      // The environment variables to pass to the program.
+      "env": {},
+      // If the environment variables should not be inherited from the parent process.
+      "strictEnv": false,
+      // If the program should be run in watch mode.
+      // This is equivalent to passing `--watch` to the `bun` executable.
+      // You can also set this to "hot" to enable hot reloading using `--hot`.
+      "watchMode": false,
+      // If the debugger should stop on the first line of the program.
+      "stopOnEntry": false,
+      // If the debugger should be disabled. (for example, breakpoints will not be hit)
+      "noDebug": false,
+      // The path to the `bun` executable, defaults to your `PATH` environment variable.
+      "runtime": "bun",
+      // The arguments to pass to the `bun` executable, if any.
+      // Unlike `args`, these are passed to the executable itself, not the program.
+      "runtimeArgs": [],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js BASIC-DOS build",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "/disks/pcsigdisks",
-        "--folders=json",
-        "--trim",
-        "--overwrite"
+        "--disk=tools.json",
+        "--dir=%basicdos/software/pcx86/src",
+        "--normalize"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2627,17 +2300,19 @@
       }
     },
     {
-      "name": "diskettes.js /disks/private --folders",
+      "name": "pc.js BASIC-DOS boot",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/diskettes.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "/disks/private",
-        "--folders",
-        "--filter=group12",
-        "--verbose"
+        "ibm5160",
+        "%basicdos/software/pcx86/src/configs/200A",
+        "--system=bd",
+        "--version=2.00A",
+        "--floppy",
+        "--serial"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2650,17 +2325,17 @@
       }
     },
     {
-      "name": "diskdump.js (deprecated)",
+      "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
-        "--format=json",
-        "--output=disk1.json",
-        "--overwrite"
+        "disks/msdos",
+        "--sys=compaq",
+        "--ver=3.31",
+        "--target=40M"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2673,16 +2348,548 @@
       }
     },
     {
-      "name": "filedump.js (deprecated)",
+      "name": "pc.js ibm5150",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
-        "--file=machines/palm/pilot/roms/pilot.rom",
-        "--format=bytes",
-        "--decimal"
+        "ibm5150",
+        "disks/empty",
+        "--floppy",
+        "--system=pcdos",
+        "--version=1.0",
+        "--halt"
       ],
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5160",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5160",
+        "disks/msdos",
+        "load a: pc dos 2.0 disk 1",
+        "--sys=pcdos",
+        "--ver=2.00"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5160 (remote)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "https://www.pcjs.org/machines/pcx86/ibm/5160/cga/640kb/machine.xml",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5160 (BASIC-DOS 2.00A)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5160",
+        "--floppy",
+        "--system=bd:2A",
+        "disks/empty"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5170",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--disk=https://harddisks.pcjs.org/pcx86/20mb/IBMOS210-EGA.json"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --target=27M dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--target=27M",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js ibm5170 --drivetype=200:4:17 dir",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--drivetype=200:4:17",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js playground",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/tools/pc/#playground",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js scp",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "scp.json",
+        "--debug",
+        "--halt"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js test386",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=test386",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js --select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=/machines/pcx86/ibm/5170/cga/640kb/rev3/machine.xml",
+        "disks/msdos"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js --select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
+        "disks/msdos"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --sys=compaq --ver=3.31",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=compaq",
+        "--ver=3.31",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --sys=pcdos --ver=2.00",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=2.00",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --sys=pcdos --ver=2.00 --target=20M",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=2.00",
+        "--target=20M",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --sys=pcdos --ver=3.10",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=3.10",
+        "disks/msdos",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --sys=pcdos --ver=3.10 --target=20M",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--sys=pcdos",
+        "--ver=3.10",
+        "--target=20M",
+        "ibm5170",
+        "disks/msdos",
+        "dir *.*",
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --disk=PCDOS200-DISK1.json",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--disk=https://diskettes.pcjs.org/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --disk=PCDOS200-C400.json",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "ibm5170",
+        "--disk=https://harddisks.pcjs.org/pcx86/10mb/PCDOS200-C400.json",
+        "dir"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js dir --drivetype=80:2:18 --sys=compaq --ver=3.31",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "disks/empty",
+        "dir",
+        "--drivetype=80:2:18",
+        "--sys=compaq",
+        "--ver=3.31"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js MS-DOS/v4.0 [Build]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=msdos",
+        "--version=3.30",
+        "--target=30M",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js MS-DOS/v4.0 [Boot]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--system=custom",
+        "--version=4.00",
+        "--target=30M",
+        "--normalize"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc/disks/MS-DOS/v4.0",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js PDP-11/20",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=/machines/dec/pdp11/1120/basic/machine.xml",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js PDP-11/20 [Debugger]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=/machines/dec/pdp11/1120/basic/debugger/machine.xml",
+        "--dir=none",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "utilities",
+        "order": 50
+      }
+    },
+    {
+      "name": "pc.js PDP-11/70 [Debugger]",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/pc/pc.js",
+      "args": [
+        "--select=/machines/dec/pdp11/1170/panel/debugger/machine.xml",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/tools/pc",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -2750,178 +2957,6 @@
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "--help"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js all",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "-ltr --path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download/**/*.{ZIP,ARC}"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js csv",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "--path /Volumes/MacSSD/Archives/sets/ibm-wgam-wbiz-collection/download*/**/* --fileID=20000001 --itemID=10000001 --setID=1001 --recurse --test --csv ibm.csv"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js dirty",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "-lt --batch tests/dirty-archives.log"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js filter",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "--list --filter squeeze --batch tests/clean-archives.log"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js split",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "--list --filter split --batch tests/dirty-archives.log"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx.js test",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/dx.js",
-      "args": [
-        "--dir ../pc/disks/msdos.json"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx import.js",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/dx/import.js",
-      "args": [
-        "--database software --table files2 --drop test.csv"
-      ],
-      "cwd": "${workspaceFolder}/tools/dx",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ],
-      "presentation": {
-        "hidden": false,
-        "group": "utilities",
-        "order": 50
-      }
-    },
-    {
-      "name": "dx test.html",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/tools/dx/test.html",
-      "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
         "group": "utilities",
