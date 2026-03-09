@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="deskpro386" type="pcx86" uncompiled="true" border="1" pos="center" background="default">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<heading>COMPAQ DeskPro 386</heading>
 	<intro>This "Visualizer" configuration is running the "uncompiled" version of PCx86, so that
 	BackTrack information is available to the PCjs Debugger.  As a result, the machine runs much slower.

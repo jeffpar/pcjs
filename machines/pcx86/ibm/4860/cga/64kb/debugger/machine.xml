@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="ibm4860" type="pcx86" border="1" pos="center" background="default">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<name pos="center">IBM PCjr (Model 4860) with 64Kb RAM</name>
 	<computer id="pcjr-cga-64k" name="IBM PCjr"/>
 	<cpu id="cpu8088" model="8088"/>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/dec/pdp11/xsl/machine.xsl"?>
 <machine id="test1120" type="pdp11" border="1" pos="center" background="default">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<name pos="center">PDP-11/20: 16Kb, PDP-11 BASIC, Debugger</name>
 	<computer id="computer" busWidth="16"/>
 	<cpu id="cpu" model="1120" cycles="6666667"/>
