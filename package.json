@@ -54,6 +54,7 @@
     "sequelize": "^6.37.7",
     "serialport": "^11.0.1",
     "xml2js": "^0.5.0",
+    "xslt-polyfill": "^1.0.19",
     "yargs-parser": "^21.1.1"
   }
 }
