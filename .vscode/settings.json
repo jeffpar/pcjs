@@ -1,6 +1,5 @@
 {
   "files.exclude": {
-    "_site/": true,
     ".fseventsd": true,
     ".history": true,
     ".sass-cache": true,

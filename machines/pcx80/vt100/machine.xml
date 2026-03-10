@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx80/xsl/machine.xsl"?>
 <machine id="vt100" type="pcx80" border="1" pos="center" background="default">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<name>VT100 Terminal</name>
 	<computer id="computer" busWidth="16"/>
 	<rom id="rom" addr="0x0000" size="0x2000" file="/machines/dec/vt100/rom/VT100.json5"/>

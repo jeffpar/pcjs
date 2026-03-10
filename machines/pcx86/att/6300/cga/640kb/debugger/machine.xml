@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="att6300" type="pcx86" border="1" pos="center" background="default">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<name pos="center">AT&amp;T Personal Computer 6300 with CGA</name>
 	<computer id="att6300-640k" name="AT&amp;T 6300"/>
 	<cpu id="cpu8086" model="8086" cycles="8000000"/>

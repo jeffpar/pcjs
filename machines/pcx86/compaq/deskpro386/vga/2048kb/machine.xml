@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
 <machine id="deskpro386" type="pcx86" border="1" pos="center" background="default" debugger="available">
+	<script src="/assets/js/xslt-polyfill.min.js" xmlns="http://www.w3.org/1999/xhtml"></script>
 	<name pos="center">COMPAQ DeskPro 386, 2Mb RAM, IBM VGA</name>
 	<computer id="deskpro386-vga-2048k" name="COMPAQ DeskPro 386" buswidth="32"/>
 	<cpu id="cpu386" model="80386"/>
