@@ -1549,8 +1549,12 @@ export default class DiskInfo {
              */
             rootEntries = driveInfo.rootEntries || 512;
             rootEntries = ((rootEntries + 15) >> 4) << 4;       // round up to nearest multiple of 16
-            if (!driveInfo.rootEntries && rootEntries < aFileData.length) {
-                rootEntries = Math.ceil(aFileData.length / rootEntries) * rootEntries;
+            /*
+             * Calculate total directory entries needed, including LFN entries
+             */
+            let cTotalRootEntries = this.getTotalDirEntries(aFileData);
+            if (!driveInfo.rootEntries && rootEntries < cTotalRootEntries) {
+                rootEntries = Math.ceil(cTotalRootEntries / rootEntries) * rootEntries;
             }
 
             /*
@@ -1910,7 +1914,11 @@ export default class DiskInfo {
                 if ((abBoot[DiskInfo.BPB.MEDIA] == DiskInfo.FAT.MEDIA_FIXED) != (kbTarget >= 10000)) continue;
                 rootEntries = getBoot(DiskInfo.BPB.DIRENTS, 2);
                 if (rootEntries > maxRoot) maxRoot = rootEntries;
-                if (aFileData.length > rootEntries) continue;
+                /*
+                 * Check if this BPB has enough root directory entries for our files,
+                 * including any LFN entries that may be required.
+                 */
+                if (this.getTotalDirEntries(aFileData) > rootEntries) continue;
                 cbSector = getBoot(DiskInfo.BPB.SECBYTES, 2);
                 cSectorsPerCluster = abBoot[DiskInfo.BPB.CLUSSECS];
                 cbCluster = cbSector * cSectorsPerCluster;
@@ -1938,7 +1946,11 @@ export default class DiskInfo {
             }
             if (iBPB == DiskInfo.aDefaultBPBs.length) {
                 rootEntries = maxRoot;
-                if (aFileData.length <= rootEntries) {
+                /*
+                 * If we ran out of BPBs but the issue isn't root directory entries
+                 * (including LFN entries), then it must be total disk size.
+                 */
+                if (this.getTotalDirEntries(aFileData) <= rootEntries) {
                     this.printf(MESSAGE.DISK + MESSAGE.ERROR, "files exceed supported disk formats (%d bytes total)\n", cbTotal);
                     return false;
                 }
@@ -1953,8 +1965,13 @@ export default class DiskInfo {
             this.cbSector = cbSector;
         }
 
-        if (aFileData.length > rootEntries) {
-            this.printf(MESSAGE.DISK + MESSAGE.ERROR, "%d files in root exceeds supported maximum of %d\n", aFileData.length, rootEntries);
+        /*
+         * Check if we have enough root directory entries for all files,
+         * including any LFN entries that may be required.
+         */
+        let cRootEntriesNeeded = this.getTotalDirEntries(aFileData);
+        if (cRootEntriesNeeded > rootEntries) {
+            this.printf(MESSAGE.DISK + MESSAGE.ERROR, "%d directory entries in root exceeds supported maximum of %d\n", cRootEntriesNeeded, rootEntries);
             return false;
         }
 
@@ -2245,12 +2262,22 @@ export default class DiskInfo {
                 this.printf(MESSAGE.DISK, "file %s missing cluster, skipping\n", file.name);
                 continue;
             }
+            let fVolume = !!(file.attr & DiskInfo.ATTR.VOLUME);
             let name, uniqueID = 0;
             do {
-                name = this.buildShortName(file.name, !!(file.attr & DiskInfo.ATTR.VOLUME), uniqueID++, file.nameEncoding);
+                name = this.buildShortName(file.name, fVolume, uniqueID++, file.nameEncoding);
             } while (names.indexOf(name) >= 0);
-            if (file.attr != DiskInfo.ATTR.VOLUME) {
+            if (!fVolume) {
                 names.push(name);       // volume labels are not considered a potential name conflict
+                /*
+                 * Generate LFN entries if the original filename requires them.
+                 * LFN entries are written before the short 8.3 entry.
+                 */
+                if (this.needsLFN(file.name)) {
+                    let cbLFN = this.buildLFNEntries(abDir, offDir, file.name, name);
+                    offDir += cbLFN;
+                    cEntries += cbLFN / DiskInfo.DIRENT.LENGTH;
+                }
             }
             offDir += this.buildDirEntry(abDir, offDir, name, file.size, file.attr, file.date, file.cluster);
             cEntries++;
@@ -2351,7 +2378,22 @@ export default class DiskInfo {
         for (let iFile = 0; iFile < aFileData.length; iFile++) {
             cb = aFileData[iFile].size;
             if (cb < 0) {
-                cb = (aFileData[iFile].files.length + 2) * 32;
+                /*
+                 * Calculate the size of this subdirectory, accounting for:
+                 * - 2 entries for "." and ".."
+                 * - 1 short entry per file
+                 * - LFN entries for files with long filenames
+                 */
+                let cEntries = 2; // "." and ".."
+                for (let iSubFile = 0; iSubFile < aFileData[iFile].files.length; iSubFile++) {
+                    let subFile = aFileData[iFile].files[iSubFile];
+                    cEntries++; // short entry
+                    // Add LFN entries if needed (but not for volume labels)
+                    if (!(subFile.attr & DiskInfo.ATTR.VOLUME)) {
+                        cEntries += this.getLFNEntryCount(subFile.name);
+                    }
+                }
+                cb = cEntries * 32;
                 cSubDirs++;
             }
             let cFileClusters = ((cb + cbCluster - 1) / cbCluster) | 0;
@@ -2539,6 +2581,254 @@ export default class DiskInfo {
             }
         }
         return sName;
+    }
+
+    /**
+     * needsLFN(sFile)
+     *
+     * Determines whether a filename requires Long Filename (LFN) entries.
+     * LFN is needed if:
+     * - The name part exceeds 8 characters
+     * - The extension exceeds 3 characters
+     * - The name contains lowercase letters
+     * - The name contains characters not valid in 8.3 format (spaces, multiple dots, etc.)
+     *
+     * @this {DiskInfo}
+     * @param {string} sFile is the filename to check
+     * @returns {boolean} true if LFN entries are required
+     */
+    needsLFN(sFile)
+    {
+        if (!sFile || sFile === "." || sFile === "..") {
+            return false;
+        }
+
+        let iExt = sFile.lastIndexOf('.');
+        let sName, sExt;
+        if (iExt > 0) {
+            sName = sFile.substring(0, iExt);
+            sExt = sFile.substring(iExt + 1);
+        } else {
+            sName = sFile;
+            sExt = "";
+        }
+
+        // Check length constraints
+        if (sName.length > 8 || sExt.length > 3) {
+            return true;
+        }
+
+        // Check for lowercase letters
+        if (sFile !== sFile.toUpperCase()) {
+            return true;
+        }
+
+        // Check for characters not allowed in 8.3 format
+        // Valid chars: A-Z, 0-9, and certain special chars
+        let validChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!#$%&'()-@^_`{}~";
+        for (let i = 0; i < sName.length; i++) {
+            if (validChars.indexOf(sName.charAt(i)) < 0) {
+                return true;
+            }
+        }
+        for (let i = 0; i < sExt.length; i++) {
+            if (validChars.indexOf(sExt.charAt(i).toUpperCase()) < 0) {
+                return true;
+            }
+        }
+
+        // Check for multiple dots in the name (excluding the one separating name and extension)
+        if (sName.indexOf('.') >= 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+  /**
+   * getLFNEntryCount(sLongName)
+   *
+   * Returns the number of LFN directory entries needed to store the long filename.
+   * Each LFN entry stores 13 UCS-2 chars.
+   *
+   * @this {DiskInfo}
+   * @param {string} sLongName the long filename
+   * @returns {number} number of LFN entries required
+   */
+  getLFNEntryCount(sLongName) {
+    if (!this.needsLFN(sLongName)) {
+      return 0;
+    }
+    else {
+      return Math.ceil(sLongName.length / 13);
+    }
+  }
+
+    /**
+     * getTotalDirEntries(aFileData)
+     *
+     * Calculates the total number of directory entries needed for an array of files,
+     * including both short (8.3) entries and any required LFN entries.
+     *
+     * @this {DiskInfo}
+     * @param {Array.<FileData>} aFileData
+     * @returns {number} total number of directory entries required
+     */
+    getTotalDirEntries(aFileData)
+    {
+        let cEntries = 0;
+        for (let iFile = 0; iFile < aFileData.length; iFile++) {
+            let file = aFileData[iFile];
+            cEntries++; // short entry
+            // Add LFN entries if needed (but not for volume labels)
+            if (!(file.attr & DiskInfo.ATTR.VOLUME)) {
+                cEntries += this.getLFNEntryCount(file.name);
+            }
+        }
+        return cEntries;
+    }
+
+    /**
+     * buildLFNChecksum(sShortName)
+     *
+     * Calculates the checksum for the 8.3 short name that will be stored in each LFN entry.
+     * The checksum is computed over the 11-byte 8.3 name (uppercase, space-padded)
+     *
+     * Algorithm: for each byte, rotate checksum right by 1 bit, then add the byte.
+     *
+     * @this {DiskInfo}
+     * @param {string} sShortName is the 8.3 format short name (e.g., "LONGFI~1.TXT")
+     * @returns {number} the 8-bit checksum
+     */
+    buildLFNChecksum(sShortName)
+    {
+        // short name buffer (8 name, 3 extension, space-padded)
+        let ab = [];
+        let i = sShortName.indexOf('.');
+        let sName, sExt;
+        if (i >= 0) {
+            sName = sShortName.substring(0, i);
+            sExt = sShortName.substring(i + 1);
+        } else {
+            sName = sShortName;
+            sExt = "";
+        }
+
+        // Pad name to 8 bytes
+        for (i = 0; i < 8; i++) {
+            ab.push(i < sName.length ? sName.charCodeAt(i) : 0x20);
+        }
+
+        // Pad extension to 3 bytes
+        for (i = 0; i < 3; i++) {
+            ab.push(i < sExt.length ? sExt.charCodeAt(i) : 0x20);
+        }
+
+        // Calculate checksum
+        let sum = 0;
+        for (i = 0; i < 11; i++) {
+            sum = (((sum & 1) << 7) + (sum >> 1) + ab[i]) & 0xFF;
+        }
+
+        return sum;
+    }
+
+    /**
+     * buildLFNEntries(ab, off, sLongName, sShortName)
+     *
+     * Builds the Long Filename (LFN) directory entries that precede a short 8.3 entry.
+     * LFN entries are stored in reverse order: the entry with the highest ordinal
+     * (and 0x40 flag) comes first, and ordinal 1 comes last (just before the short entry).
+     *
+     * Each LFN entry layout (32 bytes):
+     *   Byte 0:     Ordinal (1-based, 0x40 OR'd on the last/highest entry)
+     *   Bytes 1-10: Characters 1-5 in UTF-16LE (10 bytes)
+     *   Byte 11:    Attribute (0x0F for LFN)
+     *   Byte 12:    Type (always 0x00 for VFAT LFN)
+     *   Byte 13:    Checksum of short name
+     *   Bytes 14-25: Characters 6-11 in UTF-16LE (12 bytes)
+     *   Bytes 26-27: First cluster (always 0x0000 for LFN entries)
+     *   Bytes 28-31: Characters 12-13 in UTF-16LE (4 bytes)
+     *
+     * @this {DiskInfo}
+     * @param {Array.<number>} ab contains the bytes of a directory
+     * @param {number} off is the offset within ab to build the LFN entries
+     * @param {string} sLongName is the original long filename
+     * @param {string} sShortName is the 8.3 short filename
+     * @returns {number} number of bytes written (multiple of 32)
+     */
+    buildLFNEntries(ab, off, sLongName, sShortName)
+    {
+        let offStart = off;
+        let nEntries = this.getLFNEntryCount(sLongName);
+        if (nEntries === 0) {
+            return 0;
+        }
+
+        let checksum = this.buildLFNChecksum(sShortName);
+
+        // Convert long name to array of UTF-16LE code units
+        let chars = [];
+        for (let i = 0; i < sLongName.length; i++) {
+            chars.push(sLongName.charCodeAt(i));
+        }
+        // Add null terminator if there's room in the last entry
+        if (sLongName.length % 13 !== 0) {
+            chars.push(0x0000);
+        }
+        // Pad remaining slots with 0xFFFF
+        while (chars.length < nEntries * 13) {
+            chars.push(0xFFFF);
+        }
+
+        // Write entries in reverse order (highest ordinal first)
+        for (let entry = nEntries; entry >= 1; entry--) {
+            let ordinal = entry;
+            if (entry === nEntries) {
+                ordinal |= 0x40; // Mark as last (highest) entry
+            }
+
+            let charIndex = (entry - 1) * 13;
+
+            // Byte 0: Ordinal
+            ab[off++] = ordinal;
+
+            // Bytes 1-10: Characters 1-5 (UTF-16LE)
+            for (let i = 0; i < 5; i++) {
+                let ch = chars[charIndex + i];
+                ab[off++] = ch & 0xFF;
+                ab[off++] = (ch >> 8) & 0xFF;
+            }
+
+            // Byte 11: Attribute (LFN = 0x0F)
+            ab[off++] = DiskInfo.ATTR.LFN;
+
+            // Byte 12: Type (0x00)
+            ab[off++] = 0x00;
+
+            // Byte 13: Checksum
+            ab[off++] = checksum;
+
+            // Bytes 14-25: Characters 6-11 (UTF-16LE)
+            for (let i = 5; i < 11; i++) {
+                let ch = chars[charIndex + i];
+                ab[off++] = ch & 0xFF;
+                ab[off++] = (ch >> 8) & 0xFF;
+            }
+
+            // Bytes 26-27: First cluster (always 0x0000)
+            ab[off++] = 0x00;
+            ab[off++] = 0x00;
+
+            // Bytes 28-31: Characters 12-13 (UTF-16LE)
+            for (let i = 11; i < 13; i++) {
+                let ch = chars[charIndex + i];
+                ab[off++] = ch & 0xFF;
+                ab[off++] = (ch >> 8) & 0xFF;
+            }
+        }
+
+        return off - offStart;
     }
 
     /**
