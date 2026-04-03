@@ -3425,7 +3425,9 @@ export default class PC extends PCJSLib {
          * --boot can now be used to EITHER select the boot drive OR specify a custom boot sector.
          */
         let boot = PC.removeArg(argv, 'boot', defaults['boot'] || this.bootSelect);
-        if (boot.length <= 1 || boot.length == 2 && boot[1] == ':') {
+        if (boot == 'none') {
+            this.bootSelect = boot;
+        } else if (boot.length <= 1 || boot.length == 2 && boot[1] == ':') {
             this.bootSelect = boot.toUpperCase();
         } else {
             this.bootSector = boot;
