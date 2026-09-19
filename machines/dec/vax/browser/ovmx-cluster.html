@@ -13,15 +13,21 @@
      machine -> parent:  {t:'acp-ok', tell:<string>}           the guest console showed the GENUINE
                                                                ODS-2 ACP mount of the system disk
 
-  REAL-ACP PRODUCT AUTHENTICITY (PCJS-NODE-BRIDGE.md §4).  The CN=N gate counts a node as clustered
-  only when it has BOTH a real 0x6007 at the hub AND acp-ok.  acp-ok fires ONCE, when this node's
-  console emits the executive's genuine Files-11 ODS-2 ACP mount of the system disk -- the pair
+  REAL-PRODUCT AUTHENTICITY (PCJS-NODE-BRIDGE.md §4).  The CN=N gate counts a node as clustered
+  only when it has BOTH a real 0x6007 at the hub AND acp-ok.  acp-ok fires ONCE, on a tell a facade
+  could not emit.  For OVMX (Node B): the executive's genuine Files-11 ODS-2 ACP mount of the system
+  disk -- the pair
      %OVMX-I-SYSDISK, mounting system disk <dev>:  ->  %OVMX-I-MOUNTED, system disk <dev>: mounted
   and/or the executive's mount-unit line  "disk unit DUA0: -> ra0e".  On this pcjs VAX the system disk
   is the ODS-2 volume on the boot disk's partition e (DUA0: -> ra0e), mounted over /dev/vms by the
   executive ACP -- a tell a host-mode /vms passthrough facade cannot fabricate (vms-165 retired the
   passthrough; the ACP refuses that masquerade, INV-6).  <dev> is DUA0: on this MSCP-backed VAX; the
   matcher also accepts VDA0: (virtio-named guests) so the seam is uniform across node families.
+  For real VMS (Node C): GROUND-TRUTHED 2026-09-19 against the pinned vms55-nodeC-cluster volume --
+  its actual boot transcript never emits either OVMX tell (no "%OVMX-..." message, no "-> ra0e" mount-
+  unit line at all), so Node C needed its own. The boot banner "VAX/VMS Version Vn.n-xxx" is that tell:
+  only genuine DEC/VSI OpenVMS prints it; OVMX never claims to BE VMS (that would itself violate the
+  authenticity rule this gate enforces), so the string is exactly as unforgeable as the ACP tell.
 
   FRAME = a contract-v1 raw Ethernet frame (Uint8Array: dst/src/ethertype/payload, NO FCS).  Bytes are
   forwarded VERBATIM both ways; a malformed frame is dropped in the worker's hub, never crashes the
@@ -90,15 +96,25 @@ $("screen").addEventListener("click", () => $("screen").focus());
 
 function bar(s, cls) { const b = $("bar"); b.textContent = s; b.className = cls || ""; }
 
-/* ---- real-ACP product-authenticity detector (PCJS-NODE-BRIDGE.md §4) ----
-   Watch the guest console stream for the executive's GENUINE ODS-2 ACP mount of the system disk and,
-   the first time it appears, post {t:'acp-ok'} to the parent.  We accumulate a rolling text window
-   (the tell can straddle "out" chunks) and match either the completed MOUNTED line or the executive's
-   mount-unit line -- both prove the ACP really mounted the ODS-2 volume, which a host-mode /vms
-   facade cannot emit.  Fires exactly once. */
+/* ---- real-PRODUCT authenticity detector (PCJS-NODE-BRIDGE.md §4) ----
+   Watch the guest console stream and, the first time it shows a tell that a facade
+   COULD NOT emit, post {t:'acp-ok'} to the parent.  We accumulate a rolling text window
+   (a tell can straddle "out" chunks). Three alternatives, covering both node families
+   this page boots:
+     - OVMX (Node B): the executive's GENUINE ODS-2 ACP mount of the system disk -- the
+       completed MOUNTED line or the mount-unit line. A host-mode /vms passthrough facade
+       cannot emit either.
+     - real VMS (Node C, ground-truthed 2026-09-19 against the pinned vms55-nodeC-cluster
+       volume): the boot banner "VAX/VMS Version Vn.n-xxx" that ONLY genuine DEC/VSI OpenVMS
+       prints. OVMX never prints this string (it identifies itself via %OVMX-I- messages,
+       never claims to BE VMS) -- so this is authenticity-safe for the SAME reason the ACP
+       tell is: no facade can honestly emit it. Ground truth: booting the pinned Node-C
+       volume in this machine, the ORIGINAL two alternatives never fired (real VMS's boot
+       transcript has no "%OVMX-..." or "-> ra0e" line), so Node C needs its own tell.
+   Fires exactly once. */
 const acpDecoder = new TextDecoder("latin1");   /* console is 8-bit; latin1 never throws on any byte */
 let acpBuf = "";
-const ACP_TELL = /%OVMX-I-MOUNTED,\s*system disk\s*(?:DUA0|VDA0):|disk unit\s+(?:DUA0|VDA0):\s*->\s*ra0e/i;
+const ACP_TELL = /%OVMX-I-MOUNTED,\s*system disk\s*(?:DUA0|VDA0):|disk unit\s+(?:DUA0|VDA0):\s*->\s*ra0e|VAX\/VMS\s+Version\s+V\d+\.\d+-\w+/i;
 function acpScan(bytes) {
     if (node.acpOk) return;
     acpBuf += acpDecoder.decode(bytes, { stream: true });
