@@ -227,7 +227,11 @@ node.import = async function(...modules) {
             basename = match[1];
             module = module.toLowerCase();
         }
-        node[basename] = (await import(module)).default;
+        /**
+         * Some packages (eg, glob v9 and up) no longer provide a default export, so use the module namespace instead.
+         */
+        let imported = await import(module);
+        node[basename] = imported.default || imported;
     }
 };
 
