@@ -1957,6 +1957,7 @@
     "NORML",
     "NOSTATE",
     "NOSYM",
+    "nosync",
     "notcarry",
     "NOTCF",
     "NOTREACHED",

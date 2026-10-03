@@ -1550,6 +1550,9 @@ export default class DiskLib {
                 } else if (Array.isArray(data)) {
                     data = new DataBuffer(data).buffer;
                 }
+                if (data == null) {
+                    data = "";          // empty files (eg, created by "COPY CON") have null contents
+                }
                 if (fCreateDir) {
                     let sDir = node.path.dirname(sFile);
                     this.makeDir(sDir, true);

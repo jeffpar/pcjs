@@ -2663,9 +2663,9 @@ FPUx86.FPTAN = function()
  * FPREM is important for reducing arguments to the periodic transcendental functions such as FPTAN.  Because FPREM
  * produces an exact result, no round-off error is introduced into the calculation.
  *
- * When reduction is complete, the three least-significant bits of the quotient are stored in the condition code bits
- * C3, C1, and C0, respectively.  When arguments to the tangent function are reduced by pi/4, this result can be used
- * to identify the octant that contained the original angle.
+ * When reduction is complete, the three least-significant bits of the quotient (Q2, Q1, and Q0) are stored in the
+ * condition code bits C0, C3, and C1, respectively.  When arguments to the tangent function are reduced by pi/4, this
+ * result can be used to identify the octant that contained the original angle.
  *
  * The FPREM function operates differently than specified by the IEEE 754 standard when rounding the quotient to form
  * a partial remainder (see the algorithm).  The FPREM1 function (80287XL and up) is provided for compatibility with
@@ -2684,8 +2684,8 @@ FPUx86.FPTAN = function()
  *          ST(0) = ST(0) - (ST(1) * q)
  *          C2 = 0
  *          C0 = BIT 2 of q
- *          C1 = BIT 1 of q
- *          C3 = BIT 0 of q
+ *          C3 = BIT 1 of q
+ *          C1 = BIT 0 of q
  *      ELSE
  *          n = a number between 32 and 63
  *          q = ROUND((ST(0) / ST(1)) / 2^(t-n), CHOP)
@@ -2702,7 +2702,20 @@ FPUx86.FPTAN = function()
  */
 FPUx86.FPREM = function()
 {
-    this.setST(0, this.getST(0) % this.getST(1));
+    /**
+     * JavaScript's % operator produces the exact remainder (with the sign of the dividend), so the reduction is
+     * always complete (C2 = 0), and we can recover the quotient (q) from the remainder to set C0, C3, and C1.
+     */
+    let a = this.getST(0);
+    let b = this.getST(1);
+    let r = a % b;
+    if (this.setST(0, r)) {
+        let q = Math.abs(Math.round((a - r) / b));
+        this.regStatus &= ~(X86.FPU.STATUS.C0 | X86.FPU.STATUS.C1 | X86.FPU.STATUS.C2 | X86.FPU.STATUS.C3);
+        if (q & 4) this.regStatus |= X86.FPU.STATUS.C0;
+        if (q & 2) this.regStatus |= X86.FPU.STATUS.C3;
+        if (q & 1) this.regStatus |= X86.FPU.STATUS.C1;
+    }
 };
 
 /**
