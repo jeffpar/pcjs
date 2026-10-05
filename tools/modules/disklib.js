@@ -39,6 +39,10 @@ export default class DiskLib {
      * extension-less files (eg, EXE2BIN response files like "LOCSCR", which fail to satisfy EXE2BIN when
      * they have Unix-style line endings, and NMAKE makefiles, which actually seem to work fine with
      * with Unix-style line endings, but we may as well convert them anyway).
+     *
+     * CONFIG.SYS is also treated as a text file (see isTextFile()), but ".SYS" is not in this list,
+     * because other ".SYS" files are typically binary device drivers, which would be corrupted if they
+     * were modified on a disk and then "normalized" when written back.
      */
     static asTextFileExts = [
         ".MD",  ".ME",  ".BAS", ".BAT", ".RAT", ".ASM", ".INC", ".LRF", ".NFO", ".DIZ",
@@ -541,7 +545,10 @@ export default class DiskLib {
      */
     isTextFile(sFile)
     {
-        let sFileUC = sFile.toUpperCase();
+        let sFileUC = node.path.basename(sFile).toUpperCase();
+        if (sFileUC == "CONFIG.SYS") {
+            return true;
+        }
         if (sFileUC.indexOf('.') < 0) {
             sFileUC += '.';
         }

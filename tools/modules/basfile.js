@@ -130,7 +130,7 @@ export default class BASFile {
         0xED:   "^",
         0xEE:   "AND",
         0xEF:   "OR",
-        0xF0:   ">=",
+        0xF0:   "XOR",
         0xF1:   "EQV",
         0xF2:   "IMP",
         0xF3:   "MOD",
