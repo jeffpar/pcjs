@@ -43,10 +43,7 @@ You can also install applications using the Debugger's `load` command (eg, `load
 
 ### Palm IIIc Emulation Notes
 
-The first time the Palm IIIc boots, it will walk you through its Setup screens, including digitizer calibration.
-Like the [Palm Pilot](/machines/palm/pilot/), the state of the machine is automatically saved in your browser.
-
-The PCjs Debugger is available in the Diagnostics window below the machine.  Type `?` for a list of commands.
+The first time the Palm IIIc boots, it will walk you through its Setup screens, including digitizer calibration. Like the [Palm Pilot](/machines/palm/pilot/), the state of the machine is automatically saved in your browser.
 
 Hardware differences from the Pilot that are currently emulated:
 

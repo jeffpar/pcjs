@@ -35,7 +35,3 @@ You can also install applications using the Debugger's `load` command (eg, `load
     });
   });
 </script>
-
-### Palm III Emulation Notes
-
-The PCjs Debugger is available in the Diagnostics window below the machine.  Type `?` for a list of commands.

@@ -49,7 +49,7 @@ You can also install applications using the Debugger's `load` command (eg, `load
 
 ### Palm Pilot Emulation Notes
 
-The PCjs Debugger is available in the Diagnostics window below the machine.  Type `?` for a list of commands. For example, `h` halts the machine, `u` unassembles instructions, `t` steps through them, `r` displays the CPU registers, and `g` resumes execution.  PalmOS system calls (eg, `TRAP #15` followed by an API selector) are displayed by name.
+The PCjs Debugger is available by clicking the **Debug** button below the machine.  Type `?` for a list of commands. For example, `h` halts the machine, `u` un-assembles instructions, `t` steps through them, `r` displays the CPU registers, and `g` resumes execution.  PalmOS system calls (eg, `TRAP #15` followed by an API selector) are displayed by name.
 
 Like PIMulator, the CPU masks all addresses to 25 bits, so the ROM, which PalmOS addresses at 0x10C00000, appears at 0x00C00000 in the Debugger, and the DragonBall hardware registers, which PalmOS addresses at 0xFFFFF000, appear at 0x01FFF000.
 

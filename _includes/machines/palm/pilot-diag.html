@@ -5,14 +5,44 @@
   </div>
 </div>
 <div class="pcjs-diagnostics">
-  <div>
-    <label>Diagnostics<br>
+  <div id="diagPilot" style="display:none;">
+    <label>Status (<span id="speedPilot">Stopped</span>)<br>
       <textarea id="printPilot" class="pcjs-console" cols="128" rows="20"></textarea>
     </label>
   </div>
-  <button id="resetPilot">Reset</button>
-  <button id="runPilot">Run</button>
-  <button id="stepPilot">Step</button>
-  <button id="clearPilot">Clear</button>
-  <span id="speedPilot" style="font-size:small">Stopped</span>
+  <div style="text-align:right;">
+    <button id="debugPilot" aria-expanded="false" aria-controls="diagPilot">Debug</button>
+    <button id="resetPilot">Reset</button>
+    <button id="runPilot">Run</button>
+    <button id="stepPilot">Step</button>
+    <button id="clearPilot">Clear</button>
+  </div>
 </div>
+<script>
+  (function() {
+    let diag = document.getElementById("diagPilot");
+    let debug = document.getElementById("debugPilot");
+    let showDebugger = function(show) {
+      diag.style.display = show? "" : "none";
+      debug.setAttribute("aria-expanded", show);
+      if (show) {
+        let print = document.getElementById("printPilot");
+        print.scrollTop = print.scrollHeight;
+      }
+    };
+    debug.addEventListener("click", function() { showDebugger(diag.style.display == "none"); });
+    document.getElementById("resetPilot").addEventListener("click", function() { showDebugger(false); });
+    //
+    // The Run button is a Run/Halt toggle, so we use a capturing listener to see its text before the machine
+    // updates it: clicking "Run" closes the debugger.  And whenever the machine stops on its own (eg, at a
+    // breakpoint), the button's text changes from "Halt" to "Run", at which point we open the debugger.
+    //
+    let run = document.getElementById("runPilot");
+    run.addEventListener("click", function() { if (run.textContent == "Run") showDebugger(false); }, true);
+    let textRun = run.textContent;
+    new MutationObserver(function() {
+      if (textRun == "Halt" && run.textContent == "Run") showDebugger(true);
+      textRun = run.textContent;
+    }).observe(run, {childList: true, characterData: true, subtree: true});
+  })();
+</script>
