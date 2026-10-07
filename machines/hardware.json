@@ -1055,6 +1055,12 @@
     "@instances": {
       "pilot": {
         "@title": "Palm Pilot"
+      },
+      "iii": {
+        "@title": "Palm III"
+      },
+      "iiic": {
+        "@title": "Palm IIIc"
       }
     }
   },

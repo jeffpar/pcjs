@@ -1,0 +1,45 @@
+Daleks  
+v1.2
+10/13/98
+
+Programmed by Eagle Berns, Roger Lawrence, and Keithen
+IndiVideo
+www.individeo.net
+
+INSTRUCTIONS:
+
+This version of the classic game of "Daleks" is played on a 
+16 by 14 grid.  You are "Dr. Who" and are trying to avoid the 
+robot Daleks which, on each move, take exactly one step toward 
+you.  You move one square at a time into any of the adjacent 8 
+squares.  Your only defensive weapon is a sonic screwdriver 
+(The button at the top of the screen).  Once, per level, you 
+may hit this button and any daleks in the adjacent 8 squares 
+are vaporized. Your second line of defense is the stupidity of 
+the Daleks.  In their desire to destroy you, they pay no 
+attention to anything else, and will crash into one another 
+and will turn into a radioactive heap.  Anything landing on 
+these heaps (including you or other Daleks) will be destroyed.  
+Your objective then, is to destroy all Daleks on each level.  
+Once done, you are promoted to the next level where there are 
+more Daleks.  Stay alive as long as you can.  Your score (in 
+Dalek-Kills) is recorded at the top of the screen, and the top 
+10 high scores are recorded.  You move your player by hitting 
+an adjacent square (Actually, hitting anywhere on the play 
+field will move you to the closest adjacent square to where 
+you are.)  You may also TELEPORT to a random location by hitting 
+the teleport button, or  it is easier to just tap the graffiti 
+pad.  However, the Daleks will move immediately after you land, 
+and so it is possible to be destroyed when you do so. TELEPORT
+and SONICSCREWDRIVER also exist as menu options. Also, in the
+menu you may start a new game and may view the current high scores.
+One final menu Item is the "Last Stand".  When the only thing 
+remaining to do on a level is just stand there until all Daleks 
+collide, you may alternatively hit the last stand item and the game
+will auto-play to the end of the level. GOOD LUCK!
+
+Distribution and registration thru:
+PalmPilot Gear HQ
+www.pilotgear.com
+sales: 800 741-9070
+fax: 817 461-3482

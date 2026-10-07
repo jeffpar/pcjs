@@ -456,15 +456,15 @@
       "./machines/modules/v3/machine.js"
     ]
   },
-  "palm-pilot": {
-    "name": "Palm Pilot",
+  "palm": {
+    "name": "Palm",
     "version": "3.00",
     "folder": "palm/pilot",
     "defines": [
       "FACTORY",
       "VERSION"
     ],
-    "factory": "Pilot",
+    "factory": "Palm",
     "modules": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/message.js",
@@ -486,7 +486,9 @@
       "./machines/motorola/68k/modules/v3/cpu68k.js",
       "./machines/motorola/68k/modules/v3/dbg68k.js",
       "./machines/motorola/68k/modules/v3/eamodes.js",
+      "./machines/palm/pilot/modules/v3/palmos.js",
       "./machines/palm/pilot/modules/v3/ioregs.js",
+      "./machines/palm/pilot/modules/v3/sed1375.js",
       "./machines/palm/pilot/modules/v3/video.js",
       "./machines/modules/v3/machine.js"
     ]

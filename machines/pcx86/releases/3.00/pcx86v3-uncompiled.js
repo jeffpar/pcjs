@@ -1444,7 +1444,11 @@ class StdLib extends Defines {
             aComp[iComp++] = n;
             iSrc = iCompare;
         }
-        if (aComp.length >= aSrc.length) return aSrc;
+        /**
+         * If compression didn't help, return the source array, but make sure it's a plain Array, not a typed array
+         * (eg, Uint8Array), because typed arrays are not serialized as arrays by JSON.stringify().
+         */
+        if (aComp.length >= aSrc.length) return Array.isArray(aSrc)? aSrc : Array.from(aSrc);
         return aComp;
     }
 
@@ -3158,6 +3162,8 @@ WebIO.KEYNAME = {
     [WebIO.KEYCODE.Z]:      "Z",
     [WebIO.KEYCODE.LEFT]:   "Left",
     [WebIO.KEYCODE.RIGHT]:  "Right",
+    [WebIO.KEYCODE.UP]:     "Up",
+    [WebIO.KEYCODE.DOWN]:   "Down",
 };
 
 WebIO.BrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
@@ -8526,7 +8532,7 @@ class Bus extends Device {
     {
 
         if (addr & 0x3) {
-            this.writePair(addr, value >> this.pairWidth);
+            this.writePair(addr, (value >> this.pairWidth) & this.pairLimit);
             this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
             return;
         }
@@ -9363,7 +9369,7 @@ class Memory extends Device {
     writeValueQuadBE(offset, value)
     {
 
-        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writeValuePairBE(offset + 2, value & this.pairLimit);
     }
 
@@ -9485,7 +9491,7 @@ class Memory extends Device {
     writeDynamicQuadBE(offset, value)
     {
 
-        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writePair(offset + 2, value & this.pairLimit);
     }
 
@@ -12319,7 +12325,7 @@ class Debugger extends Device {
      * @param {string} message
      * @param {...} [args]
      */
-    stopCPU(message, args)
+    stopCPU(message, ...args)
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
@@ -12446,7 +12452,12 @@ class Debugger extends Device {
             let sAddress = this.dumpAddress(address, bus);
             for (i = cbLine; i > 0 && length > 0; i--) {
                 let b = this.readAddress(address, 1, bus);
-                data |= (b << (iByte++ << 3));
+                if (bus.littleEndian === false) {
+                    data = ((data << 8) | b) >>> 0;
+                    iByte++;
+                } else {
+                    data |= (b << (iByte++ << 3));
+                }
                 if (iByte == size) {
                     sData += this.toBase(data, 0, bits, "");
                     sData += (size == 1? (i == 9? '-' : ' ') : " ");

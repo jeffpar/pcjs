@@ -1,0 +1,194 @@
+7/6/98
+
+PocketChess v1.1
+
+by Scott Ludwig
+scottlu@eskimo.com
+http://www.eskimo.com/~scottlu
+
++++
+
+Sections in this document:
+
+1> Intro
+2> New features in this release
+3> Bug fix history
+4> Features of PocketChess v. 1.1
+
++++
+
+1. Intro
+
+Welcome to the v. 1.1 release of PocketChess for Pilot!
+PocketChess is a well featured Chess playing program
+for your Pilot.
+
+PocketChess v1.1 runs on Pilot 1000's, Pilot 5000's, PalmPilots,
+and the new Palm III. The 1.1 release is a minor release to fix
+some problems, most of them related to running on the new Palm III
+device. Check out the Bug Fix History section for more info.
+
+This release marks changing to a new compiler. Old .prc size was
+27594. New .prc size is 29247 - most of that is because the new
+compiler produces less tight code. The original PocketChess was
+developed using VC++ with a Mac cross compiler (to generate 68K),
+plus misc ASDK tools. The Mac cross compiler is no longer supported
+by Microsoft it seems; its last release was compatible with VC 4.x.
+It produced the best 68K code for a C compiler that I have seen so far
+though. Thankfully no compiler generated bugs detected in PocketChess with
+the new compiler which is good news.  
+
+On another note, starting with the PalmIII device, when viewing the
+applications list in icon view mode (as opposed to list view mode),
+the name "PocketChess" is clipped to say "PocketChes". This is very
+unfortunate in my opinion. It is correctly viewed as "PocketChess"
+in other situations - list view, delete..., beam..., category...,
+info..., and it was correct on Pilot 1000, 5000, and PalmPilot devices.
+In addition it looks like there is just enough room in the PalmIII hilight
+square to not clip off the last s. I have not decided to change the name
+of PocketChess, so for those in icon view mode it'll remain "PocketChes".
+To change to list view mode, bring up the application list, tap on menu,
+Options, Preferences..., tap View By: and select "List". Hit Ok.
+
+Finally, the original PocketChess v1.0 was released in 9/21/96 - almost 2 years
+later PocketChess v1.1 is being released. It's been awhile, yes I've been
+doing other things. However the good news is that I have returned to
+chess development and am working on PocketChess 2.0! I have received many
+great feature requests over the last 2 years. If you have your own suggestions,
+now would be a good time to send them to me at scottlu@eskimo.com.
+
+PocketChess v1.1 is free. Enjoy!
+
+Scott Ludwig
+scottlu@eskimo.com
+http://www.eskimo.com/~scottlu
+
++++
+
+2. New features found in this release
+
+v1.1 is a bug fix release. No new features.
+
+v1.0 is almost exclusively a bug fix release. However, a few feature changes
+have been made:
+
+- By popular user request, auto-reversing of board orientation when
+  playing you vs. another player has been removed!
+- Menu shortcuts no longer need the shortcut stroke! Just enter the character
+  of the shortcut directly and that command will execute. Nice feature.
+- New Game command can be cancelled
+- Options command can be cancelled
+
+3. Bug fix history
+
+v. 1.1 Release:
+
+[fixed] tapping "applications" silk screen button now brings up the
+        correct applications dialog on palmIII devices!
+[fixed] PocketChess now has a small icon when viewing in list view
+        from the applications dialog.
+[fixed] fixed a very rare fatal exception when playing games that
+        are very long (symptoms include a board that starts flipping
+        by itself right before the fatal exception).
+[fixed] fixed two uninitialized variable bugs! They did not manifest
+        themselves as bugs when playing PocketChess however.
+[fixed] fixed the menu commands so they aren't intersecting the menu
+	shortcut commands.
+
+v. 1.0 Release:
+
+[fixed] Undoing a pawn promotion would reverse the color of the pawn!
+[fixed] Castling on king side denied if castle was legal on queen side.
+[fixed] Pilot move calculation would occasionally take uncharacteristically
+        long periods of time even on level 1.
+[fixed] Using shortcuts would occasionally cause redraw problems in lower
+        left of screen.
+[fixed] The board would not redraw after dismissing the Alarm dialog, find
+	dialog, or low battery dialogs
+[fixed] Double board redraw when changing options to pilot vs. pilot play
+[fixed] Immediately after completing your move in you vs. pilot play and
+        before the pilot completed its move, issuing an undo command would
+	undo both your move and the last move the pilot made. Now it only
+        undoes your last move.
+
+BETA3 Release:
+
+[fixed] Bringing up the app dialog on Pilots with all existing Pilot
+        apps installed would occasionally cause a crash declaring
+        "memory chunk underflow". This is a bug in the Pilot ROM,
+        however PocketChess now works around it.
+[fixed] Incorrect Checkmate declared occasionally causing game to
+        end prematurely (especially when playing levels 1 and 2).
+[fixed] Castling bug: move king, then undo, and future castling denied
+[fixed] Castling bug: if hint suggested you move your king, you couldn't
+        castle after that.
+[fixed] Castling bug: if squares outside king's castling traversal
+        path were challenged, castle denied
+[fixed] Castling bug: castling out of check was allowed on the queen
+        side.
+[fixed] You vs. Another player would not declare checkmate when it
+        occured.
+[fixed] Sound effects didn't work in large board mode.
+[fixed] Stalemate was not correctly declared when it occured.
+[fixed] In board setup mode, you could remove your king from the
+        board, causing problems when the game was resumed.
+[fixed] After checkmate, you could still use all menu items which
+        in some cases would allow you to continue playing past
+        checkmate!
+[fixed] An en-passant move could not be undone.
+[fixed] When using hint, algebraic notation of hinted move now remains
+        for reference
+[fixed] When using undo, algebraic notation of undone move now remains
+        for reference
+
+BETA2 Release:
+
+(first released to public with BETA2)
+
++++
+
+4. Features of PocketChess v. 1.1
+
+Because a good number of people have asked, to access all the features
+in PocketChess, tap on the menu button found at the lower left of the
+Pilot screen, just left of the graffiti area. That'll pull down the
+PocketChess menu, giving you access to all the PocketChess commands.
+Or if you wish, use the menu shortcut by writing the letter of the
+shortcut directly in the graffiti area (not shortcut stroke required!)
+
+PocketChess features:
+
+- A drag / drop move as well as a tap, tap move UI for moving pieces
+- Square selection cursor for detailing from, to positions of a chess
+  move.
+- You vs. Pilot, You vs. Another Player, and Pilot vs. Pilot play. 
+- 8 levels of difficulty 
+- Playing status includes white / black player indicator, turn 
+indicator, last move indicator (in algebraic notation), last piece 
+played indicator. 
+- Ability to turn off status for larger board size 
+- Board setup mode to set up hypothetical chess positions and then play 
+them 
+- Undo Move command to undo moves. Remembers all moves back to the very 
+first move. 
+- Hint command. Proposes strategic moves for your pieces. 
+- Skip Move command allows you to forgo your move 
+- Reverse Board command to flip board presentation 
+- Switch sides command which allows you to switch between playing black 
+or white sides. 
+- New game command 
+- Current game is always saved if you switch to another Pilot 
+application during play. Last game played is reloaded whenever chess 
+is loaded again. 
+- Game play allows you to issue any command during game play (even play 
+level and play mode). 
+- Sound effects to liven game play, including special sound effects for 
+check, checkmate, and pawn promotion. Sound effects can be turned off.
+- A built in 80 game opening move library
+- Animated computer piece move, also used in hint and undo.
+- Menu shortcuts (using graffiti command strokes)
+
+Thank you for playing PocketChess!
+
+
+

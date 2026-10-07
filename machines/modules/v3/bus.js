@@ -641,7 +641,7 @@ export default class Bus extends Device {
     {
         this.assert(!((addr + 3) & ~this.addrLimit), "writeValueQuadBE(%#0x,%#0x) exceeds address width", addr, value);
         if (addr & 0x3) {
-            this.writePair(addr, value >> this.pairWidth);
+            this.writePair(addr, (value >> this.pairWidth) & this.pairLimit);
             this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
             return;
         }

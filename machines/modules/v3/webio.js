@@ -1532,6 +1532,8 @@ WebIO.KEYNAME = {
     [WebIO.KEYCODE.Z]:      "Z",
     [WebIO.KEYCODE.LEFT]:   "Left",
     [WebIO.KEYCODE.RIGHT]:  "Right",
+    [WebIO.KEYCODE.UP]:     "Up",
+    [WebIO.KEYCODE.DOWN]:   "Down",
 };
 
 WebIO.BrowserPrefixes = ['', 'moz', 'ms', 'webkit'];

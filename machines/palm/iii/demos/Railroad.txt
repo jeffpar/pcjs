@@ -1,0 +1,71 @@
+Railroad Solitaire
+by Tinyware, Inc.
+Copyright 2000 Tinyware, Inc.
+http://www.eskimo.com/~scottlu
+scottlu@eskimo.com
+
+Welcome to Railroad Solitaire!
+
+Railroad is a form of solitaire also known as Russian Solitaire, one of
+the most challenging types of solitaire available. The object is
+to increase your score over time. Every time you deal, your score goes down 52
+points. Every time you move a card to the foundation stacks, your score
+increases by 10. It's challenging and addictive!
+
+How to register
+
+This software is shareware. The demo version can be played for 30 days,
+after which it will cease to function. Registration is $10 and entitles
+you to free future updates. You can register at:
+
+http://www.eskimo.com/~scottlu
+
+Instructions
+
+Full instructions for playing the challenging and highly addictive game
+of Railroad Solitaire can be found within the game itself! After starting
+the game, tap on the menu silkscreen button just to the left of the
+graffiti area. Then tap on the About... command. In the upper right of
+the About... form you'll see a little 'i', which stands for "info". Tap
+on that to get full instructions. The instructions are reproduced here
+for convenience.
+
+How To Play
+
+The stacks above are called foundation stacks, and accept cards in ascending
+order by suit (starting with Aces). The stacks below are called layout stacks.
+You must stack the cards in the layout stacks in descending order by suit.
+For example, you can stack a 4 of hearts on top of a 5 of hearts. You can
+take a card from the middle of a layout stack and move it to another
+stack - it will take all cards below it as you go though! If there is an
+empty layout stack, you can move a king into that position. When you can,
+move cards from the layout stacks to the foundation stacks. You'll get 10
+points every time you do this.
+
+Moving Cards
+
+To move a card, simply double tap on it. If there is a place for it to go,
+Railroad will move it to the right spot immediately. Or if you prefer, tap on
+the card, then tap on the destination. Occasionally a stack will grow below
+the bottom of the screen. In this case, a scroll bar will appear. You can use
+the scrollbar to scroll the layout stacks or simply use the up and down
+buttons on your Palm.
+
+Dealing the Cards
+
+When there are no more moves, the screen will flash. You know then it is
+time to redeal. To deal the cards, select the menu item for Deal. For a
+shortcut, you can tap on the score to redeal. If you are fed up with your
+score and want to start fresh, select Reset Score from the menu.
+
+Stats!
+
+Railroad keeps statistics on your games from the Stats... command. It keeps
+two groups of stats: overall stats, and stats since the last Reset Score.
+
+Difficulty
+
+With the Difficulty command you can select the dealing technique. Normal
+mode is totally random deals, and easy mode is friendly deals!
+
+Good luck and enjoy playing Railroad Solitaire!

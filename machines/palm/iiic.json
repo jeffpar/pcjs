@@ -1,0 +1,143 @@
+{
+  "palm-iiic": {
+    "class": "Machine",
+    "type": "PDA",
+    "name": "Palm IIIc",
+    "version": 3.00,
+    "autoSave": true,
+    "autoStart": true,
+    "bindings": {
+      "reset": "resetIIIc",
+      "clear": "clearIIIc",
+      "print": "printIIIc"
+    },
+    "ArrayBuffer": true
+  },
+  "clock": {
+    "class": "Time",
+    "cyclesPerSecond": 20185088,
+    "bindings": {
+      "run": "runIIIc",
+      "setSpeed": "setSpeedIIIc",
+      "speed": "speedIIIc",
+      "step": "stepIIIc"
+    },
+    "overrides": ["cyclesPerSecond"],
+    "@doc": [
+      "The Palm IIIc's MC68EZ328 runs at 20Mhz: a 32.768Khz crystal multiplied by a PLL divisor of 616"
+    ]
+  },
+  "busMemory": {
+    "class": "Bus",
+    "type": "static",
+    "addrWidth": 25,
+    "dataWidth": 8,
+    "blockSize": 4096,
+    "littleEndian": false,
+    "@doc": [
+      "Like the original Java implementation, the CPU masks all addresses to 25 bits (32Mb), so the ROM at 0x10c00000",
+      "appears at 0x00c00000, the SED1375 LCD controller at 0x1f000000 appears at 0x01000000, and the DragonBall EZ",
+      "registers at 0xfffff000 appear at 0x01fff000."
+    ]
+  },
+  "input": {
+    "class": "Input",
+    "location": [0, 0, 467, 737, 467, 737, 467, 737],
+    "drag": true,
+    "map": {
+      "power":    {"keys": ["0"]},
+      "datebook": {"keys": ["1"]},
+      "address":  {"keys": ["2"]},
+      "todolist": {"keys": ["3"]},
+      "memopad":  {"keys": ["4"]},
+      "up":       {"keys": ["Up"]},
+      "down":     {"keys": ["Down"]}
+    },
+    "bindings": {
+      "surface": "imageIIIc"
+    },
+    "@doc": [
+      "The input surface is the image of the Palm IIIc (the 2x skin from the Palm OS Emulator), and its location array",
+      "divides it into a 467x737 grid, so that the PilotIO device receives image coordinates."
+    ]
+  },
+  "ram": {
+    "class": "RAM",
+    "addr": 0,
+    "size": 8388608,
+    "bus": "busMemory",
+    "@doc": [
+      "The Palm IIIc has 8Mb of RAM"
+    ]
+  },
+  "rom": {
+    "class": "ROM",
+    "addr": 12582912,
+    "size": 1605632,
+    "width": 8,
+    "bus": "busMemory",
+    "values": "/machines/palm/iiic/rom/palm3c.json",
+    "@doc": [
+      "addr of 12582912 is 0x00c00000 (ie, 0x10c00000 masked to 25 bits), and size of 1605632 is 0x188000 (PalmOS 3.5)"
+    ]
+  },
+  "cpu": {
+    "class": "CPU68K",
+    "busMemory": "busMemory",
+    "resetVectors": 281018368,
+    "@doc": [
+      "resetVectors is 0x10c00000, the address of the ROM, which begins with the initial SSP and PC"
+    ]
+  },
+  "io": {
+    "class": "PilotIO",
+    "chip": "MC68EZ328",
+    "bus": "busMemory",
+    "penRegion": [84, 80, 320, 320],
+    "penHeight": 220,
+    "buttonRegions": {
+      "power":    [22, 600, 32, 56],
+      "datebook": [78, 600, 48, 56],
+      "address":  [158, 600, 48, 56],
+      "up":       [224, 594, 42, 36],
+      "down":     [224, 650, 42, 36],
+      "todolist": [290, 600, 48, 56],
+      "memopad":  [368, 600, 48, 56]
+    },
+    "keyMatrix": {
+      "datebook": 0, "address": 1, "todolist": 2, "memopad": 3,
+      "up": 4, "down": 5, "power": 8
+    },
+    "@doc": [
+      "The pen and button regions are taken from the Palm OS Emulator's Palm_IIIc.skin file (doubled for the 2x skin).",
+      "keyMatrix maps each button to its bit in the key matrix (row * 4 + column), where rows are selected by Port C",
+      "bits 0-2 and columns are read from Port D bits 0-3; see the key translation table at 0x10c745aa in the ROM."
+    ]
+  },
+  "lcd": {
+    "class": "SED1375",
+    "bus": "busMemory",
+    "addr": 520093696,
+    "@doc": [
+      "addr of 520093696 is 0x1f000000, the address of the Epson SED1375 LCD controller's display buffer"
+    ]
+  },
+  "video": {
+    "class": "PilotVideo",
+    "bus": "busMemory",
+    "lcd": "lcd",
+    "monitorWidth": 640,
+    "monitorHeight": 640,
+    "monitorColor": "#000000",
+    "bufferWidth": 160,
+    "bufferHeight": 160,
+    "refreshRate": 60,
+    "bindings": {
+      "monitor": "monitorIIIc",
+      "surface": "surfaceIIIc"
+    }
+  },
+  "debugger": {
+    "class": "Dbg68K"
+  }
+}
