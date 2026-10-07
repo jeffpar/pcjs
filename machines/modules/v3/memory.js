@@ -627,7 +627,7 @@ export default class Memory extends Device {
     writeValueQuadBE(offset, value)
     {
         this.assert(!(value & ~this.quadLimit), "writeValueQuadBE(%#0x,%#0x) exceeds data width", this.addr + offset, value);
-        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writeValuePairBE(offset + 2, value & this.pairLimit);
     }
 
@@ -749,7 +749,7 @@ export default class Memory extends Device {
     writeDynamicQuadBE(offset, value)
     {
         this.assert((offset < this.size - 3), "writeDynamicQuadBE(%#0x,%#0x) exceeds block size", this.addr + offset, value);
-        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writePair(offset + 2, value & this.pairLimit);
     }
 

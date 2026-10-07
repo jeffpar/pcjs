@@ -35,11 +35,10 @@
     "eslint": "^8.57.1",
     "glob": "^7.2.3",
     "google-closure-compiler": "^20260128.0.0",
-    "gulp": "^4.0.2",
+    "gulp": "^5.0.1",
     "gulp-chmod": "^3.1.0",
     "gulp-cli": "^3.1.0",
     "gulp-concat": "^2.6.1",
-    "gulp-foreach": "^0.1.0",
     "gulp-header": "^2.0.12",
     "gulp-merge-json": "^2.2.1",
     "gulp-newer": "^1.4.0",
@@ -51,11 +50,18 @@
     "pako": "^2.1.0",
     "path": "^0.12.7",
     "pdf-parse": "^1.1.4",
-    "replace": "^1.2.2",
     "sequelize": "^6.37.8",
     "serialport": "^11.0.1",
     "xml2js": "^0.5.0",
     "xslt-polyfill": "^1.0.19",
     "yargs-parser": "^21.1.1"
+  },
+  "overrides": {
+    "@gulp-sourcemaps/identity-map": {
+      "postcss": "^8.4.31"
+    },
+    "sequelize": {
+      "uuid": "^11.1.1"
+    }
   }
 }

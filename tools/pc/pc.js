@@ -48,10 +48,12 @@ export default class PC extends PCJSLib {
     bare = false;               // true if --bare specified
     debug = false;              // true if --debug specified
     halt = false;               // true if --halt specified
+    noSync = false;             // true if --nosync specified
     floppy = false;             // true if --floppy specified
     bootSector = "";
     bootSelect = "";
     serial = false;             // true if --serial specified
+    speed = 0;                  // CPU speed multiplier from --speed (0 to use the machine's own setting)
     useSerial = false;
     normalize = false;          // true if --normalize specified
     test = false;               // true if --test specified
@@ -124,6 +126,29 @@ export default class PC extends PCJSLib {
         "\u001b[21~":   "$f10",
         "\u001b[23~":   "$f11",
         "\u001b[24~":   "$f12"
+    };
+
+    /**
+     * When console I/O is routed through the machine's serial port (--serial), there's no keyboard to
+     * generate scan codes, so we translate function keys to the control characters that BASIC-DOS treats
+     * as aliases (see the scan code table in condev.asm).  Keys are either names from functionKeys or raw
+     * escape sequences for keys that functionKeys doesn't handle.
+     */
+    static serialKeys = {
+        "$up":          "\x05",         // CTRLE
+        "$down":        "\x18",         // CTRLX
+        "$right":       "\x04",         // CTRLD
+        "$left":        "\x13",         // CTRLS
+        "$f1":          "\x04",         // CTRLD
+        "$f3":          "\x0c",         // CTRLL
+        "\u001b[H":     "\x17",         // HOME -> CTRLW
+        "\u001bOH":     "\x17",
+        "\u001b[1~":    "\x17",
+        "\u001b[F":     "\x12",         // END -> CTRLR
+        "\u001bOF":     "\x12",
+        "\u001b[4~":    "\x12",
+        "\u001b[2~":    "\x16",         // INS -> CTRLV
+        "\u001b[3~":    "\x7f"          // DEL -> DEL
     };
 
     static optionMap = {
@@ -555,7 +580,10 @@ export default class PC extends PCJSLib {
             if (DL >= maxCols || DH >= maxRows) {
                 break;                      // ignore "off-screen" positions
             }
-            if (DH > machine.rowCursor || DH < machine.rowCursor && DL < machine.colCursor) {
+            if (DH > machine.rowCursor) {
+                printf('\n'.repeat(DH - machine.rowCursor));   // one newline per row (eg, to preserve blank lines)
+            }
+            else if (DH < machine.rowCursor && DL < machine.colCursor) {
                 printf('\n');
             }
             else if (DH == machine.rowCursor) {
@@ -752,6 +780,17 @@ export default class PC extends PCJSLib {
                 let len = cpu.getSOByte(cpu.segDS, 0x80);
                 let args = getString(cpu.segDS, 0x81, len).trim();
                 if (!args) {                // if there were no arguments, then simply "quit"
+                    this.exit(0);
+                    return false;
+                }
+                /**
+                 * "QUIT /S [d:] file" saves the built drive (or drive d:) as a disk image before quitting.
+                 */
+                let match = args.match(/^\/s\s+(?:([a-d]):\s+)?(\S+)$/i);
+                if (match) {
+                    if (!this.saveDisk(match[2], match[1] && match[1].toUpperCase())) {
+                        printf("unable to save drive\n");
+                    }
                     this.exit(0);
                     return false;
                 }
@@ -987,13 +1026,13 @@ export default class PC extends PCJSLib {
     receiveSerial(b)
     {
         let s;
-        if (b != StrLib.ASCII.CR && b != StrLib.ASCII.LF) {
-            s = StrLib.ASCIICodeMap[b];
-        }
-        if (s) {
-            s = '<' + s + '>';
+        if (b == 0x07 || b == 0x08 || b == 0x09 || b == StrLib.ASCII.CR || b == StrLib.ASCII.LF || b == 0x1b) {
+            s = String.fromCharCode(b);             // pass BEL, BS, TAB, CR, LF, and ESC (for ANSI sequences) through
+        } else if (b < 0x20) {
+            s = '^' + String.fromCharCode(b + 0x40);    // display other control characters the way CON does (eg, "^C")
         } else {
-            s = String.fromCharCode(b);
+            s = StrLib.ASCIICodeMap[b];
+            s = s? '<' + s + '>' : String.fromCharCode(b);
         }
         printf(s);
         this.useSerial = true;
@@ -1355,8 +1394,34 @@ export default class PC extends PCJSLib {
                 }
             }
 
+            if (pc.speed && config['cpu']) {
+                config['cpu']['multiplier'] = pc.speed;
+            }
+
             if (sFile.endsWith(pc.savedMachine) && config['computer'] && pc.savedState) {
-                config['computer']['state'] = node.path.join(pcjsDir, pc.savedState);
+                let statePath = node.path.join(pcjsDir, pc.savedState);
+                config['computer']['state'] = statePath;
+                /**
+                 * The CPU restores its speed multiplier from the saved state (the 3rd value in group 3 of
+                 * its state), overriding the machine's configured multiplier, so if --speed was specified,
+                 * we update the multiplier in a copy of the state, which the machine will then load instead
+                 * of the state file (see WebLib.getResource()).
+                 */
+                if (pc.speed) {
+                    let state = JSON.parse(diskLib.readFileSync(statePath, "utf8", true) || "{}");
+                    for (let id in state) {
+                        if (id.endsWith(".cpu") && Array.isArray(state[id]['3'])) {
+                            state[id]['3'][2] = pc.speed;
+                            /**
+                             * Computer.getMachineParm() also uses the 'resources' object (for machines with
+                             * bundled resources), and it requires a 'parms' resource, so we provide an empty one.
+                             */
+                            if (typeof global['resources'] != 'object') global['resources'] = {'parms': "{}"};
+                            global['resources'][statePath] = JSON.stringify(state);
+                            break;
+                        }
+                    }
+                }
             }
 
             let args = JSON.stringify(config);
@@ -1612,6 +1677,11 @@ export default class PC extends PCJSLib {
             version = verNumber;
             if (match) version += match[1].toUpperCase();
             versionInfo = system.versions[version] || system.versions[verNumber];
+            /**
+             * As a last resort, try "v" plus the major version (eg, "2.00B" => "v2"), so that a system can
+             * define one entry for all its versions with the same major version number.
+             */
+            if (!versionInfo) versionInfo = system.versions['v' + verNumber.split('.')[0]];
         }
         if (versionInfo) {
             if (key == "disk") {
@@ -1789,11 +1859,32 @@ export default class PC extends PCJSLib {
         let count = 0;
         let aSystemFiles = this.getSystemValue("files");
         let attrHidden = verDOSMajor > 2? DiskInfo.ATTR.HIDDEN : 0;
+        /**
+         * BASIC-DOS can run hidden and system files (it locates programs by opening them), so its "helper binaries"
+         * are marked HIDDEN + SYSTEM, which keeps them out of DIR listings.
+         */
+        let attrHelper = this.systemType == "bd"? DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM : attrHidden;
         for (let name of aSystemFiles) {
             let desc, attr;
             if (!diSystem) {
+                /**
+                 * If CONFIG.SYS or a text file (eg, HELP.TXT) from the system's list also exists in the directory we're
+                 * building, the directory's copy wins, so that a directory (eg, configs/console/bios) can provide its own CONFIG.SYS.
+                 */
+                let baseName = node.path.basename(name);
+                if ((baseName.toUpperCase() == "CONFIG.SYS" || diskLib.isTextFile(name)) && diskLib.existsFile(node.path.join(sDir, baseName))) {
+                    continue;
+                }
                 name = node.path.join(sSystemDisk, name);
                 let dbFile = await diskLib.readFileAsync(name, null, true);
+                if (dbFile && this.normalize && diskLib.isTextFile(name)) {
+                    /**
+                     * As readDirFiles() does for --normalize, convert the line endings of text files (eg, HELP.TXT,
+                     * whose offsets in BASIC-DOS's COMMAND.COM assume CR/LF line endings).
+                     */
+                    let text = await diskLib.readFileAsync(name, "utf8", true);
+                    dbFile = new DataBuffer(text.replace(/\r?\n/g, "\r\n"));
+                }
                 if (dbFile) {
                     let date;
                     if (dbBoot2 && dbBoot2.length) {
@@ -1803,7 +1894,11 @@ export default class PC extends PCJSLib {
                         dbFile = dbCombined;
                         dbBoot2 = null;
                     }
-                    attr = this.systemType == "custom"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    /*
+                     * BASIC-DOS ("bd") locates its system files by name, not attributes, so we leave them
+                     * visible to DIR (which, like DOS, now skips hidden and system files).
+                     */
+                    attr = this.systemType == "custom" || this.systemType == "bd"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
                     date = node.fs.statSync(name).mtime;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
                     driveInfo.files.push(desc);
@@ -1833,7 +1928,7 @@ export default class PC extends PCJSLib {
          * determine if the interrupt came from LOAD.COM, and if so, process it as an internal "load [drive]" command.
          */
         if (!this.bare) {
-            driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "LOAD.COM", [0xCD, 0x20, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHelper));
         }
 
         /**
@@ -1842,7 +1937,7 @@ export default class PC extends PCJSLib {
          * to look for any changes and then terminate the machine.
          */
         if (!this.bare) {
-            driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHidden));
+            driveInfo.files.push(diskLib.makeFileDesc(sDir, "QUIT.COM", [0xCD, 0x19, 0xC3, 0x90, 0x50, 0x43, 0x4A, 0x53, 0x00], attrHelper));
         }
 
         /**
@@ -1851,7 +1946,7 @@ export default class PC extends PCJSLib {
          * collection of objects, where the keys are the app names and object properties like 'exec' tell us
          * what local program to execute.
          *
-         * NOTE: When I say these binaries will be hidden, well, that depends on the attrHidden setting (see above).
+         * NOTE: When I say these binaries will be hidden, well, that depends on the attrHelper setting (see above).
          */
         if (!this.bare) {
             let apps = configJSON['apps'] || {};
@@ -1904,7 +1999,7 @@ export default class PC extends PCJSLib {
                 for (let j = 0; j < len; j++) {
                     appContents.push(appName.charCodeAt(j));
                 }
-                driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHidden));
+                driveInfo.files.push(diskLib.makeFileDesc(sDir, appFile, appContents, attrHelper));
             }
         }
 
@@ -1927,6 +2022,8 @@ export default class PC extends PCJSLib {
          * if it doesn't exist, but in that case, we also mark it HIDDEN, since it's a file we created, not
          * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "quit" to run
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
+         *
+         * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
         text = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
@@ -1938,14 +2035,16 @@ export default class PC extends PCJSLib {
             text = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
             attr |= attrHidden;
         }
-        let matchPath = text.match(/^PATH\s*(.*)$/im);
-        if (matchPath) {
-            let matchPathRoot = matchPath[1].match(new RegExp("(^|;|" + bootLetter + ":|)\\\\(;|$)", "i"));
-            if (!matchPathRoot) {
-                text = text.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
+        if (this.systemType != "bd") {
+            let matchPath = text.match(/^PATH\s*(.*)$/im);
+            if (matchPath) {
+                let matchPathRoot = matchPath[1].match(new RegExp("(^|;|" + bootLetter + ":|)\\\\(;|$)", "i"));
+                if (!matchPathRoot) {
+                    text = text.replace(/^PATH\s*(.*)$/im, "PATH " + bootLetter + ":\\;$1");
+                }
+            } else if (verDOSMajor >= 2) {
+                text += "PATH " + bootLetter + ":\\\n";
             }
-        } else if (verDOSMajor >= 2) {
-            text += "PATH " + bootLetter + ":\\\n";
         }
 
         if (sCommand) {
@@ -2359,7 +2458,10 @@ export default class PC extends PCJSLib {
         if (imageData) {
             let diskInfo = new DiskInfo(device, "PCJS");
             if (diskInfo.buildDiskFromJSON(imageData, true)) {
-                if (this.drives[this.driveBuild].driveManifest && sDir == this.localDir) {
+                /**
+                 * With --nosync, any changes to the disk (new, modified, or deleted files) are not saved to the directory.
+                 */
+                if (this.drives[this.driveBuild].driveManifest && sDir == this.localDir && !this.noSync) {
                     let oldManifest = this.drives[this.driveBuild].driveManifest;
                     let newManifest = diskInfo.getFileManifest(null, true);
                     /**
@@ -2382,6 +2484,12 @@ export default class PC extends PCJSLib {
                         let newAttr = +newItem.attr || 0;
                         let oldDate = device.parseDate(oldItem.date, true);
                         let newDate = device.parseDate(newItem.date, true);
+                        /**
+                         * The machine's clock runs fast when the CPU speed multiplier is > 1 (eg, --speed=4),
+                         * so don't let files from the machine appear newer than they are (otherwise, a source file
+                         * edited shortly after a build could appear older than the build's output files).
+                         */
+                        if (newDate.getTime() > Date.now()) newDate = new Date();
 
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                             curMappings[oldItem.path] = oldItem.origin;
@@ -2416,7 +2524,7 @@ export default class PC extends PCJSLib {
                                 if (!compareContents(oldItem, newItem)) {
                                     let db = newItem.contents;
                                     if (this.debug) printf("updating: %s\n", newItemPath);
-                                    if (this.normalize && diskLib.isTextFile(newItemPath)) {
+                                    if (db && this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
                                     success = diskLib.writeFileSync(newItemPath, db, false, true);
@@ -2479,7 +2587,7 @@ export default class PC extends PCJSLib {
                                     node.fs.mkdirSync(newItemPath);
                                 } else {
                                     let db = newItem.contents;
-                                    if (this.normalize && diskLib.isTextFile(newItemPath)) {
+                                    if (db && this.normalize && diskLib.isTextFile(newItemPath)) {
                                         db = diskLib.normalizeTextFile(new DataBuffer(db));
                                     }
                                     success = diskLib.writeFileSync(newItemPath, db, true, false);
@@ -3335,6 +3443,7 @@ export default class PC extends PCJSLib {
 
         let driveInfo = this.newDrive();
         this.bare = PC.removeFlag(argv, 'bare', this.bare);
+        this.noSync = PC.removeFlag(argv, 'nosync', this.noSync);
         this.floppy = PC.removeFlag(argv, 'floppy', this.floppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
         this.normalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.normalize);
@@ -3354,6 +3463,7 @@ export default class PC extends PCJSLib {
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 5));
+        this.speed = +PC.removeArg(argv, 'speed', defaults['speed'] || this.speed) || 0;
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
@@ -3746,19 +3856,28 @@ export default class PC extends PCJSLib {
                 pc.exit(3);
                 return;
             }
-            data = PC.functionKeys[data] || data;
+            let key = PC.functionKeys[data];
             if (!pc.debugMode) {
-                data = data.replace(/\x7f/g, "\b");         // convert DEL to BS
                 if (machine.kbd && !pc.useSerial) {
+                    data = (key || data).replace(/\x7f/g, "\b");    // convert DEL to BS
                     if (MAXDEBUG) {
                         printf("injecting key(s): %s\n", data);
                     }
                     machine.kbd.injectKeys.call(machine.kbd, data, 0);
                 } else {
-                    pc.sendSerial(code);
+                    /**
+                     * Send ALL the data (not just the first byte, since data may be pasted text), after
+                     * translating function keys and converting DEL to BS; any function key without a
+                     * translation is dropped, because sending its ESC would erase the current input line.
+                     */
+                    data = PC.serialKeys[key || data] || (key? "" : data.replace(/\x7f/g, "\b"));
+                    for (let i = 0; i < data.length; i++) {
+                        pc.sendSerial(data.charCodeAt(i));
+                    }
                 }
                 return;
             }
+            data = key || data;
             if (code == 0x08 || code == 0x7f) {             // implement BS/DEL ourselves (since we're in "raw" mode)
                 if (pc.command.length) {                    // (Windows generates BS, macOS generates DEL)
                     pc.command = pc.command.slice(0, -1);
@@ -3841,6 +3960,7 @@ export default class PC extends PCJSLib {
                 "--boot=[drive]":           "\tselect boot drive (A, C, or none)",
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
+                "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
@@ -3865,6 +3985,7 @@ export default class PC extends PCJSLib {
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
                 "--messages (-m)":          "\tenable debugger messages",
+                "--nosync":                 "\tdon't save any disk changes to directory",
                 "--normalize (-n)":         "normalize characters in text files",
                 "--test (-t)":              "\tenable test mode (non-interactive)",
                 "--serial (s)":             "\tuse serial port instead of keyboard",

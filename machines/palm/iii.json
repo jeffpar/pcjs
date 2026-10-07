@@ -1,0 +1,128 @@
+{
+  "palm-iii": {
+    "class": "Machine",
+    "type": "PDA",
+    "name": "Palm III",
+    "version": 3.00,
+    "autoSave": true,
+    "autoStart": true,
+    "bindings": {
+      "reset": "resetIII",
+      "clear": "clearIII",
+      "print": "printIII"
+    },
+    "ArrayBuffer": true
+  },
+  "clock": {
+    "class": "Time",
+    "cyclesPerSecond": 16580608,
+    "bindings": {
+      "run": "runIII",
+      "setSpeed": "setSpeedIII",
+      "speed": "speedIII",
+      "step": "stepIII"
+    },
+    "overrides": ["cyclesPerSecond"],
+    "@doc": [
+      "16580608 is the DragonBall's default system clock: a 32.768Khz crystal multiplied by the default PLL divisor of 506"
+    ]
+  },
+  "busMemory": {
+    "class": "Bus",
+    "type": "static",
+    "addrWidth": 25,
+    "dataWidth": 8,
+    "blockSize": 4096,
+    "littleEndian": false,
+    "@doc": [
+      "Like the original Java implementation, the CPU masks all addresses to 25 bits (32Mb), so the ROM at 0x10c00000",
+      "appears at 0x00c00000 and the DragonBall registers at 0xfffff000 appear at 0x01fff000."
+    ]
+  },
+  "input": {
+    "class": "Input",
+    "location": [0, 0, 464, 690, 464, 690, 464, 690],
+    "drag": true,
+    "map": {
+      "power":    {"keys": ["0"]},
+      "datebook": {"keys": ["1"]},
+      "address":  {"keys": ["2"]},
+      "todolist": {"keys": ["3"]},
+      "memopad":  {"keys": ["4"]},
+      "up":       {"keys": ["Up"]},
+      "down":     {"keys": ["Down"]}
+    },
+    "bindings": {
+      "surface": "imageIII"
+    },
+    "@doc": [
+      "The input surface is the image of the Palm III (the 2x skin from the Palm OS Emulator), and its location array",
+      "divides it into a 464x690 grid, so that the PilotIO device receives image coordinates."
+    ]
+  },
+  "ram": {
+    "class": "RAM",
+    "addr": 0,
+    "size": 2097152,
+    "bus": "busMemory",
+    "@doc": [
+      "The Palm III has 2Mb of RAM"
+    ]
+  },
+  "rom": {
+    "class": "ROM",
+    "addr": 12582912,
+    "size": 1376256,
+    "width": 8,
+    "bus": "busMemory",
+    "values": "/machines/palm/iii/rom/palm33.json",
+    "@doc": [
+      "addr of 12582912 is 0x00c00000 (ie, 0x10c00000 masked to 25 bits), and size of 1376256 is 0x150000 (PalmOS 3.3)"
+    ]
+  },
+  "cpu": {
+    "class": "CPU68K",
+    "busMemory": "busMemory",
+    "resetVectors": 281018368,
+    "@doc": [
+      "resetVectors is 0x10c00000, the address of the ROM, which begins with the initial SSP and PC"
+    ]
+  },
+  "io": {
+    "class": "PilotIO",
+    "chip": "MC68328",
+    "bus": "busMemory",
+    "penRegion": [78, 88, 320, 320],
+    "penHeight": 220,
+    "buttonRegions": {
+      "power":    [20, 590, 32, 48],
+      "datebook": [74, 590, 46, 50],
+      "address":  [152, 594, 46, 50],
+      "up":       [220, 584, 40, 42],
+      "down":     [220, 626, 40, 42],
+      "todolist": [282, 594, 46, 50],
+      "memopad":  [360, 588, 46, 50]
+    },
+    "@doc": [
+      "The pen and button regions are taken from the Palm OS Emulator's Palm_III.skin file (doubled for the 2x skin)"
+    ]
+  },
+  "video": {
+    "class": "PilotVideo",
+    "bus": "busMemory",
+    "monitorWidth": 640,
+    "monitorHeight": 640,
+    "monitorColor": "#7B8C5A",
+    "pixelColor": "#1E2418",
+    "bufferWidth": 160,
+    "bufferHeight": 160,
+    "refreshRate": 60,
+    "bindings": {
+      "monitor": "monitorIII",
+      "surface": "surfaceIII"
+    }
+  },
+  "debugger": {
+    "class": "Dbg68K"
+  }
+}

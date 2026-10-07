@@ -49,18 +49,19 @@
       "vendor": "pcjs.org",
       "product": "basic-dos",           // see https://github.com/jeffpar/basicdos
       "versions": {
-        "2.00A": {                      // BASIC-DOS 2.00 requires the "v2" branch (until it's merged into "master")
+        "v2": {                         // BASIC-DOS 2.x (any 2.* version, eg, --version=2)
           "dir": "%basicdos/software/pcx86/src",
           "boot": "os/boot/OBJ/BOOT.COM",
           "boot1Offset": 0x550,         // offset of ORG'ed boot code in BOOT.COM (alternatively, use BOOT1.COM)
           "boot2Offset": 0,             // use 0x760 if BASDEV.COM does NOT already contain boot code from BOOT2.COM
           "files": [
-            "configs/200A/CONFIG.SYS",  // NOTE: this CONFIG.SYS redirects all BASIC-DOS I/O to COM1
+            "configs/console/serial/fpe/CONFIG.SYS",    // NOTE: this CONFIG.SYS redirects all BASIC-DOS I/O to COM1
             "os/dev/OBJ/BASDEV.COM",
             "os/dos/OBJ/BASDOS.COM",
-            "os/cmd/OBJ/COMMAND.COM"
+            "os/cmd/OBJ/COMMAND.COM",
+            "os/cmd/HELP.TXT"
           ],
-          "target": "BD200A"
+          "target": "BDV2"
         }
       }
     },

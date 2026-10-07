@@ -33,6 +33,12 @@ export default class Dbg68K extends Debugger {
         super(idMachine, idDevice, config);
         this.maxOpcodeLength = 6;
 
+        /**
+         * Machine-specific code (eg, PilotIO) can supply a function that converts the selector word following
+         * a "TRAP #15" instruction into a name (see setTrapHandler()).
+         */
+        this.getTrapName = null;
+
         let i = 0;
         this.aEAModes = [];
         this.aEAModes[i++] = new DbgModeDRegByte(this);         // must match EAMODEINDEX_DREG_BYTE
@@ -86,6 +92,17 @@ export default class Dbg68K extends Debugger {
     }
 
     /**
+     * setTrapHandler(func)
+     *
+     * @this {Dbg68K}
+     * @param {function(number):string} func
+     */
+    setTrapHandler(func)
+    {
+        this.getTrapName = func;
+    }
+
+    /**
      * break(addr, fArmed)
      *
      * @this {Dbg68K}
@@ -124,6 +141,7 @@ export default class Dbg68K extends Debugger {
      */
     unassemble(address, opcodes, annotation)
     {
+        let addr = address.off;
         let sBytes = null, sOp = null, sSrc = null, sDst = null;
         let op1 = 0, op2, ss, rrr, nnn, iMask, iModeSrc, iModeDst;
         let fError = false, fDispEA = false;
@@ -131,8 +149,8 @@ export default class Dbg68K extends Debugger {
 
         try {
 
-            this.curPC = address;                       // use specified addr instead of cpu.pc
-            op1 = this.cpu.getWord(this.curPC);       // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
+            this.curPC = addr;                          // use specified addr instead of cpu.pc
+            op1 = this.getWord(this.curPC);             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
             this.curPC += 2;
 
             ss = CPU68K.ssBYTE;
@@ -542,7 +560,7 @@ export default class Dbg68K extends Debugger {
                     //         3) For all other modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
                     //         4) Any register used in pre-decrement mode is stored before being decremented
                     sOp = "MOVEM";
-                    iModeSrc = this.cpu.getWord(this.curPC);
+                    iModeSrc = this.getWord(this.curPC);
                     this.curPC += 2;
                     sSrc = "{";
                     if ((op1 & 0x38) == 0x20) {
@@ -606,7 +624,7 @@ export default class Dbg68K extends Debugger {
                     //         2) For all modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
                     //         3) Any register used in post-increment mode is not affected by the value loaded for it (if any)
                     sOp = "MOVEM";
-                    iModeDst = this.cpu.getWord(this.curPC);
+                    iModeDst = this.getWord(this.curPC);
                     this.curPC += 2;
                     sSrc = this.aEAModes[this.cpu.abModesC81[(op1 - 0x40) & 0xff]].getString(nnn);
                     sDst = "{";
@@ -635,9 +653,9 @@ export default class Dbg68K extends Debugger {
                         if (op2 != 0xf) {
                             sSrc = this.sprintf("%x", op2);
                         } else {
-                            op2 = this.cpu.getWord(this.curPC);
+                            op2 = this.getWord(this.curPC);
                             this.curPC += 2;
-                            sSrc = "API"; // TODO: PalmOSTypes.getAPIName(op2);
+                            sSrc = this.getTrapName? this.getTrapName(op2) : this.sprintf("#%x,%#06x", 0xf, op2 & 0xffff);
                         }
                         break stage1;
 
@@ -684,7 +702,7 @@ export default class Dbg68K extends Debugger {
                         case 0x2:
                             //  case 0x4e72:   stop     [........01110010, format none]
                             sOp = "STOP";
-                            sSrc = this.getImmediateHexString(this.cpu.getWord(this.curPC) & 0xffff);
+                            sSrc = this.getImmediateHexString(this.getWord(this.curPC) & 0xffff);
                             this.curPC += 2;
                             break stage1;
 
@@ -923,7 +941,7 @@ export default class Dbg68K extends Debugger {
                             break;
                         }
                         sSrc = "D" + (nnn);
-                        sDst = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                        sDst = this.sprintf("%x", this.curPC + this.getWord(this.curPC));
                         this.curPC += 2;
                         break stage1;
                     }
@@ -986,7 +1004,7 @@ export default class Dbg68K extends Debugger {
                 if (op1 & 0xff) {
                     sSrc = this.sprintf("%x", this.curPC + (op1 << 24 >> 24));
                 } else {
-                    sSrc = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                    sSrc = this.sprintf("%x", this.curPC + this.getWord(this.curPC));
                     this.curPC += 2;
                 }
                 break stage1;
@@ -1395,8 +1413,8 @@ export default class Dbg68K extends Debugger {
 
             sBytes = "";
             for (let i = 0; i < 6; i += 2) {
-                if (((address + i) >>> 1) >= (this.curPC >>> 1)) break;
-                sBytes = sBytes + this.sprintf("%04x", this.cpu.getWord(address+i) & 0xffff) + " ";
+                if (((addr + i) >>> 1) >= (this.curPC >>> 1)) break;
+                sBytes = sBytes + this.sprintf("%04x", this.getWord(addr+i) & 0xffff) + " ";
             }
 
         }
@@ -1405,14 +1423,14 @@ export default class Dbg68K extends Debugger {
         if (fError) {
             try {
                 // See if we're currently *inside* an API call...
-                if (address == this.cpu.getLong(CPU68K.EXCEPTION_TRAP_0xF * 4)) {
+                if (addr == this.getLong(CPU68K.EXCEPTION_TRAP_0xF * 4)) {
                     sBytes = null;
                     sOp = "INSIDE";
                     try {
-                        let addrPC = this.cpu.getLong(this.cpu.regA[7]+2)-4;
-                        // Could check "this.cpu.getWord(addrPC) == 0x4e4f" too,
+                        let addrPC = this.getLong(this.cpu.regA[7]+2)-4;
+                        // Could check "this.getWord(addrPC) == 0x4e4f" too,
                         // to make sure it's really a TRAP 0x0F instruction....
-                        sSrc = "API";  // TODO: PalmOSTypes.getAPIName(this.cpu.getWord(addrPC+2));
+                        sSrc = this.getTrapName? this.getTrapName(this.getWord(addrPC+2)) : "API";
                     }
                     catch (e) {
                         sSrc = "???";
@@ -1456,7 +1474,99 @@ export default class Dbg68K extends Debugger {
                 sSrc = sSrc + "]";
             }
         }
-        return this.sprintf("%08x: %-15s %-8s %-40s;", address, sBytes, sOp, sSrc);
+        this.addAddress(address, Math.max(this.curPC - addr, 2));
+        opcodes.length = 0;
+        return this.sprintf("%08x: %-15s %-8s %s", addr, sBytes, sOp, sSrc || "").trimEnd() + (annotation || "") + "\n";
+    }
+
+    /**
+     * dumpAddress(address, bus)
+     *
+     * Overrides the Debugger's dumpAddress(), because our 25-bit addresses look better with 8 hex digits.
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {string}
+     */
+    dumpAddress(address, bus = this.busMemory)
+    {
+        return this.toBase(address.off, this.nDefaultRadix, 32, "");
+    }
+
+    /**
+     * readAddress(address, advance, bus)
+     *
+     * Overrides the Debugger's readAddress(), because addresses obtained from the CPU (eg, regPC) have not
+     * been masked to the width of the bus yet (see CPU68K.ADDR_MASK).
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {number} [advance] (amount to advance address after read, if any)
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {number|undefined}
+     */
+    readAddress(address, advance, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        let value = bus.readDirect(address.off & bus.addrLimit);
+        if (advance) this.addAddress(address, advance, bus);
+        this.cBreakIgnore--;
+        return value;
+    }
+
+    /**
+     * writeAddress(address, value, bus)
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {number} value
+     * @param {Bus} [bus] (default is busMemory)
+     */
+    writeAddress(address, value, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        bus.writeDirect(address.off & bus.addrLimit, value);
+        this.cBreakIgnore--;
+    }
+
+    /**
+     * getByte(addr)
+     *
+     * The disassembler uses these functions (instead of the CPU's) to read memory without side-effects
+     * (eg, reading hardware registers) and without triggering any breakpoints.
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number} (sign-extended byte)
+     */
+    getByte(addr)
+    {
+        return this.busMemory.readDirect(addr & CPU68K.ADDR_MASK) << 24 >> 24;
+    }
+
+    /**
+     * getWord(addr)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number} (sign-extended word)
+     */
+    getWord(addr)
+    {
+        return (this.getByte(addr) << 8) | (this.getByte(addr + 1) & 0xff);
+    }
+
+    /**
+     * getLong(addr)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number}
+     */
+    getLong(addr)
+    {
+        return (this.getWord(addr) << 16) | (this.getWord(addr + 2) & 0xffff);
     }
 
     /**
@@ -1501,7 +1611,7 @@ export default class Dbg68K extends Debugger {
      */
     getIndexAddr(base)
     {
-        let addr = this.cpu.getWord(this.curPC);
+        let addr = this.getWord(this.curPC);
         let i = (addr & 0x7000) >> 12, bAddr = addr << 24 >> 24;
         if ((addr & 0x0800) != 0) {
             if ((addr & 0x8000) != 0) {
@@ -1528,7 +1638,7 @@ export default class Dbg68K extends Debugger {
      */
     getIndexAddrString(nnn)
     {
-        let addr = this.cpu.getWord(this.curPC);
+        let addr = this.getWord(this.curPC);
         this.curPC += 2;
         let i = (addr >> 12) & 0x7, bAddr = addr << 24 >> 24;
         return "(" + (bAddr != 0? this.getSignedHexString(bAddr) + "," : "") +
@@ -1680,7 +1790,7 @@ class DbgModeAValByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -1691,7 +1801,7 @@ class DbgModeAValWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -1702,7 +1812,7 @@ class DbgModeAValLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -1713,7 +1823,7 @@ class DbgModeAValIncByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -1724,7 +1834,7 @@ class DbgModeAValIncWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -1735,7 +1845,7 @@ class DbgModeAValIncLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -1746,7 +1856,7 @@ class DbgModeAValDecByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -1757,7 +1867,7 @@ class DbgModeAValDecWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -1768,46 +1878,46 @@ class DbgModeAValDecLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAValDispByte extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAValDispWord extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAValDispLong extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -1818,7 +1928,7 @@ class DbgModeAValIndexByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -1829,7 +1939,7 @@ class DbgModeAValIndexWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -1840,118 +1950,118 @@ class DbgModeAValIndexLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAbs16Byte extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).b", this.ea);
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAbs16Word extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).w", this.ea);
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAbs16Long extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).l", this.ea);
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAbs32Byte extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).b", this.ea);
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAbs32Word extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).w", this.ea);
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAbs32Long extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).l", this.ea);
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModePCValDispByte extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModePCValDispWord extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModePCValDispLong extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -1962,7 +2072,7 @@ class DbgModePCValIndexByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 class DbgModePCValIndexWord extends DbgMode {
@@ -1972,7 +2082,7 @@ class DbgModePCValIndexWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 class DbgModePCValIndexLong extends DbgMode {
@@ -1982,7 +2092,7 @@ class DbgModePCValIndexLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -1994,11 +2104,11 @@ class DbgModeImmediateByte extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC + 1;
         this.dbg.curPC += 2;
-        return this.dbg.getImmediateHexString(this.cpu.getByte(this.ea));     // + ".b";
+        return this.dbg.getImmediateHexString(this.dbg.getByte(this.ea));     // + ".b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -2010,11 +2120,11 @@ class DbgModeImmediateWord extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC;
         this.dbg.curPC += 2;
-        return this.dbg.getImmediateHexString(this.cpu.getWord(this.ea));     // + ".w";
+        return this.dbg.getImmediateHexString(this.dbg.getWord(this.ea));     // + ".w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -2026,11 +2136,11 @@ class DbgModeImmediateLong extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC;
         this.dbg.curPC += 4;
-        return this.dbg.getImmediateHexString(this.cpu.getLong(this.ea));     // + ".l";
+        return this.dbg.getImmediateHexString(this.dbg.getLong(this.ea));     // + ".l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 

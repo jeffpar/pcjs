@@ -2126,7 +2126,7 @@ export default class Debugger extends Device {
      * @param {string} message
      * @param {...} [args]
      */
-    stopCPU(message, args)
+    stopCPU(message, ...args)
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
@@ -2253,7 +2253,12 @@ export default class Debugger extends Device {
             let sAddress = this.dumpAddress(address, bus);
             for (i = cbLine; i > 0 && length > 0; i--) {
                 let b = this.readAddress(address, 1, bus);
-                data |= (b << (iByte++ << 3));
+                if (bus.littleEndian === false) {
+                    data = ((data << 8) | b) >>> 0;
+                    iByte++;
+                } else {
+                    data |= (b << (iByte++ << 3));
+                }
                 if (iByte == size) {
                     sData += this.toBase(data, 0, bits, "");
                     sData += (size == 1? (i == 9? '-' : ' ') : " ");

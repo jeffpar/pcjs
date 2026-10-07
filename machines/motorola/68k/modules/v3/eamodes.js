@@ -100,9 +100,9 @@ export default class EAMode
      */
     advanceEA(nnn)
     {
-        let nCycles = this.cpu.nCyclesDebug;
+        let nCycles = this.cpu.nCyclesRemain;
         this.getEA(nnn);
-        this.cpu.nCyclesDebug = nCycles;
+        this.cpu.nCyclesRemain = nCycles;
     }
 
     /**
@@ -279,18 +279,18 @@ export default class EAMode
 
         if ((addr & 0x0800) != 0) {
             if ((addr & 0x8000) != 0) {
-                return base + this.cpu.regA[i] + (addr << 24 >> 24);
+                return (base + this.cpu.regA[i] + (addr << 24 >> 24))|0;
             }
             else {
-                return base + this.cpu.regD[i] + (addr << 24 >> 24);
+                return (base + this.cpu.regD[i] + (addr << 24 >> 24))|0;
             }
         }
         else {
             if ((addr & 0x8000) != 0) {
-                return base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24);
+                return (base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24))|0;
             }
             else {
-                return base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24);
+                return (base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24))|0;
             }
         }
     }
@@ -350,8 +350,8 @@ export class EAModeDRegByte extends EAMode {
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
@@ -417,23 +417,23 @@ export class EAModeDRegLong extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regD[this.ea] = data;
+        this.cpu.regD[this.ea] = data|0;
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
         this.ea = nnn;
-        this.cpu.regD[this.ea] = data;
-        this.cpu.flagZNew = data;
+        this.cpu.regD[this.ea] = data|0;
+        this.cpu.flagZNew = data|0;
         this.cpu.flagNNew = this.cpu.flagZNew;
         this.cpu.flagVNew = this.cpu.flagVDst = 0;
         this.cpu.flagCSrc = this.cpu.flagCDst = 0;
@@ -452,7 +452,7 @@ export class EAModeARegWord extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regA[this.ea] = data;          // NOTE: the entire A register is always updated, and byte operations are illegal
+        this.cpu.regA[this.ea] = data|0;        // NOTE: the entire A register is always updated, and byte operations are illegal
     }
 
     updateFlagZ(data) {
@@ -477,21 +477,21 @@ export class EAModeARegLong extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regA[this.ea] = data;
+        this.cpu.regA[this.ea] = data|0;
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEAData(nnn, data) {                      // overrides default method, for speed
-        this.cpu.regA[this.ea = nnn] = data;
+        this.cpu.regA[this.ea = nnn] = data|0;
     }
 }
 
@@ -506,7 +506,7 @@ export class EAModeAValByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -538,7 +538,7 @@ export class EAModeAValWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -570,7 +570,7 @@ export class EAModeAValLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -582,13 +582,13 @@ export class EAModeAValLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -600,7 +600,7 @@ export class EAModeAValIncByte extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += CPU68K.aByteInc[nnn];
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + CPU68K.aByteInc[nnn])|0;
         return this.ea;
     }
 
@@ -631,7 +631,7 @@ export class EAModeAValIncWord extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += 2;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + 2)|0;
         return this.ea;
     }
 
@@ -661,7 +661,7 @@ export class EAModeAValIncLong extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(8);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += 4;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + 4)|0;
         return this.ea;
     }
 
@@ -674,13 +674,13 @@ export class EAModeAValIncLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -691,7 +691,7 @@ export class EAModeAValDecByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= CPU68K.aByteInc[nnn];
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - CPU68K.aByteInc[nnn])|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -721,7 +721,7 @@ export class EAModeAValDecWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= 2;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - 2)|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -751,7 +751,7 @@ export class EAModeAValDecLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);                  // BUGBUG: 10 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= 4;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - 4)|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -764,13 +764,13 @@ export class EAModeAValDecLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -781,11 +781,11 @@ export class EAModeAValDispByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -814,11 +814,11 @@ export class EAModeAValDispWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -847,11 +847,11 @@ export class EAModeAValDispLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(12);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -863,13 +863,13 @@ export class EAModeAValDispLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -884,7 +884,7 @@ export class EAModeAValIndexByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -917,7 +917,7 @@ export class EAModeAValIndexWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -950,7 +950,7 @@ export class EAModeAValIndexLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -962,13 +962,13 @@ export class EAModeAValIndexLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -983,7 +983,7 @@ export class EAModeAbs16Byte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -1015,7 +1015,7 @@ export class EAModeAbs16Word extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -1048,7 +1048,7 @@ export class EAModeAbs16Long extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -1060,13 +1060,13 @@ export class EAModeAbs16Long extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -1081,7 +1081,7 @@ export class EAModeAbs32Byte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -1113,7 +1113,7 @@ export class EAModeAbs32Word extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -1146,7 +1146,7 @@ export class EAModeAbs32Long extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -1158,13 +1158,13 @@ export class EAModeAbs32Long extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -1175,11 +1175,11 @@ export class EAModePCValDispByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -1208,11 +1208,11 @@ export class EAModePCValDispWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -1241,11 +1241,11 @@ export class EAModePCValDispLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(12);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -1257,13 +1257,13 @@ export class EAModePCValDispLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -1278,7 +1278,7 @@ export class EAModePCValIndexByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -1311,7 +1311,7 @@ export class EAModePCValIndexWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -1344,7 +1344,7 @@ export class EAModePCValIndexLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -1356,13 +1356,13 @@ export class EAModePCValIndexLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -1375,7 +1375,7 @@ export class EAModeImmediateByte extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regPC+1;
-        this.cpu.regPC += 2;
+        this.cpu.regPC = (this.cpu.regPC + 2)|0;
         return this.ea;
     }
 
@@ -1411,7 +1411,7 @@ export class EAModeImmediateWord extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regPC;
-        this.cpu.regPC += 2;
+        this.cpu.regPC = (this.cpu.regPC + 2)|0;
         return this.ea;
     }
 
@@ -1447,7 +1447,7 @@ export class EAModeImmediateLong extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(8);
         this.ea = this.cpu.regPC;
-        this.cpu.regPC += 4;
+        this.cpu.regPC = (this.cpu.regPC + 4)|0;
         return this.ea;
     }
 

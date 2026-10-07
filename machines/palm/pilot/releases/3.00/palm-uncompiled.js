@@ -1444,7 +1444,11 @@ class StdLib extends Defines {
             aComp[iComp++] = n;
             iSrc = iCompare;
         }
-        if (aComp.length >= aSrc.length) return aSrc;
+        /**
+         * If compression didn't help, return the source array, but make sure it's a plain Array, not a typed array
+         * (eg, Uint8Array), because typed arrays are not serialized as arrays by JSON.stringify().
+         */
+        if (aComp.length >= aSrc.length) return Array.isArray(aSrc)? aSrc : Array.from(aSrc);
         return aComp;
     }
 
@@ -3158,6 +3162,8 @@ WebIO.KEYNAME = {
     [WebIO.KEYCODE.Z]:      "Z",
     [WebIO.KEYCODE.LEFT]:   "Left",
     [WebIO.KEYCODE.RIGHT]:  "Right",
+    [WebIO.KEYCODE.UP]:     "Up",
+    [WebIO.KEYCODE.DOWN]:   "Down",
 };
 
 WebIO.BrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
@@ -8526,7 +8532,7 @@ class Bus extends Device {
     {
 
         if (addr & 0x3) {
-            this.writePair(addr, value >> this.pairWidth);
+            this.writePair(addr, (value >> this.pairWidth) & this.pairLimit);
             this.writePair((addr + 2) & this.addrLimit, value & this.pairLimit);
             return;
         }
@@ -9363,7 +9369,7 @@ class Memory extends Device {
     writeValueQuadBE(offset, value)
     {
 
-        this.writeValuePairBE(offset, value >> this.pairWidth);
+        this.writeValuePairBE(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writeValuePairBE(offset + 2, value & this.pairLimit);
     }
 
@@ -9485,7 +9491,7 @@ class Memory extends Device {
     writeDynamicQuadBE(offset, value)
     {
 
-        this.writePair(offset, value >> this.pairWidth);
+        this.writePair(offset, (value >> this.pairWidth) & this.pairLimit);
         this.writePair(offset + 2, value & this.pairLimit);
     }
 
@@ -12319,7 +12325,7 @@ class Debugger extends Device {
      * @param {string} message
      * @param {...} [args]
      */
-    stopCPU(message, args)
+    stopCPU(message, ...args)
     {
         message = this.sprintf(message, ...args);
         if (this.time.isRunning() && this.fExceptionOnBreak) {
@@ -12446,7 +12452,12 @@ class Debugger extends Device {
             let sAddress = this.dumpAddress(address, bus);
             for (i = cbLine; i > 0 && length > 0; i--) {
                 let b = this.readAddress(address, 1, bus);
-                data |= (b << (iByte++ << 3));
+                if (bus.littleEndian === false) {
+                    data = ((data << 8) | b) >>> 0;
+                    iByte++;
+                } else {
+                    data |= (b << (iByte++ << 3));
+                }
                 if (iByte == size) {
                     sData += this.toBase(data, 0, bits, "");
                     sData += (size == 1? (i == 9? '-' : ' ') : " ");
@@ -12966,17 +12977,27 @@ class Debugger extends Device {
 
 /* eslint-disable no-labels */
 /* eslint-disable no-extra-label */
-/* eslint-disable sort-imports */
-/* eslint-disable no-duplicate-imports */
 
+
+/** @typedef {{ busMemory: string, addrReset: (number|undefined) }} */
+let CPU68KConfig;
+
+/** @typedef {{ checkInterrupts: function(boolean):boolean }} */
+let HWRegs;
 
 /**
  * 68K Emulator
  *
+ * All registers (and all data values flowing through the EAMode classes) are maintained as signed 32-bit integers,
+ * just like the original Java implementation, and all byte and word memory reads are sign-extended, again like Java's
+ * GetByte() and GetWord().  Memory addresses are masked to 25 bits (see CPU68K.ADDR_MASK), which reproduces the 32Mb
+ * address space replication that the original Java implementation (and the PalmOS ROMs it supported) relied upon.
+ *
  * @class CPU68K
  * @unrestricted
  * @property {Bus} busMemory
- * @property {Input} input
+ * @property {Input} inputDevice
+ * @property {HWRegs|null} hwregs
  */
 class CPU68K extends CPU
 {
@@ -12993,11 +13014,6 @@ class CPU68K extends CPU
         super(idMachine, idDevice, config);
 
         /**
-         * Initialize the CPU.
-         */
-        this.initCPU();
-
-        /**
          * Get access to the Bus that provides access to physical memory.
          */
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['busMemory']));
@@ -13006,6 +13022,16 @@ class CPU68K extends CPU
          * Get access to the Input device, so we can call setFocus() as needed.
          */
         this.inputDevice = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+
+        /**
+         * The hardware register device (eg, PilotIO) that manages interrupts will connect itself via setHWRegs().
+         */
+        this.hwregs = null;
+
+        /**
+         * Initialize the CPU.
+         */
+        this.initCPU();
     }
 
     /**
@@ -13016,20 +13042,84 @@ class CPU68K extends CPU
      * Executes the specified "burst" of instructions.  This code exists outside of the startClock() function
      * to ensure that its try/catch exception handler doesn't interfere with the optimization of this tight loop.
      *
+     * In the original Java implementation, CPUThread.run() was responsible for calling ExecuteOpcodes() repeatedly,
+     * checking for interrupts (CPU_CHECKINTS), and processing any exception that GenerateException() recorded before
+     * throwing a Java exception (iPendingException).  Here, all of that is managed by this function.
+     *
+     * One difference: when the 68K executes a STOP instruction, the Java implementation would sleep briefly and then
+     * resume execution after the STOP; here, the CPU remains stopped (simply consuming cycles) until an interrupt
+     * is acknowledged, which is how the real hardware behaves.
+     *
      * @this {CPU68K}
      * @param {number} nCycles
      */
     execute(nCycles)
     {
+        this.nCyclesRemain = nCycles;
+
+        while (this.nCyclesRemain > 0) {
+            if (this.fCPU & (CPU68K.CPU_CHECKINTS | CPU68K.CPU_STOPPED)) {
+                if ((this.fCPU & CPU68K.CPU_CHECKINTS) && this.hwregs && this.time.isRunning()) {
+                    if (this.hwregs.checkInterrupts(true)) {
+                        this.addCycles(44);
+                    }
+                }
+                if ((this.fCPU & CPU68K.CPU_STOPPED) && (this.injection || this.aInjections.length)) {
+                    this.checkInjections();
+                }
+                if (this.fCPU & CPU68K.CPU_STOPPED) {
+                    this.nCyclesRemain = 0;
+                    break;
+                }
+            }
+            try {
+                this.executeOpcodes();
+            } catch(err) {
+                if (err !== CPU68K.EXCEPTION_THROWN) throw err;
+                this.processException();
+            }
+            if (this.fCPU & CPU68K.CPU_BREAKPOINT) {
+                this.fCPU &= ~CPU68K.CPU_BREAKPOINT;
+                break;
+            }
+        }
+    }
+
+    /**
+     * startClock(nCycles)
+     *
+     * Overrides the CPU's startClock(), so that once a burst is complete, getClock() no longer reports the cycles
+     * from that burst; otherwise, any device calling Time's getCycles() between bursts (eg, from a timer callback)
+     * would see those cycles counted twice, since Time has already added them to its own cycle count.
+     *
+     * @this {CPU68K}
+     * @param {number} [nCycles] (default is 0 to single-step)
+     * @returns {number} (number of cycles actually "clocked")
+     */
+    startClock(nCycles = 0)
+    {
+        let nCyclesClocked = super.startClock(nCycles);
+        this.nCyclesStart = this.nCyclesRemain = 0;
+        return nCyclesClocked;
+    }
+
+    /**
+     * executeOpcodes()
+     *
+     * This is the heart of the CPU, ported from ExecuteOpcodes() in CPUOps.java.  It executes instructions until
+     * nCyclesRemain is exhausted or some condition in CPU_BREAKFLAGS occurs (eg, STOP or a change in interrupt state).
+     *
+     * @this {CPU68K}
+     */
+    executeOpcodes()
+    {
         let aEAModes = this.aEAModes;
         let dataNew, dataTmp, cBits, cRegs, fCond;
         let op1, op2, reg, ss, rrr, nnn, eaModeSrc, eaModeDst, iModeSrc, iModeDst, iMask;
 
-        this.nCyclesRemain = nCycles;
-
         while (this.nCyclesRemain > 0) {
 
-            let nCyclesCur = nCycles;           // make sure the next opcode generates a non-zero cycle count
+            let nCyclesCur = this.nCyclesRemain;    // make sure the next opcode generates a non-zero cycle count
 
             this.regPCLast = this.regPC;        // update current opcode address
             op1 = this.getPCWord();             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
@@ -13233,8 +13323,22 @@ class CPU68K extends CPU
                     //  case 0x0148:   movep    [....rrr101001nnn, format none, p.236]
                     //  case 0x0188:   movep    [....rrr110001nnn, format none, p.236]
                     //  case 0x01c8:   movep    [....rrr111001nnn, format none, p.236]
-                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
-                    this.addCycles(16 + this.eaModeDRegLong.cycle4l*2);
+                    //  The Java implementation didn't support MOVEP, but it's simple enough: transfer every
+                    //  other byte, starting at (d16,An), between memory and the specified data register.
+                    reg = (this.regA[nnn] + this.getPCWord())|0;
+                    cRegs = (op1 & 0x40)? 4 : 2;
+                    if (op1 & 0x80) {
+                        for (let i = (cRegs - 1) * 8; i >= 0; i -= 8, reg += 2) {
+                            this.setByte(reg, this.regD[rrr] >> i);
+                        }
+                    } else {
+                        dataNew = 0;
+                        for (let i = 0; i < cRegs; i++, reg += 2) {
+                            dataNew = (dataNew << 8) | (this.getByte(reg) & 0xff);
+                        }
+                        this.regD[rrr] = (cRegs == 4)? dataNew : (this.regD[rrr] & ~0xffff) | dataNew;
+                    }
+                    this.addCycles(8 + cRegs * 4);
                 }
                 else {
                     //  case 0x0100:   btst     [....rrr100yyynnn, format ??????????yyynnn, p.166]
@@ -13251,7 +13355,11 @@ class CPU68K extends CPU
                     else {
                         this.dataSrc = (1 << (this.dataSrc & 7));
                         if ((op1 & 0x00c0) == 0) {
-                            eaModeDst = aEAModes[this.abModes401[op1 & 0x3f]];  // +(ssBYTE << 6)
+                            //
+                            // BTST is the only bit operation that permits an immediate destination, and only when the
+                            // bit number is in a register (the Java implementation didn't permit it at all).
+                            //
+                            eaModeDst = aEAModes[(iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? this.abModes400 : this.abModes401)[op1 & 0x3f]];  // +(ssBYTE << 6)
                         } else {
                             eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];  // +(ssBYTE << 6)
                         }
@@ -13260,27 +13368,27 @@ class CPU68K extends CPU
                     switch ((op1 >> 6) & 0x3) {
                     case 0:
                         //  case 0x0800:   btst     [....100000zzznnn, format ??????????zzznnn, p.166]
-                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.flagZNew = this.dataDst & this.dataSrc;
                         this.addCycles(4 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
                         break;
                     case 1:
                         //  case 0x0840:   bchg     [....100001bbbnnn, format ??????????bbbnnn, p.132]
                         eaModeDst.setData(this.dataDst ^ this.dataSrc);
-                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.flagZNew = this.dataDst & this.dataSrc;
                         this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
                         break;
 
                     case 2:
                         //  case 0x0880:   bclr     [....100010bbbnnn, format ??????????bbbnnn, p.135]
                         eaModeDst.setData(this.dataDst & ~this.dataSrc);
-                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.flagZNew = this.dataDst & this.dataSrc;
                         this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4) + eaModeDst.cycle2l);
                         break;
 
                     case 3:
                         //  case 0x08c0:   bset     [....100011bbbnnn, format ??????????bbbnnn, p.161]
                         eaModeDst.setData(this.dataDst | this.dataSrc);
-                        eaModeDst.updateFlagZ(this.dataDst & this.dataSrc);
+                        this.flagZNew = this.dataDst & this.dataSrc;
                         this.addCycles(8 + (iModeSrc == CPU68K.EAMODEINDEX_DREG_LONG? 0 : 4));
                         break;
                     }
@@ -13359,12 +13467,8 @@ class CPU68K extends CPU
                         // not from the destination.
                         this.dataDst = 0;
                         eaModeDst = aEAModes[this.abModes407[op1 & 0xff]];
-                        this.dataSrc = eaModeDst.getEAData(nnn) - this.getFlagX();
-                        this.flagZTmp = this.flagZNew;
-                        eaModeDst.setDataFlags(-this.dataSrc);
-                        if (this.flagZNew == 0) {
-                            this.flagZNew = this.flagZTmp;
-                        }
+                        this.dataSrc = eaModeDst.getEAData(nnn);
+                        eaModeDst.setData(this.subX(eaModeDst.width, this.dataDst, this.dataSrc));
                         this.addCycles(8 + eaModeDst.cycle4l - eaModeDst.cycle4AD - eaModeDst.cycle2ADl);
                     }
                     else {              // MOVE SR,%s
@@ -13422,6 +13526,9 @@ class CPU68K extends CPU
                     }
                     else {              // MOVE %s,SR
                         //  case 0x46c0:   move     [....011011xxxnnn, format ??????????xxxnnn, p.474]
+                        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                            this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                        }
                         eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];    // +(ssWORD << 6)
                         this.setFlagsSR(eaModeSrc.getEAData(nnn));
                         this.addCycles(12);
@@ -13438,7 +13545,10 @@ class CPU68K extends CPU
                     switch ((op1 >> 6) & 0x3) {
                     case 0x0:
                         //  case 0x4800:   nbcd     [........00wwwnnn, format ??????????wwwnnn, p.246]
-                        this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                        eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
+                        this.dataDst = 0;
+                        this.dataSrc = eaModeDst.getEAData(nnn) & 0xff;
+                        eaModeDst.setData(this.negBCD(this.dataSrc));
                         this.addCycles(8 - eaModeDst.cycle2ADI);
                         break stage1;
 
@@ -13502,12 +13612,8 @@ class CPU68K extends CPU
                         //
                         for (let i = 7; i >= 0; i--, iMask <<= 1) {
                             if ((iModeSrc & iMask) != 0) {
-                                if (cRegs++ != 0) {
-                                    reg = this.regA[nnn];
-                                    eaModeDst.advanceEA(nnn);
-                                }
-                                if (i != nnn) reg = this.regA[i];
-                                eaModeDst.setData(reg);
+                                if (cRegs++ != 0) eaModeDst.advanceEA(nnn);
+                                eaModeDst.setData(i == nnn? reg : this.regA[i]);
                             }
                         }
                         for (let i = 7; i >= 0; i--, iMask <<= 1) {
@@ -13547,8 +13653,8 @@ class CPU68K extends CPU
                         //  case 0x4ac0:   tas      [........11wwwnnn, format ??????????wwwnnn, p.291]
                         eaModeDst = aEAModes[this.abModes407[op1 & 0x3f]];           // +(ssBYTE << 6)
                         this.dataDst = eaModeDst.getEAData(nnn);
-                        eaModeDst.updateFlagsZNClearCV(this.dataSrc);
-                        eaModeDst.setData(this.dataSrc | 0x80);
+                        eaModeDst.updateFlagsZNClearCV(this.dataDst);
+                        eaModeDst.setData(this.dataDst | 0x80);
                         this.addCycles(14 - eaModeDst.cycle2ADI*5);
                     }
                     else {
@@ -13585,7 +13691,7 @@ class CPU68K extends CPU
                         }
                     }
                     if (cRegs == 0) this.regA[nnn] = reg;
-                    this.addCycles(4 + (4+eaModeDst.cycle4l)*cRegs);
+                    this.addCycles(4 + (4+eaModeSrc.cycle4l)*cRegs);
                     break stage1;
 
                 case 0xe:
@@ -13607,9 +13713,10 @@ class CPU68K extends CPU
                     case 0x5:
                         if ((op1 & 0x8) == 0) {
                             //  case 0x4e50:   link     [........01010nnn, format none, p.216]
-                            this.pushLong(this.regA[nnn]);      // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regA[nnn]);
+                            op2 = this.getPCWord();             // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].getEAData(0);
+                            this.pushLong(nnn == 7? this.regA[7] - 4 : this.regA[nnn]);   // "LINK A7" pushes the decremented A7
                             this.regA[nnn] = this.regA[7];
-                            this.regA[7] += this.getPCWord();   // aEAModes[CPU68K.EAMODEINDEX_IMMEDIATE_WORD].getEAData(0);
+                            this.regA[7] = (this.regA[7] + op2)|0;
                             this.addCycles(16);
                         }
                         else {
@@ -13618,7 +13725,7 @@ class CPU68K extends CPU
                             this.regA[7] = this.regA[nnn];
                             this.regA[nnn] = this.popLong();
                             this.addCycles(12);
-                            if (this.dbg != null) {
+                            if (this.dbg && this.dbg.markDataAccess) {
                                 //
                                 // Mark the entire frame just removed as "uninitialized", to
                                 // help catch more errors.  There are other places where it might
@@ -13626,7 +13733,7 @@ class CPU68K extends CPU
                                 // caller and he's removed his args from the stack with an "ADD #xxx,A7",
                                 // but we don't want to slow things down *too* much.... -JP
                                 //
-                                this.dbg.markDataAccess(op2, this.regA[7]-op2, Dbg68K.DATAACCESS_UNINIT);
+                                this.dbg.markDataAccess(op2, this.regA[7]-op2, CPU68K.DATAACCESS_UNINIT);
                             }
                         }
                         break stage1;
@@ -13651,7 +13758,11 @@ class CPU68K extends CPU
                         switch (op1 & 0xf) {
                         case 0x0:
                             //  case 0x4e70:   reset    [........01110000, format none, p.538]
-                            this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                            //  The RESET instruction asserts the RESET line for external devices only; the CPU
+                            //  itself is unaffected, and we have no external devices that care, so this is a no-op.
+                            if ((this.flags & CPU68K.FLAGS_SU) == 0) {
+                                this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
+                            }
                             this.addCycles(132);
                             break stage1;
 
@@ -13677,6 +13788,9 @@ class CPU68K extends CPU
                                 // the stack to PC, and then pop the next 'long' into PC.  This effectively
                                 // "returns" us from a call injected by ScriptVarFunc.Call().
                                 //
+                                if (this.injection) {
+                                    this.injection.result = {d0: this.regD[0], a0: this.regA[0]};
+                                }
                                 this.regA[7] = this.regPC;
                                 this.regPC = this.popLong();
                                 //
@@ -13802,6 +13916,9 @@ class CPU68K extends CPU
                     eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
                     this.dataSrc = eaModeSrc.getEAData(nnn);
                     this.dataDst = this.regD[rrr] << 16 >> 16;
+                    this.setFlagZ(this.dataDst == 0? 1 : 0);      // Z, V and C are officially undefined, but this
+                    this.setFlagV(0);                               // is what real hardware does
+                    this.setFlagC(0);
                     if (this.dataDst < 0) {
                         this.setFlagN(-1);
                         this.genException(CPU68K.EXCEPTION_CHK_INSTRUCTION);
@@ -13833,11 +13950,11 @@ class CPU68K extends CPU
                     iModeDst = op1 & 0xf8;
                     if (iModeDst == 0x48 || iModeDst == 0x88) { // EAMODEINDEX_AREG_WORD or EAMODEINDEX_AREG_LONG
                         if ((op1 & 0x0100) == 0x0000) {         // affects entire A register and does not affect flags
-                            this.regA[nnn] += this.dataSrc;
+                            this.regA[nnn] = (this.regA[nnn] + this.dataSrc)|0;
                             this.addCycles(8);                  // BUGBUG: For word accesses, table 8.5 says this is only 4 cycles (but only for ADDQ, not SUBQ) -JP
                         }
                         else {
-                            this.regA[nnn] -= this.dataSrc;
+                            this.regA[nnn] = (this.regA[nnn] - this.dataSrc)|0;
                             this.addCycles(8);
                         }
                         break stage1;
@@ -13979,7 +14096,7 @@ class CPU68K extends CPU
                             this.regD[nnn] = (this.regD[nnn] & ~0xffff) | (this.dataDst & 0xffff);
 
                             if (this.dataDst != -1) {
-                                this.regPC += this.dataSrc;
+                                this.regPC = (this.regPC + this.dataSrc)|0;
                                 this.addCycles(10);
                             }
                             else {
@@ -14011,7 +14128,7 @@ class CPU68K extends CPU
                     break;
                 case 0x1:               // BSR
                     this.pushLong(this.regPC);                  // aEAModes[CPU68K.EAMODEINDEX_AREG_PUSHLONG].setEAData(7, this.regPC);
-                    this.regPC += this.dataSrc;
+                    this.regPC = (this.regPC + this.dataSrc)|0;
                     this.addCycles(18);
                     break stage1;
                 case 0x2:               // BHI
@@ -14058,7 +14175,7 @@ class CPU68K extends CPU
                     break;
                 }
                 if (fCond != 0) {
-                    this.regPC += this.dataSrc;
+                    this.regPC = (this.regPC + this.dataSrc)|0;
                     this.addCycles(10);
                 }
                 else {
@@ -14080,7 +14197,11 @@ class CPU68K extends CPU
                 //  case 0x8100:   or       [1000rrr1ssuuunnn, format ????????ssuuunnn, p.255]
                 if ((op1 & 0x01f0) == 0x0100) {
                     //  case 0x8100:   sbcd     [1000rrr10000knnn, format ????rrr?bbkkknnn, p.275]
-                    this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+                    eaModeSrc = aEAModes[this.abModesAddSubX[(op1 >> 3) & 0x1]];     // 0 or 1 (both ssBYTE)
+                    this.dataSrc = eaModeSrc.getEAData(nnn) & 0xff;
+                    eaModeDst = eaModeSrc;
+                    this.dataDst = eaModeDst.getEAData(rrr) & 0xff;
+                    eaModeDst.setData(this.subBCD(this.dataDst, this.dataSrc));
                     if ((op1 & 0x8) == 0) {
                         this.addCycles(6);
                     }
@@ -14091,6 +14212,7 @@ class CPU68K extends CPU
                     eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
                     this.dataSrc = eaModeSrc.getEAData(nnn) & 0xffff;
                     if (this.dataSrc == 0) {
+                        this.setFlagsCCR(this.getFlags() & CPU68K.FLAGS_EXTEND);
                         this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
                         this.addCycles(38);
                     }
@@ -14101,11 +14223,11 @@ class CPU68K extends CPU
                         dataNew = (dataTmp / this.dataSrc)|0;
                         dataTmp = (dataTmp % this.dataSrc)|0;
                         if ((dataNew & 0xffff0000) != 0) {
-                            this.setFlagV(-1);
+                            this.setDivOverflow();
                         }
                         else {                                  // flags are based on quotient (dataNew), not the quotient+remainder combo
                             eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
-                            eaModeDst.updateFlagsZNClearCV(dataNew);
+                            eaModeDst.updateFlagsZNClearCV(dataNew << 16 >> 16);
                         }
                         this.addCycles(140);
                     }
@@ -14116,16 +14238,17 @@ class CPU68K extends CPU
                     eaModeSrc = aEAModes[this.abModes400[(op1 & 0x3f)+0x40]];        // +(ssWORD << 6)
                     this.dataSrc = eaModeSrc.getEAData(nnn);
                     if (this.dataSrc == 0) {
+                        this.setFlagsCCR(this.getFlags() & CPU68K.FLAGS_EXTEND);
                         this.genException(CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO);
                         this.addCycles(38);
                     }
                     else {
                         eaModeDst = this.eaModeDRegLong;        // this.aEAModes[CPU68K.EAMODEINDEX_DREG_LONG];
                         this.dataDst = eaModeDst.getEAData(rrr);
-                        dataNew = (this.dataDst / this.dataSrc)|0;
+                        dataNew = Math.trunc(this.dataDst / this.dataSrc);
                         dataTmp = (this.dataDst % this.dataSrc)|0;
-                        if ((dataNew & 0xffff0000) != 0 && (dataNew & 0xffff0000) != 0xffff0000) {
-                            this.setFlagV(-1);
+                        if (dataNew < -0x8000 || dataNew > 0x7fff) {
+                            this.setDivOverflow();
                         } else {                                // flags are based on quotient (dataNew), not the quotient+remainder combo
                             eaModeDst.setData((dataNew & 0xffff) | (dataTmp << 16));
                             eaModeDst.updateFlagsZNClearCV(dataNew);
@@ -14163,7 +14286,7 @@ class CPU68K extends CPU
                     //  case 0x9000:   suba     [1001rrrk11mmmnnn, format ???????kssmmmnnn, p.282]
                     eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
                     this.dataSrc = eaModeSrc.getEAData(nnn);
-                    this.regA[rrr] -= this.dataSrc;
+                    this.regA[rrr] = (this.regA[rrr] - this.dataSrc)|0;
                     this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
                     break stage1;
                 }
@@ -14189,14 +14312,10 @@ class CPU68K extends CPU
                 else {
                     //  case 0x9100:   subx     [1001rrr1ss00knnn, format ????rrr?sskkknnn, p.288]
                     eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
-                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
                     eaModeDst = eaModeSrc;
                     this.dataDst = eaModeDst.getEAData(rrr);
-                    this.flagZTmp = this.flagZNew;
-                    eaModeDst.setDataFlags(this.dataDst - this.dataSrc);
-                    if (this.flagZNew == 0) {
-                        this.flagZNew = this.flagZTmp;
-                    }
+                    eaModeDst.setData(this.subX(eaModeDst.width, this.dataDst, this.dataSrc));
                     if ((op1 & 0x8) == 0) {
                         this.addCycles(4 + eaModeDst.cycle4l);
                     }
@@ -14204,7 +14323,7 @@ class CPU68K extends CPU
                 break stage1;
 
             case 0xa:
-                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                this.genException(CPU68K.EXCEPTION_LINE_A);
                 break;
 
             case 0xb:
@@ -14301,27 +14420,10 @@ class CPU68K extends CPU
                     case 0x4:
                         //  case 0xc100:   abcd     [1100rrr10000knnn, format ????rrr?bbkkknnn, p.107]
                         eaModeSrc = aEAModes[this.abModesAddSubX[(op1 >> 3) & 0x1]]; // 0 or 1 (both ssBYTE)
-                        this.dataSrc = eaModeSrc.getEAData(nnn);
+                        this.dataSrc = eaModeSrc.getEAData(nnn) & 0xff;
                         eaModeDst = eaModeSrc;
-                        this.dataDst = eaModeDst.getEAData(rrr);
-                        dataNew = (this.dataSrc & 0x0f) + (this.dataDst & 0x0f) - this.getFlagX();
-                        dataNew += (dataNew > 9)? 6 : 0;
-                        dataNew += (this.dataSrc & 0xf0) + (this.dataDst & 0xf0);
-                        if (dataNew <= 0x90) {
-                            eaModeDst.setData(dataNew);
-                            this.setFlagCX(0);
-                        }
-                        else {
-                            dataNew += 0x60;
-                            eaModeDst.setData(dataNew);
-                            this.setFlagCX(-1);
-                        }
-                        if ((dataNew & 0xff) != 0) {    // conditionally clear Z
-                            this.flagZNew = dataNew << 24 >> 24;
-                        }
-                        this.flagVSrc = this.dataSrc << 24 >> 24;
-                        this.flagVDst = this.dataDst << 24 >> 24;
-                        this.flagNNew = this.flagVNew = dataNew << 24 >> 24;
+                        this.dataDst = eaModeDst.getEAData(rrr) & 0xff;
+                        eaModeDst.setData(this.addBCD(this.dataDst, this.dataSrc));
                         if ((op1 & 0x8) == 0) {
                             this.addCycles(6);
                         }
@@ -14378,7 +14480,7 @@ class CPU68K extends CPU
                     //  case 0xd000:   adda     [1101rrrk11mmmnnn, format ???????kssmmmnnn, p.112]
                     eaModeSrc = aEAModes[this.abModes000[(((op1 >> 2) & 0x40) + 0x40) | (op1 & 0x3f)]];
                     this.dataSrc = eaModeSrc.getEAData(nnn);
-                    this.regA[rrr] += this.dataSrc;     // entire destination updated regardless of operand size
+                    this.regA[rrr] = (this.regA[rrr] + this.dataSrc)|0;     // entire destination updated regardless of operand size
                     this.addCycles(8 - eaModeSrc.cycle2l + eaModeSrc.cycle2ADI);
                     break stage1;
                 }
@@ -14404,14 +14506,10 @@ class CPU68K extends CPU
                 else {
                     //  case 0xd100:   addx     [1101rrr1ss00knnn, format ????rrr?sskkknnn, p.118]
                     eaModeSrc = aEAModes[this.abModesAddSubX[((op1 >> 5) & 0x6) | ((op1 >> 3) & 0x1)]];
-                    this.dataSrc = eaModeSrc.getEAData(nnn) - this.getFlagX();
+                    this.dataSrc = eaModeSrc.getEAData(nnn);
                     eaModeDst = eaModeSrc;
                     this.dataDst = eaModeDst.getEAData(rrr);
-                    this.flagZTmp = this.flagZNew;
-                    eaModeDst.setDataFlagsForAdd(this.dataSrc + this.dataDst);
-                    if (this.flagZNew == 0) {
-                        this.flagZNew = this.flagZTmp;
-                    }
+                    eaModeDst.setData(this.addX(eaModeDst.width, this.dataDst, this.dataSrc));
                     if ((op1 & 0x8) == 0) {
                         this.addCycles(4 + eaModeDst.cycle4l);
                     }
@@ -14449,15 +14547,21 @@ class CPU68K extends CPU
                 this.addCycles(8 + eaModeDst.cycle2ADl + (eaModeDst.cycle2ADI-1)*cBits);
 
                 switch (op2 & 0x7) {
+                //
+                // NOTE: The Java implementation handled shift counts >= the operand width by first shifting one bit
+                // and then reducing the count to width-1, which produced incorrect results and/or flags in a number
+                // of cases (eg, counts larger than the width); the following code handles all those cases explicitly.
+                //
                 case 0x0:
                     //  case 0xe000:   asr      [....000011uuunnn, format ??????????uuunnn, p.126]
                     //  case 0xe000:   asr      [....rrr0ssk00nnn, format ????rrr?ssk??nnn, p.126]
-                    if (cBits >= eaModeDst.width) {
-                        this.dataDst >>= 1;
-                        cBits = eaModeDst.width-1;
-                    }
-                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >> cBits);
-                    if (cBits != 0) {
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    } else if (cBits >= eaModeDst.width) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst >> 31);
+                        this.setFlagCX(cBits == eaModeDst.width? (this.dataDst >>> 31) : 0);
+                    } else {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst >> cBits);
                         this.setFlagCX((this.dataDst >> (cBits-1)) & 0x1);
                     }
                     break stage1;
@@ -14465,37 +14569,40 @@ class CPU68K extends CPU
                 case 0x1:
                     //  case 0xe100:   asl      [....000111uuunnn, format ??????????uuunnn, p.126]
                     //  case 0xe100:   asl      [....rrr1ssk00nnn, format ????rrr?ssk??nnn, p.126]
-                    dataTmp = 0;                // assume no overflow
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                        break stage1;
+                    }
+                    //
+                    // V is set if the most significant bit changes at any time during the shift operation, which means
+                    // that if the top cBits+1 bits of the operand are not all the same (or for large counts, if the
+                    // operand is non-zero), V must be set.
+                    //
                     if (cBits >= eaModeDst.width) {
-                        if ((this.dataDst & eaModeDst.sign) != (this.dataDst & (eaModeDst.sign >>> 1))) {
-                            dataTmp = 1;        // we've already "overflowed"
-                        }
-                        this.dataDst <<= 1;
-                        cBits = eaModeDst.width-1;
+                        dataTmp = this.dataDst & eaModeDst.mask;
+                        eaModeDst.setDataFlagsZNClearCV(0);
+                        this.setFlagCX(cBits == eaModeDst.width? (this.dataDst & 0x1) : 0);
+                    } else {
+                        dataNew = (eaModeDst.mask << (eaModeDst.width-cBits-1)) & eaModeDst.mask;
+                        dataTmp = this.dataDst & dataNew;
+                        dataTmp = (dataTmp != dataNew && dataTmp != 0)? 1 : 0;
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                        this.setFlagCX((this.dataDst >> (eaModeDst.width-cBits)) & 0x1);
                     }
-                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
-                    if (cBits != 0) {
-                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
-                        if (dataTmp == 0) {
-                            // All cBits from eaModeDst.sign on down must either be all set or all clear
-                            dataTmp = eaModeDst.mask;
-                            dataTmp = (dataTmp << (eaModeDst.width-cBits-1)) & dataTmp;
-                            dataTmp = ((this.dataDst & dataTmp) != dataTmp && (this.dataDst & dataTmp) != 0)? 1 : 0;
-                        }
-                        if (dataTmp != 0) this.setFlagV(-1);
-                    }
+                    if (dataTmp != 0) this.setFlagV(-1);
                     break stage1;
 
                 case 0x2:
                     //  case 0xe200:   lsr      [....001011uuunnn, format ??????????uuunnn, p.218]
                     //  case 0xe008:   lsr      [....rrr0ssk01nnn, format ????rrr?ssk??nnn, p.218]
                     this.dataDst &= eaModeDst.mask;
-                    if (cBits >= eaModeDst.width) {
-                        this.dataDst >>>= 1;
-                        cBits = eaModeDst.width-1;
-                    }
-                    eaModeDst.setDataFlagsZNClearCV(this.dataDst >>> cBits);
-                    if (cBits != 0) {
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    } else if (cBits >= eaModeDst.width) {
+                        eaModeDst.setDataFlagsZNClearCV(0);
+                        this.setFlagCX(cBits == eaModeDst.width? (this.dataDst >>> (eaModeDst.width-1)) & 0x1 : 0);
+                    } else {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst >>> cBits);
                         this.setFlagCX((this.dataDst >>> (cBits-1)) & 0x1);
                     }
                     break stage1;
@@ -14503,13 +14610,14 @@ class CPU68K extends CPU
                 case 0x3:
                     //  case 0xe300:   lsl      [....001111uuunnn, format ??????????uuunnn, p.218]
                     //  case 0xe108:   lsl      [....rrr1ssk01nnn, format ????rrr?ssk??nnn, p.218]
-                    if (cBits >= eaModeDst.width) {
-                        this.dataDst <<= 1;
-                        cBits = eaModeDst.width-1;
-                    }
-                    eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
-                    if (cBits != 0) {
-                        this.setFlagCX((this.dataDst << (cBits-1)) & eaModeDst.sign);
+                    if (cBits == 0) {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst);
+                    } else if (cBits >= eaModeDst.width) {
+                        eaModeDst.setDataFlagsZNClearCV(0);
+                        this.setFlagCX(cBits == eaModeDst.width? (this.dataDst & 0x1) : 0);
+                    } else {
+                        eaModeDst.setDataFlagsZNClearCV(this.dataDst << cBits);
+                        this.setFlagCX((this.dataDst >> (eaModeDst.width-cBits)) & 0x1);
                     }
                     break stage1;
 
@@ -14579,26 +14687,21 @@ class CPU68K extends CPU
                         return;
                     }
                 }
-                this.genException(CPU68K.EXCEPTION_ILLEGAL_INSTRUCTION);
+                this.genException(CPU68K.EXCEPTION_LINE_F);
                 break;
 
             }   // End stage1
 
             //
-            // Catch any executable instructions that still don't provide a cycle count
+            // The Java implementation (in DEBUG builds) treated any instruction that failed to generate a cycle count
+            // as unsupported; we simply ensure that every instruction consumes at least some cycles.
             //
-            if (nCyclesCur == nCycles) {
-                this.genException(CPU68K.EXCEPTION_UNSUPP_INSTRUCTION);
+            if (nCyclesCur == this.nCyclesRemain) {
+                this.addCycles(4);
             }
 
             if ((this.fCPU & CPU68K.CPU_BREAKFLAGS) != 0) {
-                //
-                // If CPU_TRACING was the sole breaking condition, make sure that CPU_STEPPING was not also set.
-                // otherwise, we should continue executing.
-                //
-                if ((this.fCPU & (CPU68K.CPU_BREAKFLAGS | CPU68K.CPU_STEPPING)) != (CPU68K.CPU_TRACING | CPU68K.CPU_STEPPING)) {
-                    break;
-                }
+                break;
             }
         }
 
@@ -14623,28 +14726,24 @@ class CPU68K extends CPU
     {
         this.initRegs();
         this.initEAModes();
-        this.defineRegister("A0", () => this.regA[0], (value) => this.regA[0] = value);
-        this.defineRegister("A1", () => this.regA[1], (value) => this.regA[1] = value);
-        this.defineRegister("A2", () => this.regA[2], (value) => this.regA[2] = value);
-        this.defineRegister("A3", () => this.regA[3], (value) => this.regA[3] = value);
-        this.defineRegister("A4", () => this.regA[4], (value) => this.regA[4] = value);
-        this.defineRegister("A5", () => this.regA[5], (value) => this.regA[5] = value);
-        this.defineRegister("A6", () => this.regA[6], (value) => this.regA[6] = value);
-        this.defineRegister("A7", () => this.regA[7], (value) => this.regA[7] = value);
-        this.defineRegister("D0", () => this.regD[0], (value) => this.regD[0] = value);
-        this.defineRegister("D1", () => this.regD[1], (value) => this.regD[1] = value);
-        this.defineRegister("D2", () => this.regD[2], (value) => this.regD[2] = value);
-        this.defineRegister("D3", () => this.regD[3], (value) => this.regD[3] = value);
-        this.defineRegister("D4", () => this.regD[4], (value) => this.regD[4] = value);
-        this.defineRegister("D5", () => this.regD[5], (value) => this.regD[5] = value);
-        this.defineRegister("D6", () => this.regD[6], (value) => this.regD[6] = value);
-        this.defineRegister("D7", () => this.regD[7], (value) => this.regD[7] = value);
+        for (let i = 0; i < 8; i++) {
+            this.defineRegister("A" + i, () => this.regA[i], (value) => this.regA[i] = value|0);
+            this.defineRegister("D" + i, () => this.regD[i], (value) => this.regD[i] = value|0);
+        }
+        this.defineRegister("SP", () => this.regA[7], (value) => this.regA[7] = value|0);
+        this.defineRegister("SR", () => this.getFlags(), (value) => this.setFlagsSR(value));
+        this.defineRegister("SSP", () => (this.flags & CPU68K.FLAGS_SU)? this.regA[7] : this.regSSP, (value) => {
+            if (this.flags & CPU68K.FLAGS_SU) this.regA[7] = value|0; else this.regSSP = value|0;
+        });
+        this.defineRegister("USP", () => (this.flags & CPU68K.FLAGS_SU)? this.regUSP : this.regA[7], (value) => {
+            if (this.flags & CPU68K.FLAGS_SU) this.regUSP = value|0; else this.regA[7] = value|0;
+        });
         this.defineRegister("C",  () => (this.getFlagC()? 1 : 0), (value) => this.setFlagC(value));
         this.defineRegister("V",  () => (this.getFlagV()? 1 : 0), (value) => this.setFlagV(value));
         this.defineRegister("Z",  () => (this.getFlagZ()? 1 : 0), (value) => this.setFlagZ(value));
         this.defineRegister("N",  () => (this.getFlagN()? 1 : 0), (value) => this.setFlagN(value));
         this.defineRegister("X",  () => (this.getFlagX()? 1 : 0), (value) => this.setFlagX(value));
-        this.defineRegister(Debugger.REGISTER.PC, () => this.regPC, (value) => this.regPC = value);
+        this.defineRegister(Debugger.REGISTER.PC, () => this.regPC, (value) => this.regPC = value|0);
     }
 
     /**
@@ -14789,6 +14888,12 @@ class CPU68K extends CPU
                 abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
             }
         }
+        //
+        // Any remaining entries correspond to an invalid size (ie, ss == 3), so make sure they are illegal, too.
+        //
+        while (i < abModes.length) {
+            abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+        }
     }
 
     /**
@@ -14829,6 +14934,9 @@ class CPU68K extends CPU
                 }
             }
         }
+        while (i < abModes.length) {
+            abModes[i++] = CPU68K.EAMODEINDEX_ILLEGAL;
+        }
     }
 
     /**
@@ -14855,6 +14963,13 @@ class CPU68K extends CPU
         try {
             this.regA = stateCPU.shift();
             this.regD = stateCPU.shift();
+            this.regPC = stateCPU.shift();
+            this.regSSP = stateCPU.shift();
+            this.regUSP = stateCPU.shift();
+            this.flags = stateCPU.shift();
+            this.setFlagsCCR(this.flags);
+            this.fCPU = stateCPU.shift();
+            this.fRestored = true;
         } catch(err) {
             this.printf("CPU state error: %s\n", err.message);
             return false;
@@ -14874,8 +14989,12 @@ class CPU68K extends CPU
         stateCPU.push(+CPU68K.VERSION);
         stateCPU.push(this.regA);
         stateCPU.push(this.regD);
+        stateCPU.push(this.regPC);
+        stateCPU.push(this.regSSP);
+        stateCPU.push(this.regUSP);
+        stateCPU.push(this.getFlags());
+        stateCPU.push(this.fCPU & (CPU68K.CPU_STOPPED | CPU68K.CPU_CHECKINTS));
     }
-
 
     /**
      * onLoad(state)
@@ -14909,6 +15028,14 @@ class CPU68K extends CPU
     onPower(on)
     {
         if (on) {
+            /**
+             * If the ROM wasn't loaded yet when initRegs() called resetRegs() (eg, the ROM's values are in a separate
+             * file), the reset vectors weren't available, so if no saved state was restored either, reset again.
+             */
+            if (!this.fRestored) {
+                this.resetRegs();
+                this.fRestored = true;
+            }
             this.time.start();
             if (this.inputDevice) this.inputDevice.setFocus();
         } else {
@@ -15240,15 +15367,30 @@ class CPU68K extends CPU
      *
      * Formerly setFlags(int flags), setFlagsSR() sets both the high and low (CCR) bytes of SR.
      *
+     * Unlike the Java implementation, we also switch stacks whenever the supervisor bit changes, so that A7
+     * is always the active stack pointer, and the inactive stack pointer is maintained in either regSSP or regUSP.
+     *
      * @this {CPU68K}
      * @param {number} flags
      */
     setFlagsSR(flags)
     {
+        flags &= CPU68K.FLAGS_MASK;
+
         // Before we blow away the original flag bits, let's see if the interrupt level
         // is dropping; if so, we'll want to set CPU_CHECKINTS....
         if ((flags & CPU68K.FLAGS_IPM) < (this.flags & CPU68K.FLAGS_IPM)) {
             this.fCPU |= CPU68K.CPU_CHECKINTS;
+        }
+
+        if ((flags ^ this.flags) & CPU68K.FLAGS_SU) {
+            if (flags & CPU68K.FLAGS_SU) {
+                this.regUSP = this.regA[7];
+                this.regA[7] = this.regSSP;
+            } else {
+                this.regSSP = this.regA[7];
+                this.regA[7] = this.regUSP;
+            }
         }
 
         // Clear everything outside the CCR bits.
@@ -15438,35 +15580,151 @@ class CPU68K extends CPU
     initRegs()
     {
         this.fCPU = 0;
+        this.flags = 0;
         this.regPC = 0;                 // program counter
         this.regPCLast = 0;             // program counter for the previous instruction
         this.regPCTrap = 0;             // program counter for the last TRAP executed
-        this.regSSP = 0;                // supervisor stack pointer
-        this.regUSP = 0;                // user stack pointer (to save/restore a[7] on user/supervisor transitions)
+        this.regSSP = 0;                // supervisor stack pointer (when in user mode)
+        this.regUSP = 0;                // user stack pointer (when in supervisor mode)
         this.regD = [0,0,0,0,0,0,0,0];  // data registers
-        this.regA = [0,0,0,0,0,0,0,0];  // address registers
+        this.regA = [0,0,0,0,0,0,0,0];  // address registers (regA[7] is always the active stack pointer)
         this.dataSrc = this.dataDst = 0;// internal data operands (exposed to the EAMode classes)
+        this.flagNNew = this.flagZNew = this.flagZTmp = 0;
+        this.flagCSrc = this.flagCDst = this.flagXSrc = this.flagXDst = 0;
+        this.flagVSrc = this.flagVDst = this.flagVNew = 0;
+        this.nCyclesRemain = 0;
+        this.aInjections = [];          // queue of calls waiting to be injected (see injectTrap())
+        this.injection = null;          // the injected call (if any) currently in progress
+        this.addrVectors = this.config['resetVectors'];
         this.resetRegs();
     }
 
     /**
      * resetRegs()
      *
+     * Simulates a 68K reset, which (in addition to resetting SR) loads SSP and PC from the reset vectors.
+     *
+     * On a real 68000, the reset vectors are at address 0, but on a DragonBall (as on many other 68K systems),
+     * the boot ROM is temporarily decoded at that address, so we allow the config to specify where to find them
+     * ('resetVectors'); if not specified, we fall back to the CPU's 'addrReset' setting for the initial PC.
+     *
      * @this {CPU68K}
      */
     resetRegs()
     {
-        this.resetFlags(CPU68K.FLAGS_SU);
         for (let i = 0; i < this.regD.length; i++) {
             this.regD[i] = 0;
         }
         for (let i = 0; i < this.regA.length; i++) {
             this.regA[i] = 0;
         }
-        this.regPC = this.regPCLast = this.addrReset;
+        this.regSSP = this.regUSP = 0;
+        this.flags = CPU68K.FLAGS_SU;
+        this.resetFlags(CPU68K.FLAGS_SU | CPU68K.FLAGS_IPM);
+        this.regPC = this.addrReset;
+        if (this.addrVectors != undefined) {
+            this.regA[7] = this.getLong(this.addrVectors);
+            this.regPC = this.getLong(this.addrVectors + 4);
+        }
+        this.regPCLast = this.regPC;
         this.nStep = 0;                 // instruction step counter
         this.iPendingException = CPU68K.EXCEPTION_NONE;
         this.addrPendingException = 0;  // set to exception-specific address, if any (eg, EA from EXCEPTION_ADDRESS_ERROR)
+        this.abortInjections();
+    }
+
+    /**
+     * setHWRegs(hwregs)
+     *
+     * Called by the device responsible for interrupt management (eg, PilotIO), so that we can call its
+     * checkInterrupts() function whenever CPU_CHECKINTS has been set.
+     *
+     * @this {CPU68K}
+     * @param {HWRegs} hwregs
+     */
+    setHWRegs(hwregs)
+    {
+        this.hwregs = hwregs;
+    }
+
+    /**
+     * injectTrap(iTrap, aParms, done)
+     *
+     * Queues a "TRAP #15" call (eg, a PalmOS API) to be injected the next time the CPU is stopped (ie, idling on
+     * a STOP instruction), which is the same approach that the original Java implementation used to make API calls
+     * on behalf of scripts (see ScriptVarFunc.Call() and CPUThread.CheckStopEvents()).
+     *
+     * The call is made by pushing the following onto the stack: the address of the next instruction to execute (ie,
+     * the instruction following the STOP), an OP_STOP_INJECT instruction, and a "TRAP #15" instruction with the given
+     * selector, followed by all the parameters (in reverse order).  The PC is then set to the stacked TRAP instruction.
+     * When the trap returns, the stacked OP_STOP_INJECT instruction restores the stack and PC and stops the CPU again,
+     * at which point checkInjections() reports the results and issues the next queued call, if any.
+     *
+     * @this {CPU68K}
+     * @param {number} iTrap (the API selector that follows the "TRAP #15" instruction)
+     * @param {Array.<Array.<number>>} aParms (array of [value, size] pairs, where size is 2 or 4)
+     * @param {function((Object|null))} done (called with {d0, a0} when the call returns, or null if aborted)
+     */
+    injectTrap(iTrap, aParms, done)
+    {
+        this.aInjections.push({iTrap, aParms, done});
+    }
+
+    /**
+     * checkInjections()
+     *
+     * Called by execute() whenever the CPU is stopped and an injected call is either queued or in progress.
+     *
+     * @this {CPU68K}
+     */
+    checkInjections()
+    {
+        let injection = this.injection;
+        if (injection) {
+            if (!injection.result) return;
+            this.injection = null;
+            this.fCPU &= ~CPU68K.CPU_INJECTING;
+            injection.done(injection.result);
+        }
+        injection = this.aInjections.shift();
+        if (injection) {
+            if ((this.getWord(this.regPC - 4) & 0xffff) != CPU68K.OP_STOP || !(this.flags & CPU68K.FLAGS_SU)) {
+                this.printf("unable to inject %#06x at %#010x\n", injection.iTrap, this.regPC);
+                injection.done(null);
+                return;
+            }
+            this.pushLong(this.regPC);
+            this.pushLong(CPU68K.OP_STOP_INJECT);
+            this.pushLong((CPU68K.OP_TRAP_0xF << 16) | (injection.iTrap & 0xffff));
+            let addrCall = this.regA[7];
+            for (let i = injection.aParms.length - 1; i >= 0; i--) {
+                let [value, size] = injection.aParms[i];
+                if (size == 4) {
+                    this.pushLong(value);
+                } else {
+                    this.pushWord(value);
+                }
+            }
+            this.regPC = addrCall;
+            this.fCPU &= ~CPU68K.CPU_STOPPED;
+            this.fCPU |= CPU68K.CPU_INJECTING;
+            this.injection = injection;
+        }
+    }
+
+    /**
+     * abortInjections()
+     *
+     * @this {CPU68K}
+     */
+    abortInjections()
+    {
+        let aInjections = this.aInjections;
+        if (this.injection) aInjections.unshift(this.injection);
+        this.aInjections = [];
+        this.injection = null;
+        this.fCPU &= ~CPU68K.CPU_INJECTING;
+        for (let injection of aInjections) injection.done(null);
     }
 
     /**
@@ -15481,29 +15739,35 @@ class CPU68K extends CPU
     }
 
     /**
-     * callException(iVector)
+     * callException(iVector, addrReturn)
+     *
+     * Now that we have access to all essential CPU components (flags, registers and memory),
+     * we can implement CPU exception handling.  See the EXCEPTION_* definitions for a complete list
+     * of supported exceptions.
      *
      * @this {CPU68K}
      * @param {number} iVector
+     * @param {number} [addrReturn] (default is the current PC)
      */
-     callException(iVector)
-     {
-        // TODO: use getLongEX() to avoid triggering "null (or almost null) pointer detection"
+    callException(iVector, addrReturn = this.regPC)
+    {
         let handler = this.getLong(CPU68K.EVT_BASE + iVector*4);
 
-        if (handler == 0) {                      // we're outta here
-            this.genException(CPU68K.EXCEPTION_INVALID_HANDLER);
+        if (handler == 0) {
+            this.printf("exception %#04x at %#010x: invalid handler\n", iVector, this.regPCLast);
+            this.time.stop();
         }
 
+        let flags = this.getFlags();
         if ((this.flags & CPU68K.FLAGS_SU) == 0) {
             this.regUSP = this.regA[7];
             this.regA[7] = this.regSSP;
         }
-        this.pushLong(this.regPC);
-        this.regA[7] -= 2;
-        this.setWord(this.regA[7], this.getFlags());
         this.flags |= CPU68K.FLAGS_SU;          // indicates we're in supervisor mode now
         this.flags &= ~CPU68K.FLAGS_T1;         // the trace bit is also supposed to be cleared
+        this.fCPU &= ~CPU68K.CPU_STOPPED;       // and any exception (eg, an interrupt) also terminates a STOP
+        this.pushLong(addrReturn);
+        this.pushWord(flags);
         this.regPC = handler;
 
         //
@@ -15526,7 +15790,7 @@ class CPU68K extends CPU
             //
             this.pushWord(0);
         }
-     }
+    }
 
     /**
      * returnFromException()
@@ -15537,19 +15801,20 @@ class CPU68K extends CPU
     {
         if ((this.flags & CPU68K.FLAGS_SU) == 0) {
             this.genException(CPU68K.EXCEPTION_PRIVILEGE_VIOLATION);
-            return;
         }
-        this.setFlagsSR(this.getWord(this.regA[7]));
-        this.regA[7] += 2;
+        let flags = this.popWord();
         this.regPC = this.popLong();
-        if ((this.flags & CPU68K.FLAGS_SU) == 0) {
-            this.regSSP = this.regA[7];
-            this.regA[7] = this.regUSP;
-        }
+        this.setFlagsSR(flags);
     }
 
     /**
      * genException(iVector, sMessage)
+     *
+     * Record the emulated exception and then throw EXCEPTION_THROWN to force control to immediately return to
+     * execute(), which will then call processException().  This is how the Java implementation (GenerateException)
+     * aborted the current instruction as well.
+     *
+     * Internal "informational" exceptions use negative vector numbers; they don't have to interrupt the CPU.
      *
      * @this {CPU68K}
      * @param {number} iVector
@@ -15557,19 +15822,218 @@ class CPU68K extends CPU
      */
     genException(iVector, sMessage)
     {
-        // TODO
+        if (iVector < 0) {
+            if (sMessage) this.printf(MESSAGE.CPU, "%s\n", sMessage);
+            return;
+        }
+        this.iPendingException = iVector;
+        this.sPendingException = sMessage;
+        throw CPU68K.EXCEPTION_THROWN;
+    }
+
+    /**
+     * processException()
+     *
+     * Called by execute() whenever genException() has thrown EXCEPTION_THROWN.
+     *
+     * The Java implementation always reset the PC to the beginning of the faulting instruction before calling
+     * the exception handler, which is correct for most exceptions (eg, illegal instructions and privilege violations),
+     * but for divide-by-zero, CHK, and TRAPV, the 68000 stacks the address of the NEXT instruction, so we do too.
+     *
+     * Exception vectors >= 0x100 are internal errors, which stop the machine.
+     *
+     * @this {CPU68K}
+     */
+    processException()
+    {
+        let iVector = this.iPendingException;
+        this.iPendingException = CPU68K.EXCEPTION_NONE;
+        if (iVector >= 0x100) {
+            this.regPC = this.regPCLast;
+            this.printf("%#010x: %s\n", this.regPCLast, this.sPendingException || this.sprintf("internal exception %#x", iVector));
+            this.nCyclesRemain = 0;
+            this.time.stop();
+            return;
+        }
+        let addrReturn = this.regPCLast;
+        if (iVector == CPU68K.EXCEPTION_INT_DIVIDE_BY_ZERO || iVector == CPU68K.EXCEPTION_CHK_INSTRUCTION || iVector == CPU68K.EXCEPTION_TRAPV_OVERFLOW) {
+            addrReturn = this.regPC;
+        }
+        this.callException(iVector, addrReturn);
+        this.addCycles(34);
+    }
+
+    /**
+     * addX(width, dst, src)
+     *
+     * Performs an extended addition (dst + src + X) for ADDX, computing all the flags explicitly.
+     *
+     * The Java implementation folded X into the source operand and then relied on the normal "lazy" flag
+     * calculations, which lost the carry whenever the adjusted source operand overflowed (eg, 0xff + X).
+     *
+     * Note that, as with all the extended operations, Z is cleared if the result is non-zero, unchanged otherwise.
+     *
+     * @this {CPU68K}
+     * @param {number} width (8, 16, or 32)
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number}
+     */
+    addX(width, dst, src)
+    {
+        let res = (dst + src + (this.getFlagX()? 1 : 0))|0;
+        let shift = 32 - width;
+        let s = src << shift, d = dst << shift, r = res << shift;
+        this.setFlagCX(((s & d) | (~r & d) | (s & ~r)) < 0? -1 : 0);
+        this.setFlagV(((s & d & ~r) | (~s & ~d & r)) < 0? -1 : 0);
+        if (r) this.flagZNew = r;
+        this.flagNNew = r;
+        return res;
+    }
+
+    /**
+     * subX(width, dst, src)
+     *
+     * Performs an extended subtraction (dst - src - X) for SUBX and NEGX, computing all the flags explicitly.
+     *
+     * @this {CPU68K}
+     * @param {number} width (8, 16, or 32)
+     * @param {number} dst
+     * @param {number} src
+     * @returns {number}
+     */
+    subX(width, dst, src)
+    {
+        let res = (dst - src - (this.getFlagX()? 1 : 0))|0;
+        let shift = 32 - width;
+        let s = src << shift, d = dst << shift, r = res << shift;
+        this.setFlagCX(((s & ~d) | (r & ~d) | (s & r)) < 0? -1 : 0);
+        this.setFlagV(((~s & d & ~r) | (s & ~d & r)) < 0? -1 : 0);
+        if (r) this.flagZNew = r;
+        this.flagNNew = r;
+        return res;
+    }
+
+    /**
+     * addBCD(dst, src)
+     *
+     * Performs a BCD addition (dst + src + X), updating flags X, C, Z, N and V (N and V are officially undefined,
+     * but we emulate the behavior of real hardware).
+     *
+     * @this {CPU68K}
+     * @param {number} dst (byte)
+     * @param {number} src (byte)
+     * @returns {number} (byte)
+     */
+    addBCD(dst, src)
+    {
+        let res = (src & 0x0f) + (dst & 0x0f) + (this.getFlagX()? 1 : 0);
+        let corf = (res > 9)? 6 : 0;
+        res += (src & 0xf0) + (dst & 0xf0);
+        let v = ~res;
+        res += corf;
+        let c = (res > 0x9f);
+        if (c) res -= 0xa0;
+        this.setBCDFlags(res, c, v & res);
+        return res & 0xff;
+    }
+
+    /**
+     * subBCD(dst, src)
+     *
+     * Performs a BCD subtraction (dst - src - X), updating flags X, C, Z, N and V (N and V are officially undefined,
+     * but we emulate the behavior of real hardware).
+     *
+     * @this {CPU68K}
+     * @param {number} dst (byte)
+     * @param {number} src (byte)
+     * @returns {number} (byte)
+     */
+    subBCD(dst, src)
+    {
+        let res = (dst & 0x0f) - (src & 0x0f) - (this.getFlagX()? 1 : 0);
+        let corf = ((res >>> 0) > 0xf)? 6 : 0;
+        res += (dst & 0xf0) - (src & 0xf0);
+        let v = res, c = false;
+        if ((res >>> 0) > 0xff) {
+            res += 0xa0;
+            c = true;
+        } else if (res < corf) {
+            c = true;
+        }
+        res = (res - corf) & 0xff;
+        this.setBCDFlags(res, c, v & ~res);
+        return res;
+    }
+
+    /**
+     * negBCD(src)
+     *
+     * Performs a BCD negation (0 - src - X), updating flags X, C, Z, N and V (N and V are officially undefined,
+     * but we emulate the behavior of real hardware).
+     *
+     * @this {CPU68K}
+     * @param {number} src (byte)
+     * @returns {number} (byte)
+     */
+    negBCD(src)
+    {
+        let res = (-src - (this.getFlagX()? 1 : 0))|0;
+        if (res) {
+            let v = res;
+            if (((res | src) & 0x0f) == 0) res = (res & 0xf0) + 6;
+            res = (res + 0x9a) & 0xff;
+            this.setBCDFlags(res, true, v & ~res);
+        } else {
+            this.setFlagCX(0);
+            this.setFlagV(0);
+            this.flagNNew = 0;
+        }
+        return res;
+    }
+
+    /**
+     * setBCDFlags(res, c, v)
+     *
+     * @this {CPU68K}
+     * @param {number} res
+     * @param {boolean} c
+     * @param {number} v (bit 7 is the new V flag)
+     */
+    setBCDFlags(res, c, v)
+    {
+        this.setFlagCX(c? -1 : 0);
+        if (res & 0xff) this.flagZNew = -1;     // Z is cleared if the result is non-zero, unchanged otherwise
+        this.flagNNew = res << 24 >> 24;
+        this.setFlagV(v & 0x80);
+    }
+
+    /**
+     * setDivOverflow()
+     *
+     * On a 68000, a division overflow sets V and clears C; N and Z are officially undefined, but real hardware
+     * leaves them unchanged.
+     *
+     * @this {CPU68K}
+     */
+    setDivOverflow()
+    {
+        this.setFlagV(-1);
+        this.setFlagC(0);
     }
 
     /**
      * getByte(addr)
      *
+     * Like the Java implementation, all reads are sign-extended.
+     *
      * @this {CPU68K}
      * @param {number} addr is a linear address
-     * @returns {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address (sign-extended)
      */
     getByte(addr)
     {
-        return this.busMemory.readData(addr)|0;
+        return this.busMemory.readData(addr & CPU68K.ADDR_MASK) << 24 >> 24;
     }
 
     /**
@@ -15577,11 +16041,11 @@ class CPU68K extends CPU
      *
      * @this {CPU68K}
      * @param {number} addr is a linear address
-     * @returns {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address (sign-extended)
      */
     getWord(addr)
     {
-        return this.busMemory.readPair(addr);
+        return this.busMemory.readPair(addr & CPU68K.ADDR_MASK) << 16 >> 16;
     }
 
     /**
@@ -15589,11 +16053,11 @@ class CPU68K extends CPU
      *
      * @this {CPU68K}
      * @param {number} addr is a linear address
-     * @returns {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address (signed)
      */
     getLong(addr)
     {
-        return this.busMemory.readQuad(addr);
+        return this.busMemory.readQuad(addr & CPU68K.ADDR_MASK)|0;
     }
 
     /**
@@ -15605,7 +16069,7 @@ class CPU68K extends CPU
      */
     setByte(addr, b)
     {
-        this.busMemory.writeData(addr, b & 0xff);
+        this.busMemory.writeData(addr & CPU68K.ADDR_MASK, b & 0xff);
     }
 
     /**
@@ -15617,19 +16081,19 @@ class CPU68K extends CPU
      */
     setWord(addr, w)
     {
-        this.busMemory.writePair(addr, w & 0xffff);
+        this.busMemory.writePair(addr & CPU68K.ADDR_MASK, w & 0xffff);
     }
 
     /**
-     * setLoad(addr, l)
+     * setLong(addr, l)
      *
      * @this {CPU68K}
      * @param {number} addr is a linear address
-     * @param {number} l is the long (32-bit) value to write (which we truncate to 32 bits to be safe)
+     * @param {number} l is the long (32-bit) value to write
      */
     setLong(addr, l)
     {
-        this.busMemory.writeQuad(addr, l & 0xffffffff);
+        this.busMemory.writeQuad(addr & CPU68K.ADDR_MASK, l|0);
     }
 
     /**
@@ -15641,7 +16105,7 @@ class CPU68K extends CPU
     getPCByte()
     {
         let b = this.getByte(this.regPC);
-        this.regPC += 1;
+        this.regPC = (this.regPC + 1)|0;
         return b;
     }
 
@@ -15649,12 +16113,12 @@ class CPU68K extends CPU
      * getPCWord()
      *
      * @this {CPU68K}
-     * @returns {number} word at the current PC; PC advanced by 2
+     * @returns {number} word at the current PC (sign-extended); PC advanced by 2
      */
     getPCWord()
     {
         let w = this.getWord(this.regPC);
-        this.regPC += 2;
+        this.regPC = (this.regPC + 2)|0;
         return w;
     }
 
@@ -15662,12 +16126,12 @@ class CPU68K extends CPU
      * getPCLong()
      *
      * @this {CPU68K}
-     * @returns {number} word at the current PC; PC advanced by 4
+     * @returns {number} long at the current PC; PC advanced by 4
      */
     getPCLong()
     {
         let l = this.getLong(this.regPC);
-        this.regPC += 4;
+        this.regPC = (this.regPC + 4)|0;
         return l;
     }
 
@@ -15682,7 +16146,7 @@ class CPU68K extends CPU
     popWord()
     {
         let w = this.getWord(this.regA[7]);
-        this.regA[7] += 2;
+        this.regA[7] = (this.regA[7] + 2)|0;
         return w;
     }
 
@@ -15696,7 +16160,8 @@ class CPU68K extends CPU
      */
     pushWord(data)
     {
-        this.setWord(this.regA[7] -= 2, data);
+        this.regA[7] = (this.regA[7] - 2)|0;
+        this.setWord(this.regA[7], data);
     }
 
     /**
@@ -15710,7 +16175,7 @@ class CPU68K extends CPU
     popLong()
     {
         let l = this.getLong(this.regA[7]);
-        this.regA[7] += 4;
+        this.regA[7] = (this.regA[7] + 4)|0;
         return l;
     }
 
@@ -15724,7 +16189,8 @@ class CPU68K extends CPU
      */
     pushLong(data)
     {
-        this.setLong(this.regA[7] -= 4, data);
+        this.regA[7] = (this.regA[7] - 4)|0;
+        this.setLong(this.regA[7], data);
     }
 
     /**
@@ -15758,7 +16224,23 @@ class CPU68K extends CPU
      */
     toString()
     {
-        return this.sprintf("D0=%08x D1=%08x D2=%08x D3=%08x\nD4=%08x D5=%08x D6=%08x D7=%08x\nA0=%08x A1=%08x A2=%08x A3=%08x\nA4=%08x A5=%08x A6=%08x A7=%08x SR=%04x\n", this.regD[0], this.regD[1], this.regD[2], this.regD[3], this.regD[4], this.regD[5], this.regD[6], this.regD[7], this.regA[0], this.regA[1], this.regA[2], this.regA[3], this.regA[4], this.regA[5], this.regA[6], this.regA[7], this.getFlags());
+        return this.sprintf("D0=%08x D1=%08x D2=%08x D3=%08x\nD4=%08x D5=%08x D6=%08x D7=%08x\nA0=%08x A1=%08x A2=%08x A3=%08x\nA4=%08x A5=%08x A6=%08x A7=%08x SR=%04x %s\n%s",
+            this.regD[0], this.regD[1], this.regD[2], this.regD[3], this.regD[4], this.regD[5], this.regD[6], this.regD[7],
+            this.regA[0], this.regA[1], this.regA[2], this.regA[3], this.regA[4], this.regA[5], this.regA[6], this.regA[7],
+            this.getFlags(), this.getFlagString(), this.toInstruction(this.regPC));
+    }
+
+    /**
+     * getFlagString()
+     *
+     * Returns the CCR flags in the same format my original Java debugger used (eg, "xnZvc").
+     *
+     * @this {CPU68K}
+     * @returns {string}
+     */
+    getFlagString()
+    {
+        return (this.getFlagX()? 'X' : 'x') + (this.getFlagN()? 'N' : 'n') + (this.getFlagZ()? 'Z' : 'z') + (this.getFlagV()? 'V' : 'v') + (this.getFlagC()? 'C' : 'c');
     }
 }
 
@@ -15776,6 +16258,8 @@ CPU68K.EXCEPTION_CHK_INSTRUCTION       = 0x06;
 CPU68K.EXCEPTION_TRAPV_OVERFLOW        = 0x07;
 CPU68K.EXCEPTION_PRIVILEGE_VIOLATION   = 0x08;
 CPU68K.EXCEPTION_TRACE                 = 0x09;
+CPU68K.EXCEPTION_LINE_A                = 0x0a;  // aka "Line 1010 Emulator"
+CPU68K.EXCEPTION_LINE_F                = 0x0b;  // aka "Line 1111 Emulator"
 CPU68K.EXCEPTION_UNINITIALIZED_IVR     = 0x0f;  // where interrupts go when the IVR hasn't been initialized yet
 
 CPU68K.EXCEPTION_TRAP_0xF              = 0x2f;  // TRAP 0xf uses vector 0x2f (ie, TRAP n uses vector 0x2n)
@@ -15795,6 +16279,16 @@ CPU68K.EXCEPTION_UNINITIALIZED_DATA    = -4;
  */
 CPU68K.EXCEPTION_UNSUPP_INSTRUCTION    = 0x100; // unsupported instruction
 CPU68K.EXCEPTION_INVALID_HANDLER       = 0x101; // exception handler is invalid (eg, corrupt vector contents)
+
+/**
+ * This is the object that genException() throws (and execute() catches) after recording the pending exception.
+ */
+CPU68K.EXCEPTION_THROWN                = {exception: "68K"};
+
+/**
+ * Used with Debugger's markDataAccess(), if supported.
+ */
+CPU68K.DATAACCESS_UNINIT               = 3;
 
 /**
  * Opcodes that we have special checks for in various places...
@@ -15842,6 +16336,7 @@ CPU68K.EVT_SIZE                = 4*256;
 CPU68K.RAM_BASE                = 0x00000000;
 CPU68K.RAM_LIMIT               = 0x00800000;    // 8Mb
 CPU68K.RAM_MIRROR              = 0x10000000;
+CPU68K.ADDR_MASK               = 0x01ffffff;    // all addresses are masked to 25 bits (32Mb)
 
 /**
  * CPU states
@@ -15976,6 +16471,7 @@ CPU68K.FLAGS_MI           = 0x1000;             // (always 0 on 68000)
 CPU68K.FLAGS_SU           = 0x2000;             // 1 == supervisor mode
 CPU68K.FLAGS_T0           = 0x4000;             // (always 0 on 68000)
 CPU68K.FLAGS_T1           = 0x8000;             // 1 == trace on any instruction
+CPU68K.FLAGS_MASK         = 0xa71f;             // all the SR bits that actually exist on a 68000
 
 CPU68K.CLASSES["CPU68K"] = CPU68K;
 
@@ -16006,6 +16502,12 @@ class Dbg68K extends Debugger {
     {
         super(idMachine, idDevice, config);
         this.maxOpcodeLength = 6;
+
+        /**
+         * Machine-specific code (eg, PilotIO) can supply a function that converts the selector word following
+         * a "TRAP #15" instruction into a name (see setTrapHandler()).
+         */
+        this.getTrapName = null;
 
         let i = 0;
         this.aEAModes = [];
@@ -16060,6 +16562,17 @@ class Dbg68K extends Debugger {
     }
 
     /**
+     * setTrapHandler(func)
+     *
+     * @this {Dbg68K}
+     * @param {function(number):string} func
+     */
+    setTrapHandler(func)
+    {
+        this.getTrapName = func;
+    }
+
+    /**
      * break(addr, fArmed)
      *
      * @this {Dbg68K}
@@ -16098,6 +16611,7 @@ class Dbg68K extends Debugger {
      */
     unassemble(address, opcodes, annotation)
     {
+        let addr = address.off;
         let sBytes = null, sOp = null, sSrc = null, sDst = null;
         let op1 = 0, op2, ss, rrr, nnn, iMask, iModeSrc, iModeDst;
         let fError = false, fDispEA = false;
@@ -16105,8 +16619,8 @@ class Dbg68K extends Debugger {
 
         try {
 
-            this.curPC = address;                       // use specified addr instead of cpu.pc
-            op1 = this.cpu.getWord(this.curPC);       // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
+            this.curPC = addr;                          // use specified addr instead of cpu.pc
+            op1 = this.getWord(this.curPC);             // get next instruction (don't forget this can be a signed integer if the opcode is a signed word)
             this.curPC += 2;
 
             ss = CPU68K.ssBYTE;
@@ -16516,7 +17030,7 @@ class Dbg68K extends Debugger {
                     //         3) For all other modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
                     //         4) Any register used in pre-decrement mode is stored before being decremented
                     sOp = "MOVEM";
-                    iModeSrc = this.cpu.getWord(this.curPC);
+                    iModeSrc = this.getWord(this.curPC);
                     this.curPC += 2;
                     sSrc = "{";
                     if ((op1 & 0x38) == 0x20) {
@@ -16580,7 +17094,7 @@ class Dbg68K extends Debugger {
                     //         2) For all modes, the order of storing is D0 to D7, then A0 to A7 (bit 0 to bit 15)
                     //         3) Any register used in post-increment mode is not affected by the value loaded for it (if any)
                     sOp = "MOVEM";
-                    iModeDst = this.cpu.getWord(this.curPC);
+                    iModeDst = this.getWord(this.curPC);
                     this.curPC += 2;
                     sSrc = this.aEAModes[this.cpu.abModesC81[(op1 - 0x40) & 0xff]].getString(nnn);
                     sDst = "{";
@@ -16609,9 +17123,9 @@ class Dbg68K extends Debugger {
                         if (op2 != 0xf) {
                             sSrc = this.sprintf("%x", op2);
                         } else {
-                            op2 = this.cpu.getWord(this.curPC);
+                            op2 = this.getWord(this.curPC);
                             this.curPC += 2;
-                            sSrc = "API"; // TODO: PalmOSTypes.getAPIName(op2);
+                            sSrc = this.getTrapName? this.getTrapName(op2) : this.sprintf("#%x,%#06x", 0xf, op2 & 0xffff);
                         }
                         break stage1;
 
@@ -16658,7 +17172,7 @@ class Dbg68K extends Debugger {
                         case 0x2:
                             //  case 0x4e72:   stop     [........01110010, format none]
                             sOp = "STOP";
-                            sSrc = this.getImmediateHexString(this.cpu.getWord(this.curPC) & 0xffff);
+                            sSrc = this.getImmediateHexString(this.getWord(this.curPC) & 0xffff);
                             this.curPC += 2;
                             break stage1;
 
@@ -16897,7 +17411,7 @@ class Dbg68K extends Debugger {
                             break;
                         }
                         sSrc = "D" + (nnn);
-                        sDst = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                        sDst = this.sprintf("%x", this.curPC + this.getWord(this.curPC));
                         this.curPC += 2;
                         break stage1;
                     }
@@ -16960,7 +17474,7 @@ class Dbg68K extends Debugger {
                 if (op1 & 0xff) {
                     sSrc = this.sprintf("%x", this.curPC + (op1 << 24 >> 24));
                 } else {
-                    sSrc = this.sprintf("%x", this.curPC + this.cpu.getWord(this.curPC));
+                    sSrc = this.sprintf("%x", this.curPC + this.getWord(this.curPC));
                     this.curPC += 2;
                 }
                 break stage1;
@@ -17369,8 +17883,8 @@ class Dbg68K extends Debugger {
 
             sBytes = "";
             for (let i = 0; i < 6; i += 2) {
-                if (((address + i) >>> 1) >= (this.curPC >>> 1)) break;
-                sBytes = sBytes + this.sprintf("%04x", this.cpu.getWord(address+i) & 0xffff) + " ";
+                if (((addr + i) >>> 1) >= (this.curPC >>> 1)) break;
+                sBytes = sBytes + this.sprintf("%04x", this.getWord(addr+i) & 0xffff) + " ";
             }
 
         }
@@ -17379,14 +17893,14 @@ class Dbg68K extends Debugger {
         if (fError) {
             try {
                 // See if we're currently *inside* an API call...
-                if (address == this.cpu.getLong(CPU68K.EXCEPTION_TRAP_0xF * 4)) {
+                if (addr == this.getLong(CPU68K.EXCEPTION_TRAP_0xF * 4)) {
                     sBytes = null;
                     sOp = "INSIDE";
                     try {
-                        let addrPC = this.cpu.getLong(this.cpu.regA[7]+2)-4;
-                        // Could check "this.cpu.getWord(addrPC) == 0x4e4f" too,
+                        let addrPC = this.getLong(this.cpu.regA[7]+2)-4;
+                        // Could check "this.getWord(addrPC) == 0x4e4f" too,
                         // to make sure it's really a TRAP 0x0F instruction....
-                        sSrc = "API";  // TODO: PalmOSTypes.getAPIName(this.cpu.getWord(addrPC+2));
+                        sSrc = this.getTrapName? this.getTrapName(this.getWord(addrPC+2)) : "API";
                     }
                     catch (e) {
                         sSrc = "???";
@@ -17430,7 +17944,99 @@ class Dbg68K extends Debugger {
                 sSrc = sSrc + "]";
             }
         }
-        return this.sprintf("%08x: %-15s %-8s %-40s;", address, sBytes, sOp, sSrc);
+        this.addAddress(address, Math.max(this.curPC - addr, 2));
+        opcodes.length = 0;
+        return this.sprintf("%08x: %-15s %-8s %s", addr, sBytes, sOp, sSrc || "").trimEnd() + (annotation || "") + "\n";
+    }
+
+    /**
+     * dumpAddress(address, bus)
+     *
+     * Overrides the Debugger's dumpAddress(), because our 25-bit addresses look better with 8 hex digits.
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {string}
+     */
+    dumpAddress(address, bus = this.busMemory)
+    {
+        return this.toBase(address.off, this.nDefaultRadix, 32, "");
+    }
+
+    /**
+     * readAddress(address, advance, bus)
+     *
+     * Overrides the Debugger's readAddress(), because addresses obtained from the CPU (eg, regPC) have not
+     * been masked to the width of the bus yet (see CPU68K.ADDR_MASK).
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {number} [advance] (amount to advance address after read, if any)
+     * @param {Bus} [bus] (default is busMemory)
+     * @returns {number|undefined}
+     */
+    readAddress(address, advance, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        let value = bus.readDirect(address.off & bus.addrLimit);
+        if (advance) this.addAddress(address, advance, bus);
+        this.cBreakIgnore--;
+        return value;
+    }
+
+    /**
+     * writeAddress(address, value, bus)
+     *
+     * @this {Dbg68K}
+     * @param {Address} address
+     * @param {number} value
+     * @param {Bus} [bus] (default is busMemory)
+     */
+    writeAddress(address, value, bus = this.busMemory)
+    {
+        this.cBreakIgnore++;
+        bus.writeDirect(address.off & bus.addrLimit, value);
+        this.cBreakIgnore--;
+    }
+
+    /**
+     * getByte(addr)
+     *
+     * The disassembler uses these functions (instead of the CPU's) to read memory without side-effects
+     * (eg, reading hardware registers) and without triggering any breakpoints.
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number} (sign-extended byte)
+     */
+    getByte(addr)
+    {
+        return this.busMemory.readDirect(addr & CPU68K.ADDR_MASK) << 24 >> 24;
+    }
+
+    /**
+     * getWord(addr)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number} (sign-extended word)
+     */
+    getWord(addr)
+    {
+        return (this.getByte(addr) << 8) | (this.getByte(addr + 1) & 0xff);
+    }
+
+    /**
+     * getLong(addr)
+     *
+     * @this {Dbg68K}
+     * @param {number} addr
+     * @returns {number}
+     */
+    getLong(addr)
+    {
+        return (this.getWord(addr) << 16) | (this.getWord(addr + 2) & 0xffff);
     }
 
     /**
@@ -17475,7 +18081,7 @@ class Dbg68K extends Debugger {
      */
     getIndexAddr(base)
     {
-        let addr = this.cpu.getWord(this.curPC);
+        let addr = this.getWord(this.curPC);
         let i = (addr & 0x7000) >> 12, bAddr = addr << 24 >> 24;
         if ((addr & 0x0800) != 0) {
             if ((addr & 0x8000) != 0) {
@@ -17502,7 +18108,7 @@ class Dbg68K extends Debugger {
      */
     getIndexAddrString(nnn)
     {
-        let addr = this.cpu.getWord(this.curPC);
+        let addr = this.getWord(this.curPC);
         this.curPC += 2;
         let i = (addr >> 12) & 0x7, bAddr = addr << 24 >> 24;
         return "(" + (bAddr != 0? this.getSignedHexString(bAddr) + "," : "") +
@@ -17654,7 +18260,7 @@ class DbgModeAValByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -17665,7 +18271,7 @@ class DbgModeAValWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -17676,7 +18282,7 @@ class DbgModeAValLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -17687,7 +18293,7 @@ class DbgModeAValIncByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -17698,7 +18304,7 @@ class DbgModeAValIncWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -17709,7 +18315,7 @@ class DbgModeAValIncLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -17720,7 +18326,7 @@ class DbgModeAValDecByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -17731,7 +18337,7 @@ class DbgModeAValDecWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -17742,46 +18348,46 @@ class DbgModeAValDecLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAValDispByte extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAValDispWord extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAValDispLong extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         this.ea = this.cpu.regA[nnn] + i;
         return (i != 0? this.dbg.getSignedHexString(i) : "") + "(A" + nnn + ").l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -17792,7 +18398,7 @@ class DbgModeAValIndexByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -17803,7 +18409,7 @@ class DbgModeAValIndexWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -17814,118 +18420,118 @@ class DbgModeAValIndexLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAbs16Byte extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).b", this.ea);
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAbs16Word extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).w", this.ea);
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAbs16Long extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getWord(this.dbg.curPC);
+        this.ea = this.dbg.getWord(this.dbg.curPC);
         this.dbg.curPC += 2;
         return this.dbg.sprintf("(%x).l", this.ea);
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModeAbs32Byte extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).b", this.ea);
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModeAbs32Word extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).w", this.ea);
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModeAbs32Long extends DbgMode {
     getString(nnn) {
-        this.ea = this.cpu.getLong(this.dbg.curPC);
+        this.ea = this.dbg.getLong(this.dbg.curPC);
         this.dbg.curPC += 4;
         return this.dbg.sprintf("(%x).l", this.ea);
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
 class DbgModePCValDispByte extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
 class DbgModePCValDispWord extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
 class DbgModePCValDispLong extends DbgMode {
     getString(nnn) {
-        let i = this.cpu.getWord(this.dbg.curPC);
+        let i = this.dbg.getWord(this.dbg.curPC);
         this.ea = this.dbg.curPC + i;
         this.dbg.curPC += 2;
         return (i? this.dbg.getSignedHexString(i) : "") + "(PC).l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -17936,7 +18542,7 @@ class DbgModePCValIndexByte extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 class DbgModePCValIndexWord extends DbgMode {
@@ -17946,7 +18552,7 @@ class DbgModePCValIndexWord extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 class DbgModePCValIndexLong extends DbgMode {
@@ -17956,7 +18562,7 @@ class DbgModePCValIndexLong extends DbgMode {
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -17968,11 +18574,11 @@ class DbgModeImmediateByte extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC + 1;
         this.dbg.curPC += 2;
-        return this.dbg.getImmediateHexString(this.cpu.getByte(this.ea));     // + ".b";
+        return this.dbg.getImmediateHexString(this.dbg.getByte(this.ea));     // + ".b";
     }
 
     getData() {
-        return this.cpu.getByte(this.ea) & 0xff;
+        return this.dbg.getByte(this.ea) & 0xff;
     }
 }
 
@@ -17984,11 +18590,11 @@ class DbgModeImmediateWord extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC;
         this.dbg.curPC += 2;
-        return this.dbg.getImmediateHexString(this.cpu.getWord(this.ea));     // + ".w";
+        return this.dbg.getImmediateHexString(this.dbg.getWord(this.ea));     // + ".w";
     }
 
     getData() {
-        return this.cpu.getWord(this.ea) & 0xffff;
+        return this.dbg.getWord(this.ea) & 0xffff;
     }
 }
 
@@ -18000,11 +18606,11 @@ class DbgModeImmediateLong extends DbgMode {
     getString(nnn) {
         this.ea = this.dbg.curPC;
         this.dbg.curPC += 4;
-        return this.dbg.getImmediateHexString(this.cpu.getLong(this.ea));     // + ".l";
+        return this.dbg.getImmediateHexString(this.dbg.getLong(this.ea));     // + ".l";
     }
 
     getData() {
-        return this.cpu.getLong(this.ea);
+        return this.dbg.getLong(this.ea);
     }
 }
 
@@ -18118,9 +18724,9 @@ class EAMode
      */
     advanceEA(nnn)
     {
-        let nCycles = this.cpu.nCyclesDebug;
+        let nCycles = this.cpu.nCyclesRemain;
         this.getEA(nnn);
-        this.cpu.nCyclesDebug = nCycles;
+        this.cpu.nCyclesRemain = nCycles;
     }
 
     /**
@@ -18297,18 +18903,18 @@ class EAMode
 
         if ((addr & 0x0800) != 0) {
             if ((addr & 0x8000) != 0) {
-                return base + this.cpu.regA[i] + (addr << 24 >> 24);
+                return (base + this.cpu.regA[i] + (addr << 24 >> 24))|0;
             }
             else {
-                return base + this.cpu.regD[i] + (addr << 24 >> 24);
+                return (base + this.cpu.regD[i] + (addr << 24 >> 24))|0;
             }
         }
         else {
             if ((addr & 0x8000) != 0) {
-                return base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24);
+                return (base + (this.cpu.regA[i] << 16 >> 16) + (addr << 24 >> 24))|0;
             }
             else {
-                return base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24);
+                return (base + (this.cpu.regD[i] << 16 >> 16) + (addr << 24 >> 24))|0;
             }
         }
     }
@@ -18368,8 +18974,8 @@ class EAModeDRegByte extends EAMode {
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
@@ -18435,23 +19041,23 @@ class EAModeDRegLong extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regD[this.ea] = data;
+        this.cpu.regD[this.ea] = data|0;
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEADataFlagsZNClearCV(nnn, data) {        // overrides default method, for speed
         this.ea = nnn;
-        this.cpu.regD[this.ea] = data;
-        this.cpu.flagZNew = data;
+        this.cpu.regD[this.ea] = data|0;
+        this.cpu.flagZNew = data|0;
         this.cpu.flagNNew = this.cpu.flagZNew;
         this.cpu.flagVNew = this.cpu.flagVDst = 0;
         this.cpu.flagCSrc = this.cpu.flagCDst = 0;
@@ -18470,7 +19076,7 @@ class EAModeARegWord extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regA[this.ea] = data;          // NOTE: the entire A register is always updated, and byte operations are illegal
+        this.cpu.regA[this.ea] = data|0;        // NOTE: the entire A register is always updated, and byte operations are illegal
     }
 
     updateFlagZ(data) {
@@ -18495,21 +19101,21 @@ class EAModeARegLong extends EAMode {
     }
 
     setData(data) {
-        this.cpu.regA[this.ea] = data;
+        this.cpu.regA[this.ea] = data|0;
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 
     setEAData(nnn, data) {                      // overrides default method, for speed
-        this.cpu.regA[this.ea = nnn] = data;
+        this.cpu.regA[this.ea = nnn] = data|0;
     }
 }
 
@@ -18524,7 +19130,7 @@ class EAModeAValByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -18556,7 +19162,7 @@ class EAModeAValWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -18588,7 +19194,7 @@ class EAModeAValLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -18600,13 +19206,13 @@ class EAModeAValLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -18618,7 +19224,7 @@ class EAModeAValIncByte extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += CPU68K.aByteInc[nnn];
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + CPU68K.aByteInc[nnn])|0;
         return this.ea;
     }
 
@@ -18649,7 +19255,7 @@ class EAModeAValIncWord extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += 2;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + 2)|0;
         return this.ea;
     }
 
@@ -18679,7 +19285,7 @@ class EAModeAValIncLong extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(8);
         this.ea = this.cpu.regA[nnn];
-        this.cpu.regA[nnn] += 4;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] + 4)|0;
         return this.ea;
     }
 
@@ -18692,13 +19298,13 @@ class EAModeAValIncLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -18709,7 +19315,7 @@ class EAModeAValDecByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= CPU68K.aByteInc[nnn];
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - CPU68K.aByteInc[nnn])|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -18739,7 +19345,7 @@ class EAModeAValDecWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(4);                  // BUGBUG: 6 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= 2;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - 2)|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -18769,7 +19375,7 @@ class EAModeAValDecLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);                  // BUGBUG: 10 if source operand (allocate separate EAMode instances for source and dest operands?) -JP
-        this.cpu.regA[nnn] -= 4;
+        this.cpu.regA[nnn] = (this.cpu.regA[nnn] - 4)|0;
         return this.ea = this.cpu.regA[nnn];
     }
 
@@ -18782,13 +19388,13 @@ class EAModeAValDecLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -18799,11 +19405,11 @@ class EAModeAValDispByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -18832,11 +19438,11 @@ class EAModeAValDispWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -18865,11 +19471,11 @@ class EAModeAValDispLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(12);
-        return this.ea = this.cpu.regA[nnn] + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regA[nnn] + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -18881,13 +19487,13 @@ class EAModeAValDispLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -18902,7 +19508,7 @@ class EAModeAValIndexByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -18935,7 +19541,7 @@ class EAModeAValIndexWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -18968,7 +19574,7 @@ class EAModeAValIndexLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -18980,13 +19586,13 @@ class EAModeAValIndexLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -19001,7 +19607,7 @@ class EAModeAbs16Byte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -19033,7 +19639,7 @@ class EAModeAbs16Word extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -19066,7 +19672,7 @@ class EAModeAbs16Long extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -19078,13 +19684,13 @@ class EAModeAbs16Long extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -19099,7 +19705,7 @@ class EAModeAbs32Byte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -19131,7 +19737,7 @@ class EAModeAbs32Word extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -19164,7 +19770,7 @@ class EAModeAbs32Long extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -19176,13 +19782,13 @@ class EAModeAbs32Long extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -19193,11 +19799,11 @@ class EAModePCValDispByte extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -19226,11 +19832,11 @@ class EAModePCValDispWord extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(8);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -19259,11 +19865,11 @@ class EAModePCValDispLong extends EAMode {
 
     getEA(nnn) {
         this.cpu.addCycles(12);
-        return this.ea = this.cpu.regPC + this.cpu.getPCWord();
+        return this.ea = (this.cpu.regPC + this.cpu.getPCWord())|0;
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -19275,13 +19881,13 @@ class EAModePCValDispLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -19296,7 +19902,7 @@ class EAModePCValIndexByte extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 1;
+        this.ea = (this.ea + 1)|0;
     }
 
     getData() {
@@ -19329,7 +19935,7 @@ class EAModePCValIndexWord extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 2;
+        this.ea = (this.ea + 2)|0;
     }
 
     getData() {
@@ -19362,7 +19968,7 @@ class EAModePCValIndexLong extends EAMode {
     }
 
     advanceEA(nnn) {
-        this.ea += 4;
+        this.ea = (this.ea + 4)|0;
     }
 
     getData() {
@@ -19374,13 +19980,13 @@ class EAModePCValIndexLong extends EAMode {
     }
 
     updateFlagZ(data) {
-        this.cpu.flagZNew = data;
+        this.cpu.flagZNew = data|0;
     }
 
     updateFlagV() {
         this.cpu.flagVNew = this.cpu.flagZNew;
-        this.cpu.flagVDst = this.cpu.dataDst;
-        this.cpu.flagVSrc = this.cpu.dataSrc;
+        this.cpu.flagVDst = this.cpu.dataDst|0;
+        this.cpu.flagVSrc = this.cpu.dataSrc|0;
     }
 }
 
@@ -19393,7 +19999,7 @@ class EAModeImmediateByte extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regPC+1;
-        this.cpu.regPC += 2;
+        this.cpu.regPC = (this.cpu.regPC + 2)|0;
         return this.ea;
     }
 
@@ -19429,7 +20035,7 @@ class EAModeImmediateWord extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(4);
         this.ea = this.cpu.regPC;
-        this.cpu.regPC += 2;
+        this.cpu.regPC = (this.cpu.regPC + 2)|0;
         return this.ea;
     }
 
@@ -19465,7 +20071,7 @@ class EAModeImmediateLong extends EAMode {
     getEA(nnn) {
         this.cpu.addCycles(8);
         this.ea = this.cpu.regPC;
-        this.cpu.regPC += 4;
+        this.cpu.regPC = (this.cpu.regPC + 4)|0;
         return this.ea;
     }
 
@@ -19493,16 +20099,1107 @@ class EAModeImmediateLong extends EAMode {
 }
 
 /**
+ * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/palmos.js (C) 2012-2026 Jeff Parsons
+ */
+
+/**
+ * @class PalmOS
+ * @unrestricted
+ *
+ * This is a port of the PalmOSTypes.java API table, which describes PalmOS system traps (ie, the API selectors that
+ * follow every "TRAP #15" instruction).  Each description begins with the name of the API, optionally followed by
+ * a parameter list and return type, which the original Java ScriptManager used to make API calls on behalf of scripts.
+ */
+class PalmOS {
+    /**
+     * getAPIName(iTrap)
+     *
+     * @param {number} iTrap (ie, the API selector following a TRAP #15 instruction)
+     * @returns {string} API name (or the selector in hex, if unknown)
+     */
+    static getAPIName(iTrap)
+    {
+        let s = PalmOS.getAPIDesc(iTrap);
+        if (s) {
+            let i = s.indexOf('(');
+            if (i >= 0) s = s.substring(0, i);
+        }
+        return s || "0x" + (iTrap & 0xffff).toString(16);
+    }
+
+    /**
+     * getAPIDesc(iTrap)
+     *
+     * @param {number} iTrap
+     * @returns {string|null} API description, or null if none
+     */
+    static getAPIDesc(iTrap)
+    {
+        let iAPI = (iTrap & 0xffff) - PalmOS.TRAP_API_BASE;
+        return (iAPI >= 0 && iAPI < PalmOS.API_DESCS.length)? PalmOS.API_DESCS[iAPI] : null;
+    }
+
+    /**
+     * getAPITrap(sName)
+     *
+     * @param {string} sName (eg, "DmFindDatabase")
+     * @returns {number} API selector (eg, 0xa045), or -1 if unknown
+     */
+    static getAPITrap(sName)
+    {
+        for (let iAPI = 0; iAPI < PalmOS.API_DESCS.length; iAPI++) {
+            let s = PalmOS.API_DESCS[iAPI];
+            if (s.startsWith(sName) && (s.length == sName.length || s[sName.length] == '(')) {
+                return PalmOS.TRAP_API_BASE + iAPI;
+            }
+        }
+        return -1;
+    }
+}
+
+/**
+ * PalmOS encodes API numbers in the word following the "TRAP #15" instruction, starting with this value.
+ */
+PalmOS.TRAP_API_BASE = 0xa000;
+
+PalmOS.API_DESCS = [
+    "MemInit",                               // 0x000
+    "MemInitHeapTable",                      // 0x001
+    "MemStoreInit",                          // 0x002
+    "MemCardFormat",                         // 0x003
+    "MemCardInfo(cardNo:uw,cardName:psz32,manufName:psz32,version:puw,crDate:pui,romSize:pui,ramSize:pui,freeBytes:pui):Err:uw", // 0x004  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/MemoryManager.html#924915
+    "MemStoreInfo",                          // 0x005
+    "MemStoreSetInfo",                       // 0x006
+    "MemNumHeaps",                           // 0x007
+    "MemNumRAMHeaps",                        // 0x008
+    "MemHeapID",                             // 0x009
+    "MemHeapPtr",                            // 0x00a
+    "MemHeapFreeBytes",                      // 0x00b
+    "MemHeapSize",                           // 0x00c
+    "MemHeapFlags",                          // 0x00d
+    "MemHeapCompact",                        // 0x00e
+    "MemHeapInit",                           // 0x00f
+    "MemHeapFreeByOwnerID",                  // 0x010
+    "MemChunkNew",                           // 0x011
+    "MemChunkFree(p:p):Err:uw",              // 0x012  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/MemoryManager.html#925616
+    "MemPtrNew(size:ui):p",                  // 0x013  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/MemoryManager.html#925646
+    "MemPtrRecoverHandle",                   // 0x014
+    "MemPtrFlags",                           // 0x015
+    "MemPtrSize",                            // 0x016
+    "MemPtrOwner",                           // 0x017
+    "MemPtrHeapID",                          // 0x018
+    "MemPtrCardNo",                          // 0x019
+    "MemPtrToLocalID",                       // 0x01a
+    "MemPtrSetOwner",                        // 0x01b
+    "MemPtrResize",                          // 0x01c
+    "MemPtrResetLock",                       // 0x01d
+    "MemHandleNew",                          // 0x01e
+    "MemHandleLockCount",                    // 0x01f
+    "MemHandleToLocalID",                    // 0x020
+    "MemHandleLock",                         // 0x021
+    "MemHandleUnlock",                       // 0x022
+    "MemLocalIDToGlobal",                    // 0x023
+    "MemLocalIDKind",                        // 0x024
+    "MemLocalIDToPtr",                       // 0x025
+    "MemMove",                               // 0x026
+    "MemSet",                                // 0x027
+    "MemStoreSearch",                        // 0x028
+    "MemPtrDataStorage",                     // 0x029
+    "MemKernelInit",                         // 0x02a
+    "MemHandleFree",                         // 0x02b
+    "MemHandleFlags",                        // 0x02c
+    "MemHandleSize",                         // 0x02d
+    "MemHandleOwner",                        // 0x02e
+    "MemHandleHeapID",                       // 0x02f
+    "MemHandleDataStorage",                  // 0x030
+    "MemHandleCardNo",                       // 0x031
+    "MemHandleSetOwner",                     // 0x032
+    "MemHandleResize",                       // 0x033
+    "MemHandleResetLock",                    // 0x034
+    "MemPtrUnlock",                          // 0x035
+    "MemLocalIDToLockedPtr",                 // 0x036
+    "MemSetDebugMode",                       // 0x037
+    "MemHeapScramble",                       // 0x038
+    "MemHeapCheck",                          // 0x039
+    "MemNumCards",                           // 0x03a
+    "MemDebugMode",                          // 0x03b
+    "MemSemaphoreReserve",                   // 0x03c
+    "MemSemaphoreRelease",                   // 0x03d
+    "MemHeapDynamic",                        // 0x03e
+    "MemNVParams",                           // 0x03f
+    "DmInit",                                // 0x040
+    "DmCreateDatabase",                      // 0x041
+    "DmDeleteDatabase(cardNo:uw,dbID:ui):Err:uw", // 0x042  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/DataAndResourceManager.html#988040
+    "DmNumDatabases",                        // 0x043
+    "DmGetDatabase",                         // 0x044
+    "DmFindDatabase(cardNo:uw,name:psz):LocalID:ui", // 0x045  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/DataAndResourceManager.html#925838
+    "DmDatabaseInfo",                        // 0x046
+    "DmSetDatabaseInfo",                     // 0x047
+    "DmDatabaseSize",                        // 0x048
+    "DmOpenDatabase",                        // 0x049
+    "DmCloseDatabase",                       // 0x04a
+    "DmNextOpenDatabase",                    // 0x04b
+    "DmOpenDatabaseInfo",                    // 0x04c
+    "DmResetRecordStates",                   // 0x04d
+    "DmGetLastErr",                          // 0x04e
+    "DmNumRecords",                          // 0x04f
+    "DmRecordInfo",                          // 0x050
+    "DmSetRecordInfo",                       // 0x051
+    "DmAttachRecord",                        // 0x052
+    "DmDetachRecord",                        // 0x053
+    "DmMoveRecord",                          // 0x054
+    "DmNewRecord",                           // 0x055
+    "DmRemoveRecord",                        // 0x056
+    "DmDeleteRecord",                        // 0x057
+    "DmArchiveRecord",                       // 0x058
+    "DmNewHandle",                           // 0x059
+    "DmRemoveSecretRecords",                 // 0x05a
+    "DmQueryRecord",                         // 0x05b
+    "DmGetRecord",                           // 0x05c
+    "DmResizeRecord",                        // 0x05d
+    "DmReleaseRecord",                       // 0x05e
+    "DmGetResource",                         // 0x05f
+    "DmGet1Resource",                        // 0x060
+    "DmReleaseResource",                     // 0x061
+    "DmResizeResource",                      // 0x062
+    "DmNextOpenResDatabase",                 // 0x063
+    "DmFindResourceType",                    // 0x064
+    "DmFindResource",                        // 0x065
+    "DmSearchResource",                      // 0x066
+    "DmNumResources",                        // 0x067
+    "DmResourceInfo",                        // 0x068
+    "DmSetResourceInfo",                     // 0x069
+    "DmAttachResource",                      // 0x06a
+    "DmDetachResource",                      // 0x06b
+    "DmNewResource",                         // 0x06c
+    "DmRemoveResource",                      // 0x06d
+    "DmGetResourceIndex",                    // 0x06e
+    "DmQuickSort",                           // 0x06f
+    "DmQueryNextInCategory",                 // 0x070
+    "DmNumRecordsInCategory",                // 0x071
+    "DmPositionInCategory",                  // 0x072
+    "DmSeekRecordInCategory",                // 0x073
+    "DmMoveCategory",                        // 0x074
+    "DmOpenDatabaseByTypeCreator",           // 0x075
+    "DmWrite",                               // 0x076
+    "DmStrCopy",                             // 0x077
+    "DmGetNextDatabaseByTypeCreator",        // 0x078
+    "DmWriteCheck",                          // 0x079
+    "DmMoveOpenDBContext",                   // 0x07a
+    "DmFindRecordByID",                      // 0x07b
+    "DmGetAppInfoID",                        // 0x07c
+    "DmFindSortPositionV10",                 // 0x07d
+    "DmSet",                                 // 0x07e
+    "DmCreateDatabaseFromImage(buffer:p):Err:uw", // 0x07f  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/DataAndResourceManager.html#925506
+    "DbgSrcMessage",                         // 0x080
+    "DbgMessage",                            // 0x081
+    "DbgGetMessage",                         // 0x082
+    "DbgCommSettings",                       // 0x083
+    "ErrDisplayFileLineMsg",                 // 0x084
+    "ErrSetJump",                            // 0x085
+    "ErrLongJump",                           // 0x086
+    "ErrThrow",                              // 0x087
+    "ErrExceptionList",                      // 0x088
+    "SysBroadcastActionCode",                // 0x089
+    "SysUnimplemented",                      // 0x08a
+    "SysColdBoot",                           // 0x08b
+    "SysReset",                              // 0x08c
+    "SysDoze",                               // 0x08d
+    "SysAppLaunch",                          // 0x08e
+    "SysAppStartup",                         // 0x08f
+    "SysAppExit",                            // 0x090
+    "SysSetA5",                              // 0x091
+    "SysSetTrapAddress",                     // 0x092
+    "SysGetTrapAddress",                     // 0x093
+    "SysTranslateKernelErr",                 // 0x094
+    "SysSemaphoreCreate",                    // 0x095
+    "SysSemaphoreDelete",                    // 0x096
+    "SysSemaphoreWait",                      // 0x097
+    "SysSemaphoreSignal",                    // 0x098
+    "SysTimerCreate",                        // 0x099
+    "SysTimerWrite",                         // 0x09a
+    "SysTaskCreate",                         // 0x09b
+    "SysTaskDelete",                         // 0x09c
+    "SysTaskTrigger",                        // 0x09d
+    "SysTaskID",                             // 0x09e
+    "SysTaskUserInfoPtr",                    // 0x09f
+    "SysTaskDelay",                          // 0x0a0
+    "SysTaskSetTermProc",                    // 0x0a1
+    "SysUILaunch",                           // 0x0a2
+    "SysNewOwnerID",                         // 0x0a3
+    "SysSemaphoreSet",                       // 0x0a4
+    "SysDisableInts",                        // 0x0a5
+    "SysRestoreStatus",                      // 0x0a6
+    "SysUIAppSwitch(cardNo:uw,dbID:ui,cmd:uw,cmdPBP:p):Err:uw", // 0x0a7  // http://www.doublebit.com/mirrors/palmos_com/dev/tech/docs/palmos/SystemManager.html#925699
+    "SysCurAppInfoP",                        // 0x0a8
+    "SysHandleEvent",                        // 0x0a9
+    "SysInit",                               // 0x0aa
+    "SysQSort",                              // 0x0ab
+    "SysCurAppDatabase",                     // 0x0ac
+    "SysFatalAlert",                         // 0x0ad
+    "SysResSemaphoreCreate",                 // 0x0ae
+    "SysResSemaphoreDelete",                 // 0x0af
+    "SysResSemaphoreReserve",                // 0x0b0
+    "SysResSemaphoreRelease",                // 0x0b1
+    "SysSleep",                              // 0x0b2
+    "SysKeyboardDialogV10",                  // 0x0b3
+    "SysAppLauncherDialog",                  // 0x0b4
+    "SysSetPerformance",                     // 0x0b5
+    "SysBatteryInfo",                        // 0x0b6
+    "SysLibInstall",                         // 0x0b7
+    "SysLibRemove",                          // 0x0b8
+    "SysLibTblEntry",                        // 0x0b9
+    "SysLibFind",                            // 0x0ba
+    "SysBatteryDialog",                      // 0x0bb
+    "SysCopyStringResource",                 // 0x0bc
+    "SysKernelInfo",                         // 0x0bd
+    "SysLaunchConsole",                      // 0x0be
+    "SysTimerDelete",                        // 0x0bf
+    "SysSetAutoOffTime",                     // 0x0c0
+    "SysFormPointerArrayToStrings",          // 0x0c1
+    "SysRandom",                             // 0x0c2
+    "SysTaskSwitching",                      // 0x0c3
+    "SysTimerRead",                          // 0x0c4
+    "StrCopy",                               // 0x0c5
+    "StrCat",                                // 0x0c6
+    "StrLen",                                // 0x0c7
+    "StrCompare",                            // 0x0c8
+    "StrIToA",                               // 0x0c9
+    "StrCaselessCompare",                    // 0x0ca
+    "StrIToH",                               // 0x0cb
+    "StrChr",                                // 0x0cc
+    "StrStr",                                // 0x0cd
+    "StrAToI",                               // 0x0ce
+    "StrToLower",                            // 0x0cf
+    "SerReceiveISP",                         // 0x0d0
+    "SlkOpen",                               // 0x0d1
+    "SlkClose",                              // 0x0d2
+    "SlkOpenSocket",                         // 0x0d3
+    "SlkCloseSocket",                        // 0x0d4
+    "SlkSocketRefNum",                       // 0x0d5
+    "SlkSocketSetTimeout",                   // 0x0d6
+    "SlkFlushSocket",                        // 0x0d7
+    "SlkSetSocketListener",                  // 0x0d8
+    "SlkSendPacket",                         // 0x0d9
+    "SlkReceivePacket",                      // 0x0da
+    "SlkSysPktDefaultResponse",              // 0x0db
+    "SlkProcessRPC",                         // 0x0dc
+    "ConPutS",                               // 0x0dd
+    "ConGetS",                               // 0x0de
+    "FplInit",                               // 0x0df
+    "FplFree",                               // 0x0e0
+    "FplFToA",                               // 0x0e1
+    "FplAToF",                               // 0x0e2
+    "FplBase10Info",                         // 0x0e3
+    "FplLongToFloat",                        // 0x0e4
+    "FplFloatToLong",                        // 0x0e5
+    "FplFloatToULong",                       // 0x0e6
+    "FplMul",                                // 0x0e7
+    "FplAdd",                                // 0x0e8
+    "FplSub",                                // 0x0e9
+    "FplDiv",                                // 0x0ea
+    "ScrInit",                               // 0x0eb
+    "ScrCopyRectangle",                      // 0x0ec
+    "ScrDrawChars",                          // 0x0ed
+    "ScrLineRoutine",                        // 0x0ee
+    "ScrRectangleRoutine",                   // 0x0ef
+    "ScrScreenInfo",                         // 0x0f0
+    "ScrDrawNotify",                         // 0x0f1
+    "ScrSendUpdateArea",                     // 0x0f2
+    "ScrCompressScanLine",                   // 0x0f3
+    "ScrDeCompressScanLine",                 // 0x0f4
+    "TimGetSeconds",                         // 0x0f5
+    "TimSetSeconds",                         // 0x0f6
+    "TimGetTicks",                           // 0x0f7
+    "TimInit",                               // 0x0f8
+    "TimSetAlarm",                           // 0x0f9
+    "TimGetAlarm",                           // 0x0fa
+    "TimHandleInterrupt",                    // 0x0fb
+    "TimSecondsToDateTime",                  // 0x0fc
+    "TimDateTimeToSeconds",                  // 0x0fd
+    "TimAdjust",                             // 0x0fe
+    "TimSleep",                              // 0x0ff
+    "TimWake",                               // 0x100
+    "CategoryCreateListV10",                 // 0x101
+    "CategoryFreeListV10",                   // 0x102
+    "CategoryFind",                          // 0x103
+    "CategoryGetName",                       // 0x104
+    "CategoryEditV10",                       // 0x105
+    "CategorySelectV10",                     // 0x106
+    "CategoryGetNext",                       // 0x107
+    "CategorySetTriggerLabel",               // 0x108
+    "CategoryTruncateName",                  // 0x109
+    "ClipboardAddItem",                      // 0x10a
+    "ClipboardCheckIfItemExist",             // 0x10b
+    "ClipboardGetItem",                      // 0x10c
+    "CtlDrawControl",                        // 0x10d
+    "CtlEraseControl",                       // 0x10e
+    "CtlHideControl",                        // 0x10f
+    "CtlShowControl",                        // 0x110
+    "CtlGetValue",                           // 0x111
+    "CtlSetValue",                           // 0x112
+    "CtlGetLabel",                           // 0x113
+    "CtlSetLabel",                           // 0x114
+    "CtlHandleEvent",                        // 0x115
+    "CtlHitControl",                         // 0x116
+    "CtlSetEnabled",                         // 0x117
+    "CtlSetUsable",                          // 0x118
+    "CtlEnabled",                            // 0x119
+    "EvtInitialize",                         // 0x11a
+    "EvtAddEventToQueue",                    // 0x11b
+    "EvtCopyEvent",                          // 0x11c
+    "EvtGetEvent",                           // 0x11d
+    "EvtGetPen",                             // 0x11e
+    "EvtSysInit",                            // 0x11f
+    "EvtGetSysEvent",                        // 0x120
+    "EvtProcessSoftKeyStroke",               // 0x121
+    "EvtGetPenBtnList",                      // 0x122
+    "EvtSetPenQueuePtr",                     // 0x123
+    "EvtPenQueueSize",                       // 0x124
+    "EvtFlushPenQueue",                      // 0x125
+    "EvtEnqueuePenPoint",                    // 0x126
+    "EvtDequeuePenStrokeInfo",               // 0x127
+    "EvtDequeuePenPoint",                    // 0x128
+    "EvtFlushNextPenStroke",                 // 0x129
+    "EvtSetKeyQueuePtr",                     // 0x12a
+    "EvtKeyQueueSize",                       // 0x12b
+    "EvtFlushKeyQueue",                      // 0x12c
+    "EvtEnqueueKey",                         // 0x12d
+    "EvtDequeueKeyEvent",                    // 0x12e
+    "EvtWakeup",                             // 0x12f
+    "EvtResetAutoOffTimer",                  // 0x130
+    "EvtKeyQueueEmpty",                      // 0x131
+    "EvtEnableGraffiti",                     // 0x132
+    "FldCopy",                               // 0x133
+    "FldCut",                                // 0x134
+    "FldDrawField",                          // 0x135
+    "FldEraseField",                         // 0x136
+    "FldFreeMemory",                         // 0x137
+    "FldGetBounds",                          // 0x138
+    "FldGetTextPtr",                         // 0x139
+    "FldGetSelection",                       // 0x13a
+    "FldHandleEvent",                        // 0x13b
+    "FldPaste",                              // 0x13c
+    "FldRecalculateField",                   // 0x13d
+    "FldSetBounds",                          // 0x13e
+    "FldSetText",                            // 0x13f
+    "FldGetFont",                            // 0x140
+    "FldSetFont",                            // 0x141
+    "FldSetSelection",                       // 0x142
+    "FldGrabFocus",                          // 0x143
+    "FldReleaseFocus",                       // 0x144
+    "FldGetInsPtPosition",                   // 0x145
+    "FldSetInsPtPosition",                   // 0x146
+    "FldSetScrollPosition",                  // 0x147
+    "FldGetScrollPosition",                  // 0x148
+    "FldGetTextHeight",                      // 0x149
+    "FldGetTextAllocatedSize",               // 0x14a
+    "FldGetTextLength",                      // 0x14b
+    "FldScrollField",                        // 0x14c
+    "FldScrollable",                         // 0x14d
+    "FldGetVisibleLines",                    // 0x14e
+    "FldGetAttributes",                      // 0x14f
+    "FldSetAttributes",                      // 0x150
+    "FldSendChangeNotification",             // 0x151
+    "FldCalcFieldHeight",                    // 0x152
+    "FldGetTextHandle",                      // 0x153
+    "FldCompactText",                        // 0x154
+    "FldDirty",                              // 0x155
+    "FldWordWrap",                           // 0x156
+    "FldSetTextAllocatedSize",               // 0x157
+    "FldSetTextHandle",                      // 0x158
+    "FldSetTextPtr",                         // 0x159
+    "FldGetMaxChars",                        // 0x15a
+    "FldSetMaxChars",                        // 0x15b
+    "FldSetUsable",                          // 0x15c
+    "FldInsert",                             // 0x15d
+    "FldDelete",                             // 0x15e
+    "FldUndo",                               // 0x15f
+    "FldSetDirty",                           // 0x160
+    "FldSendHeightChangeNotification",       // 0x161
+    "FldMakeFullyVisible",                   // 0x162
+    "FntGetFont",                            // 0x163
+    "FntSetFont",                            // 0x164
+    "FntGetFontPtr",                         // 0x165
+    "FntBaseLine",                           // 0x166
+    "FntCharHeight",                         // 0x167
+    "FntLineHeight",                         // 0x168
+    "FntAverageCharWidth",                   // 0x169
+    "FntCharWidth",                          // 0x16a
+    "FntCharsWidth",                         // 0x16b
+    "FntDescenderHeight",                    // 0x16c
+    "FntCharsInWidth",                       // 0x16d
+    "FntLineWidth",                          // 0x16e
+    "FrmInitForm",                           // 0x16f
+    "FrmDeleteForm",                         // 0x170
+    "FrmDrawForm",                           // 0x171
+    "FrmEraseForm",                          // 0x172
+    "FrmGetActiveForm",                      // 0x173
+    "FrmSetActiveForm",                      // 0x174
+    "FrmGetActiveFormID",                    // 0x175
+    "FrmGetUserModifiedState",               // 0x176
+    "FrmSetNotUserModified",                 // 0x177
+    "FrmGetFocus",                           // 0x178
+    "FrmSetFocus",                           // 0x179
+    "FrmHandleEvent",                        // 0x17a
+    "FrmGetFormBounds",                      // 0x17b
+    "FrmGetWindowHandle",                    // 0x17c
+    "FrmGetFormId",                          // 0x17d
+    "FrmGetFormPtr",                         // 0x17e
+    "FrmGetNumberOfObjects",                 // 0x17f
+    "FrmGetObjectIndex",                     // 0x180
+    "FrmGetObjectId",                        // 0x181
+    "FrmGetObjectType",                      // 0x182
+    "FrmGetObjectPtr",                       // 0x183
+    "FrmHideObject",                         // 0x184
+    "FrmShowObject",                         // 0x185
+    "FrmGetObjectPosition",                  // 0x186
+    "FrmSetObjectPosition",                  // 0x187
+    "FrmGetControlValue",                    // 0x188
+    "FrmSetControlValue",                    // 0x189
+    "FrmGetControlGroupSelection",           // 0x18a
+    "FrmSetControlGroupSelection",           // 0x18b
+    "FrmCopyLabel",                          // 0x18c
+    "FrmSetLabel",                           // 0x18d
+    "FrmGetLabel",                           // 0x18e
+    "FrmSetCategoryLabel",                   // 0x18f
+    "FrmGetTitle",                           // 0x190
+    "FrmSetTitle",                           // 0x191
+    "FrmAlert",                              // 0x192
+    "FrmDoDialog",                           // 0x193
+    "FrmCustomAlert",                        // 0x194
+    "FrmHelp",                               // 0x195
+    "FrmUpdateScrollers",                    // 0x196
+    "FrmGetFirstForm",                       // 0x197
+    "FrmVisible",                            // 0x198
+    "FrmGetObjectBounds",                    // 0x199
+    "FrmCopyTitle",                          // 0x19a
+    "FrmGotoForm",                           // 0x19b
+    "FrmPopupForm",                          // 0x19c
+    "FrmUpdateForm",                         // 0x19d
+    "FrmReturnToForm",                       // 0x19e
+    "FrmSetEventHandler",                    // 0x19f
+    "FrmDispatchEvent",                      // 0x1a0
+    "FrmCloseAllForms",                      // 0x1a1
+    "FrmSaveAllForms",                       // 0x1a2
+    "FrmGetGadgetData",                      // 0x1a3
+    "FrmSetGadgetData",                      // 0x1a4
+    "FrmSetCategoryTrigger",                 // 0x1a5
+    "UIInitialize",                          // 0x1a6
+    "UIReset",                               // 0x1a7
+    "InsPtInitialize",                       // 0x1a8
+    "InsPtSetLocation",                      // 0x1a9
+    "InsPtGetLocation",                      // 0x1aa
+    "InsPtEnable",                           // 0x1ab
+    "InsPtEnabled",                          // 0x1ac
+    "InsPtSetHeight",                        // 0x1ad
+    "InsPtGetHeight",                        // 0x1ae
+    "InsPtCheckBlink",                       // 0x1af
+    "LstSetDrawFunction",                    // 0x1b0
+    "LstDrawList",                           // 0x1b1
+    "LstEraseList",                          // 0x1b2
+    "LstGetSelection",                       // 0x1b3
+    "LstGetSelectionText",                   // 0x1b4
+    "LstHandleEvent",                        // 0x1b5
+    "LstSetHeight",                          // 0x1b6
+    "LstSetSelection",                       // 0x1b7
+    "LstSetListChoices",                     // 0x1b8
+    "LstMakeItemVisible",                    // 0x1b9
+    "LstGetNumberOfItems",                   // 0x1ba
+    "LstPopupList",                          // 0x1bb
+    "LstSetPosition",                        // 0x1bc
+    "MenuInit",                              // 0x1bd
+    "MenuDispose",                           // 0x1be
+    "MenuHandleEvent",                       // 0x1bf
+    "MenuDrawMenu",                          // 0x1c0
+    "MenuEraseStatus",                       // 0x1c1
+    "MenuGetActiveMenu",                     // 0x1c2
+    "MenuSetActiveMenu",                     // 0x1c3
+    "RctSetRectangle",                       // 0x1c4
+    "RctCopyRectangle",                      // 0x1c5
+    "RctInsetRectangle",                     // 0x1c6
+    "RctOffsetRectangle",                    // 0x1c7
+    "RctPtInRectangle",                      // 0x1c8
+    "RctGetIntersection",                    // 0x1c9
+    "TblDrawTable",                          // 0x1ca
+    "TblEraseTable",                         // 0x1cb
+    "TblHandleEvent",                        // 0x1cc
+    "TblGetItemBounds",                      // 0x1cd
+    "TblSelectItem",                         // 0x1ce
+    "TblGetItemInt",                         // 0x1cf
+    "TblSetItemInt",                         // 0x1d0
+    "TblSetItemStyle",                       // 0x1d1
+    "TblUnhighlightSelection",               // 0x1d2
+    "TblSetRowUsable",                       // 0x1d3
+    "TblGetNumberOfRows",                    // 0x1d4
+    "TblSetCustomDrawProcedure",             // 0x1d5
+    "TblSetRowSelectable",                   // 0x1d6
+    "TblRowSelectable",                      // 0x1d7
+    "TblSetLoadDataProcedure",               // 0x1d8
+    "TblSetSaveDataProcedure",               // 0x1d9
+    "TblGetBounds",                          // 0x1da
+    "TblSetRowHeight",                       // 0x1db
+    "TblGetColumnWidth",                     // 0x1dc
+    "TblGetRowID",                           // 0x1dd
+    "TblSetRowID",                           // 0x1de
+    "TblMarkRowInvalid",                     // 0x1df
+    "TblMarkTableInvalid",                   // 0x1e0
+    "TblGetSelection",                       // 0x1e1
+    "TblInsertRow",                          // 0x1e2
+    "TblRemoveRow",                          // 0x1e3
+    "TblRowInvalid",                         // 0x1e4
+    "TblRedrawTable",                        // 0x1e5
+    "TblRowUsable",                          // 0x1e6
+    "TblReleaseFocus",                       // 0x1e7
+    "TblEditing",                            // 0x1e8
+    "TblGetCurrentField",                    // 0x1e9
+    "TblSetColumnUsable",                    // 0x1ea
+    "TblGetRowHeight",                       // 0x1eb
+    "TblSetColumnWidth",                     // 0x1ec
+    "TblGrabFocus",                          // 0x1ed
+    "TblSetItemPtr",                         // 0x1ee
+    "TblFindRowID",                          // 0x1ef
+    "TblGetLastUsableRow",                   // 0x1f0
+    "TblGetColumnSpacing",                   // 0x1f1
+    "TblFindRowData",                        // 0x1f2
+    "TblGetRowData",                         // 0x1f3
+    "TblSetRowData",                         // 0x1f4
+    "TblSetColumnSpacing",                   // 0x1f5
+    "WinCreateWindow",                       // 0x1f6
+    "WinCreateOffscreenWindow",              // 0x1f7
+    "WinDeleteWindow",                       // 0x1f8
+    "WinInitializeWindow",                   // 0x1f9
+    "WinAddWindow",                          // 0x1fa
+    "WinRemoveWindow",                       // 0x1fb
+    "WinSetActiveWindow",                    // 0x1fc
+    "WinSetDrawWindow",                      // 0x1fd
+    "WinGetDrawWindow",                      // 0x1fe
+    "WinGetActiveWindow",                    // 0x1ff
+    "WinGetDisplayWindow",                   // 0x200
+    "WinGetFirstWindow",                     // 0x201
+    "WinEnableWindow",                       // 0x202
+    "WinDisableWindow",                      // 0x203
+    "WinGetWindowFrameRect",                 // 0x204
+    "WinDrawWindowFrame",                    // 0x205
+    "WinEraseWindow",                        // 0x206
+    "WinSaveBits",                           // 0x207
+    "WinRestoreBits",                        // 0x208
+    "WinCopyRectangle",                      // 0x209
+    "WinScrollRectangle",                    // 0x20a
+    "WinGetDisplayExtent",                   // 0x20b
+    "WinGetWindowExtent",                    // 0x20c
+    "WinDisplayToWindowPt",                  // 0x20d
+    "WinWindowToDisplayPt",                  // 0x20e
+    "WinGetClip",                            // 0x20f
+    "WinSetClip",                            // 0x210
+    "WinResetClip",                          // 0x211
+    "WinClipRectangle",                      // 0x212
+    "WinDrawLine",                           // 0x213
+    "WinDrawGrayLine",                       // 0x214
+    "WinEraseLine",                          // 0x215
+    "WinInvertLine",                         // 0x216
+    "WinFillLine",                           // 0x217
+    "WinDrawRectangle",                      // 0x218
+    "WinEraseRectangle",                     // 0x219
+    "WinInvertRectangle",                    // 0x21a
+    "WinDrawRectangleFrame",                 // 0x21b
+    "WinDrawGrayRectangleFrame",             // 0x21c
+    "WinEraseRectangleFrame",                // 0x21d
+    "WinInvertRectangleFrame",               // 0x21e
+    "WinGetFramesRectangle",                 // 0x21f
+    "WinDrawChars",                          // 0x220
+    "WinEraseChars",                         // 0x221
+    "WinInvertChars",                        // 0x222
+    "WinGetPattern",                         // 0x223
+    "WinSetPattern",                         // 0x224
+    "WinSetUnderlineMode",                   // 0x225
+    "WinDrawBitmap",                         // 0x226
+    "WinModal",                              // 0x227
+    "WinGetWindowBounds",                    // 0x228
+    "WinFillRectangle",                      // 0x229
+    "WinDrawInvertedChars",                  // 0x22a
+    "PrefOpenPreferenceDBV10",               // 0x22b
+    "PrefGetPreferences",                    // 0x22c
+    "PrefSetPreferences",                    // 0x22d
+    "PrefGetAppPreferencesV10",              // 0x22e
+    "PrefSetAppPreferencesV10",              // 0x22f
+    "SndInit",                               // 0x230
+    "SndSetDefaultVolume",                   // 0x231
+    "SndGetDefaultVolume",                   // 0x232
+    "SndDoCmd",                              // 0x233
+    "SndPlaySystemSound",                    // 0x234
+    "AlmInit",                               // 0x235
+    "AlmCancelAll",                          // 0x236
+    "AlmAlarmCallback",                      // 0x237
+    "AlmSetAlarm",                           // 0x238
+    "AlmGetAlarm",                           // 0x239
+    "AlmDisplayAlarm",                       // 0x23a
+    "AlmEnableNotification",                 // 0x23b
+    "HwrGetRAMMapping",                      // 0x23c
+    "HwrMemWritable",                        // 0x23d
+    "HwrMemReadable",                        // 0x23e
+    "HwrDoze",                               // 0x23f
+    "HwrSleep",                              // 0x240
+    "HwrWake",                               // 0x241
+    "HwrSetSystemClock",                     // 0x242
+    "HwrSetCPUDutyCycle",                    // 0x243
+    "HwrLCDInit",                            // 0x244
+    "HwrLCDSleep",                           // 0x245
+    "HwrTimerInit",                          // 0x246
+    "HwrCursor",                             // 0x247
+    "HwrBatteryLevel",                       // 0x248
+    "HwrDelay",                              // 0x249
+    "HwrEnableDataWrites",                   // 0x24a
+    "HwrDisableDataWrites",                  // 0x24b
+    "HwrLCDBaseAddr",                        // 0x24c
+    "HwrLCDDrawBitmap",                      // 0x24d
+    "HwrTimerSleep",                         // 0x24e
+    "HwrTimerWake",                          // 0x24f
+    "HwrLCDWake",                            // 0x250
+    "HwrIRQ1Handler",                        // 0x251
+    "HwrIRQ2Handler",                        // 0x252
+    "HwrIRQ3Handler",                        // 0x253
+    "HwrIRQ4Handler",                        // 0x254
+    "HwrIRQ5Handler",                        // 0x255
+    "HwrIRQ6Handler",                        // 0x256
+    "HwrDockSignals",                        // 0x257
+    "HwrPluggedIn",                          // 0x258
+    "Crc16CalcBlock",                        // 0x259
+    "SelectDayV10",                          // 0x25a
+    "SelectTime",                            // 0x25b
+    "DayDrawDaySelector",                    // 0x25c
+    "DayHandleEvent",                        // 0x25d
+    "DayDrawDays",                           // 0x25e
+    "DayOfWeek",                             // 0x25f
+    "DaysInMonth",                           // 0x260
+    "DayOfMonth",                            // 0x261
+    "DateDaysToDate",                        // 0x262
+    "DateToDays",                            // 0x263
+    "DateAdjust",                            // 0x264
+    "DateSecondsToDate",                     // 0x265
+    "DateToAscii",                           // 0x266
+    "DateToDOWDMFormat",                     // 0x267
+    "TimeToAscii",                           // 0x268
+    "Find",                                  // 0x269
+    "FindStrInStr",                          // 0x26a
+    "FindSaveMatch",                         // 0x26b
+    "FindGetLineBounds",                     // 0x26c
+    "FindDrawHeader",                        // 0x26d
+    "PenOpen",                               // 0x26e
+    "PenClose",                              // 0x26f
+    "PenGetRawPen",                          // 0x270
+    "PenCalibrate",                          // 0x271
+    "PenRawToScreen",                        // 0x272
+    "PenScreenToRaw",                        // 0x273
+    "PenResetCalibration",                   // 0x274
+    "PenSleep",                              // 0x275
+    "PenWake",                               // 0x276
+    "ResLoadForm",                           // 0x277
+    "ResLoadMenu",                           // 0x278
+    "FtrInit",                               // 0x279
+    "FtrUnregister",                         // 0x27a
+    "FtrGet",                                // 0x27b
+    "FtrSet",                                // 0x27c
+    "FtrGetByIndex",                         // 0x27d
+    "GrfInit",                               // 0x27e
+    "GrfFree",                               // 0x27f
+    "GrfGetState",                           // 0x280
+    "GrfSetState",                           // 0x281
+    "GrfFlushPoints",                        // 0x282
+    "GrfAddPoint",                           // 0x283
+    "GrfInitState",                          // 0x284
+    "GrfCleanState",                         // 0x285
+    "GrfMatch",                              // 0x286
+    "GrfGetMacro",                           // 0x287
+    "GrfFilterPoints",                       // 0x288
+    "GrfGetNumPoints",                       // 0x289
+    "GrfGetPoint",                           // 0x28a
+    "GrfFindBranch",                         // 0x28b
+    "GrfMatchGlyph",                         // 0x28c
+    "GrfGetGlyphMapping",                    // 0x28d
+    "GrfGetMacroName",                       // 0x28e
+    "GrfDeleteMacro",                        // 0x28f
+    "GrfAddMacro",                           // 0x290
+    "GrfGetAndExpandMacro",                  // 0x291
+    "GrfProcessStroke",                      // 0x292
+    "GrfFieldChange",                        // 0x293
+    "GetCharSortValue",                      // 0x294
+    "GetCharAttr",                           // 0x295
+    "GetCharCaselessValue",                  // 0x296
+    "PwdExists",                             // 0x297
+    "PwdVerify",                             // 0x298
+    "PwdSet",                                // 0x299
+    "PwdRemove",                             // 0x29a
+    "GsiInitialize",                         // 0x29b
+    "GsiSetLocation",                        // 0x29c
+    "GsiEnable",                             // 0x29d
+    "GsiEnabled",                            // 0x29e
+    "GsiSetShiftState",                      // 0x29f
+    "KeyInit",                               // 0x2a0
+    "KeyHandleInterrupt",                    // 0x2a1
+    "KeyCurrentState",                       // 0x2a2
+    "KeyResetDoubleTap",                     // 0x2a3
+    "KeyRates",                              // 0x2a4
+    "KeySleep",                              // 0x2a5
+    "KeyWake",                               // 0x2a6
+    "DlkControl",                            // 0x2a7
+    "DlkStartServer",                        // 0x2a8
+    "DlkGetSyncInfo",                        // 0x2a9
+    "DlkSetLogEntry",                        // 0x2aa
+    null,                                    // 0x2ab
+    "SysLibLoad",                            // 0x2ac
+    null,                                    // 0x2ad
+    null,                                    // 0x2ae
+    "AbtShowAbout",                          // 0x2af
+    "MdmDial",                               // 0x2b0
+    "MdmHangUp",                             // 0x2b1
+    "DmSearchRecord",                        // 0x2b2
+    "SysInsertionSort",                      // 0x2b3
+    "DmInsertionSort",                       // 0x2b4
+    "LstSetTopItem",                         // 0x2b5
+    //
+    // PalmOS 2.0 and higher:
+    //
+    "SclSetScrollBar",                       // 0x2b6
+    "SclDrawScrollBar",                      // 0x2b7
+    "SclHandleEvent",                        // 0x2b8
+    "SysMailboxCreate",                      // 0x2b9
+    "SysMailboxDelete",                      // 0x2ba
+    "SysMailboxFlush",                       // 0x2bb
+    "SysMailboxSend",                        // 0x2bc
+    "SysMailboxWait",                        // 0x2bd
+    "SysTaskWait",                           // 0x2be
+    "SysTaskWake",                           // 0x2bf
+    "SysTaskWaitClr",                        // 0x2c0
+    "SysTaskSuspend",                        // 0x2c1
+    "SysTaskResume",                         // 0x2c2
+    "CategoryCreateList",                    // 0x2c3
+    "CategoryFreeList",                      // 0x2c4
+    "CategoryEdit",                          // 0x2c5
+    "CategorySelect",                        // 0x2c6
+    "DmDeleteCategory",                      // 0x2c7
+    "SysEvGroupCreate",                      // 0x2c8
+    "SysEvGroupSignal",                      // 0x2c9
+    "SysEvGroupRead",                        // 0x2ca
+    "SysEvGroupWait",                        // 0x2cb
+    "EvtEventAvail",                         // 0x2cc
+    "EvtSysEventAvail",                      // 0x2cd
+    "StrNCopy",                              // 0x2ce
+    "KeySetMask",                            // 0x2cf
+    "SelectDay",                             // 0x2d0
+    "PrefGetPreference",                     // 0x2d1
+    "PrefSetPreference",                     // 0x2d2
+    "PrefGetAppPreferences",                 // 0x2d3
+    "PrefSetAppPreferences",                 // 0x2d4
+    "FrmPointInTitle",                       // 0x2d5
+    "StrNCat",                               // 0x2d6
+    "MemCmp",                                // 0x2d7
+    "TblSetColumnEditIndicator",             // 0x2d8
+    "FntWordWrap",                           // 0x2d9
+    "FldGetScrollValues",                    // 0x2da
+    "SysCreateDataBaseList",                 // 0x2db
+    "SysCreatePanelList",                    // 0x2dc
+    "DlkDispatchRequest",                    // 0x2dd
+    "StrPrintF",                             // 0x2de
+    "StrVPrintF",                            // 0x2df
+    "PrefOpenPreferenceDB",                  // 0x2e0
+    "SysGraffitiReferenceDialog",            // 0x2e1
+    "SysKeyboardDialog",                     // 0x2e2
+    "FntWordWrapReverseNLines",              // 0x2e3
+    "FntGetScrollValues",                    // 0x2e4
+    "TblSetRowStaticHeight",                 // 0x2e5
+    "TblHasScrollBar",                       // 0x2e6
+    "SclGetScrollBar",                       // 0x2e7
+    "FldGetNumberOfBlankLines",              // 0x2e8
+    "SysTicksPerSecond",                     // 0x2e9
+    "HwrBacklight",                          // 0x2ea
+    "DmDatabaseProtect",                     // 0x2eb
+    "TblSetBounds",                          // 0x2ec
+    "StrNCompare",                           // 0x2ed
+    "StrNCaselessCompare",                   // 0x2ee
+    "PhoneNumberLookup",                     // 0x2ef
+    "FrmSetMenu",                            // 0x2f0
+    "EncDigestMD5",                          // 0x2f1
+    "DmFindSortPosition",                    // 0x2f2
+    "SysBinarySearch",                       // 0x2f3
+    "SysErrString",                          // 0x2f4
+    "SysStringByIndex",                      // 0x2f5
+    "EvtAddUniqueEventToQueue",              // 0x2f6
+    "StrLocalizeNumber",                     // 0x2f7
+    "StrDelocalizeNumber",                   // 0x2f8
+    "LocGetNumberSeparators",                // 0x2f9
+    "MenuSetActiveMenuRscID",                // 0x2fa
+    "LstScrollList",                         // 0x2fb
+    "CategoryInitialize",                    // 0x2fc
+    "EncDigestMD4",                          // 0x2fd
+    "EncDES",                                // 0x2fe
+    "LstGetVisibleItems",                    // 0x2ff
+    "WinSetWindowBounds",                    // 0x300
+    "CategorySetName",                       // 0x301
+    "FldSetInsertionPoint",                  // 0x302
+    "FrmSetObjectBounds",                    // 0x303
+    "WinSetColors",                          // 0x304
+    "FlpDispatch",                           // 0x305
+    "FlpEmDispatch",                         // 0x306
+    //
+    // PalmOS 3.0 and higher:
+    //
+    "ExgInit",                               // 0x307
+    "ExgConnect",                            // 0x308
+    "ExgPut",                                // 0x309
+    "ExgGet",                                // 0x30a
+    "ExgAccept",                             // 0x30b
+    "ExgDisconnect",                         // 0x30c
+    "ExgSend",                               // 0x30d
+    "ExgReceive",                            // 0x30e
+    "ExgRegisterData",                       // 0x30f
+    "ExgNotifyReceive",                      // 0x310
+    "ExgControl",                            // 0x311
+    "PrgStartDialogV31",                     // 0x312  /* Updated in v3.2 */
+    "PrgStopDialog",                         // 0x313
+    "PrgUpdateDialog",                       // 0x314
+    "PrgHandleEvent",                        // 0x315
+    "ImcReadFieldNoSemicolon",               // 0x316
+    "ImcReadFieldQuotablePrintable",         // 0x317
+    "ImcReadPropertyParameter",              // 0x318
+    "ImcSkipAllPropertyParameters",          // 0x319
+    "ImcReadWhiteSpace",                     // 0x31a
+    "ImcWriteQuotedPrintable",               // 0x31b
+    "ImcWriteNoSemicolon",                   // 0x31c
+    "ImcStringIsAscii",                      // 0x31d
+    "TblGetItemFont",                        // 0x31e
+    "TblSetItemFont",                        // 0x31f
+    "FontSelect",                            // 0x320
+    "FntDefineFont",                         // 0x321
+    "CategoryEdit",                          // 0x322
+    "SysGetOSVersionString",                 // 0x323
+    "SysBatteryInfo",                        // 0x324
+    "SysUIBusy",                             // 0x325
+    "WinValidateHandle",                     // 0x326
+    "FrmValidatePtr",                        // 0x327
+    "CtlValidatePointer",                    // 0x328
+    "WinMoveWindowAddr",                     // 0x329
+    "FrmAddSpaceForObject",                  // 0x32a
+    "FrmNewForm",                            // 0x32b
+    "CtlNewControl",                         // 0x32c
+    "FldNewField",                           // 0x32d
+    "LstNewList",                            // 0x32e
+    "FrmNewLabel",                           // 0x32f
+    "FrmNewBitmap",                          // 0x330
+    "FrmNewGadget",                          // 0x331
+    "FileOpen",                              // 0x332
+    "FileClose",                             // 0x333
+    "FileDelete",                            // 0x334
+    "FileReadLow",                           // 0x335
+    "FileWrite",                             // 0x336
+    "FileSeek",                              // 0x337
+    "FileTell",                              // 0x338
+    "FileTruncate",                          // 0x339
+    "FileControl",                           // 0x33a
+    "FrmActiveState",                        // 0x33b
+    "SysGetAppInfo",                         // 0x33c
+    "SysGetStackInfo",                       // 0x33d
+    "WinScreenMode",                         // 0x33e  /* was sysTrapScrDisplayMode */
+    "HwrLCDGetDepthV33",                     // 0x33f  /* This trap obsoleted for OS 3.5 and later */
+    "HwrGetROMToken",                        // 0x340
+    "DbgControl",                            // 0x341
+    "ExgDBRead",                             // 0x342
+    "ExgDBWrite",                            // 0x343
+    "HostControl",                           // 0x344  /* Renamed from sysTrapSysGremlins, functionality generalized */
+    "FrmRemoveObject",                       // 0x345
+    "SysReserved1",                          // 0x346  /* "Reserved" trap in Palm OS 3.0 and later trap table */
+    "SysReserved2",                          // 0x347  /* "Reserved" trap in Palm OS 3.0 and later trap table */
+    "SysReserved3",                          // 0x348  /* "Reserved" trap in Palm OS 3.0 and later trap table */
+    "OEMDispatch",                           // 0x349  /* OEM trap in Palm OS 3.0 and later trap table (formerly sysTrapSysReserved4) */
+    //
+    // PalmOS 3.1 and higher:
+    //
+    "HwrLCDContrastV33",                     // 0x34a  /* This trap obsoleted for OS 3.5 and later */
+    "SysLCDContrast",                        // 0x34b
+    "UIContrastAdjust",                      // 0x34c  /* Renamed from sysTrapContrastAdjust */
+    "HwrDockStatus",                         // 0x34d
+    "FntWidthToOffset",                      // 0x34e
+    "SelectOneTime",                         // 0x34f
+    "WinDrawChar",                           // 0x350
+    "WinDrawTruncChars",                     // 0x351
+    "SysNotifyInit",                         // 0x352  /* Notification Manager traps */
+    "SysNotifyRegister",                     // 0x353
+    "SysNotifyUnregister",                   // 0x354
+    "SysNotifyBroadcast",                    // 0x355
+    "SysNotifyBroadcastDeferred",            // 0x356
+    "SysNotifyDatabaseAdded",                // 0x357
+    "SysNotifyDatabaseRemoved",              // 0x358
+    "SysWantEvent",                          // 0x359
+    "FtrPtrNew",                             // 0x35a
+    "FtrPtrFree",                            // 0x35b
+    "FtrPtrResize",                          // 0x35c
+    "SysReserved5",                          // 0x35d  /* "Reserved" trap in Palm OS 3.1 and later trap table */
+    //
+    // PalmOS 3.2 and 3.3 and higher:
+    //
+    "HwrNVPrefSet",                          // 0x35e  /* mapped to FlashParmsWrite */
+    "HwrNVPrefGet",                          // 0x35f  /* mapped to FlashParmsRead */
+    "FlashInit",                             // 0x360
+    "FlashCompress",                         // 0x361
+    "FlashErase",                            // 0x362
+    "FlashProgram",                          // 0x363
+    "AlmTimeChange",                         // 0x364
+    "ErrAlertCustom",                        // 0x365
+    "PrgStartDialog",                        // 0x366  /* New version of sysTrapPrgStartDialogV31 */
+    "SerialDispatch",                        // 0x367
+    "HwrBattery",                            // 0x368
+    "DmGetDatabaseLockState",                // 0x369
+    "CncGetProfileList",                     // 0x36a
+    "CncGetProfileInfo",                     // 0x36b
+    "CncAddProfile",                         // 0x36c
+    "CncDeleteProfile",                      // 0x36d
+    "SndPlaySmfResource",                    // 0x36e
+    "MemPtrDataStorage",                     // 0x36f  /* Never actually installed until now. */
+    "ClipboardAppendItem",                   // 0x370
+    "WiCmdV32",                              // 0x371  /* Code moved to INetLib; trap obsolete */
+    //
+    // PalmOS 3.5 and higher:
+    //
+    "HwrDisplayAttributes",                  // 0x372
+    "HwrDisplayDoze",                        // 0x373
+    "HwrDisplayPalette",                     // 0x374
+    "BltFindIndexes",                        // 0x375
+    "BmpGetBits",                            // 0x376  /* was BltGetBitsAddr */
+    "BltCopyRectangle",                      // 0x377
+    "BltDrawChars",                          // 0x378
+    "BltLineRoutine",                        // 0x379
+    "BltRectangleRoutine",                   // 0x37a
+    "ScrCompress",                           // 0x37b
+    "ScrDecompress",                         // 0x37c
+    "SysLCDBrightness",                      // 0x37d
+    "WinPaintChar",                          // 0x37e
+    "WinPaintChars",                         // 0x37f
+    "WinPaintBitmap",                        // 0x380
+    "WinGetPixel",                           // 0x381
+    "WinPaintPixel",                         // 0x382
+    "WinDrawPixel",                          // 0x383
+    "WinErasePixel",                         // 0x384
+    "WinInvertPixel",                        // 0x385
+    "WinPaintPixels",                        // 0x386
+    "WinPaintLines",                         // 0x387
+    "WinPaintLine",                          // 0x388
+    "WinPaintRectangle",                     // 0x389
+    "WinPaintRectangleFrame",                // 0x38a
+    "WinPaintPolygon",                       // 0x38b
+    "WinDrawPolygon",                        // 0x38c
+    "WinErasePolygon",                       // 0x38d
+    "WinInvertPolygon",                      // 0x38e
+    "WinFillPolygon",                        // 0x38f
+    "WinPaintArc",                           // 0x390
+    "WinDrawArc",                            // 0x391
+    "WinEraseArc",                           // 0x392
+    "WinInvertArc",                          // 0x393
+    "WinFillArc",                            // 0x394
+    "WinPushDrawState",                      // 0x395
+    "WinPopDrawState",                       // 0x396
+    "WinSetDrawMode",                        // 0x397
+    "WinSetForeColor",                       // 0x398
+    "WinSetBackColor",                       // 0x399
+    "WinSetTextColor",                       // 0x39a
+    "WinGetPatternType",                     // 0x39b
+    "WinSetPatternType",                     // 0x39c
+    "WinPalette",                            // 0x39d
+    "WinRGBToIndex",                         // 0x39e
+    "WinIndexToRGB",                         // 0x39f
+    "WinScreenLock",                         // 0x3a0
+    "WinScreenUnlock",                       // 0x3a1
+    "WinGetBitmap",                          // 0x3a2
+    "UIColorInit",                           // 0x3a3
+    "UIColorGetTableEntryIndex",             // 0x3a4
+    "UIColorGetTableEntryRGB",               // 0x3a5
+    "UIColorSetTableEntry",                  // 0x3a6
+    "UIColorPushTable",                      // 0x3a7
+    "UIColorPopTable",                       // 0x3a8
+    "CtlNewGraphicControl",                  // 0x3a9
+    "TblGetItemPtr",                         // 0x3aa
+    "UIBrightnessAdjust",                    // 0x3ab
+    "UIPickColor",                           // 0x3ac
+    "EvtSetAutoOffTimer",                    // 0x3ad
+    "TsmDispatch",                           // 0x3ae
+    "OmDispatch",                            // 0x3af
+    "DmOpenDBNoOverlay",                     // 0x3b0
+    "DmOpenDBWithLocale",                    // 0x3b1
+    "ResLoadConstant",                       // 0x3b2
+    "HwrPreDebugInit",                       // 0x3b3
+    "HwrResetNMI",                           // 0x3b4
+    "HwrResetPWM",                           // 0x3b5
+    "KeyBootKeys",                           // 0x3b6
+    "DbgSerDrvOpen",                         // 0x3b7
+    "DbgSerDrvClose",                        // 0x3b8
+    "DbgSerDrvControl",                      // 0x3b9
+    "DbgSerDrvStatus",                       // 0x3ba
+    "DbgSerDrvWriteChar",                    // 0x3bb
+    "DbgSerDrvReadChar",                     // 0x3bc
+    "HwrPostDebugInit",                      // 0x3bd
+    "HwrIdentifyFeatures",                   // 0x3be
+    "HwrModelSpecificInit",                  // 0x3bf
+    "HwrModelInitStage2",                    // 0x3c0
+    "HwrInterruptsInit",                     // 0x3c1
+    "HwrSoundOn",                            // 0x3c2
+    "HwrSoundOff",                           // 0x3c3
+    "SysKernelClockTick",                    // 0x3c4
+    "MenuEraseMenu",                         // 0x3c5
+    "SelectTime",                            // 0x3c6
+    "MenuCmdBarAddButton",                   // 0x3c7
+    "MenuCmdBarGetButtonData",               // 0x3c8
+    "MenuCmdBarDisplay",                     // 0x3c9
+    "HwrGetSilkscreenID",                    // 0x3ca
+    "EvtGetSilkscreenAreaList",              // 0x3cb
+    "SysFatalAlertInit",                     // 0x3cc
+    "DateTemplateToAscii",                   // 0x3cd
+    "SecVerifyPW",                           // 0x3ce
+    "SecSelectViewStatus",                   // 0x3cf
+    "TblSetColumnMasked",                    // 0x3d0
+    "TblSetRowMasked",                       // 0x3d1
+    "TblRowMasked",                          // 0x3d2
+    "FrmCustomResponseAlert",                // 0x3d3
+    "FrmNewGsi",                             // 0x3d4
+    "MenuShowItem",                          // 0x3d5
+    "MenuHideItem",                          // 0x3d6
+    "MenuAddItem",                           // 0x3d7
+    "FrmSetGadgetHandler",                   // 0x3d8
+    "CtlSetGraphics",                        // 0x3d9
+    "CtlGetSliderValues",                    // 0x3da
+    "CtlSetSliderValues",                    // 0x3db
+    "CtlNewSliderControl",                   // 0x3dc
+    "BmpCreate",                             // 0x3dd
+    "BmpDelete",                             // 0x3de
+    "BmpCompress",                           // 0x3df
+    "BmpGetColortable",                      // 0x3e0
+    "BmpSize",                               // 0x3e1
+    "BmpBitsSize",                           // 0x3e2
+    "BmpColortableSize",                     // 0x3e3
+    "WinCreateBitmapWindow",                 // 0x3e4
+    "EvtSetNullEventTick",                   // 0x3e5
+    "ExgDoDialog",                           // 0x3e6
+    "SysUICleanup",                          // 0x3e7
+];
+
+/**
  * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/ioregs.js (C) 2012-2026 Jeff Parsons
  */
 
-/** @typedef {{ addr: number, size: number }} */
+/** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), penRegion: Array.<number>, penHeight: number, buttonRegions: Object }} */
 let PilotIOConfig;
 
 /**
  * @class PilotIO
  * @unrestricted
  * @property {PilotIOConfig} config
+ *
+ * This is a port of HWDragonBall.java and HWLCDDragonBall.java, which emulate the MC68328 ("DragonBall")
+ * hardware registers, including the interrupt controller, timers, I/O ports, SPI master (which the Pilot
+ * uses to read the digitizer), RTC, and the LCD controller.
+ *
+ * In the original Java implementation, all hardware register values were maintained in a bank of memory
+ * allocated along with the hardware address range, with special handling for frequently accessed registers
+ * (eg, the timers).  We do the same thing here, using our own big-endian shadow of the register space
+ * (see getByteEx() and friends, which correspond to the CPUMem GetByteEx() family of functions).
  */
 class PilotIO extends Memory {
     /**
@@ -19515,11 +21212,333 @@ class PilotIO extends Memory {
      */
     constructor(idMachine, idDevice, config)
     {
+        config['type'] = Memory.TYPE.READWRITE;
+        config['addr'] = PilotIO.DBREGS_BASE & CPU68K.ADDR_MASK;
+        config['size'] = PilotIO.DBREGS_SIZE;
         super(idMachine, idDevice, config);
-        this.input = /** @type {Input} */ (this.findDeviceByClass("Input"));
-        this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
-        this.busMemory.addBlocks(PilotIO.DBREGS_BASE, PilotIO.DBREGS_SIZE, Memory.TYPE.READWRITE, this);
+
+        this.cpu = /** @type {CPU68K} */ (this.findDeviceByClass("CPU"));
+        this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+        this.video = null;          // the PilotVideo device will connect itself via setVideo()
+
+        /**
+         * Allocate our own big-endian register shadow, and then replace the default Memory interfaces with
+         * our own, so that all byte, word, and long accesses are routed to the appropriate register handlers.
+         */
+        this.abRegs = new Uint8Array(PilotIO.DBREGS_SIZE);
+        this.dvRegs = new DataView(this.abRegs.buffer);
+        this.readData = this.getByte;
+        this.readPair = this.getWord;
+        this.readQuad = this.getLong;
+        this.writeData = this.setByte;
+        this.writePair = this.setWord;
+        this.writeQuad = this.setLong;
+        this.bus.addBlocks(this.config['addr'], this.size, Memory.TYPE.READWRITE, this);
+
+        /**
+         * Create "guard blocks" (dummy blocks that read as zero and ignore writes) immediately after RAM,
+         * and at the ROM's address + 2Mb (if the ROM is smaller than that), just like CPUMem.InitMem() did, as a
+         * simple way of making code that scans for memory (or for additional ROMs) see the "right" thing.
+         */
+        let ram = /** @type {Memory} */ (this.findDeviceByClass("RAM", false));
+        if (ram) this.addGuardBlock(ram.config['addr'] + ram.config['size']);
+        let rom = /** @type {Memory} */ (this.findDeviceByClass("ROM", false));
+        if (rom && rom.config['addr'] == (0x10c00000 & CPU68K.ADDR_MASK) && rom.config['size'] <= 0x00200000) {
+            this.addGuardBlock(rom.config['addr'] + 0x00200000);
+        }
+
+        /**
+         * These are the hardware registers that we maintain internally, for the sake of performance and
+         * convenience, as well as other hardware state that has no corresponding register.
+         */
+        this.awTMR1 = new Array(PilotIO.TMR_REGS);
+        this.awTMR2 = new Array(PilotIO.TMR_REGS);
+        this.xPenCurrent = this.yPenCurrent = 0;    // current pen position
+        this.fPenDown = this.fPenUpPending = false; // keeps track of whether the pen is currently down
+        this.fPenRead = false;                      // keeps track of whether the last pen position change has been read yet
+        this.bPDDataEdge = 0;                       // keeps track of button interrupt transitions
+        this.msRTCDelta = 0;                        // the delta between the device's time and the "real world" time
+        this.nCyclesTimers = 0;                     // CPU cycle count when the timers were last updated
+        this.nCyclesTMR1 = this.nCyclesTMR2 = 0;    // cycles not yet converted into timer ticks
+
+        /**
+         * The original Pilot uses the MC68328 ("DragonBall"), whereas later devices (eg, the Palm IIIc) use the
+         * MC68EZ328 ("DragonBall EZ"), which has a mostly compatible (but simplified) set of registers; the most
+         * important differences are a single timer (at the same address as TMR1, but using the TMR2 interrupt bit),
+         * different interrupt levels, and different chip select registers.
+         */
+        this.fEZ = (this.config['chip'] == PilotIO.CHIP.EZ);
+        this.abIMRLvl = this.fEZ? PilotIO.abIMRLvlEZ : PilotIO.abIMRLvl;
+        this.lTMR1Bit = this.fEZ? PilotIO.IMR_TMR : PilotIO.IMR_TMR1;
+
+        this.cpu.setHWRegs(this);
+        this.timerTMR = this.time.addTimer(this.idDevice + ".timer", this.onTimer.bind(this));
+
+        /**
+         * Hook up the pen and the buttons.  The input surface (eg, an image of the Pilot) reports positions
+         * via our onPen() handler, and keyboard/surface button events arrive via onButton().
+         */
+        let region = this.config['penRegion'] || [0, 0, PilotIO.DEF_SCREEN_WIDTH, PilotIO.DEF_SCREEN_HEIGHT];
+        this.xPenRegion = region[0];
+        this.yPenRegion = region[1];
+        this.cxPenRegion = region[2];
+        this.cyPenRegion = region[3];
+        this.cyDigitizer = this.config['penHeight'] || PilotIO.DEF_SCREEN_HEIGHT;
+        this.buttonRegions = this.config['buttonRegions'] || {};
+        this.idButtonActive = null;
+        if (this.input) {
+            this.input.addInput(this.onPen.bind(this));
+            for (let id in PilotIO.BUTTONS) {
+                this.input.addListener(Input.TYPE.IDMAP, id, this.onButton.bind(this));
+            }
+        }
+
+        /**
+         * Support for loading PalmOS applications (see loadApp()), which needs a range of otherwise unused
+         * addresses for temporary memory blocks; like CPUMem.InitTempBanks(), we use the range starting one block
+         * past the end of RAM (since a guard block occupies the block immediately after RAM).
+         */
+        this.addrTemp = (ram? ram.config['addr'] + ram.config['size'] : 0) + this.bus.blockSize;
+        this.addrTempLimit = rom? rom.config['addr'] : PilotIO.TEMP_LIMIT;
+        this.aTempBlocks = [];
+        this.aTempBlocksPrev = [];
+        this.sAppLoading = null;
+        this.addHandler(PilotIO.HANDLER.COMMAND, this.onCommand.bind(this));
+
+        /**
+         * On EZ-based devices, the digitizer is read using an A/D converter (see exchangeADC()), and these ranges
+         * determine which A/D values correspond to the left/right and top/bottom edges of the digitizer.
+         */
+        this.aADCRangeX = this.config['adcRangeX'] || PilotIO.ADC_RANGE_X;
+
+        /**
+         * On EZ-based devices, the buttons are arranged in a matrix (see getKeyColumns()), so the 'keyMatrix' config
+         * property maps each button ID to its matrix bit number (eg, row 2, column 0 is bit 8).
+         */
+        this.aKeyMatrix = [];
+        let keyMatrix = this.config['keyMatrix'] || {};
+        for (let id in PilotIO.BUTTONS) {
+            this.aKeyMatrix[PilotIO.BUTTONS[id]] = keyMatrix[id] != undefined? keyMatrix[id] : PilotIO.BUTTONS[id];
+        }
+        this.aADCRangeY = this.config['adcRangeY'] || PilotIO.ADC_RANGE_Y;
+
         this.onReset();
+    }
+
+    /**
+     * onCommand(aTokens)
+     *
+     * Processes commands that we support (eg, "load [url]"), returning undefined for all other commands, so that
+     * other command handlers (eg, the Debugger's) have a chance to process them.
+     *
+     * @this {PilotIO}
+     * @param {Array.<string>} aTokens ([0] contains the entire command, [1] the first token, and so on)
+     * @returns {string|undefined}
+     */
+    onCommand(aTokens)
+    {
+        let result;
+        if (aTokens[1] == "load") {
+            result = this.loadApp(aTokens[2]);
+        }
+        return result;
+    }
+
+    /**
+     * loadApp(url)
+     *
+     * Loads a PalmOS database (eg, a PRC file) and installs it, and if it's an application, launches it, using the
+     * same sequence of API calls that the original Java implementation's web pages used (see LoadDB() in apps.htm):
+     *
+     *      LocalID=DmFindDatabase(0, p)
+     *      if (LocalID) DmDeleteDatabase(0, LocalID)
+     *      DmCreateDatabaseFromImage(p)
+     *      LocalID=DmFindDatabase(0, p)
+     *      if (LocalID) SysUIAppSwitch(0, LocalID, 0, 0)
+     *
+     * where p is the address of the database image, which conveniently begins with the database name.
+     *
+     * A relative URL (eg, "demos/Daleks.prc") is resolved relative to the machine's page, whether or not the page's
+     * URL ends with a slash (eg, "/machines/palm/pilot" is treated the same as "/machines/palm/pilot/").
+     *
+     * @this {PilotIO}
+     * @param {string} [url]
+     * @returns {string}
+     */
+    loadApp(url)
+    {
+        if (!url) return "usage: load [url]\n";
+        if (this.sAppLoading) return this.sprintf("still loading %s\n", this.sAppLoading);
+        let base = window.location.origin + window.location.pathname;
+        if (!base.endsWith('/') && base.lastIndexOf('.') < base.lastIndexOf('/')) base += '/';
+        let sURL = new URL(url, base).href;
+        this.sAppLoading = sURL;
+        fetch(sURL).then((response) => {
+            if (!response.ok) throw new Error(this.sprintf("%d %s", response.status, response.statusText));
+            return response.arrayBuffer();
+        }).then((buffer) => {
+            this.installApp(sURL, new Uint8Array(buffer));
+        }).catch((err) => {
+            this.printf("unable to load %s: %s\n", sURL, err.message);
+            this.sAppLoading = null;
+        });
+        return this.sprintf("loading %s\n", sURL);
+    }
+
+    /**
+     * installApp(url, ab)
+     *
+     * @this {PilotIO}
+     * @param {string} url
+     * @param {Uint8Array} ab (contents of a PalmOS database image)
+     */
+    installApp(url, ab)
+    {
+        let sName = "", sType = "";
+        if (ab.length >= PilotIO.DBHDR_SIZE) {
+            for (let i = 0; i < PilotIO.DBHDR_NAME_LEN && ab[i]; i++) sName += String.fromCharCode(ab[i]);
+            for (let i = 0; i < 4; i++) sType += String.fromCharCode(ab[PilotIO.DBHDR_TYPE + i]);
+        }
+        if (!sName) {
+            this.printf("%s is not a PalmOS database\n", url);
+            this.sAppLoading = null;
+            return;
+        }
+        let addr = this.allocTempBlocks(ab);
+        if (!addr) {
+            this.printf("not enough memory for %s\n", url);
+            this.sAppLoading = null;
+            return;
+        }
+        let cpu = this.cpu;
+        let trap = (sName) => PalmOS.getAPITrap(sName);
+        let done = (sError) => {
+            this.freeTempBlocks();
+            this.sAppLoading = null;
+            if (sError) {
+                this.printf("unable to install %s: %s\n", sName, sError);
+                return;
+            }
+            this.printf("installed %s\n", sName);
+            if (this.input) this.input.setFocus();
+        };
+        let findDatabase = (next) => {
+            cpu.injectTrap(trap("DmFindDatabase"), [[0, 2], [addr, 4]], (result) => {
+                if (!result) done("call aborted"); else next(result.d0);
+            });
+        };
+        this.printf("installing %s (%d bytes)\n", sName, ab.length);
+        findDatabase((dbID) => {
+            if (dbID) cpu.injectTrap(trap("DmDeleteDatabase"), [[0, 2], [dbID, 4]], (result) => {
+                if (!result) done("call aborted");
+            });
+            cpu.injectTrap(trap("DmCreateDatabaseFromImage"), [[addr, 4]], (result) => {
+                if (!result) {
+                    done("call aborted");
+                    return;
+                }
+                let err = result.d0 & 0xffff;
+                findDatabase((dbID) => {
+                    if (!dbID) {
+                        done(this.sprintf("error %#06x", err));
+                        return;
+                    }
+                    if (sType != "appl") {
+                        done("");
+                        return;
+                    }
+                    cpu.injectTrap(trap("SysUIAppSwitch"), [[0, 2], [dbID, 4], [0, 2], [0, 4]], (result) => {
+                        done(result? "" : "call aborted");
+                    });
+                });
+            });
+        });
+    }
+
+    /**
+     * allocTempBlocks(ab)
+     *
+     * Maps enough temporary memory blocks at addrTemp to hold the given data, preceded by a fake PalmOS chunk header
+     * (like CPUMem.InitTempBanks()), since the data is passed to PalmOS APIs as if it were allocated from a heap.
+     *
+     * Temporary blocks have no saveState() or loadState() handlers, so they are never saved as part of the Bus state.
+     *
+     * @this {PilotIO}
+     * @param {Uint8Array} ab
+     * @returns {number} (address of data, or 0 if error)
+     */
+    allocTempBlocks(ab)
+    {
+        let cpu = this.cpu, bus = this.bus;
+        let cbHeader = (cpu.getWord(PilotIO.ROM_BASE + PilotIO.ROMHDR_HDRVER) == 1? 6 : 8);
+        let cbActual = (cbHeader + ab.length + 1) & ~0x1;
+        let nBlocks = Math.ceil(cbActual / bus.blockSize);
+        if (this.aTempBlocksPrev.length || this.addrTemp + nBlocks * bus.blockSize > this.addrTempLimit) {
+            return 0;
+        }
+        for (let i = 0; i < nBlocks; i++) {
+            let block = this.aTempBlocks[i];
+            if (!block) {
+                block = new Memory(this.idMachine, this.idDevice + "[TEMP:" + i + "]", {"type": Memory.TYPE.READWRITE, "size": bus.blockSize, "bus": bus.idDevice});
+                block.saveState = block.loadState = /** @type {?} */ (null);
+                this.aTempBlocks[i] = block;
+            }
+            this.aTempBlocksPrev.push(bus.setBlock(this.addrTemp + i * bus.blockSize, block));
+        }
+        let addr = this.addrTemp;
+        if (cbHeader == 6) {
+            cpu.setWord(addr, cbActual);
+            cpu.setByte(addr + 2, 0xf2);
+            cpu.setByte(addr + 3, cbActual - cbHeader - ab.length);
+        } else {
+            cpu.setByte(addr, cbActual - cbHeader - ab.length);
+            cpu.setByte(addr + 1, cbActual >> 16);
+            cpu.setWord(addr + 2, cbActual);
+            cpu.setByte(addr + 4, 0xf2);
+        }
+        addr += cbHeader;
+        bus.initBlocks(addr, ab.length, ab);
+        return addr;
+    }
+
+    /**
+     * freeTempBlocks()
+     *
+     * @this {PilotIO}
+     */
+    freeTempBlocks()
+    {
+        for (let i = 0; i < this.aTempBlocksPrev.length; i++) {
+            this.bus.setBlock(this.addrTemp + i * this.bus.blockSize, this.aTempBlocksPrev[i]);
+        }
+        this.aTempBlocksPrev = [];
+    }
+
+    /**
+     * addGuardBlock(addr)
+     *
+     * @this {PilotIO}
+     * @param {number} addr
+     */
+    addGuardBlock(addr)
+    {
+        let guard = new Memory(this.idMachine, this.idDevice + "[GUARD:" + this.toBase(addr, 16, 32, "") + "]", {"type": Memory.TYPE.NONE, "size": this.bus.blockSize, "bus": this.bus.idDevice});
+        guard.readData = guard.readPair = guard.readQuad = function readGuard() { return 0; };
+        this.bus.addBlocks(addr & CPU68K.ADDR_MASK, this.bus.blockSize, Memory.TYPE.NONE, guard);
+    }
+
+    /**
+     * setVideo(video)
+     *
+     * Called by the PilotVideo device, so that we can notify it of LCD state changes (see resetScreen()).
+     *
+     * @this {PilotIO}
+     * @param {Object} video
+     */
+    setVideo(video)
+    {
+        this.video = video;
     }
 
     /**
@@ -19536,7 +21555,21 @@ class PilotIO extends Memory {
         if (state) {
             let idDevice = state.shift();
             if (this.idDevice == idDevice) {
-                return true;
+                try {
+                    let abRegs = this.decompress(state.shift(), this.abRegs.length);
+                    for (let i = 0; i < abRegs.length; i++) this.abRegs[i] = abRegs[i];
+                    this.awTMR1 = state.shift();
+                    this.awTMR2 = state.shift();
+                    this.bPDDataEdge = state.shift();
+                    this.msRTCDelta = state.shift();
+                    this.nCyclesTimers = this.time.getCycles();
+                    this.nCyclesTMR1 = this.nCyclesTMR2 = 0;
+                    this.scheduleTimers();
+                    this.resetScreen();
+                    return true;
+                } catch(err) {
+                    this.printf("PilotIO state error: %s\n", err.message);
+                }
             }
         }
         return false;
@@ -19552,11 +21585,75 @@ class PilotIO extends Memory {
      */
     saveState(state)
     {
+        this.updateTimers();
         state.push(this.idDevice);
+        state.push(this.compress(this.abRegs));
+        state.push(this.awTMR1);
+        state.push(this.awTMR2);
+        state.push(this.bPDDataEdge);
+        state.push(this.msRTCDelta);
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event.  This is also a good time to get
+     * access to the Debugger, if any, and give it the ability to display PalmOS API names.
+     *
+     * @this {PilotIO}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (this.dbg === undefined) {
+            this.dbg = /** @type {Dbg68K} */ (this.findDeviceByClass("Debugger", false));
+            if (this.dbg && this.dbg.setTrapHandler) this.dbg.setTrapHandler(PalmOS.getAPIName);
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.  This is the equivalent of
+     * HWDragonBall.Init() and HWLCDDragonBall.Init(), which initialize all the registers that are defined to
+     * have non-zero starting values.
+     *
+     * @this {PilotIO}
+     */
+    onReset()
+    {
+        this.abRegs.fill(0);
+        let regsInit = this.fEZ? PilotIO.regsInitEZ : PilotIO.regsInit;
+        for (let offset in regsInit.ab) {
+            this.setByteEx(+offset, regsInit.ab[offset]);
+        }
+        for (let offset in regsInit.aw) {
+            this.setWordEx(+offset, regsInit.aw[offset]);
+        }
+        for (let offset in regsInit.al) {
+            this.setLongEx(+offset, regsInit.al[offset]);
+        }
+        if (!this.fEZ) {
+            for (let offset = PilotIO.DBREG_CSA0; offset <= PilotIO.DBREG_CSD3; offset += 4) {
+                this.setLongEx(offset, PilotIO.CHIP_SELECT_DEFAULT);
+            }
+        }
+        this.awTMR1.fill(0);
+        this.awTMR2.fill(0);
+        this.awTMR1[PilotIO.TCMP] = this.awTMR2[PilotIO.TCMP] = 0xFFFF;
+        this.nCyclesTimers = this.time.getCycles();
+        this.nCyclesTMR1 = this.nCyclesTMR2 = 0;
+        this.fPenDown = this.fPenUpPending = this.fPenRead = false;
+        this.bADCShift = this.nADCBits = this.bADCControl = 0;
+        this.bPDDataEdge = this.wKeyBits = 0;
+        this.msRTCDelta = 0;
+        this.resetScreen();
     }
 
     /**
      * onButton(id, down)
+     *
+     * Input notifications for the Pilot's hardware buttons (eg, via keyboard).
      *
      * @this {PilotIO}
      * @param {string} id
@@ -19564,53 +21661,1148 @@ class PilotIO extends Memory {
      */
     onButton(id, down)
     {
-    }
-
-    /**
-     * onReset()
-     *
-     * Called by the Machine device to provide notification of a reset event.
-     *
-     * @this {PilotIO}
-     */
-    onReset()
-    {
-        for (let offset in PilotIO.abRegsInit) {
-            this.printf("reset byte I/O register 0x%08x to 0x%02x\n", PilotIO.DBREGS_BASE + offset, PilotIO.abRegsInit[offset]);
+        let iBit = PilotIO.BUTTONS[id];
+        if (iBit != undefined) {
+            this.printf(MESSAGE.INPUT, "onButton(%s,%b)\n", id, down);
+            this.updateButton(iBit, down);
         }
     }
 
     /**
-     * readData(offset)
+     * onPen(col, row)
      *
-     * Implements the required Memory interface for reading a single value (ie, byte) at the given offset.
+     * Input notifications from the input surface (we configure the surface so that col and row are simply
+     * the surface's own pixel coordinates).  Coordinates within the pen region are converted to digitizer
+     * coordinates, which are the same as LCD coordinates, extended below the LCD to cover the silk-screen area;
+     * coordinates within a button region are converted to button presses.  A col and row of -1 indicate that
+     * the pen (or mouse button) was released.
+     *
+     * @this {PilotIO}
+     * @param {number} col
+     * @param {number} row
+     */
+    onPen(col, row)
+    {
+        if (col < 0 || row < 0) {
+            if (this.idButtonActive) {
+                this.onButton(this.idButtonActive, false);
+                this.idButtonActive = null;
+            }
+            if (this.fPenDown) {
+                this.updatePen(this.xPenCurrent, this.yPenCurrent, false);
+            }
+            return;
+        }
+        let x = Math.floor((col - this.xPenRegion) * PilotIO.DEF_SCREEN_WIDTH / this.cxPenRegion);
+        let y = Math.floor((row - this.yPenRegion) * PilotIO.DEF_SCREEN_HEIGHT / this.cyPenRegion);
+        if (x >= 0 && x < PilotIO.DEF_SCREEN_WIDTH && y >= 0 && y < this.cyDigitizer) {
+            if (!this.idButtonActive) this.updatePen(x, y, true);
+            return;
+        }
+        if (!this.fPenDown && !this.idButtonActive) {
+            for (let id in this.buttonRegions) {
+                let r = this.buttonRegions[id];
+                if (col >= r[0] && col < r[0] + r[2] && row >= r[1] && row < r[1] + r[3]) {
+                    this.idButtonActive = id;
+                    this.onButton(id, true);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * onTimer()
+     *
+     * Called by the Time device whenever our timer fires, which we schedule for the next timer "compare" event.
+     *
+     * @this {PilotIO}
+     */
+    onTimer()
+    {
+        this.updateTimers();
+        this.scheduleTimers();
+    }
+
+    /**
+     * getByteEx(offset)
+     *
+     * Get one byte from the register shadow (the equivalent of CPUMem.GetByteEx()).
      *
      * @this {PilotIO}
      * @param {number} offset
      * @returns {number}
      */
-    readData(offset)
+    getByteEx(offset)
     {
-        let data = 0;
-        this.printf("PilotIO.readData(0x%08x): 0x%02x\n", PilotIO.DBREGS_BASE + offset, data);
+        return this.abRegs[offset];
+    }
+
+    /**
+     * getWordEx(offset)
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    getWordEx(offset)
+    {
+        return this.dvRegs.getUint16(offset);
+    }
+
+    /**
+     * getLongEx(offset)
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    getLongEx(offset)
+    {
+        return this.dvRegs.getInt32(offset);
+    }
+
+    /**
+     * setByteEx(offset, data)
+     *
+     * Set one byte in the register shadow (the equivalent of CPUMem.SetByteEx()).
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    setByteEx(offset, data)
+    {
+        this.abRegs[offset] = data;
+    }
+
+    /**
+     * setWordEx(offset, data)
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    setWordEx(offset, data)
+    {
+        this.dvRegs.setUint16(offset, data & 0xffff);
+    }
+
+    /**
+     * setLongEx(offset, data)
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    setLongEx(offset, data)
+    {
+        this.dvRegs.setInt32(offset, data|0);
+    }
+
+    /**
+     * readDirect(offset)
+     *
+     * Overrides the Memory interface used by the Debugger, so that it can examine registers without side-effects.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    readDirect(offset)
+    {
+        return this.getByteEx(offset);
+    }
+
+    /**
+     * writeDirect(offset, data)
+     *
+     * Overrides the Memory interface used by the Debugger, so that it can modify registers without side-effects.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    writeDirect(offset, data)
+    {
+        this.setByteEx(offset, data);
+    }
+
+    /**
+     * isLCDReg(offset)
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {boolean} (true if the offset is within the LCD controller register set)
+     */
+    isLCDReg(offset)
+    {
+        return offset >= PilotIO.LCDREGS_OFFSET && offset < PilotIO.LCDREGS_OFFSET + PilotIO.LCDREGS_SIZE;
+    }
+
+    /**
+     * getByte(offset)
+     *
+     * Get one byte from the register set.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    getByte(offset)
+    {
+        let data = this.getByteEx(offset);
+        if (!this.isLCDReg(offset)) {
+            switch(offset) {
+            case PilotIO.DBREG_PCDATA:
+                if (this.fEZ) break;
+                //
+                // I don't know the details of the Port C Data register (PCDATA), but I do know that in PalmOS 3.3,
+                // in a routine called PrvLowBatteryShutdownNow, if it doesn't see bit 4 (value 0x10) set in PCDATA,
+                // then it wants to go to sleep (ie, TRAP HwrSleep).  Let's avoid that for now.  ;-) -JP
+                //
+                data |= 0x10;
+                this.setByteEx(offset, data);
+                break;
+            case PilotIO.DBREG_PFDATA:
+                if (!this.fEZ) break;
+                //
+                // When the Palm IIIc's PalmOS 3.5 ROM wakes the display, it turns on the LCD power (bit 5 of PFDATA)
+                // and then waits for bit 0 of PFDATA to go high, so if bit 0 is an input, we make it follow bit 5.
+                //
+                if (!(this.getByteEx(PilotIO.DBREG_PFDIR) & 0x01)) {
+                    data = (data & ~0x01) | ((data >> 5) & 0x01);
+                }
+                break;
+            case PilotIO.DBREG_PDDATA:
+                if (!this.fEZ) break;
+                //
+                // Similarly, in the Palm IIIc's PalmOS 3.5 ROM, PrvLowBatteryShutdownNow puts the device to sleep if
+                // it doesn't see bit 7 (value 0x80) set in PDDATA, so we report that the battery is fine.  Bits 0-3
+                // report the state of the key matrix columns (see getKeyColumns()).
+                //
+                data = (data & 0x70) | 0x80 | this.getKeyColumns(this.getByteEx(PilotIO.DBREG_PCDIR) & ~this.getByteEx(PilotIO.DBREG_PCDATA));
+                break;
+            }
+        }
+        this.printf(MESSAGE.PORTS, "getByte(%#06x): %#04x\n", offset, data);
         return data;
     }
 
     /**
-     * writeData(offset, data)
+     * getWord(offset)
      *
-     * Implements the required Memory interface for writing a single value (ie, byte) at the given offset.
+     * Get one word from the register set.
      *
-     * @this {Memory}
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    getWord(offset)
+    {
+        let data = this.getWordEx(offset);
+        if (!this.isLCDReg(offset)) {
+            switch(offset) {
+            case PilotIO.DBREG_PLLFSR:
+                data ^= PilotIO.PLLFSR_CLK32;
+                this.setWordEx(offset, data);
+                break;
+
+            case PilotIO.DBREG_TCTL1:
+            case PilotIO.DBREG_TPRER1:
+            case PilotIO.DBREG_TCMP1:
+            case PilotIO.DBREG_TCR1:
+            case PilotIO.DBREG_TCN1:
+                this.updateTimers();
+                data = this.awTMR1[(offset - PilotIO.DBREG_TCTL1) >> 1];
+                break;
+
+            case PilotIO.DBREG_TSTAT1:
+                this.updateTimers();
+                data = this.awTMR1[PilotIO.TSTAT];
+                this.awTMR1[PilotIO.TSTAT_LASTREAD] |= data;
+                break;
+
+            case PilotIO.DBREG_TCTL2:
+            case PilotIO.DBREG_TPRER2:
+            case PilotIO.DBREG_TCMP2:
+            case PilotIO.DBREG_TCR2:
+            case PilotIO.DBREG_TCN2:
+                this.updateTimers();
+                data = this.awTMR2[(offset - PilotIO.DBREG_TCTL2) >> 1];
+                break;
+
+            case PilotIO.DBREG_TSTAT2:
+                this.updateTimers();
+                data = this.awTMR2[PilotIO.TSTAT];
+                this.awTMR2[PilotIO.TSTAT_LASTREAD] |= data;
+                break;
+
+            case PilotIO.DBREG_SPIMDATA:
+                if (this.fPenUpPending) {
+                    this.fPenUpPending = false;
+                    this.updateInterrupts(PilotIO.IMR_PEN, 0, false);
+                }
+                break;
+
+            case PilotIO.DBREG_SPIMCONT:
+                if (data & PilotIO.SPIMCONT_XCH) {
+                    //
+                    // BUGBUG: The 3.5 ROM gets stuck in PrvSetBacklightController if we don't clear this bit;
+                    // we really need to understand how this controller works, and only clear SPIMCONT_XCH as appropriate -JP
+                    //
+                    data &= ~PilotIO.SPIMCONT_XCH;
+                    this.setWordEx(offset, data);
+                }
+                break;
+            }
+        }
+        this.printf(MESSAGE.PORTS, "getWord(%#06x): %#06x\n", offset, data);
+        return data;
+    }
+
+    /**
+     * getLong(offset)
+     *
+     * Get one long from the register set.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @returns {number}
+     */
+    getLong(offset)
+    {
+        let data = this.getLongEx(offset);
+        if (!this.isLCDReg(offset)) {
+            switch(offset) {
+            case PilotIO.DBREG_RHMSR: {
+                let date = new Date(Date.now() + this.msRTCDelta);
+                data = (date.getHours() << PilotIO.RHMSR_HOURS_SHIFT) | (date.getMinutes() << PilotIO.RHMSR_MINUTES_SHIFT) | (date.getSeconds() << PilotIO.RHMSR_SECONDS_SHIFT);
+                this.setLongEx(offset, data);       // shadow it
+                break;
+            }
+            }
+        }
+        this.printf(MESSAGE.PORTS, "getLong(%#06x): %#010x\n", offset, data);
+        return data;
+    }
+
+    /**
+     * setByte(offset, data)
+     *
+     * Set one byte in the register set.
+     *
+     * @this {PilotIO}
      * @param {number} offset
      * @param {number} data
      */
-     writeData(offset, data)
-     {
-        this.printf("PilotIO.writeData(0x%08x, 0x%02x)\n", PilotIO.DBREGS_BASE + offset, data);
-     }
+    setByte(offset, data)
+    {
+        let bPrev = this.getByteEx(offset);
+        this.printf(MESSAGE.PORTS, "setByte(%#06x,%#04x)\n", offset, data);
 
-  }
+        if (this.isLCDReg(offset)) {
+            this.setByteEx(offset, data);
+            if (offset - PilotIO.LCDREGS_OFFSET == PilotIO.LCDREG_CKCON) {
+                if ((bPrev & PilotIO.CKCON_LCDON) != (data & PilotIO.CKCON_LCDON)) {
+                    this.resetScreen();
+                }
+            }
+            return;
+        }
+
+        switch (offset) {
+        case PilotIO.DBREG_PDDATA:
+            //
+            // Writes to Port D Data clear the corresponding edge-triggered button interrupts (on the MC68EZ328 too,
+            // where this is the only way to clear edge-triggered INT0-3 interrupts), and on the MC68328, since that
+            // data must not propagate to PDDATA, we return now.
+            //
+            this.bPDDataEdge &= ~data;
+            this.updateButtonInterrupts();
+            if (this.fEZ) break;
+            return;
+        }
+
+        this.setByteEx(offset, data);
+
+        switch (offset) {
+        case PilotIO.DBREG_IMR:
+        case PilotIO.DBREG_IMR+1:
+        case PilotIO.DBREG_IMR+2:
+        case PilotIO.DBREG_IMR+3:
+            this.updateInterrupts(0, 0, false);
+            break;
+
+        case PilotIO.DBREG_PDIRQEN:
+            this.updateButtonInterrupts();
+            break;
+
+        case PilotIO.DBREG_PDIRQEDGE:
+            if (this.fEZ) {
+                //
+                // If any INT0-3 pins become edge-sensitive while active (eg, when KeyWake re-enables edge-sensitive
+                // key interrupts while the key that woke the device is still down), the edge detector sees an edge.
+                // PalmOS relies on that, so that KeyHandleInterrupt can "swallow" the key press that woke the device.
+                //
+                let bRows = this.getByteEx(PilotIO.DBREG_PCDIR) & ~this.getByteEx(PilotIO.DBREG_PCDATA);
+                this.bPDDataEdge |= (data & ~bPrev) & this.getKeyColumns(bRows);
+                this.updateButtonInterrupts();
+            }
+            break;
+
+        case PilotIO.DBREG_PCDIR:
+        case PilotIO.DBREG_PCDATA:
+        case PilotIO.DBREG_PDKBEN:
+            if (this.fEZ) this.updateButtonInterrupts();
+            break;
+
+        case PilotIO.DBREG_PFDATA:
+            if ((bPrev & PilotIO.PFDATA_LCDENABLE) != (data & PilotIO.PFDATA_LCDENABLE)) {
+                this.resetScreen();
+            }
+            break;
+        }
+    }
+
+    /**
+     * setWord(offset, data)
+     *
+     * Set one word in the register set.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    setWord(offset, data)
+    {
+        this.printf(MESSAGE.PORTS, "setWord(%#06x,%#06x)\n", offset, data);
+
+        if (this.isLCDReg(offset)) {
+            this.setWordEx(offset, data);
+            return;
+        }
+
+        switch(offset) {
+        case PilotIO.DBREG_IMR:
+        case PilotIO.DBREG_IMR+2:
+            this.setWordEx(offset, data);
+            this.updateInterrupts(0, 0, false);
+            return;             // return, memory already updated
+
+        case PilotIO.DBREG_ISR:
+            this.clearEdgeInterrupts(data << 16);
+            return;             // return, memory already updated
+
+        case PilotIO.DBREG_ISR+2:
+            return;             // no writable bits we have to pay attention to in ISR+2
+
+        case PilotIO.DBREG_TCTL1:
+        case PilotIO.DBREG_TPRER1:
+        case PilotIO.DBREG_TCMP1:
+            this.updateTimers();
+            this.awTMR1[(offset - PilotIO.DBREG_TCTL1) >> 1] = data & 0xffff;
+            this.scheduleTimers();
+            break;              // break and shadow the change in memory
+
+        case PilotIO.DBREG_TCR1:
+        case PilotIO.DBREG_TCN1:
+            data = this.awTMR1[(offset - PilotIO.DBREG_TCTL1) >> 1];
+            break;              // these timer registers are read-only
+
+        case PilotIO.DBREG_TSTAT1:
+            data = this.awTMR1[PilotIO.TSTAT] & (data | ~this.awTMR1[PilotIO.TSTAT_LASTREAD]);
+            this.awTMR1[PilotIO.TSTAT_LASTREAD] = 0;
+            if (!(data & PilotIO.TSTAT_COMP)) this.updateInterrupts(this.lTMR1Bit, 0, false);
+            this.awTMR1[PilotIO.TSTAT] = data & 0xffff;
+            break;              // break and shadow the change in memory
+
+        case PilotIO.DBREG_TCTL2:
+        case PilotIO.DBREG_TPRER2:
+        case PilotIO.DBREG_TCMP2:
+            this.updateTimers();
+            this.awTMR2[(offset - PilotIO.DBREG_TCTL2) >> 1] = data & 0xffff;
+            this.scheduleTimers();
+            break;              // break and shadow the change in memory
+
+        case PilotIO.DBREG_TCR2:
+        case PilotIO.DBREG_TCN2:
+            data = this.awTMR2[(offset - PilotIO.DBREG_TCTL2) >> 1];
+            break;              // these timer registers are read-only
+
+        case PilotIO.DBREG_TSTAT2:
+            data = this.awTMR2[PilotIO.TSTAT] & (data | ~this.awTMR2[PilotIO.TSTAT_LASTREAD]);
+            this.awTMR2[PilotIO.TSTAT_LASTREAD] = 0;
+            if (!(data & PilotIO.TSTAT_COMP)) this.updateInterrupts(PilotIO.IMR_TMR2, 0, false);
+            this.awTMR2[PilotIO.TSTAT] = data & 0xffff;
+            break;              // break and shadow the change in memory
+
+        case PilotIO.DBREG_SPIMCONT:
+            if (this.fEZ) {
+                if (data & PilotIO.SPIMCONT_XCH) {
+                    data = (data & ~PilotIO.SPIMCONT_XCH) | PilotIO.SPIMCONT_SPIMIRQ;
+                    this.setWordEx(PilotIO.DBREG_SPIMDATA, this.exchangeADC(this.getWordEx(PilotIO.DBREG_SPIMDATA), (data & PilotIO.SPIMCONT_BITCOUNT) + 1));
+                }
+                break;
+            }
+            if ((data & PilotIO.SPIMCONT_XCH) && (data & PilotIO.SPIMCONT_IRQEN)) {
+                //
+                // The caller is wanting to exchange data, so set SPIMIRQ to indicate exchange complete
+                // (data will be deposited in SPIMDATA); Port F Data apparently specifies the type of data requested.
+                //
+                data |= PilotIO.SPIMCONT_SPIMIRQ;
+                data &= ~PilotIO.SPIMCONT_XCH;
+                let spimdata = -1;
+                switch (this.getByteEx(PilotIO.DBREG_PFDATA) & 0x0F) {
+                case 0x6:
+                    spimdata = (0xff - this.xPenCurrent) * 2;
+                    this.fPenRead = true;
+                    break;
+                case 0x9:
+                    spimdata = (0xff - this.yPenCurrent) * 2;
+                    this.fPenRead = true;
+                    break;
+                }
+                if (spimdata >= 0) this.setWordEx(PilotIO.DBREG_SPIMDATA, spimdata);
+            }
+            break;
+        }
+
+        this.setWordEx(offset, data);
+    }
+
+    /**
+     * exchangeADC(dataOut, nBits)
+     *
+     * On EZ-based devices (eg, the Palm IIIc), the digitizer and battery voltage are read using a Burr-Brown ADS7843
+     * A/D converter attached to the SPI master.  PalmOS (see the HAL routine at 0x10c76c70 in the Palm IIIc ROM)
+     * sends an 8-bit control byte (as a 7-bit exchange followed by a 1-bit exchange), and then performs a 16-bit
+     * exchange to read the 12-bit result, which it shifts right 3 bits.
+     *
+     * The control byte contains a start bit (bit 7), a channel select (bits 6-4), a mode bit (bit 3), a
+     * single-ended/differential bit (bit 2), and power-down bits (bits 1-0).
+     *
+     * @this {PilotIO}
+     * @param {number} dataOut (data being shifted out to the ADC)
+     * @param {number} nBits (number of bits being exchanged)
+     * @returns {number} (data shifted in from the ADC)
+     */
+    exchangeADC(dataOut, nBits)
+    {
+        let dataIn = 0;
+        if (nBits >= 16) {
+            let value = 0;
+            switch((this.bADCControl >> 4) & 0x7) {
+            case PilotIO.ADC_CHANNEL_X:
+                value = this.getADCValue(this.xPenCurrent, PilotIO.DEF_SCREEN_WIDTH, this.aADCRangeX);
+                this.fPenRead = true;
+                break;
+            case PilotIO.ADC_CHANNEL_Y:
+                value = this.getADCValue(this.yPenCurrent, this.cyDigitizer, this.aADCRangeY);
+                this.fPenRead = true;
+                break;
+            case PilotIO.ADC_CHANNEL_BATTERY:
+                value = PilotIO.ADC_BATTERY_GOOD;
+                break;
+            }
+            dataIn = (value << 3) & 0xffff;
+            this.nADCBits = 0;
+        } else {
+            this.bADCShift = ((this.bADCShift << nBits) | (dataOut & ((1 << nBits) - 1))) & 0xff;
+            this.nADCBits += nBits;
+            if (this.nADCBits >= 8) {
+                this.bADCControl = this.bADCShift;
+                this.nADCBits = 0;
+            }
+        }
+        this.printf(MESSAGE.PORTS, "exchangeADC(%#06x,%d): control=%#04x data=%#06x\n", dataOut, nBits, this.bADCControl, dataIn);
+        return dataIn;
+    }
+
+    /**
+     * getADCValue(pos, size, range)
+     *
+     * Converts a pen coordinate into a 12-bit A/D converter value, by linearly mapping the coordinate range
+     * (0 to size) onto the given range of A/D values (which may be decreasing, to indicate an inverted axis).
+     *
+     * @this {PilotIO}
+     * @param {number} pos
+     * @param {number} size
+     * @param {Array.<number>} range (eg, [0, 0xfff])
+     * @returns {number}
+     */
+    getADCValue(pos, size, range)
+    {
+        return Math.round(range[0] + (range[1] - range[0]) * pos / size) & 0xfff;
+    }
+
+    /**
+     * setLong(offset, data)
+     *
+     * Set one long in the register set.
+     *
+     * @this {PilotIO}
+     * @param {number} offset
+     * @param {number} data
+     */
+    setLong(offset, data)
+    {
+        this.printf(MESSAGE.PORTS, "setLong(%#06x,%#010x)\n", offset, data);
+
+        if (this.isLCDReg(offset)) {
+            this.setLongEx(offset, data);
+            return;
+        }
+
+        switch(offset) {
+        case PilotIO.DBREG_IMR:
+            this.setLongEx(offset, data);
+            this.updateInterrupts(0, 0, false);
+            return;             // return, memory already updated
+
+        case PilotIO.DBREG_ISR:
+            this.clearEdgeInterrupts(data);
+            return;             // return, memory already updated
+
+        case PilotIO.DBREG_RHMSR: {
+            let date = new Date(Date.now() + this.msRTCDelta);
+            date.setHours((data & PilotIO.RHMSR_HOURS) >> PilotIO.RHMSR_HOURS_SHIFT, (data & PilotIO.RHMSR_MINUTES) >> PilotIO.RHMSR_MINUTES_SHIFT, (data & PilotIO.RHMSR_SECONDS) >> PilotIO.RHMSR_SECONDS_SHIFT);
+            this.msRTCDelta = date.getTime() - Date.now();
+            break;
+        }
+        }
+
+        this.setLongEx(offset, data);
+    }
+
+    /**
+     * clearEdgeInterrupts(lData)
+     *
+     * Writing ones to ISR bits corresponding to edge-triggered interrupts clears them.
+     *
+     * @this {PilotIO}
+     * @param {number} lData (the bits written to ISR)
+     */
+    clearEdgeInterrupts(lData)
+    {
+        let wICR = this.getWordEx(PilotIO.DBREG_ICR);
+        let lIPR = this.getLongEx(PilotIO.DBREG_IPR);
+        let lIPRNew = lIPR;
+        if ((wICR & PilotIO.ICR_ET1) && (lData & PilotIO.IMR_IRQ1)) lIPRNew &= ~PilotIO.IMR_IRQ1;
+        if ((wICR & PilotIO.ICR_ET2) && (lData & PilotIO.IMR_IRQ2)) lIPRNew &= ~PilotIO.IMR_IRQ2;
+        if ((wICR & PilotIO.ICR_ET3) && (lData & PilotIO.IMR_IRQ3)) lIPRNew &= ~PilotIO.IMR_IRQ3;
+        if ((wICR & PilotIO.ICR_ET6) && (lData & PilotIO.IMR_IRQ6)) lIPRNew &= ~PilotIO.IMR_IRQ6;
+        if (lData & PilotIO.IMR_IRQ7) lIPRNew &= ~PilotIO.IMR_IRQ7;
+        if (lIPRNew != lIPR) {
+            this.setLongEx(PilotIO.DBREG_IPR, lIPRNew);
+            this.updateInterrupts(0, 0, false);
+        }
+    }
+
+    /**
+     * updateButton(iBit, fDown)
+     *
+     * The Port D Data register contains bits that map to the hardware button interrupt lines (see PilotIO.BUTTONS).
+     *
+     * @this {PilotIO}
+     * @param {number} iBit
+     * @param {boolean} fDown
+     */
+    updateButton(iBit, fDown)
+    {
+        if (this.fEZ) {
+            let iKey = this.aKeyMatrix[iBit];
+            if (iKey == undefined || iKey < 0) return;
+            let wKeyBits = this.wKeyBits;
+            this.wKeyBits = fDown? (wKeyBits | (1 << iKey)) : (wKeyBits & ~(1 << iKey));
+            //
+            // An edge is latched only if the key's column (ie, the corresponding INT0-3 pin) is edge-sensitive.
+            //
+            let bCol = 1 << (iKey & 0x3);
+            if (fDown && wKeyBits != this.wKeyBits && (this.getByteEx(PilotIO.DBREG_PDIRQEDGE) & bCol)) {
+                this.bPDDataEdge |= bCol;
+            }
+            this.updateButtonInterrupts();
+            return;
+        }
+        let bMask = 1 << iBit;
+        let bPDData = this.getByteEx(PilotIO.DBREG_PDDATA);
+        let bPDDataOrig = bPDData;
+        if (fDown) {
+            bPDData |= bMask;
+        } else {
+            bPDData &= ~bMask;
+        }
+        if (bPDData != bPDDataOrig) {
+            this.bPDDataEdge |= bMask;
+            this.setByteEx(PilotIO.DBREG_PDDATA, bPDData);
+            this.updateButtonInterrupts();
+        }
+    }
+
+    /**
+     * updateButtonInterrupts()
+     *
+     * @this {PilotIO}
+     */
+    updateButtonInterrupts()
+    {
+        if (this.fEZ) {
+            //
+            // On the MC68EZ328, Port D bits 0-3 are INT0-3, which are presented to the interrupt controller only if
+            // enabled in PDIRQEN, and which are either level-sensitive or (if enabled in PDIRQEDGE) edge-sensitive.
+            //
+            let bIQEN = this.getByteEx(PilotIO.DBREG_PDIRQEN) & 0xf;
+            let bIQEG = this.getByteEx(PilotIO.DBREG_PDIRQEDGE) & 0xf;
+            let bInts = ((this.getKeyColumns(PilotIO.KEY_ROWS) & ~bIQEG) | (this.bPDDataEdge & bIQEG)) & bIQEN;
+            //
+            // In addition, the keyboard (KB) interrupt is a level-sensitive interrupt that's asserted whenever any of the
+            // Port D pins enabled in PDKBEN is low; PalmOS uses it to wake from sleep (see KeySleep in the Palm IIIc ROM),
+            // after driving the rows of the key matrix low.
+            //
+            let bRows = this.getByteEx(PilotIO.DBREG_PCDIR) & ~this.getByteEx(PilotIO.DBREG_PCDATA);
+            let lKB = (this.getKeyColumns(bRows) & this.getByteEx(PilotIO.DBREG_PDKBEN) & 0xf)? PilotIO.IMR_KBD : 0;
+            this.updateInterrupts((bInts << 8) | lKB, PilotIO.IMR_INT0 | PilotIO.IMR_INT1 | PilotIO.IMR_INT2 | PilotIO.IMR_INT3 | PilotIO.IMR_KBD, true);
+            return;
+        }
+        let bPDData = this.getByteEx(PilotIO.DBREG_PDDATA);
+        let bPDIRQEdge = this.getByteEx(PilotIO.DBREG_PDIRQEDGE);
+        let bPDIRQEn = this.getByteEx(PilotIO.DBREG_PDIRQEN);
+        let lMask = PilotIO.IMR_INT0 | PilotIO.IMR_INT1 | PilotIO.IMR_INT2 | PilotIO.IMR_INT3 | PilotIO.IMR_INT4 | PilotIO.IMR_INT5 | PilotIO.IMR_INT6 | PilotIO.IMR_INT7;
+        this.updateInterrupts(((this.bPDDataEdge & bPDIRQEdge) | (bPDData & ~bPDIRQEdge) & bPDIRQEn) << 8, lMask, true);
+    }
+
+    /**
+     * getKeyColumns(bRows)
+     *
+     * On EZ-based devices (eg, the Palm IIIc), the hardware buttons are arranged in a matrix, where each row is
+     * selected by driving one of Port C bits 0-2 low, and the columns are read from Port D bits 0-3 (which are
+     * inverted by PDPOL, so pressed keys read as 1).  The keys in row N are recorded in bits (N*4) through (N*4)+3 of
+     * wKeyBits, and the device's 'keyMatrix' config property determines which bit each button corresponds to.
+     *
+     * @this {PilotIO}
+     * @param {number} bRows (bits 0-2 indicate which rows are selected)
+     * @returns {number} (bits 0-3 indicate which columns contain a pressed key in the selected rows)
+     */
+    getKeyColumns(bRows)
+    {
+        let bCols = 0;
+        for (let iRow = 0; iRow < 3; iRow++) {
+            if (bRows & (1 << iRow)) bCols |= (this.wKeyBits >> (iRow * 4)) & 0xf;
+        }
+        return bCols;
+    }
+
+    /**
+     * updatePen(x, y, fDown)
+     *
+     * @this {PilotIO}
+     * @param {number} x
+     * @param {number} y
+     * @param {boolean} fDown
+     */
+    updatePen(x, y, fDown)
+    {
+        this.xPenCurrent = x;
+        this.yPenCurrent = y;
+        if (!this.fPenDown && fDown) {
+            this.fPenDown = true;
+            this.updateInterrupts(PilotIO.IMR_PEN, 0, true);
+        }
+        else if (this.fPenDown && !fDown) {
+            this.fPenDown = false;
+            //
+            // In an attempt to avoid missing pen activity due to the emulator being unexpectedly busy, I don't
+            // clear IPR_PEN if fPenRead is false.  I wait until the emulator has started reading pen data and clear
+            // the interrupt at THAT time.
+            //
+            if (!this.fPenRead) {
+                this.fPenUpPending = true;
+            } else {
+                //
+                // BUGBUG: I suspect we should really be clearing PEN interrupts when the handler updates the IPR instead.
+                // The problem with clearing them here is that the emulator could miss the transition altogether, and I seriously
+                // doubt the real hardware clears the interrupt status on a "pen up" condition - but maybe it does.... -JP
+                //
+                this.updateInterrupts(PilotIO.IMR_PEN, 0, false);
+            }
+        }
+        this.fPenRead = false;
+    }
+
+    /**
+     * updateTimers()
+     *
+     * Update the high-frequency timers, by advancing them by the number of CPU cycles that have elapsed since
+     * the last update.  The Java implementation estimated the number of elapsed cycles, using a combination of
+     * opcode counts and elapsed real-world time, whereas we have an accurate CPU cycle count.
+     *
+     * @this {PilotIO}
+     */
+    updateTimers()
+    {
+        let nCycles = this.time.getCycles();
+        let nCyclesAdd = nCycles - this.nCyclesTimers;
+        this.nCyclesTimers = nCycles;
+        if (nCyclesAdd > 0) {
+            this.nCyclesTMR1 = this.updateTimer(this.awTMR1, this.nCyclesTMR1 + nCyclesAdd, this.lTMR1Bit);
+            this.nCyclesTMR2 = this.updateTimer(this.awTMR2, this.nCyclesTMR2 + nCyclesAdd, PilotIO.IMR_TMR2);
+        }
+    }
+
+    /**
+     * getTimerDivisor(awTMR)
+     *
+     * Returns the number of CPU cycles per timer tick, or 0 if the timer isn't counting.
+     *
+     * The Java implementation always assumed that the input clock was the system clock; we also support
+     * the system clock divided by 16 and the 32Khz clock.
+     *
+     * @this {PilotIO}
+     * @param {Array.<number>} awTMR
+     * @returns {number}
+     */
+    getTimerDivisor(awTMR)
+    {
+        let nDivisor = 0;
+        if (awTMR[PilotIO.TCTL] & PilotIO.TCTL_TEN) {
+            switch(awTMR[PilotIO.TCTL] & PilotIO.TCTL_CLKSOURCE) {
+            case PilotIO.CLKSOURCE_SYSTEMCLOCK:
+                nDivisor = 1;
+                break;
+            case PilotIO.CLKSOURCE_SYSTEMCLOCKDIV16:
+                nDivisor = 16;
+                break;
+            case PilotIO.CLKSOURCE_32OR38KHZ:
+            case PilotIO.CLKSOURCE_32OR38KHZ + 0x2:
+            case PilotIO.CLKSOURCE_32OR38KHZ + 0x4:
+            case PilotIO.CLKSOURCE_32OR38KHZ + 0x6:
+                nDivisor = this.time.nCyclesPerSecond / 32768;
+                break;
+            }
+            nDivisor *= (awTMR[PilotIO.TPRER] & PilotIO.TPRER_PRESCALER) + 1;
+        }
+        return nDivisor;
+    }
+
+    /**
+     * updateTimer(awTMR, nCycles, lBit)
+     *
+     * Update the specified high-frequency timer, by converting the number of cycles accumulated since the
+     * last call into timer ticks.
+     *
+     * @this {PilotIO}
+     * @param {Array.<number>} awTMR
+     * @param {number} nCycles
+     * @param {number} lBit
+     * @returns {number} (number of cycles not yet converted into ticks)
+     */
+    updateTimer(awTMR, nCycles, lBit)
+    {
+        let nDivisor = this.getTimerDivisor(awTMR);
+        if (!nDivisor) return 0;
+        let nTicks = Math.floor(nCycles / nDivisor);
+        nCycles -= nTicks * nDivisor;
+        if (nTicks) {
+            let tcn = awTMR[PilotIO.TCN];
+            let tcmp = awTMR[PilotIO.TCMP];
+            let fCompare = false;
+            if (!(awTMR[PilotIO.TCTL] & PilotIO.TCTL_FRR)) {
+                //
+                // In "restart" mode, the counter is reset to zero (and resumes counting) on every "compare event".
+                //
+                tcn += nTicks;
+                if (tcn >= tcmp) {
+                    fCompare = true;
+                    tcn = tcmp? (tcn - tcmp) % tcmp : 0;
+                }
+            } else {
+                //
+                // In "free run" mode, the counter simply wraps around, and a "compare event" occurs whenever it passes TCMP.
+                //
+                let ticksToCompare = ((tcmp - tcn) & 0xffff) || 0x10000;
+                if (nTicks >= ticksToCompare) fCompare = true;
+                tcn = (tcn + nTicks) & 0xffff;
+            }
+            awTMR[PilotIO.TCN] = tcn;
+            if (fCompare) {
+                awTMR[PilotIO.TSTAT] |= PilotIO.TSTAT_COMP;
+                if (awTMR[PilotIO.TCTL] & PilotIO.TCTL_IRQEN) {
+                    this.updateInterrupts(lBit, 0, true);
+                }
+            }
+        }
+        return nCycles;
+    }
+
+    /**
+     * scheduleTimers()
+     *
+     * Arm our Time timer to fire at the next timer "compare" event, so that timer interrupts are generated on time.
+     *
+     * @this {PilotIO}
+     */
+    scheduleTimers()
+    {
+        let nCyclesNext = -1;
+        let awTMRs = [this.awTMR1, this.awTMR2];
+        let anCycles = [this.nCyclesTMR1, this.nCyclesTMR2];
+        for (let i = 0; i < awTMRs.length; i++) {
+            let awTMR = awTMRs[i];
+            let nDivisor = this.getTimerDivisor(awTMR);
+            if (nDivisor && (awTMR[PilotIO.TCTL] & PilotIO.TCTL_IRQEN)) {
+                let tcn = awTMR[PilotIO.TCN], tcmp = awTMR[PilotIO.TCMP];
+                let nTicks = (awTMR[PilotIO.TCTL] & PilotIO.TCTL_FRR)? (((tcmp - tcn) & 0xffff) || 0x10000) : Math.max(tcmp - tcn, 1);
+                let nCycles = Math.max(nTicks * nDivisor - anCycles[i], 1);
+                if (nCyclesNext < 0 || nCycles < nCyclesNext) nCyclesNext = nCycles;
+            }
+        }
+        if (nCyclesNext > 0) {
+            this.time.setTimer(this.timerTMR, nCyclesNext / this.time.getCyclesPerMS(1), true);
+        }
+    }
+
+    /**
+     * updateInterrupts(lBits, lMask, fSet)
+     *
+     * Update the Interrupt Pending Register (IPR), and then propagate any pending interrupts that are NOT
+     * masked to the Interrupt Status Register (ISR).  If this results in a change in the ISR, then we need
+     * to tell the CPU to take a look, and see if the flags will allow an interrupt to occur.
+     *
+     * @this {PilotIO}
+     * @param {number} lBits
+     * @param {number} lMask
+     * @param {boolean} fSet
+     */
+    updateInterrupts(lBits, lMask, fSet)
+    {
+        // Get the current IPR and compute a new IPR
+        let lIPR = this.getLongEx(PilotIO.DBREG_IPR);
+        let lIPRNew = fSet? ((lIPR & ~lMask) | lBits) : ((lIPR & ~lMask) & ~lBits);
+
+        // Get the current IMR and compute a new ISR, using the new IPR
+        let lIMR = this.getLongEx(PilotIO.DBREG_IMR);
+        let lISR = this.getLongEx(PilotIO.DBREG_ISR);
+        let lISRNew = lIPRNew & ~lIMR;
+
+        // If the new IPR differs from the current IPR, update it
+        if (lIPR != lIPRNew) {
+            this.setLongEx(PilotIO.DBREG_IPR, lIPRNew);
+        }
+
+        // If the new ISR differs from the current ISR, update it, and indicate that interrupt status has changed
+        if (lISR != lISRNew) {
+            this.setLongEx(PilotIO.DBREG_ISR, lISRNew);
+            if (lISRNew) {
+                this.cpu.fCPU |= CPU68K.CPU_CHECKINTS;
+            }
+        }
+    }
+
+    /**
+     * checkInterrupts(fInitiate)
+     *
+     * Called from the CPU whenever it notices CPU_CHECKINTS has been set.  Our job is to determine if an interrupt
+     * is currently being asserted, and whether or not it is greater than the CPU's current IPM (Interrupt Priority Mask).
+     *
+     * @this {PilotIO}
+     * @param {boolean} fInitiate
+     * @returns {boolean} (true if an interrupt is ready to initiate, or has been if fInitiate is true)
+     */
+    checkInterrupts(fInitiate)
+    {
+        let cpu = this.cpu;
+
+        //
+        // BUGBUG: The following code is a hack to prevent simulating interrupts when the current stack is
+        // dangerously close to the current task's interrupt stack.
+        //
+        // I've noticed that when booting PalmOS 3.3, the hardware interrupt service routine at 0x10c7cba2 loads
+        // A0 from 0x11e (let's call location 0x11e the "current task pointer"), and then switches to a new
+        // stack (let's call it the current task's "interrupt stack"), whose address is stored at A0+0x10.  In the
+        // case of PalmOS 3.3, the current (first?) task is usually 0xe7fe, its application stack is usually 0xedf6
+        // (set by 0x10c7c804), and its interrupt stack is usually 0xeafe.  Notice that the amount of room between
+        // the stacks is surprisingly small: 0x2f8.  Set a breakpoint at 0x10c87a32, and when you hit it, set another
+        // breakpoint at 0x10c7c7a2 -- at this second location, you will eventually see the stack (A7) drop as low
+        // as 0xeb12.  At that instant, the stack is too low to allow an interrupt to occur, because the first thing the
+        // interrupt service routine at 0x10c7cba2 will do is save a bunch of client registers, thereby overflowing
+        // the application stack and overwriting the interrupt stack.  0x10c7c7a2 is not an arbitrary address
+        // either: it's the very next instruction after the IPM (Interrupt Priority Mask) in the CPU's flags has
+        // been reset to zero, clearing the way for any pending interrupt to be acknowledged.
+        //
+        // I've repro'ed the same thing in Palm's own emulator.  All the stacks are 0x16 bytes higher, but their
+        // relative positions are identical, so the only reason their emulator (and presumably real devices) don't
+        // crash is fortuitous timing with respect to TMR2.  Even if I'm simulating timer interrupts at a slightly
+        // different/incorrect rate, PalmOS clearly has a window where their application stack is too small.
+        //
+        if (cpu.regA[7] <= 0xeb12+0x14 && cpu.regA[7] > 0xeafe) {
+            return false;
+        }
+
+        if (cpu.fCPU & CPU68K.CPU_CHECKINTS) {
+            let iLvlHighest = 0;
+            let lISR = this.getLongEx(PilotIO.DBREG_ISR);
+            for (let iBit = 0, lMask = 1; lISR && iBit < this.abIMRLvl.length; iBit++, lMask <<= 1) {
+                if (lISR & lMask) {
+                    if (iLvlHighest < this.abIMRLvl[iBit]) {
+                        iLvlHighest = this.abIMRLvl[iBit];
+                    }
+                    lISR &= ~lMask;
+                }
+            }
+            if (iLvlHighest > cpu.getFlagIPM()) {
+                if (fInitiate) {
+                    let iVector = (this.getByteEx(PilotIO.DBREG_IVR) & 0xff) + iLvlHighest;
+                    this.printf(MESSAGE.INT, "interrupt level %d (vector %#04x)\n", iLvlHighest, iVector);
+                    cpu.callException(iVector);
+                    cpu.setFlagIPM(iLvlHighest);    // we can't change the IPM until callException() had a chance to save the current IPM on the stack
+                    cpu.fCPU &= ~CPU68K.CPU_CHECKINTS;
+                }
+                return true;
+            }
+            cpu.fCPU &= ~CPU68K.CPU_CHECKINTS;
+        }
+        return false;
+    }
+
+    /**
+     * getLCDStatus()
+     *
+     * Return true if the LCD controller is enabled and the LCD is on.
+     *
+     * @this {PilotIO}
+     * @returns {boolean}
+     */
+    getLCDStatus()
+    {
+        if (!(this.getByteEx(PilotIO.DBREG_PFDATA) & PilotIO.PFDATA_LCDENABLE)) {
+            return false;
+        }
+        if (!(this.getByteEx(PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_CKCON) & PilotIO.CKCON_LCDON)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * getBufferWidth()
+     *
+     * Return width of screen buffer (in terms of words).
+     *
+     * @this {PilotIO}
+     * @returns {number}
+     */
+    getBufferWidth()
+    {
+        let cWords = this.getByteEx(PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_LBAR);
+        if (cWords & 0x1) {
+            cWords++;           // BUGBUG: Why is this sometimes 9 instead of 10 for standard 1BPP operation? -JP
+        }
+        return cWords;
+    }
+
+    /**
+     * getBufferStride()
+     *
+     * Return number of bytes per scanline.
+     *
+     * @this {PilotIO}
+     * @returns {number}
+     */
+    getBufferStride()
+    {
+        return this.getBufferWidth() * 2;
+    }
+
+    /**
+     * getBPP()
+     *
+     * If we assume the physical screen width is a constant, then the LBAR register (which describes the number
+     * of WORDS required for each scanline) can simply be multiplied by 16 (to yield the number of BITS required
+     * for each scanline) and then divided by the width (to yield bits-per-pixel).
+     *
+     * @this {PilotIO}
+     * @returns {number} (1 or 2, since DragonBall LCD controllers support only 1BPP and 2BPP)
+     */
+    getBPP()
+    {
+        let cBPP = ((this.getBufferWidth() * 16) / PilotIO.DEF_SCREEN_WIDTH)|0;
+        return cBPP <= 1? 1 : 2;
+    }
+
+    /**
+     * getBufferAddress()
+     *
+     * Return address of screen buffer.
+     *
+     * @this {PilotIO}
+     * @returns {number}
+     */
+    getBufferAddress()
+    {
+        return this.getLongEx(PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_SSA);
+    }
+
+    /**
+     * getGrayPalette()
+     *
+     * Return the 16-bit Gray Palette Mapping Register (GPMR), where bits 8-11, 12-15, 0-3, and 4-7 describe the
+     * intensity of 2-bit pixel values 00, 01, 10, and 11.
+     *
+     * @this {PilotIO}
+     * @returns {number}
+     */
+    getGrayPalette()
+    {
+        return this.getWordEx(PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_GPMR);
+    }
+
+    /**
+     * resetScreen()
+     *
+     * Notify the video device (if any) that the LCD state has changed (the equivalent of Device.ResetScreen()).
+     *
+     * @this {PilotIO}
+     */
+    resetScreen()
+    {
+        if (this.video) this.video.resetScreen();
+    }
+}
+
+/**
+ * Button IDs (as used by the Input device's map) and their corresponding Port D Data register bits.
+ *
+ * NOTE: The Java implementation also defined BUTTON_BACKLIGHT as a pseudo-button, to logically separate the
+ * backlight function of the power button from its on/off function.
+ */
+PilotIO.BUTTONS = {
+    "power":    0,
+    "up":       1,
+    "down":     2,
+    "datebook": 3,
+    "address":  4,
+    "todolist": 5,
+    "memopad":  6
+};
+
+/**
+ * ROM header definitions (see CPUMem.java)
+ */
+PilotIO.ROM_BASE            = 0x10c00000;
+PilotIO.ROMHDR_HDRVER       = 0x000c;       // eg, 0x0001 (PalmOS 1.0), which implies 6-byte heap chunk headers
+
+/**
+ * PalmOS database header definitions (see pdb_file_format.txt)
+ */
+PilotIO.DBHDR_NAME_LEN      = 32;           // the database name is a null-terminated string at offset 0
+PilotIO.DBHDR_TYPE          = 0x3c;         // eg, "appl"
+PilotIO.DBHDR_SIZE          = 0x4e;         // size of the header, up to (but not including) the record list
+
+/**
+ * Temporary blocks (see allocTempBlocks()) must not extend beyond this address (or the ROM, if any).
+ */
+PilotIO.TEMP_LIMIT          = 0x00400000;
 
 /**
  * List of supported DragonBall h/w registers (see p.24 of MC68328 User's Manual 12/9/97)
@@ -19628,6 +22820,9 @@ PilotIO.DBREG_SCR           = 0x000;
  * Mask Revision Register
  */
 PilotIO.DBREG_MRR           = 0x004;
+PilotIO.DBREG_IDR           = 0x004;        // MC68EZ328 Silicon ID Register (chip ID, mask ID, and software ID)
+PilotIO.EZ_CHIPID                   = 0x45;
+PilotIO.EZ_MASKID                   = 0x01;
 
 /**
  * Chip Select Base Registers
@@ -19751,6 +22946,19 @@ PilotIO.INTLVL_IRQ1             = 1;
 PilotIO.abIMRLvl = [4, 4, 4, 4, 4, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 1, 2, 3, 6, 5, 6, 6, 7];
 
 /**
+ * Interrupt levels for each IMR/ISR/IPR bit on the MC68EZ328 (see section 6 of the MC68EZ328 User's Manual)
+ */
+PilotIO.abIMRLvlEZ = [4, 6, 4, 4, 4, 0, 4, 6, 4, 4, 4, 4, 0, 0, 0, 0, 1, 2, 3, 6, 5, 0, 4, 7];
+
+/**
+ * Supported DragonBall chips (see the 'chip' property of the PilotIO config)
+ */
+PilotIO.CHIP = {
+    DB:     "MC68328",
+    EZ:     "MC68EZ328"
+};
+
+/**
  * Interrupt Control Register (16-bit)
  */
 PilotIO.DBREG_ICR           = 0x302;
@@ -19785,6 +22993,7 @@ PilotIO.IMR_IRQ6                    = 0x00080000;
 PilotIO.IMR_PEN                     = 0x00100000;
 PilotIO.IMR_SPIS                    = 0x00200000;
 PilotIO.IMR_TMR1                    = 0x00400000;
+PilotIO.IMR_TMR                     = 0x00000002;   // the MC68EZ328's only timer uses the same bit as TMR2
 PilotIO.IMR_IRQ7                    = 0x00800000;
 
 PilotIO.DBREG_IWR           = 0x308;        // Interrupt Wakeup Enable Register (32-bit)
@@ -19826,6 +23035,7 @@ PilotIO.DBREG_PDDATA        = 0x419;
 PilotIO.DBREG_PDPUEN        = 0x41A;
 PilotIO.DBREG_PDPOL         = 0x41C;
 PilotIO.DBREG_PDIRQEN       = 0x41D;
+PilotIO.DBREG_PDKBEN        = 0x41E;        // MC68EZ328 Port D Keyboard Enable Register
 PilotIO.DBREG_PDIRQEDGE     = 0x41F;
 PilotIO.DBREG_PEDIR         = 0x420;
 PilotIO.DBREG_PEDATA        = 0x421;
@@ -19916,7 +23126,7 @@ PilotIO.DBREG_SPISR         = 0x700;        // SPIS (Serial Peripheral Interface
 
 PilotIO.DBREG_SPIMDATA      = 0x800;        // SPIM (Serial Peripheral Interface Master) Data Register (16-bit)
 PilotIO.DBREG_SPIMCONT      = 0x802;        // SPIM (Serial Peripheral Interface Master) Control/Status Register (16-bit)
-PilotIO.SPIMCONT_BITCOUNT           = 0x000F;
+PilotIO.SPIMCONT_BITCOUNT           = 0x000F;   // number of bits to exchange, minus 1
 PilotIO.SPIMCONT_POL                = 0x0010;       // polarity
 PilotIO.SPIMCONT_PHA                = 0x0020;       // phase
 PilotIO.SPIMCONT_IRQEN              = 0x0040;       // interrupt request enable
@@ -19925,11 +23135,30 @@ PilotIO.SPIMCONT_XCH                = 0x0100;
 PilotIO.SPIMCONT_SPIMEN             = 0x0200;       // SPI master enable
 PilotIO.SPIMCONT_DATARATE           = 0xE000;
 
+/**
+ * Burr-Brown ADS7843 channel selections (see exchangeADC())
+ */
+PilotIO.KEY_ROWS                    = 0x07;     // Port C bits that select key matrix rows on EZ-based devices
+PilotIO.ADC_CHANNEL_Y               = 1;
+PilotIO.ADC_CHANNEL_BATTERY         = 2;
+PilotIO.ADC_CHANNEL_X               = 5;
+PilotIO.ADC_BATTERY_GOOD            = 0xc80;
+PilotIO.ADC_RANGE_X                 = [0xfff, 0];
+PilotIO.ADC_RANGE_Y                 = [0xfff, 0];
+
 PilotIO.DBREG_USTCNT        = 0x900;        // UART Status/Control Register
 PilotIO.DBREG_UBAUD         = 0x902;        // UART Baud Control Register
 PilotIO.DBREG_URX           = 0x904;        // UART RX Register
 PilotIO.DBREG_UTX           = 0x906;        // UART TX Register
 PilotIO.DBREG_UMISC         = 0x908;        // UART Misc Register
+
+/**
+ * List of supported DragonBall LCD Controller registers (the LCDREG_* offsets are relative to LCDREGS_BASE)
+ */
+PilotIO.LCDREGS_BASE        = 0xfffffa00;
+PilotIO.LCDREGS_SIZE        = 0x00000034;
+PilotIO.LCDREGS_LIMIT       = PilotIO.LCDREGS_BASE + PilotIO.LCDREGS_SIZE;
+PilotIO.LCDREGS_OFFSET      = PilotIO.LCDREGS_BASE - PilotIO.DBREGS_BASE;
 
 PilotIO.LCDREG_SSA          = 0x00;         // LCD Screen Starting Address Register (LSSA, 32-bit)
 PilotIO.LCDREG_VPW          = 0x05;         // LCD Virtual Page Width Register (LVPW, 8-bit, normally set to 10, units are words)
@@ -19968,7 +23197,8 @@ PilotIO.DBREG_RISR          = 0xB0E;        // RTC Interrupt Status Register
 PilotIO.DBREG_RIENR         = 0xB10;        // RTC Interrupt Enable Register
 PilotIO.DBREG_RSTPWCH       = 0xB12;        // RTC Stopwatch Register
 
-PilotIO.abRegsInit = {
+PilotIO.regsInit = {};
+PilotIO.regsInit.ab = {
     [PilotIO.DBREG_PCTLR]:    0x1F,
     [PilotIO.DBREG_PDPUEN]:   0xFF,
     [PilotIO.DBREG_PEPUEN]:   0x80,
@@ -19980,47 +23210,472 @@ PilotIO.abRegsInit = {
     [PilotIO.DBREG_PKPUEN]:   0x3F,
     [PilotIO.DBREG_PKSEL]:    0x3F,
     [PilotIO.DBREG_PMPUEN]:   0xFF,
-    [PilotIO.DBREG_PMSEL]:    0x02,
-    [PilotIO.LCDREG_VPW]:     (PilotIO.DEF_SCREEN_WIDTH/8)/2,
-    [PilotIO.LCDREG_BLKC]:    0x7F,
-    [PilotIO.LCDREG_CKCON]:   0x40,                                   // LCD controller initially disabled
-    [PilotIO.LCDREG_LBAR]:    (PilotIO.DEF_SCREEN_WIDTH/8)/2,         // we initialize this to 10, they seem to prefer 9, hmmm
-    [PilotIO.LCDREG_OTCR]:    0x3F,
-    [PilotIO.LCDREG_FRCM]:    0xB9
+    [PilotIO.DBREG_PMSEL]:    0x02
 };
 
-PilotIO.awRegsInit = {
+PilotIO.regsInit.aw = {
     [PilotIO.DBREG_PLLCR]:    0x2400,
     [PilotIO.DBREG_PLLFSR]:   0x0123,         // sets Q counter to 0x1, P counter to 0x23
     [PilotIO.DBREG_TCMP1]:    0xFFFF,
     [PilotIO.DBREG_TCMP2]:    0xFFFF,
     [PilotIO.DBREG_WCSR]:     0x0001,
     [PilotIO.DBREG_WRR]:      0xFFFF,
-    [PilotIO.DBREG_UBAUD]:    0x003F,
-    [PilotIO.LCDREG_XMAX]:    0x03FF,
-    [PilotIO.LCDREG_YMAX]:    0x01FF,
-    [PilotIO.LCDREG_CWCH]:    0x0101,
-    [PilotIO.LCDREG_GPMR]:    0x1073
+    [PilotIO.DBREG_UBAUD]:    0x003F
 };
 
-PilotIO.alRegsInit = {
+PilotIO.regsInit.al = {
     [PilotIO.DBREG_IMR]:      0x00FFFFFF,
     [PilotIO.DBREG_IWR]:      0x00FFFFFF
+};
+
+Object.assign(PilotIO.regsInit.ab, {
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_VPW]:    (PilotIO.DEF_SCREEN_WIDTH/8)/2,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_BLKC]:   0x7F,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_CKCON]:  0x40,         // LCD controller initially disabled
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_LBAR]:   (PilotIO.DEF_SCREEN_WIDTH/8)/2,   // we initialize this to 10, they seem to prefer 9, hmmm
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_OTCR]:   0x3F,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_FRCM]:   0xB9
+});
+
+Object.assign(PilotIO.regsInit.aw, {
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_XMAX]:   0x03FF,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_YMAX]:   0x01FF,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_CWCH]:   0x0101,
+    [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_GPMR]:   0x1073
+});
+
+/**
+ * MC68EZ328 register reset values (see Table 1-3 of the MC68EZ328 User's Manual)
+ */
+PilotIO.regsInitEZ = {
+    ab: {
+        [PilotIO.DBREG_SCR]:      0x1C,
+        [PilotIO.DBREG_IDR]:      PilotIO.EZ_CHIPID,
+        [PilotIO.DBREG_IDR+1]:    PilotIO.EZ_MASKID,
+        [PilotIO.DBREG_PCTLR]:    0x1F,
+        [0x402]:                  0xFF,     // PAPUEN
+        [0x40A]:                  0xFF,     // PBPUEN
+        [0x40B]:                  0xFF,     // PBSEL
+        [0x412]:                  0xFF,     // PCPDEN
+        [0x413]:                  0xFF,     // PCSEL
+        [PilotIO.DBREG_PDPUEN]:   0xFF,
+        [0x41B]:                  0xF0,     // PDSEL
+        [0x422]:                  0xFF,     // PEPUEN
+        [PilotIO.DBREG_PESEL]:    0xFF,
+        [0x42A]:                  0xFF,     // PFPUEN
+        [PilotIO.DBREG_PGPUEN]:   0x3D,
+        [PilotIO.DBREG_PGSEL]:    0x08,
+        [0x504]:                  0xFE,     // PWMP
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_VPW]:    0xFF,
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_BLKC]:   0x7F,
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_CKCON]:  0x40,
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_LBAR]:   0xFF,     // LRRA on the EZ
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_FRCM]:   0xB9,
+        [PilotIO.LCDREGS_OFFSET + 0x33]:                  0x84      // LGPMR is 8-bit on the EZ
+    },
+    aw: {
+        [0x110]:                  0x00E0,   // CSA
+        [0x116]:                  0x0200,   // CSD
+        [0x118]:                  0x0060,   // EMUCS
+        [PilotIO.DBREG_PLLCR]:    0x2430,
+        [PilotIO.DBREG_PLLFSR]:   0x0123,
+        [PilotIO.DBREG_TCMP1]:    0xFFFF,
+        [PilotIO.DBREG_PWMC]:     0x0020,
+        [PilotIO.DBREG_UBAUD]:    0x003F,
+        [0xB0A]:                  0x0001,   // WATCHDOG
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_XMAX]:   0x03FF,
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_YMAX]:   0x01FF,
+        [PilotIO.LCDREGS_OFFSET + PilotIO.LCDREG_CWCH]:   0x0101
+    },
+    al: {
+        [PilotIO.DBREG_IMR]:      0x00FFFFFF
+    }
 };
 
 PilotIO.CLASSES["PilotIO"] = PilotIO;
 
 /**
+ * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/sed1375.js (C) 2012-2026 Jeff Parsons
+ */
+
+/** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined) }} */
+let SED1375Config;
+
+/**
+ * @class SED1375
+ * @unrestricted
+ * @property {SED1375Config} config
+ *
+ * This is a port of HWLCDEpson1375.java, with improvements based on the S1D13705 (aka SED1375) Hardware
+ * Functional Specification (see /machines/palm/pilot/webarchive/epson_com/x27aa001.pdf).
+ *
+ * On a Palm IIIc, the controller's 80K display buffer begins at 0x1f000000, and its 32 registers begin at offset
+ * 0x1ffe0.  We add the display buffer to the bus as ordinary RAM, and then we add one block of our own at the top
+ * of the controller's address range, where the registers reside.
+ *
+ * To support different LCD controllers, the PilotVideo device asks its LCD controller (either this device or
+ * PilotIO) for the following information: getLCDStatus(), getBufferAddress(), getBufferStride(), getBPP(), and
+ * optionally getPalette().
+ */
+class SED1375 extends Memory {
+    /**
+     * SED1375(idMachine, idDevice, config)
+     *
+     * @this {SED1375}
+     * @param {string} idMachine
+     * @param {string} idDevice
+     * @param {SED1375Config} [config]
+     */
+    constructor(idMachine, idDevice, config)
+    {
+        let addrBase = (config['addr'] != undefined? config['addr'] : SED1375.VRAM_BASE) & CPU68K.ADDR_MASK;
+        config['type'] = Memory.TYPE.READWRITE;
+        config['addr'] = addrBase + SED1375.REGS_OFFSET - (SED1375.REGS_OFFSET % 0x1000);
+        config['size'] = 0x1000;
+        super(idMachine, idDevice, config);
+
+        this.addrVRAM = addrBase;
+        this.offRegs = SED1375.REGS_OFFSET % 0x1000;
+        this.abRegs = new Uint8Array(SED1375.REGS_SIZE);
+        this.aPalette = new Array(SED1375.MAX_COLORS);
+        this.abLUT = new Uint8Array(3);
+        this.video = null;
+
+        this.readData = this.getByte;
+        this.writeData = this.setByte;
+        this.readPair = (offset) => (this.getByte(offset) << 8) | this.getByte(offset + 1);
+        this.writePair = (offset, data) => { this.setByte(offset, data >> 8); this.setByte(offset + 1, data); };
+        this.readQuad = (offset) => (this.readPair(offset) << 16) | this.readPair(offset + 2);
+        this.writeQuad = (offset, data) => { this.writePair(offset, data >>> 16); this.writePair(offset + 2, data & 0xffff); };
+
+        this.bus.addBlocks(this.addrVRAM, SED1375.VRAM_SIZE, Memory.TYPE.READWRITE);
+        this.bus.addBlocks(this.config['addr'], this.size, Memory.TYPE.READWRITE, this);
+
+        this.onReset();
+    }
+
+    /**
+     * setVideo(video)
+     *
+     * Called by the PilotVideo device, so that we can notify it of LCD state changes.
+     *
+     * @this {SED1375}
+     * @param {Object} video
+     */
+    setVideo(video)
+    {
+        this.video = video;
+    }
+
+    /**
+     * onReset()
+     *
+     * All registers are reset to zero, except the (read-only) Revision Code register.
+     *
+     * @this {SED1375}
+     */
+    onReset()
+    {
+        this.abRegs.fill(0);
+        this.abRegs[SED1375.REG.REVCODE] = SED1375.REVCODE;
+        for (let i = 0; i < this.aPalette.length; i++) {
+            this.aPalette[i] = [0, 0, 0];
+        }
+        this.iLUTColor = 0;
+        this.resetScreen();
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Memory and I/O register states are managed by the Bus onLoad() handler, which calls our loadState() handler.
+     *
+     * @this {SED1375}
+     * @param {Array|undefined} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        if (state && state.length >= 3) {
+            let abRegs = state.shift(), aPalette = state.shift();
+            this.iLUTColor = state.shift();
+            if (abRegs && abRegs.length == this.abRegs.length && aPalette && aPalette.length == this.aPalette.length) {
+                this.abRegs.set(abRegs);
+                this.aPalette = aPalette;
+                this.resetScreen();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * saveState(state)
+     *
+     * @this {SED1375}
+     * @param {Array} state
+     */
+    saveState(state)
+    {
+        state.push(Array.from(this.abRegs));
+        state.push(this.aPalette);
+        state.push(this.iLUTColor);
+    }
+
+    /**
+     * getByte(offset)
+     *
+     * @this {SED1375}
+     * @param {number} offset (within our block)
+     * @returns {number}
+     */
+    getByte(offset)
+    {
+        let reg = offset - this.offRegs;
+        if (reg < 0 || reg >= SED1375.REGS_SIZE) return 0;
+        let data = this.abRegs[reg];
+        switch(reg) {
+        case SED1375.REG.VNDP:
+            //
+            // Routines like PrvUpdateCLUT wait for the "Vertical Non-Display" status bit, so we toggle it on every read.
+            //
+            this.abRegs[reg] ^= SED1375.VNDP_STATUS;
+            break;
+        case SED1375.REG.LUTDATA:
+            data = (this.aPalette[this.abRegs[SED1375.REG.LUTADDR]][this.iLUTColor] & 0xf0);
+            this.advanceLUT();
+            break;
+        }
+        this.printf(MESSAGE.VIDEO, "SED1375.getByte(%#04x): %#04x\n", reg, data);
+        return data;
+    }
+
+    /**
+     * setByte(offset, data)
+     *
+     * @this {SED1375}
+     * @param {number} offset (within our block)
+     * @param {number} data
+     */
+    setByte(offset, data)
+    {
+        let reg = offset - this.offRegs;
+        if (reg < 0 || reg >= SED1375.REGS_SIZE) return;
+        data &= 0xff;
+        this.printf(MESSAGE.VIDEO, "SED1375.setByte(%#04x,%#04x)\n", reg, data);
+        switch(reg) {
+        case SED1375.REG.REVCODE:
+            return;                 // read-only
+        case SED1375.REG.VNDP:
+            data = (data & ~SED1375.VNDP_STATUS) | (this.abRegs[reg] & SED1375.VNDP_STATUS);
+            break;
+        case SED1375.REG.LUTADDR:
+            this.iLUTColor = 0;     // writing the LUT address register always selects the red component first
+            break;
+        case SED1375.REG.LUTDATA:
+            //
+            // Each LUT entry has 4 bits per component, which are written to bits 7-4; once the blue component of
+            // an entry has been written, the entire entry is updated.  The 4-bit components are replicated in the
+            // low nibble when converted to 8-bit RGB values.
+            //
+            this.abLUT[this.iLUTColor] = data & 0xf0;
+            if (this.iLUTColor == 2) {
+                let iEntry = this.abRegs[SED1375.REG.LUTADDR];
+                this.aPalette[iEntry] = [this.abLUT[0], this.abLUT[1], this.abLUT[2]];
+                if (this.video) this.video.initCache();
+            }
+            this.advanceLUT();
+            return;
+        }
+        let dataPrev = this.abRegs[reg];
+        this.abRegs[reg] = data;
+        if (dataPrev != data && SED1375.SCREEN_REGS.indexOf(reg) >= 0) {
+            this.resetScreen();
+        }
+    }
+
+    /**
+     * advanceLUT()
+     *
+     * Every access to the LUT data register advances to the next component (red, green, blue) of the current
+     * entry, and after blue, to the red component of the next entry.
+     *
+     * @this {SED1375}
+     */
+    advanceLUT()
+    {
+        if (++this.iLUTColor > 2) {
+            this.iLUTColor = 0;
+            this.abRegs[SED1375.REG.LUTADDR] = (this.abRegs[SED1375.REG.LUTADDR] + 1) & 0xff;
+        }
+    }
+
+    /**
+     * getLCDStatus()
+     *
+     * The display is on if the controller is in "Normal Operation" (not Power Save) mode and the display isn't blanked.
+     *
+     * @this {SED1375}
+     * @returns {boolean}
+     */
+    getLCDStatus()
+    {
+        if ((this.abRegs[SED1375.REG.MODE2] & SED1375.MODE2_POWERSAVE) != SED1375.MODE2_POWERSAVE) return false;
+        if (this.abRegs[SED1375.REG.MODE1] & SED1375.MODE1_BLANK) return false;
+        return true;
+    }
+
+    /**
+     * getBPP()
+     *
+     * @this {SED1375}
+     * @returns {number} (1, 2, 4 or 8)
+     */
+    getBPP()
+    {
+        return 1 << ((this.abRegs[SED1375.REG.MODE1] & SED1375.MODE1_BPP) >> SED1375.MODE1_BPP_SHIFT);
+    }
+
+    /**
+     * getBufferAddress()
+     *
+     * In landscape mode, the Screen 1 Start Address registers contain a word address.
+     *
+     * @this {SED1375}
+     * @returns {number}
+     */
+    getBufferAddress()
+    {
+        let wAddr = this.abRegs[SED1375.REG.S1ADDRLO] | (this.abRegs[SED1375.REG.S1ADDRHI] << 8);
+        return this.addrVRAM + wAddr * 2;
+    }
+
+    /**
+     * getBufferStride()
+     *
+     * Returns the number of bytes per scanline, which is the panel width (in pixels) times the bits-per-pixel,
+     * divided by 8, plus the Memory Address Offset (which is in words).
+     *
+     * @this {SED1375}
+     * @returns {number}
+     */
+    getBufferStride()
+    {
+        let cxPanel = ((this.abRegs[SED1375.REG.HPS] & 0x7f) + 1) * 8;
+        return ((cxPanel * this.getBPP()) >> 3) + this.abRegs[SED1375.REG.MAOFF] * 2;
+    }
+
+    /**
+     * getPalette()
+     *
+     * Returns an array of RGB values for every pixel value at the current color depth.  Monochrome (passive) panels
+     * use only the green LUT, and the Software Video Invert bit inverts the data after the LUT.
+     *
+     * @this {SED1375}
+     * @returns {Array.<Array.<number>>}
+     */
+    getPalette()
+    {
+        let aColors = [];
+        let nColors = 1 << this.getBPP();
+        let fMono = !(this.abRegs[SED1375.REG.MODE0] & (SED1375.MODE0_TFT | SED1375.MODE0_COLOR));
+        let fInvert = !!(this.abRegs[SED1375.REG.MODE1] & SED1375.MODE1_INVERT);
+        for (let i = 0; i < nColors; i++) {
+            let rgb = this.aPalette[i];
+            let r = rgb[0] | (rgb[0] >> 4), g = rgb[1] | (rgb[1] >> 4), b = rgb[2] | (rgb[2] >> 4);
+            if (fMono) r = b = g;
+            if (fInvert) {
+                r = 0xff - r; g = 0xff - g; b = 0xff - b;
+            }
+            aColors.push([r, g, b]);
+        }
+        return aColors;
+    }
+
+    /**
+     * resetScreen()
+     *
+     * Notify the video device (if any) that the LCD state has changed.
+     *
+     * @this {SED1375}
+     */
+    resetScreen()
+    {
+        if (this.video) this.video.resetScreen();
+    }
+}
+
+SED1375.VRAM_BASE           = 0x1f000000;
+SED1375.VRAM_SIZE           = 0x00014000;   // 80K display buffer
+SED1375.REGS_OFFSET         = 0x0001ffe0;
+SED1375.REGS_SIZE           = 0x20;
+SED1375.MAX_COLORS          = 256;
+SED1375.REVCODE             = 0x24;         // product code 001001b, revision code 00b
+
+SED1375.REG = {
+    REVCODE:    0x00,       // Revision Code Register (read-only)
+    MODE0:      0x01,       // Mode Register 0
+    MODE1:      0x02,       // Mode Register 1
+    MODE2:      0x03,       // Mode Register 2
+    HPS:        0x04,       // Horizontal Panel Size Register ((width / 8) - 1)
+    VPSLO:      0x05,       // Vertical Panel Size Register (LSB) (height - 1)
+    VPSHI:      0x06,       // Vertical Panel Size Register (MSB)
+    FPLSP:      0x07,       // FPLINE Start Position
+    HNDP:       0x08,       // Horizontal Non-Display Period
+    FPFSP:      0x09,       // FPFRAME Start Position
+    VNDP:       0x0a,       // Vertical Non-Display Period
+    MODRATE:    0x0b,       // MOD Rate Register
+    S1ADDRLO:   0x0c,       // Screen 1 Start Address Register (LSB)
+    S1ADDRHI:   0x0d,       // Screen 1 Start Address Register (MSB)
+    S2ADDRLO:   0x0e,       // Screen 2 Start Address Register (LSB)
+    S2ADDRHI:   0x0f,       // Screen 2 Start Address Register (MSB)
+    S1ADDRBIT:  0x10,       // Screen Start Address Overflow Register
+    MAOFF:      0x11,       // Memory Address Offset Register (in words)
+    S1VSLO:     0x12,       // Screen 1 Vertical Size Register (LSB)
+    S1VSHI:     0x13,       // Screen 1 Vertical Size Register (MSB)
+    LUTADDR:    0x15,       // Look-Up Table Address Register
+    LUTDATA:    0x17,       // Look-Up Table Data Register
+    GPIOCONF:   0x18,       // GPIO Configuration Control Register
+    GPIOSTAT:   0x19,       // GPIO Status/Control Register
+    SCRATCH:    0x1a,       // Scratch Pad Register
+    SWIVEL:     0x1b,       // SwivelView Mode Register
+    LBCR:       0x1c        // Line Byte Count Register (SwivelView mode only)
+};
+
+SED1375.MODE0_TFT           = 0x80;         // TFT (active) panel if set, STN (passive) if clear
+SED1375.MODE0_DUAL          = 0x40;
+SED1375.MODE0_COLOR         = 0x20;         // color (passive) panel if set, monochrome if clear
+SED1375.MODE1_BPP           = 0xc0;         // 00=1BPP, 01=2BPP, 10=4BPP, 11=8BPP
+SED1375.MODE1_BPP_SHIFT     = 6;
+SED1375.MODE1_BLANK         = 0x08;         // display blank
+SED1375.MODE1_INVERT        = 0x01;         // software video invert
+SED1375.MODE2_POWERSAVE     = 0x03;         // 00=Software Power Save, 11=Normal Operation
+SED1375.VNDP_STATUS         = 0x80;         // set during the vertical non-display period
+
+/**
+ * Changes to any of these registers require the video device to recompute the screen characteristics.
+ */
+SED1375.SCREEN_REGS = [
+    SED1375.REG.MODE0, SED1375.REG.MODE1, SED1375.REG.MODE2, SED1375.REG.HPS,
+    SED1375.REG.S1ADDRLO, SED1375.REG.S1ADDRHI, SED1375.REG.MAOFF
+];
+
+SED1375.CLASSES["SED1375"] = SED1375;
+
+/**
  * @copyright https://www.pcjs.org/machines/palm/pilot/modules/v3/video.js (C) 2012-2026 Jeff Parsons
  */
 
-/** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferRAM: boolean, bufferBits: number, bufferLeft: number, bufferRotate: number, interruptRate: number }} */
+/** @typedef {{ bus: string, bufferWidth: number, bufferHeight: number, pixelColor: (string|undefined), refreshRate: (number|undefined) }} */
 let PilotVideoConfig;
 
 /**
  * @class PilotVideo
  * @unrestricted
  * @property {PilotVideoConfig} config
+ *
+ * This is a port of DeviceScreen.java, which displays the contents of the LCD frame buffer, whose location
+ * and format are determined by the DragonBall LCD controller registers (see PilotIO).
  */
 class PilotVideo extends Monitor {
     /**
@@ -20028,31 +23683,14 @@ class PilotVideo extends Monitor {
      *
      * The PilotVideo component can be configured with the following config properties:
      *
-     *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
-     *      bufferHeight: the number of frame buffer rows (eg, 224)
-     *      bufferAddr: the starting address of the frame buffer (eg, 0x2400)
-     *      bufferRAM: true to use existing RAM (default is false)
-     *      bufferBits: the number of bits per column (default is 1)
-     *      bufferLeft: the bit position of the left-most pixel in a byte (default is 0; CGA uses 7)
-     *      bufferRotate: the amount of counter-clockwise buffer rotation required (eg, -90 or 270)
-     *      interruptRate: normally the same as (or some multiple of) refreshRate (eg, 120)
+     *      bufferWidth: the width of the LCD, in pixels (eg, 160)
+     *      bufferHeight: the height of the LCD, in pixels (eg, 160)
+     *      monitorColor: the color of the LCD background (ie, a pixel with a value of zero)
+     *      pixelColor: the color of an LCD pixel at maximum intensity
      *      refreshRate: how many times updateMonitor() should be performed per second (eg, 60)
      *
-     * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
-     * is called.  At that point, we will also compute the extent of the frame buffer, determine the
-     * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
-     * and then allocate our cell cache.
-     *
-     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Pilot,
-     * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
-     * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
-     * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
-     * it will call updateMonitor() more frequently, but we still limit our monitor updates to every *other* call.
-     *
-     * bufferRotate is an alternative to monitorRotate; you may set one or the other (but not both) to -90 to
-     * enable different approaches to counter-clockwise 90-degree image rotation.  monitorRotate uses canvas
-     * transformation methods (translate(), rotate(), and scale()), while bufferRotate inverts the dimensions
-     * of the off-screen buffer and then relies on setPixel() to "rotate" the data into the proper location.
+     * Unlike the frame buffers of most other machines, the location of the Pilot's frame buffer is programmable
+     * (and is normally located in RAM), so we have no fixed buffer address.
      *
      * @this {PilotVideo}
      * @param {string} idMachine
@@ -20063,44 +23701,195 @@ class PilotVideo extends Monitor {
     {
         super(idMachine, idDevice, config);
 
-        this.addrBuffer = this.config['bufferAddr'];
-        this.fUseRAM = this.config['bufferRAM'];
-
-        this.nColsBuffer = this.config['bufferWidth'];
-        this.nRowsBuffer = this.config['bufferHeight'];
-
-        this.cxCell = this.config['cellWidth'] || 1;
-        this.cyCell = this.config['cellHeight'] || 1;
-
-        this.nBitsPerPixel = this.config['bufferBits'] || 1;
-        this.iBitFirstPixel = this.config['bufferLeft'] || 0;
-
-        this.rotateBuffer = this.config['bufferRotate'];
-        if (this.rotateBuffer) {
-            this.rotateBuffer = this.rotateBuffer % 360;
-            if (this.rotateBuffer > 0) this.rotateBuffer -= 360;
-            if (this.rotateBuffer != -90) {
-                this.printf("unsupported buffer rotation: %d\n", this.rotateBuffer);
-                this.rotateBuffer = 0;
-            }
-        }
-
-        this.rateInterrupt = this.config['interruptRate'];
+        this.cxScreen = this.config['bufferWidth'] || 160;
+        this.cyScreen = this.config['bufferHeight'] || 160;
         this.rateRefresh = this.config['refreshRate'] || 60;
 
-        this.cxMonitorCell = (this.cxMonitor / this.nColsBuffer)|0;
-        this.cyMonitorCell = (this.cyMonitor / this.nRowsBuffer)|0;
-
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
-        this.initBuffers();
-
-        this.cpu = /** @type {CPU68K} */ (this.findDeviceByClass("CPU"));
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
+        this.io = /** @type {PilotIO} */ (this.findDeviceByClass("PilotIO"));
+
+        /**
+         * The LCD controller (eg, SED1375) is optional; if none is specified, the DragonBall's own LCD controller
+         * (ie, PilotIO) is used.  Either way, the LCD controller must provide getLCDStatus(), getBufferAddress(),
+         * getBufferStride(), getBPP(), and optionally getPalette() (otherwise, the gray palette below is used).
+         */
+        this.lcd = this.config['lcd']? /** @type {Object} */ (this.findDevice(this.config['lcd'])) : this.io;
+
+        /**
+         * fEnabled records whether or not the machine has powered us; for the LCD to display anything, it must
+         * be enabled AND the LCD hardware must be enabled (see resetScreen()).
+         */
+        this.fEnabled = false;
+        this.fLCDOn = false;
+        this.cBPP = 1;
+        this.aCache = null;
+        this.fCacheValid = false;
+
+        this.imageBuffer = this.contextMonitor.createImageData(this.cxScreen, this.cyScreen);
+        this.canvasBuffer = document.createElement("canvas");
+        this.canvasBuffer.width = this.cxScreen;
+        this.canvasBuffer.height = this.cyScreen;
+        this.contextBuffer = this.canvasBuffer.getContext("2d");
+
+        /**
+         * Since there's always a large disparity between the size of the LCD and the size of the monitor,
+         * we disable image smoothing by default, unless the config (or URL) explicitly enables it.
+         */
+        if (this.sSmoothing) {
+            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
+        }
+
+        this.rgbBackground = this.parseColor(this.config['monitorColor'], [0x77, 0x8b, 0x76]);
+        this.rgbPixel = this.parseColor(this.config['pixelColor'], [0x2e, 0x3a, 0x44]);
+        this.initColors();
+
         this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
         this.time.addUpdate(this);
-
         this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-        this.nUpdates = 0;
+
+        this.io.setVideo(this);
+        if (this.lcd != this.io) this.lcd.setVideo(this);
+        this.blankMonitor();
+    }
+
+    /**
+     * parseColor(sColor, rgbDefault)
+     *
+     * @this {PilotVideo}
+     * @param {string|undefined} sColor (eg, "#778b76")
+     * @param {Array.<number>} rgbDefault
+     * @returns {Array.<number>}
+     */
+    parseColor(sColor, rgbDefault)
+    {
+        let match = sColor && sColor.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+        if (match) {
+            return [parseInt(match[1], 16), parseInt(match[2], 16), parseInt(match[3], 16)];
+        }
+        return rgbDefault;
+    }
+
+    /**
+     * initColors()
+     *
+     * Creates an array of 16 colors, ranging from the LCD background color (intensity 0) to the pixel color
+     * (intensity 15).  1BPP pixels use only the first and last colors, while 2BPP pixels are mapped through
+     * the LCD controller's gray palette (see getPixelColors()).
+     *
+     * The Java implementation created a 256-color palette, but that was just to work around problems with
+     * 4-bit color models in older JDKs.
+     *
+     * @this {PilotVideo}
+     */
+    initColors()
+    {
+        this.aRGB = new Array(16);
+        for (let i = 0; i < this.aRGB.length; i++) {
+            let rgb = [0, 0, 0, 0xff];
+            for (let j = 0; j < 3; j++) {
+                rgb[j] = Math.round(this.rgbBackground[j] + (this.rgbPixel[j] - this.rgbBackground[j]) * i / 15);
+            }
+            this.aRGB[i] = rgb;
+        }
+    }
+
+    /**
+     * getPixelColors()
+     *
+     * Returns an array of RGB values for each possible pixel value at the current color depth.
+     *
+     * For 2BPP modes, the 16-bit GPMR (Gray Palette Mapping Register) describes the intensity of pixels 00, 01, 10,
+     * and 11 in bits 8-11, 12-15, 0-3, and 4-7, respectively; intensities range from 0 to 7.
+     *
+     * @this {PilotVideo}
+     * @returns {Array.<Array.<number>>}
+     */
+    getPixelColors()
+    {
+        if (this.lcd.getPalette) return this.lcd.getPalette();
+        let aColors = [];
+        if (this.cBPP == 2) {
+            let gpmr = this.io.getGrayPalette();
+            let anShifts = [8, 12, 0, 4];
+            for (let i = 0; i < 4; i++) {
+                let level = Math.min((gpmr >> anShifts[i]) & 0xf, 7);
+                aColors.push(this.aRGB[Math.round(level * 15 / 7)]);
+            }
+        } else {
+            let nColors = 1 << this.cBPP;
+            for (let i = 0; i < nColors; i++) {
+                aColors.push(this.aRGB[Math.round(i * 15 / (nColors - 1))]);
+            }
+        }
+        return aColors;
+    }
+
+    /**
+     * blankMonitor()
+     *
+     * Overrides the Monitor's blankMonitor(), because a blank LCD isn't black.
+     *
+     * @this {PilotVideo}
+     */
+    blankMonitor()
+    {
+        if (this.contextMonitor) {
+            let rgb = this.rgbBackground;
+            this.contextMonitor.fillStyle = "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")";
+            this.contextMonitor.fillRect(0, 0, this.canvasMonitor.width, this.canvasMonitor.height);
+        }
+    }
+
+    /**
+     * getRefreshTime()
+     *
+     * @this {PilotVideo}
+     * @returns {number} (number of milliseconds per refresh)
+     */
+    getRefreshTime()
+    {
+        return 1000 / this.rateRefresh;
+    }
+
+    /**
+     * initCache()
+     *
+     * Invalidates our copy of the frame buffer, forcing the next updateScreen() to redraw everything.
+     *
+     * @this {PilotVideo}
+     */
+    initCache()
+    {
+        this.fCacheValid = false;
+    }
+
+    /**
+     * onPower(on)
+     *
+     * Called by the Machine device to provide notification of a power event (the equivalent of DeviceScreen.Enable()).
+     *
+     * @this {PilotVideo}
+     * @param {boolean} on (true to power on, false to power off)
+     */
+    onPower(on)
+    {
+        if (this.fEnabled != on) {
+            this.fEnabled = on;
+            this.resetScreen();
+        }
+    }
+
+    /**
+     * onReset()
+     *
+     * Called by the Machine device to provide notification of a reset event.
+     *
+     * @this {PilotVideo}
+     */
+    onReset()
+    {
+        this.resetScreen();
     }
 
     /**
@@ -20123,301 +23912,97 @@ class PilotVideo extends Monitor {
     }
 
     /**
-     * initBuffers()
+     * resetScreen()
+     *
+     * Recompute screen characteristics, and then enable or disable the screen, and refresh as appropriate
+     * (the equivalent of DeviceScreen.Reset()).  This is called whenever the LCD hardware state changes, and
+     * whenever power is applied or removed.
      *
      * @this {PilotVideo}
-     * @returns {boolean}
      */
-    initBuffers()
+    resetScreen()
     {
-        /**
-         * Allocate off-screen buffers now
-         */
-        this.cxBuffer = this.nColsBuffer * this.cxCell;
-        this.cyBuffer = this.nRowsBuffer * this.cyCell;
-
-        let cxBuffer = this.cxBuffer;
-        let cyBuffer = this.cyBuffer;
-        if (this.rotateBuffer) {
-            cxBuffer = this.cyBuffer;
-            cyBuffer = this.cxBuffer;
+        this.fLCDOn = this.fEnabled && this.lcd.getLCDStatus();
+        if (!this.fLCDOn) {
+            this.printf(MESSAGE.VIDEO, "LCD off\n");
+            this.blankMonitor();
+            return;
         }
-
-        this.sizeBuffer = ((this.cxBuffer * this.nBitsPerPixel) >> 3) * this.cyBuffer;
-        if (!this.fUseRAM) {
-            if (!this.busMemory.addBlocks(this.addrBuffer, this.sizeBuffer, Memory.TYPE.READWRITE)) {
-                return false;
-            }
-        }
-
-        /**
-         * Since we will read video data from the bus at its default width, get that width now;
-         * that width will also determine the size of a cell.
-         */
-        this.cellWidth = this.busMemory.dataWidth;
-        this.imageBuffer = this.contextMonitor.createImageData(cxBuffer, cyBuffer);
-        this.nPixelsPerCell = Math.trunc(this.cellWidth / this.nBitsPerPixel);
-
-        /**
-         * Since we calculated sizeBuffer as a number of bytes, convert that to the number of cells.
-         */
-        this.initCache(Math.ceil(this.sizeBuffer / (this.cellWidth >> 3)));
-
-        this.canvasBuffer = document.createElement("canvas");
-        this.canvasBuffer.width = cxBuffer;
-        this.canvasBuffer.height = cyBuffer;
-        this.contextBuffer = this.canvasBuffer.getContext("2d");
-
-        this.initColors();
-
-        /**
-         * Our 'smoothing' parameter defaults to null (which we treat the same as undefined), which means that
-         * image smoothing will be selectively enabled (ie, true for text modes, false for graphics modes); otherwise,
-         * we'll set image smoothing to whatever value was provided for ALL modes -- assuming the browser supports it.
-         */
-        if (this.sSmoothing) {
-            this.contextMonitor[this.sSmoothing] = (this.fSmoothing == null? false : this.fSmoothing);
-        }
-        return true;
+        this.cBPP = this.lcd.getBPP();
+        this.printf(MESSAGE.VIDEO, "LCD on: %d BPP at %#010x\n", this.cBPP, this.lcd.getBufferAddress());
+        this.initCache();
+        this.updateScreen();
     }
 
     /**
-     * getRefreshTime()
+     * updateMonitor()
      *
-     * @this {PilotVideo}
-     * @returns {number} (number of milliseconds per refresh)
-     */
-    getRefreshTime()
-    {
-        return 1000 / Math.max(this.rateRefresh, this.rateInterrupt);
-    }
-
-    /**
-     * initCache(nCells)
-     *
-     * Initializes the contents of our internal cell cache.
-     *
-     * @this {PilotVideo}
-     * @param {number} [nCells]
-     */
-    initCache(nCells)
-    {
-        this.fCacheValid = false;
-        if (nCells) {
-            this.nCacheCells = nCells;
-            if (this.aCacheCells === undefined || this.aCacheCells.length != this.nCacheCells) {
-                this.aCacheCells = new Array(this.nCacheCells);
-            }
-        }
-    }
-
-    /**
-     * initColors()
-     *
-     * This creates an array of nColors, with additional OVERLAY_TOTAL colors tacked on to the end of the array.
+     * Our periodic "refresh" timer callback.
      *
      * @this {PilotVideo}
      */
-    initColors()
+    updateMonitor()
     {
-        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
-        this.nColors = (1 << this.nBitsPerPixel);
-        this.aRGB = new Array(this.nColors + PilotVideo.COLORS.OVERLAY_TOTAL);
-        this.aRGB[0] = rgbBlack;
-        this.aRGB[1] = rgbWhite;
-        let rgbGreen  = [0x00, 0xff, 0x00, 0xff];
-        let rgbYellow = [0xff, 0xff, 0x00, 0xff];
-        this.aRGB[this.nColors + PilotVideo.COLORS.OVERLAY_TOP] = rgbYellow;
-        this.aRGB[this.nColors + PilotVideo.COLORS.OVERLAY_BOTTOM] = rgbGreen;
-    }
-
-    /**
-     * setPixel(image, x, y, bPixel)
-     *
-     * @this {PilotVideo}
-     * @param {Object} image
-     * @param {number} x
-     * @param {number} y
-     * @param {number} bPixel (ie, an index into aRGB)
-     */
-    setPixel(image, x, y, bPixel)
-    {
-        let index;
-        if (!this.rotateBuffer) {
-            index = (x + y * image.width);
-        } else {
-            index = (image.height - x - 1) * image.width + y;
-        }
-        if (bPixel) {
-            if (x >= 208 && x < 236) {
-                bPixel = this.nColors + PilotVideo.COLORS.OVERLAY_TOP;
-            }
-            else if (x >= 28 && x < 72) {
-                bPixel = this.nColors + PilotVideo.COLORS.OVERLAY_BOTTOM;
-            }
-        }
-        let rgb = this.aRGB[bPixel];
-        index *= rgb.length;
-        image.data[index] = rgb[0];
-        image.data[index+1] = rgb[1];
-        image.data[index+2] = rgb[2];
-        image.data[index+3] = rgb[3];
-    }
-
-    /**
-     * updateMonitor(fForced)
-     *
-     * Forced updates are generally internal updates triggered by an I/O operation or other state change,
-     * while non-forced updates are periodic "refresh" updates.
-     *
-     * @this {PilotVideo}
-     * @param {boolean} [fForced]
-     */
-    updateMonitor(fForced)
-    {
-        let fUpdate = true;
-        if (!fForced) {
-            if (this.rateInterrupt) {
-                /**
-                 * TODO: Incorporate these hard-coded interrupt vector numbers into configuration blocks.
-                 */
-                if (this.rateInterrupt == 120) {
-                    /**
-                     * According to http://www.computerarcheology.com/Arcade/SpacePilot/Hardware.html:
-                     *
-                     *      The CPU's INT line is asserted via a D flip-flop at E3.
-                     *      The flip-flop is clocked by the expression (!(64V | !128V) | VBLANK).
-                     *      According to this, the LO to HI transition happens when the vertical
-                     *      sync chain is 0x80 and 0xda and VBLANK is 0 and 1, respectively.
-                     *      These correspond to lines 96 and 224 as displayed.
-                     *      The interrupt vector is provided by the expression:
-                     *      0xc7 | (64V << 4) | (!64V << 3), giving 0xcf and 0xd7 for the vectors.
-                     *      The flip-flop, thus the INT line, is later cleared by the CPU via
-                     *      one of its memory access control signals.
-                     *
-                     * Translation:
-                     *
-                     * Two different RST instructions are generated: RST 1 and RST 2.  It's believed that
-                     * RST 1 occurs when the beam is near the middle of the image (and therefore it's safe to
-                     * draw the top half of the image) and RST 2 occurs when the beam is at the bottom (and
-                     * it's safe to draw the rest of the image).
-                     */
-                    if (!(this.nUpdates & 1)) {
-                        /**
-                         * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
-                         */
-                        // this.cpu.requestINTR(1);
-                    } else {
-                        /**
-                         * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
-                         * the machine has presumably only updated the top half of the frame buffer at this point; it will
-                         * update the bottom half of the frame buffer after acknowledging this interrupt.
-                         */
-                        // this.cpu.requestINTR(2);
-                        fUpdate = false;
-                    }
-                }
-            }
-
-            /**
-             * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
-             * is clean, then there's nothing to do.
-             */
-            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
-                if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
-                    fUpdate = false;
-                }
-            }
-            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
-            this.nUpdates++;
-            if (!fUpdate) return;
-        }
+        this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
         this.updateScreen();
     }
 
     /**
      * updateScreen()
      *
-     * Propagates the video buffer to the cell cache and updates the screen with any changes on the monitor.
+     * Check the screen buffer for changes, and then refresh the monitor (the equivalent of DeviceScreen.CheckBuffer()).
      *
-     * For every cell in the video buffer, compare it to the cell stored in the cell cache, render if it differs,
-     * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
-     * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
+     * Every byte of the frame buffer is compared to the byte in our cache, and any differences are propagated to
+     * imageBuffer, while also updating the dirty rectangle; then only the dirty portion of imageBuffer is copied
+     * to canvasBuffer, which is then drawn onto the monitor.
      *
      * @this {PilotVideo}
      */
     updateScreen()
     {
-        let addr = this.addrBuffer;
-        let addrLimit = addr + this.sizeBuffer;
+        if (!this.fLCDOn) return;
 
-        let iCell = 0, xBuffer = 0, yBuffer = 0;
-        let xDirty = this.cxBuffer, xMaxDirty = 0, yDirty = this.cyBuffer, yMaxDirty = 0;
-
-        let nShiftInit = 0;
-        let nShiftPixel = this.nBitsPerPixel;
-        let nMask = (1 << nShiftPixel) - 1;
-        if (this.iBitFirstPixel) {
-            nShiftPixel = -nShiftPixel;
-            nShiftInit = this.cellWidth + nShiftPixel;
+        let addrBuffer = this.lcd.getBufferAddress();
+        let cbRow = this.lcd.getBufferStride();
+        let cbBuffer = cbRow * this.cyScreen;
+        if (!this.aCache || this.aCache.length != cbBuffer || this.cBPPCache != this.cBPP) {
+            this.cBPPCache = this.cBPP;
+            this.aCache = new Uint8Array(cbBuffer);
+            this.fCacheValid = false;
         }
-        let addrInc = (this.cellWidth / this.busMemory.dataWidth)|0;
 
-        while (addr < addrLimit) {
-            let data = this.busMemory.readData(addr);
+        let nPixelsPerByte = 8 / this.cBPP;
+        let nMask = (1 << this.cBPP) - 1;
+        let aColors = this.getPixelColors();
+        let data = this.imageBuffer.data;
+        let xDirty = this.cxScreen, xMaxDirty = 0, yDirty = this.cyScreen, yMaxDirty = 0;
 
-            if (this.fCacheValid && data === this.aCacheCells[iCell]) {
-                xBuffer += this.nPixelsPerCell;
-            } else {
-                this.aCacheCells[iCell] = data;
-                let nShift = nShiftInit;
-                if (nShift) data = ((data >> 8) | ((data & 0xff) << 8));
-                if (xBuffer < xDirty) xDirty = xBuffer;
-                let cPixels = this.nPixelsPerCell;
-                while (cPixels--) {
-                    let bPixel = (data >> nShift) & nMask;
-                    this.setPixel(this.imageBuffer, xBuffer++, yBuffer, bPixel);
-                    nShift += nShiftPixel;
+        for (let y = 0, off = 0; y < this.cyScreen; y++) {
+            for (let x = 0, offRow = off; x < this.cxScreen; x += nPixelsPerByte, offRow++) {
+                let b = this.busMemory.readData((addrBuffer + offRow) & CPU68K.ADDR_MASK);
+                if (this.fCacheValid && b === this.aCache[offRow]) continue;
+                this.aCache[offRow] = b;
+                for (let i = 0, nShift = 8 - this.cBPP; i < nPixelsPerByte; i++, nShift -= this.cBPP) {
+                    let rgb = aColors[(b >> nShift) & nMask];
+                    let index = ((y * this.cxScreen) + x + i) * 4;
+                    data[index] = rgb[0];
+                    data[index+1] = rgb[1];
+                    data[index+2] = rgb[2];
+                    data[index+3] = 0xff;
                 }
-                if (xBuffer > xMaxDirty) xMaxDirty = xBuffer;
-                if (yBuffer < yDirty) yDirty = yBuffer;
-                if (yBuffer >= yMaxDirty) yMaxDirty = yBuffer + 1;
+                if (x < xDirty) xDirty = x;
+                if (x + nPixelsPerByte > xMaxDirty) xMaxDirty = x + nPixelsPerByte;
+                if (y < yDirty) yDirty = y;
+                if (y >= yMaxDirty) yMaxDirty = y + 1;
             }
-            addr += addrInc; iCell++;
-            if (xBuffer >= this.cxBuffer) {
-                xBuffer = 0; yBuffer++;
-                if (yBuffer > this.cyBuffer) break;
-            }
+            off += cbRow;
         }
         this.fCacheValid = true;
 
-        /**
-         * Instead of blasting the ENTIRE imageBuffer into contextBuffer, and then blasting the ENTIRE
-         * canvasBuffer onto contextMonitor, even for the smallest change, let's try to be a bit smarter about
-         * the update (well, to the extent that the canvas APIs permit).
-         */
-        if (xDirty < this.cxBuffer) {
-            let cxDirty = xMaxDirty - xDirty;
-            let cyDirty = yMaxDirty - yDirty;
-            if (this.rotateBuffer) {
-                /**
-                 * If rotateBuffer is set, then it must be -90, so we must "rotate" the dirty coordinates as well,
-                 * because they are relative to the frame buffer, not the rotated image buffer.  Alternatively, you
-                 * can use the following call to blast the ENTIRE imageBuffer into contextBuffer instead:
-                 *
-                 *      this.contextBuffer.putImageData(this.imageBuffer, 0, 0);
-                 */
-                let xDirtyOrig = xDirty;
-                let cxDirtyOrig = cxDirty;
-                xDirty = yDirty;
-                cxDirty = cyDirty;
-                yDirty = this.cxBuffer - (xDirtyOrig + cxDirtyOrig);
-                cyDirty = cxDirtyOrig;
-            }
-            this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
+        if (xDirty < xMaxDirty) {
+            this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, xMaxDirty - xDirty, yMaxDirty - yDirty);
             /**
-             * As originally noted in /modules/pcx86/modules/v2/video.js, I would prefer to draw only the dirty portion
+             * As originally noted in /machines/pcx86/modules/v2/video.js, I would prefer to draw only the dirty portion
              * of canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextMonitor, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.
              */
@@ -20425,12 +24010,6 @@ class PilotVideo extends Monitor {
         }
     }
 }
-
-PilotVideo.COLORS = {
-    OVERLAY_TOP:    0,
-    OVERLAY_BOTTOM: 1,
-    OVERLAY_TOTAL:  2
-};
 
 PilotVideo.CLASSES["PilotVideo"] = PilotVideo;
 

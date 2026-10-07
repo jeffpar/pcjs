@@ -579,7 +579,11 @@ export default class StdLib extends Defines {
             aComp[iComp++] = n;
             iSrc = iCompare;
         }
-        if (aComp.length >= aSrc.length) return aSrc;
+        /**
+         * If compression didn't help, return the source array, but make sure it's a plain Array, not a typed array
+         * (eg, Uint8Array), because typed arrays are not serialized as arrays by JSON.stringify().
+         */
+        if (aComp.length >= aSrc.length) return Array.isArray(aSrc)? aSrc : Array.from(aSrc);
         return aComp;
     }
 

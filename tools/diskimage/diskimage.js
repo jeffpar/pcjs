@@ -1140,7 +1140,10 @@ function processArgs(argv, fSingle = false)
             processDisk(di, input, argv, null, fSingle);
             return true;
         }
-        if (input) printf("unable to process %s\n", input);
+        if (input) {
+            printf("unable to process %s\n", input);
+            process.exitCode = 1;
+        }
         return false;
     };
 
@@ -1186,6 +1189,7 @@ function processArgs(argv, fSingle = false)
         let offset = getArchiveOffset(input, arcType, argv['offset']);
         if (offset < 0) {
             printf("error: %s is not a supported archive file\n", input);
+            process.exitCode = 1;
             return true;
         }
         let listing = argv['list'];
