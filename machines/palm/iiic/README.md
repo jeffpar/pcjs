@@ -25,7 +25,7 @@ The image of the Palm IIIc is the 2x "skin" from the Palm OS Emulator (POSE), an
 
 Click any of the following applications to install it on the Palm IIIc and launch it (make sure the Palm IIIc is on and has completed Setup first).  Once installed, an application remains on the device (until it's reset), and it can be launched again using the Applications button.
 
-- [Bejeweled 1.2 (demo)](/machines/palm/iii/demos/Bejeweled.prc) by [Astraware](https://web.archive.org/web/20010410214533/http://www.astraware.com/palm/bejeweled/)
+- [Bejeweled 2.23](/machines/palm/iiic/demos/Bejeweled.prc) by [Astraware](https://web.archive.org/web/20031210092358/http://www.astraware.com/palm/bejeweled/)
 - [Pocket Aargon](/machines/palm/iiic/demos/Aargon.prc) by [DoubleBit Software](https://web.archive.org/web/20040627193028/http://www.doublebit.com/aargon/)
 
 [Pocket Aargon](https://web.archive.org/web/20040627193028/http://www.doublebit.com/aargon/) is a puzzle game of lasers and logic based on the PC game *Aargon Deluxe* developed by Twilight Games. I worked with them to develop *Pocket Aargon* for color Palm and Pocket PC devices, and it features a built-in tutorial, 30 Beginner levels, 90 Deluxe levels, and 30 new levels designed especially for handhelds, along with a level editor.  I built this particular version in June 2003.
