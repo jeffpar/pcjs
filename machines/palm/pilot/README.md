@@ -2,6 +2,7 @@
 layout: page
 title: Palm Pilot (1995)
 permalink: /machines/palm/pilot/
+preview: images/screenshot.png
 machines:
   - id: palm-pilot
     type: palm
@@ -11,7 +12,9 @@ machines:
     unbundled: true
 ---
 
-This PCjs machine emulates the original Palm Pilot, running the PalmOS 1.0 ROM.  It's a port of the [PIMulator](https://web.archive.org/web/20020627015208/http://www.pimcity.com/welcome.htm), a Java-based Palm Pilot emulator I wrote over 20 years ago, which emulated the Motorola 68000 CPU and the MC68328 ("DragonBall") hardware, including its interrupt controller, timers, LCD controller, and the digitizer and buttons attached to it.
+This PCjs machine emulates the original Palm Pilot, running the PalmOS 1.0 ROM.  It's a port of the [PIMulator](https://web.archive.org/web/20020627015208/http://www.pimcity.com/welcome.htm), a Java-based [Palm Pilot emulator](https://github.com/jeffpar/pcjs/tree/master/machines/palm/pilot/java) I wrote over 20 years ago.
+
+The machine emulates the [Motorola 68000 CPU](https://github.com/jeffpar/pcjs/tree/master/machines/motorola/68k/modules/v3) and the [MC68328 ("DragonBall")](https://github.com/jeffpar/pcjs/tree/master/machines/palm/pilot/modules/v3) hardware, including its interrupt controller, timers, LCD controller, and the digitizer and buttons attached to it.
 
 Use your mouse (or finger) as the stylus: tap anywhere on the screen or the silk-screened area below it, including the Graffiti area, where you can write characters.  The hardware buttons on the image can also be clicked. Hard-coded key mappings include:
 
@@ -32,9 +35,10 @@ Click any of the following applications to install it on the Pilot and launch it
 
 - [CODE5](/machines/palm/pilot/demos/CODE5.prc) by PIMCity
 - [Daleks](/machines/palm/pilot/demos/Daleks.prc) by [IndiVideo](https://web.archive.org/web/19991123230030/http://www.individeo.net/Daleks.html) ([ReadMe](/machines/palm/pilot/demos/Daleks.txt))
-- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Tinyware](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/PocketChess.txt))
+- [Invaders 1.0](/machines/palm/pilot/demos/Invaders.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/Invaders.txt))
+- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/PocketChess.txt))
 
-Some applications, like Bejeweled, Railroad, and SFCave, don't run on PalmOS 1.0, so try them on the [Palm III](/machines/palm/iii/#demos) instead.
+For more applications, like Bejeweled, Railroad, and SFCave, which don't run on PalmOS 1.0, try them on the [Palm III](/machines/palm/iii/#demos) instead.
 
 You can also install applications using the Debugger's `load` command (eg, `load demos/Daleks.prc`).
 

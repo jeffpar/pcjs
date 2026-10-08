@@ -1642,7 +1642,15 @@ export default class PC extends PCJSLib {
                             sCommand = sCommand.slice(sDir.length);
                         }
                         sCommand = sCommand.replace(/\//g, '\\');
-                        sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand + sArguments;
+                        sCommand = (sCommand[0] != '\\'? '\\' : '') + sCommand;
+                        /**
+                         * BASIC-DOS doesn't recognize '\\' as a path separator (its default is '/'), and a
+                         * program in the root needs no path at all, since that's where BASIC-DOS starts.
+                         */
+                        if (this.systemType == "bd") {
+                            sCommand = sCommand.replace(/^\\([^\\]*)$/, "$1").replace(/\\/g, '/');
+                        }
+                        sCommand += sArguments;
                     }
                 }
             }
@@ -2024,6 +2032,9 @@ export default class PC extends PCJSLib {
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          *
          * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command.
+         *
+         * With --bare, there's no QUIT.COM to find, so we leave any AUTOEXEC.BAT alone, and we don't create
+         * one unless there are commands to put in it.
          */
         let attr = DiskInfo.ATTR.ARCHIVE;
         text = await diskLib.readFileAsync(node.path.join(sDir, "AUTOEXEC.BAT"), "utf8", true);
@@ -2032,10 +2043,10 @@ export default class PC extends PCJSLib {
                 text = '@' + text;
             }
         } else {
-            text = verDOSMajor < 2? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
+            text = verDOSMajor < 2 || this.bare? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
             attr |= attrHidden;
         }
-        if (this.systemType != "bd") {
+        if (this.systemType != "bd" && !this.bare) {
             let matchPath = text.match(/^PATH\s*(.*)$/im);
             if (matchPath) {
                 let matchPathRoot = matchPath[1].match(new RegExp("(^|;|" + bootLetter + ":|)\\\\(;|$)", "i"));
@@ -3978,7 +3989,7 @@ export default class PC extends PCJSLib {
                 "--version=[#.##]":         "set operating system version (default is " + this.systemVersion + ")"
             };
             let optionsOther = {
-                "--bare (-b)":              "\tomit helper binaries from disk",
+                "--bare (-b)":              "\tomit helper binaries (and default AUTOEXEC.BAT)",
                 "--debug (-d)":             "\tenable DEBUG messages",
                 "--floppy (-f)":            "\tbuild floppy instead of hard disk",
                 "--halt (-h)":              "\thalt machine on startup",

@@ -2,6 +2,7 @@
 layout: page
 title: Palm III (1998)
 permalink: /machines/palm/iii/
+preview: images/screenshot.png
 machines:
   - id: palm-iii
     type: palm
