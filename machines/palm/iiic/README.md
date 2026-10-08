@@ -2,6 +2,7 @@
 layout: page
 title: Palm IIIc (2000)
 permalink: /machines/palm/iiic/
+preview: images/screenshot.png
 machines:
   - id: palm-iiic
     type: palm
