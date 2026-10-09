@@ -2,6 +2,7 @@
 layout: page
 title: PocketChess on the Palm Pilot
 permalink: /machines/palm/pilot/pocketchess/
+preview: /machines/palm/pilot/images/screenshot.png
 machines:
   - id: palm-pocketchess
     type: palm
