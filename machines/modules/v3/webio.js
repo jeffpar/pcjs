@@ -295,6 +295,33 @@ export default class WebIO extends StdIO {
     }
 
     /**
+     * downloadFile(sData, sFileName, sType)
+     *
+     * @this {WebIO}
+     * @param {string} sData
+     * @param {string} sFileName
+     * @param {string} [sType]
+     * @returns {boolean} true if download initiated, false if not
+     */
+    downloadFile(sData, sFileName, sType = "application/octet-stream")
+    {
+        if (window && window.document && typeof Blob == 'function' && typeof URL != 'undefined' && URL.createObjectURL) {
+            let link = window.document.createElement('a');
+            if (typeof link.download == 'string') {
+                let sURL = URL.createObjectURL(new Blob([sData], {type: sType}));
+                link.href = sURL;
+                link.download = sFileName;
+                window.document.body.appendChild(link);
+                link.click();
+                window.document.body.removeChild(link);
+                setTimeout(function() { URL.revokeObjectURL(sURL); }, 1000);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * error(format, args)
      *
      * @this {WebIO}

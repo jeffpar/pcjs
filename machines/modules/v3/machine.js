@@ -17,6 +17,7 @@ import MESSAGE from "./message.js";
  * @property {string} sConfigFile
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
+ * @property {string|null|undefined} sStateInit
  */
 export default class Machine extends Device {
     /**
@@ -119,6 +120,7 @@ export default class Machine extends Device {
         this.sConfigFile = "";
         this.fConfigLoaded = false;
         this.fPageLoaded = false;
+        this.sStateInit = undefined;    // contents of the machine's initial state file, if any (see initDevices())
         this.setReady(false);
 
         /**
@@ -212,6 +214,35 @@ export default class Machine extends Device {
     {
         let power = true;
         if (this.fConfigLoaded && this.fPageLoaded) {
+            /**
+             * If the machine has an initial state file (eg, a 'state' property in the page's machine Front Matter),
+             * make sure we have it before initializing any devices; sStateInit is undefined until the request is made,
+             * null while the request is pending, and a string (empty if the request failed) when it's complete.
+             */
+            let sStateFile = this.config['state'];
+            if (sStateFile && typeof this.sStateInit != "string") {
+                if (this.sStateInit === undefined) {
+                    let machine = this;
+                    this.sStateInit = null;
+                    this.getResource(sStateFile, function onLoadState(sURL, sResource, readyState, nErrorCode) {
+                        if (readyState == 4) {
+                            machine.sStateInit = "";
+                            if (!nErrorCode && sResource) {
+                                try {
+                                    JSON.parse(sResource);
+                                    machine.sStateInit = sResource;
+                                } catch(err) {
+                                    machine.printf("error parsing state file %s: %s\n", sURL, err.message);
+                                }
+                            } else {
+                                machine.printf("error (%d) loading state file: %s\n", nErrorCode, sURL);
+                            }
+                            machine.initDevices();
+                        }
+                    });
+                }
+                return;
+            }
             for (let idDevice in this.deviceConfigs) {
                 let sClass;
                 let config = this.deviceConfigs[idDevice];
@@ -236,17 +267,16 @@ export default class Machine extends Device {
                     this.removeDevice(idDevice);
                 }
             }
-            if (this.fAutoSave) {
-                let state = this.loadLocalStorage();
-                this.enumDevices(function onDeviceLoad(device) {
-                    if (device.onLoad) {
-                        if (!device.onLoad(state)) {
-                            device.printf('unable to restore state for device "%s"\n', device.idDevice);
-                            return false;
-                        }
-                    }
-                    return true;
-                });
+            /**
+             * Any state saved in localStorage takes precedence over the machine's initial state file (if any).
+             */
+            let state = this.fAutoSave? this.loadLocalStorage() : null;
+            if (!state && this.sStateInit) {
+                state = JSON.parse(this.sStateInit);
+                this.printf("Initial state: %s\n", this.config['state']);
+            }
+            if (state) {
+                this.loadState(state);
             }
             this.setReady(true);
             if (!this.whenReady(this.onPower.bind(this, power))) {
@@ -282,15 +312,27 @@ export default class Machine extends Device {
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
-                 * Machine object within the config using the name of the config file itself, and if that
-                 * succeeds, then we'll duplicate the Machine object within the config using the actual ID.
+                 * Machine object within the config using the name of the config file itself, or failing that,
+                 * the config's only Machine object, and if that succeeds, then we'll rename the Machine object
+                 * within the config using the actual ID (preserving its position within the config).
                  */
                 let id = this.getBaseName(this.sConfigFile, true);
                 config = this.deviceConfigs[id];
                 if (!config) {
+                    let ids = Object.keys(this.deviceConfigs).filter((idConfig) => this.deviceConfigs[idConfig]['class'] == "Machine");
+                    if (ids.length == 1) {
+                        id = ids[0];
+                        config = this.deviceConfigs[id];
+                    }
+                }
+                if (!config) {
                     throw new Error("configuration missing machine ID");
                 }
-                this.deviceConfigs[this.idMachine] = config;
+                let configs = {};
+                for (let idConfig in this.deviceConfigs) {
+                    configs[idConfig == id? this.idMachine : idConfig] = this.deviceConfigs[idConfig];
+                }
+                this.deviceConfigs = configs;
             }
             this.checkConfig(config, ['autoSave', 'autoStart']);
             this.fAutoSave = (this.config['autoSave'] !== false);
@@ -320,6 +362,51 @@ export default class Machine extends Device {
             }
             this.printf("machine '%s' initialization error: %s\n", this.idMachine, sError);
         }
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Calls the onLoad() handler of every device, stopping at the first device unable to restore its state.
+     *
+     * @this {Machine}
+     * @param {Array|null} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let success = true;
+        this.enumDevices(function onDeviceLoad(device) {
+            if (device.onLoad) {
+                if (!device.onLoad(state)) {
+                    device.printf('unable to restore state for device "%s"\n', device.idDevice);
+                    success = false;
+                    return false;
+                }
+            }
+            return true;
+        });
+        return success;
+    }
+
+    /**
+     * saveState()
+     *
+     * Calls the onSave() handler of every device, returning the combined state of the machine.
+     *
+     * @this {Machine}
+     * @returns {Array}
+     */
+    saveState()
+    {
+        let state = [];
+        this.enumDevices(function onDeviceSave(device) {
+            if (device.onSave) {
+                device.onSave(state);
+            }
+            return true;
+        });
+        return state;
     }
 
     /**
@@ -356,6 +443,9 @@ export default class Machine extends Device {
     /**
      * onReset()
      *
+     * If the machine has an initial state file, then after all devices have been reset, that state is restored,
+     * so that the machine reverts to its initial state rather than its default state.
+     *
      * @this {Machine}
      */
     onReset()
@@ -369,6 +459,11 @@ export default class Machine extends Device {
                 return true;
             });
             this.printf("reset\n");
+            if (this.sStateInit) {
+                if (this.loadState(JSON.parse(this.sStateInit))) {
+                    this.printf("Initial state restored: %s\n", this.config['state']);
+                }
+            }
         }
     }
 
@@ -380,14 +475,7 @@ export default class Machine extends Device {
     stopDevices()
     {
         if (this.fAutoSave) {
-            let state = [];
-            this.enumDevices(function onDeviceSave(device) {
-                if (device.onSave) {
-                    device.onSave(state);
-                }
-                return true;
-            });
-            this.saveLocalStorage(state);
+            this.saveLocalStorage(this.saveState());
         }
         this.onPower(false);
     }
