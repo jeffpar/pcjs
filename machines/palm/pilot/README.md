@@ -25,7 +25,9 @@ Use your mouse (or finger) as the stylus: tap anywhere on the screen or the silk
 - 4: Memo Pad
 - Up/Down arrows: Scroll Up/Down
 
-The first time the Pilot boots, it will ask you to calibrate the digitizer, by tapping the center of a few targets. The state of the machine (including everything you've entered) is automatically saved in your browser whenever you leave the page, and restored when you return.  Clicking the **Reset** button below the machine erases RAM (the equivalent of a "hard reset"), so the Pilot will start over.  Use the Pilot's own power button to put it to sleep and wake it up again; like the real thing, it will also turn itself off after a period of inactivity (see the "Auto-off" setting in Prefs).
+The first time the Pilot boots, it will ask you to calibrate the digitizer, by tapping the center of a few targets.
+
+The state of the machine (including all your changes/progress) is automatically saved in your browser whenever you leave the page and restored when you return.  Use the Pilot's own **Power** button to put it to sleep and wake it up again; it will turn itself off after a period of inactivity (see the "Auto-off" setting in Prefs).  Clicking the **Reset** button below the machine erases its memory (the equivalent of a "hard reset"), so any changes will be lost.
 
 {% include machine.html id="palm-pilot" %}
 
@@ -33,10 +35,10 @@ The first time the Pilot boots, it will ask you to calibrate the digitizer, by t
 
 Click any of the following applications to install it on the Pilot and launch it.  Like the original PIMulator, this "injects" a series of PalmOS API calls (DmCreateDatabaseFromImage, SysUIAppSwitch, etc) while the Pilot is idle, so make sure the Pilot is on and has been calibrated first.  Once installed, an application remains on the Pilot (until the Pilot is reset), and it can be launched again using the Pilot's Applications button.
 
-- [CODE5](/machines/palm/pilot/demos/CODE5.prc) by PIMCity
+- [CODE5](/machines/palm/pilot/demos/CODE5.prc) by [DoubleBit Software](https://web.archive.org/web/20040823231821/http://www.doublebit.com/code5/)
 - [Daleks](/machines/palm/pilot/demos/Daleks.prc) by [IndiVideo](https://web.archive.org/web/19991123230030/http://www.individeo.net/Daleks.html) ([ReadMe](/machines/palm/pilot/demos/Daleks.txt))
 - [Invaders 1.0](/machines/palm/pilot/demos/Invaders.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/Invaders.txt))
-- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([Demo](/machines/palm/pilot/pocketchess/))
+- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/pocketchess/PocketChess.txt)) ([Demo](/machines/palm/pilot/pocketchess/))
 
 For more applications, like Bejeweled, Railroad, and SFCave, which don't run on PalmOS 1.0, try them on the [Palm III](/machines/palm/iii/#demos) instead.
 

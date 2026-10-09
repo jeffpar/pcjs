@@ -21385,7 +21385,7 @@ class Machine extends Device {
              */
             let state = this.fAutoSave? this.loadLocalStorage() : null;
             if (!state && this.sStateInit) {
-                state = JSON.parse(this.sStateInit);
+                state = /** @type {Array} */ (JSON.parse(this.sStateInit));
                 this.printf("Initial state: %s\n", this.config['state']);
             }
             if (state) {
@@ -21432,7 +21432,7 @@ class Machine extends Device {
                 let id = this.getBaseName(this.sConfigFile, true);
                 config = this.deviceConfigs[id];
                 if (!config) {
-                    let ids = Object.keys(this.deviceConfigs).filter((idConfig) => this.deviceConfigs[idConfig]['class'] == "Machine");
+                    let ids = Object.keys(/** @type {!Object} */ (this.deviceConfigs)).filter((idConfig) => this.deviceConfigs[idConfig]['class'] == "Machine");
                     if (ids.length == 1) {
                         id = ids[0];
                         config = this.deviceConfigs[id];
@@ -21573,7 +21573,7 @@ class Machine extends Device {
             });
             this.printf("reset\n");
             if (this.sStateInit) {
-                if (this.loadState(JSON.parse(this.sStateInit))) {
+                if (this.loadState(/** @type {Array} */ (JSON.parse(this.sStateInit)))) {
                     this.printf("Initial state restored: %s\n", this.config['state']);
                 }
             }
