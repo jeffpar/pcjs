@@ -71,6 +71,7 @@ export default class Debugger extends Device {
         "p    [expr]\tparse expression",
         "r?   [value]\tdisplay/set registers",
         "s?\t\tset commands",
+        "save [file]\tsave machine state",
         "t[r] [n]\tstep (n instructions)",
         "u    [addr] [n]\tunassemble (at addr)"
     ];
@@ -2419,6 +2420,10 @@ export default class Debugger extends Device {
 
         this.fStepQuietly = undefined;
 
+        if (cmd == "save") {
+            return this.saveMachine(option);
+        }
+
         if (option == '*') {
             index = -2;
         } else {
@@ -2705,6 +2710,34 @@ export default class Debugger extends Device {
             }
             this.cTransitions++;
         }
+    }
+
+    /**
+     * saveMachine(sFileName)
+     *
+     * Saves the state of the entire machine (the same state the Machine saves in localStorage) as a JSON file,
+     * which can then be used as the initial state of another machine (eg, via a 'state' property in the page's
+     * machine Front Matter).  If the browser doesn't support downloads, the JSON is simply returned instead.
+     *
+     * @this {Debugger}
+     * @param {string} [sFileName] (default is the machine ID with a ".json" extension)
+     * @returns {string}
+     */
+    saveMachine(sFileName)
+    {
+        /**
+         * Our own onSave() handler resets cTransitions (since it's normally called when the page is being unloaded),
+         * so we preserve it here.
+         */
+        let cTransitions = this.cTransitions;
+        let sState = JSON.stringify(this.machine.saveState());
+        this.cTransitions = cTransitions;
+        if (!sFileName) sFileName = this.idMachine;
+        if (sFileName.indexOf('.') < 0) sFileName += ".json";
+        if (this.downloadFile(sState, sFileName, "application/json")) {
+            return this.sprintf("saved %d bytes to %s\n", sState.length, sFileName);
+        }
+        return sState + "\n";
     }
 
     /**

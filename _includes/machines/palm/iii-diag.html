@@ -34,15 +34,10 @@
     document.getElementById("resetIII").addEventListener("click", function() { showDebugger(false); });
     //
     // The Run button is a Run/Halt toggle, so we use a capturing listener to see its text before the machine
-    // updates it: clicking "Run" closes the debugger.  And whenever the machine stops on its own (eg, at a
-    // breakpoint), the button's text changes from "Halt" to "Run", at which point we open the debugger.
+    // updates it: clicking "Run" closes the debugger.  The debugger is never opened automatically (eg, when the
+    // machine stops, which also happens whenever the page is unloaded); only the Debug button opens it.
     //
     let run = document.getElementById("runIII");
     run.addEventListener("click", function() { if (run.textContent == "Run") showDebugger(false); }, true);
-    let textRun = run.textContent;
-    new MutationObserver(function() {
-      if (textRun == "Halt" && run.textContent == "Run") showDebugger(true);
-      textRun = run.textContent;
-    }).observe(run, {childList: true, characterData: true, subtree: true});
   })();
 </script>

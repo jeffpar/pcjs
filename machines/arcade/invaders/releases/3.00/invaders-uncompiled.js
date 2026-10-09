@@ -1925,6 +1925,33 @@ class WebIO extends StdIO {
     }
 
     /**
+     * downloadFile(sData, sFileName, sType)
+     *
+     * @this {WebIO}
+     * @param {string} sData
+     * @param {string} sFileName
+     * @param {string} [sType]
+     * @returns {boolean} true if download initiated, false if not
+     */
+    downloadFile(sData, sFileName, sType = "application/octet-stream")
+    {
+        if (window && window.document && typeof Blob == 'function' && typeof URL != 'undefined' && URL.createObjectURL) {
+            let link = window.document.createElement('a');
+            if (typeof link.download == 'string') {
+                let sURL = URL.createObjectURL(new Blob([sData], {type: sType}));
+                link.href = sURL;
+                link.download = sFileName;
+                window.document.body.appendChild(link);
+                link.click();
+                window.document.body.removeChild(link);
+                setTimeout(function() { URL.revokeObjectURL(sURL); }, 1000);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * error(format, args)
      *
      * @this {WebIO}
@@ -10467,6 +10494,7 @@ class Debugger extends Device {
         "p    [expr]\tparse expression",
         "r?   [value]\tdisplay/set registers",
         "s?\t\tset commands",
+        "save [file]\tsave machine state",
         "t[r] [n]\tstep (n instructions)",
         "u    [addr] [n]\tunassemble (at addr)"
     ];
@@ -12815,6 +12843,10 @@ class Debugger extends Device {
 
         this.fStepQuietly = undefined;
 
+        if (cmd == "save") {
+            return this.saveMachine(option);
+        }
+
         if (option == '*') {
             index = -2;
         } else {
@@ -13101,6 +13133,34 @@ class Debugger extends Device {
             }
             this.cTransitions++;
         }
+    }
+
+    /**
+     * saveMachine(sFileName)
+     *
+     * Saves the state of the entire machine (the same state the Machine saves in localStorage) as a JSON file,
+     * which can then be used as the initial state of another machine (eg, via a 'state' property in the page's
+     * machine Front Matter).  If the browser doesn't support downloads, the JSON is simply returned instead.
+     *
+     * @this {Debugger}
+     * @param {string} [sFileName] (default is the machine ID with a ".json" extension)
+     * @returns {string}
+     */
+    saveMachine(sFileName)
+    {
+        /**
+         * Our own onSave() handler resets cTransitions (since it's normally called when the page is being unloaded),
+         * so we preserve it here.
+         */
+        let cTransitions = this.cTransitions;
+        let sState = JSON.stringify(this.machine.saveState());
+        this.cTransitions = cTransitions;
+        if (!sFileName) sFileName = this.idMachine;
+        if (sFileName.indexOf('.') < 0) sFileName += ".json";
+        if (this.downloadFile(sState, sFileName, "application/json")) {
+            return this.sprintf("saved %d bytes to %s\n", sState.length, sFileName);
+        }
+        return sState + "\n";
     }
 
     /**
@@ -18577,6 +18637,7 @@ InvadersVideo.CLASSES["InvadersVideo"] = InvadersVideo;
  * @property {string} sConfigFile
  * @property {boolean} fConfigLoaded
  * @property {boolean} fPageLoaded
+ * @property {string|null|undefined} sStateInit
  */
 class Machine extends Device {
     /**
@@ -18679,6 +18740,7 @@ class Machine extends Device {
         this.sConfigFile = "";
         this.fConfigLoaded = false;
         this.fPageLoaded = false;
+        this.sStateInit = undefined;    // contents of the machine's initial state file, if any (see initDevices())
         this.setReady(false);
 
         /**
@@ -18772,6 +18834,35 @@ class Machine extends Device {
     {
         let power = true;
         if (this.fConfigLoaded && this.fPageLoaded) {
+            /**
+             * If the machine has an initial state file (eg, a 'state' property in the page's machine Front Matter),
+             * make sure we have it before initializing any devices; sStateInit is undefined until the request is made,
+             * null while the request is pending, and a string (empty if the request failed) when it's complete.
+             */
+            let sStateFile = this.config['state'];
+            if (sStateFile && typeof this.sStateInit != "string") {
+                if (this.sStateInit === undefined) {
+                    let machine = this;
+                    this.sStateInit = null;
+                    this.getResource(sStateFile, function onLoadState(sURL, sResource, readyState, nErrorCode) {
+                        if (readyState == 4) {
+                            machine.sStateInit = "";
+                            if (!nErrorCode && sResource) {
+                                try {
+                                    JSON.parse(sResource);
+                                    machine.sStateInit = sResource;
+                                } catch(err) {
+                                    machine.printf("error parsing state file %s: %s\n", sURL, err.message);
+                                }
+                            } else {
+                                machine.printf("error (%d) loading state file: %s\n", nErrorCode, sURL);
+                            }
+                            machine.initDevices();
+                        }
+                    });
+                }
+                return;
+            }
             for (let idDevice in this.deviceConfigs) {
                 let sClass;
                 let config = this.deviceConfigs[idDevice];
@@ -18796,17 +18887,16 @@ class Machine extends Device {
                     this.removeDevice(idDevice);
                 }
             }
-            if (this.fAutoSave) {
-                let state = this.loadLocalStorage();
-                this.enumDevices(function onDeviceLoad(device) {
-                    if (device.onLoad) {
-                        if (!device.onLoad(state)) {
-                            device.printf('unable to restore state for device "%s"\n', device.idDevice);
-                            return false;
-                        }
-                    }
-                    return true;
-                });
+            /**
+             * Any state saved in localStorage takes precedence over the machine's initial state file (if any).
+             */
+            let state = this.fAutoSave? this.loadLocalStorage() : null;
+            if (!state && this.sStateInit) {
+                state = JSON.parse(this.sStateInit);
+                this.printf("Initial state: %s\n", this.config['state']);
+            }
+            if (state) {
+                this.loadState(state);
             }
             this.setReady(true);
             if (!this.whenReady(this.onPower.bind(this, power))) {
@@ -18842,15 +18932,27 @@ class Machine extends Device {
                  * Pages that want to instantiate multiple machines using identical configs would normally
                  * have to create unique config files for each machine, even though the only difference between
                  * the configs would be the machine ID.  To reduce that redundancy, we'll try to identify the
-                 * Machine object within the config using the name of the config file itself, and if that
-                 * succeeds, then we'll duplicate the Machine object within the config using the actual ID.
+                 * Machine object within the config using the name of the config file itself, or failing that,
+                 * the config's only Machine object, and if that succeeds, then we'll rename the Machine object
+                 * within the config using the actual ID (preserving its position within the config).
                  */
                 let id = this.getBaseName(this.sConfigFile, true);
                 config = this.deviceConfigs[id];
                 if (!config) {
+                    let ids = Object.keys(this.deviceConfigs).filter((idConfig) => this.deviceConfigs[idConfig]['class'] == "Machine");
+                    if (ids.length == 1) {
+                        id = ids[0];
+                        config = this.deviceConfigs[id];
+                    }
+                }
+                if (!config) {
                     throw new Error("configuration missing machine ID");
                 }
-                this.deviceConfigs[this.idMachine] = config;
+                let configs = {};
+                for (let idConfig in this.deviceConfigs) {
+                    configs[idConfig == id? this.idMachine : idConfig] = this.deviceConfigs[idConfig];
+                }
+                this.deviceConfigs = configs;
             }
             this.checkConfig(config, ['autoSave', 'autoStart']);
             this.fAutoSave = (this.config['autoSave'] !== false);
@@ -18880,6 +18982,51 @@ class Machine extends Device {
             }
             this.printf("machine '%s' initialization error: %s\n", this.idMachine, sError);
         }
+    }
+
+    /**
+     * loadState(state)
+     *
+     * Calls the onLoad() handler of every device, stopping at the first device unable to restore its state.
+     *
+     * @this {Machine}
+     * @param {Array|null} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        let success = true;
+        this.enumDevices(function onDeviceLoad(device) {
+            if (device.onLoad) {
+                if (!device.onLoad(state)) {
+                    device.printf('unable to restore state for device "%s"\n', device.idDevice);
+                    success = false;
+                    return false;
+                }
+            }
+            return true;
+        });
+        return success;
+    }
+
+    /**
+     * saveState()
+     *
+     * Calls the onSave() handler of every device, returning the combined state of the machine.
+     *
+     * @this {Machine}
+     * @returns {Array}
+     */
+    saveState()
+    {
+        let state = [];
+        this.enumDevices(function onDeviceSave(device) {
+            if (device.onSave) {
+                device.onSave(state);
+            }
+            return true;
+        });
+        return state;
     }
 
     /**
@@ -18916,6 +19063,9 @@ class Machine extends Device {
     /**
      * onReset()
      *
+     * If the machine has an initial state file, then after all devices have been reset, that state is restored,
+     * so that the machine reverts to its initial state rather than its default state.
+     *
      * @this {Machine}
      */
     onReset()
@@ -18929,6 +19079,11 @@ class Machine extends Device {
                 return true;
             });
             this.printf("reset\n");
+            if (this.sStateInit) {
+                if (this.loadState(JSON.parse(this.sStateInit))) {
+                    this.printf("Initial state restored: %s\n", this.config['state']);
+                }
+            }
         }
     }
 
@@ -18940,14 +19095,7 @@ class Machine extends Device {
     stopDevices()
     {
         if (this.fAutoSave) {
-            let state = [];
-            this.enumDevices(function onDeviceSave(device) {
-                if (device.onSave) {
-                    device.onSave(state);
-                }
-                return true;
-            });
-            this.saveLocalStorage(state);
+            this.saveLocalStorage(this.saveState());
         }
         this.onPower(false);
     }

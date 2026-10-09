@@ -36,11 +36,11 @@ Click any of the following applications to install it on the Pilot and launch it
 - [CODE5](/machines/palm/pilot/demos/CODE5.prc) by PIMCity
 - [Daleks](/machines/palm/pilot/demos/Daleks.prc) by [IndiVideo](https://web.archive.org/web/19991123230030/http://www.individeo.net/Daleks.html) ([ReadMe](/machines/palm/pilot/demos/Daleks.txt))
 - [Invaders 1.0](/machines/palm/pilot/demos/Invaders.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/Invaders.txt))
-- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/PocketChess.txt))
+- [PocketChess 1.1](/machines/palm/pilot/demos/PocketChess.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([Demo](/machines/palm/pilot/pocketchess/))
 
 For more applications, like Bejeweled, Railroad, and SFCave, which don't run on PalmOS 1.0, try them on the [Palm III](/machines/palm/iii/#demos) instead.
 
-You can also install applications using the Debugger's `load` command (eg, `load demos/Daleks.prc`).
+You can also install applications using the Debugger's `load` command (eg, `load demos/Daleks.prc`).  The Debugger's `save` command (eg, `save pocketchess.json`) saves the entire state of the machine to a file, which another page can use as the initial state of its machine, as the [PocketChess](pocketchess/) page does.
 
 <script>
   document.querySelectorAll('a[href$=".prc"]').forEach((link) => {
