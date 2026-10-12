@@ -2609,7 +2609,7 @@ export default class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            this.printf((bCmdIndex > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
+            this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -2642,7 +2642,7 @@ export default class HDC extends Component {
     pushResult(bResult)
     {
         if (DEBUG) {
-            this.printf((this.regDataTotal > 0? MESSAGE.PORT : 0) + MESSAGE.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
+            this.printf(MESSAGE.HDC + MESSAGE.PORT, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
