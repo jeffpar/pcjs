@@ -33,6 +33,7 @@ import { APPCLASS, RS232 } from "./defines.js";
  * @property {number} nIRQ
  * @property {string|null} consoleBuffer
  * @property {HTMLTextAreaElement} controlBuffer (DOM element bound to the port for rudimentary output; see transmitByte())
+ * @property {number} maxBuffer (maximum number of characters in controlBuffer, or 0 for no limit)
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class SerialPort extends Component {
@@ -289,10 +290,18 @@ export default class SerialPort extends Component {
          */
         this.tabSize = +parms['tabSize'] || 0;
         this.charBOL = +parms['charBOL'] || 0;
+
+        /**
+         * If 'maxBuffer' is set, then controlBuffer is limited to that many characters; whenever output would
+         * exceed it, the oldest lines are discarded, so that a long-running terminal doesn't slow down as its
+         * text grows.
+         */
+        this.maxBuffer = +parms['maxBuffer'] || 0;
         this.charPrev = 0;
         this.iLogicalCol = 0;
 
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
+        this.fTHRInt = false;
         this.fNullModem = true;
 
         /**
@@ -334,7 +343,7 @@ export default class SerialPort extends Component {
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = null;
+        this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
         this.fAutoFlow = false;
 
         /**
@@ -344,7 +353,8 @@ export default class SerialPort extends Component {
             'bind': this.bindConnection,
             'connect': this.initConnection,
             'receiveData': this.receiveData,
-            'receiveStatus': this.receiveStatus
+            'receiveStatus': this.receiveStatus,
+            'receiveBreak': this.receiveBreak
         };
     }
 
@@ -549,6 +559,7 @@ export default class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
+                                this.sendBreak = exports['receiveBreak'] || null;
                                 this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
@@ -682,6 +693,12 @@ export default class SerialPort extends Component {
         this.bLSR = data[i++];
         this.bMSR = data[i++];
         this.abReceive = data[i];
+        /**
+         * fTHRInt latches the "transmitter holding register empty" interrupt condition, like a real 8250: it's set
+         * when the THR becomes empty (or when that interrupt is enabled while the THR is empty), and cleared by a THR
+         * write or by an IIR read that reports it; it's derived from the IIR here, so saved states remain compatible.
+         */
+        this.fTHRInt = (this.bIIR & (SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS)) == SerialPort.IIR.INT_THR;
         return true;
     }
 
@@ -711,18 +728,26 @@ export default class SerialPort extends Component {
     /**
      * getBaudTimeout()
      *
-     * The 16-bit Divisor Latch is stored in wDL.  If we take the frequency value 1843200 and divide it by wDL*128,
-     * we get the maximum number of bytes per second that the SerialPort interface should generate.  For example,
-     * if a baud rate of 1200 is being used, the divisor will be 0x60 (96), so we calculate 1843200/(96*128) = 150,
-     * which means there should be a 1000ms/150 or 6.667ms delay between bytes delivered.
+     * The 16-bit Divisor Latch is stored in wDL.  The 8250 divides its 1.8432Mhz clock by wDL*16 to get the baud
+     * rate (bits per second), and every byte (character) on the line includes a start bit, 5-8 data bits, an
+     * optional parity bit, and 1, 1.5, or 2 stop bits (see the LCR).  For example, at 9600 baud (wDL = 12) with
+     * 8 data bits, no parity, and 1 stop bit, that's 10 bits per byte, or 960 bytes per second, which means there
+     * should be a 1000ms/960 or 1.042ms delay between bytes.
+     *
+     * NOTE: The result is NOT truncated to an integer, because at higher baud rates (eg, 9600), the delay is
+     * barely more than 1ms, and setTimer() treats 0ms as no delay at all; that used to remove all pacing (other
+     * than the speed of the emulated CPU), so increasing the machine's speed would increase the serial data rate.
      *
      * @this {SerialPort}
      * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout()
     {
-        let nBytesPerSecond = 1843200 / ((this.wDL || 1) << 7);
-        return (1000 / nBytesPerSecond)|0;
+        let nDataBits = 5 + (this.bLCR & SerialPort.LCR.DATA_8BITS);
+        let nStopBits = (this.bLCR & SerialPort.LCR.STOP_BITS)? (nDataBits == 5? 1.5 : 2) : 1;
+        let nBits = 1 + nDataBits + ((this.bLCR & SerialPort.LCR.PARITY_BIT)? 1 : 0) + nStopBits;
+        let nBytesPerSecond = 1843200 / (((this.wDL || 1) << 4) * nBits);
+        return 1000 / nBytesPerSecond;
     }
 
     /**
@@ -771,6 +796,24 @@ export default class SerialPort extends Component {
     }
 
     /**
+     * receiveBreak(fBreak)
+     *
+     * Called when the connected machine starts (or stops) sending a BREAK.  Like a real 8250, we set the "Break
+     * Interrupt" bit when a BREAK begins, which reading the LSR clears, along with any line status interrupt.  However,
+     * we don't also load a zero character into the RBR, as a real 8250 does, since it's not useful data.
+     *
+     * @this {SerialPort}
+     * @param {boolean} fBreak
+     */
+    receiveBreak(fBreak)
+    {
+        if (fBreak && !(this.bLSR & SerialPort.LSR.BI)) {
+            this.bLSR |= SerialPort.LSR.BI;
+            this.updateIIR();
+        }
+    }
+
+    /**
      * receiveStatus(pins)
      *
      * NOTE: Prior to the addition of this interface, the CTS and DSR bits were initialized set and remained set
@@ -784,12 +827,15 @@ export default class SerialPort extends Component {
     {
         let bMSROld = this.bMSR;
         this.bMSR &= ~(SerialPort.MSR.CTS | SerialPort.MSR.DSR);
-        if (pins & RS232.CTS.MASK) {
-            this.bMSR |= SerialPort.MSR.CTS | SerialPort.MSR.DCTS;
-        }
-        if (pins & RS232.DSR.MASK) {
-            this.bMSR |= SerialPort.MSR.DSR | SerialPort.MSR.DDSR;
-        }
+        if (pins & RS232.CTS.MASK) this.bMSR |= SerialPort.MSR.CTS;
+        if (pins & RS232.DSR.MASK) this.bMSR |= SerialPort.MSR.DSR;
+        /**
+         * Like a real 8250, set the "delta" bits whenever CTS or DSR changes in EITHER direction, so that
+         * software using RTS/CTS flow control is notified (via an MSR interrupt) when CTS drops, too.
+         */
+        let bDelta = this.bMSR ^ bMSROld;
+        if (bDelta & SerialPort.MSR.CTS) this.bMSR |= SerialPort.MSR.DCTS;
+        if (bDelta & SerialPort.MSR.DSR) this.bMSR |= SerialPort.MSR.DDSR;
         if (bMSROld != this.bMSR) this.updateIIR();
     }
 
@@ -856,10 +902,12 @@ export default class SerialPort extends Component {
     {
         let b = this.bIIR;
         /**
-         * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR).
+         * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR), and then
+         * the IIR reflects the next pending interrupt condition, if any (eg, a modem status change).
          */
         if (b == SerialPort.IIR.INT_THR) {
-            this.bIIR = SerialPort.IIR.NO_INT;
+            this.fTHRInt = false;
+            this.updateIIR();
         }
         this.printIO(port, undefined, addrFrom, "IIR", b);
         return b;
@@ -906,6 +954,14 @@ export default class SerialPort extends Component {
     inLSR(port, addrFrom)
     {
         let b = this.bLSR;
+        /**
+         * Reading the LSR clears the error bits (and therefore any line status interrupt).
+         */
+        let bErrors = SerialPort.LSR.OE | SerialPort.LSR.PE | SerialPort.LSR.FE | SerialPort.LSR.BI;
+        if (b & bErrors) {
+            this.bLSR &= ~bErrors;
+            this.updateIIR();
+        }
         this.printIO(port, undefined, addrFrom, "LSR", b);
         return b;
     }
@@ -943,6 +999,7 @@ export default class SerialPort extends Component {
         } else {
             this.bTHR = bOut;
             this.bLSR &= ~(SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
+            this.fTHRInt = false;
             /**
              * If transmitByte() returned success, we used to immediately re-set the transmitter empty bits:
              *
@@ -979,6 +1036,12 @@ export default class SerialPort extends Component {
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & 0xff) | (bOut << 8);
         } else {
+            /**
+             * Enabling the THR interrupt while the THR is already empty sets the (latched) THR interrupt condition.
+             */
+            if ((bOut & ~this.bIER & SerialPort.IER.THR_EMPTY) && (this.bLSR & SerialPort.LSR.THRE)) {
+                this.fTHRInt = true;
+            }
             this.bIER = bOut;
         }
     }
@@ -994,6 +1057,12 @@ export default class SerialPort extends Component {
     outLCR(port, bOut, addrFrom)
     {
         this.printIO(port, bOut, addrFrom, "LCR");
+        /**
+         * Whenever the BREAK bit changes, notify any connected machine.
+         */
+        if (this.sendBreak && ((bOut ^ this.bLCR) & SerialPort.LCR.BREAK)) {
+            this.sendBreak.call(this.connection, !!(bOut & SerialPort.LCR.BREAK));
+        }
         this.bLCR = bOut;
     }
 
@@ -1041,12 +1110,15 @@ export default class SerialPort extends Component {
     {
         let bIIR = -1;
         /**
-         * We check all the interrupt conditions in priority order.  TODO: Add INT_LSR.
+         * We check all the interrupt conditions in priority order (currently, BI is the only LSR error we generate).
          */
-        if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
+        if ((this.bLSR & (SerialPort.LSR.OE | SerialPort.LSR.PE | SerialPort.LSR.FE | SerialPort.LSR.BI)) && (this.bIER & SerialPort.IER.LSR_DELTA)) {
+            bIIR = SerialPort.IIR.INT_LSR;
+        }
+        else if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
             bIIR = SerialPort.IIR.INT_RBR;
         }
-        else if ((this.bLSR & SerialPort.LSR.THRE) && (this.bIER & SerialPort.IER.THR_EMPTY)) {
+        else if (this.fTHRInt && (this.bIER & SerialPort.IER.THR_EMPTY)) {
             bIIR = SerialPort.IIR.INT_THR;
         }
         else if ((this.bMSR & (SerialPort.MSR.DCTS | SerialPort.MSR.DDSR)) && (this.bIER & SerialPort.IER.MSR_DELTA)) {
@@ -1129,7 +1201,12 @@ export default class SerialPort extends Component {
                     if (this.charPrev != 0x0A) s = "\n" + s;
                     if (this.charBOL) s = String.fromCharCode(this.charBOL) + s;
                 }
-                this.controlBuffer.value += s;
+                let text = this.controlBuffer.value + s;
+                if (this.maxBuffer && text.length > this.maxBuffer) {
+                    let i = text.indexOf("\n", text.length - this.maxBuffer);
+                    text = text.slice(i < 0? text.length - this.maxBuffer : i + 1);
+                }
+                this.controlBuffer.value = text;
                 this.controlBuffer.scrollTop = this.controlBuffer.scrollHeight;
                 this.iLogicalCol += nChars;
             }
@@ -1160,6 +1237,7 @@ export default class SerialPort extends Component {
     transmitData()
     {
         this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
+        this.fTHRInt = true;
         this.updateIIR();
     }
 

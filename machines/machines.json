@@ -24,7 +24,7 @@
   },
   "pcx86": {
     "name": "PCx86",
-    "version": "2.25",
+    "version": "2.26",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
@@ -103,7 +103,7 @@
   },
   "pcx86v3": {
     "name": "PCx86",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "pcx86",
     "defines": [
       "FACTORY",
@@ -136,7 +136,7 @@
   },
   "c1p": {
     "name": "C1Pjs",
-    "version": "2.21",
+    "version": "2.26",
     "folder": "osi/c1p",
     "defines": [
       "APPVERSION",
@@ -183,7 +183,7 @@
   },
   "pcx80": {
     "name": "PCx80",
-    "version": "2.21",
+    "version": "2.26",
     "defines": [
       "APPVERSION",
       "DEBUGGER",
@@ -239,7 +239,7 @@
   },
   "pdp10": {
     "name": "PDPjs",
-    "version": "2.21",
+    "version": "2.26",
     "folder": "dec/pdp10",
     "defines": [
       "APPVERSION",
@@ -294,7 +294,7 @@
   },
   "pdp11": {
     "name": "PDPjs",
-    "version": "2.21",
+    "version": "2.26",
     "folder": "dec/pdp11",
     "defines": [
       "APPVERSION",
@@ -356,7 +356,7 @@
   },
   "ti57": {
     "name": "TI57",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "ti/ti57",
     "defines": [
       "FACTORY",
@@ -384,19 +384,19 @@
   },
   "ti55": {
     "name": "TI55",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "ti/ti55",
     "copy": "ti57"
   },
   "ti42": {
     "name": "TI42",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "ti/ti42",
     "copy": "ti57"
   },
   "invaders": {
     "name": "Space Invaders",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "arcade/invaders",
     "defines": [
       "FACTORY",
@@ -431,7 +431,7 @@
   },
   "led": {
     "name": "LED",
-    "version": "3.00",
+    "version": "3.01",
     "defines": [
       "FACTORY",
       "VERSION"
@@ -458,7 +458,7 @@
   },
   "palm": {
     "name": "Palm",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "palm/pilot",
     "defines": [
       "FACTORY",
@@ -495,7 +495,7 @@
   },
   "vt100": {
     "name": "VT100",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "dec/vt100",
     "defines": [
       "FACTORY",
@@ -532,7 +532,7 @@
   },
   "pdp11v3": {
     "name": "PDP-11",
-    "version": "3.00",
+    "version": "3.01",
     "folder": "dec/pdp11",
     "defines": [
       "FACTORY",
@@ -567,7 +567,7 @@
     ]
   },
   "shared": {
-    "version": "2.21",
+    "version": "2.26",
     "externs": [
       "./machines/modules/v2/externs.js"
     ]

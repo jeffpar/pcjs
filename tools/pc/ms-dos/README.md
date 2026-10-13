@@ -35,7 +35,7 @@ If you want to edit any files and re-run any DOS commands, you can make all chan
     remote: Total 1859 (delta 104), reused 97 (delta 97), pack-reused 1639
     Receiving objects: 100% (1859/1859), 117.41 MiB | 13.18 MiB/s, done.
     Resolving deltas: 100% (288/288), done.
-    pc.js v3.00
+    pc.js v3.01
     Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
     Options: --system=msdos --version=3.30 --target=30M --normalize
     [Press CTRL-D to enter command mode]

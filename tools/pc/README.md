@@ -33,7 +33,7 @@ The format of a `pc.js` command (as `--help` will also tell you) is:
 
 Here is the complete help text:
 
-    pc.js v3.00
+    pc.js v3.01
     Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
     Options: --help
 
@@ -132,7 +132,7 @@ Besides a machine name and a directory name, you can also specify a third argume
 If you omit the machine name, it defaults to `compaq386` (a machine which also starts up faster because it includes a state file that bypasses the power-on tests and floppy boot sequence).  And if you omit the directory name, it defaults to the current directory -- which is why, if you run `pc.js` from the `/tools/pc` folder, you will likely see this error message:
 
     % pc.js
-    pc.js v3.00
+    pc.js v3.01
     Copyright © 2012-2026 Jeff Parsons <Jeff@pcjs.org>
     error: file(s) too large (32536576 bytes total, 10653696 bytes maximum)
     error: unable to build drive
