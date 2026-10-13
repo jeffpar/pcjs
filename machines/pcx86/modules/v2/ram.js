@@ -47,6 +47,8 @@ export default class RAMx86 extends Component {
         this.sizeRAM = +parmsRAM['size'];       // we allow numbers or strings (JSON strings permit hex)
         this.fTestRAM = parmsRAM['test'] && parmsRAM['test'] != "false";
         this.fInstalled = (!!this.sizeRAM);     // 0 is the default value for 'size' when none is specified
+        this.sizeInstalled = this.sizeRAM;      // the configured size (see reset)
+        this.fSizeChanged = false;              // true if the configured size was overridden
         this.sizeOverride = 0;
         this.fAllocated = false;
     }
@@ -199,11 +201,36 @@ export default class RAMx86 extends Component {
      * they must necessarily specify a non-conflicting, non-zero start address, in which case their sizeRAM
      * value will never be affected by the ChipSet settings.
      *
+     * A RAM instance at 0x0000 that WAS given a specific size uses that size by default, but if the user
+     * selects a different size (or a 'sizeRAM' machine parameter specifies one), then that size is used
+     * instead, and the ChipSet's memory switches are updated to match, if they can represent it; selecting
+     * "Default" again restores the configured size (and the initial switch settings).
+     *
      * @this {RAMx86}
      */
     reset()
     {
-        if (!this.addrRAM && !this.fInstalled && this.chipset) {
+        if (!this.addrRAM && this.fInstalled && this.chipset) {
+            let baseRAM = this.getRAMSetting();
+            if (baseRAM > 0 && baseRAM != this.sizeInstalled) {
+                this.chipset.setDIPMemorySize(baseRAM / 1024);
+                this.fSizeChanged = true;
+            } else {
+                baseRAM = this.sizeInstalled;
+                if (this.fSizeChanged) {
+                    this.chipset.setDIPMemorySize(this.chipset.getDIPMemorySize(true));
+                    this.fSizeChanged = false;
+                }
+            }
+            if (baseRAM != this.sizeRAM) {
+                if (this.fAllocated) {
+                    this.bus.removeMemory(this.addrRAM, this.sizeRAM);
+                    this.fAllocated = false;
+                }
+                this.sizeRAM = baseRAM;
+            }
+        }
+        else if (!this.addrRAM && !this.fInstalled && this.chipset) {
             let baseRAM = this.getRAMSetting();
             if (baseRAM > 0) {
                 this.chipset.setDIPMemorySize(baseRAM / 1024);

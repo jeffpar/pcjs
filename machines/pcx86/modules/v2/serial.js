@@ -33,6 +33,7 @@ import { APPCLASS, RS232 } from "./defines.js";
  * @property {number} nIRQ
  * @property {string|null} consoleBuffer
  * @property {HTMLTextAreaElement} controlBuffer (DOM element bound to the port for rudimentary output; see transmitByte())
+ * @property {number} maxBuffer (maximum number of characters in controlBuffer, or 0 for no limit)
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export default class SerialPort extends Component {
@@ -289,10 +290,18 @@ export default class SerialPort extends Component {
          */
         this.tabSize = +parms['tabSize'] || 0;
         this.charBOL = +parms['charBOL'] || 0;
+
+        /**
+         * If 'maxBuffer' is set, then controlBuffer is limited to that many characters; whenever output would
+         * exceed it, the oldest lines are discarded, so that a long-running terminal doesn't slow down as its
+         * text grows.
+         */
+        this.maxBuffer = +parms['maxBuffer'] || 0;
         this.charPrev = 0;
         this.iLogicalCol = 0;
 
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
+        this.fTHRInt = false;
         this.fNullModem = true;
 
         /**
@@ -682,6 +691,12 @@ export default class SerialPort extends Component {
         this.bLSR = data[i++];
         this.bMSR = data[i++];
         this.abReceive = data[i];
+        /**
+         * fTHRInt latches the "transmitter holding register empty" interrupt condition, like a real 8250: it's set
+         * when the THR becomes empty (or when that interrupt is enabled while the THR is empty), and cleared by a THR
+         * write or by an IIR read that reports it; it's derived from the IIR here, so saved states remain compatible.
+         */
+        this.fTHRInt = (this.bIIR & (SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS)) == SerialPort.IIR.INT_THR;
         return true;
     }
 
@@ -784,12 +799,15 @@ export default class SerialPort extends Component {
     {
         let bMSROld = this.bMSR;
         this.bMSR &= ~(SerialPort.MSR.CTS | SerialPort.MSR.DSR);
-        if (pins & RS232.CTS.MASK) {
-            this.bMSR |= SerialPort.MSR.CTS | SerialPort.MSR.DCTS;
-        }
-        if (pins & RS232.DSR.MASK) {
-            this.bMSR |= SerialPort.MSR.DSR | SerialPort.MSR.DDSR;
-        }
+        if (pins & RS232.CTS.MASK) this.bMSR |= SerialPort.MSR.CTS;
+        if (pins & RS232.DSR.MASK) this.bMSR |= SerialPort.MSR.DSR;
+        /**
+         * Like a real 8250, set the "delta" bits whenever CTS or DSR changes in EITHER direction, so that
+         * software using RTS/CTS flow control is notified (via an MSR interrupt) when CTS drops, too.
+         */
+        let bDelta = this.bMSR ^ bMSROld;
+        if (bDelta & SerialPort.MSR.CTS) this.bMSR |= SerialPort.MSR.DCTS;
+        if (bDelta & SerialPort.MSR.DSR) this.bMSR |= SerialPort.MSR.DDSR;
         if (bMSROld != this.bMSR) this.updateIIR();
     }
 
@@ -856,10 +874,12 @@ export default class SerialPort extends Component {
     {
         let b = this.bIIR;
         /**
-         * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR).
+         * Reading the IIR is supposed to clear the INT_THR condition (as is another write to the THR), and then
+         * the IIR reflects the next pending interrupt condition, if any (eg, a modem status change).
          */
         if (b == SerialPort.IIR.INT_THR) {
-            this.bIIR = SerialPort.IIR.NO_INT;
+            this.fTHRInt = false;
+            this.updateIIR();
         }
         this.printIO(port, undefined, addrFrom, "IIR", b);
         return b;
@@ -943,6 +963,7 @@ export default class SerialPort extends Component {
         } else {
             this.bTHR = bOut;
             this.bLSR &= ~(SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
+            this.fTHRInt = false;
             /**
              * If transmitByte() returned success, we used to immediately re-set the transmitter empty bits:
              *
@@ -979,6 +1000,12 @@ export default class SerialPort extends Component {
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & 0xff) | (bOut << 8);
         } else {
+            /**
+             * Enabling the THR interrupt while the THR is already empty sets the (latched) THR interrupt condition.
+             */
+            if ((bOut & ~this.bIER & SerialPort.IER.THR_EMPTY) && (this.bLSR & SerialPort.LSR.THRE)) {
+                this.fTHRInt = true;
+            }
             this.bIER = bOut;
         }
     }
@@ -1046,7 +1073,7 @@ export default class SerialPort extends Component {
         if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
             bIIR = SerialPort.IIR.INT_RBR;
         }
-        else if ((this.bLSR & SerialPort.LSR.THRE) && (this.bIER & SerialPort.IER.THR_EMPTY)) {
+        else if (this.fTHRInt && (this.bIER & SerialPort.IER.THR_EMPTY)) {
             bIIR = SerialPort.IIR.INT_THR;
         }
         else if ((this.bMSR & (SerialPort.MSR.DCTS | SerialPort.MSR.DDSR)) && (this.bIER & SerialPort.IER.MSR_DELTA)) {
@@ -1129,7 +1156,12 @@ export default class SerialPort extends Component {
                     if (this.charPrev != 0x0A) s = "\n" + s;
                     if (this.charBOL) s = String.fromCharCode(this.charBOL) + s;
                 }
-                this.controlBuffer.value += s;
+                let text = this.controlBuffer.value + s;
+                if (this.maxBuffer && text.length > this.maxBuffer) {
+                    let i = text.indexOf("\n", text.length - this.maxBuffer);
+                    text = text.slice(i < 0? text.length - this.maxBuffer : i + 1);
+                }
+                this.controlBuffer.value = text;
                 this.controlBuffer.scrollTop = this.controlBuffer.scrollHeight;
                 this.iLogicalCol += nChars;
             }
@@ -1160,6 +1192,7 @@ export default class SerialPort extends Component {
     transmitData()
     {
         this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
+        this.fTHRInt = true;
         this.updateIIR();
     }
 
