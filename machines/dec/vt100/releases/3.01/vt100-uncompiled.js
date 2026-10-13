@@ -19752,7 +19752,7 @@ class VT100Video extends Monitor {
          */
         if (this.cyCell > 1) {
             this.nRowsBuffer++;
-            this.bScrollOffset = 0;
+            this.bScrollOffset = this.bScrollLatch = 0;
             this.fSkipSingleCellUpdate = false;
         }
 
@@ -19764,11 +19764,71 @@ class VT100Video extends Monitor {
 
         this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
-        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
+        this.timerUpdateNext = this.time.addTimer(this.idDevice, this.onRefreshTimer.bind(this));
         this.time.addUpdate(this);
+
+        /*
+         * When the machine is running at its normal speed, we lock our refreshes (and the vertical interrupts
+         * that go with them) to animation frames, so that every scroll step the firmware performs is presented
+         * in its own frame; otherwise, refreshes drift in and out of phase with the frames that the browser
+         * actually displays, and smooth scrolling stutters.  See onAnimation() for details.
+         */
+        this.fFrameLock = this.fScrollUpdate = false;
+        this.msRefreshDue = 0;
+        this.time.addAnimation(this.onAnimation.bind(this));
 
         this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
         this.nUpdates = 0;
+    }
+
+    /**
+     * onAnimation(t, nFramesPerSecond)
+     *
+     * Called by the Time device at the end of every animation frame.  If the machine is running at its
+     * normal speed, and frames are arriving at least as often as our refresh rate, we perform a refresh
+     * whenever one is due, on the frame closest to the time it's due (ie, every frame at 60Hz, every other
+     * frame at 120Hz, etc).  The refresh draws the state produced by all the cycles executed during the
+     * frame, and it requests the vertical interrupt that the firmware will service during the next frame.
+     *
+     * @this {VT100Video}
+     * @param {number} t (time of the current frame, in milliseconds)
+     * @param {number} nFramesPerSecond
+     */
+    onAnimation(t, nFramesPerSecond)
+    {
+        let msRefresh = this.getRefreshTime();
+        let msFrame = 1000 / nFramesPerSecond;
+        if (this.time.nTargetMultiplier != 1 || msFrame > msRefresh * 1.5) {
+            this.fFrameLock = false;
+            return;
+        }
+        if (!this.fFrameLock) {
+            this.fFrameLock = true;
+            this.msRefreshDue = msRefresh;
+        } else {
+            this.msRefreshDue += msFrame;
+        }
+        if (this.msRefreshDue >= msRefresh - msFrame / 2) {
+            this.msRefreshDue -= msRefresh;
+            if (this.msRefreshDue > msRefresh) this.msRefreshDue = 0;
+            this.updateMonitor();
+        }
+    }
+
+    /**
+     * onRefreshTimer()
+     *
+     * Our refresh timer drives updateMonitor() only when refreshes aren't locked to animation frames.
+     *
+     * @this {VT100Video}
+     */
+    onRefreshTimer()
+    {
+        if (this.fFrameLock) {
+            this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
+        } else {
+            this.updateMonitor();
+        }
     }
 
     /**
@@ -20052,6 +20112,16 @@ class VT100Video extends Monitor {
     updateScrollOffset(bScroll)
     {
         this.printf("updateScrollOffset(%d)\n", bScroll);
+        this.bScrollLatch = bScroll;
+        if (this.fFrameLock) {
+            /*
+             * When refreshes are locked to animation frames, the new scroll offset isn't presented until the
+             * refresh AFTER the next one, because the firmware writes a zero offset one frame BEFORE it updates
+             * the frame buffer to complete the scroll (presumably the DC012 doesn't apply a new offset until the
+             * next frame begins, whereas frame buffer changes are visible immediately).  See updateMonitor().
+             */
+            return;
+        }
         if (this.bScrollOffset !== bScroll) {
             this.bScrollOffset = bScroll;
             /*
@@ -20294,7 +20364,7 @@ class VT100Video extends Monitor {
              * Since this is not a forced update, if our cell cache is valid AND we allocated our own buffer AND the buffer
              * is clean, then there's nothing to do.
              */
-            if (fUpdate && this.fCacheValid && this.sizeBuffer) {
+            if (fUpdate && this.fCacheValid && this.sizeBuffer && !this.fScrollUpdate) {
                 if (this.busMemory.cleanBlocks(this.addrBuffer, this.sizeBuffer)) {
                     fUpdate = false;
                 }
@@ -20302,10 +20372,17 @@ class VT100Video extends Monitor {
             this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
             this.nUpdates++;
         }
-        if (!fUpdate) {
-            return;
+        if (fUpdate) {
+            this.updateScreen(fForced || this.fScrollUpdate);
         }
-        this.updateScreen(fForced);
+        this.fScrollUpdate = false;
+        if (!fForced && this.fFrameLock && this.bScrollOffset !== this.bScrollLatch) {
+            /*
+             * Any new scroll offset written by the firmware since the last refresh will be presented by the next one.
+             */
+            this.bScrollOffset = this.bScrollLatch;
+            this.fScrollUpdate = true;
+        }
     }
 
     /**
