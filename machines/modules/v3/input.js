@@ -377,7 +377,7 @@ export default class Input extends Device {
                                 }
                             }
                             input.onKeyCode(keyCode, down, autoRelease);
-                            input.setFocus();
+                            input.setFocus(false);
                         });
                     } else {
                         if (Input.DEBUG) input.printf("click map element '%s' not found\n", binding);
@@ -789,7 +789,8 @@ export default class Input extends Device {
                  */
                 let focusElement = input.altFocus? input.altFocusElement : input.focusElement;
                 if (focusElement) {
-                    let x = window.scrollX, y = window.scrollY;
+                    let x = window.scrollX;
+                    let y = window.scrollY;
                     focusElement.focus();
                     window.scrollTo(x, y);
                 }
@@ -1373,8 +1374,9 @@ export default class Input extends Device {
      * after starting the machine.
      *
      * @this {Input}
+     * @param {boolean} [fScroll] (false to leave the page's scroll position alone, eg, after a soft-key click)
      */
-    setFocus()
+    setFocus(fScroll = true)
     {
         /**
          * In addition, we now check machine.isReady(), to avoid jerking the page's focus around when a machine is first
@@ -1384,8 +1386,19 @@ export default class Input extends Device {
         let focusElement = this.altFocus? this.altFocusElement : this.focusElement;
         if (focusElement && this.machine.isReady()) {
             this.printf(MESSAGE.INPUT, 'setFocus("%s")\n', focusElement.id || focusElement.nodeName);
-            focusElement.focus();
-            focusElement.scrollIntoView();      // one would have thought focus() would do this, but apparently not....
+            if (fScroll) {
+                focusElement.focus();
+                focusElement.scrollIntoView();  // one would have thought focus() would do this, but apparently not....
+            } else {
+                /**
+                 * Setting focus on an element can cause the browser to scroll it into view, so we use the same
+                 * scrollTo() work-around as onMouseDown().
+                 */
+                let x = window.scrollX;
+                let y = window.scrollY;
+                focusElement.focus();
+                window.scrollTo(x, y);
+            }
         }
     }
 

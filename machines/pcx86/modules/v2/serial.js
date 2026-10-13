@@ -343,7 +343,7 @@ export default class SerialPort extends Component {
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = null;
+        this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
         this.fAutoFlow = false;
 
         /**
@@ -353,7 +353,8 @@ export default class SerialPort extends Component {
             'bind': this.bindConnection,
             'connect': this.initConnection,
             'receiveData': this.receiveData,
-            'receiveStatus': this.receiveStatus
+            'receiveStatus': this.receiveStatus,
+            'receiveBreak': this.receiveBreak
         };
     }
 
@@ -558,6 +559,7 @@ export default class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
+                                this.sendBreak = exports['receiveBreak'] || null;
                                 this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
@@ -786,6 +788,24 @@ export default class SerialPort extends Component {
     }
 
     /**
+     * receiveBreak(fBreak)
+     *
+     * Called when the connected machine starts (or stops) sending a BREAK.  Like a real 8250, we set the "Break
+     * Interrupt" bit when a BREAK begins, which reading the LSR clears, along with any line status interrupt.  However,
+     * we don't also load a zero character into the RBR, as a real 8250 does, since it's not useful data.
+     *
+     * @this {SerialPort}
+     * @param {boolean} fBreak
+     */
+    receiveBreak(fBreak)
+    {
+        if (fBreak && !(this.bLSR & SerialPort.LSR.BI)) {
+            this.bLSR |= SerialPort.LSR.BI;
+            this.updateIIR();
+        }
+    }
+
+    /**
      * receiveStatus(pins)
      *
      * NOTE: Prior to the addition of this interface, the CTS and DSR bits were initialized set and remained set
@@ -926,6 +946,14 @@ export default class SerialPort extends Component {
     inLSR(port, addrFrom)
     {
         let b = this.bLSR;
+        /**
+         * Reading the LSR clears the error bits (and therefore any line status interrupt).
+         */
+        let bErrors = SerialPort.LSR.OE | SerialPort.LSR.PE | SerialPort.LSR.FE | SerialPort.LSR.BI;
+        if (b & bErrors) {
+            this.bLSR &= ~bErrors;
+            this.updateIIR();
+        }
         this.printIO(port, undefined, addrFrom, "LSR", b);
         return b;
     }
@@ -1021,6 +1049,12 @@ export default class SerialPort extends Component {
     outLCR(port, bOut, addrFrom)
     {
         this.printIO(port, bOut, addrFrom, "LCR");
+        /**
+         * Whenever the BREAK bit changes, notify any connected machine.
+         */
+        if (this.sendBreak && ((bOut ^ this.bLCR) & SerialPort.LCR.BREAK)) {
+            this.sendBreak.call(this.connection, !!(bOut & SerialPort.LCR.BREAK));
+        }
         this.bLCR = bOut;
     }
 
@@ -1068,9 +1102,12 @@ export default class SerialPort extends Component {
     {
         let bIIR = -1;
         /**
-         * We check all the interrupt conditions in priority order.  TODO: Add INT_LSR.
+         * We check all the interrupt conditions in priority order (currently, BI is the only LSR error we generate).
          */
-        if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
+        if ((this.bLSR & (SerialPort.LSR.OE | SerialPort.LSR.PE | SerialPort.LSR.FE | SerialPort.LSR.BI)) && (this.bIER & SerialPort.IER.LSR_DELTA)) {
+            bIIR = SerialPort.IIR.INT_LSR;
+        }
+        else if ((this.bLSR & SerialPort.LSR.DR) && (this.bIER & SerialPort.IER.RBR_AVAIL)) {
             bIIR = SerialPort.IIR.INT_RBR;
         }
         else if (this.fTHRInt && (this.bIER & SerialPort.IER.THR_EMPTY)) {
