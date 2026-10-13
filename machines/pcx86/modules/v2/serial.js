@@ -728,18 +728,26 @@ export default class SerialPort extends Component {
     /**
      * getBaudTimeout()
      *
-     * The 16-bit Divisor Latch is stored in wDL.  If we take the frequency value 1843200 and divide it by wDL*128,
-     * we get the maximum number of bytes per second that the SerialPort interface should generate.  For example,
-     * if a baud rate of 1200 is being used, the divisor will be 0x60 (96), so we calculate 1843200/(96*128) = 150,
-     * which means there should be a 1000ms/150 or 6.667ms delay between bytes delivered.
+     * The 16-bit Divisor Latch is stored in wDL.  The 8250 divides its 1.8432Mhz clock by wDL*16 to get the baud
+     * rate (bits per second), and every byte (character) on the line includes a start bit, 5-8 data bits, an
+     * optional parity bit, and 1, 1.5, or 2 stop bits (see the LCR).  For example, at 9600 baud (wDL = 12) with
+     * 8 data bits, no parity, and 1 stop bit, that's 10 bits per byte, or 960 bytes per second, which means there
+     * should be a 1000ms/960 or 1.042ms delay between bytes.
+     *
+     * NOTE: The result is NOT truncated to an integer, because at higher baud rates (eg, 9600), the delay is
+     * barely more than 1ms, and setTimer() treats 0ms as no delay at all; that used to remove all pacing (other
+     * than the speed of the emulated CPU), so increasing the machine's speed would increase the serial data rate.
      *
      * @this {SerialPort}
      * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout()
     {
-        let nBytesPerSecond = 1843200 / ((this.wDL || 1) << 7);
-        return (1000 / nBytesPerSecond)|0;
+        let nDataBits = 5 + (this.bLCR & SerialPort.LCR.DATA_8BITS);
+        let nStopBits = (this.bLCR & SerialPort.LCR.STOP_BITS)? (nDataBits == 5? 1.5 : 2) : 1;
+        let nBits = 1 + nDataBits + ((this.bLCR & SerialPort.LCR.PARITY_BIT)? 1 : 0) + nStopBits;
+        let nBytesPerSecond = 1843200 / (((this.wDL || 1) << 4) * nBits);
+        return 1000 / nBytesPerSecond;
     }
 
     /**
