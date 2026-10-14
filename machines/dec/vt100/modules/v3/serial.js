@@ -49,7 +49,8 @@ export default class VT100Serial extends Device {
         /*
          * No connection until initConnection() is called.
          */
-        this.sDataReceived = "";
+        this.abReceived = [];
+        this.iReceived = 0;
         this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
 
         /*
@@ -263,31 +264,50 @@ export default class VT100Serial extends Device {
      * Helper for clocking received data at the expected RECV_RATE.
      *
      * When we're cramming test data down the terminal's throat, that data will typically be in the form
-     * of a string.  When we're called by another component, data will typically be a number (ie, byte).  If no
-     * data is specified at all, then all we do is "clock" any remaining data into the receiver.
+     * of a string, which replaces any data not yet received.  When we're called by another component, data
+     * will typically be a number (ie, byte).  If no data is specified at all, then all we do is "clock" any
+     * remaining data into the receiver.
+     *
+     * Pending bytes are queued in abReceived, starting at index iReceived (so that removing a byte doesn't
+     * require copying the rest of the queue).  The queue is limited to RECV_MAX bytes, because a connected
+     * machine may keep sending while we're unable to run (eg, while the browser has paused our animation
+     * frames); any byte that would exceed the limit is dropped, as if the UART had been overrun.
      *
      * @this {VT100Serial}
      * @param {number|string|undefined} [data]
-     * @returns {boolean} true if received, false if not
+     * @returns {boolean} true if received (or queued), false if dropped
      */
     receiveData(data)
     {
         if (data != null) {
             if (typeof data != "number") {
-                this.sDataReceived = data;
+                this.abReceived = [];
+                this.iReceived = 0;
+                for (let i = 0; i < data.length; i++) {
+                    this.abReceived.push(data.charCodeAt(i));
+                }
+            } else if (this.abReceived.length - this.iReceived < VT100Serial.RECV_MAX) {
+                this.abReceived.push(data);
             } else {
-                this.sDataReceived += String.fromCharCode(data);
+                this.printf(MESSAGE.SERIAL, "receiveData(%#04x): overrun\n", data);
+                return false;
             }
         }
-        if (this.sDataReceived) {
-            if (this.receiveByte(this.sDataReceived.charCodeAt(0))) {
-                this.sDataReceived = this.sDataReceived.substr(1);
+        if (this.iReceived < this.abReceived.length) {
+            if (this.receiveByte(this.abReceived[this.iReceived])) {
+                if (++this.iReceived == this.abReceived.length) {
+                    this.abReceived = [];
+                    this.iReceived = 0;
+                } else if (this.iReceived >= VT100Serial.RECV_MAX) {
+                    this.abReceived.splice(0, this.iReceived);
+                    this.iReceived = 0;
+                }
             }
-            if (this.sDataReceived) {
+            if (this.iReceived < this.abReceived.length) {
                 this.time.setTimer(this.timerReceiveNext, this.getBaudTimeout(VT100Serial.UART8251.BAUDRATES.RECV_RATE));
             }
         }
-        return true;                // for now, return true regardless, since we're buffering everything anyway
+        return true;
     }
 
     /**
@@ -600,6 +620,11 @@ VT100Serial.UART8251 = {
         50, 75, 110, 134.5, 150, 200, 300, 600, 1200, 1800, 2000, 2400, 3600, 4800, 9600, 19200
     ]
 };
+
+/*
+ * Maximum number of received bytes that can be queued (about 4 seconds of data at 9600 baud).
+ */
+VT100Serial.RECV_MAX = 4096;
 
 VT100Serial.LEDS = {
     [VT100Serial.UART8251.COMMAND.DTR]:  "ledDTR",
