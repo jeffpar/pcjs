@@ -7601,9 +7601,16 @@ class Time extends Device {
                  * Make ABSOLUTELY certain that nFramesPerSecond can never become a ridiculous value, which means
                  * making sure msDelta is never zero (or even close to it).  If that ever happens, then we choose a
                  * delta (16.67ms) that will revert us to a conventional 60 frames/second.
+                 *
+                 * The same goes for an excessively LARGE delta, because the browser stops animation frames for
+                 * hidden pages (and delivers them erratically for windows that are covered or off-screen), and since
+                 * every frame deposits 1/nFramesPerSecond of a second's worth of cycles, the first frame after a long
+                 * gap would otherwise try to "catch up" on the entire gap, making that frame (and possibly the next
+                 * few) so long that the browser becomes unresponsive.  runStart() already discounts such gaps when
+                 * calculating our effective speed.
                  */
                 let msDelta = t - this.msFrame;
-                if (msDelta < 1) msDelta = 16.67;
+                if (msDelta < 1 || msDelta > this.msFrameDefault * 4) msDelta = this.msFrameDefault;
                 this.nFramesPerSecond = 1000 / msDelta;
             }
             this.msFrame = t;
