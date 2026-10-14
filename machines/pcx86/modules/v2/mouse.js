@@ -277,6 +277,11 @@ export default class Mouse extends Component {
         this.dbg = dbg;
         this.scale = cmp.getMachineParm('scaleMouse') || this.scale;
         /**
+         * Like a real serial mouse, we don't send a new packet until the previous one has been received;
+         * in the meantime, movement accumulates, and this timer checks periodically whether it can be sent.
+         */
+        this.timerMove = cpu.addTimer(this.id + ".move", this.sendMovement.bind(this));
+        /**
          * Enumerate all the Video components that we may need to interact with.
          */
         for (let video = null; (video = cmp.getMachineComponent("Video", video));) {
@@ -690,14 +695,33 @@ export default class Mouse extends Component {
             if (xScaled || yScaled) {
                 this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /**
-                 * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
-                 * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
-                 * on completion.
+                 * Movement accumulates in xDelta and yDelta until sendMovement() can send it (see sendPacket()).
                  */
-                this.xDelta = xScaled;
-                this.yDelta = yScaled;
-                this.sendPacket(null, xDiag, yDiag);
+                this.xDelta += xScaled;
+                this.yDelta += yScaled;
+                this.sendMovement();
             }
+        }
+    }
+
+    /**
+     * sendMovement()
+     *
+     * Sends any accumulated movement, unless the serial port is still receiving a previous packet, in which
+     * case we check again later.  Browsers can report mouse movements much faster than a serial mouse can send
+     * them (at 1200 baud, a 3-byte packet takes about 25ms), so without this, packets would pile up in the
+     * serial port, and the machine would see the mouse lag further and further behind.
+     *
+     * @this {Mouse}
+     */
+    sendMovement()
+    {
+        if (this.xDelta || this.yDelta) {
+            if (this.componentDevice && this.componentDevice.getReceiveCount()) {
+                this.cpu.setTimer(this.timerMove, 5);
+                return;
+            }
+            this.sendPacket();
         }
     }
 
@@ -720,12 +744,20 @@ export default class Mouse extends Component {
      */
     sendPacket(sDiag, xDiag, yDiag)
     {
-        let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
-        let b2 = this.xDelta & 0x3F;
-        let b3 = this.yDelta & 0x3F;
+        /**
+         * Each packet can report movement of at most 127 in either direction (or -128), so any movement beyond
+         * that remains in xDelta and yDelta for the next packet.
+         */
+        let xDelta = Math.max(-128, Math.min(127, this.xDelta));
+        let yDelta = Math.max(-128, Math.min(127, this.yDelta));
+        let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((yDelta & 0xC0) >> 4) | ((xDelta & 0xC0) >> 6);
+        let b2 = xDelta & 0x3F;
+        let b3 = yDelta & 0x3F;
         this.printf(MESSAGE.SERIAL + MESSAGE.ADDR, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
-        this.xDelta = this.yDelta = 0;
+        this.xDelta -= xDelta;
+        this.yDelta -= yDelta;
+        if (this.xDelta || this.yDelta) this.cpu.setTimer(this.timerMove, 5);
     }
 
     /**

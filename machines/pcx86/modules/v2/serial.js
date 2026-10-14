@@ -303,6 +303,11 @@ export default class SerialPort extends Component {
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
         this.fTHRInt = false;
         this.fNullModem = true;
+        /**
+         * fReceiveReady is set whenever the next received byte may be clocked into the receiver: initially, and
+         * then one character time (at the current baud rate) after the previous byte (see advanceRBR()).
+         */
+        this.fReceiveReady = true;
 
         /**
          * Normally, any HTML controls defined within the scope of the component's XML element are *implicitly*
@@ -503,6 +508,7 @@ export default class SerialPort extends Component {
 
             let serial = this;
             this.timerReceiveNext = this.cpu.addTimer(this.id + ".receive", function receiveDataTimer() {
+                serial.fReceiveReady = true;
                 serial.receiveData();
             });
             this.timerTransmitNext = this.cpu.addTimer(this.id + ".transmit", function transmitDataTimer() {
@@ -699,6 +705,7 @@ export default class SerialPort extends Component {
          * write or by an IIR read that reports it; it's derived from the IIR here, so saved states remain compatible.
          */
         this.fTHRInt = (this.bIIR & (SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS)) == SerialPort.IIR.INT_THR;
+        this.fReceiveReady = true;
         return true;
     }
 
@@ -748,6 +755,20 @@ export default class SerialPort extends Component {
         let nBits = 1 + nDataBits + ((this.bLCR & SerialPort.LCR.PARITY_BIT)? 1 : 0) + nStopBits;
         let nBytesPerSecond = 1843200 / (((this.wDL || 1) << 4) * nBits);
         return 1000 / nBytesPerSecond;
+    }
+
+    /**
+     * getReceiveCount()
+     *
+     * Returns the number of bytes waiting to be received (ie, not yet clocked into the receiver); a serial
+     * mouse uses this to avoid sending more packets than the port's baud rate can deliver.
+     *
+     * @this {SerialPort}
+     * @returns {number}
+     */
+    getReceiveCount()
+    {
+        return this.abReceive.length;
     }
 
     /**
@@ -846,11 +867,17 @@ export default class SerialPort extends Component {
      */
     advanceRBR()
     {
-        if (this.abReceive.length > 0 && !(this.bLSR & SerialPort.LSR.DR)) {
+        if (this.abReceive.length > 0 && !(this.bLSR & SerialPort.LSR.DR) && this.fReceiveReady) {
             if (!this.fAutoFlow || (this.bMCR & SerialPort.MCR.RTS)) {
                 this.bRBR = this.abReceive.shift();
                 this.bLSR |= SerialPort.LSR.DR;
-                if (this.abReceive.length && this.cpu) {
+                /**
+                 * The next byte can't arrive until one character time later, even if the program reads this
+                 * one sooner (otherwise, for example, a 1200 baud serial mouse could deliver packets as fast as
+                 * the browser reports mouse movements).
+                 */
+                if (this.cpu) {
+                    this.fReceiveReady = false;
                     this.cpu.setTimer(this.timerReceiveNext, this.getBaudTimeout());
                 }
             }

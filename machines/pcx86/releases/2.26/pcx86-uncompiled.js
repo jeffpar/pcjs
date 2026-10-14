@@ -61542,6 +61542,11 @@ class SerialPort extends Component {
         this.bMSRInit = SerialPort.MSR.CTS | SerialPort.MSR.DSR;
         this.fTHRInt = false;
         this.fNullModem = true;
+        /**
+         * fReceiveReady is set whenever the next received byte may be clocked into the receiver: initially, and
+         * then one character time (at the current baud rate) after the previous byte (see advanceRBR()).
+         */
+        this.fReceiveReady = true;
 
         /**
          * Normally, any HTML controls defined within the scope of the component's XML element are *implicitly*
@@ -61742,6 +61747,7 @@ class SerialPort extends Component {
 
             let serial = this;
             this.timerReceiveNext = this.cpu.addTimer(this.id + ".receive", function receiveDataTimer() {
+                serial.fReceiveReady = true;
                 serial.receiveData();
             });
             this.timerTransmitNext = this.cpu.addTimer(this.id + ".transmit", function transmitDataTimer() {
@@ -61938,6 +61944,7 @@ class SerialPort extends Component {
          * write or by an IIR read that reports it; it's derived from the IIR here, so saved states remain compatible.
          */
         this.fTHRInt = (this.bIIR & (SerialPort.IIR.NO_INT | SerialPort.IIR.INT_BITS)) == SerialPort.IIR.INT_THR;
+        this.fReceiveReady = true;
         return true;
     }
 
@@ -61987,6 +61994,20 @@ class SerialPort extends Component {
         let nBits = 1 + nDataBits + ((this.bLCR & SerialPort.LCR.PARITY_BIT)? 1 : 0) + nStopBits;
         let nBytesPerSecond = 1843200 / (((this.wDL || 1) << 4) * nBits);
         return 1000 / nBytesPerSecond;
+    }
+
+    /**
+     * getReceiveCount()
+     *
+     * Returns the number of bytes waiting to be received (ie, not yet clocked into the receiver); a serial
+     * mouse uses this to avoid sending more packets than the port's baud rate can deliver.
+     *
+     * @this {SerialPort}
+     * @returns {number}
+     */
+    getReceiveCount()
+    {
+        return this.abReceive.length;
     }
 
     /**
@@ -62085,11 +62106,17 @@ class SerialPort extends Component {
      */
     advanceRBR()
     {
-        if (this.abReceive.length > 0 && !(this.bLSR & SerialPort.LSR.DR)) {
+        if (this.abReceive.length > 0 && !(this.bLSR & SerialPort.LSR.DR) && this.fReceiveReady) {
             if (!this.fAutoFlow || (this.bMCR & SerialPort.MCR.RTS)) {
                 this.bRBR = this.abReceive.shift();
                 this.bLSR |= SerialPort.LSR.DR;
-                if (this.abReceive.length && this.cpu) {
+                /**
+                 * The next byte can't arrive until one character time later, even if the program reads this
+                 * one sooner (otherwise, for example, a 1200 baud serial mouse could deliver packets as fast as
+                 * the browser reports mouse movements).
+                 */
+                if (this.cpu) {
+                    this.fReceiveReady = false;
                     this.cpu.setTimer(this.timerReceiveNext, this.getBaudTimeout());
                 }
             }
@@ -63539,6 +63566,11 @@ class Mouse extends Component {
         this.dbg = dbg;
         this.scale = cmp.getMachineParm('scaleMouse') || this.scale;
         /**
+         * Like a real serial mouse, we don't send a new packet until the previous one has been received;
+         * in the meantime, movement accumulates, and this timer checks periodically whether it can be sent.
+         */
+        this.timerMove = cpu.addTimer(this.id + ".move", this.sendMovement.bind(this));
+        /**
          * Enumerate all the Video components that we may need to interact with.
          */
         for (let video = null; (video = cmp.getMachineComponent("Video", video));) {
@@ -63952,14 +63984,33 @@ class Mouse extends Component {
             if (xScaled || yScaled) {
                 this.printf(MESSAGE.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /**
-                 * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
-                 * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
-                 * on completion.
+                 * Movement accumulates in xDelta and yDelta until sendMovement() can send it (see sendPacket()).
                  */
-                this.xDelta = xScaled;
-                this.yDelta = yScaled;
-                this.sendPacket(null, xDiag, yDiag);
+                this.xDelta += xScaled;
+                this.yDelta += yScaled;
+                this.sendMovement();
             }
+        }
+    }
+
+    /**
+     * sendMovement()
+     *
+     * Sends any accumulated movement, unless the serial port is still receiving a previous packet, in which
+     * case we check again later.  Browsers can report mouse movements much faster than a serial mouse can send
+     * them (at 1200 baud, a 3-byte packet takes about 25ms), so without this, packets would pile up in the
+     * serial port, and the machine would see the mouse lag further and further behind.
+     *
+     * @this {Mouse}
+     */
+    sendMovement()
+    {
+        if (this.xDelta || this.yDelta) {
+            if (this.componentDevice && this.componentDevice.getReceiveCount()) {
+                this.cpu.setTimer(this.timerMove, 5);
+                return;
+            }
+            this.sendPacket();
         }
     }
 
@@ -63982,12 +64033,20 @@ class Mouse extends Component {
      */
     sendPacket(sDiag, xDiag, yDiag)
     {
-        let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
-        let b2 = this.xDelta & 0x3F;
-        let b3 = this.yDelta & 0x3F;
+        /**
+         * Each packet can report movement of at most 127 in either direction (or -128), so any movement beyond
+         * that remains in xDelta and yDelta for the next packet.
+         */
+        let xDelta = Math.max(-128, Math.min(127, this.xDelta));
+        let yDelta = Math.max(-128, Math.min(127, this.yDelta));
+        let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((yDelta & 0xC0) >> 4) | ((xDelta & 0xC0) >> 6);
+        let b2 = xDelta & 0x3F;
+        let b3 = yDelta & 0x3F;
         this.printf(MESSAGE.SERIAL + MESSAGE.ADDR, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
-        this.xDelta = this.yDelta = 0;
+        this.xDelta -= xDelta;
+        this.yDelta -= yDelta;
+        if (this.xDelta || this.yDelta) this.cpu.setTimer(this.timerMove, 5);
     }
 
     /**
