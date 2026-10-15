@@ -6,9 +6,8 @@ redirect_from: /disks/pcx86/os2/ibm/1.1/
 machines:
   - id: ibm5170
     type: pcx86
-    debugger: true
-    messages: fault
-    config: /machines/pcx86/ibm/5170/vga/4096kb/debugger/machine.xml
+    debugger: available
+    config: /machines/pcx86/ibm/5170/vga/4096kb/machine.xml
     drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/IBMOS211-VGA.json"}]'
     autoMount:
       A:

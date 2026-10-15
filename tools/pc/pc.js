@@ -54,6 +54,8 @@ export default class PC extends PCJSLib {
     bootSelect = "";
     serial = false;             // true if --serial specified
     speed = 0;                  // CPU speed multiplier from --speed (0 to use the machine's own setting)
+    fpu = false;                // true if --fpu specified (install an 8087)
+    kbRAM = 0;                  // RAM size (in Kb) from --ram (0 to use the machine's own setting)
     useSerial = false;
     normalize = false;          // true if --normalize specified
     test = false;               // true if --test specified
@@ -1289,6 +1291,18 @@ export default class PC extends PCJSLib {
 
             pc.halt = false;
 
+            /**
+             * With --floppy, we're booting the diskette we just built, so remove any XT hard disk controller (and
+             * its ROM); otherwise, its empty drive makes the BASIC-DOS boot sector wait for a key.  AT-style
+             * controllers are left alone, since they're part of the system (and the CMOS may expect a drive).
+             */
+            if (pc.floppy && config['hdc'] && config['hdc']['type'] == "XT") {
+                delete config['hdc'];
+                if (Array.isArray(config['rom'])) {
+                    config['rom'] = config['rom'].filter((rom) => rom['id'] != "romHDC");
+                }
+            }
+
             if (config['hdc']) {
                 let typeCtrl = config['hdc']['type'];
                 let drives = config['hdc']['drives'];
@@ -1396,6 +1410,19 @@ export default class PC extends PCJSLib {
 
             if (pc.speed && config['cpu']) {
                 config['cpu']['multiplier'] = pc.speed;
+            }
+
+            /**
+             * --fpu installs an 8087 by turning off switch 2 of a PC or XT's SW1 (eg, "01000001" becomes
+             * "00000001"), and --ram sets the size of the machine's first RAM block (eg, --ram=640K).
+             */
+            if (pc.fpu && config['chipset'] && typeof config['chipset']['sw1'] == "string") {
+                let sw1 = config['chipset']['sw1'];
+                config['chipset']['sw1'] = sw1[0] + '0' + sw1.slice(2);
+            }
+            if (pc.kbRAM && config['ram']) {
+                let ram = Array.isArray(config['ram'])? config['ram'][0] : config['ram'];
+                ram['size'] = pc.kbRAM * 1024;
             }
 
             if (sFile.endsWith(pc.savedMachine) && config['computer'] && pc.savedState) {
@@ -1872,18 +1899,28 @@ export default class PC extends PCJSLib {
          * are marked HIDDEN + SYSTEM, which keeps them out of DIR listings.
          */
         let attrHelper = this.systemType == "bd"? DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM : attrHidden;
+        /**
+         * Text files from the system's list other than CONFIG.SYS (eg, BASIC-DOS's HELP.TXT) are added to the root
+         * after AUTOEXEC.BAT, so that the root begins with the system files and CONFIG.SYS (in the order the system's
+         * list gives them; BASIC-DOS puts CONFIG.SYS first), followed by AUTOEXEC.BAT.
+         */
+        let aDeferred = [];
         for (let name of aSystemFiles) {
             let desc, attr;
             if (!diSystem) {
                 /**
                  * If CONFIG.SYS or a text file (eg, HELP.TXT) from the system's list also exists in the directory we're
-                 * building, the directory's copy wins, so that a directory (eg, configs/console/bios) can provide its own CONFIG.SYS.
+                 * building, the directory's copy wins (taking the system file's place in the root), so that a directory
+                 * (eg, configs/console/bios) can provide its own CONFIG.SYS.
                  */
                 let baseName = node.path.basename(name);
-                if ((baseName.toUpperCase() == "CONFIG.SYS" || diskLib.isTextFile(name)) && diskLib.existsFile(node.path.join(sDir, baseName))) {
-                    continue;
+                let fConfig = baseName.toUpperCase() == "CONFIG.SYS";
+                let fText = fConfig || diskLib.isTextFile(name);
+                if (fText && diskLib.existsFile(node.path.join(sDir, baseName))) {
+                    name = node.path.join(sDir, baseName);
+                } else {
+                    name = node.path.join(sSystemDisk, name);
                 }
-                name = node.path.join(sSystemDisk, name);
                 let dbFile = await diskLib.readFileAsync(name, null, true);
                 if (dbFile && this.normalize && diskLib.isTextFile(name)) {
                     /**
@@ -1895,7 +1932,7 @@ export default class PC extends PCJSLib {
                 }
                 if (dbFile) {
                     let date;
-                    if (dbBoot2 && dbBoot2.length) {
+                    if (dbBoot2 && dbBoot2.length && !fText) {
                         let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
                         dbBoot2.copy(dbCombined, 0);
                         dbFile.copy(dbCombined, dbBoot2.length);
@@ -1909,7 +1946,11 @@ export default class PC extends PCJSLib {
                     attr = this.systemType == "custom" || this.systemType == "bd"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
                     date = node.fs.statSync(name).mtime;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
-                    driveInfo.files.push(desc);
+                    if (fText && !fConfig) {
+                        aDeferred.push(desc);
+                    } else {
+                        driveInfo.files.push(desc);
+                    }
                     count++;
                     continue;
                 }
@@ -2084,6 +2125,7 @@ export default class PC extends PCJSLib {
             text = CharSet.toCP437(text).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
             driveInfo.files.push(diskLib.makeFileDesc(sDir, "AUTOEXEC.BAT", text, attr));
         }
+        driveInfo.files.push(...aDeferred);
 
         if (verDOS < 2.0) {
             /**
@@ -2233,7 +2275,13 @@ export default class PC extends PCJSLib {
                      * I've deferred the minimum version check until now, because even if we can't (well, shouldn't)
                      * use the drive image, I'd still like to be able to inspect it.
                      */
-                    if (diskInfo.minDOSVersion && diskInfo.minDOSVersion > verDOS) {
+                    /**
+                     * BASIC-DOS 2.x supports FAT16 volumes (normally DOS 3.00 or later), but not 32-bit sector
+                     * counts (DOS 3.31 or later).
+                     */
+                    let verMin = diskInfo.minDOSVersion;
+                    if (pc.systemType == "bd" && verMin == 3.0) verMin = 0;
+                    if (verMin && verMin > verDOS) {
                         printf("error: %s drive type %d (%.2fMb) requires DOS %s or later\n", driveInfo.driveCtrl, driveInfo.driveType, driveInfo.driveSize, diskInfo.minDOSVersion.toFixed(2));
                         return;
                     }
@@ -3475,6 +3523,8 @@ export default class PC extends PCJSLib {
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 5));
         this.speed = +PC.removeArg(argv, 'speed', defaults['speed'] || this.speed) || 0;
+        this.fpu = PC.removeFlag(argv, 'fpu', defaults['fpu'] || this.fpu);
+        this.kbRAM = diskLib.getTargetValue(PC.removeArg(argv, 'ram', defaults['ram'])) || 0;
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
@@ -3972,6 +4022,7 @@ export default class PC extends PCJSLib {
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
+                "--ram=[nK]":               "\tset RAM size (eg, 640K)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
@@ -3992,6 +4043,7 @@ export default class PC extends PCJSLib {
                 "--bare (-b)":              "\tomit helper binaries (and default AUTOEXEC.BAT)",
                 "--debug (-d)":             "\tenable DEBUG messages",
                 "--floppy (-f)":            "\tbuild floppy instead of hard disk",
+                "--fpu":                    "\t\tinstall an 8087 (PC and XT machines)",
                 "--halt (-h)":              "\thalt machine on startup",
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
