@@ -66525,7 +66525,7 @@ let DiskImage;
 /** @typedef {{ heads: number, tracks: number, boot: boolean }} */
 let DriveType;
 
- /** @typedef {{ iDrive: number, name: string, nCylinders: number, nHeads: number, nSectors: number, cbSector: number, fBusy: boolean, fLocal: boolean, fBootable: boolean, fRemovable: boolean, fWritable: boolean, nDiskCylinders: number, nDiskHeads: number, nDiskSectors: number, bHead: number, bCylinder: number, bCylinderSeek: number, bSector: number, bSectorEnd: number, nBytes: number, iByte: number }} */
+ /** @typedef {{ iDrive: number, name: string, nCylinders: number, nHeads: number, nSectors: number, cbSector: number, fBusy: boolean, fLocal: boolean, fBootable: boolean, fRemovable: boolean, fWritable: boolean, nDiskCylinders: number, nDiskHeads: number, nDiskSectors: number, bHead: number, bCylinder: number, bCylinderSeek: number, fChanged: boolean, bSector: number, bSectorEnd: number, nBytes: number, iByte: number }} */
 let DriveInfo;
 
 /**
@@ -67477,14 +67477,22 @@ class FDC extends Component {
         }
 
         /**
-         * regInput and regControl (port 0x3F7) were not present on controllers prior to MODEL_5170, which is why
+         * The change lines and regControl (port 0x3F7) were not present on controllers prior to MODEL_5170, which is why
          * we don't include initializers for them in the default data array; we could eliminate them on older models,
          * but we don't have access to the model info right now, and there's no real cost to always including them
          * in the FDC state.
          *
          * The bigger compatibility question is whether to always include hooks for them (see aPortInput and aPortOutput).
          */
-        this.regInput = data[i++] || 0;                             // TODO: Determine if we should default to FDC.REG_INPUT.DISK_CHANGE instead of 0
+        /**
+         * The change line is per-drive, so we save a mask of changed drives (bits 0-3) in the slot where regInput
+         * used to be; a legacy regInput value of FDC.REG_INPUT.DISK_CHANGE marks every drive as changed.
+         */
+        let bChanged = data[i++] || 0;
+        if (bChanged & FDC.REG_INPUT.DISK_CHANGE) bChanged = 0x0F;
+        for (iDrive = 0; iDrive < this.aDrives.length; iDrive++) {
+            this.aDrives[iDrive].fChanged = !!(bChanged & (1 << iDrive));
+        }
         this.regControl = data[i] || FDC.REG_CONTROL.RATE500K;      // default to maximum data rate
 
         this.printf("FDC initialized for %d drive(s)\n", this.aDrives.length);
@@ -67511,7 +67519,11 @@ class FDC extends Component {
         data[i++] = this.regOutput;
         data[i++] = this.saveDrives();
         data[i++] = this.saveDeltas();
-        data[i++] = this.regInput;
+        let bChanged = 0;
+        for (let iDrive = 0; iDrive < this.aDrives.length; iDrive++) {
+            if (this.aDrives[iDrive].fChanged) bChanged |= (1 << iDrive);
+        }
+        data[i++] = bChanged;
         data[i] = this.regControl;
         return data;
     }
@@ -68166,7 +68178,7 @@ class FDC extends Component {
              *
              * Successful unmounts are a different story, however; those *do* trigger a change. See unloadDrive().
              */
-            this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
+            drive.fChanged = true;
 
             /**
              * With the addition of notify(), users are now "alerted" whenever a diskette has finished loading;
@@ -68595,7 +68607,7 @@ class FDC extends Component {
             drive.disk = null;
             drive.fLocal = false;
 
-            this.regInput |= FDC.REG_INPUT.DISK_CHANGE;
+            drive.fChanged = true;
 
             /**
              * TODO: Consider adding support for non-modal notices that appear briefly over the machine and then fade,
@@ -68752,6 +68764,19 @@ class FDC extends Component {
          *      if (bOut & (FDC.REG_OUTPUT.MOTOR_D0 << iDrive)) this.iDrive = iDrive;
          */
         this.regOutput = bOut;
+    }
+
+    /**
+     * stepDrive(drive)
+     *
+     * A drive's change line is reset by a step pulse, but only if a diskette is inserted.
+     *
+     * @this {FDC}
+     * @param {Object} drive
+     */
+    stepDrive(drive)
+    {
+        if (drive.disk) drive.fChanged = false;
     }
 
     /**
@@ -68919,11 +68944,13 @@ class FDC extends Component {
      */
     inFDCInput(port, addrFrom)
     {
-        let bIn = this.regInput;
         /**
-         * TODO: Determine when the DISK_CHANGE bit is *really* cleared (this is just a guess)
+         * The DISK_CHANGE bit reflects the change line of the drive selected in regOutput; the line remains
+         * active until that drive steps with a diskette inserted (see stepDrive()), not when this port is read.
          */
-        this.regInput &= ~FDC.REG_INPUT.DISK_CHANGE;
+        let bIn = 0;
+        let drive = this.aDrives[this.regOutput & FDC.REG_OUTPUT.DS];
+        if (drive && drive.fChanged) bIn |= FDC.REG_INPUT.DISK_CHANGE;
         this.printIO(port, undefined, addrFrom, "INPUT", bIn);
         return bIn;
     }
@@ -69049,6 +69076,7 @@ class FDC extends Component {
             bDrive = this.popCmd(FDC.TERMS.DS);
             this.iDrive = (bDrive & 0x3);
             drive = this.aDrives[this.iDrive];
+            if (drive.bCylinder) this.stepDrive(drive);
             drive.bCylinder = drive.bCylinderSeek = 0;
             drive.resCode = FDC.REG_DATA.RES.SEEK_END | FDC.REG_DATA.RES.TRACK0;
             this.beginResult();                             // no results provided; this command is typically followed by FDC.REG_DATA.CMD.SENSE_INT
@@ -69144,6 +69172,7 @@ class FDC extends Component {
              * greater than or equal to nCylinders).
              */
             c = this.popCmd(FDC.TERMS.NCN);
+            if (c != drive.bCylinderSeek) this.stepDrive(drive);
             drive.bCylinder += c - drive.bCylinderSeek;
             if (drive.bCylinder < 0) drive.bCylinder = 0;
             if (drive.bCylinder >= drive.nCylinders) drive.bCylinder = drive.nCylinders - 1;
