@@ -1810,16 +1810,20 @@ export default class ChipSet extends Component {
      *
      * This should be called whenever the timings in STATUSA may have changed.
      *
-     * TODO: 1024 is a hard-coded number of periods per second based on the default interrupt rate of 976.562us
-     * (ie, 1000000 / 976.562).  Calculate the actual number based on the values programmed in the STATUSA register.
+     * The periodic interrupt rate is determined by the rate selection bits (RS3-RS0) in STATUSA: 0 disables
+     * the periodic interrupt, 1 and 2 select 3.90625ms (256Hz) and 7.8125ms (128Hz), and 3 through 15 select
+     * 122.070us (8192Hz) through 500ms (2Hz), each value halving the rate of the previous one.  The default
+     * (6) selects 976.562us (1024Hz), which is what the PC AT ROM BIOS uses, but OS/2 1.x reprograms the rate
+     * to 31.25ms (32Hz) for its system clock, and expects timeouts to be measured accordingly.
      *
      * @this {ChipSet}
      */
     calcRTCCyclePeriod()
     {
         this.nRTCCyclesLastUpdate = this.cpu.getCycles(this.fScaleTimers);
-        this.nRTCPeriodsPerSecond = 1024;
-        this.nRTCCyclesPerPeriod = Math.floor(this.cpu.getBaseCyclesPerSecond() / this.nRTCPeriodsPerSecond);
+        let rs = this.abCMOSData[ChipSet.CMOS.ADDR.STATUSA] & ChipSet.CMOS.STATUSA.RS;
+        this.nRTCPeriodsPerSecond = (!rs? 0 : (rs < 3? (256 >> (rs - 1)) : (32768 >> (rs - 1))));
+        this.nRTCCyclesPerPeriod = Math.floor(this.cpu.getBaseCyclesPerSecond() / (this.nRTCPeriodsPerSecond || 1));
         this.setRTCCycleLimit();
     }
 
@@ -1891,8 +1895,11 @@ export default class ChipSet extends Component {
          */
         if (nCyclesUpdate >= this.nRTCCyclesNextUpdate) {
             let bPrev = this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC];
-            this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.PF;
-            if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.PIE) {
+            /**
+             * A rate selection of zero in STATUSA disables the periodic interrupt (and the PF flag) altogether.
+             */
+            if (this.nRTCPeriodsPerSecond) this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.PF;
+            if (this.nRTCPeriodsPerSecond && (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.PIE)) {
                 /**
                  * When PIE is set, setBurstCycles() should be getting called as needed to ensure
                  * that updateRTCTime() is called more frequently, so let's assert that we don't have
@@ -5842,6 +5849,14 @@ export default class ChipSet extends Component {
         }
         let bDelta = bOut ^ this.abCMOSData[bAddr];
         this.abCMOSData[bAddr] = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.setRTCByte(bAddr, bOut) : bOut);
+        if (bAddr == ChipSet.CMOS.ADDR.STATUSA && (bDelta & ChipSet.CMOS.STATUSA.RS) && this.nRTCCyclesPerPeriod != null) {
+            /**
+             * The periodic interrupt rate has changed (eg, OS/2 1.x selects a 32Hz rate for its system clock),
+             * so recalculate the cycle period; the next periodic interrupt is then one full (new) period away.
+             */
+            this.calcRTCCyclePeriod();
+            if (!COMPILED) this.printf(MESSAGE.RTC, "RTC periodic interrupt rate: %dHz\n", this.nRTCPeriodsPerSecond);
+        }
         if (bAddr == ChipSet.CMOS.ADDR.STATUSB && (bDelta & ChipSet.CMOS.STATUSB.PIE)) {
             if (bOut & ChipSet.CMOS.STATUSB.PIE) {
                 if (!COMPILED) this.printf(MESSAGE.RTC, "RTC periodic interrupts enabled\n");

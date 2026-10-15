@@ -1901,7 +1901,8 @@ export default class PC extends PCJSLib {
         let attrHelper = this.systemType == "bd"? DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM : attrHidden;
         /**
          * Text files from the system's list other than CONFIG.SYS (eg, BASIC-DOS's HELP.TXT) are added to the root
-         * after AUTOEXEC.BAT, so that the root begins with the system files, CONFIG.SYS, and AUTOEXEC.BAT, in that order.
+         * after AUTOEXEC.BAT, so that the root begins with the system files and CONFIG.SYS (in the order the system's
+         * list gives them; BASIC-DOS puts CONFIG.SYS first), followed by AUTOEXEC.BAT.
          */
         let aDeferred = [];
         for (let name of aSystemFiles) {
@@ -1931,7 +1932,7 @@ export default class PC extends PCJSLib {
                 }
                 if (dbFile) {
                     let date;
-                    if (dbBoot2 && dbBoot2.length) {
+                    if (dbBoot2 && dbBoot2.length && !fText) {
                         let dbCombined = new DataBuffer(dbBoot2.length + dbFile.length);
                         dbBoot2.copy(dbCombined, 0);
                         dbFile.copy(dbCombined, dbBoot2.length);

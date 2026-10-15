@@ -773,6 +773,18 @@
       }
     },
     {
+      "name": "IBM OS/2 1.1 (1988)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/software/pcx86/sys/os2/ibm/1.1/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "software",
+        "order": 30
+      }
+    },
+    {
       "name": "IBM PC Dealer Demo (1982)",
       "type": "chrome",
       "request": "launch",
