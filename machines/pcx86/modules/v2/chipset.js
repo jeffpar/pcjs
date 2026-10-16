@@ -3763,11 +3763,17 @@ export default class ChipSet extends Component {
         controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
 
         /**
-         * EOP is supposed to automatically (re)mask the channel, unless it's set for auto-initialize.
+         * EOP is supposed to automatically (re)mask the channel, unless it's set for auto-initialize, in which
+         * case the current address and count are reloaded from the base registers instead.
          */
         if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) {
             channel.masked = true;
             channel.component = channel.obj = null;
+        } else {
+            channel.addrCurrent[0] = channel.addrInit[0];
+            channel.addrCurrent[1] = channel.addrInit[1];
+            channel.countCurrent[0] = channel.countInit[0];
+            channel.countCurrent[1] = channel.countInit[1];
         }
 
         if (DEBUG && channel.type == ChipSet.DMA_MODE.TYPE_WRITE && channel.sAddrDebug && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
@@ -3785,6 +3791,82 @@ export default class ChipSet extends Component {
          * to chipset.checkDMA() and let the CPU update INTR.DMA on its own, based on the return value from checkDMA().
          */
         return true;
+    }
+
+    /**
+     * transferDMA(iDMAChannel, abData, nBytes, fWrite)
+     *
+     * This is an alternative to requestDMA()/advanceDMA() for devices that must pace their own transfers
+     * (eg, a sound card's DAC consuming samples at a fixed rate), as opposed to the disk controllers, which
+     * are happy to move an entire block in one shot.  The device calls this whenever it's ready to move a few
+     * more bytes, and we move as many as we can (up to nBytes), honoring the channel's current address, count,
+     * mode (increment/decrement, auto-initialize) and mask.  Terminal count is handled exactly as it is for
+     * "pushed" transfers: the TC status bit is set, and the channel is either re-masked or (if auto-initialize
+     * is enabled) reloaded from its base address and count registers.
+     *
+     * The device is responsible for its own notion of block completion (and interrupts); a Sound Blaster, for
+     * example, counts the bytes it has played and ignores the DMA controller's terminal count entirely.
+     *
+     * @this {ChipSet}
+     * @param {number} iDMAChannel
+     * @param {Uint8Array|Array.<number>} abData (bytes read from memory are stored here, or bytes to be written to memory are taken from here)
+     * @param {number} nBytes (maximum number of bytes to transfer)
+     * @param {boolean} [fWrite] (true to write abData to memory, false or undefined to read memory into abData)
+     * @returns {number} number of bytes transferred (zero if the channel is masked or has no bytes remaining)
+     */
+    transferDMA(iDMAChannel, abData, nBytes, fWrite)
+    {
+        let iDMAC = iDMAChannel >> 2;
+        let controller = this.aDMACs[iDMAC];
+        if (!controller) return 0;
+
+        let iChannel = iDMAChannel & 0x3;
+        let channel = controller.aChannels[iChannel];
+
+        let n = 0;
+        while (n < nBytes && !channel.masked) {
+            let addr = (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
+            if (fWrite) {
+                this.bus.setByte(addr, abData[n]);
+            } else {
+                abData[n] = this.bus.getByte(addr);
+            }
+            n++;
+            if (channel.mode & ChipSet.DMA_MODE.DECREMENT) {
+                if (--channel.addrCurrent[0] < 0) {
+                    channel.addrCurrent[0] = 0xff;
+                    if (--channel.addrCurrent[1] < 0) channel.addrCurrent[1] = 0xff;
+                }
+            } else {
+                if (++channel.addrCurrent[0] > 0xff) {
+                    channel.addrCurrent[0] = 0x00;
+                    if (++channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
+                }
+            }
+            let count = ((channel.countCurrent[1] << 8) | channel.countCurrent[0]) - 1;
+            if (count < 0) {
+                /**
+                 * Terminal count: set the channel's TC status bit, and then either reload the channel (auto-initialize)
+                 * or re-mask it; in both cases, the current count register wraps to 0xFFFF.
+                 */
+                controller.bStatus = (controller.bStatus & ~(0x10 << iChannel)) | (0x1 << iChannel);
+                if (channel.mode & ChipSet.DMA_MODE.AUTOINIT) {
+                    channel.addrCurrent[0] = channel.addrInit[0];
+                    channel.addrCurrent[1] = channel.addrInit[1];
+                    channel.countCurrent[0] = channel.countInit[0];
+                    channel.countCurrent[1] = channel.countInit[1];
+                    if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
+                        this.printf(MESSAGE.DMA, "transferDMA(%d): auto-initialize reload\n", iDMAChannel);
+                    }
+                    continue;
+                }
+                channel.masked = true;
+                count = 0xffff;
+            }
+            channel.countCurrent[0] = count & 0xff;
+            channel.countCurrent[1] = count >> 8;
+        }
+        return n;
     }
 
     /**
