@@ -14,8 +14,8 @@ machines:
       A:
         name: Wolfenstein 3D 1.4
       B:
-        name: None
-    autoType: \r\rCD WOLF3D\rWOLF3D\r
+        name: MS Mouse 5.00 (SYSTEM)
+    autoType: \r\rB:MOUSE\r$30C:\rCD WOLF3D\rWOLF3D\r
 ---
 
 This is a shareware version (1.4) of Wolfenstein 3D.  Directory listings and screenshots are
