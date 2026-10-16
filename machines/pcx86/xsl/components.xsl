@@ -872,6 +872,51 @@
 		</xsl:call-template>
 	</xsl:template>
 
+	<xsl:template match="soundblaster[@ref]">
+		<xsl:param name="machine" select="''"/>
+		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
+		<xsl:apply-templates select="document($componentFile)/soundblaster"><xsl:with-param name="machine" select="$machine"/></xsl:apply-templates>
+	</xsl:template>
+
+	<xsl:template match="soundblaster[not(@ref)]">
+		<xsl:param name="machine" select="''"/>
+		<xsl:variable name="model">
+			<xsl:choose>
+				<xsl:when test="@model"><xsl:value-of select="@model"/></xsl:when>
+				<xsl:otherwise>sb2</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="port">
+			<xsl:choose>
+				<xsl:when test="@port"><xsl:value-of select="@port"/></xsl:when>
+				<xsl:otherwise>0x220</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="irq">
+			<xsl:choose>
+				<xsl:when test="@irq"><xsl:value-of select="@irq"/></xsl:when>
+				<xsl:otherwise>7</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="dma">
+			<xsl:choose>
+				<xsl:when test="@dma"><xsl:value-of select="@dma"/></xsl:when>
+				<xsl:otherwise>1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="volume">
+			<xsl:choose>
+				<xsl:when test="@volume"><xsl:value-of select="@volume"/></xsl:when>
+				<xsl:otherwise>-1</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:call-template name="component">
+			<xsl:with-param name="machine" select="$machine"/>
+			<xsl:with-param name="class">soundblaster</xsl:with-param>
+			<xsl:with-param name="parms">,model:'<xsl:value-of select="$model"/>',port:<xsl:value-of select="$port"/>,irq:<xsl:value-of select="$irq"/>,dma:<xsl:value-of select="$dma"/>,volume:<xsl:value-of select="$volume"/></xsl:with-param>
+		</xsl:call-template>
+	</xsl:template>
+
 	<xsl:template match="serial[@ref]">
 		<xsl:param name="machine" select="''"/>
 		<xsl:variable name="componentFile"><xsl:value-of select="$rootDir"/><xsl:value-of select="@ref"/></xsl:variable>
