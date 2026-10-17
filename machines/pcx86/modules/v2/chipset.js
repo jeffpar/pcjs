@@ -1276,20 +1276,20 @@ export default class ChipSet extends Component {
          * I know about sound generation, using the API to make the same noises as the IBM PC speaker seems
          * straightforward.
          *
-         * To start, we create an audio context, unless the 'sound' parameter has been explicitly set to false
-         * or 0; the boolean value true (along with any illegal number) now defaults to 0.5 instead of 1.0.
+         * Audio is enabled unless the 'sound' parameter has been explicitly set to false or 0; the boolean value
+         * true (along with any illegal number) now defaults to 0.5 instead of 1.0.
+         *
+         * The audio context itself isn't created until getAudioContext() is first called (eg, when the speaker is
+         * first turned on), because creating one can stall the page for hundreds of milliseconds (or more, if the
+         * audio hardware must wake up), and browsers create it suspended until the user interacts with the page
+         * anyway.  contextAudio is undefined until then, and null if audio is disabled or unavailable.
          */
         this.volumeInit = 0;
+        this.contextAudio = null;
         let sound = parmsChipSet['sound'];
         if (sound) {
             this.volumeInit = (typeof sound != "number" || sound < 0 || sound > 1)? 0.5 : sound;
-            this.classAudio = this.contextAudio = null;
-            this.classAudio = globals.window['AudioContext'] || globals.window['webkitAudioContext'];
-            if (this.classAudio) {
-                this.contextAudio = new this.classAudio();
-            } else {
-                if (DEBUG) this.printf(MESSAGE.LOG, "AudioContext not available");
-            }
+            this.contextAudio = undefined;
         }
         /**
          * fSpeakerEnabled indicates whether the speaker is *logically* on, whereas fSpeakerOn indicates
@@ -6100,7 +6100,7 @@ export default class ChipSet extends Component {
              */
             fOn = false;
         }
-        if (this.contextAudio) {
+        if (fOn? this.getAudioContext() : this.contextAudio) {
             if (fOn && this.startAudio()) {
                 /**
                  * Instead of setting the frequency's 'value' property directly, as we used to do, we use the
@@ -6126,6 +6126,24 @@ export default class ChipSet extends Component {
     }
 
     /**
+     * getAudioContext()
+     *
+     * Creates the audio context on first use (see the ChipSet constructor).
+     *
+     * @this {ChipSet}
+     * @returns {Object|null|undefined}
+     */
+    getAudioContext()
+    {
+        if (this.contextAudio === undefined) {
+            let classAudio = globals.window['AudioContext'] || globals.window['webkitAudioContext'];
+            this.contextAudio = classAudio? new classAudio() : null;
+            if (DEBUG && !classAudio) this.printf(MESSAGE.LOG, "AudioContext not available");
+        }
+        return this.contextAudio;
+    }
+
+    /**
      * startAudio(event)
      *
      * NOTE: We currently use named properties rather than "dot" properties to access all the AudioContext
@@ -6140,7 +6158,7 @@ export default class ChipSet extends Component {
      */
     startAudio(event)
     {
-        if (this.contextAudio) {
+        if (this.getAudioContext()) {
             /**
              * NOTE: If the machine happened to enable its speaker *before* the user generated an event
              * (eg, touchstart) that resulted in a call here, then we're too late -- at least as far as iOS

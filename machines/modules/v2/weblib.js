@@ -1171,7 +1171,7 @@ export default class WebLib {
 WebLib.parmsURL = null;            // initialized on first call to parseURLParms()
 
 WebLib.aPageEventHandlers = {
-    'init': [],                 // list of 'load' handlers
+    'init': [],                 // list of 'DOMContentLoaded' (or 'load') handlers
     'show': [],                 // list of 'pageshow' handlers
     'exit': []                  // list of 'unload' handlers (although we prefer to use 'beforeunload' if possible)
 };
@@ -1199,7 +1199,12 @@ WebLib.fLocalStorage = null;
  */
 WebLib.sLocalStorageTest = "PCjs.localStorage";
 
-WebLib.addPageEvent('load', WebLib.doPageInit);
+/*
+ * Machines initialize as soon as the DOM is ready, instead of waiting for the 'load' event, which also waits for
+ * fonts, images, analytics, etc; that delayed every machine's ROM and disk requests.  If the DOM is already ready
+ * (eg, this script was loaded dynamically), we fall back to the 'load' event.
+ */
+WebLib.addPageEvent(globals.window.document && globals.window.document.readyState == "loading"? 'DOMContentLoaded' : 'load', WebLib.doPageInit);
 WebLib.addPageEvent('pageshow', WebLib.doPageShow);
 WebLib.addPageEvent(WebLib.isUserAgent("iOS")? 'pagehide' : (WebLib.isUserAgent("Opera")? 'unload' : 'beforeunload'), WebLib.doPageExit);
 
