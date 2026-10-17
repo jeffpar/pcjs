@@ -42480,7 +42480,16 @@ class ChipSet extends Component {
         this.cmp = cmp;
 
         this.fpuActive = null;
-        this.setDIPSwitches(ChipSet.SW_TYPE.FPU, this.cmp.fpu? 1 : 0, true);
+        /**
+         * A configured FPU component turns on the FPU switch (both its initial and current values, since
+         * models without SW1 controls, such as the MODEL_5170, never copy initial values to current values);
+         * otherwise, the switch keeps whatever SW1 specified (eg, pc.js --fpu).  On the MODEL_5170, the next
+         * reset propagates the switch to the CMOS equipment byte (see initCMOSData()).
+         */
+        if (this.cmp.fpu) {
+            this.setDIPSwitches(ChipSet.SW_TYPE.FPU, 1, true);
+            this.setDIPSwitches(ChipSet.SW_TYPE.FPU, 1);
+        }
 
         this.kbd = cmp.getMachineComponent("Keyboard");
 
@@ -42742,7 +42751,8 @@ class ChipSet extends Component {
             }
 
             if (DESKPRO386 && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386) {
-                this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NO80387 | ChipSet.C8042.INPORT.COMPAQ_NOWEITEK;
+                this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NOWEITEK;
+                if (!this.getDIPCoprocessor()) this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NO80387;
             }
 
             this.b8042OutPort = ChipSet.C8042.OUTPORT.NO_RESET | ChipSet.C8042.OUTPORT.A20_ON;
