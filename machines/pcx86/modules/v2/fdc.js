@@ -457,6 +457,11 @@ export default class FDC extends Component {
         if (this.sortBy == "none") this.sortBy = null;
 
         /**
+         * Set once addDiskettes() has added the "None", "Local Disk" and "Remote Disk" entries (and auto-mounted).
+         */
+        this.fDisksAdded = false;
+
+        /**
          * The following array keeps track of every disk image we've ever mounted.  Each entry in the
          * array is another array whose elements are:
          *
@@ -738,6 +743,16 @@ export default class FDC extends Component {
                     fdc.printf(MESSAGE.PROGRESS, "%s\n", sProgress);
                 });
             }
+            /**
+             * Don't make the machine wait for the diskette libraries unless an auto-mount name can't be found
+             * without them; addDiskettes() will merge the libraries into the diskette list whenever they arrive.
+             */
+            let fWait = false;
+            for (let sDrive in this.configMount) {
+                let configDrive = this.configMount[sDrive];
+                if (!configDrive['path'] && !this.findDisketteByName(configDrive['name'], true)) fWait = true;
+            }
+            if (!fWait && !this.fDisksAdded) this.addDiskettes();
             return;
         }
         this.addDiskettes();
@@ -1840,71 +1855,69 @@ export default class FDC extends Component {
     /**
      * addDiskettes(fSilent)
      *
+     * Merges aDiskettes into the "listDisks" control; the first call also adds the "None", "Local Disk" and
+     * "Remote Disk" entries and performs any auto-mounts.  Later calls (eg, after the diskette libraries have
+     * loaded) only merge.
+     *
      * @this {FDC}
      * @param {boolean} [fSilent]
      */
     addDiskettes(fSilent)
     {
-        if (this.aDiskettes) {
-            for (let i = 0; i < this.aDiskettes.length; i++) {
+        let controlDisks = this.bindings["listDisks"];
+        if (controlDisks && controlDisks.options && this.aDiskettes) {
+            /**
+             * Existing options are divided into "None" (top), "Local Disk" and "Remote Disk" (bottom), and
+             * everything else (aOptions), which is merged with any new aDiskettes, sorted, and then reinserted.
+             * A path lookup table replaces the per-diskette scan that addDiskette() performs, because scanning
+             * thousands of options for each of thousands of diskettes took several seconds.
+             */
+            let i;
+            let paths = {};
+            let aTop = [], aOptions = [], aBottom = [];
+            let sValue = controlDisks.value, fdc = this;
+            for (i = 0; i < controlDisks.options.length; i++) {
+                let option = controlDisks.options[i];
+                paths[option.value] = true;
+                (option.value? (option.value[0] == '?'? aBottom : aOptions) : aTop).push(option);
+            }
+            let cOptions = aOptions.length;
+            for (i = 0; i < this.aDiskettes.length; i++) {
                 let diskette = this.aDiskettes[i];
-                this.addDiskette(diskette['name'], diskette['path']);
+                if (paths[diskette['path']]) continue;
+                paths[diskette['path']] = true;
+                let option = document.createElement("option");
+                option.text = diskette['name'];
+                option.value = diskette['path'];
+                aOptions.push(option);
             }
-        }
-        /**
-         * Why didn't we sort aDiskettes before adding them to the controlDisks list control?
-         * Because that wouldn't handle any prepopulated entries already stored in the list control.
-         */
-        if (this.sortBy) {
-            let i, aOptions = [], fdc = this;
-            let controlDisks = this.bindings["listDisks"];
-            if (controlDisks) {
-                /**
-                 * NOTE: All this monkeying around with copying the elements from control.options to aOptions
-                 * and then back again is necessary because control.options isn't a *real* Array (at least not
-                 * in all browsers); consequently, it may have no sort() method.  It has a length property,
-                 * along with numeric properties 0 to length-1, but it's still probably just an Object, not
-                 * an Array.
-                 *
-                 * Also note that changing the order of the control's options would ordinarily mean that the
-                 * control's selectedIndex may now be incorrect, but in our case, it doesn't matter, because
-                 * we have a special function, displayDiskette(), that will be called at LEAST once during
-                 * initialization, ensuring that selectedIndex is set correctly.
-                 */
-                for (i = 0; i < controlDisks.options.length; i++)  {
-                    aOptions.push(controlDisks.options[i]);
-                }
-                aOptions.sort(function(a, b) {
-                    /**
-                     * I've switched to localeCompare() because it offers case-insensitivity by default;
-                     * I'm still a little concerned that we could somehow end up with list elements whose text
-                     * and/or value properties are undefined (because calling a method on an undefined variable
-                     * will throw an exception), but maybe I'm being overly paranoid....
-                     */
-                    if (fdc.sortBy != "path") {
-                        return a.text.localeCompare(b.text);
-                    } else {
-                        return a.value.localeCompare(b.value);
-                    }
-                });
-                for (i = 0; i < aOptions.length; i++)  {
-                    try {
+            /**
+             * Rebuild the control only if there are new options (or, on the first call, options to sort).
+             */
+            if (aOptions.length > cOptions || !this.fDisksAdded) {
+                if (this.sortBy) {
+                    aOptions.sort(function(a, b) {
                         /**
-                         * TODO: Determine why this line blows up in IE8; are the properties of an options object not settable in IE8?
+                         * I've switched to localeCompare() because it offers case-insensitivity by default.
                          */
-                        controlDisks.options[i] = aOptions[i];
-                    } catch(e) {
-                        break;
-                    }
+                        return fdc.sortBy != "path"? a.text.localeCompare(b.text) : a.value.localeCompare(b.value);
+                    });
                 }
+                let fragment = document.createDocumentFragment();
+                aOptions = aTop.concat(aOptions, aBottom);
+                for (i = 0; i < aOptions.length; i++) fragment.appendChild(aOptions[i]);
+                controlDisks.textContent = "";
+                controlDisks.appendChild(fragment);
+                controlDisks.value = sValue;
             }
         }
-
-        this.addDiskette("None", "", true);
-        if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
-        this.addDiskette("Remote Disk", "??");
-
-        if (fSilent || !this.autoMount()) this.setReady();
+        if (!this.fDisksAdded) {
+            this.fDisksAdded = true;
+            this.addDiskette("None", "", true);
+            if (this.fLocalDisks) this.addDiskette("Local Disk", "?");
+            this.addDiskette("Remote Disk", "??");
+            if (fSilent || !this.autoMount()) this.setReady();
+        }
     }
 
     /**
@@ -1944,9 +1957,10 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string|undefined} sName
+     * @param {boolean} [fQuiet] (true to suppress the "Unable to find" notice)
      * @returns {string}
      */
-    findDisketteByName(sName)
+    findDisketteByName(sName, fQuiet)
     {
         if (sName && sName != "None") {
             let controlDisks = this.bindings["listDisks"];
@@ -1963,7 +1977,7 @@ export default class FDC extends Component {
                     if (diskette['name'] == sName) return diskette['path'];
                 }
             }
-            this.printf(MESSAGE.NOTICE, "Unable to find diskette \"%s\"\n", sName);
+            if (!fQuiet) this.printf(MESSAGE.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }

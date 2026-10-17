@@ -361,7 +361,7 @@ export default class SoundBlaster extends Component {
         this.timerPull = cpu.addTimer(this.id + ".pull", function onPull() { sb.pull(); });
 
         if (this.chipset) {
-            this.contextAudio = this.chipset.contextAudio;
+            this.contextAudio = this.chipset.getAudioContext();
             if (this.volume < 0) this.volume = this.chipset.volumeInit;
         }
         if (this.volume < 0 || this.volume > 1) this.volume = 0.5;
