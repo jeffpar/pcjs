@@ -1077,6 +1077,15 @@ export class Card extends Controller {
             this.nCyclesHorzActive = (this.nCyclesHorzPeriod * monitorSpecs.percentHorzActive / 100)|0;
             this.nCyclesVertActive = (this.nCyclesHorzPeriod * monitorSpecs.nHorzPeriodsPerFrame)|0;
             this.nCyclesVertPeriod = (this.nCyclesVertActive / (monitorSpecs.percentVertActive / 100))|0;
+            /**
+             * nCyclesVertPorch is the vertical blanking "front porch": the last few horizontal periods of the
+             * active period, during which the display is blanked (STATUS.RETRACE) but vertical retrace has not
+             * yet started.  Real monitors have one, and some software (eg, Wolfenstein 3D's VL_WaitVBL) waits
+             * for exactly that state (several consecutive samples of RETRACE without VRETRACE) before it will
+             * accept the vertical retrace that follows; without a porch, that state exists only during horizontal
+             * blanking, which is too short to be sampled several times in a row on a slower CPU.
+             */
+            this.nCyclesVertPorch = this.nCyclesHorzPeriod * Videox86.VERT_PORCH_LINES;
             this.nCyclesVertRetrace = (data[7] || 0);
             this.nCountVertRetrace = 0;
         }
@@ -2462,6 +2471,11 @@ export default class Videox86 extends Component {
     /**
      * @type {Object.<MonitorSpecs>}
      */
+    /**
+     * The number of horizontal periods at the end of a frame's active period that are blanked (see nCyclesVertPorch).
+     */
+    static VERT_PORCH_LINES = 10;
+
     static monitorSpecs = {
         /**
          * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
@@ -7145,7 +7159,11 @@ export default class Videox86 extends Component {
         nCyclesElapsed -= card.nCyclesVertPeriod - card.nCyclesVertActive;
         if (nCyclesElapsed < 0) {
             b |= Card.CGA.STATUS.VRETRACE | Card.CGA.STATUS.RETRACE;
-        } else {
+        }
+        else if (nCyclesElapsed >= card.nCyclesVertActive - card.nCyclesVertPorch) {
+            b |= Card.CGA.STATUS.RETRACE;               // vertical blanking (front porch; see nCyclesVertPorch)
+        }
+        else {
             let nCyclesHorzRemain = nCyclesElapsed % card.nCyclesHorzPeriod;
             if (nCyclesHorzRemain > card.nCyclesHorzActive) {
                 b |= Card.CGA.STATUS.RETRACE;
