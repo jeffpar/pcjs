@@ -17,6 +17,8 @@ Other VGA configurations include:
 
   - [DeskPro 386 with 2Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/2048kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
   - [DeskPro 386 with 4Mb and IBM VGA](/machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/machine.xml), [Visualizer](/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/visual/machine.xml))
+  - [DeskPro 386 with 2Mb, IBM VGA, and Sound Blaster](/machines/pcx86/compaq/deskpro386/vga/2048kb/soundblaster/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/2048kb/soundblaster/debugger/machine.xml))
+  - [DeskPro 386 with 4Mb, IBM VGA, and Sound Blaster](/machines/pcx86/compaq/deskpro386/vga/4096kb/soundblaster/machine.xml) ([Debugger](/machines/pcx86/compaq/deskpro386/vga/4096kb/soundblaster/debugger/machine.xml))
   - [DeskPro 386 with 4Mb and IBM VGA running Windows 95](/software/pcx86/sys/windows/win95/4.00.950/) ([Debugger](/software/pcx86/sys/windows/win95/4.00.950/debugger/))
   - [DeskPro 386 with 2Mb and COMPAQ VGA (Debugger)](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/machine.xml), ([Visualizer](/machines/pcx86/compaq/deskpro386/other/2048kb/debugger/visual/machine.xml))
 

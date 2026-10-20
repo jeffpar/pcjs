@@ -2430,6 +2430,11 @@ export default class PC extends PCJSLib {
             }
         }
         driveInfo.disk = diskInfo;
+        /**
+         * A disk read from a raw image (eg, --disk=X.img) doesn't have a volume table yet (only JSON images
+         * carry one), and without it, the drive would never be marked partitioned (and never be mounted).
+         */
+        if (!diskInfo.volTable.length) diskInfo.buildTables();
         let volume = diskInfo.volTable[0];
         if (volume) {
             driveInfo.volume = volume;

@@ -42480,7 +42480,16 @@ class ChipSet extends Component {
         this.cmp = cmp;
 
         this.fpuActive = null;
-        this.setDIPSwitches(ChipSet.SW_TYPE.FPU, this.cmp.fpu? 1 : 0, true);
+        /**
+         * A configured FPU component turns on the FPU switch (both its initial and current values, since
+         * models without SW1 controls, such as the MODEL_5170, never copy initial values to current values);
+         * otherwise, the switch keeps whatever SW1 specified (eg, pc.js --fpu).  On the MODEL_5170, the next
+         * reset propagates the switch to the CMOS equipment byte (see initCMOSData()).
+         */
+        if (this.cmp.fpu) {
+            this.setDIPSwitches(ChipSet.SW_TYPE.FPU, 1, true);
+            this.setDIPSwitches(ChipSet.SW_TYPE.FPU, 1);
+        }
 
         this.kbd = cmp.getMachineComponent("Keyboard");
 
@@ -42742,7 +42751,8 @@ class ChipSet extends Component {
             }
 
             if (DESKPRO386 && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386) {
-                this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NO80387 | ChipSet.C8042.INPORT.COMPAQ_NOWEITEK;
+                this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NOWEITEK;
+                if (!this.getDIPCoprocessor()) this.b8042InPort |= ChipSet.C8042.INPORT.COMPAQ_NO80387;
             }
 
             this.b8042OutPort = ChipSet.C8042.OUTPORT.NO_RESET | ChipSet.C8042.OUTPORT.A20_ON;
@@ -53263,6 +53273,15 @@ class Card extends Controller {
             this.nCyclesHorzActive = (this.nCyclesHorzPeriod * monitorSpecs.percentHorzActive / 100)|0;
             this.nCyclesVertActive = (this.nCyclesHorzPeriod * monitorSpecs.nHorzPeriodsPerFrame)|0;
             this.nCyclesVertPeriod = (this.nCyclesVertActive / (monitorSpecs.percentVertActive / 100))|0;
+            /**
+             * nCyclesVertPorch is the vertical blanking "front porch": the last few horizontal periods of the
+             * active period, during which the display is blanked (STATUS.RETRACE) but vertical retrace has not
+             * yet started.  Real monitors have one, and some software (eg, Wolfenstein 3D's VL_WaitVBL) waits
+             * for exactly that state (several consecutive samples of RETRACE without VRETRACE) before it will
+             * accept the vertical retrace that follows; without a porch, that state exists only during horizontal
+             * blanking, which is too short to be sampled several times in a row on a slower CPU.
+             */
+            this.nCyclesVertPorch = this.nCyclesHorzPeriod * Videox86.VERT_PORCH_LINES;
             this.nCyclesVertRetrace = (data[7] || 0);
             this.nCountVertRetrace = 0;
         }
@@ -54639,6 +54658,11 @@ class Videox86 extends Component {
     /**
      * @type {Object.<MonitorSpecs>}
      */
+    /**
+     * The number of horizontal periods at the end of a frame's active period that are blanked (see nCyclesVertPorch).
+     */
+    static VERT_PORCH_LINES = 10;
+
     static monitorSpecs = {
         /**
          * NOTE: The number of horizontal periods per frame (200) is dictated by the EGA ROM BIOS at C000:03D0.
@@ -59322,7 +59346,11 @@ class Videox86 extends Component {
         nCyclesElapsed -= card.nCyclesVertPeriod - card.nCyclesVertActive;
         if (nCyclesElapsed < 0) {
             b |= Card.CGA.STATUS.VRETRACE | Card.CGA.STATUS.RETRACE;
-        } else {
+        }
+        else if (nCyclesElapsed >= card.nCyclesVertActive - card.nCyclesVertPorch) {
+            b |= Card.CGA.STATUS.RETRACE;               // vertical blanking (front porch; see nCyclesVertPorch)
+        }
+        else {
             let nCyclesHorzRemain = nCyclesElapsed % card.nCyclesHorzPeriod;
             if (nCyclesHorzRemain > card.nCyclesHorzActive) {
                 b |= Card.CGA.STATUS.RETRACE;
