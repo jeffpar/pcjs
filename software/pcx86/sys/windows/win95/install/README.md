@@ -6,7 +6,7 @@ machines:
   - id: deskpro386
     type: pcx86
     debugger: available
-    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/soundblaster/machine.xml
     drives: '[{name:"68Mb Hard Disk",type:4}]'
     autoMount:
       A: "MS-DOS 5.00 (720K Disk 1)"

@@ -5,7 +5,7 @@ permalink: /software/pcx86/sys/windows/win95/4.00.121/
 machines:
   - id: deskpro386
     type: pcx86
-    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/machine.xml
+    config: /machines/pcx86/compaq/deskpro386/vga/4096kb/soundblaster/machine.xml
     autoMount:
         A: "MS-DOS 5.00 (720K Disk 1)"
         B: "None"

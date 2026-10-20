@@ -7078,8 +7078,11 @@ class Input extends Device {
                 /**
                  * At this point, I used to return true, indicating that we're not interested in a keypress
                  * event, but in fact, onkeyCode() is now interested in them only insofar as letters can convey
-                 * information about the state of CAPS-LOCK (see above).
+                 * information about the state of CAPS-LOCK (see above).  So we still return true for every
+                 * other key, because otherwise the browser performs its default action; eg, TAB moves focus
+                 * off the machine, which then also loses the TAB keyup, leaving the key stuck down.
                  */
+                return (keyCode < Input.KEYCODE.A || keyCode > Input.KEYCODE.Z);
             }
         }
         return false;
