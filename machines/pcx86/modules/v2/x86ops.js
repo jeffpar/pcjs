@@ -3482,14 +3482,7 @@ X86.opRETF = function()
  */
 X86.opINT3 = function()
 {
-    /**
-     * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
-     */
-    if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printf(MESSAGE.ADDR, "INT 0x03 in v86-mode (IOPL < 3)\n");
-        X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
-        return;
-    }
+    /* INT3 (CC) skips the IOPL check in virtual 8086 mode. */
     /**
      * Because INT3 is a trap, not a fault, we must use helpTrap() rather than helpFault().  Unfortunately, that
      * means you can't rely on the Debugger logic instead helpFault() to conditionally stop execution on an INT3,
@@ -3534,14 +3527,7 @@ X86.opINTn = function()
 X86.opINTO = function()
 {
     if (this.getOF()) {
-        /**
-         * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
-         */
-        if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printf(MESSAGE.ADDR, "INTO in v86-mode (IOPL < 3)\n");
-            X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
-            return;
-        }
+        /* INTO skips the IOPL check in virtual 8086 mode. */
         X86.helpTrap.call(this, X86.EXCEPTION.OF_TRAP, 1, this.cycleCounts.nOpCyclesIntOD);
         return;
     }
