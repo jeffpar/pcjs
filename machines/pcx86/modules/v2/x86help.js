@@ -462,7 +462,7 @@ X86.helpCALLF = function(off, sel)
 };
 
 /**
- * helpINT(nIDT, nError, nBytes, nCycles)
+ * helpINT(nIDT, nError, nBytes, nCycles, fFault)
  *
  * NOTE: We no longer use setCSIP(), because it always loads the new CS using segCS.load(), which only knows
  * how to load GDT and LDT descriptors, whereas interrupts must use setCS.loadIDT(), which deals exclusively
@@ -473,14 +473,19 @@ X86.helpCALLF = function(off, sel)
  * @param {number|null} [nError]
  * @param {number} [nBytes] (size of opcode, if any)
  * @param {number} [nCycles] (in addition to the default of nOpCyclesInt)
+ * @param {boolean} [fFault] true to set RF in the flags saved for an 80386 fault
  */
-X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
+X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0, fFault = false)
 {
     /**
      * TODO: We assess the cycle cost up front, because otherwise, if loadIDT() fails, no cost may be assessed.
      */
     this.nStepCycles -= this.cycleCounts.nOpCyclesInt + nCycles;
     let oldPS = this.getPS();
+    /* The 80386 sets RF in the flags saved for a fault (Intel PRM 12.3.1.1).
+     * Set it in the saved copy before pushing the interrupt frame.
+     */
+    if (I386 && this.model >= X86.MODEL_80386 && fFault) oldPS |= X86.PS.RF;
     let oldCS = this.getCS();
     let oldIP = this.getIP();
     /**
@@ -845,7 +850,8 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
     if (fDispatch) {
 
         this.nFault = nFault;
-        X86.helpINT.call(this, nFault, nError, 0, nCycles);
+        X86.helpINT.call(this, nFault, nError, 0, nCycles,
+            nFault != X86.EXCEPTION.DF_FAULT && nFault != X86.EXCEPTION.MP_FAULT);
 
         /**
          * REPeated instructions that rewind regLIP to opLIP used to screw up this dispatch,
