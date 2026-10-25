@@ -585,6 +585,8 @@ X86.helpIRET = function()
                 newPS = (newPS & (0xffff | X86.PS.RF)) | (this.regPS & ~(0xffff | X86.PS.RF));
             }
             else {
+                // Only CPL 0 can enter virtual 8086 mode through IRETD.
+                if (cpl) newPS &= ~X86.PS.VM;
                 if (newPS & X86.PS.VM) {
                     /**
                      * As noted in loadDesc8(), where the V86-mode frame we're about to pop was originally pushed,
