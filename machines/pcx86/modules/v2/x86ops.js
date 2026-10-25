@@ -4170,13 +4170,13 @@ X86.opREPZ = function()
  *
  *      HLT is a privileged instruction. #GP(O) if the current privilege level is not O.
  *
- * On the 80386, we now throw GP_FAULT when operating in V86 mode, but we still don't check CPL on an 80286.
+ * HLT raises #GP(0) outside CPL 0 or in virtual 8086 mode, regardless of IOPL.
  *
  * @this {CPUx86}
  */
 X86.opHLT = function()
 {
-    if (I386 && (this.regPS & X86.PS.VM)) {
+    if (this.nCPL || I386 && (this.regPS & X86.PS.VM)) {
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
