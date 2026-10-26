@@ -1681,6 +1681,9 @@ export default class Computer extends Component {
     /**
      * getMachineComponent(sType, componentPrev)
      *
+     * A missing component is reported on the console rather than with an alert, since a machine may legitimately
+     * omit one (eg, an IBM PC with no video adapter); a componentPrev of false skips the message.
+     *
      * @this {Computer}
      * @param {string} sType
      * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
@@ -1698,8 +1701,8 @@ export default class Computer extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
+        if (!componentLast && componentPrev !== false) {
+            Component.printf(MESSAGE.LOG, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -1736,6 +1739,16 @@ export default class Computer extends Component {
 
             if (!fScroll && globals.window.scrollTo) {
                 globals.window.scrollTo(x, y);
+            }
+        }
+        else if (globals.browser) {
+            /**
+             * A machine with no video (eg, a PC whose only console is a terminal on a serial port) gives focus
+             * to whatever its serial ports are connected to instead.
+             */
+            let serial = null;
+            while ((serial = /** @type {SerialPort} */ (this.getMachineComponent("SerialPort", serial || false)))) {
+                serial.setFocus(fScroll);
             }
         }
     }

@@ -62127,6 +62127,7 @@ class SerialPort extends Component {
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
         this.fAutoFlow = false;
+        this.fFocusPending = false;
 
         /**
          * Export all functions required by bindConnection() or initConnection(), whichever is required.
@@ -62344,6 +62345,7 @@ class SerialPort extends Component {
                                 this.updateStatus = exports['receiveStatus'];
                                 this.sendBreak = exports['receiveBreak'] || null;
                                 this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                if (this.fFocusPending) this.setFocus(false);
                                 return;
                             }
                         }
@@ -62355,6 +62357,24 @@ class SerialPort extends Component {
                 this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
+    }
+
+    /**
+     * setFocus(fScroll)
+     *
+     * Gives focus to the connected machine (eg, a VT100 terminal), if it exports a 'focus' function; Computer's
+     * updateFocus() calls this when the machine has no video.  If there's no connection yet, initConnection() calls
+     * this again once there is.
+     *
+     * @this {SerialPort}
+     * @param {boolean} [fScroll]
+     */
+    setFocus(fScroll)
+    {
+        let exports = this.connection && this.connection['exports'];
+        let fnFocus = exports && /** @function */ (exports['focus']);
+        if (fnFocus) fnFocus.call(this.connection, fScroll);
+        this.fFocusPending = !this.connection;
     }
 
     /**
@@ -87846,6 +87866,9 @@ class Computer extends Component {
     /**
      * getMachineComponent(sType, componentPrev)
      *
+     * A missing component is reported on the console rather than with an alert, since a machine may legitimately
+     * omit one (eg, an IBM PC with no video adapter); a componentPrev of false skips the message.
+     *
      * @this {Computer}
      * @param {string} sType
      * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
@@ -87863,8 +87886,8 @@ class Computer extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && DEBUG && componentPrev !== false) {
-            this.printf(MESSAGE.WARNING, "Machine component type \"%s\" not found\n", sType);
+        if (!componentLast && componentPrev !== false) {
+            Component.printf(MESSAGE.LOG, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -87901,6 +87924,16 @@ class Computer extends Component {
 
             if (!fScroll && globals.window.scrollTo) {
                 globals.window.scrollTo(x, y);
+            }
+        }
+        else if (globals.browser) {
+            /**
+             * A machine with no video (eg, a PC whose only console is a terminal on a serial port) gives focus
+             * to whatever its serial ports are connected to instead.
+             */
+            let serial = null;
+            while ((serial = /** @type {SerialPort} */ (this.getMachineComponent("SerialPort", serial || false)))) {
+                serial.setFocus(fScroll);
             }
         }
     }

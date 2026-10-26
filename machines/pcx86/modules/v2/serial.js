@@ -350,6 +350,7 @@ export default class SerialPort extends Component {
         this.sDataReceived = "";
         this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
         this.fAutoFlow = false;
+        this.fFocusPending = false;
 
         /**
          * Export all functions required by bindConnection() or initConnection(), whichever is required.
@@ -567,6 +568,7 @@ export default class SerialPort extends Component {
                                 this.updateStatus = exports['receiveStatus'];
                                 this.sendBreak = exports['receiveBreak'] || null;
                                 this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
+                                if (this.fFocusPending) this.setFocus(false);
                                 return;
                             }
                         }
@@ -578,6 +580,24 @@ export default class SerialPort extends Component {
                 this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
+    }
+
+    /**
+     * setFocus(fScroll)
+     *
+     * Gives focus to the connected machine (eg, a VT100 terminal), if it exports a 'focus' function; Computer's
+     * updateFocus() calls this when the machine has no video.  If there's no connection yet, initConnection() calls
+     * this again once there is.
+     *
+     * @this {SerialPort}
+     * @param {boolean} [fScroll]
+     */
+    setFocus(fScroll)
+    {
+        let exports = this.connection && this.connection['exports'];
+        let fnFocus = exports && /** @function */ (exports['focus']);
+        if (fnFocus) fnFocus.call(this.connection, fScroll);
+        this.fFocusPending = !this.connection;
     }
 
     /**
