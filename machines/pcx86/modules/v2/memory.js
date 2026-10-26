@@ -136,16 +136,43 @@ export default class Memoryx86 {
     constructor(addr, used, size, type, controller, cpu)
     {
         let i;
+        /**
+         * Every property that any Memory block may ever use is initialized here, in a fixed order, so that
+         * all Memory blocks share a single hidden class; that keeps the CPU's block property accesses (eg,
+         * block.fDirectRead and block.ab) monomorphic, which is what makes the CPU's direct-access fast paths
+         * worthwhile (see CPUx86.getByte() for an example).
+         */
         this.id = (Memoryx86.idBlock += 2);
-        this.adw = null;
-        this.offset = 0;
         this.addr = addr;
         this.used = used;
         this.size = size || 0;
         this.type = type || Memoryx86.TYPE.NONE;
         this.fReadOnly = (type == Memoryx86.TYPE.ROM);
+        this.buffer = null;
+        this.dv = null;
+        this.ab = null;
+        this.aw = null;
+        this.adw = null;
+        this.offset = 0;
         this.controller = null;
         this.cpu = cpu;             // if a CPU reference is provided, then this must be an UNPAGED Memory block allocation
+        this.dbg = null;
+        this.cReadBreakpoints = this.cWriteBreakpoints = 0;
+        this.readByte = this.readByteDirect = this.readNone;
+        this.readShort = this.readShortDirect = this.readShortDefault;
+        this.readLong = this.readLongDirect = this.readLongDefault;
+        this.writeByte = this.writeByteDirect = this.writeNone;
+        this.writeShort = this.writeShortDirect = this.writeShortDefault;
+        this.writeLong = this.writeLongDirect = this.writeLongDefault;
+        /**
+         * fDirectRead is true whenever readByte is readByteLE, and fDirectWrite is true whenever writeByte is
+         * writeByteLE, which tells the CPU that it may access the block's ab/aw/adw arrays directly, bypassing
+         * the block's access functions.  See setReadAccess(), setWriteAccess(), and the "PLE" handlers.
+         */
+        this.fDirectRead = this.fDirectWrite = false;
+        this.blockPhys = this.blockPDE = this.blockPTE = null;
+        this.iPDE = this.iPTE = 0;
+        this.bitPTEAccessed = this.bitPTEDirty = 0;
         this.copyBreakpoints();     // initialize the block's Debugger info (eg, breakpoint totals); the caller will reinitialize
 
         /**
@@ -493,6 +520,7 @@ export default class Memoryx86 {
             this.readShortDirect = afn[2] || this.readShortDefault;
             this.readLongDirect = afn[4] || this.readLongDefault;
         }
+        this.fDirectRead = (this.readByte === this.readByteLE);
     }
 
     /**
@@ -514,6 +542,7 @@ export default class Memoryx86 {
             this.writeShortDirect = afn[3] || this.writeShortDefault;
             this.writeLongDirect = afn[5] || this.writeLongDefault;
         }
+        this.fDirectWrite = (this.writeByte === this.writeByteLE);
     }
 
     /**
@@ -526,6 +555,7 @@ export default class Memoryx86 {
         this.readByte = this.readByteDirect;
         this.readShort = this.readShortDirect;
         this.readLong = this.readLongDirect;
+        this.fDirectRead = (this.readByte === this.readByteLE);
     }
 
     /**
@@ -538,6 +568,7 @@ export default class Memoryx86 {
         this.writeByte = this.fReadOnly? this.writeNone : this.writeByteDirect;
         this.writeShort = this.fReadOnly? this.writeShortDefault : this.writeShortDirect;
         this.writeLong = this.fReadOnly? this.writeLongDefault : this.writeLongDirect;
+        this.fDirectWrite = (this.writeByte === this.writeByteLE);
     }
 
     /**
@@ -1240,14 +1271,17 @@ export default class Memoryx86 {
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
         /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
-         * we redirect the default read handler to a faster handler.  However, if operating
+         * we redirect the default read handlers to faster handlers (all three at once, since the
+         * ACCESSED bits have now been set, and the CPU's block caches rely on readByte being LE to
+         * mean that the whole block is eligible for direct array access).  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
          *
          * We should look into creating special write handlers for pages containing PDE/PTE
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.readByte = this.readByteLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return this.ab[off];
     }
 
@@ -1299,14 +1333,17 @@ export default class Memoryx86 {
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
         /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
-         * we redirect the default read handler to a faster handler.  However, if operating
+         * we redirect the default read handlers to faster handlers (all three at once, since the
+         * ACCESSED bits have now been set, and the CPU's block caches rely on readByte being LE to
+         * mean that the whole block is eligible for direct array access).  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
          *
          * We should look into creating special write handlers for pages containing PDE/PTE
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.readShort = this.readShortLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return (off & 0x1)? (this.ab[off] | (this.ab[off+1] << 8)) : this.aw[off >> 1];
     }
 
@@ -1364,7 +1401,8 @@ export default class Memoryx86 {
          * We should look into creating special write handlers for pages containing PDE/PTE entries, and whenever
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
-        this.readLong = this.readLongLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return (off & 0x3)? (this.ab[off] | (this.ab[off+1] << 8) | (this.ab[off+2] << 16) | (this.ab[off+3] << 24)) : this.adw[off >> 2];
     }
 
@@ -1417,7 +1455,8 @@ export default class Memoryx86 {
          * We should look into creating special write handlers for pages containing PDE/PTE entries, and whenever
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
-        this.writeByte = this.writeByteLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's consider
          * the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by the Video component,
@@ -1496,7 +1535,8 @@ export default class Memoryx86 {
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.writeShort = this.writeShortLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
@@ -1579,7 +1619,8 @@ export default class Memoryx86 {
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.writeLong = this.writeLongLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by

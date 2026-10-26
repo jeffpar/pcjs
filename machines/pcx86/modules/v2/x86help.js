@@ -483,47 +483,6 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    /**
-     * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
-     * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
-     * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
-     */
-    if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
-        let op = this.getSOWord(this.segCS, oldIP-2);
-        if (op == 0x06CD) {
-            let actual;
-            let argA = this.getSOWord(this.segSS, this.regEBP+10) | (this.getSOWord(this.segSS, this.regEBP+12) << 16);
-            let argB = this.getSOWord(this.segSS, this.regEBP+6) | (this.getSOWord(this.segSS, this.regEBP+8) << 16);
-            let result = this.regEAX | (this.regEDX << 16);
-            let remainder = this.regEDI | (this.regESI << 16);
-            switch(this.peekIPByte()) {
-            case 0xCC:
-                if (DEBUGGER && this.dbg && this.flags.running) {
-                    this.getIPByte();
-                    this.printf("debugger halting on INT 0x06,0xCC\n");
-                    this.dbg.stopCPU();
-                    return;
-                }
-                break;
-            case 0xFB:
-                actual = (argA * argB)|0;
-                if (result != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                break;
-            case 0xFC:
-                actual = (argA / argB)|0;
-                if (result != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                actual = (argA % argB)|0;
-                if (remainder != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                break;
-            }
-        }
-    }
     if (nIDT == 0x13 && this.model <= X86.MODEL_8088) {
         if (DEBUGGER && this.dbg && this.regEAX == 0x0201 && this.regEBX == 0x7C00 && this.segES.sel == 0) {
             this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
@@ -751,8 +710,9 @@ X86.helpTrap = function(nIDT, nBytes, nCycles)
  * @param {number|null} [nError] (if omitted, no error code will be pushed)
  * @param {number} [nCycles] cycle count to pass through to helpINT(), if any
  * @param {boolean} [fHalt] (true to halt the CPU, false to not, undefined if "it depends")
+ * @param {boolean} [fReturn] (true to return after dispatching the fault instead of throwing an exception)
  */
-X86.helpFault = function(nFault, nError, nCycles, fHalt)
+X86.helpFault = function(nFault, nError, nCycles, fHalt, fReturn)
 {
     let fDispatch = false;
 
@@ -884,8 +844,12 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
          *
          * Fortunately, we now throw an exception that terminates the current instruction, so the above hack
          * should no longer be necessary.
+         *
+         * The exception is also what terminates the current burst (see runCPU()), which is not cheap, so callers
+         * that have nothing left to do after dispatching the fault (eg, opARPL() in V86-mode, which Windows uses
+         * as a trap thousands of times per second) can set fReturn to simply return instead.
          */
-        throw nFault;
+        if (!fReturn) throw nFault;
     }
 };
 

@@ -6984,6 +6984,15 @@ class Input extends Device {
         if (down != undefined) {
             keyCode = Input.FF_KEYCODE[code] || code;       // fix any Firefox-specific keyCodes
             keyName = Input.KEYNAME[code];
+            /**
+             * HACK for the Apple Magic Keyboard connected to an iPad: iPadOS inexplicably generates CTRL-ENTER
+             * whenever CTRL-C is pressed, so we undo that behavior (at the loss of a genuine CTRL-ENTER, sadly).
+             * PCx86 (v2) has the same hack.  Only keyCode changes, so that the event is still consumed as an
+             * ENTER (see the keyMap return below); otherwise, iPadOS's default action scrolls the page.
+             */
+            if (keyCode == Input.KEYCODE.CR && (this.keyMods & Input.KEYMOD.CTRLS) && this.isUserAgent("iOS")) {
+                keyCode = Input.KEYCODE.C;
+            }
             let keyMod = Input.KEYCODEMOD[keyCode];
             let fRight = (event && event.location == Input.LOCATION.RIGHT);
             if ((keyMod & Input.KEYMOD.LEFT) && fRight) {
@@ -7082,7 +7091,7 @@ class Input extends Device {
                  * other key, because otherwise the browser performs its default action; eg, TAB moves focus
                  * off the machine, which then also loses the TAB keyup, leaving the key stuck down.
                  */
-                return (keyCode < Input.KEYCODE.A || keyCode > Input.KEYCODE.Z);
+                return (code < Input.KEYCODE.A || code > Input.KEYCODE.Z);
             }
         }
         return false;

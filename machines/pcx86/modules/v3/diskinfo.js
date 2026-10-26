@@ -5112,6 +5112,12 @@ export default class DiskInfo {
                     if (hasBPB) {
                         let bOpcode = db.readUInt8(0);
                         if (bOpcode == CPUx86.OPCODE.CLD) {
+                            /*
+                             * BASIC-DOS uses all four hidden-sector bytes, including the DOS 2.x boot-drive byte.
+                             */
+                            for (let i = 0; i < 4; i++) {
+                                this.write(sectorBoot, DiskInfo.BPB.HIDDENSECS + i, (lbaBoot >>> (i * 8)) & 0xff, true);
+                            }
                             let nSecBytes = this.getSectorData(sectorBoot, DiskInfo.BPB.SECBYTES, 2);
                             let nFATs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATS, 1);
                             let nFATSecs = this.getSectorData(sectorBoot, DiskInfo.BPB.FATSECS, 2);

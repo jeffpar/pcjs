@@ -40,6 +40,43 @@ li.pcjs-explorer-item:before {
 .pcjs-explorer-selected a {
   text-decoration: underline;
 }
+.pcjs-compare {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin: 0 0 20px;
+}
+.pcjs-compare-box {
+  flex: 1 1 360px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e5e5e5;
+  border-radius: 5px;
+  overflow: hidden;
+  pre {
+    flex: 1;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+}
+.pcjs-compare-title {
+  padding: 4px 15px;
+  font-weight: bold;
+  color: #494949;
+  background: #eee;
+  border-bottom: 1px solid #e5e5e5;
+}
+@media (prefers-color-scheme: dark) {
+  .pcjs-compare-box, .pcjs-compare-title {
+    border-color: #555;
+  }
+  .pcjs-compare-title {
+    color: #ffcc00;
+    background: #333;
+  }
+}
 .pcjs-form {
   padding-bottom: 16px;
 }

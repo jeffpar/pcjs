@@ -10,7 +10,7 @@
 import MESSAGE from "./message.js";
 import Component from "../../../modules/v2/component.js";
 import StrLib from "../../../modules/v2/strlib.js";
-import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
+import { DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * TimeLog objects record the duration of "work" and "idle" intervals, which normally alternate.
@@ -124,6 +124,49 @@ export default class CPU extends Component {
 
         this.idRunTimeout = 0;
         this.onRunTimeout = this.runCPU.bind(this); // function onRunTimeout() { cpu.runCPU(); };
+
+        /**
+         * Browsers clamp nested setTimeout(fn, 0) calls to a minimum of 4ms, which costs us a
+         * substantial amount of time whenever runCPU() wants to yield for "as little time as possible"
+         * (ie, whenever we're behind our target speed).  So we use a MessageChannel for zero-delay
+         * yields instead; see scheduleRunCPU() for details.  We do this only in browsers, because Node
+         * doesn't clamp timeouts, and an open MessagePort would keep its event loop alive.  idYield is
+         * a token that lets us ignore any yield messages that were cancelled (eg, by startCPU) before
+         * they arrived.
+         */
+        this.portYield = null;
+        this.idYield = 0;
+        if (globals.browser && typeof MessageChannel != "undefined") {
+            let cpu = this;
+            let channel = new MessageChannel();
+            channel.port1.onmessage = function(event) {
+                if (cpu.idRunTimeout < 0 && event.data === cpu.idYield) cpu.runCPU();
+            };
+            this.portYield = channel.port2;
+        }
+    }
+
+    /**
+     * scheduleRunCPU(ms)
+     *
+     * Schedules the next runCPU() call.  For non-zero delays, we use setTimeout(); for zero delays,
+     * we post a message to ourselves instead (if MessageChannel is available), because browsers clamp
+     * nested zero-delay timeouts to 4ms, and that adds up quickly when we're trying to catch up.
+     *
+     * Either way, idRunTimeout is set to a non-zero value (a timeout ID or -1 for a pending message),
+     * and any code that cancels the pending call (eg, startCPU) must reset idRunTimeout to zero.
+     *
+     * @this {CPU}
+     * @param {number} ms
+     */
+    scheduleRunCPU(ms)
+    {
+        if (ms > 0 || !this.portYield) {
+            this.idRunTimeout = setTimeout(this.onRunTimeout, ms);
+        } else {
+            this.idRunTimeout = -1;
+            this.portYield.postMessage(++this.idYield);
+        }
     }
 
     /**
@@ -1291,7 +1334,7 @@ export default class CPU extends Component {
             this.assert(!this.idRunTimeout);
             let msTimeout = this.calcRemainingTime();
             if (DEBUG) this.addTimeLog(0, 0, msRunStop, msTimeout);
-            this.idRunTimeout = setTimeout(this.onRunTimeout, msTimeout);
+            this.scheduleRunCPU(msTimeout);
         }
     }
 
@@ -1314,7 +1357,7 @@ export default class CPU extends Component {
             return false;
         }
         if (this.idRunTimeout) {
-            clearTimeout(this.idRunTimeout);
+            if (this.idRunTimeout > 0) clearTimeout(this.idRunTimeout);
             this.idRunTimeout = 0;
         }
         /**
