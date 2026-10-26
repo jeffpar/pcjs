@@ -58,6 +58,7 @@ export default class VT100Serial extends Device {
          */
         this['exports'] = {
             'connect': this.initConnection,
+            'focus': this.setFocus,
             'receiveData': this.receiveData,
             'receiveStatus': this.receiveStatus,
             'receiveBreak': this.receiveBreak
@@ -117,6 +118,23 @@ export default class VT100Serial extends Device {
                 this.printf("Unable to establish connection: %s\n", sConnection);
             }
         }
+    }
+
+    /**
+     * setFocus(fScroll)
+     *
+     * Called by a connected machine with no display of its own (eg, a PC with no video), so that the terminal
+     * receives keyboard input by default; if this machine isn't ready yet, it gets focus once it is.
+     *
+     * @this {VT100Serial}
+     * @param {boolean} [fScroll]
+     */
+    setFocus(fScroll)
+    {
+        this.machine.whenReady(() => {
+            let input = /** @type {Input} */ (this.findDeviceByClass("Input", false));
+            if (input) input.setFocus(!!fScroll);
+        });
     }
 
     /**
