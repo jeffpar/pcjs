@@ -28481,7 +28481,11 @@ X86.fnMULb = function(dst, src)
         this.clearCF(); this.clearOF();
     }
     if (this.model <= X86.MODEL_8088) {
-        this.clearZF();         // differentiate ourselves from a NEC V20
+        /**
+         * An 8088 sets ZF from the high half of the product (a NEC V20 leaves ZF unchanged), and the IBM PC's
+         * 10/27/82 ROM BIOS relies on that to skip filling I/O channel RAM when there isn't any.
+         */
+        if (this.regMDLo & 0xff00) this.clearZF(); else this.setZF();
     }
     this.fMDSet = true;
     this.nStepCycles -= (this.regEA === X86.ADDR_INVALID? this.cycleCounts.nOpCyclesMulBR : this.cycleCounts.nOpCyclesMulBM);
@@ -28563,7 +28567,7 @@ X86.fnMULw = function(dst, src)
         this.clearCF(); this.clearOF();
     }
     if (this.model <= X86.MODEL_8088) {
-        this.clearZF();         // differentiate ourselves from a NEC V20
+        if (this.regMDHi) this.clearZF(); else this.setZF();    // see fnMULb()
     }
     this.fMDSet = true;
     this.nStepCycles -= (this.regEA === X86.ADDR_INVALID? this.cycleCounts.nOpCyclesMulWR : this.cycleCounts.nOpCyclesMulWM);
