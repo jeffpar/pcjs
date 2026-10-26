@@ -1437,7 +1437,11 @@ X86.opARPL = function()
      * fashion, instead of using these in-line mode tests.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
-        X86.opInvalid.call(this);
+        /**
+         * Since Windows generates thousands of these faults per second, and since we have nothing left to do
+         * here, we ask helpFault() to return instead of throwing an exception (which would also end the burst).
+         */
+        X86.helpFault.call(this, X86.EXCEPTION.UD_FAULT, undefined, undefined, undefined, true);
         return;
     }
     this.decodeModMemWord.call(this, X86.fnARPL);
@@ -2682,6 +2686,13 @@ X86.opMOVSb = function()
         nCycles = this.cycleCounts.nOpCyclesMovSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesMovSr0;
     }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.copyString(nReps, 1, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP(true);
+            return;
+        }
+    }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.getSOByte(this.segData, this.regESI & maskAddr));
         /**
@@ -2715,6 +2726,13 @@ X86.opMOVSw = function()
         nDelta = 1;
         nCycles = this.cycleCounts.nOpCyclesMovSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesMovSr0;
+    }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.copyString(nReps, this.sizeData, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP(true);
+            return;
+        }
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.getSOWord(this.segData, this.regESI & maskAddr));
@@ -2864,6 +2882,13 @@ X86.opSTOSb = function()
         nCycles = this.cycleCounts.nOpCyclesStoSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesStoSr0;
     }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.fillString(nReps, 1, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP();
+            return;
+        }
+    }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.regEAX);
         /**
@@ -2918,6 +2943,13 @@ X86.opSTOSw = function()
         nDelta = 1;
         nCycles = this.cycleCounts.nOpCyclesStoSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesStoSr0;
+    }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.fillString(nReps, this.sizeData, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP();
+            return;
+        }
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.regEAX);

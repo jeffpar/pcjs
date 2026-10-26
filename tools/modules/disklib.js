@@ -909,7 +909,7 @@ export default class DiskLib {
          *
          * By default, I prefer a hard-coded date/time, because it avoids creating different disk images every time this is run.
          */
-        if (label && (!driveInfo || driveInfo.verDOS >= 2)) {
+        if (label && !(driveInfo && driveInfo.verDOS < 2)) {
             let sPath = '/' + node.path.basename(label);
             let file = {path: sPath, name: label, attr: DiskInfo.ATTR.VOLUME, date: dateLabel || new Date(), size: 0};
             aFiles.push(file);
@@ -988,6 +988,13 @@ export default class DiskLib {
                     if (!(stats.mode & 0o200)) {
                         file.attr |= DiskInfo.ATTR.READONLY;
                     }
+                }
+                /**
+                 * Attributes given for a file in the root (eg, with diskimage.js --attr) replace its attributes.
+                 */
+                if (!iLevel && driveInfo && driveInfo.attrs) {
+                    let attr = driveInfo.attrs[sName.toUpperCase()];
+                    if (attr !== undefined) file.attr = attr;
                 }
                 file.size = data.length;
                 file.data = data;

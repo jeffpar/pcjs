@@ -181,6 +181,29 @@ function createDriveInfo(argv, diskette)
         }
     }
 
+    /**
+     * --attr=FILE:ATTRS[,FILE:ATTRS...] sets the attributes of files in the root of a disk built from files,
+     * where ATTRS is any combination of R (read-only), H (hidden), S (system), and A (archive) (eg,
+     * "--attr=IO.SYS:RHS,COMMAND.COM:R"); see readDirFiles() in disklib.js.
+     */
+    let attrs = argv['attr'];
+    if (typeof attrs == "string") {
+        driveInfo.attrs = {};
+        let attrBits = {'R': DiskInfo.ATTR.READONLY, 'H': DiskInfo.ATTR.HIDDEN, 'S': DiskInfo.ATTR.SYSTEM, 'A': DiskInfo.ATTR.ARCHIVE};
+        for (let spec of attrs.split(',')) {
+            let [name, letters = ""] = spec.split(':');
+            let attr = 0;
+            for (let c of letters.toUpperCase()) {
+                if (attrBits[c] === undefined) {
+                    printf("unrecognized attribute for %s: %s\n", name, c);
+                    continue;
+                }
+                attr |= attrBits[c];
+            }
+            driveInfo.attrs[name.toUpperCase()] = attr;
+        }
+    }
+
     driveInfo.sectorIDs = diskette && diskette.argv['sectorID'] || argv['sectorID'];
     driveInfo.sectorErrors = diskette && diskette.argv['sectorError'] || argv['sectorError'];
     driveInfo.suppData = diskLib.readFileSync(diskette && diskette.argv['suppData'] || argv['suppData']);
@@ -1268,6 +1291,7 @@ function main(argc, argv)
             "--zip=[zipfile]\t":        "read all files in a ZIP archive"
         };
         let optionsOutput = {
+            "--attr=[file:attrs,...]":  "set attributes (R, H, S, A) of files in the root",
             "--drivetype=[value]":      "set drive type (eg, AT:1 or C:H:S or \"custom\")",
             "--dest=[directory]":       "write extracted files to destination directory",
             "--extract (-e)\t":         "extract all files in disks or archives",

@@ -3,6 +3,12 @@ baseurl: ""
 url: "http://localhost:4000"
 
 #
+# Include posts and pages with 'published: false' in their front matter (equivalent to --unpublished),
+# so that drafts can be previewed on development servers but not on production servers.
+#
+unpublished: true
+
+#
 # 'site.pcjs.unbundled' is now preferred when 'site.developer' is true, and it takes precedence in our
 # Jekyll scripts over 'site.pcjs.uncompiled'; unbundled means JavaScript modules are loaded individually
 # as-is, whereas uncompiled means all the modules are concatenated into a single script with all module

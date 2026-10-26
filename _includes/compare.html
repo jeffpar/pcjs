@@ -1,0 +1,17 @@
+{%- comment -%}
+  Displays two bordered boxes side-by-side (or stacked, on narrow screens) to compare two code samples.
+
+  Capture the text of each sample into a variable first (eg, "pcdos" and "basicdos"), and then pass them as
+  left=pcdos and right=basicdos.  The box titles default to "PC DOS" and "BASIC-DOS"; use left_title and
+  right_title to change them.
+{%- endcomment %}
+<div class="pcjs-compare">
+  <div class="pcjs-compare-box">
+    <div class="pcjs-compare-title">{{ include.left_title | default: "PC DOS" }}</div>
+    <pre>{{ include.left | strip | escape }}</pre>
+  </div>
+  <div class="pcjs-compare-box">
+    <div class="pcjs-compare-title">{{ include.right_title | default: "BASIC-DOS" }}</div>
+    <pre>{{ include.right | strip | escape }}</pre>
+  </div>
+</div>

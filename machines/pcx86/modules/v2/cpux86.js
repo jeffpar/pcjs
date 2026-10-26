@@ -157,6 +157,7 @@ export default class CPUx86 extends CPU {
          * when the Bus is initialized.
          */
         this.aBusBlocks = this.aMemBlocks = [];
+        this.blockString = null;    // see getStringLimit()
         this.nBusMask = this.nMemMask = -1;
         this.nBlockShift = this.nBlockSize = this.nBlockLimit = this.nBlockTotal = this.nBlockMask = 0;
 
@@ -3190,8 +3191,10 @@ export default class CPUx86 extends CPU {
      */
     getByte(addr)
     {
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && block.fDirectRead) return block.ab[addr & this.nBlockLimit];
         if (BACKTRACK) this.backTrack.btiMem0 = this.bus.readBackTrack(addr);
-        return this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift].readByte(addr & this.nBlockLimit, addr);
+        return block.readByte(addr & this.nBlockLimit, addr);
     }
 
     /**
@@ -3219,7 +3222,11 @@ export default class CPUx86 extends CPU {
             this.backTrack.btiMem1 = this.bus.readBackTrack(addr + 1);
         }
         if (off < this.nBlockLimit) {
-            return this.aMemBlocks[iBlock].readShort(off, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectRead) {
+                return (off & 0x1)? (block.ab[off] | (block.ab[off+1] << 8)) : block.aw[off >> 1];
+            }
+            return block.readShort(off, addr);
         }
         let w = this.aMemBlocks[iBlock].readByte(off, addr);
         if (!(this.opFlags & X86.OPFLAG.FAULT)) {
@@ -3249,7 +3256,13 @@ export default class CPUx86 extends CPU {
             this.backTrack.btiMem3 = this.bus.readBackTrack(addr + 3);
         }
         if (off < this.nBlockLimit - 2) {
-            return this.aMemBlocks[iBlock].readLong(off, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectRead) {
+                if (!(off & 0x3)) return block.adw[off >> 2];
+                let ab = block.ab;
+                return ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            }
+            return block.readLong(off, addr);
         }
         /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
@@ -3284,8 +3297,13 @@ export default class CPUx86 extends CPU {
      */
     setByte(addr, b)
     {
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && block.fDirectWrite) {
+            block.ab[addr & this.nBlockLimit] = b;
+            return;
+        }
         if (BACKTRACK) this.bus.writeBackTrack(addr, this.backTrack.btiMem0);
-        this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift].writeByte(addr & this.nBlockLimit, b & 0xff, addr);
+        block.writeByte(addr & this.nBlockLimit, b & 0xff, addr);
     }
 
     /**
@@ -3313,7 +3331,17 @@ export default class CPUx86 extends CPU {
             this.bus.writeBackTrack(addr + 1, this.backTrack.btiMem1);
         }
         if (off < this.nBlockLimit) {
-            this.aMemBlocks[iBlock].writeShort(off, w & 0xffff, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectWrite) {
+                if (off & 0x1) {
+                    block.ab[off] = w;
+                    block.ab[off+1] = w >> 8;
+                } else {
+                    block.aw[off >> 1] = w;
+                }
+                return;
+            }
+            block.writeShort(off, w & 0xffff, addr);
             return;
         }
         this.aMemBlocks[iBlock++].writeByte(off, w & 0xff, addr);
@@ -3344,7 +3372,20 @@ export default class CPUx86 extends CPU {
             this.bus.writeBackTrack(addr + 3, this.backTrack.btiMem3);
         }
         if (off < this.nBlockLimit - 2) {
-            this.aMemBlocks[iBlock].writeLong(off, l, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectWrite) {
+                if (off & 0x3) {
+                    let ab = block.ab;
+                    ab[off] = l;
+                    ab[off+1] = (l >> 8);
+                    ab[off+2] = (l >> 16);
+                    ab[off+3] = (l >> 24);
+                } else {
+                    block.adw[off >> 2] = l;
+                }
+                return;
+            }
+            block.writeLong(off, l, addr);
             return;
         }
         /**
@@ -3675,6 +3716,186 @@ export default class CPUx86 extends CPU {
     }
 
     /**
+     * getStringLimit(seg, off, size, n, fWrite, fDown)
+     *
+     * Helper for copyString() and fillString(): returns the number of elements (0 to n) that can be
+     * accessed starting at seg:off (and moving up, or down if fDown is set) without wrapping the address
+     * size, exceeding the segment limit, or crossing a Memory block boundary, and also ensures the block
+     * supports direct access (returning it in blockString); zero means the caller must fall back to the
+     * normal one-element-at-a-time code path.
+     *
+     * @this {CPUx86}
+     * @param {Segx86} seg
+     * @param {number} off
+     * @param {number} size (1, 2 or 4)
+     * @param {number} n (maximum number of elements)
+     * @param {boolean} fWrite
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    getStringLimit(seg, off, size, n, fWrite, fDown)
+    {
+        /**
+         * Only ordinary limit checks are batched (expand-up protected-mode segments, and real-mode/V86-mode
+         * segments); anything else (expand-down segments, null segments, Debugger checks) takes the slow path.
+         */
+        let fnCheck = fWrite? seg.checkWrite : seg.checkRead;
+        if (fnCheck !== seg.checkReadWriteReal && fnCheck !== (fWrite? seg.checkWriteProt : seg.checkReadProt)) return 0;
+        off >>>= 0;
+        /**
+         * NOTE: These limits can be as large as 2^32 (eg, a flat 32-bit segment), so we can't use "|0" here.
+         */
+        let nMax;
+        if (!fDown) {
+            nMax = Math.floor(((this.maskAddr >>> 0) + 1 - off) / size);
+            if (n > nMax) n = nMax;
+            nMax = Math.floor((seg.offMax - off) / size);
+        } else {
+            /**
+             * Moving down, only the first element can exceed the segment limit; every subsequent element
+             * is at a lower offset, so the only other limit is the address wrap at offset zero.
+             */
+            if (off + size > seg.offMax) return 0;
+            nMax = Math.floor(off / size) + 1;
+        }
+        if (n > nMax) n = nMax;
+        if (n <= 0) return 0;
+        let addr = (seg.base + off)|0;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        /**
+         * If the block hasn't been paged in yet, page it in (which may trigger a page fault, exactly as
+         * the first element access would have), and then make sure the block supports direct access.
+         */
+        if (block.type === Memoryx86.TYPE.UNPAGED) block = this.mapPageBlock(addr, fWrite);
+        if (!(fWrite? block.fDirectWrite : block.fDirectRead)) return 0;
+        let offBlock = addr & this.nBlockLimit;
+        if (!fDown) {
+            nMax = ((this.nBlockSize - offBlock) / size)|0;
+        } else {
+            /**
+             * Moving down, the first element is the highest, so it must not straddle the end of the block.
+             */
+            if (offBlock + size > this.nBlockSize) return 0;
+            nMax = ((offBlock / size)|0) + 1;
+        }
+        if (n > nMax) n = nMax;
+        this.blockString = block;
+        return n;
+    }
+
+    /**
+     * copyString(nReps, size, fDown)
+     *
+     * Performs up to nReps iterations of a MOVS instruction at once, copying from segData:ESI to ES:EDI
+     * (moving up, or down if fDown is set, per the direction flag), and returns the number of elements
+     * actually copied; zero means nothing was done and the caller must fall back to the normal
+     * one-element-at-a-time code path.  See getStringLimit() for the conditions.
+     *
+     * Elements are copied one at a time, in order, to preserve the semantics of overlapping copies (eg, the
+     * classic "REP MOVSB with EDI = ESI+1" fill pattern).
+     *
+     * @this {CPUx86}
+     * @param {number} nReps
+     * @param {number} size (1, 2 or 4)
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    copyString(nReps, size, fDown)
+    {
+        let maskAddr = this.maskAddr;
+        let offSrc = this.regESI & maskAddr, offDst = this.regEDI & maskAddr;
+        let n = this.getStringLimit(this.segData, offSrc, size, nReps, false, fDown);
+        if (!n) return 0;
+        let blockSrc = this.blockString;
+        n = this.getStringLimit(this.segES, offDst, size, n, true, fDown);
+        if (!n) return 0;
+        let blockDst = this.blockString;
+        let abSrc = blockSrc.ab, awSrc = blockSrc.aw, adwSrc = blockSrc.adw;
+        let abDst = blockDst.ab, awDst = blockDst.aw, adwDst = blockDst.adw;
+        let iSrc = (this.segData.base + offSrc) & this.nBlockLimit;
+        let iDst = (this.segES.base + offDst) & this.nBlockLimit;
+        let i = 0, inc = fDown? -1 : 1;
+        if (size == 4 && !((iSrc | iDst) & 0x3)) {
+            iSrc >>= 2; iDst >>= 2;
+            while (i++ < n) { adwDst[iDst] = adwSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else if (size == 2 && !((iSrc | iDst) & 0x1)) {
+            iSrc >>= 1; iDst >>= 1;
+            while (i++ < n) { awDst[iDst] = awSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else if (size == 1) {
+            while (i++ < n) { abDst[iDst] = abSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else {
+            inc *= size;
+            while (i++ < n) {
+                let b0 = abSrc[iSrc], b1 = abSrc[iSrc+1], b2 = 0, b3 = 0;
+                if (size == 4) { b2 = abSrc[iSrc+2]; b3 = abSrc[iSrc+3]; }
+                abDst[iDst] = b0; abDst[iDst+1] = b1;
+                if (size == 4) { abDst[iDst+2] = b2; abDst[iDst+3] = b3; }
+                iSrc += inc; iDst += inc;
+            }
+        }
+        let cb = fDown? -n * size : n * size;
+        this.regESI = (this.regESI & ~maskAddr) | ((offSrc + cb) & maskAddr);
+        this.regEDI = (this.regEDI & ~maskAddr) | ((offDst + cb) & maskAddr);
+        this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - n) & maskAddr);
+        this.nStepCycles -= n * this.cycleCounts.nOpCyclesMovSrn;
+        return n;
+    }
+
+    /**
+     * fillString(nReps, size, fDown)
+     *
+     * Performs up to nReps iterations of a STOS instruction at once, storing AL/AX/EAX to ES:EDI (moving up,
+     * or down if fDown is set, per the direction flag), and returns the number of elements actually stored;
+     * zero means nothing was done and the caller must fall back to the normal one-element-at-a-time code
+     * path.  See getStringLimit() for the conditions.
+     *
+     * @this {CPUx86}
+     * @param {number} nReps
+     * @param {number} size (1, 2 or 4)
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    fillString(nReps, size, fDown)
+    {
+        let maskAddr = this.maskAddr;
+        let offDst = this.regEDI & maskAddr;
+        let n = this.getStringLimit(this.segES, offDst, size, nReps, true, fDown);
+        if (!n) return 0;
+        let block = this.blockString;
+        let iDst = (this.segES.base + offDst) & this.nBlockLimit;
+        let data = this.regEAX;
+        /**
+         * Since every element receives the same value, a downward fill is just an upward fill that starts
+         * at the lowest element.
+         */
+        if (fDown) iDst -= (n - 1) * size;
+        if (size == 1) {
+            block.ab.fill(data & 0xff, iDst, iDst + n);
+        }
+        else if (size == 2 && !(iDst & 0x1)) {
+            block.aw.fill(data & 0xffff, iDst >> 1, (iDst >> 1) + n);
+        }
+        else if (size == 4 && !(iDst & 0x3)) {
+            block.adw.fill(data, iDst >> 2, (iDst >> 2) + n);
+        }
+        else {
+            let ab = block.ab, i = 0;
+            while (i++ < n) {
+                ab[iDst] = data; ab[iDst+1] = data >> 8;
+                if (size == 4) { ab[iDst+2] = data >> 16; ab[iDst+3] = data >> 24; }
+                iDst += size;
+            }
+        }
+        this.regEDI = (this.regEDI & ~maskAddr) | ((offDst + (fDown? -n * size : n * size)) & maskAddr);
+        this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - n) & maskAddr);
+        this.nStepCycles -= n * this.cycleCounts.nOpCyclesStoSrn;
+        return n;
+    }
+
+    /**
      * getSOByte(seg, off)
      *
      * This is like getEAByte(), but it does NOT update regEA.
@@ -3883,8 +4104,14 @@ export default class CPUx86 extends CPU {
     getIPByte()
     {
         let newLIP = this.checkIP(1);
-        let b = (PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP));
-        if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
+        let addr = this.regLIP, b;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead) {
+            b = block.ab[addr & this.nBlockLimit];
+        } else {
+            b = (PREFETCH? this.getBytePrefetch() : this.getByte(addr));
+            if (BACKTRACK) this.bus.updateBackTrackCode(addr, this.backTrack.btiMem0);
+        }
         /**
          * With the following cycle penalty (which really only affects 8086/8088 CPUs), PC Tools 4.30
          * correctly reports an IBM PC-relative speed of 100% (assuming you're using a 4.77Mhz configuration).
@@ -3939,6 +4166,21 @@ export default class CPUx86 extends CPU {
     {
         let w;
         let newLIP = this.checkIP(this.sizeAddr);
+        let addr = this.regLIP, off = addr & this.nBlockLimit;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead && off < this.nBlockLimit - 2 && !(this.opFlags & X86.OPFLAG.WRAP)) {
+            let ab = block.ab;
+            if (this.sizeAddr == 2) {
+                w = ab[off] | (ab[off+1] << 8);
+                this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
+            } else if (off & 0x3) {
+                w = ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            } else {
+                w = block.adw[off >> 2];
+            }
+            this.regLIP = newLIP;
+            return w;
+        }
         if (PREFETCH) {
             w = this.getAddr();
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
@@ -3969,6 +4211,21 @@ export default class CPUx86 extends CPU {
     {
         let w;
         let newLIP = this.checkIP(this.sizeData);
+        let addr = this.regLIP, off = addr & this.nBlockLimit;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead && off < this.nBlockLimit - 2 && !(this.opFlags & X86.OPFLAG.WRAP)) {
+            let ab = block.ab;
+            if (this.sizeData == 2) {
+                w = ab[off] | (ab[off+1] << 8);
+                this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
+            } else if (off & 0x3) {
+                w = ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            } else {
+                w = block.adw[off >> 2];
+            }
+            this.regLIP = newLIP;
+            return w;
+        }
         if (PREFETCH) {
             w = this.getWordPrefetch();
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
@@ -3998,8 +4255,14 @@ export default class CPUx86 extends CPU {
     getIPDisp()
     {
         let newLIP = this.checkIP(1);
-        let w = ((PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP)) << 24) >> 24;
-        if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
+        let addr = this.regLIP, w;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead) {
+            w = (block.ab[addr & this.nBlockLimit] << 24) >> 24;
+        } else {
+            w = ((PREFETCH? this.getBytePrefetch() : this.getByte(addr)) << 24) >> 24;
+            if (BACKTRACK) this.bus.updateBackTrackCode(addr, this.backTrack.btiMem0);
+        }
         this.regLIP = newLIP;
         return w;
     }
@@ -4210,6 +4473,16 @@ export default class CPUx86 extends CPU {
     checkINTR()
     {
         // DEBUG: this.assert(this.intFlags);
+
+        /**
+         * The most common reason for this function to be called is that a hardware interrupt is pending but
+         * interrupts are disabled, and since stepCPU() calls us after every instruction while that's the case,
+         * we want to dispose of it as quickly as possible: if INTR is the ONLY flag set and IF is clear, there's
+         * nothing to do (the HALT and DEBUGGER flags are handled by stepCPU()).
+         */
+        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP | X86.INTFLAG.DMA)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
+            return false;
+        }
 
         if (!(this.opFlags & X86.OPFLAG.NOINTR)) {
             /**

@@ -13661,16 +13661,43 @@ class Memoryx86 {
     constructor(addr, used, size, type, controller, cpu)
     {
         let i;
+        /**
+         * Every property that any Memory block may ever use is initialized here, in a fixed order, so that
+         * all Memory blocks share a single hidden class; that keeps the CPU's block property accesses (eg,
+         * block.fDirectRead and block.ab) monomorphic, which is what makes the CPU's direct-access fast paths
+         * worthwhile (see CPUx86.getByte() for an example).
+         */
         this.id = (Memoryx86.idBlock += 2);
-        this.adw = null;
-        this.offset = 0;
         this.addr = addr;
         this.used = used;
         this.size = size || 0;
         this.type = type || Memoryx86.TYPE.NONE;
         this.fReadOnly = (type == Memoryx86.TYPE.ROM);
+        this.buffer = null;
+        this.dv = null;
+        this.ab = null;
+        this.aw = null;
+        this.adw = null;
+        this.offset = 0;
         this.controller = null;
         this.cpu = cpu;             // if a CPU reference is provided, then this must be an UNPAGED Memory block allocation
+        this.dbg = null;
+        this.cReadBreakpoints = this.cWriteBreakpoints = 0;
+        this.readByte = this.readByteDirect = this.readNone;
+        this.readShort = this.readShortDirect = this.readShortDefault;
+        this.readLong = this.readLongDirect = this.readLongDefault;
+        this.writeByte = this.writeByteDirect = this.writeNone;
+        this.writeShort = this.writeShortDirect = this.writeShortDefault;
+        this.writeLong = this.writeLongDirect = this.writeLongDefault;
+        /**
+         * fDirectRead is true whenever readByte is readByteLE, and fDirectWrite is true whenever writeByte is
+         * writeByteLE, which tells the CPU that it may access the block's ab/aw/adw arrays directly, bypassing
+         * the block's access functions.  See setReadAccess(), setWriteAccess(), and the "PLE" handlers.
+         */
+        this.fDirectRead = this.fDirectWrite = false;
+        this.blockPhys = this.blockPDE = this.blockPTE = null;
+        this.iPDE = this.iPTE = 0;
+        this.bitPTEAccessed = this.bitPTEDirty = 0;
         this.copyBreakpoints();     // initialize the block's Debugger info (eg, breakpoint totals); the caller will reinitialize
 
         /**
@@ -14018,6 +14045,7 @@ class Memoryx86 {
             this.readShortDirect = afn[2] || this.readShortDefault;
             this.readLongDirect = afn[4] || this.readLongDefault;
         }
+        this.fDirectRead = (this.readByte === this.readByteLE);
     }
 
     /**
@@ -14039,6 +14067,7 @@ class Memoryx86 {
             this.writeShortDirect = afn[3] || this.writeShortDefault;
             this.writeLongDirect = afn[5] || this.writeLongDefault;
         }
+        this.fDirectWrite = (this.writeByte === this.writeByteLE);
     }
 
     /**
@@ -14051,6 +14080,7 @@ class Memoryx86 {
         this.readByte = this.readByteDirect;
         this.readShort = this.readShortDirect;
         this.readLong = this.readLongDirect;
+        this.fDirectRead = (this.readByte === this.readByteLE);
     }
 
     /**
@@ -14063,6 +14093,7 @@ class Memoryx86 {
         this.writeByte = this.fReadOnly? this.writeNone : this.writeByteDirect;
         this.writeShort = this.fReadOnly? this.writeShortDefault : this.writeShortDirect;
         this.writeLong = this.fReadOnly? this.writeLongDefault : this.writeLongDirect;
+        this.fDirectWrite = (this.writeByte === this.writeByteLE);
     }
 
     /**
@@ -14765,14 +14796,17 @@ class Memoryx86 {
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
         /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
-         * we redirect the default read handler to a faster handler.  However, if operating
+         * we redirect the default read handlers to faster handlers (all three at once, since the
+         * ACCESSED bits have now been set, and the CPU's block caches rely on readByte being LE to
+         * mean that the whole block is eligible for direct array access).  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
          *
          * We should look into creating special write handlers for pages containing PDE/PTE
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.readByte = this.readByteLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return this.ab[off];
     }
 
@@ -14824,14 +14858,17 @@ class Memoryx86 {
         this.blockPTE.adw[this.iPTE] |= X86.PTE.ACCESSED;
         /**
          * TODO: Review this performance hack.  Basically, after the first read of a page,
-         * we redirect the default read handler to a faster handler.  However, if operating
+         * we redirect the default read handlers to faster handlers (all three at once, since the
+         * ACCESSED bits have now been set, and the CPU's block caches rely on readByte being LE to
+         * mean that the whole block is eligible for direct array access).  However, if operating
          * systems clear the PDE/PTE bits without reloading CR3, they won't get set again.
          *
          * We should look into creating special write handlers for pages containing PDE/PTE
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.readShort = this.readShortLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return (off & 0x1)? (this.ab[off] | (this.ab[off+1] << 8)) : this.aw[off >> 1];
     }
 
@@ -14889,7 +14926,8 @@ class Memoryx86 {
          * We should look into creating special write handlers for pages containing PDE/PTE entries, and whenever
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
-        this.readLong = this.readLongLE;
+        this.readByte = this.readByteLE; this.readShort = this.readShortLE; this.readLong = this.readLongLE;
+        this.fDirectRead = true;
         return (off & 0x3)? (this.ab[off] | (this.ab[off+1] << 8) | (this.ab[off+2] << 16) | (this.ab[off+3] << 24)) : this.adw[off >> 2];
     }
 
@@ -14942,7 +14980,8 @@ class Memoryx86 {
          * We should look into creating special write handlers for pages containing PDE/PTE entries, and whenever
          * those entries are written, reset the read/write handlers for the corresponding pages.
          */
-        this.writeByte = this.writeByteLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's consider
          * the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by the Video component,
@@ -15021,7 +15060,8 @@ class Memoryx86 {
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.writeShort = this.writeShortLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
@@ -15104,7 +15144,8 @@ class Memoryx86 {
          * entries, and whenever those entries are written, reset the read/write handlers
          * for the corresponding pages.
          */
-        this.writeLong = this.writeLongLE;
+        this.writeByte = this.writeByteLE; this.writeShort = this.writeShortLE; this.writeLong = this.writeLongLE;
+        this.fDirectWrite = true;
         /**
          * NOTE: Technically, we should be setting the DIRTY flag on blockPDE and blockPTE as well, but let's
          * consider the two sole uses of DIRTY.  First, we have cleanMemory(), which is currently used only by
@@ -15392,6 +15433,49 @@ class CPU extends Component {
 
         this.idRunTimeout = 0;
         this.onRunTimeout = this.runCPU.bind(this); // function onRunTimeout() { cpu.runCPU(); };
+
+        /**
+         * Browsers clamp nested setTimeout(fn, 0) calls to a minimum of 4ms, which costs us a
+         * substantial amount of time whenever runCPU() wants to yield for "as little time as possible"
+         * (ie, whenever we're behind our target speed).  So we use a MessageChannel for zero-delay
+         * yields instead; see scheduleRunCPU() for details.  We do this only in browsers, because Node
+         * doesn't clamp timeouts, and an open MessagePort would keep its event loop alive.  idYield is
+         * a token that lets us ignore any yield messages that were cancelled (eg, by startCPU) before
+         * they arrived.
+         */
+        this.portYield = null;
+        this.idYield = 0;
+        if (globals.browser && typeof MessageChannel != "undefined") {
+            let cpu = this;
+            let channel = new MessageChannel();
+            channel.port1.onmessage = function(event) {
+                if (cpu.idRunTimeout < 0 && event.data === cpu.idYield) cpu.runCPU();
+            };
+            this.portYield = channel.port2;
+        }
+    }
+
+    /**
+     * scheduleRunCPU(ms)
+     *
+     * Schedules the next runCPU() call.  For non-zero delays, we use setTimeout(); for zero delays,
+     * we post a message to ourselves instead (if MessageChannel is available), because browsers clamp
+     * nested zero-delay timeouts to 4ms, and that adds up quickly when we're trying to catch up.
+     *
+     * Either way, idRunTimeout is set to a non-zero value (a timeout ID or -1 for a pending message),
+     * and any code that cancels the pending call (eg, startCPU) must reset idRunTimeout to zero.
+     *
+     * @this {CPU}
+     * @param {number} ms
+     */
+    scheduleRunCPU(ms)
+    {
+        if (ms > 0 || !this.portYield) {
+            this.idRunTimeout = setTimeout(this.onRunTimeout, ms);
+        } else {
+            this.idRunTimeout = -1;
+            this.portYield.postMessage(++this.idYield);
+        }
     }
 
     /**
@@ -16559,7 +16643,7 @@ class CPU extends Component {
 
             let msTimeout = this.calcRemainingTime();
             if (DEBUG) this.addTimeLog(0, 0, msRunStop, msTimeout);
-            this.idRunTimeout = setTimeout(this.onRunTimeout, msTimeout);
+            this.scheduleRunCPU(msTimeout);
         }
     }
 
@@ -16582,7 +16666,7 @@ class CPU extends Component {
             return false;
         }
         if (this.idRunTimeout) {
-            clearTimeout(this.idRunTimeout);
+            if (this.idRunTimeout > 0) clearTimeout(this.idRunTimeout);
             this.idRunTimeout = 0;
         }
         /**
@@ -16855,6 +16939,7 @@ class CPUx86 extends CPU {
          * when the Bus is initialized.
          */
         this.aBusBlocks = this.aMemBlocks = [];
+        this.blockString = null;    // see getStringLimit()
         this.nBusMask = this.nMemMask = -1;
         this.nBlockShift = this.nBlockSize = this.nBlockLimit = this.nBlockTotal = this.nBlockMask = 0;
 
@@ -19888,8 +19973,10 @@ class CPUx86 extends CPU {
      */
     getByte(addr)
     {
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && block.fDirectRead) return block.ab[addr & this.nBlockLimit];
         if (BACKTRACK) this.backTrack.btiMem0 = this.bus.readBackTrack(addr);
-        return this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift].readByte(addr & this.nBlockLimit, addr);
+        return block.readByte(addr & this.nBlockLimit, addr);
     }
 
     /**
@@ -19917,7 +20004,11 @@ class CPUx86 extends CPU {
             this.backTrack.btiMem1 = this.bus.readBackTrack(addr + 1);
         }
         if (off < this.nBlockLimit) {
-            return this.aMemBlocks[iBlock].readShort(off, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectRead) {
+                return (off & 0x1)? (block.ab[off] | (block.ab[off+1] << 8)) : block.aw[off >> 1];
+            }
+            return block.readShort(off, addr);
         }
         let w = this.aMemBlocks[iBlock].readByte(off, addr);
         if (!(this.opFlags & X86.OPFLAG.FAULT)) {
@@ -19947,7 +20038,13 @@ class CPUx86 extends CPU {
             this.backTrack.btiMem3 = this.bus.readBackTrack(addr + 3);
         }
         if (off < this.nBlockLimit - 2) {
-            return this.aMemBlocks[iBlock].readLong(off, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectRead) {
+                if (!(off & 0x3)) return block.adw[off >> 2];
+                let ab = block.ab;
+                return ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            }
+            return block.readLong(off, addr);
         }
         /**
          * I think the previous version of this function tried to be too clever (ie, reading the last
@@ -19982,8 +20079,13 @@ class CPUx86 extends CPU {
      */
     setByte(addr, b)
     {
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && block.fDirectWrite) {
+            block.ab[addr & this.nBlockLimit] = b;
+            return;
+        }
         if (BACKTRACK) this.bus.writeBackTrack(addr, this.backTrack.btiMem0);
-        this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift].writeByte(addr & this.nBlockLimit, b & 0xff, addr);
+        block.writeByte(addr & this.nBlockLimit, b & 0xff, addr);
     }
 
     /**
@@ -20011,7 +20113,17 @@ class CPUx86 extends CPU {
             this.bus.writeBackTrack(addr + 1, this.backTrack.btiMem1);
         }
         if (off < this.nBlockLimit) {
-            this.aMemBlocks[iBlock].writeShort(off, w & 0xffff, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectWrite) {
+                if (off & 0x1) {
+                    block.ab[off] = w;
+                    block.ab[off+1] = w >> 8;
+                } else {
+                    block.aw[off >> 1] = w;
+                }
+                return;
+            }
+            block.writeShort(off, w & 0xffff, addr);
             return;
         }
         this.aMemBlocks[iBlock++].writeByte(off, w & 0xff, addr);
@@ -20042,7 +20154,20 @@ class CPUx86 extends CPU {
             this.bus.writeBackTrack(addr + 3, this.backTrack.btiMem3);
         }
         if (off < this.nBlockLimit - 2) {
-            this.aMemBlocks[iBlock].writeLong(off, l, addr);
+            let block = this.aMemBlocks[iBlock];
+            if (!BACKTRACK && block.fDirectWrite) {
+                if (off & 0x3) {
+                    let ab = block.ab;
+                    ab[off] = l;
+                    ab[off+1] = (l >> 8);
+                    ab[off+2] = (l >> 16);
+                    ab[off+3] = (l >> 24);
+                } else {
+                    block.adw[off >> 2] = l;
+                }
+                return;
+            }
+            block.writeLong(off, l, addr);
             return;
         }
         /**
@@ -20373,6 +20498,186 @@ class CPUx86 extends CPU {
     }
 
     /**
+     * getStringLimit(seg, off, size, n, fWrite, fDown)
+     *
+     * Helper for copyString() and fillString(): returns the number of elements (0 to n) that can be
+     * accessed starting at seg:off (and moving up, or down if fDown is set) without wrapping the address
+     * size, exceeding the segment limit, or crossing a Memory block boundary, and also ensures the block
+     * supports direct access (returning it in blockString); zero means the caller must fall back to the
+     * normal one-element-at-a-time code path.
+     *
+     * @this {CPUx86}
+     * @param {Segx86} seg
+     * @param {number} off
+     * @param {number} size (1, 2 or 4)
+     * @param {number} n (maximum number of elements)
+     * @param {boolean} fWrite
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    getStringLimit(seg, off, size, n, fWrite, fDown)
+    {
+        /**
+         * Only ordinary limit checks are batched (expand-up protected-mode segments, and real-mode/V86-mode
+         * segments); anything else (expand-down segments, null segments, Debugger checks) takes the slow path.
+         */
+        let fnCheck = fWrite? seg.checkWrite : seg.checkRead;
+        if (fnCheck !== seg.checkReadWriteReal && fnCheck !== (fWrite? seg.checkWriteProt : seg.checkReadProt)) return 0;
+        off >>>= 0;
+        /**
+         * NOTE: These limits can be as large as 2^32 (eg, a flat 32-bit segment), so we can't use "|0" here.
+         */
+        let nMax;
+        if (!fDown) {
+            nMax = Math.floor(((this.maskAddr >>> 0) + 1 - off) / size);
+            if (n > nMax) n = nMax;
+            nMax = Math.floor((seg.offMax - off) / size);
+        } else {
+            /**
+             * Moving down, only the first element can exceed the segment limit; every subsequent element
+             * is at a lower offset, so the only other limit is the address wrap at offset zero.
+             */
+            if (off + size > seg.offMax) return 0;
+            nMax = Math.floor(off / size) + 1;
+        }
+        if (n > nMax) n = nMax;
+        if (n <= 0) return 0;
+        let addr = (seg.base + off)|0;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        /**
+         * If the block hasn't been paged in yet, page it in (which may trigger a page fault, exactly as
+         * the first element access would have), and then make sure the block supports direct access.
+         */
+        if (block.type === Memoryx86.TYPE.UNPAGED) block = this.mapPageBlock(addr, fWrite);
+        if (!(fWrite? block.fDirectWrite : block.fDirectRead)) return 0;
+        let offBlock = addr & this.nBlockLimit;
+        if (!fDown) {
+            nMax = ((this.nBlockSize - offBlock) / size)|0;
+        } else {
+            /**
+             * Moving down, the first element is the highest, so it must not straddle the end of the block.
+             */
+            if (offBlock + size > this.nBlockSize) return 0;
+            nMax = ((offBlock / size)|0) + 1;
+        }
+        if (n > nMax) n = nMax;
+        this.blockString = block;
+        return n;
+    }
+
+    /**
+     * copyString(nReps, size, fDown)
+     *
+     * Performs up to nReps iterations of a MOVS instruction at once, copying from segData:ESI to ES:EDI
+     * (moving up, or down if fDown is set, per the direction flag), and returns the number of elements
+     * actually copied; zero means nothing was done and the caller must fall back to the normal
+     * one-element-at-a-time code path.  See getStringLimit() for the conditions.
+     *
+     * Elements are copied one at a time, in order, to preserve the semantics of overlapping copies (eg, the
+     * classic "REP MOVSB with EDI = ESI+1" fill pattern).
+     *
+     * @this {CPUx86}
+     * @param {number} nReps
+     * @param {number} size (1, 2 or 4)
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    copyString(nReps, size, fDown)
+    {
+        let maskAddr = this.maskAddr;
+        let offSrc = this.regESI & maskAddr, offDst = this.regEDI & maskAddr;
+        let n = this.getStringLimit(this.segData, offSrc, size, nReps, false, fDown);
+        if (!n) return 0;
+        let blockSrc = this.blockString;
+        n = this.getStringLimit(this.segES, offDst, size, n, true, fDown);
+        if (!n) return 0;
+        let blockDst = this.blockString;
+        let abSrc = blockSrc.ab, awSrc = blockSrc.aw, adwSrc = blockSrc.adw;
+        let abDst = blockDst.ab, awDst = blockDst.aw, adwDst = blockDst.adw;
+        let iSrc = (this.segData.base + offSrc) & this.nBlockLimit;
+        let iDst = (this.segES.base + offDst) & this.nBlockLimit;
+        let i = 0, inc = fDown? -1 : 1;
+        if (size == 4 && !((iSrc | iDst) & 0x3)) {
+            iSrc >>= 2; iDst >>= 2;
+            while (i++ < n) { adwDst[iDst] = adwSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else if (size == 2 && !((iSrc | iDst) & 0x1)) {
+            iSrc >>= 1; iDst >>= 1;
+            while (i++ < n) { awDst[iDst] = awSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else if (size == 1) {
+            while (i++ < n) { abDst[iDst] = abSrc[iSrc]; iSrc += inc; iDst += inc; }
+        }
+        else {
+            inc *= size;
+            while (i++ < n) {
+                let b0 = abSrc[iSrc], b1 = abSrc[iSrc+1], b2 = 0, b3 = 0;
+                if (size == 4) { b2 = abSrc[iSrc+2]; b3 = abSrc[iSrc+3]; }
+                abDst[iDst] = b0; abDst[iDst+1] = b1;
+                if (size == 4) { abDst[iDst+2] = b2; abDst[iDst+3] = b3; }
+                iSrc += inc; iDst += inc;
+            }
+        }
+        let cb = fDown? -n * size : n * size;
+        this.regESI = (this.regESI & ~maskAddr) | ((offSrc + cb) & maskAddr);
+        this.regEDI = (this.regEDI & ~maskAddr) | ((offDst + cb) & maskAddr);
+        this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - n) & maskAddr);
+        this.nStepCycles -= n * this.cycleCounts.nOpCyclesMovSrn;
+        return n;
+    }
+
+    /**
+     * fillString(nReps, size, fDown)
+     *
+     * Performs up to nReps iterations of a STOS instruction at once, storing AL/AX/EAX to ES:EDI (moving up,
+     * or down if fDown is set, per the direction flag), and returns the number of elements actually stored;
+     * zero means nothing was done and the caller must fall back to the normal one-element-at-a-time code
+     * path.  See getStringLimit() for the conditions.
+     *
+     * @this {CPUx86}
+     * @param {number} nReps
+     * @param {number} size (1, 2 or 4)
+     * @param {boolean} fDown
+     * @returns {number}
+     */
+    fillString(nReps, size, fDown)
+    {
+        let maskAddr = this.maskAddr;
+        let offDst = this.regEDI & maskAddr;
+        let n = this.getStringLimit(this.segES, offDst, size, nReps, true, fDown);
+        if (!n) return 0;
+        let block = this.blockString;
+        let iDst = (this.segES.base + offDst) & this.nBlockLimit;
+        let data = this.regEAX;
+        /**
+         * Since every element receives the same value, a downward fill is just an upward fill that starts
+         * at the lowest element.
+         */
+        if (fDown) iDst -= (n - 1) * size;
+        if (size == 1) {
+            block.ab.fill(data & 0xff, iDst, iDst + n);
+        }
+        else if (size == 2 && !(iDst & 0x1)) {
+            block.aw.fill(data & 0xffff, iDst >> 1, (iDst >> 1) + n);
+        }
+        else if (size == 4 && !(iDst & 0x3)) {
+            block.adw.fill(data, iDst >> 2, (iDst >> 2) + n);
+        }
+        else {
+            let ab = block.ab, i = 0;
+            while (i++ < n) {
+                ab[iDst] = data; ab[iDst+1] = data >> 8;
+                if (size == 4) { ab[iDst+2] = data >> 16; ab[iDst+3] = data >> 24; }
+                iDst += size;
+            }
+        }
+        this.regEDI = (this.regEDI & ~maskAddr) | ((offDst + (fDown? -n * size : n * size)) & maskAddr);
+        this.regECX = (this.regECX & ~maskAddr) | ((this.regECX - n) & maskAddr);
+        this.nStepCycles -= n * this.cycleCounts.nOpCyclesStoSrn;
+        return n;
+    }
+
+    /**
      * getSOByte(seg, off)
      *
      * This is like getEAByte(), but it does NOT update regEA.
@@ -20581,8 +20886,14 @@ class CPUx86 extends CPU {
     getIPByte()
     {
         let newLIP = this.checkIP(1);
-        let b = (PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP));
-        if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
+        let addr = this.regLIP, b;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead) {
+            b = block.ab[addr & this.nBlockLimit];
+        } else {
+            b = (PREFETCH? this.getBytePrefetch() : this.getByte(addr));
+            if (BACKTRACK) this.bus.updateBackTrackCode(addr, this.backTrack.btiMem0);
+        }
         /**
          * With the following cycle penalty (which really only affects 8086/8088 CPUs), PC Tools 4.30
          * correctly reports an IBM PC-relative speed of 100% (assuming you're using a 4.77Mhz configuration).
@@ -20637,6 +20948,21 @@ class CPUx86 extends CPU {
     {
         let w;
         let newLIP = this.checkIP(this.sizeAddr);
+        let addr = this.regLIP, off = addr & this.nBlockLimit;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead && off < this.nBlockLimit - 2 && !(this.opFlags & X86.OPFLAG.WRAP)) {
+            let ab = block.ab;
+            if (this.sizeAddr == 2) {
+                w = ab[off] | (ab[off+1] << 8);
+                this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
+            } else if (off & 0x3) {
+                w = ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            } else {
+                w = block.adw[off >> 2];
+            }
+            this.regLIP = newLIP;
+            return w;
+        }
         if (PREFETCH) {
             w = this.getAddr();
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
@@ -20667,6 +20993,21 @@ class CPUx86 extends CPU {
     {
         let w;
         let newLIP = this.checkIP(this.sizeData);
+        let addr = this.regLIP, off = addr & this.nBlockLimit;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead && off < this.nBlockLimit - 2 && !(this.opFlags & X86.OPFLAG.WRAP)) {
+            let ab = block.ab;
+            if (this.sizeData == 2) {
+                w = ab[off] | (ab[off+1] << 8);
+                this.nStepCycles -= this.cycleCounts.nWordCyclePenalty;
+            } else if (off & 0x3) {
+                w = ab[off] | (ab[off+1] << 8) | (ab[off+2] << 16) | (ab[off+3] << 24);
+            } else {
+                w = block.adw[off >> 2];
+            }
+            this.regLIP = newLIP;
+            return w;
+        }
         if (PREFETCH) {
             w = this.getWordPrefetch();
         } else if (!(this.opFlags & X86.OPFLAG.WRAP)) {
@@ -20696,8 +21037,14 @@ class CPUx86 extends CPU {
     getIPDisp()
     {
         let newLIP = this.checkIP(1);
-        let w = ((PREFETCH? this.getBytePrefetch() : this.getByte(this.regLIP)) << 24) >> 24;
-        if (BACKTRACK) this.bus.updateBackTrackCode(this.regLIP, this.backTrack.btiMem0);
+        let addr = this.regLIP, w;
+        let block = this.aMemBlocks[(addr & this.nMemMask) >>> this.nBlockShift];
+        if (!BACKTRACK && !PREFETCH && block.fDirectRead) {
+            w = (block.ab[addr & this.nBlockLimit] << 24) >> 24;
+        } else {
+            w = ((PREFETCH? this.getBytePrefetch() : this.getByte(addr)) << 24) >> 24;
+            if (BACKTRACK) this.bus.updateBackTrackCode(addr, this.backTrack.btiMem0);
+        }
         this.regLIP = newLIP;
         return w;
     }
@@ -20908,6 +21255,16 @@ class CPUx86 extends CPU {
     checkINTR()
     {
         // DEBUG:
+
+        /**
+         * The most common reason for this function to be called is that a hardware interrupt is pending but
+         * interrupts are disabled, and since stepCPU() calls us after every instruction while that's the case,
+         * we want to dispose of it as quickly as possible: if INTR is the ONLY flag set and IF is clear, there's
+         * nothing to do (the HALT and DEBUGGER flags are handled by stepCPU()).
+         */
+        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP | X86.INTFLAG.DMA)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
+            return false;
+        }
 
         if (!(this.opFlags & X86.OPFLAG.NOINTR)) {
             /**
@@ -30228,47 +30585,6 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    /**
-     * Support for INT 06h operation checks.  The only operation we consume is the one reserved for breakpoints,
-     * and only if our debugger is running.  All these should only occur in DEBUG builds of the underlying operating
-     * system (ie, BASIC-DOS), which should clean up after itself.  See https://github.com/jeffpar/basicdos.
-     */
-    if (nIDT == 0x06 && this.model <= X86.MODEL_8088) {
-        let op = this.getSOWord(this.segCS, oldIP-2);
-        if (op == 0x06CD) {
-            let actual;
-            let argA = this.getSOWord(this.segSS, this.regEBP+10) | (this.getSOWord(this.segSS, this.regEBP+12) << 16);
-            let argB = this.getSOWord(this.segSS, this.regEBP+6) | (this.getSOWord(this.segSS, this.regEBP+8) << 16);
-            let result = this.regEAX | (this.regEDX << 16);
-            let remainder = this.regEDI | (this.regESI << 16);
-            switch(this.peekIPByte()) {
-            case 0xCC:
-                if (DEBUGGER && this.dbg && this.flags.running) {
-                    this.getIPByte();
-                    this.printf("debugger halting on INT 0x06,0xCC\n");
-                    this.dbg.stopCPU();
-                    return;
-                }
-                break;
-            case 0xFB:
-                actual = (argA * argB)|0;
-                if (result != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x * %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                break;
-            case 0xFC:
-                actual = (argA / argB)|0;
-                if (result != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x / %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                actual = (argA % argB)|0;
-                if (remainder != actual) {
-                    if (!COMPILED) this.printf(MESSAGE.INT, "result %#x for %#x % %#x does not match actual: %#x\n", result, argA, argB, actual);
-                }
-                break;
-            }
-        }
-    }
     if (nIDT == 0x13 && this.model <= X86.MODEL_8088) {
         if (DEBUGGER && this.dbg && this.regEAX == 0x0201 && this.regEBX == 0x7C00 && this.segES.sel == 0) {
             this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
@@ -30496,8 +30812,9 @@ X86.helpTrap = function(nIDT, nBytes, nCycles)
  * @param {number|null} [nError] (if omitted, no error code will be pushed)
  * @param {number} [nCycles] cycle count to pass through to helpINT(), if any
  * @param {boolean} [fHalt] (true to halt the CPU, false to not, undefined if "it depends")
+ * @param {boolean} [fReturn] (true to return after dispatching the fault instead of throwing an exception)
  */
-X86.helpFault = function(nFault, nError, nCycles, fHalt)
+X86.helpFault = function(nFault, nError, nCycles, fHalt, fReturn)
 {
     let fDispatch = false;
 
@@ -30629,8 +30946,12 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt)
          *
          * Fortunately, we now throw an exception that terminates the current instruction, so the above hack
          * should no longer be necessary.
+         *
+         * The exception is also what terminates the current burst (see runCPU()), which is not cheap, so callers
+         * that have nothing left to do after dispatching the fault (eg, opARPL() in V86-mode, which Windows uses
+         * as a trap thousands of times per second) can set fReturn to simply return instead.
          */
-        throw nFault;
+        if (!fReturn) throw nFault;
     }
 };
 
@@ -36267,7 +36588,11 @@ X86.opARPL = function()
      * fashion, instead of using these in-line mode tests.
      */
     if (!(this.regCR0 & X86.CR0.MSW.PE) || I386 && (this.regPS & X86.PS.VM)) {
-        X86.opInvalid.call(this);
+        /**
+         * Since Windows generates thousands of these faults per second, and since we have nothing left to do
+         * here, we ask helpFault() to return instead of throwing an exception (which would also end the burst).
+         */
+        X86.helpFault.call(this, X86.EXCEPTION.UD_FAULT, undefined, undefined, undefined, true);
         return;
     }
     this.decodeModMemWord.call(this, X86.fnARPL);
@@ -37512,6 +37837,13 @@ X86.opMOVSb = function()
         nCycles = this.cycleCounts.nOpCyclesMovSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesMovSr0;
     }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.copyString(nReps, 1, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP(true);
+            return;
+        }
+    }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.getSOByte(this.segData, this.regESI & maskAddr));
         /**
@@ -37545,6 +37877,13 @@ X86.opMOVSw = function()
         nDelta = 1;
         nCycles = this.cycleCounts.nOpCyclesMovSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesMovSr0;
+    }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.copyString(nReps, this.sizeData, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP(true);
+            return;
+        }
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.getSOWord(this.segData, this.regESI & maskAddr));
@@ -37694,6 +38033,13 @@ X86.opSTOSb = function()
         nCycles = this.cycleCounts.nOpCyclesStoSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesStoSr0;
     }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.fillString(nReps, 1, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP();
+            return;
+        }
+    }
     if (nReps--) {
         this.setSOByte(this.segES, this.regEDI & maskAddr, this.regEAX);
         /**
@@ -37748,6 +38094,13 @@ X86.opSTOSw = function()
         nDelta = 1;
         nCycles = this.cycleCounts.nOpCyclesStoSrn;
         if (!(this.opPrefixes & X86.OPFLAG.REPEAT)) this.nStepCycles -= this.cycleCounts.nOpCyclesStoSr0;
+    }
+    if (!BACKTRACK && nReps > 1) {
+        let n = this.fillString(nReps, this.sizeData, !!(this.regPS & X86.PS.DF));
+        if (n) {
+            if (n < nReps) this.rewindIP();
+            return;
+        }
     }
     if (nReps--) {
         this.setSOWord(this.segES, this.regEDI & maskAddr, this.regEAX);
@@ -53274,14 +53627,22 @@ class Card extends Controller {
             this.nCyclesVertActive = (this.nCyclesHorzPeriod * monitorSpecs.nHorzPeriodsPerFrame)|0;
             this.nCyclesVertPeriod = (this.nCyclesVertActive / (monitorSpecs.percentVertActive / 100))|0;
             /**
-             * nCyclesVertPorch is the vertical blanking "front porch": the last few horizontal periods of the
-             * active period, during which the display is blanked (STATUS.RETRACE) but vertical retrace has not
-             * yet started.  Real monitors have one, and some software (eg, Wolfenstein 3D's VL_WaitVBL) waits
-             * for exactly that state (several consecutive samples of RETRACE without VRETRACE) before it will
-             * accept the vertical retrace that follows; without a porch, that state exists only during horizontal
-             * blanking, which is too short to be sampled several times in a row on a slower CPU.
+             * nCyclesVertPorch is the vertical blanking "front porch": the first part of the vertical blanking
+             * interval, after the last active horizontal period, during which the display is blanked (STATUS.RETRACE)
+             * but vertical retrace (STATUS.VRETRACE) has not yet started.  Real monitors have one, and some software
+             * (eg, Wolfenstein 3D's VL_SetScreen) waits for exactly that state (several consecutive samples of RETRACE
+             * without VRETRACE) before it will accept the vertical retrace that follows; without a porch, that state
+             * exists only during horizontal blanking, which is too short to be sampled several times in a row on a
+             * slower CPU.
+             *
+             * The porch must be carved out of the blanking interval (nCyclesVertPeriod - nCyclesVertActive), NOT the
+             * active period, because the EGA BIOS POST (C000:039E-03D0) counts the number of active-to-blanked
+             * transitions per frame and requires exactly nHorzPeriodsPerFrame of them.  Since our blanking interval
+             * is small for some monitors (eg, ~8 horizontal periods for a CGA monitor), we also cap the porch at half
+             * the blanking interval, so that VRETRACE always remains asserted for the other half.
              */
-            this.nCyclesVertPorch = this.nCyclesHorzPeriod * Videox86.VERT_PORCH_LINES;
+            let nCyclesVertBlank = this.nCyclesVertPeriod - this.nCyclesVertActive;
+            this.nCyclesVertPorch = Math.min(this.nCyclesHorzPeriod * Videox86.VERT_PORCH_LINES, nCyclesVertBlank >> 1);
             this.nCyclesVertRetrace = (data[7] || 0);
             this.nCountVertRetrace = 0;
         }
@@ -54659,7 +55020,8 @@ class Videox86 extends Component {
      * @type {Object.<MonitorSpecs>}
      */
     /**
-     * The number of horizontal periods at the end of a frame's active period that are blanked (see nCyclesVertPorch).
+     * The maximum number of horizontal periods, at the start of a frame's vertical blanking interval, during which
+     * the display is blanked but vertical retrace has not yet started (see nCyclesVertPorch).
      */
     static VERT_PORCH_LINES = 10;
 
@@ -59343,11 +59705,20 @@ class Videox86 extends Component {
             card.nCyclesVertRetrace = nCycles;
             nCyclesElapsed = 0;
         }
-        nCyclesElapsed -= card.nCyclesVertPeriod - card.nCyclesVertActive;
+        /**
+         * Each frame (ie, each nCyclesVertPeriod, starting when startVerticalRetrace() fires) consists of:
+         *
+         *      1) vertical retrace (VRETRACE and RETRACE), for the blanking interval minus the porch
+         *      2) nHorzPeriodsPerFrame active horizontal periods, each ending with horizontal retrace (RETRACE)
+         *      3) the vertical blanking "front porch" (RETRACE only; see nCyclesVertPorch)
+         *
+         * so that the porch immediately precedes the next vertical retrace, as on a real monitor.
+         */
+        nCyclesElapsed -= card.nCyclesVertPeriod - card.nCyclesVertActive - card.nCyclesVertPorch;
         if (nCyclesElapsed < 0) {
             b |= Card.CGA.STATUS.VRETRACE | Card.CGA.STATUS.RETRACE;
         }
-        else if (nCyclesElapsed >= card.nCyclesVertActive - card.nCyclesVertPorch) {
+        else if (nCyclesElapsed >= card.nCyclesVertActive) {
             b |= Card.CGA.STATUS.RETRACE;               // vertical blanking (front porch; see nCyclesVertPorch)
         }
         else {
@@ -71597,7 +71968,7 @@ class FDC extends Component {
         let fIRQ = false;
         this.regDataIndex = 0;
         let bCmd = this.popCmd();
-        let drive, bDrive, bHead, c, h, r, n;
+        let drive, bDrive, bHead, c, h, r, n, sector;
 
         /**
          * NOTE: We currently ignore the FDC.REG_DATA.CMD.SK, FDC.REG_DATA.CMD.MF and FDC.REG_DATA.CMD.MT bits of every command.
@@ -71647,11 +72018,6 @@ class FDC extends Component {
             drive.bHead = bHead;
             c = drive.bCylinder = this.popCmd(FDC.TERMS.C); // C
             h = this.popCmd(FDC.TERMS.H);                   // H
-            /**
-             * Controller docs say that H should always match HD, so I assert that, but what if someone
-             * made a mistake and didn't program them identically -- what would happen?  Which should we honor?
-             */
-
             r = drive.bSector = this.popCmd(FDC.TERMS.R);   // R
             n = this.popCmd(FDC.TERMS.N);                   // N
             drive.nBytes = 128 << n;                        // 0 => 128, 1 => 256, 2 => 512, 3 => 1024
@@ -71679,6 +72045,16 @@ class FDC extends Component {
                  * TYPE_VERIFY instead of TYPE_READ or TYPE_WRITE.
                  */
                 drive.resCode = FDC.REG_DATA.RES.INCOMPLETE | FDC.REG_DATA.RES.NO_DATA;
+                fIRQ = true;
+            } else if (h != bHead && drive.disk && (!(sector = drive.disk.seek(c, bHead, r)) || sector[Disk.SECTOR.HEAD] != h)) {
+                /**
+                 * The controller reads the track under the head selected by HD (in the Drive Select byte), looking for
+                 * a sector whose ID matches C, H, and R.  H normally matches HD, but when it doesn't (eg, when a program
+                 * that probes for more heads asks INT 13h for head 2, which the BIOS programs as HD 0 and H 2), the sector
+                 * isn't found, unless its ID really contains H (as on an unusual disk image), so the command fails with
+                 * NO_DATA, as it does on a real controller, instead of reading the sector under the selected head.
+                 */
+                drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
                 fIRQ = true;
             } else {
                 if (bCmdMasked != FDC.REG_DATA.CMD.WRITE_DATA) {

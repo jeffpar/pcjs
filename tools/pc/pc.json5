@@ -61,6 +61,11 @@
             "os/cmd/OBJ/COMMAND.COM",
             "os/cmd/HELP.TXT"
           ],
+          "attrs": {                    // system file attributes (see DiskInfo.ATTR)
+            "BASDEV.COM": "HIDDEN | SYSTEM | READONLY",
+            "BASDOS.COM": "HIDDEN | SYSTEM | READONLY",
+            "COMMAND.COM": "SYSTEM | READONLY"
+          },
           "target": "BDV2"
         }
       }

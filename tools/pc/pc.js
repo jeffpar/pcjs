@@ -1940,10 +1940,27 @@ export default class PC extends PCJSLib {
                         dbBoot2 = null;
                     }
                     /*
-                     * BASIC-DOS ("bd") locates its system files by name, not attributes, so we leave them
-                     * visible to DIR (which, like DOS, now skips hidden and system files).
+                     * A system's "attrs" (if any) give the attributes of its system files, as DiskInfo.ATTR names
+                     * separated by "|" (eg, BASIC-DOS's BASDEV.COM and BASDOS.COM are "HIDDEN | SYSTEM | READONLY",
+                     * and its COMMAND.COM is "SYSTEM | READONLY", so DIR still lists it, since in BASIC-DOS, only
+                     * HIDDEN keeps a file out of DIR); otherwise, the files of a "custom" system have no attributes,
+                     * and those of any other system are read-only hidden system files.
                      */
-                    attr = this.systemType == "custom" || this.systemType == "bd"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    let attrs = this.getSystemValue("attrs");
+                    if (attrs) {
+                        attr = 0;
+                        for (let attrName of (attrs[baseName.toUpperCase()] || "").split("|")) {
+                            attrName = attrName.trim();
+                            if (!attrName) continue;
+                            if (DiskInfo.ATTR[attrName] === undefined) {
+                                printf("warning: unrecognized attribute for %s: %s\n", baseName, attrName);
+                                continue;
+                            }
+                            attr |= DiskInfo.ATTR[attrName];
+                        }
+                    } else {
+                        attr = this.systemType == "custom"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
+                    }
                     date = node.fs.statSync(name).mtime;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
                     if (fText && !fConfig) {
