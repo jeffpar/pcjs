@@ -384,8 +384,12 @@ export default class SoundBlaster extends Component {
     /**
      * enableUserAudio()
      *
-     * Browsers generally refuse to start an AudioContext until the user has interacted with the page, so if the
-     * context is suspended, we hook a few document-level events and resume the context on the first one we see.
+     * Browsers generally refuse to start an AudioContext until the user has interacted with the page, so whenever
+     * the context isn't running, we hook a few document-level events and try to resume the context on each one.
+     *
+     * The events stay hooked until the context is actually running, because not every event qualifies as a user
+     * gesture in every browser (eg, iOS Safari ignores touchstart and waits for touchend), and if the context is
+     * later suspended or interrupted (eg, Safari's non-standard "interrupted" state), we hook them again.
      *
      * @this {SoundBlaster}
      */
@@ -393,28 +397,39 @@ export default class SoundBlaster extends Component {
     {
         let context = this.contextAudio;
         let doc = globals.window['document'];
-        if (!context || !doc || !doc.addEventListener) return;
-        if (context['state'] != "suspended") return;
+        if (!context || !context['resume'] || !doc || !doc.addEventListener) return;
         let sb = this;
-        let aEvents = ['keydown', 'mousedown', 'touchstart'];
+        let aEvents = ['keydown', 'mousedown', 'touchstart', 'touchend'];
+        let fHooked = false;
         let onUserEvent = function() {
             try {
                 let promise = context['resume']();
                 if (promise && promise.then) {
                     promise.then(function() {
                         sb.printf("AudioContext resumed (%s)\n", context['state']);
+                    }, function(e) {
+                        sb.printf("AudioContext resume failed: %s\n", e.message);
                     });
                 }
             } catch(e) {
                 sb.printf("AudioContext resume failed: %s\n", e.message);
             }
-            for (let i = 0; i < aEvents.length; i++) {
-                doc.removeEventListener(aEvents[i], onUserEvent, true);
-            }
         };
-        for (let i = 0; i < aEvents.length; i++) {
-            doc.addEventListener(aEvents[i], onUserEvent, true);
-        }
+        let updateHooks = function() {
+            let state = context['state'];
+            let fHook = state != "running" && state != "closed";
+            if (fHook == fHooked) return;
+            for (let i = 0; i < aEvents.length; i++) {
+                if (fHook) {
+                    doc.addEventListener(aEvents[i], onUserEvent, true);
+                } else {
+                    doc.removeEventListener(aEvents[i], onUserEvent, true);
+                }
+            }
+            fHooked = fHook;
+        };
+        if (context['addEventListener']) context['addEventListener']('statechange', updateHooks);
+        updateHooks();
     }
 
     /**
@@ -1549,6 +1564,17 @@ export default class SoundBlaster extends Component {
             this.nSilent += nSamples;
         } else {
             this.nSilent = 0;
+        }
+
+        /**
+         * If the AudioContext isn't running (eg, Safari hasn't seen a user gesture yet, or the context has been
+         * interrupted), its clock is stopped, so anything we queue now would play in a burst whenever it resumes,
+         * well after the fact.  So we discard the buffer, and re-synchronize once the clock is running again.
+         */
+        let state = context['state'];
+        if (state && state != "running") {
+            this.fPlaying = false;
+            return;
         }
 
         /**

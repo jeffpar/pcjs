@@ -129,12 +129,14 @@ export default class CPU extends Component {
          * Browsers clamp nested setTimeout(fn, 0) calls to a minimum of 4ms, which costs us a
          * substantial amount of time whenever runCPU() wants to yield for "as little time as possible"
          * (ie, whenever we're behind our target speed).  So we use a MessageChannel for zero-delay
-         * yields instead; see scheduleRunCPU() for details.  We do this only in browsers, because Node
-         * doesn't clamp timeouts, and an open MessagePort would keep its event loop alive.  idYield is
-         * a token that lets us ignore any yield messages that were cancelled (eg, by startCPU) before
+         * yields instead; see scheduleRunCPU() for details.  We do this only in browsers, because an
+         * open MessagePort would keep Node's event loop alive; Node clamps zero-delay timeouts to 1ms,
+         * so there we use setImmediate() instead (which runs as soon as pending I/O has been processed).
+         * idYield is a token that lets us ignore any yields that were cancelled (eg, by startCPU) before
          * they arrived.
          */
         this.portYield = null;
+        this.fnImmediate = null;
         this.idYield = 0;
         if (globals.browser && typeof MessageChannel != "undefined") {
             let cpu = this;
@@ -144,6 +146,9 @@ export default class CPU extends Component {
             };
             this.portYield = channel.port2;
         }
+        else if (typeof globals.node['setImmediate'] == "function") {
+            this.fnImmediate = globals.node['setImmediate'];
+        }
     }
 
     /**
@@ -151,9 +156,10 @@ export default class CPU extends Component {
      *
      * Schedules the next runCPU() call.  For non-zero delays, we use setTimeout(); for zero delays,
      * we post a message to ourselves instead (if MessageChannel is available), because browsers clamp
-     * nested zero-delay timeouts to 4ms, and that adds up quickly when we're trying to catch up.
+     * nested zero-delay timeouts to 4ms, and that adds up quickly when we're trying to catch up; under
+     * Node, we use setImmediate() (if available) for the same reason.
      *
-     * Either way, idRunTimeout is set to a non-zero value (a timeout ID or -1 for a pending message),
+     * Either way, idRunTimeout is set to a non-zero value (a timeout ID or -1 for a pending yield),
      * and any code that cancels the pending call (eg, startCPU) must reset idRunTimeout to zero.
      *
      * @this {CPU}
@@ -161,11 +167,18 @@ export default class CPU extends Component {
      */
     scheduleRunCPU(ms)
     {
-        if (ms > 0 || !this.portYield) {
+        if (ms > 0 || !this.portYield && !this.fnImmediate) {
             this.idRunTimeout = setTimeout(this.onRunTimeout, ms);
         } else {
+            let cpu = this, id = ++this.idYield;
             this.idRunTimeout = -1;
-            this.portYield.postMessage(++this.idYield);
+            if (this.portYield) {
+                this.portYield.postMessage(id);
+            } else {
+                this.fnImmediate(function() {
+                    if (cpu.idRunTimeout < 0 && id === cpu.idYield) cpu.runCPU();
+                });
+            }
         }
     }
 

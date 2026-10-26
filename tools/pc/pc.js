@@ -1294,12 +1294,17 @@ export default class PC extends PCJSLib {
             /**
              * With --floppy, we're booting the diskette we just built, so remove any XT hard disk controller (and
              * its ROM); otherwise, its empty drive makes the BASIC-DOS boot sector wait for a key.  AT-style
-             * controllers are left alone, since they're part of the system (and the CMOS may expect a drive).
+             * controllers are part of the system, so we keep them but remove their drives (the controller sets
+             * the CMOS drive types from its drives, so the CMOS then reports none).
              */
-            if (pc.floppy && config['hdc'] && config['hdc']['type'] == "XT") {
-                delete config['hdc'];
-                if (Array.isArray(config['rom'])) {
-                    config['rom'] = config['rom'].filter((rom) => rom['id'] != "romHDC");
+            if (pc.floppy && config['hdc']) {
+                if (config['hdc']['type'] == "XT") {
+                    delete config['hdc'];
+                    if (Array.isArray(config['rom'])) {
+                        config['rom'] = config['rom'].filter((rom) => rom['id'] != "romHDC");
+                    }
+                } else {
+                    config['hdc']['drives'] = [];
                 }
             }
 
@@ -1414,11 +1419,18 @@ export default class PC extends PCJSLib {
 
             /**
              * --fpu installs an 8087 by turning off switch 2 of a PC or XT's SW1 (eg, "01000001" becomes
-             * "00000001"), and --ram sets the size of the machine's first RAM block (eg, --ram=640K).
+             * "00000001"); a machine without SW1 (eg, a PC AT) gets an FPU component matching its CPU instead
+             * (eg, an 80287), which turns on the FPU switch that the CMOS equipment byte reports.  And --ram sets
+             * the size of the machine's first RAM block (eg, --ram=640K).
              */
-            if (pc.fpu && config['chipset'] && typeof config['chipset']['sw1'] == "string") {
+            if (pc.fpu && config['chipset']) {
                 let sw1 = config['chipset']['sw1'];
-                config['chipset']['sw1'] = sw1[0] + '0' + sw1.slice(2);
+                if (typeof sw1 == "string") {
+                    config['chipset']['sw1'] = sw1[0] + '0' + sw1.slice(2);
+                } else if (!config['fpu']) {
+                    let model = config['cpu'] && config['cpu']['model'] >= 80386? 80387 : 80287;
+                    config['fpu'] = {'id': "fpu", 'model': model};
+                }
             }
             if (pc.kbRAM && config['ram']) {
                 let ram = Array.isArray(config['ram'])? config['ram'][0] : config['ram'];
@@ -2089,7 +2101,9 @@ export default class PC extends PCJSLib {
          * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "quit" to run
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          *
-         * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command.
+         * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command.  And since it
+         * starts every BAT file with ECHO OFF, we don't create an AUTOEXEC.BAT unless there are commands that
+         * we can't put on a SHELL line (see below).
          *
          * With --bare, there's no QUIT.COM to find, so we leave any AUTOEXEC.BAT alone, and we don't create
          * one unless there are commands to put in it.
@@ -2101,7 +2115,7 @@ export default class PC extends PCJSLib {
                 text = '@' + text;
             }
         } else {
-            text = verDOSMajor < 2 || this.bare? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
+            text = verDOSMajor < 2 || this.bare || this.systemType == "bd"? "" : (verDOS >= 3.30? '@' : '') + "ECHO OFF\n";
             attr |= attrHidden;
         }
         if (this.systemType != "bd" && !this.bare) {
@@ -2116,24 +2130,51 @@ export default class PC extends PCJSLib {
             }
         }
 
-        if (sCommand) {
-            let aCommands = sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',');
-            for (let command of aCommands) {
-                text += command + "\n";
-            }
-        }
+        let aCommands = sCommand? sCommand.split(sCommand.indexOf(';') >= 0? ';' : ',') : [];
         if (this.machineDrive) {
-            text += this.machineDrive + ":\n";
+            aCommands.push(this.machineDrive + ":");
         }
         if (this.machineDir) {
-            text += "CD " + this.machineDir + "\n";
+            aCommands.push("CD " + this.machineDir);
         }
         if (this.test) {
-            text += "quit\n";
+            aCommands.push("quit");
         }
         let autoexecBAT = configJSON['defaults'] && configJSON['defaults']['autoexec'];
         if (autoexecBAT && autoexecBAT.length) {
-            text += autoexecBAT.join("\n") + "\n";
+            aCommands.push(...autoexecBAT);
+        }
+
+        /**
+         * BASIC-DOS doesn't run AUTOEXEC.BAT automatically; instead, a SHELL line in CONFIG.SYS gives a session's
+         * startup commands, separated by colons.  So we append our commands to the first SHELL line, as long as its
+         * command tail still fits in a PSP (126 characters) and no IF precedes the last command (since its THEN and
+         * ELSE clauses would include the rest of the line).  Otherwise, we append them to AUTOEXEC.BAT, and if no
+         * SHELL line names AUTOEXEC.BAT, we append that to the first SHELL line instead.  Each colon has a space on
+         * either side; the space before it keeps a command ending with a switch (eg, TIME /D) from taking the rest
+         * as the switch's value, and the space after it is for symmetry.
+         */
+        if (this.systemType == "bd" && aCommands.length) {
+            let desc = driveInfo.files.find((desc) => desc[DiskInfo.FILEDESC.NAME].toUpperCase() == "CONFIG.SYS");
+            let config = desc && desc[DiskInfo.FILEDESC.CONTENTS].toString();
+            let match = config && config.match(/^(SHELL\s*=\s*\S+)([^\r\n]*)/im);
+            if (match) {
+                let tail = match[2].trimEnd();
+                let prefix = tail? tail + " : " : " ";
+                tail = prefix + aCommands.join(" : ");
+                if (tail.length > 126 || aCommands.slice(0, -1).some((command) => /^\s*IF\b/i.test(command))) {
+                    tail = /^SHELL\s*=.*\bAUTOEXEC(\.BAT)?\b/im.test(config)? match[2] : prefix + "AUTOEXEC.BAT";
+                } else {
+                    aCommands = [];
+                }
+                config = config.slice(0, match.index) + match[1] + tail + config.slice(match.index + match[0].length);
+                let db = new DataBuffer(config);
+                desc[DiskInfo.FILEDESC.CONTENTS] = db;
+                desc[DiskInfo.FILEDESC.SIZE] = db.length;
+            }
+        }
+        for (let command of aCommands) {
+            text += command + "\n";
         }
         if (text.length) {
             /**
@@ -4065,7 +4106,7 @@ export default class PC extends PCJSLib {
                 "--bare (-b)":              "\tomit helper binaries (and default AUTOEXEC.BAT)",
                 "--debug (-d)":             "\tenable DEBUG messages",
                 "--floppy (-f)":            "\tbuild floppy instead of hard disk",
-                "--fpu":                    "\t\tinstall an 8087 (PC and XT machines)",
+                "--fpu":                    "\t\tinstall an FPU (eg, an 8087 or 80287)",
                 "--halt (-h)":              "\thalt machine on startup",
                 "--help (-?)":              "\tdisplay command-line usage",
                 "--local (-l)":             "\tuse local diskette images",
