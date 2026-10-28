@@ -1421,7 +1421,9 @@ export default class PC extends PCJSLib {
              * --fpu installs an 8087 by turning off switch 2 of a PC or XT's SW1 (eg, "01000001" becomes
              * "00000001"); a machine without SW1 (eg, a PC AT) gets an FPU component matching its CPU instead
              * (eg, an 80287), which turns on the FPU switch that the CMOS equipment byte reports.  And --ram sets
-             * the size of the machine's first RAM block (eg, --ram=640K).
+             * the size of the machine's first RAM block (eg, --ram=640K); on an 80286 or later machine, anything
+             * over 640K goes in an extended memory block at 1Mb instead (eg, --ram=2M gives 640K of conventional
+             * memory and 1408K of extended memory, like the PCjs 2048K PC AT machines).
              */
             if (pc.fpu && config['chipset']) {
                 let sw1 = config['chipset']['sw1'];
@@ -1433,8 +1435,15 @@ export default class PC extends PCJSLib {
                 }
             }
             if (pc.kbRAM && config['ram']) {
-                let ram = Array.isArray(config['ram'])? config['ram'][0] : config['ram'];
-                ram['size'] = pc.kbRAM * 1024;
+                let rams = Array.isArray(config['ram'])? config['ram'] : [config['ram']];
+                let kbLow = pc.kbRAM;
+                if (kbLow > 640 && config['cpu'] && config['cpu']['model'] >= 80286) {
+                    rams = rams.filter((ram) => ram['id'] != "ramExt");
+                    rams.push({'id': "ramExt", 'addr': 0x100000, 'size': (kbLow - 640) * 1024});
+                    config['ram'] = rams;
+                    kbLow = 640;
+                }
+                rams[0]['size'] = kbLow * 1024;
             }
 
             if (sFile.endsWith(pc.savedMachine) && config['computer'] && pc.savedState) {
@@ -3963,7 +3972,7 @@ export default class PC extends PCJSLib {
 
         stdin.resume();
         stdin.setEncoding("utf8");
-        stdin.setRawMode(true);
+        if (stdin.setRawMode) stdin.setRawMode(true);   // (stdin may not be a TTY)
 
         stdin.on("data", function(data) {
             let machine = pc.machine;
@@ -4062,7 +4071,7 @@ export default class PC extends PCJSLib {
         } else if (this.drives[this.driveBuild].driveManifest) {
             printf("warning: any changes to disk not saved\n");
         }
-        node.process.stdin.setRawMode(false);
+        if (node.process.stdin.setRawMode) node.process.stdin.setRawMode(false);
         if (code) printf("shutting down (%d)\n", code);
         if (this.test) printf("\n");
         node.process.exit(code);
@@ -4085,7 +4094,7 @@ export default class PC extends PCJSLib {
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
-                "--ram=[nK]":               "\tset RAM size (eg, 640K)",
+                "--ram=[nK]":               "\tset RAM size (eg, 640K, or 2M on a PC AT)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
