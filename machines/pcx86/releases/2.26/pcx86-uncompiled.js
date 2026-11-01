@@ -16481,12 +16481,17 @@ class CPU extends Component {
                 nCycles = ms > 0? this.getMSCycles(ms) : -ms;
                 /**
                  * If the CPU is currently executing a burst of cycles, the number of cycles it has executed in
-                 * that burst so far must NOT be charged against the cycle timeout we're about to set.  The simplest
-                 * way to resolve that is to immediately call endBurst() and bias the cycle timeout by the number
-                 * of cycles that the burst executed.
+                 * that burst so far must NOT be charged against the cycle timeout we're about to set.  When the
+                 * burst ends, all its cycles are charged against every timer (including this one), so we bias the
+                 * cycle timeout by the number of cycles that the burst has executed, and then end the burst, so
+                 * that the new timeout is honored.
+                 *
+                 * We used to end the burst with endBurst(), but that discarded the cycles the burst had executed,
+                 * so they were never charged against any timer, making all of them (including this one) fire late.
                  */
                 if (this.flags.running) {
-                    nCycles += this.endBurst();
+                    nCycles += this.nBurstCycles - this.nStepCycles;
+                    this.setBurstCycles(0);
                 }
                 timer[1] = nCycles;
             }

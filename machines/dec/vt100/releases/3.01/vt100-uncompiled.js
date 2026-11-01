@@ -19836,7 +19836,7 @@ class VT100Video extends Monitor {
          * actually displays, and smooth scrolling stutters.  See onAnimation() for details.
          */
         this.fFrameLock = this.fScrollUpdate = false;
-        this.msRefreshDue = 0;
+        this.msRefreshDue = this.msFrameAvg = 0;
         this.time.addAnimation(this.onAnimation.bind(this));
 
         this.time.setTimer(this.timerUpdateNext, this.getRefreshTime());
@@ -19852,6 +19852,12 @@ class VT100Video extends Monitor {
      * frame at 120Hz, etc).  The refresh draws the state produced by all the cycles executed during the
      * frame, and it requests the vertical interrupt that the firmware will service during the next frame.
      *
+     * A frame that arrives late (eg, because the browser was too busy to draw the one before it) doesn't break
+     * the lock, because the next frame would then perform several refreshes at once, and the firmware's smooth
+     * scroll would stall and then jump.  Only a sustained drop in the frame rate, which msFrameAvg tracks, makes
+     * us fall back to our refresh timer.  A late frame performs one refresh, and the rest of its delay is dropped
+     * rather than made up with extra refreshes.
+     *
      * @this {VT100Video}
      * @param {number} t (time of the current frame, in milliseconds)
      * @param {number} nFramesPerSecond
@@ -19860,7 +19866,8 @@ class VT100Video extends Monitor {
     {
         let msRefresh = this.getRefreshTime();
         let msFrame = 1000 / nFramesPerSecond;
-        if (this.time.nTargetMultiplier != 1 || msFrame > msRefresh * 1.5) {
+        this.msFrameAvg = this.msFrameAvg? this.msFrameAvg + (msFrame - this.msFrameAvg) / 8 : msFrame;
+        if (this.time.nTargetMultiplier != 1 || this.msFrameAvg > msRefresh * 1.5) {
             this.fFrameLock = false;
             return;
         }
@@ -19872,7 +19879,7 @@ class VT100Video extends Monitor {
         }
         if (this.msRefreshDue >= msRefresh - msFrame / 2) {
             this.msRefreshDue -= msRefresh;
-            if (this.msRefreshDue > msRefresh) this.msRefreshDue = 0;
+            if (this.msRefreshDue > this.msFrameAvg / 2) this.msRefreshDue = 0;
             this.updateMonitor();
         }
     }
