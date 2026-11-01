@@ -827,6 +827,13 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt, fReturn)
         } else {
             this.assert(nFault >= 0);
             this.opFlags |= X86.OPFLAG.FAULT;
+            /**
+             * A faulting instruction doesn't complete, so it mustn't generate a single-step trap either; otherwise,
+             * the trap would occur at the start of the fault handler (eg, a debugger tracing a faulting instruction
+             * would stop at the handler's first instruction instead of seeing the fault).  The flags pushed for the
+             * fault still have TF set, so if the handler restarts the instruction, it will be single-stepped again.
+             */
+            this.intFlags &= ~X86.INTFLAG.TRAP;
         }
 
         /**

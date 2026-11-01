@@ -711,12 +711,14 @@ export default class Segx86 {
                  * and it's probably fine for the LDT, but it's definitely NOT fine for the GDT, because
                  * that's a reference to the null selector.  A null selector is allowed in DS, ES, FS, or GS,
                  * but never CS or SS.  Since there's no parameter that tells us which table we're using,
-                 * we have to check manually.
+                 * we have to check manually: with a zero offset, addrDesc is the table's base, so it's the
+                 * GDT's null selector only if addrDesc is the GDT's base (an IDT or LDT can lie within the
+                 * GDT's limit, as BASIC-DOS's do, so a range check would reject their first entries).
                  *
                  * If we ARE attempting to load a null selector from the GDT, then we zero type, ensuring that
                  * sizeGate will remain invalid (-1), triggering a GP_FAULT below.
                  */
-                if (addrDesc >= cpu.addrGDT && addrDesc < cpu.addrGDTLimit) type = 0;
+                if (addrDesc == cpu.addrGDT) type = 0;
             }
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
