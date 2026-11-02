@@ -56,8 +56,7 @@
             "configs/console/serial/fpe/CONFIG.SYS",    // NOTE: this CONFIG.SYS redirects all BASIC-DOS I/O to COM1
             "os/dev/OBJ/BASDEV.COM",
             "os/dos/OBJ/BASDOS.COM",
-            "os/cmd/OBJ/COMMAND.COM",
-            "os/cmd/HELP.TXT"
+            "os/cmd/OBJ/COMMAND.COM"
           ],
           "attrs": {                    // system file attributes (see DiskInfo.ATTR)
             "BASDEV.COM": "HIDDEN | SYSTEM | READONLY",

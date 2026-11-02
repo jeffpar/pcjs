@@ -890,6 +890,16 @@ export default class DiskLib {
              * consistency across all operating systems *and* runtimes, we always sort them ourselves.
              */
             asFiles.sort();
+            /**
+             * If the drive lists the names of root entries that come first (eg, pc.js's --order), move them to
+             * the front, in that order.
+             */
+            if (!iLevel && driveInfo && driveInfo.order) {
+                for (let i = driveInfo.order.length - 1; i >= 0; i--) {
+                    let j = asFiles.indexOf(driveInfo.order[i]);
+                    if (j > 0) asFiles.unshift(asFiles.splice(j, 1)[0]);
+                }
+            }
             for (let i = 0; i < asFiles.length; i++) {
                 asFiles[i] = node.path.join(sDir, asFiles[i]);
             }
