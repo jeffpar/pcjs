@@ -394,10 +394,12 @@ export default class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkReadProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -448,10 +450,12 @@ export default class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkWriteProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -1053,7 +1057,12 @@ export default class Segx86 {
             break;
 
         case Segx86.ID.STACK:
-            if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
+            /**
+             * A null selector (table offset zero) is invalid for SS, but ONLY in the GDT: an LDT selector with
+             * index zero (ie, with the TI bit set) is perfectly valid, so we must not treat it as null here (the
+             * CODE case above makes the same GDT-only distinction when it zeroes "type" for a null selector).
+             */
+            if ((!selMasked && !(sel & X86.SEL.LDT)) || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }

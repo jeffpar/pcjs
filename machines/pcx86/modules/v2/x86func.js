@@ -1461,10 +1461,11 @@ X86.fnLSL = function(dst, src)
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
-     * TODO: LSL is explicitly documented as ALSO requiring a non-null selector, so we check X86.SEL.MASK;
-     * are there any other instructions that were, um, less explicit but also require a non-null selector?
+     * LSL is explicitly documented as ALSO requiring a non-null selector.  The null selector is index
+     * zero in the GDT (TI clear); an LDT selector with index zero (TI set) is NOT null, so we include
+     * SEL.LDT in the mask (as the CODE and STACK cases of loadDesc8 make the same GDT-only distinction).
      */
-    if ((src & X86.SEL.MASK) && this.segVER.load(src) !== X86.ADDR_INVALID) {
+    if ((src & (X86.SEL.MASK | X86.SEL.LDT)) && this.segVER.load(src) !== X86.ADDR_INVALID) {
         let fConforming = ((this.segVER.acc & X86.DESC.ACC.TYPE.CODE_CONFORMING) == X86.DESC.ACC.TYPE.CODE_CONFORMING);
         if ((fConforming || this.segVER.dpl >= this.nCPL) && this.segVER.dpl >= (src & X86.SEL.RPL)) {
             this.setZF();

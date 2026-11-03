@@ -24433,11 +24433,16 @@ FPUx86.FRSTOR = function()
     let cpu = this.cpu;
     let addr = this.loadEnv(cpu.regEA);
     let a = this.intTmpTR;
+    /**
+     * We store each register directly, rather than with setTR(), which would mark every register in use and
+     * check every value for an exception; FRSTOR must restore the tags and status that loadEnv() loaded, as-is
+     * (eg, a session switch that saves and restores an FPU stack with only a few values on it).
+     */
     for (let i = 0; i < this.regStack.length; i++) {
         a[0] = cpu.getLong(addr);
         a[1] = cpu.getLong(addr += 4);
         a[2] = cpu.getShort(addr += 4);
-        this.setTR(i, a);
+        this.regStack[(this.iST + i) & 7] = this.getLRFromTR(a);
         addr += 2;
     }
 };
@@ -25455,10 +25460,12 @@ class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkReadProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -25509,10 +25516,12 @@ class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkWriteProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -26114,7 +26123,12 @@ class Segx86 {
             break;
 
         case Segx86.ID.STACK:
-            if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
+            /**
+             * A null selector (table offset zero) is invalid for SS, but ONLY in the GDT: an LDT selector with
+             * index zero (ie, with the TI bit set) is perfectly valid, so we must not treat it as null here (the
+             * CODE case above makes the same GDT-only distinction when it zeroes "type" for a null selector).
+             */
+            if ((!selMasked && !(sel & X86.SEL.LDT)) || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }
@@ -28213,10 +28227,11 @@ X86.fnLSL = function(dst, src)
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
-     * TODO: LSL is explicitly documented as ALSO requiring a non-null selector, so we check X86.SEL.MASK;
-     * are there any other instructions that were, um, less explicit but also require a non-null selector?
+     * LSL is explicitly documented as ALSO requiring a non-null selector.  The null selector is index
+     * zero in the GDT (TI clear); an LDT selector with index zero (TI set) is NOT null, so we include
+     * SEL.LDT in the mask (as the CODE and STACK cases of loadDesc8 make the same GDT-only distinction).
      */
-    if ((src & X86.SEL.MASK) && this.segVER.load(src) !== X86.ADDR_INVALID) {
+    if ((src & (X86.SEL.MASK | X86.SEL.LDT)) && this.segVER.load(src) !== X86.ADDR_INVALID) {
         let fConforming = ((this.segVER.acc & X86.DESC.ACC.TYPE.CODE_CONFORMING) == X86.DESC.ACC.TYPE.CODE_CONFORMING);
         if ((fConforming || this.segVER.dpl >= this.nCPL) && this.segVER.dpl >= (src & X86.SEL.RPL)) {
             this.setZF();
@@ -81687,7 +81702,14 @@ class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined) {
+            /**
+             * VxD service calls (INT 20h followed by a service ID) come only from 32-bit code; other protected-mode
+             * INT 20h calls (eg, a 16-bit program terminating under BASIC-DOS or in a Windows DOS box) are not VxD
+             * calls, and a temporary breakpoint at one of those addresses would halt the machine whenever any other
+             * code later ran at the same linear address.
+             */
+            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined &&
+                this.cpu.segCS.sizeData == 4) {
                 let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                 /**
                  * Since nDebugState is normally only used by addresses stored in the history buffer

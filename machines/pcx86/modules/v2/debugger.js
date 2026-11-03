@@ -3805,7 +3805,14 @@ export default class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined) {
+            /**
+             * VxD service calls (INT 20h followed by a service ID) come only from 32-bit code; other protected-mode
+             * INT 20h calls (eg, a 16-bit program terminating under BASIC-DOS or in a Windows DOS box) are not VxD
+             * calls, and a temporary breakpoint at one of those addresses would halt the machine whenever any other
+             * code later ran at the same linear address.
+             */
+            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined &&
+                this.cpu.segCS.sizeData == 4) {
                 let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                 /**
                  * Since nDebugState is normally only used by addresses stored in the history buffer

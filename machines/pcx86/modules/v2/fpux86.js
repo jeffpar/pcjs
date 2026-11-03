@@ -2728,11 +2728,16 @@ FPUx86.FRSTOR = function()
     let cpu = this.cpu;
     let addr = this.loadEnv(cpu.regEA);
     let a = this.intTmpTR;
+    /**
+     * We store each register directly, rather than with setTR(), which would mark every register in use and
+     * check every value for an exception; FRSTOR must restore the tags and status that loadEnv() loaded, as-is
+     * (eg, a session switch that saves and restores an FPU stack with only a few values on it).
+     */
     for (let i = 0; i < this.regStack.length; i++) {
         a[0] = cpu.getLong(addr);
         a[1] = cpu.getLong(addr += 4);
         a[2] = cpu.getShort(addr += 4);
-        this.setTR(i, a);
+        this.regStack[(this.iST + i) & 7] = this.getLRFromTR(a);
         addr += 2;
     }
 };
