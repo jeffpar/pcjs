@@ -1696,6 +1696,12 @@ export default class Debuggerx86 extends DbgLib {
         let getByte = function(addr) { return cpu.probeAddr(addr, 1) & 0xff; };
         let getShort = function(addr) { return cpu.probeAddr(addr, 2) & 0xffff; };
         let getLong = function(addr) { return cpu.probeAddr(addr, 4) >>> 0; };
+        /**
+         * @param {number} sel
+         * @param {number} off
+         * @param {number} [type] (default is based on current CPU mode)
+         * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
+         */
         let getLinear = function(sel, off, type) { return dbg.getAddr(dbg.newAddr(off, sel, undefined, type)); };
         let getName = function(addr) {
             let s = "";
