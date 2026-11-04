@@ -73,6 +73,7 @@ export default class PC extends PCJSLib {
     localDisk = "harddisk.json";
     localDiskette = "floppy.json";
     diskLabel = "default";
+    diskOrder = "";             // root entries that come first, from --order (eg, "EXT,DEMOS")
     machineDrive = "";          // current drive *inside* the machine
     machineDir = "";            // current directory *inside* the machine
     maxFiles = 1024;            // default disk file limit
@@ -1205,6 +1206,7 @@ export default class PC extends PCJSLib {
             trimFAT:        false,
             partitioned:    undefined,
             files:          [],
+            order:          null,   // names of the root entries that come first (see --order)
             disk:           null,   // cached DiskInfo object, for debugging purposes
             volume:         null,   // cached VolInfo object, for debugging purposes
             driveManifest:  null,
@@ -1421,7 +1423,9 @@ export default class PC extends PCJSLib {
              * --fpu installs an 8087 by turning off switch 2 of a PC or XT's SW1 (eg, "01000001" becomes
              * "00000001"); a machine without SW1 (eg, a PC AT) gets an FPU component matching its CPU instead
              * (eg, an 80287), which turns on the FPU switch that the CMOS equipment byte reports.  And --ram sets
-             * the size of the machine's first RAM block (eg, --ram=640K).
+             * the size of the machine's first RAM block (eg, --ram=640K); on an 80286 or later machine, anything
+             * over 640K goes in an extended memory block at 1Mb instead (eg, --ram=2M gives 640K of conventional
+             * memory and 1408K of extended memory, like the PCjs 2048K PC AT machines).
              */
             if (pc.fpu && config['chipset']) {
                 let sw1 = config['chipset']['sw1'];
@@ -1433,8 +1437,15 @@ export default class PC extends PCJSLib {
                 }
             }
             if (pc.kbRAM && config['ram']) {
-                let ram = Array.isArray(config['ram'])? config['ram'][0] : config['ram'];
-                ram['size'] = pc.kbRAM * 1024;
+                let rams = Array.isArray(config['ram'])? config['ram'] : [config['ram']];
+                let kbLow = pc.kbRAM;
+                if (kbLow > 640 && config['cpu'] && config['cpu']['model'] >= 80286) {
+                    rams = rams.filter((ram) => ram['id'] != "ramExt");
+                    rams.push({'id': "ramExt", 'addr': 0x100000, 'size': (kbLow - 640) * 1024});
+                    config['ram'] = rams;
+                    kbLow = 640;
+                }
+                rams[0]['size'] = kbLow * 1024;
             }
 
             if (sFile.endsWith(pc.savedMachine) && config['computer'] && pc.savedState) {
@@ -1840,6 +1851,7 @@ export default class PC extends PCJSLib {
         let driveInfo = this.drives[this.driveBuild];
 
         driveInfo.files = [];
+        driveInfo.order = this.diskOrder? this.diskOrder.split(',') : null;
         driveInfo.disk = null;
         driveInfo.volume = null;
         driveInfo.verDOS = verDOS;
@@ -1912,16 +1924,16 @@ export default class PC extends PCJSLib {
          */
         let attrHelper = this.systemType == "bd"? DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM : attrHidden;
         /**
-         * Text files from the system's list other than CONFIG.SYS (eg, BASIC-DOS's HELP.TXT) are added to the root
-         * after AUTOEXEC.BAT, so that the root begins with the system files and CONFIG.SYS (in the order the system's
-         * list gives them; BASIC-DOS puts CONFIG.SYS first), followed by AUTOEXEC.BAT.
+         * Text files from the system's list other than CONFIG.SYS (if any) are added to the root after AUTOEXEC.BAT,
+         * so that the root begins with the system files and CONFIG.SYS (in the order the system's list gives them;
+         * BASIC-DOS puts CONFIG.SYS first), followed by AUTOEXEC.BAT.
          */
         let aDeferred = [];
         for (let name of aSystemFiles) {
             let desc, attr;
             if (!diSystem) {
                 /**
-                 * If CONFIG.SYS or a text file (eg, HELP.TXT) from the system's list also exists in the directory we're
+                 * If CONFIG.SYS or another text file from the system's list also exists in the directory we're
                  * building, the directory's copy wins (taking the system file's place in the root), so that a directory
                  * (eg, configs/console/bios) can provide its own CONFIG.SYS.
                  */
@@ -1936,8 +1948,8 @@ export default class PC extends PCJSLib {
                 let dbFile = await diskLib.readFileAsync(name, null, true);
                 if (dbFile && this.normalize && diskLib.isTextFile(name)) {
                     /**
-                     * As readDirFiles() does for --normalize, convert the line endings of text files (eg, HELP.TXT,
-                     * whose offsets in BASIC-DOS's COMMAND.COM assume CR/LF line endings).
+                     * As readDirFiles() does for --normalize, convert the line endings of text files (eg, CONFIG.SYS)
+                     * to CR/LF.
                      */
                     let text = await diskLib.readFileAsync(name, "utf8", true);
                     dbFile = new DataBuffer(text.replace(/\r?\n/g, "\r\n"));
@@ -3568,6 +3580,7 @@ export default class PC extends PCJSLib {
         this.noSync = PC.removeFlag(argv, 'nosync', this.noSync);
         this.floppy = PC.removeFlag(argv, 'floppy', this.floppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
+        this.diskOrder = PC.removeArg(argv, 'order', defaults['order'] || this.diskOrder);
         this.normalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.normalize);
         this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
 
@@ -3963,7 +3976,7 @@ export default class PC extends PCJSLib {
 
         stdin.resume();
         stdin.setEncoding("utf8");
-        stdin.setRawMode(true);
+        if (stdin.setRawMode) stdin.setRawMode(true);   // (stdin may not be a TTY)
 
         stdin.on("data", function(data) {
             let machine = pc.machine;
@@ -4062,7 +4075,7 @@ export default class PC extends PCJSLib {
         } else if (this.drives[this.driveBuild].driveManifest) {
             printf("warning: any changes to disk not saved\n");
         }
-        node.process.stdin.setRawMode(false);
+        if (node.process.stdin.setRawMode) node.process.stdin.setRawMode(false);
         if (code) printf("shutting down (%d)\n", code);
         if (this.test) printf("\n");
         node.process.exit(code);
@@ -4085,7 +4098,7 @@ export default class PC extends PCJSLib {
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
-                "--ram=[nK]":               "\tset RAM size (eg, 640K)",
+                "--ram=[nK]":               "\tset RAM size (eg, 640K, or 2M on a PC AT)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
@@ -4097,6 +4110,7 @@ export default class PC extends PCJSLib {
                 "--hidden=[number]":        "set hidden sectors (default is 1)",
                 "--label=[string]":         "set volume label of disk image",
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
+                "--order=[names]":          "set root entries that come first (eg, EXT,DEMOS)",
                 "--save=[filename]":        "save drive disk image and exit",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",

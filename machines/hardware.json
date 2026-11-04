@@ -971,6 +971,9 @@
         "5170": {
           "@title": "VT100 connected to IBM PC AT",
           "@redirect_from": "/devices/pcx86/machine/5170/ega/2048kb/rev3/vt100/"
+        },
+        "sdf": {
+          "@title": "VT100 connected to SDF.ORG"
         }
       }
     }

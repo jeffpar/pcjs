@@ -941,6 +941,12 @@
   "serialPort": {
     "class": "VT100Serial"
   },
+  "sdf": {
+    "class": "SocketIO",
+    "url": "wss://connect.sdf.org:3000/socket.io/?EIO=4&transport=websocket",
+    "cols": 80,
+    "rows": 24
+  },
   "video": {
     "class": "VT100Video",
     "bus": "busMemory",

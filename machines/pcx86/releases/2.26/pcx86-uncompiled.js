@@ -16481,12 +16481,17 @@ class CPU extends Component {
                 nCycles = ms > 0? this.getMSCycles(ms) : -ms;
                 /**
                  * If the CPU is currently executing a burst of cycles, the number of cycles it has executed in
-                 * that burst so far must NOT be charged against the cycle timeout we're about to set.  The simplest
-                 * way to resolve that is to immediately call endBurst() and bias the cycle timeout by the number
-                 * of cycles that the burst executed.
+                 * that burst so far must NOT be charged against the cycle timeout we're about to set.  When the
+                 * burst ends, all its cycles are charged against every timer (including this one), so we bias the
+                 * cycle timeout by the number of cycles that the burst has executed, and then end the burst, so
+                 * that the new timeout is honored.
+                 *
+                 * We used to end the burst with endBurst(), but that discarded the cycles the burst had executed,
+                 * so they were never charged against any timer, making all of them (including this one) fire late.
                  */
                 if (this.flags.running) {
-                    nCycles += this.endBurst();
+                    nCycles += this.nBurstCycles - this.nStepCycles;
+                    this.setBurstCycles(0);
                 }
                 timer[1] = nCycles;
             }
@@ -24428,11 +24433,16 @@ FPUx86.FRSTOR = function()
     let cpu = this.cpu;
     let addr = this.loadEnv(cpu.regEA);
     let a = this.intTmpTR;
+    /**
+     * We store each register directly, rather than with setTR(), which would mark every register in use and
+     * check every value for an exception; FRSTOR must restore the tags and status that loadEnv() loaded, as-is
+     * (eg, a session switch that saves and restores an FPU stack with only a few values on it).
+     */
     for (let i = 0; i < this.regStack.length; i++) {
         a[0] = cpu.getLong(addr);
         a[1] = cpu.getLong(addr += 4);
         a[2] = cpu.getShort(addr += 4);
-        this.setTR(i, a);
+        this.regStack[(this.iST + i) & 7] = this.getLRFromTR(a);
         addr += 2;
     }
 };
@@ -25450,10 +25460,12 @@ class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkReadProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -25504,10 +25516,12 @@ class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkWriteProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -25767,12 +25781,14 @@ class Segx86 {
                  * and it's probably fine for the LDT, but it's definitely NOT fine for the GDT, because
                  * that's a reference to the null selector.  A null selector is allowed in DS, ES, FS, or GS,
                  * but never CS or SS.  Since there's no parameter that tells us which table we're using,
-                 * we have to check manually.
+                 * we have to check manually: with a zero offset, addrDesc is the table's base, so it's the
+                 * GDT's null selector only if addrDesc is the GDT's base (an IDT or LDT can lie within the
+                 * GDT's limit, as BASIC-DOS's do, so a range check would reject their first entries).
                  *
                  * If we ARE attempting to load a null selector from the GDT, then we zero type, ensuring that
                  * sizeGate will remain invalid (-1), triggering a GP_FAULT below.
                  */
-                if (addrDesc >= cpu.addrGDT && addrDesc < cpu.addrGDTLimit) type = 0;
+                if (addrDesc == cpu.addrGDT) type = 0;
             }
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
@@ -26056,7 +26072,11 @@ class Segx86 {
             break;
 
         case Segx86.ID.DATA:
-            if (selMasked) {
+            /**
+             * As in the STACK case, only index zero in the GDT is the null selector; an LDT selector with index
+             * zero must be checked like any other.
+             */
+            if (selMasked || (sel & X86.SEL.LDT)) {
                 /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
@@ -26097,8 +26117,16 @@ class Segx86 {
                     return X86.ADDR_INVALID;
                 }
                 /**
-                 * TODO: This would be a good place to perform some additional access rights checks, too.
+                 * A data segment or non-conforming code segment can be loaded only if its DPL is numerically
+                 * greater than or equal to both the CPL and the selector's RPL, which is what keeps less privileged
+                 * code from loading a more privileged selector (and, through RPL, from having more privileged code
+                 * load one on its behalf).
                  */
+                let dplData = (acc & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
+                if ((type & X86.DESC.ACC.TYPE.CODE_CONFORMING) != X86.DESC.ACC.TYPE.CODE_CONFORMING && (dplData < cpu.nCPL || dplData < (sel & X86.SEL.RPL))) {
+                    X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+                    return X86.ADDR_INVALID;
+                }
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
                     X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;
@@ -26107,7 +26135,12 @@ class Segx86 {
             break;
 
         case Segx86.ID.STACK:
-            if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
+            /**
+             * A null selector (table offset zero) is invalid for SS, but ONLY in the GDT: an LDT selector with
+             * index zero (ie, with the TI bit set) is perfectly valid, so we must not treat it as null here (the
+             * CODE case above makes the same GDT-only distinction when it zeroes "type" for a null selector).
+             */
+            if ((!selMasked && !(sel & X86.SEL.LDT)) || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }
@@ -28206,10 +28239,11 @@ X86.fnLSL = function(dst, src)
      * Currently, segVER.load() will return an error only if the selector is beyond the bounds of the
      * descriptor table or the descriptor is not for a segment.
      *
-     * TODO: LSL is explicitly documented as ALSO requiring a non-null selector, so we check X86.SEL.MASK;
-     * are there any other instructions that were, um, less explicit but also require a non-null selector?
+     * LSL is explicitly documented as ALSO requiring a non-null selector.  The null selector is index
+     * zero in the GDT (TI clear); an LDT selector with index zero (TI set) is NOT null, so we include
+     * SEL.LDT in the mask (as the CODE and STACK cases of loadDesc8 make the same GDT-only distinction).
      */
-    if ((src & X86.SEL.MASK) && this.segVER.load(src) !== X86.ADDR_INVALID) {
+    if ((src & (X86.SEL.MASK | X86.SEL.LDT)) && this.segVER.load(src) !== X86.ADDR_INVALID) {
         let fConforming = ((this.segVER.acc & X86.DESC.ACC.TYPE.CODE_CONFORMING) == X86.DESC.ACC.TYPE.CODE_CONFORMING);
         if ((fConforming || this.segVER.dpl >= this.nCPL) && this.segVER.dpl >= (src & X86.SEL.RPL)) {
             this.setZF();
@@ -30703,8 +30737,20 @@ X86.helpIRET = function()
             }
         }
 
-        if (this.setCSIP(newIP, newCS, false) != null) {
+        let fSwitch = this.setCSIP(newIP, newCS, false);
+        if (fSwitch != null) {
             this.setPS(newPS, cpl);
+            /**
+             * An IRET to an outer privilege level has the same effect on DS and ES as a RETF (see helpRETF).
+             */
+            if (fSwitch) {
+                X86.zeroSeg.call(this, this.segDS);
+                X86.zeroSeg.call(this, this.segES);
+                if (I386 && this.model >= X86.MODEL_80386) {
+                    X86.zeroSeg.call(this, this.segFS);
+                    X86.zeroSeg.call(this, this.segGS);
+                }
+            }
             if (this.cIntReturn) this.checkIntReturn(this.regLIP);
         }
     }
@@ -30946,6 +30992,13 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt, fReturn)
         } else {
 
             this.opFlags |= X86.OPFLAG.FAULT;
+            /**
+             * A faulting instruction doesn't complete, so it mustn't generate a single-step trap either; otherwise,
+             * the trap would occur at the start of the fault handler (eg, a debugger tracing a faulting instruction
+             * would stop at the handler's first instruction instead of seeing the fault).  The flags pushed for the
+             * fault still have TF set, so if the handler restarts the instruction, it will be single-stepped again.
+             */
+            this.intFlags &= ~X86.INTFLAG.TRAP;
         }
 
         /**
@@ -31136,7 +31189,7 @@ X86.zeroSeg = function(seg)
     if (seg.sel & X86.SEL.MASK) {
         if (acc == X86.DESC.ACC.TYPE.CODE_EXECONLY ||           // non-readable code segment (not allowed)
             acc == X86.DESC.ACC.TYPE.CODE_CONFORMING ||         // non-readable code segment (not allowed)
-            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL && seg.dpl < (seg.sel & X86.SEL.RPL)) {
+            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL) {
             seg.load(0);
         }
     }
@@ -79543,29 +79596,146 @@ class Debuggerx86 extends DbgLib {
     }
 
     /**
+     * dumpArena()
+     *
+     * Dumps BASIC-DOS's memory arena the way its DEBUG.COM's DM command does: every block in address order, with
+     * its address, length, owner, and name (or type), except that each of the system's blocks (and the memory below
+     * the first MCB) is shown as the drivers in it, plus any memory before or between them, as SYS (or DOS, if DOS
+     * is in it).
+     *
+     * BASIC-DOS stores the real-mode address of its arena in CPU_ARENA (0:0514h): either its first MCB (when the
+     * 8086 CPU$ driver manages memory) or its first PMB (when the 80286 CPU$ driver does, with a table of PMBs in
+     * its system area, above 1Mb).  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
+     * mode and selectors in protected mode.  DOS is wherever its INT 20h handler is (DM gets DOS's segment from
+     * DOS_MSC_GETVARS instead, which we can't call).
+     *
+     * @this {Debuggerx86}
+     */
+    dumpArena()
+    {
+        let dbg = this, cpu = this.cpu;
+        let getByte = function(addr) { return cpu.probeAddr(addr, 1) & 0xff; };
+        let getShort = function(addr) { return cpu.probeAddr(addr, 2) & 0xffff; };
+        let getLong = function(addr) { return cpu.probeAddr(addr, 4) >>> 0; };
+        /**
+         * @param {number} sel
+         * @param {number} off
+         * @param {number} [type] (default is based on current CPU mode)
+         * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
+         */
+        let getLinear = function(sel, off, type) { return dbg.getAddr(dbg.newAddr(off, sel, undefined, type)); };
+        let getName = function(addr) {
+            let s = "";
+            for (let i = 0; i < 8; i++) {
+                let b = getByte(addr + i);
+                if (b) s += (b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.');
+            }
+            return s;
+        };
+        /**
+         * Gather the blocks, describing each MCB the way the 8086 CPU$ driver's CPU_QUERY function does.
+         */
+        let aBlocks = [];
+        let addr = (getShort(Debuggerx86.BASICDOS.CPU_ARENA + 2) << 4) + getShort(Debuggerx86.BASICDOS.CPU_ARENA);
+        let fPMB = (addr >= 0x100000);
+        while (addr && aBlocks.length < 1024) {     // (CPU_ARENA is zero until CPU$ sets it, if RAM was zeroed)
+            let sig = getByte(addr), block;
+            if (sig != 0x4D && sig != 0x5A) break;
+            if (fPMB) {
+                block = {type: getByte(addr + 1), owner: getShort(addr + 2), addr: getLong(addr + 4), len: getLong(addr + 8), mcbType: getByte(addr + 0x10), name: addr + 0x18};
+                addr += 0x20;
+            } else {
+                let owner = getShort(addr + 1), paras = getShort(addr + 3);
+                block = {type: owner? Debuggerx86.BASICDOS.PMB_USED : 0, owner: owner, addr: addr + 0x10, len: paras << 4, mcbType: getByte(addr + 5), name: addr + 8};
+                addr += (paras + 1) << 4;
+            }
+            aBlocks.push(block);
+            if (sig == 0x5A) break;
+        }
+        if (!aBlocks.length) {
+            this.printf("no BASIC-DOS memory arena\n");
+            return;
+        }
+        let fProt = cpu.isProtMode();
+        let selDOS = getShort(cpu.addrIDT + (0x20 << (fProt? 3 : 2)) + 2);
+        let addrDOS = getLinear(selDOS, 0, fProt? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL);
+        let addrCur = 0;
+        let printSpan = function(addrEnd) {
+            dbg.printf("%06X %06X ", addrCur & 0xffffff, (addrEnd - addrCur) & 0xffffff);
+            addrCur = addrEnd;
+        };
+        let printSys = function(addrEnd) {
+            if (addrEnd != addrCur) {
+                let fDOS = (addrDOS !== X86.ADDR_INVALID && addrDOS >= addrCur && addrDOS < addrEnd);
+                printSpan(addrEnd);
+                dbg.printf("%04X <%s>\n", Debuggerx86.BASICDOS.OWNER_SYS, fDOS? "DOS" : "SYS");
+            }
+        };
+        let printDrivers = function(addrStart, addrEnd) {
+            addrCur = addrStart;
+            let off = getShort(Debuggerx86.BASICDOS.DD_LIST), sel = getShort(Debuggerx86.BASICDOS.DD_LIST + 2);
+            for (let n = 0; off != 0xffff && n < 256; n++) {
+                let addrDrv = getLinear(sel, off);
+                if (addrDrv === X86.ADDR_INVALID) break;
+                off = getShort(addrDrv);
+                sel = getShort(addrDrv + 2);
+                if (addrDrv < addrCur || addrDrv >= addrEnd) continue;
+                printSys(addrDrv);
+                let addrNext = (off == 0xffff? X86.ADDR_INVALID : getLinear(sel, off));
+                printSpan(addrNext !== X86.ADDR_INVALID && addrNext > addrCur && addrNext <= addrEnd? addrNext : addrEnd);
+                dbg.printf("%04X %s\n", Debuggerx86.BASICDOS.OWNER_SYS, getName(addrDrv + 0x0A));
+            }
+            printSys(addrEnd);
+        };
+        this.printf("Addr   Length Own  Name\n");
+        for (let i = 0; i < aBlocks.length; i++) {
+            let block = aBlocks[i];
+            let fNamed = !!getByte(block.name);
+            if (!i && block.addr) {
+                printDrivers(0, block.addr - 0x10);
+            }
+            if (block.type == Debuggerx86.BASICDOS.PMB_USED && block.owner == Debuggerx86.BASICDOS.OWNER_SYS && !fNamed) {
+                printDrivers(block.addr, block.addr + block.len);
+                continue;
+            }
+            this.printf("%06X %06X %04X ", block.addr & 0xffffff, block.len & 0xffffff, block.owner);
+            if (fNamed) {
+                this.printf("%s\n", getName(block.name));
+                continue;
+            }
+            let type = block.type;
+            if (type == Debuggerx86.BASICDOS.PMB_USED) {
+                type = (block.owner <= Debuggerx86.BASICDOS.OWNER_SYS? block.owner : (block.mcbType || 0xff));
+            }
+            let sType = Debuggerx86.BASICDOS.TYPES[type];
+            this.printf("%s\n", sType? '<' + sType + '>' : "");
+        }
+    }
+
+    /**
      * dumpDOS(asArgs)
      *
-     * Dumps DOS MCBs (Memory Control Blocks).
-     *
-     * TODO: Add some code to detect the current version of DOS (if any) and locate the first MCB automatically.
+     * Dumps DOS MCBs (Memory Control Blocks), starting with the given MCB segment, or without one, BASIC-DOS's
+     * memory arena (see dumpArena()).
      *
      * @this {Debuggerx86}
      * @param {Array.<string>} asArgs
      */
     dumpDOS(asArgs)
     {
-        let mcb;
         let sMCB = asArgs[0];
-        if (sMCB) {
-            mcb = this.parseValue(sMCB);
+        if (!sMCB) {
+            this.dumpArena();
+            return;
         }
+        let mcb = this.parseValue(sMCB);
         if (mcb === undefined) {
             this.printf("invalid MCB\n");
             return;
         }
         this.printf("dumpMCB(%#06x)\n", mcb);
         while (mcb) {
-            let dbgAddr = this.newAddr(0, mcb);
+            let dbgAddr = this.newAddr(0, mcb, undefined, Debuggerx86.ADDRTYPE.REAL);
             let bSig = this.getByte(dbgAddr, 1);
             let wPID = this.getShort(dbgAddr, 2);
             let wParas = this.getShort(dbgAddr, 5);
@@ -81562,7 +81732,14 @@ class Debuggerx86 extends DbgLib {
     {
         if (this.vectorSkip < 0) {
             this.vectorTrace = vector;
-            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined) {
+            /**
+             * VxD service calls (INT 20h followed by a service ID) come only from 32-bit code; other protected-mode
+             * INT 20h calls (eg, a 16-bit program terminating under BASIC-DOS or in a Windows DOS box) are not VxD
+             * calls, and a temporary breakpoint at one of those addresses would halt the machine whenever any other
+             * code later ran at the same linear address.
+             */
+            if (vector == Interrupts.VxD.VECTOR && fProt && this.fWinDbg !== undefined &&
+                this.cpu.segCS.sizeData == 4) {
                 let dbgAddr = this.newAddr(this.cpu.getIP(), this.cpu.getCS());
                 /**
                  * Since nDebugState is normally only used by addresses stored in the history buffer
@@ -84342,11 +84519,11 @@ class Debuggerx86 extends DbgLib {
                     bOp2 = this.getByte(dbgAddr);
                     this.incAddr(dbgAddr, 1);
                     /**
-                     * Look for INT 0x32 functions 4-6 and skip over the null-terminated string following the interrupt.
+                     * Look for INT 0x2B functions 3-6 and skip over the null-terminated string following the interrupt.
                      */
-                    if (bOp2 == 0x32) {
+                    if (bOp2 == 0x2B) {
                         let regAH = (this.cpu.regEAX >> 8) & 0xFF;
-                        if (regAH >= 0x04 && regAH <= 0x06) {
+                        if (regAH >= 0x03 && regAH <= 0x06) {
                             let limit = 128;
                             while ((bOp2 = this.getByte(dbgAddr)) && limit--) {
                                 this.incAddr(dbgAddr, 1);
@@ -85080,6 +85257,22 @@ if (DEBUGGER) {
         V86:        0x03,
         LINEAR:     0x04,
         PHYSICAL:   0x05
+    };
+
+    /**
+     * BASIC-DOS definitions for dumpArena(): the low memory locations of DD_LIST and CPU_ARENA (see bios.inc),
+     * PMBTYPE_USED (see cpu.inc), MCBOWNER_SYSTEM (see dosapi.inc), and the names that DEBUG.COM's DM command
+     * displays for each block type (a PMB type, an owner, or an MCB type; see MA_TYPES in dbgdev.asm).
+     */
+    Debuggerx86.BASICDOS = {
+        DD_LIST:    0x50A,
+        CPU_ARENA:  0x514,
+        PMB_USED:   0x01,
+        OWNER_SYS:  0x08,
+        TYPES: {
+            0x00: "FREE", 0x02: "CPU$", 0x03: "RSVD", 0x08: "SYS", 0x41: "ARR", 0x43: "CODE", 0x45: "ENV",
+            0x46: "FUNC", 0x53: "STR", 0x54: "TEXT", 0x56: "VAR", 0xFF: "DATA"
+        }
     };
 
     /**

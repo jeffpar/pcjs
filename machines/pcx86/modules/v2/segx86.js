@@ -394,10 +394,12 @@ export default class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkReadProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -448,10 +450,12 @@ export default class Segx86 {
      * @param {number} off is a segment-relative offset
      * @param {number} cb is number of bytes to check (1, 2 or 4)
      * @returns {number} corresponding linear address if valid, X86.ADDR_INVALID if not
+     *
+     * As on an 80286, a violation through SS is a stack fault, and any other is a general protection fault.
      */
     checkWriteProtDisallowed(off, cb)
     {
-        X86.helpFault.call(this.cpu, X86.EXCEPTION.GP_FAULT, 0);
+        X86.helpFault.call(this.cpu, this.id == Segx86.ID.STACK? X86.EXCEPTION.SS_FAULT : X86.EXCEPTION.GP_FAULT, 0);
         return X86.ADDR_INVALID;
     }
 
@@ -711,12 +715,14 @@ export default class Segx86 {
                  * and it's probably fine for the LDT, but it's definitely NOT fine for the GDT, because
                  * that's a reference to the null selector.  A null selector is allowed in DS, ES, FS, or GS,
                  * but never CS or SS.  Since there's no parameter that tells us which table we're using,
-                 * we have to check manually.
+                 * we have to check manually: with a zero offset, addrDesc is the table's base, so it's the
+                 * GDT's null selector only if addrDesc is the GDT's base (an IDT or LDT can lie within the
+                 * GDT's limit, as BASIC-DOS's do, so a range check would reject their first entries).
                  *
                  * If we ARE attempting to load a null selector from the GDT, then we zero type, ensuring that
                  * sizeGate will remain invalid (-1), triggering a GP_FAULT below.
                  */
-                if (addrDesc >= cpu.addrGDT && addrDesc < cpu.addrGDTLimit) type = 0;
+                if (addrDesc == cpu.addrGDT) type = 0;
             }
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
@@ -1000,7 +1006,11 @@ export default class Segx86 {
             break;
 
         case Segx86.ID.DATA:
-            if (selMasked) {
+            /**
+             * As in the STACK case, only index zero in the GDT is the null selector; an LDT selector with index
+             * zero must be checked like any other.
+             */
+            if (selMasked || (sel & X86.SEL.LDT)) {
                 /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
@@ -1041,8 +1051,16 @@ export default class Segx86 {
                     return X86.ADDR_INVALID;
                 }
                 /**
-                 * TODO: This would be a good place to perform some additional access rights checks, too.
+                 * A data segment or non-conforming code segment can be loaded only if its DPL is numerically
+                 * greater than or equal to both the CPL and the selector's RPL, which is what keeps less privileged
+                 * code from loading a more privileged selector (and, through RPL, from having more privileged code
+                 * load one on its behalf).
                  */
+                let dplData = (acc & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
+                if ((type & X86.DESC.ACC.TYPE.CODE_CONFORMING) != X86.DESC.ACC.TYPE.CODE_CONFORMING && (dplData < cpu.nCPL || dplData < (sel & X86.SEL.RPL))) {
+                    X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+                    return X86.ADDR_INVALID;
+                }
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
                     X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;
@@ -1051,7 +1069,12 @@ export default class Segx86 {
             break;
 
         case Segx86.ID.STACK:
-            if (!selMasked || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
+            /**
+             * A null selector (table offset zero) is invalid for SS, but ONLY in the GDT: an LDT selector with
+             * index zero (ie, with the TI bit set) is perfectly valid, so we must not treat it as null here (the
+             * CODE case above makes the same GDT-only distinction when it zeroes "type" for a null selector).
+             */
+            if ((!selMasked && !(sel & X86.SEL.LDT)) || type < X86.DESC.ACC.TYPE.SEG || (type & (X86.DESC.ACC.TYPE.CODE | X86.DESC.ACC.TYPE.WRITABLE)) != X86.DESC.ACC.TYPE.WRITABLE) {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
                 return X86.ADDR_INVALID;
             }

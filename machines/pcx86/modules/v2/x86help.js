@@ -584,8 +584,20 @@ X86.helpIRET = function()
             }
         }
 
-        if (this.setCSIP(newIP, newCS, false) != null) {
+        let fSwitch = this.setCSIP(newIP, newCS, false);
+        if (fSwitch != null) {
             this.setPS(newPS, cpl);
+            /**
+             * An IRET to an outer privilege level has the same effect on DS and ES as a RETF (see helpRETF).
+             */
+            if (fSwitch) {
+                X86.zeroSeg.call(this, this.segDS);
+                X86.zeroSeg.call(this, this.segES);
+                if (I386 && this.model >= X86.MODEL_80386) {
+                    X86.zeroSeg.call(this, this.segFS);
+                    X86.zeroSeg.call(this, this.segGS);
+                }
+            }
             if (this.cIntReturn) this.checkIntReturn(this.regLIP);
         }
     }
@@ -827,6 +839,13 @@ X86.helpFault = function(nFault, nError, nCycles, fHalt, fReturn)
         } else {
             this.assert(nFault >= 0);
             this.opFlags |= X86.OPFLAG.FAULT;
+            /**
+             * A faulting instruction doesn't complete, so it mustn't generate a single-step trap either; otherwise,
+             * the trap would occur at the start of the fault handler (eg, a debugger tracing a faulting instruction
+             * would stop at the handler's first instruction instead of seeing the fault).  The flags pushed for the
+             * fault still have TF set, so if the handler restarts the instruction, it will be single-stepped again.
+             */
+            this.intFlags &= ~X86.INTFLAG.TRAP;
         }
 
         /**
@@ -1017,7 +1036,7 @@ X86.zeroSeg = function(seg)
     if (seg.sel & X86.SEL.MASK) {
         if (acc == X86.DESC.ACC.TYPE.CODE_EXECONLY ||           // non-readable code segment (not allowed)
             acc == X86.DESC.ACC.TYPE.CODE_CONFORMING ||         // non-readable code segment (not allowed)
-            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL && seg.dpl < (seg.sel & X86.SEL.RPL)) {
+            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL) {
             seg.load(0);
         }
     }
