@@ -512,6 +512,7 @@
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
+      "./machines/modules/v3/socketio.js",
       "./machines/modules/v3/input.js",
       "./machines/modules/v3/led.js",
       "./machines/modules/v3/monitor.js",

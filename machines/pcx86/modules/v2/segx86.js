@@ -1006,7 +1006,11 @@ export default class Segx86 {
             break;
 
         case Segx86.ID.DATA:
-            if (selMasked) {
+            /**
+             * As in the STACK case, only index zero in the GDT is the null selector; an LDT selector with index
+             * zero must be checked like any other.
+             */
+            if (selMasked || (sel & X86.SEL.LDT)) {
                 /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
@@ -1047,8 +1051,16 @@ export default class Segx86 {
                     return X86.ADDR_INVALID;
                 }
                 /**
-                 * TODO: This would be a good place to perform some additional access rights checks, too.
+                 * A data segment or non-conforming code segment can be loaded only if its DPL is numerically
+                 * greater than or equal to both the CPL and the selector's RPL, which is what keeps less privileged
+                 * code from loading a more privileged selector (and, through RPL, from having more privileged code
+                 * load one on its behalf).
                  */
+                let dplData = (acc & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
+                if ((type & X86.DESC.ACC.TYPE.CODE_CONFORMING) != X86.DESC.ACC.TYPE.CODE_CONFORMING && (dplData < cpu.nCPL || dplData < (sel & X86.SEL.RPL))) {
+                    X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+                    return X86.ADDR_INVALID;
+                }
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
                     X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;

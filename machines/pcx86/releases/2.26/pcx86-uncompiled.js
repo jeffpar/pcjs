@@ -26072,7 +26072,11 @@ class Segx86 {
             break;
 
         case Segx86.ID.DATA:
-            if (selMasked) {
+            /**
+             * As in the STACK case, only index zero in the GDT is the null selector; an LDT selector with index
+             * zero must be checked like any other.
+             */
+            if (selMasked || (sel & X86.SEL.LDT)) {
                 /**
                  * OS/2 1.0 faults on segments with "empty descriptors" multiple times during boot; for example:
                  *
@@ -26113,8 +26117,16 @@ class Segx86 {
                     return X86.ADDR_INVALID;
                 }
                 /**
-                 * TODO: This would be a good place to perform some additional access rights checks, too.
+                 * A data segment or non-conforming code segment can be loaded only if its DPL is numerically
+                 * greater than or equal to both the CPL and the selector's RPL, which is what keeps less privileged
+                 * code from loading a more privileged selector (and, through RPL, from having more privileged code
+                 * load one on its behalf).
                  */
+                let dplData = (acc & X86.DESC.ACC.DPL.MASK) >> X86.DESC.ACC.DPL.SHIFT;
+                if ((type & X86.DESC.ACC.TYPE.CODE_CONFORMING) != X86.DESC.ACC.TYPE.CODE_CONFORMING && (dplData < cpu.nCPL || dplData < (sel & X86.SEL.RPL))) {
+                    X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);
+                    return X86.ADDR_INVALID;
+                }
                 if (!(acc & X86.DESC.ACC.PRESENT)) {
                     X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, sel & X86.ERRCODE.SELMASK);
                     return X86.ADDR_INVALID;
@@ -30725,8 +30737,20 @@ X86.helpIRET = function()
             }
         }
 
-        if (this.setCSIP(newIP, newCS, false) != null) {
+        let fSwitch = this.setCSIP(newIP, newCS, false);
+        if (fSwitch != null) {
             this.setPS(newPS, cpl);
+            /**
+             * An IRET to an outer privilege level has the same effect on DS and ES as a RETF (see helpRETF).
+             */
+            if (fSwitch) {
+                X86.zeroSeg.call(this, this.segDS);
+                X86.zeroSeg.call(this, this.segES);
+                if (I386 && this.model >= X86.MODEL_80386) {
+                    X86.zeroSeg.call(this, this.segFS);
+                    X86.zeroSeg.call(this, this.segGS);
+                }
+            }
             if (this.cIntReturn) this.checkIntReturn(this.regLIP);
         }
     }
@@ -31165,7 +31189,7 @@ X86.zeroSeg = function(seg)
     if (seg.sel & X86.SEL.MASK) {
         if (acc == X86.DESC.ACC.TYPE.CODE_EXECONLY ||           // non-readable code segment (not allowed)
             acc == X86.DESC.ACC.TYPE.CODE_CONFORMING ||         // non-readable code segment (not allowed)
-            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL && seg.dpl < (seg.sel & X86.SEL.RPL)) {
+            acc < X86.DESC.ACC.TYPE.CODE_CONFORMING && seg.dpl < this.nCPL) {
             seg.load(0);
         }
     }
