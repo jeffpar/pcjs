@@ -3031,6 +3031,10 @@ export default class CPUx86 extends CPU {
     /**
      * checkIOPM(port, nPorts, fInput)
      *
+     * Any I/O instruction with CPL > IOPL (or in V86-mode, regardless of IOPL) generates a GP_FAULT, unless the
+     * current TSS is a 386 TSS whose I/O permission map allows every port involved; an 80286 TSS has no such map.
+     * As in opCLI(), there's no need to check for protected-mode, because CPL is always zero in real-mode.
+     *
      * @this {CPUx86}
      * @param {number} port (0x0000 to 0xffff)
      * @param {number} nPorts (1 to 4)
@@ -3040,15 +3044,17 @@ export default class CPUx86 extends CPU {
     checkIOPM(port, nPorts, fInput)
     {
         let bitsPorts = 0;
-        if (I386 && (this.regCR0 & X86.CR0.MSW.PE) && (this.nCPL > this.nIOPL || (this.regPS & X86.PS.VM)) && this.segTSS.addrIOPM) {
-            let offIOPM = port >>> 3;
-            let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+        if (this.nCPL > this.nIOPL || I386 && (this.regPS & X86.PS.VM)) {
             bitsPorts = ((1 << nPorts) - 1) << (port & 0x7);
-            while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
-                let bits = this.getByte(addrIOPM);
-                if (bits & bitsPorts) break;
-                bitsPorts >>>= 8;
-                addrIOPM++;
+            if (I386 && this.segTSS.addrIOPM) {
+                let offIOPM = port >>> 3;
+                let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+                while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
+                    let bits = this.getByte(addrIOPM);
+                    if (bits & bitsPorts) break;
+                    bitsPorts >>>= 8;
+                    addrIOPM++;
+                }
             }
         }
         if (bitsPorts) {

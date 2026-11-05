@@ -15,9 +15,7 @@ machines:
 
 This is an updated PCjs emulation of the 8080-based DEC VT100 Terminal.
 
-Unlike other VT100 emulators, our VT100 is emulating the original VT100 hardware, running the [VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.pages }}/machines/pcx80/) CPU emulator.
-
-This VT100 can connect to other PCjs emulations, like this [IBM PC AT](/machines/dec/vt100/5170/) or even [itself](/machines/dec/vt100/dual/), as well as physical (remote) systems, like the vintage computer systems at [SDF.ORG](/machines/dec/vt100/sdf/).
+Unlike other VT100 emulators, our VT100 is emulating the original VT100 hardware, running the [VT100 Firmware](/machines/dec/vt100/rom/) inside the [PCx80]({{ site.github.pages }}/machines/pcx80/) CPU emulator.  It can connect to other PCjs emulations, like this [IBM PC AT](/machines/dec/vt100/5170/) or even [itself](/machines/dec/vt100/dual/), as well as physical (remote) systems, like the vintage computer systems at [SDF.ORG](/machines/dec/vt100/sdf/).
 
 {% include machine.html id="vt100" %}
 
