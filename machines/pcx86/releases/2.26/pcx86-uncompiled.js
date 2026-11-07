@@ -79630,8 +79630,8 @@ class Debuggerx86 extends DbgLib {
      * is in it).
      *
      * BASIC-DOS stores the real-mode address of its arena in CPU_ARENA (0:0514h): either its first MCB (when the
-     * 8086 CPU$ driver manages memory) or its first PMB (when the 80286 CPU$ driver does, with a table of PMBs in
-     * its system area, above 1Mb).  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
+     * 8086 CPU$ driver manages memory, whose offset is always zero) or its first PMB (when the 80286 CPU$ driver
+     * does, with a table of PMBs at a nonzero offset in its system area).  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
      * mode and selectors in protected mode.  DOS is wherever its INT 20h handler is (DM gets DOS's segment from
      * DOS_MSC_GETVARS instead, which we can't call).
      *
@@ -79663,7 +79663,7 @@ class Debuggerx86 extends DbgLib {
          */
         let aBlocks = [];
         let addr = (getShort(Debuggerx86.BASICDOS.CPU_ARENA + 2) << 4) + getShort(Debuggerx86.BASICDOS.CPU_ARENA);
-        let fPMB = (addr >= 0x100000);
+        let fPMB = (getShort(Debuggerx86.BASICDOS.CPU_ARENA) != 0);
         while (addr && aBlocks.length < 1024) {     // (CPU_ARENA is zero until CPU$ sets it, if RAM was zeroed)
             let sig = getByte(addr), block;
             if (sig != 0x4D && sig != 0x5A) break;
