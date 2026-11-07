@@ -70,6 +70,12 @@ export default class SerialPort extends Component {
     static DL_DEFAULT = 0x180;      // we select an arbitrary default Divisor Latch equivalent to 300 baud
 
     /**
+     * The number of bytes a connected machine can have waiting before transmitData() holds our transmitter.  A VT100
+     * sends XOFF when it has room for 32 more bytes, so this leaves about half of them for the XOFF to take effect.
+     */
+    static PEER_MAX = 16;
+
+    /**
      * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
      */
     static RBR = {REG: 0};          // (read)
@@ -348,7 +354,7 @@ export default class SerialPort extends Component {
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
+        this.connection = this.sendData = this.updateStatus = this.sendBreak = this.getPeerCount = null;
         this.fAutoFlow = false;
         this.fFocusPending = false;
 
@@ -567,6 +573,7 @@ export default class SerialPort extends Component {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
                                 this.sendBreak = exports['receiveBreak'] || null;
+                                this.getPeerCount = exports['getReceiveCount'] || null;
                                 this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 if (this.fFocusPending) this.setFocus(false);
                                 return;
@@ -1279,10 +1286,17 @@ export default class SerialPort extends Component {
      *
      * Helper for clocking transmitted data at the expected baud rate.
      *
+     * A connected machine can't run during our bursts of instructions, so to keep us from getting too far ahead of
+     * it, the transmitter doesn't become empty while that machine has PEER_MAX or more bytes waiting.
+     *
      * @this {SerialPort}
      */
     transmitData()
     {
+        if (this.getPeerCount && this.getPeerCount.call(this.connection) >= SerialPort.PEER_MAX) {
+            this.cpu.setTimer(this.timerTransmitNext, this.getBaudTimeout());
+            return;
+        }
         this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
         this.fTHRInt = true;
         this.updateIIR();

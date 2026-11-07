@@ -483,11 +483,6 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    if (nIDT == 0x13 && this.model <= X86.MODEL_8088) {
-        if (DEBUGGER && this.dbg && this.regEAX == 0x0201 && this.regEBX == 0x7C00 && this.segES.sel == 0) {
-            this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
-        }
-    }
     let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
         /**

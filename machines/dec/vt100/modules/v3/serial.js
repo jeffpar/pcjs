@@ -61,7 +61,8 @@ export default class VT100Serial extends Device {
             'focus': this.setFocus,
             'receiveData': this.receiveData,
             'receiveStatus': this.receiveStatus,
-            'receiveBreak': this.receiveBreak
+            'receiveBreak': this.receiveBreak,
+            'getReceiveCount': this.getReceiveCount
         };
         this.onReset();
     }
@@ -253,6 +254,21 @@ export default class VT100Serial extends Device {
     isTransmitterReady()
     {
         return !!(this.bStatus & VT100Serial.UART8251.STATUS.XMIT_READY);
+    }
+
+    /**
+     * getReceiveCount()
+     *
+     * Returns the number of bytes queued by receiveData() but not yet clocked into the UART, so that a connected
+     * machine can avoid getting ahead of us; zero if we're not running, since the queue won't drain and a connected
+     * machine shouldn't have to wait for us.
+     *
+     * @this {VT100Serial}
+     * @returns {number}
+     */
+    getReceiveCount()
+    {
+        return this.time.isRunning()? this.abReceived.length - this.iReceived : 0;
     }
 
     /**
