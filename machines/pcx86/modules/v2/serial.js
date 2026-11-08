@@ -533,8 +533,8 @@ export default class SerialPort extends Component {
     /**
      * initConnection(fNullModem)
      *
-     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
-     * and "{sourcePort}" matches our idComponent, then look for a component with id "{targetMachine}.{targetPort}".
+     * If the machine 'connection' parameter has an entry for us (see findConnection()), then look for a component
+     * with id "{targetMachine}.{targetPort}".
      *
      * If the target component is found, then verify that it has exported functions with the following names:
      *
@@ -555,38 +555,56 @@ export default class SerialPort extends Component {
     initConnection(fNullModem)
     {
         if (!this.connection) {
-            let sConnection = this.cmp.getMachineParm('connection');
-            if (sConnection) {
-                let asParts = sConnection.split('->');
-                if (asParts.length == 2) {
-                    let sSourceID = StrLib.trim(asParts[0]);
-                    if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    let sTargetID = StrLib.trim(asParts[1]);
-                    this.connection = Component.getComponentByID(sTargetID, false);
-                    if (this.connection) {
-                        let exports = this.connection['exports'];
-                        if (exports) {
-                            let fnConnect = /** @function */ (exports['connect']);
-                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
-                            this.sendData = exports['receiveData'];
-                            if (this.sendData) {
-                                this.fNullModem = fNullModem;
-                                this.updateStatus = exports['receiveStatus'];
-                                this.sendBreak = exports['receiveBreak'] || null;
-                                this.getPeerCount = exports['getReceiveCount'] || null;
-                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
-                                if (this.fFocusPending) this.setFocus(false);
-                                return;
-                            }
+            let sTargetID = this.findConnection();
+            if (sTargetID) {
+                this.connection = Component.getComponentByID(sTargetID, false);
+                if (this.connection) {
+                    let exports = this.connection['exports'];
+                    if (exports) {
+                        let fnConnect = /** @function */ (exports['connect']);
+                        if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
+                        this.sendData = exports['receiveData'];
+                        if (this.sendData) {
+                            this.fNullModem = fNullModem;
+                            this.updateStatus = exports['receiveStatus'];
+                            this.sendBreak = exports['receiveBreak'] || null;
+                            this.getPeerCount = exports['getReceiveCount'] || null;
+                            this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, this.idComponent, sTargetID);
+                            if (this.fFocusPending) this.setFocus(false);
+                            return;
                         }
                     }
                 }
                 /**
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s->%s\n", this.idComponent, sTargetID);
             }
         }
+    }
+
+    /**
+     * findConnection()
+     *
+     * The machine 'connection' parameter is a comma-separated list of "{sourcePort}->{targetMachine}.{targetPort}"
+     * entries (eg, "com1->vt100.serialPort,com2->vt100b.serialPort"), so that each serial port can be connected to
+     * a different machine.
+     *
+     * @this {SerialPort}
+     * @returns {string|null} the target ID ("{targetMachine}.{targetPort}") of the entry for this port, if any
+     */
+    findConnection()
+    {
+        let sConnection = this.cmp.getMachineParm('connection');
+        if (sConnection) {
+            for (let sEntry of sConnection.split(',')) {
+                let asParts = sEntry.split('->');
+                if (asParts.length == 2 && StrLib.trim(asParts[0]) == this.idComponent) {
+                    return StrLib.trim(asParts[1]);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -598,13 +616,16 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {boolean} [fScroll]
+     * @returns {boolean} true if this port has a connection (or will have one, when its target is ready)
      */
     setFocus(fScroll)
     {
+        if (!this.findConnection()) return false;
         let exports = this.connection && this.connection['exports'];
         let fnFocus = exports && /** @function */ (exports['focus']);
         if (fnFocus) fnFocus.call(this.connection, fScroll);
         this.fFocusPending = !this.connection;
+        return true;
     }
 
     /**

@@ -223,7 +223,7 @@ export default class Segx86 {
          */
         if (addrDT) {
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
                 /**
                  * TODO: This is the first of many steps toward accurately counting cycles in protected mode;
                  * I simply noted that "POP segreg" takes 5 cycles in real mode and 20 in protected mode, so I'm
@@ -1664,7 +1664,7 @@ export default class Segx86 {
 
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
 
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
 
                 /**
                  * Load the descriptor from memory using probeAddr().
