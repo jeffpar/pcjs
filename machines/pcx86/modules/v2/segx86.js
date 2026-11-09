@@ -1102,12 +1102,13 @@ export default class Segx86 {
             }
             /**
              * For more efficient IOPM lookups, we cache the starting linear address in segTSS.addrIOPM, and the
-             * last valid address in segTSS.addrIOPMLimit.  An 80286 TSS has no IOPM, so we clear addrIOPM.
+             * last valid address in segTSS.addrIOPMLimit.  An 80286 TSS has no IOPM, so we clear addrIOPM.  The
+             * limit is the new descriptor's (this.limit still has the previous TSS's until it's updated below).
              */
             this.addrIOPM = 0;
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
                 this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
-                this.addrIOPMLimit = (base + this.limit) >>> 0;
+                this.addrIOPMLimit = (base + limit) >>> 0;
             }
             break;
 

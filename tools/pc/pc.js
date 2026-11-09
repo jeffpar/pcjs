@@ -1935,7 +1935,7 @@ export default class PC extends PCJSLib {
                 /**
                  * If CONFIG.SYS or another text file from the system's list also exists in the directory we're
                  * building, the directory's copy wins (taking the system file's place in the root), so that a directory
-                 * (eg, configs/console/bios) can provide its own CONFIG.SYS.
+                 * (eg, configs/console/serial/fpe) can provide its own CONFIG.SYS.
                  */
                 let baseName = node.path.basename(name);
                 let fConfig = baseName.toUpperCase() == "CONFIG.SYS";

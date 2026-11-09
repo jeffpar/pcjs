@@ -873,6 +873,7 @@ export default class FDC extends Component {
          * NOTE: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
+        if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_FDC, this);
         this.initController();
         /**
          * Don't bother resetting the drive list if we're being called by powerUp(), because powerUp() will.
@@ -949,6 +950,10 @@ export default class FDC extends Component {
      */
     save()
     {
+        /**
+         * A command's Execution Phase can't be saved, so complete any DMA transfer that's in progress.
+         */
+        if (this.chipset) this.chipset.flushDMA();
         let state = new State(this);
         state.set(0, this.saveController());
         return state.data();
@@ -995,6 +1000,13 @@ export default class FDC extends Component {
          * is from processor to the FDC Data Register).
          */
         this.regStatus = data[i++];
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The state was saved during a command's Execution Phase (which can happen only if a DMA transfer was
+             * waiting on remote I/O), and since that can't be resumed, the command is effectively abandoned.
+             */
+            this.regStatus = FDC.REG_STATUS.RQM;
+        }
 
         /**
          * There can be up to 9 command bytes, and 7 result bytes, so 9 data registers are sufficient for communicating
@@ -2328,6 +2340,7 @@ export default class FDC extends Component {
     {
         this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
+            if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_FDC, this);
             this.initController();
             /**
              * initController() resets, among other things, the selected drive (this.iDrive), so if we were
@@ -2484,11 +2497,18 @@ export default class FDC extends Component {
     inFDCData(port, addrFrom)
     {
         let bIn = 0;
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The FDC is in its Execution Phase (see beginExecution()), so it's not ready for data register access.
+             */
+            this.printIO(port, undefined, addrFrom, "DATA (BUSY)", bIn);
+            return bIn;
+        }
         if (this.regDataIndex < this.regDataTotal) {
             bIn = this.regDataArray[this.regDataIndex];
         }
         /**
-         * As per the discussion in doCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
+         * As per the discussion in endCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
          */
         if (this.regOutput & FDC.REG_OUTPUT.INT_ENABLE) {
             if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.FDC);
@@ -2515,6 +2535,14 @@ export default class FDC extends Component {
     {
         if (this.messageEnabled()) {
             this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+        }
+
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The FDC is in its Execution Phase (see beginExecution()), so it's not ready for data register access.
+             */
+            this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.outFDCData(%#04x): ignored while busy\n", this.idComponent, bOut);
+            return;
         }
 
         if (this.regDataTotal < this.regDataArray.length) {
@@ -2577,6 +2605,7 @@ export default class FDC extends Component {
      */
     doCmd()
     {
+        let fdc = this;
         let fIRQ = false;
         this.regDataIndex = 0;
         let bCmd = this.popCmd();
@@ -2669,11 +2698,21 @@ export default class FDC extends Component {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
                 fIRQ = true;
             } else {
+                /**
+                 * The Execution Phase (ie, the DMA transfer) now runs in parallel with the CPU, so the Result Phase
+                 * (and interrupt) is deferred until doRead() or doWrite() calls us back.
+                 */
+                this.beginExecution();
+                let onExecutionDone = function onFDCReadWriteDone(fIRQ) {
+                    fdc.pushResults(drive, bCmd, bHead, c, h, r, n);
+                    fdc.endCmd(drive, bCmdMasked, fIRQ);
+                };
                 if (bCmdMasked != FDC.REG_DATA.CMD.WRITE_DATA) {
-                    fIRQ = this.doRead(drive);
+                    this.doRead(drive, onExecutionDone);
                 } else {
-                    fIRQ = this.doWrite(drive);
+                    this.doWrite(drive, onExecutionDone);
                 }
+                return;
             }
             this.pushResults(drive, bCmd, bHead, c, h, r, n);
             break;
@@ -2757,10 +2796,12 @@ export default class FDC extends Component {
             drive.bSectorEnd = this.popCmd(FDC.TERMS.SC);   // SC (sectors/track)
             this.popCmd(FDC.TERMS.GPL);                     // GPL (spacing between sectors, excluding VCO Sync Field; 3)
             drive.bFiller = this.popCmd(FDC.TERMS.D);       // D (filler byte)
-            this.doFormat(drive);
-            this.pushResults(drive, bCmd, bHead, c, h, r, n);
-            fIRQ = true;
-            break;
+            this.beginExecution();
+            this.doFormat(drive, function onFDCFormatDone() {
+                fdc.pushResults(drive, bCmd, bHead, c, h, r, n);
+                fdc.endCmd(drive, bCmdMasked, true);
+            });
+            return;
 
         case FDC.REG_DATA.CMD.SEEK:                         // 0x0F
             bDrive = this.popCmd(FDC.TERMS.DS);
@@ -2802,8 +2843,40 @@ export default class FDC extends Component {
             break;
         }
 
+        this.endCmd(drive, bCmdMasked, fIRQ);
+    }
+
+    /**
+     * beginExecution()
+     *
+     * Called when a command enters its Execution Phase (ie, a DMA transfer); the FDC is busy and not ready for
+     * any data register access until the Result Phase begins (see endCmd()).
+     *
+     * @this {FDC}
+     */
+    beginExecution()
+    {
+        this.regDataIndex = this.regDataTotal = 0;
+        this.regStatus = (this.regStatus & ~(FDC.REG_STATUS.RQM | FDC.REG_STATUS.READ_DATA)) | FDC.REG_STATUS.BUSY;
+    }
+
+    /**
+     * endCmd(drive, bCmdMasked, fIRQ)
+     *
+     * Called when a command has finished (including its Execution Phase, if any) to begin the Result Phase.
+     *
+     * @this {FDC}
+     * @param {Object|undefined} drive
+     * @param {number} bCmdMasked
+     * @param {boolean} fIRQ
+     */
+    endCmd(drive, bCmdMasked, fIRQ)
+    {
+        this.regStatus |= FDC.REG_STATUS.RQM;
         if (this.regDataTotal > 0) {
             this.regStatus |= (FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
+        } else {
+            this.regStatus &= ~(FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
         }
 
         /**
@@ -3105,13 +3178,13 @@ export default class FDC extends Component {
     }
 
     /**
-     * doRead(drive)
+     * doRead(drive, done)
      *
      * @this {FDC}
      * @param {Object} drive
-     * @returns {boolean}
+     * @param {function(boolean)} done (called when the read has finished, with true if an interrupt should be generated)
      */
-    doRead(drive)
+    doRead(drive, done)
     {
         /**
          * With only NOT_READY and INCOMPLETE set, an empty drive causes DOS to report "General Failure";
@@ -3129,31 +3202,36 @@ export default class FDC extends Component {
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             drive.sector = null;
             drive.resCode = FDC.REG_DATA.RES.NONE;
             if (this.chipset) {
                 if (!drive.bCylinder && !drive.bHead && drive.bSector == 1) {
                     if (!drive.fBootable && this.chipset.getDMAState(ChipSet.DMA_FDC)[0] == 0x7C00) {
-                        return false;
+                        done(false);
+                        return;
                     }
                 }
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaRead', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCReadDone(fComplete) {
+                    done(true);
+                }, this.getDataRate());
+                return;
             }
         }
-        return true;
+        done(true);
     }
 
     /**
-     * doWrite(drive)
+     * doWrite(drive, done)
      *
      * @this {FDC}
      * @param {Object} drive
-     * @returns {boolean}
+     * @param {function(boolean)} done (called when the write has finished, with true if an interrupt should be generated)
      */
-    doWrite(drive)
+    doWrite(drive, done)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
@@ -3166,20 +3244,25 @@ export default class FDC extends Component {
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             if (!drive.fWritable || drive.disk.fWriteProtected) {
                 drive.resCode = FDC.REG_DATA.RES.NOT_WRITABLE | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             drive.sector = null;
             drive.resCode = FDC.REG_DATA.RES.NONE;
             if (this.chipset) {
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaWrite', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCWriteDone(fComplete) {
+                    done(true);
+                }, this.getDataRate());
+                return;
             }
         }
-        return true;
+        done(true);
     }
 
     /**
@@ -3196,8 +3279,9 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
+     * @param {function()} done (called when the format has finished)
      */
-    doFormat(drive)
+    doFormat(drive, done)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         /**
@@ -3218,10 +3302,45 @@ export default class FDC extends Component {
                 drive.bFormatting = true;
                 drive.cSectorsFormatted = 0;
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaFormat', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
-                drive.bFormatting = false;
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCFormatDone(fComplete) {
+                    drive.bFormatting = false;
+                    done();
+                }, this.getDataRate());
+                return;
             }
         }
+        done();
+    }
+
+    /**
+     * getDataRate()
+     *
+     * Returns the controller's data rate, in bytes per second, which is used to pace DMA transfers.  Prior to the
+     * MODEL_5170, the rate was always 250Kbps; on later models, it's selected with the Control Register (0x3F7).
+     *
+     * @this {FDC}
+     * @returns {number}
+     */
+    getDataRate()
+    {
+        let nRate = 250000;
+        if (this.chipset && this.chipset.model >= ChipSet.MODEL_5170) {
+            switch(this.regControl & 0x3) {
+            case FDC.REG_CONTROL.RATE500K:
+                nRate = 500000;
+                break;
+            case FDC.REG_CONTROL.RATE300K:
+                nRate = 300000;
+                break;
+            case FDC.REG_CONTROL.RATE250K:
+                nRate = 250000;
+                break;
+            default:
+                nRate = 1000000;            // RATEUNUSED on the MODEL_5170, but 1Mbps on later (2.88M) controllers
+                break;
+            }
+        }
+        return nRate >> 3;
     }
 
     /**
