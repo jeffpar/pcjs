@@ -1683,8 +1683,10 @@ export default class Debuggerx86 extends DbgLib {
      * is in it).
      *
      * BASIC-DOS stores the real-mode address of its arena in CPU_ARENA (0:0514h): either its first MCB (when the
-     * 8086 CPU$ driver manages memory, whose offset is always zero) or its first PMB (when the 80286 CPU$ driver
-     * does, with a table of PMBs at a nonzero offset in its system area).  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
+     * 8086 CPU$ driver manages memory, whose offset is always zero) or its first PMB (when the 80386 CPU$ driver
+     * does, with a table of PMBs at a nonzero offset in its system area).  All of those addresses are physical,
+     * so we read physical memory, and with paging, BASIC-DOS maps physical memory at linear address LIN_BASE, so
+     * we convert the linear addresses of its selectors to physical addresses, too.  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
      * mode and selectors in protected mode.  DOS is wherever its INT 20h handler is (DM gets DOS's segment from
      * DOS_MSC_GETVARS instead, which we can't call).
      *
@@ -1693,16 +1695,22 @@ export default class Debuggerx86 extends DbgLib {
     dumpArena()
     {
         let dbg = this, cpu = this.cpu;
-        let getByte = function(addr) { return cpu.probeAddr(addr, 1) & 0xff; };
-        let getShort = function(addr) { return cpu.probeAddr(addr, 2) & 0xffff; };
-        let getLong = function(addr) { return cpu.probeAddr(addr, 4) >>> 0; };
+        let getByte = function(addr) { return cpu.probeAddr(addr, 1, true) & 0xff; };
+        let getShort = function(addr) { return cpu.probeAddr(addr, 2, true) & 0xffff; };
+        let getLong = function(addr) { return cpu.probeAddr(addr, 4, true) >>> 0; };
+        let getPhys = function(addr) {
+            if (addr !== X86.ADDR_INVALID && (addr >>> 0) >= Debuggerx86.BASICDOS.LIN_BASE) {
+                addr = (addr >>> 0) - Debuggerx86.BASICDOS.LIN_BASE;
+            }
+            return addr;
+        };
         /**
          * @param {number} sel
          * @param {number} off
          * @param {number} [type] (default is based on current CPU mode)
          * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
          */
-        let getLinear = function(sel, off, type) { return dbg.getAddr(dbg.newAddr(off, sel, undefined, type)); };
+        let getLinear = function(sel, off, type) { return getPhys(dbg.getAddr(dbg.newAddr(off, sel, undefined, type))); };
         let getName = function(addr) {
             let s = "";
             for (let i = 0; i < 8; i++) {
@@ -1736,7 +1744,7 @@ export default class Debuggerx86 extends DbgLib {
             return;
         }
         let fProt = cpu.isProtMode();
-        let selDOS = getShort(cpu.addrIDT + (0x20 << (fProt? 3 : 2)) + 2);
+        let selDOS = getShort(getPhys(cpu.addrIDT) + (0x20 << (fProt? 3 : 2)) + 2);
         let addrDOS = getLinear(selDOS, 0, fProt? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL);
         let addrCur = 0;
         let printSpan = function(addrEnd) {
@@ -7346,6 +7354,7 @@ if (DEBUGGER) {
     Debuggerx86.BASICDOS = {
         DD_LIST:    0x50A,
         CPU_ARENA:  0x514,
+        LIN_BASE:   0xC0000000,     // with paging, the linear address of physical memory
         PMB_USED:   0x01,
         OWNER_SYS:  0x08,
         TYPES: {
