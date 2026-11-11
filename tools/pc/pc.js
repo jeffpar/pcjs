@@ -31,6 +31,13 @@ import { node }      from "../modules/nodeapi.js";
 
 await node.import("child_process", "fs", "glob", "json5", "path", "xml2js");
 
+/*
+ * Node 25 and up define a localStorage getter that warns ("localStorage is not available because
+ * --localstorage-file was not provided") on first use, which the machine's localStorage test triggers;
+ * replacing the getter (without calling it) makes localStorage simply undefined, as it was before.
+ */
+Object.defineProperty(globalThis, "localStorage", {value: undefined, configurable: true, writable: true});
+
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
