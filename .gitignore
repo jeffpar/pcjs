@@ -4,6 +4,7 @@
 *.out
 *.zip
 .DS_Store
+.claude
 .history
 .jekyll-metadata
 .sass-cache

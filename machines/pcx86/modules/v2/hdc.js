@@ -323,6 +323,13 @@ export default class HDC extends Component {
     };
 
     /**
+     * XTC DMA transfer rate, in bytes per second, which is used to pace DMA transfers between the XTC's sector
+     * buffer and memory; it's simply the drive's 5Mbps data rate, since we don't simulate rotational latency or
+     * sector interleave.
+     */
+    static XTC_DMA_RATE = 625000;
+
+    /**
      * XTC (XT Controller) Registers
      */
     static XTC = {
@@ -912,6 +919,7 @@ export default class HDC extends Component {
          * TODO: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
+        if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_HDC, this);
         this.initController(null, true);
     }
 
@@ -925,6 +933,10 @@ export default class HDC extends Component {
      */
     save()
     {
+        /**
+         * A command's DMA transfer can't be saved, so complete any transfer that's in progress.
+         */
+        if (this.chipset) this.chipset.flushDMA();
         let state = new State(this);
         state.set(0, this.saveController());
         return state.data();
@@ -1639,7 +1651,10 @@ export default class HDC extends Component {
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
         this.regReset = bOut;
-        if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.XTC);
+        if (this.chipset) {
+            this.chipset.clearIRR(ChipSet.IRQ.XTC);
+            this.chipset.cancelDMA(ChipSet.DMA_HDC, this);
+        }
         this.initController();
     }
 
@@ -2763,7 +2778,7 @@ export default class HDC extends Component {
                         }
                     }
                     done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-                });
+                }, HDC.XTC_DMA_RATE);
                 return;
             }
         }
@@ -2812,7 +2827,7 @@ export default class HDC extends Component {
                         }
                     }
                     done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-                });
+                }, HDC.XTC_DMA_RATE);
                 return;
             }
         }
@@ -2854,7 +2869,7 @@ export default class HDC extends Component {
                     }
                 }
                 done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-            });
+            }, HDC.XTC_DMA_RATE);
             return;
         }
         done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);

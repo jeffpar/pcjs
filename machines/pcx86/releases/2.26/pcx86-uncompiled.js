@@ -6475,7 +6475,6 @@ const X86 = {
         INTR:       0x01,       // h/w interrupt requested
         TRAP:       0x02,       // trap (INT 0x01) requested
         HALT:       0x04,       // halt (HLT) requested
-        DMA:        0x08,       // async DMA operation in progress
         DEBUGGER:   0x10        // debugger checks enabled
     },
     /**
@@ -19831,6 +19830,10 @@ class CPUx86 extends CPU {
     /**
      * checkIOPM(port, nPorts, fInput)
      *
+     * Any I/O instruction with CPL > IOPL (or in V86-mode, regardless of IOPL) generates a GP_FAULT, unless the
+     * current TSS is a 386 TSS whose I/O permission map allows every port involved; an 80286 TSS has no such map.
+     * As in opCLI(), there's no need to check for protected-mode, because CPL is always zero in real-mode.
+     *
      * @this {CPUx86}
      * @param {number} port (0x0000 to 0xffff)
      * @param {number} nPorts (1 to 4)
@@ -19840,15 +19843,17 @@ class CPUx86 extends CPU {
     checkIOPM(port, nPorts, fInput)
     {
         let bitsPorts = 0;
-        if (I386 && (this.regCR0 & X86.CR0.MSW.PE) && (this.nCPL > this.nIOPL || (this.regPS & X86.PS.VM)) && this.segTSS.addrIOPM) {
-            let offIOPM = port >>> 3;
-            let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+        if (this.nCPL > this.nIOPL || I386 && (this.regPS & X86.PS.VM)) {
             bitsPorts = ((1 << nPorts) - 1) << (port & 0x7);
-            while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
-                let bits = this.getByte(addrIOPM);
-                if (bits & bitsPorts) break;
-                bitsPorts >>>= 8;
-                addrIOPM++;
+            if (I386 && this.segTSS.addrIOPM) {
+                let offIOPM = port >>> 3;
+                let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+                while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
+                    let bits = this.getByte(addrIOPM);
+                    if (bits & bitsPorts) break;
+                    bitsPorts >>>= 8;
+                    addrIOPM++;
+                }
             }
         }
         if (bitsPorts) {
@@ -21232,21 +21237,10 @@ class CPUx86 extends CPU {
      * and the Trap flag are similar; they must both honor the NOINTR suppression flag, and stepCPU() shouldn't
      * have to check multiple variables when deciding whether to simulate an interrupt.
      *
-     * This function also includes a check for the new async INTFLAG.DMA flag, which is triggered by a ChipSet call
-     * to setDMA().  This DMA flag actually has nothing to do with interrupts; it's simply an expedient way to
-     * piggy-back on the CPU's execution logic, to help drive async DMA requests.
-     *
-     * Originally, DMA requests (eg, FDC or HDC I/O operations) were all handled synchronously, since no actual
-     * I/O was required to satisfy the request; from the CPU's perspective, this meant DMA operations were virtually
-     * instantaneous.  However, with the introduction of remote disk connections, some actual I/O may now be required;
-     * in practice, this means that the FIRST byte requested as part of a DMA operation may require a callback to
-     * finish, while all remaining bytes will be retrieved during subsequent checkINTR() calls -- unless of course
-     * additional remote I/O operations are required to complete the DMA operation.
-     *
-     * As a result, the CPU will run slightly slower while an async DMA request is in progress, but the slowdown
-     * should be negligible.  One downside is that this slowdown will be in effect for the entire duration of the
-     * I/O (ie, even while we're waiting for the remote I/O to finish), so the ChipSet component should avoid
-     * calling setDMA() whenever possible.
+     * NOTE: There used to be an (unused) INTFLAG.DMA flag here as well, which would have had the CPU call the ChipSet
+     * after every instruction to advance DMA requests.  DMA requests are now driven by a ChipSet timer instead (see
+     * ChipSet.requestDMA()), which lets them run in parallel with the CPU at each device's data rate, without adding
+     * any overhead to instruction execution.
      *
      * TODO: While comparing SYMDEB tracing in both PCx86 and VMware, I noticed that after single-stepping ANY
      * segment-load instruction, SYMDEB would get control immediately after that instruction in VMware, whereas
@@ -21280,7 +21274,7 @@ class CPUx86 extends CPU {
          * we want to dispose of it as quickly as possible: if INTR is the ONLY flag set and IF is clear, there's
          * nothing to do (the HALT and DEBUGGER flags are handled by stepCPU()).
          */
-        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP | X86.INTFLAG.DMA)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
+        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
             return false;
         }
 
@@ -21317,15 +21311,6 @@ class CPUx86 extends CPU {
                 iPriority = 1 - iPriority;
             }
         }
-        /**
-         * As long as the ChipSet component isn't calling setDMA(), we don't need to test INTFLAG.DMA...
-         *
-        if (this.intFlags & X86.INTFLAG.DMA) {
-            if (!this.chipset.checkDMA()) {
-                this.intFlags &= ~X86.INTFLAG.DMA;
-            }
-        }
-         */
         return false;
     }
 
@@ -21668,26 +21653,6 @@ class CPUx86 extends CPU {
 
         return (this.flags.complete? this.nBurstCycles - this.nStepCycles : (this.flags.complete === undefined? 0 : -1));
     }
-
-    /**
-     * setDMA(fActive)
-     *
-     * This is called by the ChipSet component to update DMA status.
-     *
-     * @this {CPUx86}
-     * @param {boolean} fActive is true to set INTFLAG.DMA, false to clear
-     *
-     setDMA(fActive)
-     {
-        if (this.chipset) {
-            if (fActive) {
-                this.intFlags |= X86.INTFLAG.DMA;
-            } else {
-                this.intFlags &= ~X86.INTFLAG.DMA;
-            }
-        }
-    }
-     */
 
     /**
      * CPUx86.init()
@@ -25289,7 +25254,7 @@ class Segx86 {
          */
         if (addrDT) {
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
                 /**
                  * TODO: This is the first of many steps toward accurately counting cycles in protected mode;
                  * I simply noted that "POP segreg" takes 5 cycles in real mode and 20 in protected mode, so I'm
@@ -26069,6 +26034,16 @@ class Segx86 {
                 X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, (sel & X86.ERRCODE.SELMASK) | (fIDT? X86.ERRCODE.IDT : 0));
                 return X86.ADDR_INVALID;
             }
+            /**
+             * A RETF or IRET to an offset past the new segment's limit must fault here, while CS is unchanged and
+             * helpRETF() or helpIRET() can still undo any stack switch above, so that the fault is reported at the
+             * return instruction, at its own privilege level.  If it were left to the first opcode fetch, a return
+             * to an outer privilege level would appear to have faulted at that outer level.
+             */
+            if (fCall === false && (this.offIP >>> 0) > (limit >>> 0)) {
+                X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, 0);
+                return X86.ADDR_INVALID;
+            }
             break;
 
         case Segx86.ID.DATA:
@@ -26158,11 +26133,13 @@ class Segx86 {
             }
             /**
              * For more efficient IOPM lookups, we cache the starting linear address in segTSS.addrIOPM, and the
-             * last valid address in segTSS.addrIOPMLimit.
+             * last valid address in segTSS.addrIOPMLimit.  An 80286 TSS has no IOPM, so we clear addrIOPM.  The
+             * limit is the new descriptor's (this.limit still has the previous TSS's until it's updated below).
              */
+            this.addrIOPM = 0;
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
                 this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
-                this.addrIOPMLimit = (base + this.limit) >>> 0;
+                this.addrIOPMLimit = (base + limit) >>> 0;
             }
             break;
 
@@ -26719,7 +26696,7 @@ class Segx86 {
 
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
 
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
 
                 /**
                  * Load the descriptor from memory using probeAddr().
@@ -30636,11 +30613,6 @@ X86.helpINT = function(nIDT, nError, nBytes = 0, nCycles = 0)
     let oldPS = this.getPS();
     let oldCS = this.getCS();
     let oldIP = this.getIP();
-    if (nIDT == 0x13 && this.model <= X86.MODEL_8088) {
-        if (DEBUGGER && this.dbg && this.regEAX == 0x0201 && this.regEBX == 0x7C00 && this.segES.sel == 0) {
-            this.setShort(0x52D, 0x4442);       // on 8088 boot up, set a special "BD" boot indicator in low memory
-        }
-    }
     let addr = this.segCS.loadIDT(nIDT, nBytes);
     if (addr !== X86.ADDR_INVALID) {
         /**
@@ -42170,6 +42142,9 @@ class ChipSet extends Component {
     static DMA_FDC        = 0x02;   // DMA channel assigned to the Floppy Drive Controller (FDC)
     static DMA_HDC        = 0x03;   // DMA channel assigned to the Hard Drive Controller (HDC; XTC only)
 
+    static DMA_QUANTUM_MS = 0.1;    // approximate interval at which paced DMA requests are serviced (see scheduleDMA())
+    static DMA_MAX_BYTES  = 0x10000;// maximum number of bytes a channel can transfer before reaching terminal count
+
     /**
      * 8259A Programmable Interrupt Controller (PIC) I/O ports
      *
@@ -42746,6 +42721,7 @@ class ChipSet extends Component {
      *      sw2:            8-character binary string representing the SW2 DIP switches (SW2[1-8]) (MODEL_5150 only)
      *      sound:          true (or non-zero) to enable sounds (default), false (or 0) to disable; number used as initial volume
      *      scaleTimers:    true to divide timer cycle counts by the CPU's cycle multiplier (default is false)
+     *      fastDMA:        true to perform device DMA transfers all at once, instead of at the device's data rate (default is false)
      *      floppies:       array of floppy drive sizes in Kb (default is "[360, 360]" if no sw1 value provided)
      *      monitor:        none|tv|color|mono|ega|vga (if no sw1 value provided, default is "ega" for 5170, "mono" otherwise)
      *      dateRTC:        optional RTC date/time (in GMT) to use on reset; use the ISO 8601 format; eg: "2014-10-01T08:00:00"
@@ -42847,6 +42823,16 @@ class ChipSet extends Component {
         }
 
         this.fScaleTimers = parmsChipSet['scaleTimers'] || false;
+
+        /**
+         * DMA requests from devices (see requestDMA()) are serviced by timerDMA (created by initBus()) at the
+         * device's data rate, unless fFastDMA is set.  nDMAWait generates unique tokens for transfers that are
+         * waiting on a device (see advanceDMA()).
+         */
+        let fastDMA = parmsChipSet['fastDMA'];
+        this.fFastDMA = (fastDMA === true || fastDMA === "true" || fastDMA === 1);
+        this.timerDMA = -1;
+        this.nDMAWait = 0;
         this.sDateRTC = parmsChipSet['dateRTC'];
 
         /**
@@ -42901,6 +42887,11 @@ class ChipSet extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
         this.cmp = cmp;
+
+        let chipset = this;
+        this.timerDMA = cpu.addTimer(this.id + ".dma", function onDMATimer() {
+            chipset.serviceDMA();
+        });
 
         this.fpuActive = null;
         /**
@@ -43091,6 +43082,7 @@ class ChipSet extends Component {
         /**
          * DMA (Direct Memory Access) Controller initialization
          */
+        this.cancelAllDMA();
         this.aDMACs = new Array(this.cDMACs);
         for (i = 0; i < this.cDMACs; i++) {
             this.initDMAController(i);
@@ -43777,6 +43769,7 @@ class ChipSet extends Component {
      */
     save()
     {
+        this.flushDMA();
         let state = new State(this);
         state.set(0, [this.aDIPSwitches]);
         state.set(1, [this.saveDMAControllers()]);
@@ -43816,6 +43809,7 @@ class ChipSet extends Component {
         this.updateDIPSwitches();
 
         a = data[1];
+        this.cancelAllDMA();
         for (i = 0; i < this.cDMACs; i++) {
             this.initDMAController(i, a.length == 1? a[0][i] : a);
         }
@@ -43948,21 +43942,43 @@ class ChipSet extends Component {
                 addrInit: [0,0],
                 countInit: [0,0],
                 addrCurrent: [0,0],
-                countCurrent: [0,0]
+                countCurrent: [0,0],
+                /**
+                 * The remaining properties describe the state of a device's DMA request (see requestDMA()).
+                 */
+                component: null,
+                sDevice: "",
+                sFunction: "",
+                fnTransfer: null,
+                obj: null,
+                done: null,
+                fRequest: false,        // true while the device is requesting service (ie, DREQ is asserted)
+                nWait: 0,               // non-zero while waiting for the device to deliver a byte (see advanceDMA())
+                nCyclesPerByte: 0,      // transfer rate (zero to transfer all bytes immediately)
+                nBatch: 1,              // number of bytes to transfer per timer interval
+                cyclesLast: 0,          // CPU cycle count when the request was last serviced
+                accBytes: 0,            // bytes (and fractions thereof) accrued since cyclesLast
+                fWarning: false,
+                fError: false,
+                bto: null,              // BACKTRACK object for the current transfer, if any
+                cbDebug: 0,
+                sAddrDebug: null
             };
         }
-        let a = aState && aState.length == 8? aState : this.aDMAChannelInit;
+        /**
+         * Saved states contain 7 elements (older saved states may contain more, but none of the
+         * additional elements were ever usable).
+         */
+        let a = aState && aState.length >= 7? aState : this.aDMAChannelInit;
         channel.masked = a[0];
         channel.addrInit[0] = a[1][0]; channel.addrInit[1] = a[1][1];
         channel.countInit[0] = a[2][0];  channel.countInit[1] = a[2][1];
         channel.addrCurrent[0] = a[3][0]; channel.addrCurrent[1] = a[3][1];
         channel.countCurrent[0] = a[4][0]; channel.countCurrent[1] = a[4][1];
-        channel.mode = a[5];
-        channel.bPage = a[6];
-        // a[7] is deprecated
+        channel.mode = a[5] || 0;
+        channel.bPage = a[6] || 0;
         channel.controller = controller;
         channel.iChannel = iChannel;
-        this.initDMAFunction(channel, a[8], a[9]);
         controller.aChannels[iChannel] = channel;
     }
 
@@ -44000,7 +44016,7 @@ class ChipSet extends Component {
     saveDMAControllers()
     {
         let data = [];
-        for (let iDMAC = 0; iDMAC < this.aDMACs; iDMAC++) {
+        for (let iDMAC = 0; iDMAC < this.aDMACs.length; iDMAC++) {
             let controller = this.aDMACs[iDMAC];
             data[iDMAC] = [
                 controller.bStatus,
@@ -44026,16 +44042,18 @@ class ChipSet extends Component {
         let data = [];
         for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
             let channel = controller.aChannels[iChannel];
+            /**
+             * We don't save the channel's connection to a device (if any), because devices don't save their
+             * own transfer state; devices call flushDMA() before saving their state, to complete any transfers.
+             */
             data[iChannel] = [
                 channel.masked,
-                channel.addrInit,
-                channel.countInit,
-                channel.addrCurrent,
-                channel.countCurrent,
+                channel.addrInit.slice(),
+                channel.countInit.slice(),
+                channel.addrCurrent.slice(),
+                channel.countCurrent.slice(),
                 channel.mode,
-                channel.bPage,
-                channel.sDevice,
-                channel.sFunction
+                channel.bPage
             ];
         }
         return data;
@@ -44919,7 +44937,10 @@ class ChipSet extends Component {
         let iChannel = bOut & ChipSet.DMA_MASK.CHANNEL;
         let channel = controller.aChannels[iChannel];
         channel.masked = !!(bOut & ChipSet.DMA_MASK.CHANNEL_SET);
-        if (!channel.masked) this.requestDMA(controller.nChannelBase + iChannel);
+        /**
+         * Unmasking a channel with a pending request (see requestDMA()) starts (or resumes) the transfer.
+         */
+        if (!channel.masked && channel.fRequest) this.startDMA(channel);
     }
 
     /**
@@ -45129,19 +45150,33 @@ class ChipSet extends Component {
     }
 
     /**
-     * requestDMA(iDMAChannel, done)
+     * requestDMA(iDMAChannel, done, nRate)
+     *
+     * This is how a device (eg, the FDC or the XTC) asserts DREQ for a DMA channel it has connected to with
+     * connectDMA(): we then move bytes between the device and memory, as long as the channel is unmasked, until the
+     * channel's count reaches terminal count (TC), at which point the device's done() callback, if any, is invoked.
+     *
+     * DMA transfers now run in parallel with the CPU: rather than moving the entire block at once, we move bytes at
+     * the device's data rate (nRate, in bytes per second of simulated time), using a CPU timer to service the channel
+     * at regular intervals, so the CPU sees the channel's address and count registers advance as the transfer proceeds,
+     * and the device's result phase (and interrupt) occurs after the time a real transfer would have taken.
+     *
+     * If no rate is specified (or the ChipSet "fastDMA" property is set), the transfer happens all at once, as it
+     * always used to.  Rates are expressed in unscaled (base) CPU cycles, so if the CPU is running faster than its
+     * base speed, DMA transfers run correspondingly faster, too.
+     *
+     * For DMA_MODE.TYPE_WRITE (and TYPE_VERIFY) transfers, fnTransfer(-1) must return bytes as long as we request them
+     * (although it may return -1 if it runs out of bytes prematurely).
+     *
+     * Similarly, for DMA_MODE.TYPE_READ transfers, fnTransfer(b) must accept bytes as long as we deliver them (although
+     * it is certainly free to ignore bytes it no longer wants).
      *
      * @this {ChipSet}
      * @param {number} iDMAChannel
      * @param {function(boolean)} [done]
-     *
-     * For DMA_MODE.TYPE_WRITE transfers, fnTransfer(-1) must return bytes as long as we request them (although it may
-     * return -1 if it runs out of bytes prematurely).
-     *
-     * Similarly, for DMA_MODE.TYPE_READ transfers, fnTransfer(b) must accept bytes as long as we deliver them (although
-     * it is certainly free to ignore bytes it no longer wants).
+     * @param {number} [nRate] (bytes per second; zero or undefined to transfer all bytes immediately)
      */
-    requestDMA(iDMAChannel, done)
+    requestDMA(iDMAChannel, done, nRate)
     {
         let iDMAC = iDMAChannel >> 2;
         let controller = this.aDMACs[iDMAC];
@@ -45156,241 +45191,468 @@ class ChipSet extends Component {
         }
 
         /**
-         * We can't simply slam done into channel.done; that would be fine if requestDMA() was called only by functions
-         * like HDC.doRead() and HDC.doWrite(), but we're also called whenever a DMA channel is unmasked, and in those cases,
-         * we need to preserve whatever handler may have been previously set.
-         *
-         * However, in an effort to ensure we don't end up with stale done handlers, connectDMA() will reset channel.done.
+         * In an effort to ensure we don't end up with stale done handlers, connectDMA() resets channel.done.
          */
         if (done) channel.done = done;
 
+        if (!channel.fRequest) {
+            channel.fRequest = true;
+            channel.nWait = 0;
+            channel.fWarning = channel.fError = false;
+            channel.bto = null;
+            channel.nCyclesPerByte = 0;
+            channel.nBatch = 1;
+            if (nRate > 0 && !this.fFastDMA && this.cpu) {
+                channel.nCyclesPerByte = this.cpu.getBaseCyclesPerSecond() / nRate;
+                channel.nBatch = Math.max(1, Math.round(nRate * ChipSet.DMA_QUANTUM_MS / 1000));
+            }
+            /**
+             * Bits 4-7 of the status register are set whenever the corresponding channel is requesting service.
+             */
+            controller.bStatus |= (0x10 << iChannel);
+            if (DEBUG && DEBUGGER) {
+                channel.cbDebug = 0;
+                channel.sAddrDebug = null;
+            }
+        }
+
         if (channel.masked) {
-            if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "requestDMA(%d): channel masked, request queued\n", iDMAChannel);
+            if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "requestDMA(%d): channel masked, request pending\n", iDMAChannel);
             return;
         }
 
-        /**
-         * Let's try to do async DMA without asking the CPU for help...
-         *
-         *      this.cpu.setDMA(true);
-         */
-        this.advanceDMA(channel, true);
+        this.startDMA(channel);
     }
 
     /**
-     * advanceDMA(channel, fInit)
+     * startDMA(channel)
+     *
+     * Starts (or resumes) servicing a channel's pending DMA request; called when the request is made, or when the
+     * channel is unmasked while a request is pending.
      *
      * @this {ChipSet}
      * @param {Object} channel
-     * @param {boolean} [fInit]
      */
-    advanceDMA(channel, fInit)
+    startDMA(channel)
     {
-        if (fInit) {
-            channel.count = (channel.countCurrent[1] << 8) | channel.countCurrent[0];
-            channel.type = (channel.mode & ChipSet.DMA_MODE.TYPE);
-            channel.fWarning = channel.fError = false;
-            if (DEBUG && DEBUGGER) {
-                channel.cbDebug = channel.count + 1;
-                channel.sAddrDebug = (DEBUG && DEBUGGER? null : undefined);
+        channel.cyclesLast = this.getDMACycles();
+        channel.accBytes = 0;
+        if (channel.nWait) return;      // still waiting for the device to deliver a byte
+        if (!channel.nCyclesPerByte) {
+            this.advanceDMA(channel, ChipSet.DMA_MAX_BYTES);
+            return;
+        }
+        this.scheduleDMA();
+    }
+
+    /**
+     * cancelDMA(iDMAChannel, component)
+     *
+     * Cancels any pending DMA request on the specified channel (eg, when a device is reset in the middle of a
+     * transfer).  The device's done() callback is NOT invoked.
+     *
+     * @this {ChipSet}
+     * @param {number} iDMAChannel
+     * @param {Component} [component] (if specified, the request is cancelled only if it belongs to this component)
+     */
+    cancelDMA(iDMAChannel, component)
+    {
+        let controller = this.aDMACs[iDMAChannel >> 2];
+        if (controller) {
+            let channel = controller.aChannels[iDMAChannel & 0x3];
+            if (channel.fRequest && (!component || channel.component === component)) {
+                if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "cancelDMA(%d): request cancelled\n", iDMAChannel);
+                this.endDMARequest(channel);
+                this.scheduleDMA();
             }
         }
-        /**
-         * To support async DMA without requiring help from the CPU (ie, without relying upon cpu.setDMA()), we require that
-         * the data transfer functions provide an fAsync parameter to their callbacks; fAsync must be true if the callback was
-         * truly asynchronous (ie, it had to wait for a remote I/O request to finish), or false if the data was already available
-         * and the callback was performed synchronously.
-         *
-         * Whenever a callback is issued asynchronously, we will immediately daisy-chain another pair of updateDMA()/advanceDMA()
-         * calls, which will either finish the DMA operation if no more remote I/O requests are required, or will queue up another
-         * I/O request, which will in turn trigger another async callback.  Thus, the DMA request keeps itself going without
-         * requiring any special assistance from the CPU via setDMA().
-         */
-        let bto = null;
+    }
+
+    /**
+     * cancelAllDMA()
+     *
+     * @this {ChipSet}
+     */
+    cancelAllDMA()
+    {
+        if (this.aDMACs) {
+            for (let iDMAC = 0; iDMAC < this.aDMACs.length; iDMAC++) {
+                let controller = this.aDMACs[iDMAC];
+                if (!controller) continue;
+                for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
+                    let channel = controller.aChannels[iChannel];
+                    if (channel && channel.fRequest) this.endDMARequest(channel);
+                }
+            }
+        }
+        if (this.cpu) this.cpu.clearTimer(this.timerDMA);
+    }
+
+    /**
+     * endDMARequest(channel)
+     *
+     * Drops the channel's DMA request, without invoking any done() callback.
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     */
+    endDMARequest(channel)
+    {
+        channel.fRequest = false;
+        channel.nWait = 0;          // any outstanding transfer callback is now stale
+        channel.done = null;
+        channel.component = channel.obj = null;
+        channel.controller.bStatus &= ~(0x10 << channel.iChannel);
+    }
+
+    /**
+     * flushDMA()
+     *
+     * Completes all unmasked DMA requests immediately.  Devices with DMA requests in progress call this before
+     * saving their state, since a saved state can't capture a transfer in mid-flight (the DMA controller's own
+     * state is saved, but the device's connection to it is not).
+     *
+     * @this {ChipSet}
+     */
+    flushDMA()
+    {
+        for (let iDMAC = 0; iDMAC < this.aDMACs.length; iDMAC++) {
+            let controller = this.aDMACs[iDMAC];
+            for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
+                let channel = controller.aChannels[iChannel];
+                if (channel.fRequest && !channel.masked && !channel.nWait) {
+                    this.advanceDMA(channel, ChipSet.DMA_MAX_BYTES);
+                }
+            }
+        }
+        this.scheduleDMA();
+    }
+
+    /**
+     * getDMACycles()
+     *
+     * @this {ChipSet}
+     * @returns {number}
+     */
+    getDMACycles()
+    {
+        return this.cpu? this.cpu.getCycles() : 0;
+    }
+
+    /**
+     * getDMAAddr(channel)
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     * @returns {number} (current physical address of the channel)
+     */
+    getDMAAddr(channel)
+    {
+        return (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
+    }
+
+    /**
+     * getDMARemaining(channel)
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     * @returns {number} (number of bytes remaining before terminal count)
+     */
+    getDMARemaining(channel)
+    {
+        return ((channel.countCurrent[1] << 8) | channel.countCurrent[0]) + 1;
+    }
+
+    /**
+     * serviceDMA()
+     *
+     * Called by the DMA timer: for every channel with an active (unmasked) paced request, moves as many bytes as the
+     * device's data rate allows for the number of cycles that have elapsed since the channel was last serviced.
+     *
+     * @this {ChipSet}
+     */
+    serviceDMA()
+    {
+        let cycles = this.getDMACycles();
+        for (let iDMAC = 0; iDMAC < this.aDMACs.length; iDMAC++) {
+            let controller = this.aDMACs[iDMAC];
+            for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
+                let channel = controller.aChannels[iChannel];
+                if (!channel.fRequest || channel.masked || channel.nWait || !channel.nCyclesPerByte) continue;
+                let nCycles = cycles - channel.cyclesLast;
+                if (nCycles < 0) nCycles = 0;           // the CPU's cycle counter was reset; just carry on
+                channel.cyclesLast = cycles;
+                channel.accBytes += nCycles / channel.nCyclesPerByte;
+                let nBytes = Math.floor(channel.accBytes);
+                if (nBytes > 0) {
+                    channel.accBytes -= nBytes;
+                    this.advanceDMA(channel, nBytes);
+                }
+            }
+        }
+        this.scheduleDMA();
+    }
+
+    /**
+     * scheduleDMA()
+     *
+     * Arms the DMA timer to fire when the next batch of bytes is due on any channel with an active paced request
+     * (each batch is roughly DMA_QUANTUM_MS of transfer time, or the rest of the transfer, whichever is less, so that
+     * terminal count, and the device's response to it, happens on time).
+     *
+     * @this {ChipSet}
+     */
+    scheduleDMA()
+    {
+        if (!this.cpu) return;
+        let cycles = this.getDMACycles();
+        let nCyclesNext = 0;
+        for (let iDMAC = 0; iDMAC < this.aDMACs.length; iDMAC++) {
+            let controller = this.aDMACs[iDMAC];
+            for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
+                let channel = controller.aChannels[iChannel];
+                if (!channel.fRequest || channel.masked || channel.nWait || !channel.nCyclesPerByte) continue;
+                let nElapsed = cycles - channel.cyclesLast;
+                if (nElapsed < 0) nElapsed = 0;
+                let nBytes = Math.min(channel.nBatch, this.getDMARemaining(channel));
+                let nCycles = Math.ceil((nBytes - channel.accBytes) * channel.nCyclesPerByte - nElapsed);
+                if (nCycles < 1) nCycles = 1;
+                if (!nCyclesNext || nCycles < nCyclesNext) nCyclesNext = nCycles;
+            }
+        }
+        if (nCyclesNext) {
+            this.cpu.setTimer(this.timerDMA, -nCyclesNext, true);
+        } else {
+            this.cpu.clearTimer(this.timerDMA);
+        }
+    }
+
+    /**
+     * advanceDMA(channel, nBytes)
+     *
+     * Moves up to nBytes between the channel's device and memory, stopping early if the request completes,
+     * the channel is masked, or the device can't deliver its next byte until some remote I/O has finished.
+     *
+     * To support async DMA (eg, a disk image that is fetched from a server on demand), the device's transfer
+     * function always delivers its byte via a callback.  If the callback is invoked synchronously, we carry on;
+     * otherwise, the channel waits (channel.nWait) until the callback arrives, and then resumes.
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     * @param {number} nBytes
+     */
+    advanceDMA(channel, nBytes)
+    {
         let chipset = this;
-        let fAsyncRequest = false;
-        let controller = channel.controller;
-        let iDMAChannel = controller.nChannelBase + channel.iChannel;
+        let iDMAChannel = channel.controller.nChannelBase + channel.iChannel;
 
-        while (true) {
-            if (channel.count >= 0) {
-                let b;
-                let addr = (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
-                if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
-                    channel.sAddrDebug = StrLib.toHex(addr >> 4, 4) + ":" + StrLib.toHex(addr & 0xf, 4);
-                    if (channel.type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-                        this.printf(MESSAGE.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
-                        this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
-                    }
-                }
-                if (channel.type == ChipSet.DMA_MODE.TYPE_WRITE) {
-                    fAsyncRequest = true;
-                    (function advanceDMAWrite(addrCur) {
-                        channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
-                            if (b < 0) {
-                                if (!channel.fWarning) {
-                                    if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAWrite(%d) ran out of data, assuming 0xff\n", iDMAChannel);
-                                    channel.fWarning = true;
-                                }
-                                /**
-                                 * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
-                                 */
-                                b = 0xff;
-                            }
-                            if (!channel.masked && !channel.fError) {
-                                chipset.bus.setByte(addrCur, b);
-                                /**
-                                 * WARNING: Do NOT assume that obj is valid; if the sector data was not found, there will be no obj.
-                                 */
-                                if (BACKTRACK && obj) {
-                                    if (!off && obj.file) {
-                                        chipset.printf(MESSAGE.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addrCur);
-                                        /**
-                                        if (obj.file.path == "\\SYSBAS.EXE" && obj.offFile == 512) {
-                                            chipset.cpu.stopCPU();
-                                        }
-                                        */
-                                    }
-                                    bto = chipset.bus.addBackTrackObject(obj, bto, off);
-                                    chipset.bus.writeBackTrackObject(addrCur, bto, off);
-                                }
-                            }
-                            fAsyncRequest = fAsync;
-                            if (fAsync) {
-                                setTimeout(function() {
-                                    if (!chipset.updateDMA(channel)) chipset.advanceDMA(channel);
-                                }, 0);
-                            }
-                        });
-                    }(addr));
-                }
-                else if (channel.type == ChipSet.DMA_MODE.TYPE_READ) {
-                    /**
-                     * TODO: Determine whether we should support async dmaWrite() functions (currently not required)
-                     */
-                    b = chipset.bus.getByte(addr);
-                    if (channel.fnTransfer.call(channel.component, channel.obj, b) < 0) {
-                        /**
-                         * In this case, I think I have no choice but to terminate the DMA operation in response to a failure,
-                         * because the ROM BIOS FDC.REG_DATA.CMD.FORMAT_TRACK command specifies a count that is MUCH too large
-                         * (a side-effect of the ROM BIOS using the same "DMA_SETUP" code for reads, writes AND formats).
-                         */
-                        channel.fError = true;
-                    }
-                }
-                else if (channel.type == ChipSet.DMA_MODE.TYPE_VERIFY) {
-                    /**
-                     * Originally, we did nothing here and just fell into updateDMA(); however, we actually need to probe for
-                     * data even though we're not going to do anything with it, so that any data errors get flagged by the FDC.
-                     *
-                     * This resolves the copy-protection check on "Life & Death II (Disk 1)", and it should also resolve a
-                     * similar problem with COMPAQ DeskPro 386 machines configured with 1.2M drives (where the BIOS would
-                     * attempt to verify sector 16 after reading the boot sector from a 15 sector/track diskette and expect
-                     * an error in order to confirm the CMOS drive type).  This will make disk type/drive type errors more
-                     * common on those machines (eg, loading a 1.44M diskette in a 1.2M drive), but that should just be a more
-                     * accurate reflection of historical reality.
-                     */
-                    (function advanceDMAVerify(addrCur) {
-                        channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
-                            if (b < 0) {
-                                if (!channel.fWarning) {
-                                    if (DEBUG) chipset.printf(MESSAGE.DMA, "advanceDMAVerify(%d) ran out of data\n", iDMAChannel);
-                                    channel.fWarning = true;
-                                }
-                                /**
-                                 * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
-                                 */
-                            }
-                        });
-                    }(addr));
-                }
-                else {
-                    if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.WARNING, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
-                    channel.fError = true;
+        while (nBytes-- > 0 && channel.fRequest && !channel.masked && !channel.nWait) {
+
+            let addr = this.getDMAAddr(channel);
+            let type = channel.mode & ChipSet.DMA_MODE.TYPE;
+
+            if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
+                channel.cbDebug = this.getDMARemaining(channel);
+                channel.sAddrDebug = StrLib.toHex(addr >> 4, 4) + ":" + StrLib.toHex(addr & 0xf, 4);
+                if (type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
+                    this.printf(MESSAGE.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+                    this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
                 }
             }
-            if (fAsyncRequest || this.updateDMA(channel)) break;
+
+            if (type == ChipSet.DMA_MODE.TYPE_WRITE || type == ChipSet.DMA_MODE.TYPE_VERIFY) {
+                /**
+                 * TYPE_VERIFY doesn't move any data, but we still need to ask the device for it, so that any data errors
+                 * get flagged by the FDC.  This resolves the copy-protection check on "Life & Death II (Disk 1)", and it should
+                 * also resolve a similar problem with COMPAQ DeskPro 386 machines configured with 1.2M drives (where the BIOS
+                 * would attempt to verify sector 16 after reading the boot sector from a 15 sector/track diskette and expect
+                 * an error in order to confirm the CMOS drive type).
+                 */
+                let fSync = true;
+                let fDelivered = false;
+                let bSync = -1;
+                let objSync = null;
+                let offSync = 0;
+                let nWait = channel.nWait = ++this.nDMAWait;
+                channel.fnTransfer.call(channel.component, channel.obj, -1, function onTransferDMA(b, fAsync, obj, off) {
+                    if (channel.nWait !== nWait) return;        // the request was cancelled
+                    channel.nWait = 0;
+                    if (fSync) {
+                        bSync = b; objSync = obj; offSync = off || 0;
+                        fDelivered = true;
+                        return;
+                    }
+                    chipset.receiveDMA(channel, addr, b, obj, off || 0);
+                    if (channel.fRequest && !channel.masked) chipset.startDMA(channel);
+                });
+                fSync = false;
+                if (!fDelivered) {
+                    if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.DATA, "advanceDMA(%d): waiting for device\n", iDMAChannel);
+                    break;
+                }
+                this.receiveDMA(channel, addr, bSync, objSync, offSync);
+            }
+            else if (type == ChipSet.DMA_MODE.TYPE_READ) {
+                /**
+                 * TODO: Determine whether we should support async dmaWrite() functions (currently not required)
+                 */
+                let b = this.bus.getByte(addr);
+                if (channel.fnTransfer.call(channel.component, channel.obj, b) < 0) {
+                    /**
+                     * In this case, I think I have no choice but to terminate the DMA operation in response to a failure,
+                     * because the ROM BIOS FDC.REG_DATA.CMD.FORMAT_TRACK command specifies a count that is MUCH too large
+                     * (a side-effect of the ROM BIOS using the same "DMA_SETUP" code for reads, writes AND formats).
+                     */
+                    channel.fError = true;
+                    this.finishDMA(channel);
+                }
+                else if (this.stepDMA(channel)) {
+                    this.finishDMA(channel);
+                }
+            }
+            else {
+                if (DEBUG) this.printf(MESSAGE.DMA + MESSAGE.WARNING, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, type);
+                channel.fError = true;
+                this.finishDMA(channel);
+            }
         }
     }
 
     /**
-     * updateDMA(channel)
+     * receiveDMA(channel, addr, b, obj, off)
+     *
+     * Stores a byte delivered by a device (for TYPE_WRITE transfers; TYPE_VERIFY transfers discard it), and then
+     * advances the channel.
      *
      * @this {ChipSet}
      * @param {Object} channel
-     * @returns {boolean} true if DMA operation complete, false if not
+     * @param {number} addr
+     * @param {number} b (or -1 if the device has run out of data)
+     * @param {Object|null|undefined} obj (BACKTRACK object, if any)
+     * @param {number} off (BACKTRACK offset, if any)
      */
-    updateDMA(channel)
+    receiveDMA(channel, addr, b, obj, off)
     {
-        if (!channel.fError && --channel.count >= 0) {
-            if (channel.mode & ChipSet.DMA_MODE.DECREMENT) {
-                channel.addrCurrent[0]--;
-                if (channel.addrCurrent[0] < 0) {
-                    channel.addrCurrent[0] = 0xff;
-                    channel.addrCurrent[1]--;
-                    if (channel.addrCurrent[1] < 0) channel.addrCurrent[1] = 0xff;
-                }
-            } else {
-                channel.addrCurrent[0]++;
-                if (channel.addrCurrent[0] > 0xff) {
-                    channel.addrCurrent[0] = 0x00;
-                    channel.addrCurrent[1]++;
-                    if (channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
-                }
+        if (!channel.fRequest) return;
+        let type = channel.mode & ChipSet.DMA_MODE.TYPE;
+        if (b < 0) {
+            if (!channel.fWarning) {
+                if (DEBUG) this.printf(MESSAGE.DMA, "receiveDMA(%d) ran out of data%s\n", channel.controller.nChannelBase + channel.iChannel, type == ChipSet.DMA_MODE.TYPE_WRITE? ", assuming 0xff" : "");
+                channel.fWarning = true;
             }
             /**
-             * In situations where an HDC DMA operation took too long, the Fixed Disk BIOS would give up, but the DMA operation would continue.
-             *
-             * TODO: Verify that the Fixed Disk BIOS shuts down (ie, re-masks) a DMA channel for failed requests, and that this handles those failures.
+             * TODO: Determine whether to abort, as we do for DMA_MODE.TYPE_READ.
              */
-            if (!channel.masked) return false;
+            b = 0xff;
         }
+        if (type == ChipSet.DMA_MODE.TYPE_WRITE && !channel.fError) {
+            this.bus.setByte(addr, b);
+            /**
+             * WARNING: Do NOT assume that obj is valid; if the sector data was not found, there will be no obj.
+             */
+            if (BACKTRACK && obj) {
+                if (!off && obj.file) {
+                    this.printf(MESSAGE.DISK, "loading %s[%#0X] at %%%0X\n", obj.file.path, obj.offFile, addr);
+                }
+                channel.bto = this.bus.addBackTrackObject(obj, channel.bto, off);
+                this.bus.writeBackTrackObject(addr, channel.bto, off);
+            }
+        }
+        if (this.stepDMA(channel)) this.finishDMA(channel);
+    }
 
-        let controller = channel.controller;
-        let iDMAChannel = controller.nChannelBase + channel.iChannel;
-        controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
-
-        /**
-         * EOP is supposed to automatically (re)mask the channel, unless it's set for auto-initialize, in which
-         * case the current address and count are reloaded from the base registers instead.
-         */
-        if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) {
-            channel.masked = true;
-            channel.component = channel.obj = null;
+    /**
+     * stepDMA(channel)
+     *
+     * Advances the channel's current address and count after one byte has been transferred, and handles terminal
+     * count (TC): the channel's TC status bit is set (and its request bit cleared), and then the channel is either
+     * reloaded from its base address and count registers (auto-initialize) or masked (in which case the current count
+     * register wraps to 0xFFFF).
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     * @returns {boolean} true if terminal count was reached
+     */
+    stepDMA(channel)
+    {
+        if (channel.mode & ChipSet.DMA_MODE.DECREMENT) {
+            if (--channel.addrCurrent[0] < 0) {
+                channel.addrCurrent[0] = 0xff;
+                if (--channel.addrCurrent[1] < 0) channel.addrCurrent[1] = 0xff;
+            }
         } else {
+            if (++channel.addrCurrent[0] > 0xff) {
+                channel.addrCurrent[0] = 0x00;
+                if (++channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
+            }
+        }
+        let count = ((channel.countCurrent[1] << 8) | channel.countCurrent[0]) - 1;
+        if (count >= 0) {
+            channel.countCurrent[0] = count & 0xff;
+            channel.countCurrent[1] = count >> 8;
+            return false;
+        }
+        let controller = channel.controller;
+        controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
+        if (channel.mode & ChipSet.DMA_MODE.AUTOINIT) {
             channel.addrCurrent[0] = channel.addrInit[0];
             channel.addrCurrent[1] = channel.addrInit[1];
             channel.countCurrent[0] = channel.countInit[0];
             channel.countCurrent[1] = channel.countInit[1];
+            if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
+                this.printf(MESSAGE.DMA, "stepDMA(%d): auto-initialize reload\n", controller.nChannelBase + channel.iChannel);
+            }
+        } else {
+            channel.masked = true;
+            channel.countCurrent[0] = channel.countCurrent[1] = 0xff;
+        }
+        return true;
+    }
+
+    /**
+     * finishDMA(channel)
+     *
+     * Ends the channel's DMA request (because terminal count was reached or an error occurred), and notifies the device.
+     *
+     * @this {ChipSet}
+     * @param {Object} channel
+     */
+    finishDMA(channel)
+    {
+        let controller = channel.controller;
+        let iDMAChannel = controller.nChannelBase + channel.iChannel;
+
+        if (channel.fError) {
+            /**
+             * An error ends the transfer as if EOP had occurred.
+             */
+            controller.bStatus = (controller.bStatus & ~(0x10 << channel.iChannel)) | (0x1 << channel.iChannel);
+            if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) channel.masked = true;
         }
 
-        if (DEBUG && channel.type == ChipSet.DMA_MODE.TYPE_WRITE && channel.sAddrDebug && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-            this.printf(MESSAGE.DMA, "updateDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+        if (DEBUG && (channel.mode & ChipSet.DMA_MODE.TYPE) == ChipSet.DMA_MODE.TYPE_WRITE && channel.sAddrDebug && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
+            this.printf(MESSAGE.DMA, "finishDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
             this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
         }
 
-        if (channel.done) {
-            channel.done(!channel.fError);
-            channel.done = null;
+        let done = channel.done;
+        channel.fRequest = false;
+        channel.nWait = 0;
+        channel.done = null;
+        if (!(channel.mode & ChipSet.DMA_MODE.AUTOINIT)) {
+            channel.component = channel.obj = null;
         }
-
-        /**
-         * While it might make sense to call cpu.setDMA() here, it's simpler to let the CPU issue one more call
-         * to chipset.checkDMA() and let the CPU update INTR.DMA on its own, based on the return value from checkDMA().
-         */
-        return true;
+        if (done) done(!channel.fError);
     }
 
     /**
      * transferDMA(iDMAChannel, abData, nBytes, fWrite)
      *
-     * This is an alternative to requestDMA()/advanceDMA() for devices that must pace their own transfers
-     * (eg, a sound card's DAC consuming samples at a fixed rate), as opposed to the disk controllers, which
-     * are happy to move an entire block in one shot.  The device calls this whenever it's ready to move a few
-     * more bytes, and we move as many as we can (up to nBytes), honoring the channel's current address, count,
-     * mode (increment/decrement, auto-initialize) and mask.  Terminal count is handled exactly as it is for
-     * "pushed" transfers: the TC status bit is set, and the channel is either re-masked or (if auto-initialize
-     * is enabled) reloaded from its base address and count registers.
+     * This is an alternative to requestDMA() for devices that pace their own transfers (eg, a sound card's DAC
+     * consuming samples at a fixed rate), as opposed to the disk controllers, which ask us to pace transfers for them.
+     * The device calls this whenever it's ready to move a few more bytes, and we move as many as we can (up to nBytes),
+     * honoring the channel's current address, count, mode (increment/decrement, auto-initialize) and mask.  Terminal count
+     * is handled exactly as it is for requestDMA() transfers (see stepDMA()).
      *
      * The device is responsible for its own notion of block completion (and interrupts); a Sound Blaster, for
      * example, counts the bytes it has played and ignores the DMA controller's terminal count entirely.
@@ -45413,46 +45675,14 @@ class ChipSet extends Component {
 
         let n = 0;
         while (n < nBytes && !channel.masked) {
-            let addr = (channel.bPage << 16) | (channel.addrCurrent[1] << 8) | channel.addrCurrent[0];
+            let addr = this.getDMAAddr(channel);
             if (fWrite) {
                 this.bus.setByte(addr, abData[n]);
             } else {
                 abData[n] = this.bus.getByte(addr);
             }
             n++;
-            if (channel.mode & ChipSet.DMA_MODE.DECREMENT) {
-                if (--channel.addrCurrent[0] < 0) {
-                    channel.addrCurrent[0] = 0xff;
-                    if (--channel.addrCurrent[1] < 0) channel.addrCurrent[1] = 0xff;
-                }
-            } else {
-                if (++channel.addrCurrent[0] > 0xff) {
-                    channel.addrCurrent[0] = 0x00;
-                    if (++channel.addrCurrent[1] > 0xff) channel.addrCurrent[1] = 0x00;
-                }
-            }
-            let count = ((channel.countCurrent[1] << 8) | channel.countCurrent[0]) - 1;
-            if (count < 0) {
-                /**
-                 * Terminal count: set the channel's TC status bit, and then either reload the channel (auto-initialize)
-                 * or re-mask it; in both cases, the current count register wraps to 0xFFFF.
-                 */
-                controller.bStatus = (controller.bStatus & ~(0x10 << iChannel)) | (0x1 << iChannel);
-                if (channel.mode & ChipSet.DMA_MODE.AUTOINIT) {
-                    channel.addrCurrent[0] = channel.addrInit[0];
-                    channel.addrCurrent[1] = channel.addrInit[1];
-                    channel.countCurrent[0] = channel.countInit[0];
-                    channel.countCurrent[1] = channel.countInit[1];
-                    if (this.messageEnabled(MESSAGE.DMA + MESSAGE.PORT)) {
-                        this.printf(MESSAGE.DMA, "transferDMA(%d): auto-initialize reload\n", iDMAChannel);
-                    }
-                    continue;
-                }
-                channel.masked = true;
-                count = 0xffff;
-            }
-            channel.countCurrent[0] = count & 0xff;
-            channel.countCurrent[1] = count >> 8;
+            this.stepDMA(channel);
         }
         return n;
     }
@@ -47834,30 +48064,6 @@ class ChipSet extends Component {
         }
         return bitsMessage;
     }
-
-    /**
-     * checkDMA()
-     *
-     * Called by the CPU whenever INTR.DMA is set.
-     *
-     * @returns {boolean} true if one or more async DMA channels are still active (unmasked), false to reset INTR.DMA
-     *
-     checkDMA()
-     {
-         let fActive = false;
-         for (let iDMAC = 0; iDMAC < this.aDMACs; iDMAC++) {
-             let controller = this.aDMACs[iDMAC];
-             for (let iChannel = 0; iChannel < controller.aChannels.length; iChannel++) {
-                 let channel = controller.aChannels[iChannel];
-                 if (!channel.masked) {
-                     this.advanceDMA(channel);
-                     if (!channel.masked) fActive = true;
-                 }
-             }
-         }
-         return fActive;
-     }
-     */
 
     /**
      * ChipSet.init()
@@ -61900,6 +62106,12 @@ class SerialPort extends Component {
     static DL_DEFAULT = 0x180;      // we select an arbitrary default Divisor Latch equivalent to 300 baud
 
     /**
+     * The number of bytes a connected machine can have waiting before transmitData() holds our transmitter.  A VT100
+     * sends XOFF when it has room for 32 more bytes, so this leaves about half of them for the XOFF to take effect.
+     */
+    static PEER_MAX = 16;
+
+    /**
      * Receiver Buffer Register (RBR.REG, offset 0; eg, 0x3F8 or 0x2F8) on read, Transmitter Holding Register on write
      */
     static RBR = {REG: 0};          // (read)
@@ -62178,7 +62390,7 @@ class SerialPort extends Component {
          * No connection until initConnection() is called.
          */
         this.sDataReceived = "";
-        this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
+        this.connection = this.sendData = this.updateStatus = this.sendBreak = this.getPeerCount = null;
         this.fAutoFlow = false;
         this.fFocusPending = false;
 
@@ -62357,8 +62569,8 @@ class SerialPort extends Component {
     /**
      * initConnection(fNullModem)
      *
-     * If a machine 'connection' parameter exists of the form "{sourcePort}->{targetMachine}.{targetPort}",
-     * and "{sourcePort}" matches our idComponent, then look for a component with id "{targetMachine}.{targetPort}".
+     * If the machine 'connection' parameter has an entry for us (see findConnection()), then look for a component
+     * with id "{targetMachine}.{targetPort}".
      *
      * If the target component is found, then verify that it has exported functions with the following names:
      *
@@ -62379,37 +62591,56 @@ class SerialPort extends Component {
     initConnection(fNullModem)
     {
         if (!this.connection) {
-            let sConnection = this.cmp.getMachineParm('connection');
-            if (sConnection) {
-                let asParts = sConnection.split('->');
-                if (asParts.length == 2) {
-                    let sSourceID = StrLib.trim(asParts[0]);
-                    if (sSourceID != this.idComponent) return;  // this connection string is intended for another instance
-                    let sTargetID = StrLib.trim(asParts[1]);
-                    this.connection = Component.getComponentByID(sTargetID, false);
-                    if (this.connection) {
-                        let exports = this.connection['exports'];
-                        if (exports) {
-                            let fnConnect = /** @function */ (exports['connect']);
-                            if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
-                            this.sendData = exports['receiveData'];
-                            if (this.sendData) {
-                                this.fNullModem = fNullModem;
-                                this.updateStatus = exports['receiveStatus'];
-                                this.sendBreak = exports['receiveBreak'] || null;
-                                this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
-                                if (this.fFocusPending) this.setFocus(false);
-                                return;
-                            }
+            let sTargetID = this.findConnection();
+            if (sTargetID) {
+                this.connection = Component.getComponentByID(sTargetID, false);
+                if (this.connection) {
+                    let exports = this.connection['exports'];
+                    if (exports) {
+                        let fnConnect = /** @function */ (exports['connect']);
+                        if (fnConnect) fnConnect.call(this.connection, this.fNullModem);
+                        this.sendData = exports['receiveData'];
+                        if (this.sendData) {
+                            this.fNullModem = fNullModem;
+                            this.updateStatus = exports['receiveStatus'];
+                            this.sendBreak = exports['receiveBreak'] || null;
+                            this.getPeerCount = exports['getReceiveCount'] || null;
+                            this.printf(MESSAGE.STATUS, "Connected %s.%s to %s\n", this.idMachine, this.idComponent, sTargetID);
+                            if (this.fFocusPending) this.setFocus(false);
+                            return;
                         }
                     }
                 }
                 /**
                  * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s\n", sConnection);
+                this.printf(MESSAGE.STATUS, "Unable to establish connection: %s->%s\n", this.idComponent, sTargetID);
             }
         }
+    }
+
+    /**
+     * findConnection()
+     *
+     * The machine 'connection' parameter is a comma-separated list of "{sourcePort}->{targetMachine}.{targetPort}"
+     * entries (eg, "com1->vt100.serialPort,com2->vt100b.serialPort"), so that each serial port can be connected to
+     * a different machine.
+     *
+     * @this {SerialPort}
+     * @returns {string|null} the target ID ("{targetMachine}.{targetPort}") of the entry for this port, if any
+     */
+    findConnection()
+    {
+        let sConnection = this.cmp.getMachineParm('connection');
+        if (sConnection) {
+            for (let sEntry of sConnection.split(',')) {
+                let asParts = sEntry.split('->');
+                if (asParts.length == 2 && StrLib.trim(asParts[0]) == this.idComponent) {
+                    return StrLib.trim(asParts[1]);
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -62421,13 +62652,16 @@ class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {boolean} [fScroll]
+     * @returns {boolean} true if this port has a connection (or will have one, when its target is ready)
      */
     setFocus(fScroll)
     {
+        if (!this.findConnection()) return false;
         let exports = this.connection && this.connection['exports'];
         let fnFocus = exports && /** @function */ (exports['focus']);
         if (fnFocus) fnFocus.call(this.connection, fScroll);
         this.fFocusPending = !this.connection;
+        return true;
     }
 
     /**
@@ -63109,10 +63343,17 @@ class SerialPort extends Component {
      *
      * Helper for clocking transmitted data at the expected baud rate.
      *
+     * A connected machine can't run during our bursts of instructions, so to keep us from getting too far ahead of
+     * it, the transmitter doesn't become empty while that machine has PEER_MAX or more bytes waiting.
+     *
      * @this {SerialPort}
      */
     transmitData()
     {
+        if (this.getPeerCount && this.getPeerCount.call(this.connection) >= SerialPort.PEER_MAX) {
+            this.cpu.setTimer(this.timerTransmitNext, this.getBaudTimeout());
+            return;
+        }
         this.bLSR |= (SerialPort.LSR.THRE | SerialPort.LSR.TSRE);
         this.fTHRInt = true;
         this.updateIIR();
@@ -70377,6 +70618,7 @@ class FDC extends Component {
          * NOTE: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
+        if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_FDC, this);
         this.initController();
         /**
          * Don't bother resetting the drive list if we're being called by powerUp(), because powerUp() will.
@@ -70453,6 +70695,10 @@ class FDC extends Component {
      */
     save()
     {
+        /**
+         * A command's Execution Phase can't be saved, so complete any DMA transfer that's in progress.
+         */
+        if (this.chipset) this.chipset.flushDMA();
         let state = new State(this);
         state.set(0, this.saveController());
         return state.data();
@@ -70499,6 +70745,13 @@ class FDC extends Component {
          * is from processor to the FDC Data Register).
          */
         this.regStatus = data[i++];
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The state was saved during a command's Execution Phase (which can happen only if a DMA transfer was
+             * waiting on remote I/O), and since that can't be resumed, the command is effectively abandoned.
+             */
+            this.regStatus = FDC.REG_STATUS.RQM;
+        }
 
         /**
          * There can be up to 9 command bytes, and 7 result bytes, so 9 data registers are sufficient for communicating
@@ -71832,6 +72085,7 @@ class FDC extends Component {
     {
         this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
+            if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_FDC, this);
             this.initController();
             /**
              * initController() resets, among other things, the selected drive (this.iDrive), so if we were
@@ -71988,11 +72242,18 @@ class FDC extends Component {
     inFDCData(port, addrFrom)
     {
         let bIn = 0;
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The FDC is in its Execution Phase (see beginExecution()), so it's not ready for data register access.
+             */
+            this.printIO(port, undefined, addrFrom, "DATA (BUSY)", bIn);
+            return bIn;
+        }
         if (this.regDataIndex < this.regDataTotal) {
             bIn = this.regDataArray[this.regDataIndex];
         }
         /**
-         * As per the discussion in doCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
+         * As per the discussion in endCmd(), once the first byte of the Result Phase has been read, the interrupt must be cleared.
          */
         if (this.regOutput & FDC.REG_OUTPUT.INT_ENABLE) {
             if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.FDC);
@@ -72019,6 +72280,14 @@ class FDC extends Component {
     {
         if (this.messageEnabled()) {
             this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+        }
+
+        if (!(this.regStatus & FDC.REG_STATUS.RQM)) {
+            /**
+             * The FDC is in its Execution Phase (see beginExecution()), so it's not ready for data register access.
+             */
+            this.printf(MESSAGE.PORT + MESSAGE.FDC, "%s.outFDCData(%#04x): ignored while busy\n", this.idComponent, bOut);
+            return;
         }
 
         if (this.regDataTotal < this.regDataArray.length) {
@@ -72081,6 +72350,7 @@ class FDC extends Component {
      */
     doCmd()
     {
+        let fdc = this;
         let fIRQ = false;
         this.regDataIndex = 0;
         let bCmd = this.popCmd();
@@ -72173,11 +72443,21 @@ class FDC extends Component {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
                 fIRQ = true;
             } else {
+                /**
+                 * The Execution Phase (ie, the DMA transfer) now runs in parallel with the CPU, so the Result Phase
+                 * (and interrupt) is deferred until doRead() or doWrite() calls us back.
+                 */
+                this.beginExecution();
+                let onExecutionDone = function onFDCReadWriteDone(fIRQ) {
+                    fdc.pushResults(drive, bCmd, bHead, c, h, r, n);
+                    fdc.endCmd(drive, bCmdMasked, fIRQ);
+                };
                 if (bCmdMasked != FDC.REG_DATA.CMD.WRITE_DATA) {
-                    fIRQ = this.doRead(drive);
+                    this.doRead(drive, onExecutionDone);
                 } else {
-                    fIRQ = this.doWrite(drive);
+                    this.doWrite(drive, onExecutionDone);
                 }
+                return;
             }
             this.pushResults(drive, bCmd, bHead, c, h, r, n);
             break;
@@ -72261,10 +72541,12 @@ class FDC extends Component {
             drive.bSectorEnd = this.popCmd(FDC.TERMS.SC);   // SC (sectors/track)
             this.popCmd(FDC.TERMS.GPL);                     // GPL (spacing between sectors, excluding VCO Sync Field; 3)
             drive.bFiller = this.popCmd(FDC.TERMS.D);       // D (filler byte)
-            this.doFormat(drive);
-            this.pushResults(drive, bCmd, bHead, c, h, r, n);
-            fIRQ = true;
-            break;
+            this.beginExecution();
+            this.doFormat(drive, function onFDCFormatDone() {
+                fdc.pushResults(drive, bCmd, bHead, c, h, r, n);
+                fdc.endCmd(drive, bCmdMasked, true);
+            });
+            return;
 
         case FDC.REG_DATA.CMD.SEEK:                         // 0x0F
             bDrive = this.popCmd(FDC.TERMS.DS);
@@ -72306,8 +72588,40 @@ class FDC extends Component {
             break;
         }
 
+        this.endCmd(drive, bCmdMasked, fIRQ);
+    }
+
+    /**
+     * beginExecution()
+     *
+     * Called when a command enters its Execution Phase (ie, a DMA transfer); the FDC is busy and not ready for
+     * any data register access until the Result Phase begins (see endCmd()).
+     *
+     * @this {FDC}
+     */
+    beginExecution()
+    {
+        this.regDataIndex = this.regDataTotal = 0;
+        this.regStatus = (this.regStatus & ~(FDC.REG_STATUS.RQM | FDC.REG_STATUS.READ_DATA)) | FDC.REG_STATUS.BUSY;
+    }
+
+    /**
+     * endCmd(drive, bCmdMasked, fIRQ)
+     *
+     * Called when a command has finished (including its Execution Phase, if any) to begin the Result Phase.
+     *
+     * @this {FDC}
+     * @param {Object|undefined} drive
+     * @param {number} bCmdMasked
+     * @param {boolean} fIRQ
+     */
+    endCmd(drive, bCmdMasked, fIRQ)
+    {
+        this.regStatus |= FDC.REG_STATUS.RQM;
         if (this.regDataTotal > 0) {
             this.regStatus |= (FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
+        } else {
+            this.regStatus &= ~(FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
         }
 
         /**
@@ -72609,13 +72923,13 @@ class FDC extends Component {
     }
 
     /**
-     * doRead(drive)
+     * doRead(drive, done)
      *
      * @this {FDC}
      * @param {Object} drive
-     * @returns {boolean}
+     * @param {function(boolean)} done (called when the read has finished, with true if an interrupt should be generated)
      */
-    doRead(drive)
+    doRead(drive, done)
     {
         /**
          * With only NOT_READY and INCOMPLETE set, an empty drive causes DOS to report "General Failure";
@@ -72633,31 +72947,36 @@ class FDC extends Component {
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             drive.sector = null;
             drive.resCode = FDC.REG_DATA.RES.NONE;
             if (this.chipset) {
                 if (!drive.bCylinder && !drive.bHead && drive.bSector == 1) {
                     if (!drive.fBootable && this.chipset.getDMAState(ChipSet.DMA_FDC)[0] == 0x7C00) {
-                        return false;
+                        done(false);
+                        return;
                     }
                 }
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaRead', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCReadDone(fComplete) {
+                    done(true);
+                }, this.getDataRate());
+                return;
             }
         }
-        return true;
+        done(true);
     }
 
     /**
-     * doWrite(drive)
+     * doWrite(drive, done)
      *
      * @this {FDC}
      * @param {Object} drive
-     * @returns {boolean}
+     * @param {function(boolean)} done (called when the write has finished, with true if an interrupt should be generated)
      */
-    doWrite(drive)
+    doWrite(drive, done)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         if (drive.disk) {
@@ -72670,20 +72989,25 @@ class FDC extends Component {
             }
             if (drive.bHead > drive.nHeads - 1) {
                 drive.resCode = FDC.REG_DATA.RES.NO_DATA | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             if (!drive.fWritable || drive.disk.fWriteProtected) {
                 drive.resCode = FDC.REG_DATA.RES.NOT_WRITABLE | FDC.REG_DATA.RES.INCOMPLETE;
-                return true;
+                done(true);
+                return;
             }
             drive.sector = null;
             drive.resCode = FDC.REG_DATA.RES.NONE;
             if (this.chipset) {
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaWrite', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCWriteDone(fComplete) {
+                    done(true);
+                }, this.getDataRate());
+                return;
             }
         }
-        return true;
+        done(true);
     }
 
     /**
@@ -72700,8 +73024,9 @@ class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
+     * @param {function()} done (called when the format has finished)
      */
-    doFormat(drive)
+    doFormat(drive, done)
     {
         drive.resCode = FDC.REG_DATA.RES.NOT_READY | FDC.REG_DATA.RES.INCOMPLETE;
         /**
@@ -72722,10 +73047,45 @@ class FDC extends Component {
                 drive.bFormatting = true;
                 drive.cSectorsFormatted = 0;
                 this.chipset.connectDMA(ChipSet.DMA_FDC, this, 'dmaFormat', drive);
-                this.chipset.requestDMA(ChipSet.DMA_FDC);
-                drive.bFormatting = false;
+                this.chipset.requestDMA(ChipSet.DMA_FDC, function onFDCFormatDone(fComplete) {
+                    drive.bFormatting = false;
+                    done();
+                }, this.getDataRate());
+                return;
             }
         }
+        done();
+    }
+
+    /**
+     * getDataRate()
+     *
+     * Returns the controller's data rate, in bytes per second, which is used to pace DMA transfers.  Prior to the
+     * MODEL_5170, the rate was always 250Kbps; on later models, it's selected with the Control Register (0x3F7).
+     *
+     * @this {FDC}
+     * @returns {number}
+     */
+    getDataRate()
+    {
+        let nRate = 250000;
+        if (this.chipset && this.chipset.model >= ChipSet.MODEL_5170) {
+            switch(this.regControl & 0x3) {
+            case FDC.REG_CONTROL.RATE500K:
+                nRate = 500000;
+                break;
+            case FDC.REG_CONTROL.RATE300K:
+                nRate = 300000;
+                break;
+            case FDC.REG_CONTROL.RATE250K:
+                nRate = 250000;
+                break;
+            default:
+                nRate = 1000000;            // RATEUNUSED on the MODEL_5170, but 1Mbps on later (2.88M) controllers
+                break;
+            }
+        }
+        return nRate >> 3;
     }
 
     /**
@@ -73215,6 +73575,13 @@ class HDC extends Component {
             }
         }
     };
+
+    /**
+     * XTC DMA transfer rate, in bytes per second, which is used to pace DMA transfers between the XTC's sector
+     * buffer and memory; it's simply the drive's 5Mbps data rate, since we don't simulate rotational latency or
+     * sector interleave.
+     */
+    static XTC_DMA_RATE = 625000;
 
     /**
      * XTC (XT Controller) Registers
@@ -73806,6 +74173,7 @@ class HDC extends Component {
          * TODO: The controller is also initialized by the constructor, to assist with auto-mount support,
          * so think about whether we can skip powerUp initialization.
          */
+        if (this.chipset) this.chipset.cancelDMA(ChipSet.DMA_HDC, this);
         this.initController(null, true);
     }
 
@@ -73819,6 +74187,10 @@ class HDC extends Component {
      */
     save()
     {
+        /**
+         * A command's DMA transfer can't be saved, so complete any transfer that's in progress.
+         */
+        if (this.chipset) this.chipset.flushDMA();
         let state = new State(this);
         state.set(0, this.saveController());
         return state.data();
@@ -74533,7 +74905,10 @@ class HDC extends Component {
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
         this.regReset = bOut;
-        if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.XTC);
+        if (this.chipset) {
+            this.chipset.clearIRR(ChipSet.IRQ.XTC);
+            this.chipset.cancelDMA(ChipSet.DMA_HDC, this);
+        }
         this.initController();
     }
 
@@ -75657,7 +76032,7 @@ class HDC extends Component {
                         }
                     }
                     done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-                });
+                }, HDC.XTC_DMA_RATE);
                 return;
             }
         }
@@ -75706,7 +76081,7 @@ class HDC extends Component {
                         }
                     }
                     done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-                });
+                }, HDC.XTC_DMA_RATE);
                 return;
             }
         }
@@ -75748,7 +76123,7 @@ class HDC extends Component {
                     }
                 }
                 done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
-            });
+            }, HDC.XTC_DMA_RATE);
             return;
         }
         done(drive.errorCode? HDC.XTC.DATA.STATUS.ERROR : HDC.XTC.DATA.STATUS.OK);
@@ -79604,8 +79979,10 @@ class Debuggerx86 extends DbgLib {
      * is in it).
      *
      * BASIC-DOS stores the real-mode address of its arena in CPU_ARENA (0:0514h): either its first MCB (when the
-     * 8086 CPU$ driver manages memory) or its first PMB (when the 80286 CPU$ driver does, with a table of PMBs in
-     * its system area, above 1Mb).  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
+     * 8086 CPU$ driver manages memory, whose offset is always zero) or its first PMB (when the 80386 CPU$ driver
+     * does, with a table of PMBs at a nonzero offset in its system area).  All of those addresses are physical,
+     * so we read physical memory, and with paging, BASIC-DOS maps physical memory at linear address LIN_BASE, so
+     * we convert the linear addresses of its selectors to physical addresses, too.  The driver chain starts at DD_LIST (0:050Ah), and its links are segments in real
      * mode and selectors in protected mode.  DOS is wherever its INT 20h handler is (DM gets DOS's segment from
      * DOS_MSC_GETVARS instead, which we can't call).
      *
@@ -79614,16 +79991,22 @@ class Debuggerx86 extends DbgLib {
     dumpArena()
     {
         let dbg = this, cpu = this.cpu;
-        let getByte = function(addr) { return cpu.probeAddr(addr, 1) & 0xff; };
-        let getShort = function(addr) { return cpu.probeAddr(addr, 2) & 0xffff; };
-        let getLong = function(addr) { return cpu.probeAddr(addr, 4) >>> 0; };
+        let getByte = function(addr) { return cpu.probeAddr(addr, 1, true) & 0xff; };
+        let getShort = function(addr) { return cpu.probeAddr(addr, 2, true) & 0xffff; };
+        let getLong = function(addr) { return cpu.probeAddr(addr, 4, true) >>> 0; };
+        let getPhys = function(addr) {
+            if (addr !== X86.ADDR_INVALID && (addr >>> 0) >= Debuggerx86.BASICDOS.LIN_BASE) {
+                addr = (addr >>> 0) - Debuggerx86.BASICDOS.LIN_BASE;
+            }
+            return addr;
+        };
         /**
          * @param {number} sel
          * @param {number} off
          * @param {number} [type] (default is based on current CPU mode)
          * @returns {number} (is the corresponding linear address, or X86.ADDR_INVALID)
          */
-        let getLinear = function(sel, off, type) { return dbg.getAddr(dbg.newAddr(off, sel, undefined, type)); };
+        let getLinear = function(sel, off, type) { return getPhys(dbg.getAddr(dbg.newAddr(off, sel, undefined, type))); };
         let getName = function(addr) {
             let s = "";
             for (let i = 0; i < 8; i++) {
@@ -79637,7 +80020,7 @@ class Debuggerx86 extends DbgLib {
          */
         let aBlocks = [];
         let addr = (getShort(Debuggerx86.BASICDOS.CPU_ARENA + 2) << 4) + getShort(Debuggerx86.BASICDOS.CPU_ARENA);
-        let fPMB = (addr >= 0x100000);
+        let fPMB = (getShort(Debuggerx86.BASICDOS.CPU_ARENA) != 0);
         while (addr && aBlocks.length < 1024) {     // (CPU_ARENA is zero until CPU$ sets it, if RAM was zeroed)
             let sig = getByte(addr), block;
             if (sig != 0x4D && sig != 0x5A) break;
@@ -79657,7 +80040,7 @@ class Debuggerx86 extends DbgLib {
             return;
         }
         let fProt = cpu.isProtMode();
-        let selDOS = getShort(cpu.addrIDT + (0x20 << (fProt? 3 : 2)) + 2);
+        let selDOS = getShort(getPhys(cpu.addrIDT) + (0x20 << (fProt? 3 : 2)) + 2);
         let addrDOS = getLinear(selDOS, 0, fProt? Debuggerx86.ADDRTYPE.PROT : Debuggerx86.ADDRTYPE.REAL);
         let addrCur = 0;
         let printSpan = function(addrEnd) {
@@ -85267,6 +85650,7 @@ if (DEBUGGER) {
     Debuggerx86.BASICDOS = {
         DD_LIST:    0x50A,
         CPU_ARENA:  0x514,
+        LIN_BASE:   0xC0000000,     // with paging, the linear address of physical memory
         PMB_USED:   0x01,
         OWNER_SYS:  0x08,
         TYPES: {
@@ -88122,11 +88506,11 @@ class Computer extends Component {
         else if (globals.browser) {
             /**
              * A machine with no video (eg, a PC whose only console is a terminal on a serial port) gives focus
-             * to whatever its serial ports are connected to instead.
+             * to whatever its first connected serial port is connected to instead.
              */
             let serial = null;
             while ((serial = /** @type {SerialPort} */ (this.getMachineComponent("SerialPort", serial || false)))) {
-                serial.setFocus(fScroll);
+                if (serial.setFocus(fScroll)) break;
             }
         }
     }

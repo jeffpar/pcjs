@@ -31,6 +31,13 @@ import { node }      from "../modules/nodeapi.js";
 
 await node.import("child_process", "fs", "glob", "json5", "path", "xml2js");
 
+/*
+ * Node 25 and up define a localStorage getter that warns ("localStorage is not available because
+ * --localstorage-file was not provided") on first use, which the machine's localStorage test triggers;
+ * replacing the getter (without calling it) makes localStorage simply undefined, as it was before.
+ */
+Object.defineProperty(globalThis, "localStorage", {value: undefined, configurable: true, writable: true});
+
 let device = new Device("node");
 let printf = device.printf.bind(device);
 let sprintf = device.sprintf.bind(device);
@@ -1935,7 +1942,7 @@ export default class PC extends PCJSLib {
                 /**
                  * If CONFIG.SYS or another text file from the system's list also exists in the directory we're
                  * building, the directory's copy wins (taking the system file's place in the root), so that a directory
-                 * (eg, configs/console/bios) can provide its own CONFIG.SYS.
+                 * (eg, configs/console/serial/fpe) can provide its own CONFIG.SYS.
                  */
                 let baseName = node.path.basename(name);
                 let fConfig = baseName.toUpperCase() == "CONFIG.SYS";

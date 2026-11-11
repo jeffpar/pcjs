@@ -1,0 +1,8 @@
+{
+  "id": "romNone",
+  "class": "rom",
+  "addr": "0xc0000",
+  "size": "0x00200",
+  "alias": null,
+  "file": "/machines/pcx86/ibm/video/none/NOVIDEO.json5"
+}

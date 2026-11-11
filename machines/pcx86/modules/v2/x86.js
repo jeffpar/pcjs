@@ -426,7 +426,6 @@ const X86 = {
         INTR:       0x01,       // h/w interrupt requested
         TRAP:       0x02,       // trap (INT 0x01) requested
         HALT:       0x04,       // halt (HLT) requested
-        DMA:        0x08,       // async DMA operation in progress
         DEBUGGER:   0x10        // debugger checks enabled
     },
     /**

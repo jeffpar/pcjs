@@ -223,7 +223,7 @@ export default class Segx86 {
          */
         if (addrDT) {
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
                 /**
                  * TODO: This is the first of many steps toward accurately counting cycles in protected mode;
                  * I simply noted that "POP segreg" takes 5 cycles in real mode and 20 in protected mode, so I'm
@@ -1003,6 +1003,16 @@ export default class Segx86 {
                 X86.helpFault.call(cpu, X86.EXCEPTION.NP_FAULT, (sel & X86.ERRCODE.SELMASK) | (fIDT? X86.ERRCODE.IDT : 0));
                 return X86.ADDR_INVALID;
             }
+            /**
+             * A RETF or IRET to an offset past the new segment's limit must fault here, while CS is unchanged and
+             * helpRETF() or helpIRET() can still undo any stack switch above, so that the fault is reported at the
+             * return instruction, at its own privilege level.  If it were left to the first opcode fetch, a return
+             * to an outer privilege level would appear to have faulted at that outer level.
+             */
+            if (fCall === false && (this.offIP >>> 0) > (limit >>> 0)) {
+                X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, 0);
+                return X86.ADDR_INVALID;
+            }
             break;
 
         case Segx86.ID.DATA:
@@ -1092,11 +1102,13 @@ export default class Segx86 {
             }
             /**
              * For more efficient IOPM lookups, we cache the starting linear address in segTSS.addrIOPM, and the
-             * last valid address in segTSS.addrIOPMLimit.
+             * last valid address in segTSS.addrIOPMLimit.  An 80286 TSS has no IOPM, so we clear addrIOPM.  The
+             * limit is the new descriptor's (this.limit still has the previous TSS's until it's updated below).
              */
+            this.addrIOPM = 0;
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
                 this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
-                this.addrIOPMLimit = (base + this.limit) >>> 0;
+                this.addrIOPMLimit = (base + limit) >>> 0;
             }
             break;
 
@@ -1653,7 +1665,7 @@ export default class Segx86 {
 
             let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
 
-            if ((addrDTLimit - addrDesc)|0 >= 7) {
+            if (((addrDTLimit - addrDesc)|0) >= 7) {
 
                 /**
                  * Load the descriptor from memory using probeAddr().

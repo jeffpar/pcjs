@@ -3031,6 +3031,10 @@ export default class CPUx86 extends CPU {
     /**
      * checkIOPM(port, nPorts, fInput)
      *
+     * Any I/O instruction with CPL > IOPL (or in V86-mode, regardless of IOPL) generates a GP_FAULT, unless the
+     * current TSS is a 386 TSS whose I/O permission map allows every port involved; an 80286 TSS has no such map.
+     * As in opCLI(), there's no need to check for protected-mode, because CPL is always zero in real-mode.
+     *
      * @this {CPUx86}
      * @param {number} port (0x0000 to 0xffff)
      * @param {number} nPorts (1 to 4)
@@ -3040,15 +3044,17 @@ export default class CPUx86 extends CPU {
     checkIOPM(port, nPorts, fInput)
     {
         let bitsPorts = 0;
-        if (I386 && (this.regCR0 & X86.CR0.MSW.PE) && (this.nCPL > this.nIOPL || (this.regPS & X86.PS.VM)) && this.segTSS.addrIOPM) {
-            let offIOPM = port >>> 3;
-            let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+        if (this.nCPL > this.nIOPL || I386 && (this.regPS & X86.PS.VM)) {
             bitsPorts = ((1 << nPorts) - 1) << (port & 0x7);
-            while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
-                let bits = this.getByte(addrIOPM);
-                if (bits & bitsPorts) break;
-                bitsPorts >>>= 8;
-                addrIOPM++;
+            if (I386 && this.segTSS.addrIOPM) {
+                let offIOPM = port >>> 3;
+                let addrIOPM = this.segTSS.addrIOPM + offIOPM;
+                while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
+                    let bits = this.getByte(addrIOPM);
+                    if (bits & bitsPorts) break;
+                    bitsPorts >>>= 8;
+                    addrIOPM++;
+                }
             }
         }
         if (bitsPorts) {
@@ -4432,21 +4438,10 @@ export default class CPUx86 extends CPU {
      * and the Trap flag are similar; they must both honor the NOINTR suppression flag, and stepCPU() shouldn't
      * have to check multiple variables when deciding whether to simulate an interrupt.
      *
-     * This function also includes a check for the new async INTFLAG.DMA flag, which is triggered by a ChipSet call
-     * to setDMA().  This DMA flag actually has nothing to do with interrupts; it's simply an expedient way to
-     * piggy-back on the CPU's execution logic, to help drive async DMA requests.
-     *
-     * Originally, DMA requests (eg, FDC or HDC I/O operations) were all handled synchronously, since no actual
-     * I/O was required to satisfy the request; from the CPU's perspective, this meant DMA operations were virtually
-     * instantaneous.  However, with the introduction of remote disk connections, some actual I/O may now be required;
-     * in practice, this means that the FIRST byte requested as part of a DMA operation may require a callback to
-     * finish, while all remaining bytes will be retrieved during subsequent checkINTR() calls -- unless of course
-     * additional remote I/O operations are required to complete the DMA operation.
-     *
-     * As a result, the CPU will run slightly slower while an async DMA request is in progress, but the slowdown
-     * should be negligible.  One downside is that this slowdown will be in effect for the entire duration of the
-     * I/O (ie, even while we're waiting for the remote I/O to finish), so the ChipSet component should avoid
-     * calling setDMA() whenever possible.
+     * NOTE: There used to be an (unused) INTFLAG.DMA flag here as well, which would have had the CPU call the ChipSet
+     * after every instruction to advance DMA requests.  DMA requests are now driven by a ChipSet timer instead (see
+     * ChipSet.requestDMA()), which lets them run in parallel with the CPU at each device's data rate, without adding
+     * any overhead to instruction execution.
      *
      * TODO: While comparing SYMDEB tracing in both PCx86 and VMware, I noticed that after single-stepping ANY
      * segment-load instruction, SYMDEB would get control immediately after that instruction in VMware, whereas
@@ -4480,7 +4475,7 @@ export default class CPUx86 extends CPU {
          * we want to dispose of it as quickly as possible: if INTR is the ONLY flag set and IF is clear, there's
          * nothing to do (the HALT and DEBUGGER flags are handled by stepCPU()).
          */
-        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP | X86.INTFLAG.DMA)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
+        if ((this.intFlags & (X86.INTFLAG.INTR | X86.INTFLAG.TRAP)) == X86.INTFLAG.INTR && !(this.regPS & X86.PS.IF)) {
             return false;
         }
 
@@ -4517,15 +4512,6 @@ export default class CPUx86 extends CPU {
                 iPriority = 1 - iPriority;
             }
         }
-        /**
-         * As long as the ChipSet component isn't calling setDMA(), we don't need to test INTFLAG.DMA...
-         *
-        if (this.intFlags & X86.INTFLAG.DMA) {
-            if (!this.chipset.checkDMA()) {
-                this.intFlags &= ~X86.INTFLAG.DMA;
-            }
-        }
-         */
         return false;
     }
 
@@ -4868,26 +4854,6 @@ export default class CPUx86 extends CPU {
 
         return (this.flags.complete? this.nBurstCycles - this.nStepCycles : (this.flags.complete === undefined? 0 : -1));
     }
-
-    /**
-     * setDMA(fActive)
-     *
-     * This is called by the ChipSet component to update DMA status.
-     *
-     * @this {CPUx86}
-     * @param {boolean} fActive is true to set INTFLAG.DMA, false to clear
-     *
-     setDMA(fActive)
-     {
-        if (this.chipset) {
-            if (fActive) {
-                this.intFlags |= X86.INTFLAG.DMA;
-            } else {
-                this.intFlags &= ~X86.INTFLAG.DMA;
-            }
-        }
-    }
-     */
 
     /**
      * CPUx86.init()
