@@ -54,6 +54,16 @@ export default class VT100Serial extends Device {
         this.connection = this.sendData = this.updateStatus = this.sendBreak = null;
 
         /*
+         * fAutoXOFF enables auto-XOFF/XON processing: when the VT100 firmware transmits XOFF (because its
+         * internal input buffer is nearly full), receiveByte() stops clocking queued data into the UART until
+         * the firmware transmits XON.  Without this, XOFF would have to make a round trip to the connected
+         * host (eg, through a network connection), and by the time the host stopped sending, the firmware's
+         * buffer would have overflowed, resulting in lost characters and "checkerboard" error characters.
+         * XOFF and XON are still passed along to the host as well (see transmitByte()).  See onReset() for fAutoStop.
+         */
+        this.fAutoXOFF = true;
+
+        /*
          * Export all functions required by initConnection().
          */
         this['exports'] = {
@@ -215,6 +225,7 @@ export default class VT100Serial extends Device {
     onReset()
     {
         this.fReady = false;
+        this.fAutoStop = false;
         this.bDataIn = 0;
         this.bDataOut = 0;
         this.bStatus = VT100Serial.UART8251.STATUS.INIT;
@@ -385,14 +396,17 @@ export default class VT100Serial extends Device {
     {
         let fTransmitted = false;
         this.printf(MESSAGE.SERIAL, "transmitByte(%#04x)\n", b);
+        /*
+         * XOFF and XON are acted upon locally (if fAutoXOFF is set) AND passed along to the connected host,
+         * just as a real VT100 would; the host may not stop in time to prevent our own buffer from overflowing,
+         * but it should still reduce the amount of data that piles up in abReceived.
+         */
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
                 this.fAutoStop = true;
-                return false;
             }
-            if (b == 0x11) {        // XON
+            else if (b == 0x11) {   // XON
                 this.fAutoStop = false;
-                return false;
             }
         }
         if (this.sendData && this.sendData.call(this.connection, b)) {
