@@ -18,12 +18,13 @@ VEC_DRIVE1	equ	46h
 ;
 ; While I had considered shaving 1K off available RAM so that I could safely
 ; stash a copy of the drive tables, that seemed rather wasteful, so I wondered
-; if I could just use some unused interrupt vector space.  And while browsing
-; Ralf Brown's Interrupt List, I noticed that AMI BIOS authors had apparently
-; come to the same conclusion and used vectors C0h-C7h for a similar purpose.
+; if I could just use some unused interrupt vector space.  I originally used
+; vectors C0h-C7h, as the AMI BIOS does (see Ralf Brown's Interrupt List), but
+; BASIC-DOS uses vectors 80h-FFh as a stack, so now it's vectors 50h-57h, one
+; of the least-used ranges below 80h (on PCs, IRQ relocations by multitaskers).
 ;
-TBL_DRIVE0	equ	0C0h*4	; room for 1 drv_parms spanning vectors C0h-C3h
-TBL_DRIVE1	equ	0C4h*4	; room for 1 drv_parms spanning vectors C4h-C7h
+TBL_DRIVE0	equ	050h*4	; room for 1 drv_parms spanning vectors 50h-53h
+TBL_DRIVE1	equ	054h*4	; room for 1 drv_parms spanning vectors 54h-57h
 
 par_record	struc
 par_status	db	?
