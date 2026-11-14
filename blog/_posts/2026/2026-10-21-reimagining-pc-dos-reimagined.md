@@ -101,11 +101,17 @@ BASIC programs can not only be `LOAD`'ed and `LIST`'ed from the command prompt b
 
 ### Batch Files
 
-In BASIC-DOS, there isn't much difference between BAT and BAS files, because I didn't want `COMMAND.COM` to need a separate "language".  Simple operations like looping a certain number of times, which could be surprisingly difficult in a DOS batch file, are now as easy as:
+In BASIC-DOS, there isn't much difference between BAT and BAS files, because I didn't want `COMMAND.COM` to need a separate "language".  Simple operations like looping a certain number of times, which could be surprisingly difficult in a DOS batch file, are now easy using BASIC-DOS variables:
 
 ```
 FOR LOOP = 1 TO 10 : DIR : NEXT
 ```
+
+There is no need for "environment variables"; BASIC-DOS does support environment blocks internally, but only to provide backward-compatibility with old DOS programs.
+
+Instead of PATH and PROMPT environment variables, there are simply `PATH$` and `PROMPT$` string variables.  Instead of `ECHO`ing them, you `PRINT` them, and instead of using `SET` to set them, you use an explicit (or implicit) `LET` to assign new values.
+
+Run the `HELP PROMPT` command and you'll see that the BASIC-DOS `PROMPT$` string is a much more flexible version of the DOS `PROMPT` environment variable, because it leverages BASIC-DOS' built-in *sprintf* functionality.  Ditto for the `PRINTF USING` command,  which replaces the traditional `PRINT USING` command.
 
 ## BASIC-DOS Demos
 
@@ -116,7 +122,7 @@ I created a handy "matrix" of demos at [BASIC-DOS Demos](https://basicdos.com/de
 
 And I'm just scratching the surface of what's been done so far.  For example, I haven't mentioned the `DEBUG.COM` utility, which goes far beyond the original DEBUG.COM, not only in terms of processor support (8088, 80286, and 80386) but also in its ability to run as a device driver (`DEBUG$`) and debug the entire BASIC-DOS operating system.  There's also a built-in mouse driver (`MOUSE$`) that supports the Microsoft Serial Mouse, and a few MOUSE commands have been added to the BASIC-DOS language to enable the creation of mouse-based apps.
 
-Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 10Mb hard disk (eg, [BASIC-DOS in Protected Mode with 640K](https://basicdos.com/demos/mmu/640k/)) and you can build the entire product from scratch:
+Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 10Mb hard disk (eg, [BASIC-DOS in Protected Mode with 640K](https://basicdos.com/demos/mmu/640k/)) and you can build the entire product from scratch:
 
 ```
 CD C:\SRC
@@ -151,4 +157,4 @@ UCASE$  UNIQ    V86     VAL     VER     VI      VIEW    VOL     WC
 WEND    WHILE   WIDTH   WINDOW  WRITE
 ```
 
-So retire all those old cheesy DOS BAT files you created years ago and embrace the full power of BASIC... in [BASIC-DOS](https://basicdos.com).
+So imagine it's the early 1980s again, retire all those old cheesy DOS BAT files you created years ago, and embrace the full power of BASIC... in [BASIC-DOS](https://basicdos.com).
