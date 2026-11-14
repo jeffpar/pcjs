@@ -968,7 +968,11 @@
     },
     "diagnostics": true,
     "touchType": true,
+    "avo": false,
+    "overrides": ["avo"],
     "@doc": [
+      "Set 'avo' to true to install the Advanced Video Option (AVO); it can also be set as a machine property,",
+      "or overridden with a URL parameter (eg, '?avo=true').",
       "The following ROM dump was generated with 'fileimage --file=/machines/dec/vt100/rom/23-018E2.bin --format=bytes --decimal'"
     ],
     "fontROM": [

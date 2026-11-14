@@ -58,6 +58,7 @@ export default class VT100Chips extends Device {
             this.bNVRLatch      = state.shift(); // 1 byte
             this.bNVROut        = state.shift(); // 1 bit
             this.aNVRWords      = state.shift(); // 100 14-bit words
+            this.updateVideo();
             return true;
         }
         return false;
@@ -114,6 +115,27 @@ export default class VT100Chips extends Device {
         if (this.dbg === undefined) {
             this.dbg = /** @type {Debugger} */ (this.findDeviceByClass("Debugger", false));
             if (this.dbg) this.dbg.addDumper(this, "nvr", "dump non-volatile ram", this.dumpNVR);
+        }
+        this.updateVideo();
+    }
+
+    /**
+     * updateVideo()
+     *
+     * Called whenever the video device needs to be (re)synchronized with our state (eg, after a power, reset,
+     * or restore event).  This is also where we find out if the Advanced Video Option (AVO) is installed, since
+     * that's a property of the video device; the firmware learns about it from FLAGS.NO_AVO.
+     *
+     * @this {VT100Chips}
+     */
+    updateVideo()
+    {
+        if (this.video) {
+            this.bFlags |= VT100Chips.FLAGS.NO_AVO;
+            if (this.video.fAVO) this.bFlags &= ~VT100Chips.FLAGS.NO_AVO;
+            this.video.updateAttributes(
+                !!this.bDC012Blink, !!this.bDC012Reverse, this.bDC012Attr == VT100Chips.DC012.ATTR_UNDERLINE
+            );
         }
     }
 
@@ -184,6 +206,7 @@ export default class VT100Chips extends Device {
             0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
             0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
         ];
+        this.updateVideo();
     }
 
     /**
@@ -385,6 +408,7 @@ export default class VT100Chips extends Device {
             switch(bOpt) {
             case 0x0:
                 this.bDC012Blink = ~this.bDC012Blink;
+                this.updateVideo();
                 break;
             case 0x1:
                 // TODO: Clear vertical frequency interrupt?
@@ -392,11 +416,18 @@ export default class VT100Chips extends Device {
             case 0x2:
             case 0x3:
                 this.bDC012Reverse = 0x3 - bOpt;
+                this.updateVideo();
                 break;
             }
             break;
         case 0x3:
-            this.bDC012Attr = bOpt;
+            /*
+             * All four of these commands clear the blink flip-flop, but only the first two (ATTR_UNDERLINE
+             * and ATTR_REVERSE) are defined; the other two are "reserved for future specification".
+             */
+            if (bOpt <= VT100Chips.DC012.ATTR_REVERSE) this.bDC012Attr = bOpt;
+            this.bDC012Blink = 0;
+            this.updateVideo();
             break;
         }
     }
@@ -425,7 +456,7 @@ export default class VT100Chips extends Device {
                 this.bDC011Cols = value;
                 if (this.video) {
                     let nCols = (this.bDC011Cols == VT100Chips.DC011.COLS132? 132 : 80);
-                    let nRows = (nCols > 80 && (this.bFlags & VT100Chips.FLAGS.NO_AVO)? 14 : 24);
+                    let nRows = (nCols > 80 && !this.video.fAVO? 14 : 24);
                     this.video.updateDimensions(nCols, nRows);
                 }
             }
@@ -633,7 +664,9 @@ VT100Chips.DC012 = {            // generates scan counts for the Video Processor
     INITSCROLL: 0x00,
     INITBLINK:  0x00,
     INITREVERSE:0x00,
-    INITATTR:   0x00
+    INITATTR:   0x00,
+    ATTR_UNDERLINE: 0x00,       // base attribute (bit 7 of every character) is displayed as underline
+    ATTR_REVERSE:   0x01        // base attribute is displayed as reverse video
 };
 
 /*
