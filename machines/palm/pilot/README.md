@@ -35,6 +35,7 @@ The state of the machine (including all your changes/progress) is automatically 
 
 Click any of the following applications to install it on the Pilot and launch it.  Like the original PIMulator, this "injects" a series of PalmOS API calls (DmCreateDatabaseFromImage, SysUIAppSwitch, etc) while the Pilot is idle, so make sure the Pilot is on and has been calibrated first.  Once installed, an application remains on the Pilot (until the Pilot is reset), and it can be launched again using the Pilot's Applications button.
 
+- [Ataxx](/machines/palm/pilot/demos/Ataxx.PRC) by Valavan Manohararajah (July 1997)
 - [CODE5](/machines/palm/pilot/demos/CODE5.prc) by [DoubleBit Software](https://web.archive.org/web/20040823231821/http://www.doublebit.com/code5/)
 - [Daleks](/machines/palm/pilot/demos/Daleks.prc) by [IndiVideo](https://web.archive.org/web/19991123230030/http://www.individeo.net/Daleks.html) ([ReadMe](/machines/palm/pilot/demos/Daleks.txt))
 - [Invaders 1.0](/machines/palm/pilot/demos/Invaders.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/Invaders.txt))
@@ -45,7 +46,7 @@ For more applications, like Bejeweled, Railroad, and SFCave, which don't run on 
 You can also install applications using the Debugger's `load` command (eg, `load demos/Daleks.prc`).  The Debugger's `save` command (eg, `save pocketchess.json`) saves the entire state of the machine to a file, which another page can use as the initial state of its machine, as the [PocketChess](pocketchess/) page does.
 
 <script>
-  document.querySelectorAll('a[href$=".prc"]').forEach((link) => {
+  document.querySelectorAll('a[href$=".prc" i]').forEach((link) => {
     link.addEventListener('click', (event) => {
       event.preventDefault();
       if (window.command) window.command("load " + link.getAttribute("href"));
