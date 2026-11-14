@@ -37,6 +37,7 @@ The following optional machine properties will be added to the 'parms' property:
     'commands' (debugger commands, if any)
     'messages' (eg: fault)
     'connection' (eg: serialPort->vt100a.serialPort)
+    'avo' (eg: true to install the VT100 Advanced Video Option)
 
 Note that the 'resume' and 'state' properties were originally (and still are) Computer component properties, but the machine.html
 template doesn't add them to the Computer component anymore, since we started supporting them here as machine "override" properties.
@@ -202,7 +203,12 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- else -%}
     {%- capture machine_connection -%},connection:"{{ machine.connection }}"{%- endcapture -%}
   {%- endif -%}
-  {%- capture machine_parms -%}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_diskettes }}{{ machine_fdrives }}{{ machine_hdrives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{%- endcapture -%}
+  {%- if machine.avo == nil -%}
+    {%- assign machine_avo = "" -%}
+  {%- else -%}
+    {%- capture machine_avo -%},avo:{{ machine.avo }}{%- endcapture -%}
+  {%- endif -%}
+  {%- capture machine_parms -%}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_diskettes }}{{ machine_fdrives }}{{ machine_hdrives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{{ machine_avo }}{%- endcapture -%}
   {%- if machine_parms != "" -%}{%- capture machine_parms -%}{{ site.left_brace }}{{ machine_parms | prepend: "@" | replace: "@,","" }}{{ site.right_brace }}{%- endcapture -%}{%- endif %}
     <script src="/assets/js/xslt-polyfill.min.js"></script>
   {%- if site.pcjs.uncompiled or site.pcjs.unbundled or machine.unbundled -%}

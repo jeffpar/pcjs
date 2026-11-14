@@ -19,6 +19,8 @@ import MESSAGE from "../../../../modules/v3/message.js";
  * @property {number} bufferBits
  * @property {number} bufferLeft
  * @property {number} interruptRate
+ * @property {boolean} [avo]
+ * @property {Array.<number>} [fontROMAlt]
  */
 
 /**
@@ -47,6 +49,17 @@ export default class VT100Video extends Monitor {
      *      fontColor: default is white
      *      cellWidth: number (eg, 10 for VT100)
      *      cellHeight: number (eg, 10 for VT100)
+     *
+     *  And the following properties control the VT100's Advanced Video Option (AVO):
+     *
+     *      avo: true to install the AVO (default is false); this can also be set as a machine property
+     *      fontROMAlt: optional contents of the AVO's alternate character generator ROM (default is none)
+     *
+     * The AVO extends screen RAM from 3K to 4K (at 0x2C00), which allows 24 lines to be displayed in 132-column
+     * mode instead of 14, and it adds 4K of 4-bit attribute RAM (at 0x3000), which provides every character on
+     * the screen with bold, underline, blink, and alternate character set attributes, in addition to the VT100's
+     * base attribute (see getCell() for details).  We allocate all that additional RAM ourselves, so that 'avo'
+     * is the only property required to enable the option.
      *
      * We record all the above values now, but we defer creation of the frame buffer until initBuffers()
      * is called.  At that point, we will also compute the extent of the frame buffer, determine the
@@ -82,8 +95,11 @@ export default class VT100Video extends Monitor {
         this.cxCellDefault = this.cxCell = this.config['cellWidth'] || 1;
         this.cyCellDefault = this.cyCell = this.config['cellHeight'] || 1;
 
-        this.abFontData = null;
+        this.abFontData = this.abFontDataAlt = null;
         this.fDotStretcher = false;
+
+        this.fAVO = !!this.getMachineConfig('avo');
+        this.fBlink = this.fReverseField = this.fUnderline = false;
 
         this.nBitsPerPixel = this.config['bufferBits'] || 1;
         this.iBitFirstPixel = this.config['bufferLeft'] || 0;
@@ -105,9 +121,15 @@ export default class VT100Video extends Monitor {
         }
 
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
+        if (this.fAVO) {
+            if (!this.busMemory.addBlocks(VT100Video.VT100.AVO.ADDR, VT100Video.VT100.AVO.SIZE, Memory.TYPE.READWRITE)) {
+                this.fAVO = false;
+            }
+        }
         this.initBuffers();
 
         this.abFontData = this.config['fontROM'];
+        this.abFontDataAlt = this.config['fontROMAlt'];
         this.createFonts();
 
         this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
@@ -285,11 +307,6 @@ export default class VT100Video extends Monitor {
          *      builds a contiguous image of test data starting at the default frame buffer address (0x2000).
          */
         this.rateMonitor = 60;
-
-        /*
-         * The default character-selectable attribute (reverse video vs. underline) is controlled by fUnderline.
-         */
-        this.fUnderline = false;
         this.abLineBuffer = new Array(this.nColsBuffer);
 
         /*
@@ -306,6 +323,8 @@ export default class VT100Video extends Monitor {
     /**
      * createFonts()
      *
+     * Font variations are created on demand (see getFont()), so all we do here is discard any existing ones.
+     *
      * @this {VT100Video}
      * @returns {boolean}
      */
@@ -314,44 +333,59 @@ export default class VT100Video extends Monitor {
         /*
          * We retain abFontData in case we have to rebuild the fonts (eg, when we switch from 80 to 132 columns)
          */
+        this.aFonts = {};
         if (this.abFontData) {
             this.fDotStretcher = true;
-            this.aFonts[VT100Video.VT100.FONT.NORML] = [
-                this.createFontVariation(this.cxCell, this.cyCell),
-                this.createFontVariation(this.cxCell, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DWIDE] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell),
-                this.createFontVariation(this.cxCell*2, this.cyCell, this.fUnderline)
-            ];
-            this.aFonts[VT100Video.VT100.FONT.DHIGH] = this.aFonts[VT100Video.VT100.FONT.DHIGH_BOT] = [
-                this.createFontVariation(this.cxCell*2, this.cyCell*2),
-                this.createFontVariation(this.cxCell*2, this.cyCell*2, this.fUnderline)
-            ];
             return true;
         }
         return false;
     }
 
     /**
-     * createFontVariation(cxCell, cyCell, fUnderline)
+     * getFont(idFont, bits)
+     *
+     * Returns the font variation for the given font ID (ie, line attribute) and cell bits (ie, the CELL bits
+     * above CELL.CHAR that describe how the character should be drawn), creating the variation if necessary.
+     *
+     * @this {VT100Video}
+     * @param {number} idFont (one of the VT100Video.VT100.FONT values)
+     * @param {number} bits (some combination of VT100Video.VT100.CELL bits, excluding CELL.CHAR)
+     * @returns {Object|undefined}
+     */
+    getFont(idFont, bits)
+    {
+        let id = idFont;
+        if (id == VT100Video.VT100.FONT.DHIGH_BOT) id = VT100Video.VT100.FONT.DHIGH;
+        let key = id | (bits << 8);
+        let font = this.aFonts[key];
+        if (!font && this.abFontData) {
+            let cxCell = this.cxCell, cyCell = this.cyCell;
+            if (id != VT100Video.VT100.FONT.NORML) cxCell *= 2;
+            if (id == VT100Video.VT100.FONT.DHIGH) cyCell *= 2;
+            font = this.aFonts[key] = this.createFontVariation(cxCell, cyCell, bits);
+        }
+        return font;
+    }
+
+    /**
+     * createFontVariation(cxCell, cyCell, bits)
      *
      * This creates a 16x16 character grid for the requested font variation.  Variations include:
      *
      *      1) no variation (cell size is this.cxCell x this.cyCell)
      *      2) double-wide characters (cell size is this.cxCell*2 x this.cyCell)
      *      3) double-high double-wide characters (cell size is this.cxCell*2 x this.cyCell*2)
-     *      4) any of the above with either reverse video or underline enabled (default is neither)
+     *      4) any of the above with any combination of the CELL bits described in getCell()
      *
      * @this {VT100Video}
      * @param {number} cxCell is the target width of each character in the grid
      * @param {number} cyCell is the target height of each character in the grid
-     * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
+     * @param {number} [bits] (some combination of VT100Video.VT100.CELL bits, excluding CELL.CHAR)
      * @returns {Object}
      */
-    createFontVariation(cxCell, cyCell, fUnderline)
+    createFontVariation(cxCell, cyCell, bits = VT100Video.VT100.INTENSITY.NORMAL << VT100Video.VT100.CELL.FGND_SHIFT)
     {
-        this.printf("createFontVariation(cxCell=%d, cyCell=%d, fUnderline=%b\n", cxCell, cyCell, fUnderline);
+        this.printf("createFontVariation(cxCell=%d, cyCell=%d, bits=%#x)\n", cxCell, cyCell, bits);
 
         /*
          * On a VT100, cxCell,cyCell is initially 10,10, but may change to 9,10 for 132-column mode.
@@ -368,11 +402,20 @@ export default class VT100Video extends Monitor {
         let nFontByteOffset = nFontBytesPerChar > 8? 15 : 0;
         let nChars = this.abFontData.length / nFontBytesPerChar;
 
+        let CELL = VT100Video.VT100.CELL;
+        let iFgnd = (bits >> CELL.FGND_SHIFT) & CELL.MASK;
+        let iBgnd = (bits >> CELL.BGND_SHIFT) & CELL.MASK;
+        let fUnderline = !!(bits & CELL.UNDERLINE);
+
         /*
-         * The absence of a boolean for fUnderline means that both fReverse and fUnderline are "falsey".  The presence
-         * of a boolean means that fReverse will be true OR fUnderline will be true, but NOT both.
+         * If the alternate character set is selected and there's no alternate character generator ROM, then
+         * "any character cell in which the alternate set is selected will appear white (black if reverse video)",
+         * as the data lines of the empty ROM socket are all pulled high (VT100 Technical Manual, p. 4-76).
          */
-        let fReverse = (fUnderline === false);
+        let abFontData = this.abFontData;
+        if (bits & CELL.ALTCHAR) {
+            abFontData = this.abFontDataAlt && this.abFontDataAlt.length == abFontData.length? this.abFontDataAlt : null;
+        }
 
         let font = {cxCell: cxCell, cyCell: cyCell};
         font.canvas = document.createElement("canvas");
@@ -385,7 +428,12 @@ export default class VT100Video extends Monitor {
         for (let iChar = 0; iChar < nChars; iChar++) {
             for (let y = 0, yDst = y; y < this.cyCell; y++) {
                 let offFontData = iChar * nFontBytesPerChar + ((nFontByteOffset + y) & (nFontBytesPerChar - 1));
-                let bits = (fUnderline && y == 8? 0xff : this.abFontData[offFontData]);
+                /*
+                 * Underline forces the ninth scan on; ie, "to white of the same intensity as the character for
+                 * nonreversed characters, and to black for reverse characters", which is exactly what happens
+                 * when we treat every dot on that scan as a character dot.
+                 */
+                let bFont = (fUnderline && y == 8 || !abFontData? 0xff : abFontData[offFontData]);
                 for (let nRows = 0; nRows < (cyCell / this.cyCell); nRows++) {
                     let bitPrev = 0;
                     for (let x = 0, xDst = x; x < this.cxCell; x++) {
@@ -395,11 +443,10 @@ export default class VT100Video extends Monitor {
                          * (so that line-drawing characters seamlessly connect), we ensure that the effective
                          * shift count remains stuck at 7 once it reaches 7.
                          */
-                        let bitReal = bits & (0x80 >> (x > 7? 7 : x));
+                        let bitReal = bFont & (0x80 >> (x > 7? 7 : x));
                         let bit = (this.fDotStretcher && !bitReal && bitPrev)? bitPrev : bitReal;
                         for (let nCols = 0; nCols < (cxCell / this.cxCell); nCols++) {
-                            if (fReverse) bit = !bit;
-                            this.setPixel(imageChar, xDst, yDst, bit? 1 : 0);
+                            this.setPixel(imageChar, xDst, yDst, bit? iFgnd : iBgnd);
                             xDst++;
                         }
                         bitPrev = bitReal;
@@ -413,6 +460,100 @@ export default class VT100Video extends Monitor {
             font.context.putImageData(imageChar, (iChar & 0xf) * cxCell, (iChar >> 4) * cyCell);
         }
         return font;
+    }
+
+    /**
+     * getCell(data, attr)
+     *
+     * Converts a character from screen RAM, along with its attributes from the AVO's attribute RAM (if any),
+     * into a cell value for our cell cache, which combines the character code with everything else that affects
+     * how the character is drawn.
+     *
+     * Bit 7 of every character in screen RAM is the "base attribute", which the DC012 displays as either reverse
+     * video or underline, depending on how the firmware has programmed it (see updateAttributes()).  Without the
+     * AVO, the firmware makes that choice based on the cursor selected in SET-UP; with the AVO, the firmware
+     * always selects reverse video, and uses these bits in the AVO's attribute RAM (all active low) for the rest:
+     *
+     *      bit 0: blink
+     *      bit 1: underline
+     *      bit 2: bold
+     *      bit 3: alternate character set (ie, use the AVO's alternate character generator ROM)
+     *
+     * The DC012 then uses its two video outputs to produce four beam intensities (off, dim, normal, and bright),
+     * as described in Table 4-6-4 ("Character Attribute Combinations") of the VT100 Technical Manual (July 1982),
+     * p. 4-75, where "Reverse" is the exclusive-OR of the character's reverse video attribute and the reverse field
+     * (ie, reverse screen) setting, and where a pair of values indicates what's displayed when the DC012's blink
+     * flip-flop is off and on, respectively:
+     *
+     *      Reverse     Bold    Blink       Background      Character
+     *      -------     ----    -----       ----------      ---------
+     *      no          no      no          off             normal
+     *      no          no      yes         off             normal/dim
+     *      no          yes     no          off             bright
+     *      no          yes     yes         off             bright/normal
+     *      yes         no      no          dim             off
+     *      yes         no      yes         dim/off         off/normal
+     *      yes         yes     no          normal          off
+     *      yes         yes     yes         normal/off      off/bright
+     *
+     * In other words, blinking characters alternate between their usual intensity and the next lower intensity,
+     * unless they're also reversed, in which case they alternate between reverse and normal video.  Underline
+     * doesn't affect any of this; it simply turns every dot on the ninth scan into a character dot.
+     *
+     * @this {VT100Video}
+     * @param {number} data (from screen RAM)
+     * @param {number} attr (from AVO attribute RAM; 0x0f if none)
+     * @returns {number} (cell value; see VT100Video.VT100.CELL)
+     */
+    getCell(data, attr)
+    {
+        let CELL = VT100Video.VT100.CELL;
+        let INTENSITY = VT100Video.VT100.INTENSITY;
+        let cell = data & CELL.CHAR;
+        let fReverse = this.fReverseField;
+        if (data & 0x80) {
+            if (this.fUnderline) {
+                cell |= CELL.UNDERLINE;
+            } else {
+                fReverse = !fReverse;
+            }
+        }
+        let fBlink = false, fBold = false;
+        if (attr != 0x0f) {
+            if (!(attr & VT100Video.VT100.AVO.BLINK)) fBlink = this.fBlink;
+            if (!(attr & VT100Video.VT100.AVO.UNDERLINE)) cell |= CELL.UNDERLINE;
+            if (!(attr & VT100Video.VT100.AVO.BOLD)) fBold = true;
+            if (!(attr & VT100Video.VT100.AVO.ALTCHAR)) cell |= CELL.ALTCHAR;
+        }
+        let iFgnd, iBgnd = INTENSITY.OFF;
+        if (!fReverse) {
+            iFgnd = (fBold? INTENSITY.BRIGHT : INTENSITY.NORMAL) - (fBlink? 1 : 0);
+        } else if (fBlink) {
+            iFgnd = (fBold? INTENSITY.BRIGHT : INTENSITY.NORMAL);
+        } else {
+            iFgnd = INTENSITY.OFF;
+            iBgnd = (fBold? INTENSITY.NORMAL : INTENSITY.DIM);
+        }
+        return cell | (iFgnd << CELL.FGND_SHIFT) | (iBgnd << CELL.BGND_SHIFT);
+    }
+
+    /**
+     * updateAttributes(fBlink, fReverseField, fUnderline)
+     *
+     * Called from the Chip component whenever any of the DC012 settings that affect character attributes
+     * have changed.  There's nothing to redraw here, because all of these settings are incorporated into the
+     * cell values that updateScreen() compares to the cell cache on every refresh.
+     *
+     * @this {VT100Video}
+     * @param {boolean} fBlink (current state of the blink flip-flop)
+     * @param {boolean} fReverseField (true if the entire screen is reversed)
+     * @param {boolean} fUnderline (true if the base attribute is displayed as underline, false if reverse video)
+     */
+    updateAttributes(fBlink, fReverseField, fUnderline)
+    {
+        this.fBlink = fBlink;
+        this.fReverseField = fReverseField;
+        this.fUnderline = fUnderline;
     }
 
     /**
@@ -604,12 +745,20 @@ export default class VT100Video extends Monitor {
      */
     initColors()
     {
-        let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
-        let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
-        this.nColors = (1 << this.nBitsPerPixel);
-        this.aRGB = new Array(this.nColors);
-        this.aRGB[0] = rgbBlack;
-        this.aRGB[1] = rgbWhite;
+        /*
+         * The DC012 produces four beam intensities: off, dim, normal, and bright (see getCell()).  However, on a
+         * VT100 without the AVO, there are no bold characters, so nothing is ever displayed at bright intensity,
+         * and the operator would simply turn up the brightness; so in that case, we display everything at full
+         * intensity (as we always have).
+         */
+        let INTENSITY = VT100Video.VT100.INTENSITY;
+        this.aRGB = new Array(4);
+        this.aRGB[INTENSITY.OFF] = [0x00, 0x00, 0x00, 0xff];
+        for (let i = INTENSITY.DIM; i <= INTENSITY.BRIGHT; i++) {
+            let level = this.fAVO? VT100Video.VT100.LEVELS[i] : 0xff;
+            this.aRGB[i] = [level, level, level, 0xff];
+        }
+        this.nColors = this.aRGB.length;
     }
 
     /**
@@ -633,7 +782,7 @@ export default class VT100Video extends Monitor {
     }
 
     /**
-     * updateChar(idFont, col, row, data, context)
+     * updateChar(idFont, col, row, cell, context)
      *
      * Updates a particular character cell (row,col) in the associated window.
      *
@@ -641,13 +790,13 @@ export default class VT100Video extends Monitor {
      * @param {number} idFont
      * @param {number} col
      * @param {number} row
-     * @param {number} data
+     * @param {number} cell (see getCell())
      * @param {Object} [context]
      */
-    updateChar(idFont, col, row, data, context)
+    updateChar(idFont, col, row, cell, context)
     {
-        let bChar = data & 0x7f;
-        let font = this.aFonts[idFont][(data & 0x80)? 1 : 0];
+        let bChar = cell & VT100Video.VT100.CELL.CHAR;
+        let font = this.getFont(idFont, cell & ~VT100Video.VT100.CELL.CHAR);
         if (!font) return;
 
         let xSrc = (bChar & 0xf) * font.cxCell;
@@ -760,6 +909,7 @@ export default class VT100Video extends Monitor {
         let iCell = 0, cUpdated = 0, iCellUpdated = -1;
 
         let addrNext = this.addrBuffer;
+        let cellBlank = this.getCell(0, 0x0f);      // character code 0 is a empty font character
         this.assert(this.abLineBuffer.length == this.nColsBuffer);
 
         while (nRows < this.nRowsBuffer) {
@@ -781,7 +931,15 @@ export default class VT100Video extends Monitor {
                     break;
                 }
                 if (nCols < nColsVisible) {
-                    this.abLineBuffer[nCols++] = data;
+                    /*
+                     * The AVO widens every screen RAM location from 8 to 12 bits, so the attributes for any
+                     * character are always located at the same offset in attribute RAM as the character itself.
+                     */
+                    let attr = 0x0f;
+                    if (this.fAVO) {
+                        attr = this.busMemory.readData(((addr - 1) & VT100Video.VT100.AVO.ATTR_MASK) | VT100Video.VT100.AVO.ATTR_ADDR) & 0x0f;
+                    }
+                    this.abLineBuffer[nCols++] = this.getCell(data, attr);
                 } else {
                     break;                          // ideally, we would wait for a LINETERM byte, but it's not safe to loop without limit
                 }
@@ -799,7 +957,7 @@ export default class VT100Video extends Monitor {
              * Pad the line buffer as needed
              */
             while (nCols < this.abLineBuffer.length) {
-                this.abLineBuffer[nCols++] = 0;     // character code 0 is a empty font character
+                this.abLineBuffer[nCols++] = cellBlank;
             }
 
             /*
@@ -847,7 +1005,7 @@ export default class VT100Video extends Monitor {
              * Possible VT100 firmware bug?  I'm not sure.  Anyway, this DEBUG-only code is here to help trap
              * that scenario, until I figure it out.
              */
-            if (VT100Video.DEBUG && (this.aCacheCells[iCellUpdated] & 0x7f) == 0x48) {
+            if (VT100Video.DEBUG && (this.aCacheCells[iCellUpdated] & VT100Video.VT100.CELL.CHAR) == 0x48) {
                 this.printf("spurious 'H' character at offset %d\n", iCellUpdated);
             }
             this.aCacheCells[iCellUpdated] = -1;
@@ -895,7 +1053,38 @@ VT100Video.VT100 = {
         SCROLL:     0x80
     },
     ADDRBIAS_LO:    0x2000,
-    ADDRBIAS_HI:    0x4000
+    ADDRBIAS_HI:    0x4000,
+    /*
+     * Advanced Video Option (AVO) definitions; the attribute bits are all active low.
+     */
+    AVO: {
+        ADDR:       0x2C00,     // the AVO's 1K of additional screen RAM is followed by 4K of (4-bit) attribute RAM
+        SIZE:       0x1400,
+        ATTR_ADDR:  0x3000,
+        ATTR_MASK:  0x0FFF,
+        BLINK:      0x01,
+        UNDERLINE:  0x02,
+        BOLD:       0x04,
+        ALTCHAR:    0x08
+    },
+    /*
+     * Cell values, as returned by getCell() and stored in the cell cache.
+     */
+    CELL: {
+        CHAR:       0x7F,       // character code
+        UNDERLINE:  0x80,       // character is underlined
+        ALTCHAR:    0x100,      // character uses the alternate character generator ROM
+        FGND_SHIFT: 9,          // INTENSITY of character dots
+        BGND_SHIFT: 11,         // INTENSITY of background dots
+        MASK:       0x3
+    },
+    INTENSITY: {
+        OFF:        0,
+        DIM:        1,
+        NORMAL:     2,
+        BRIGHT:     3
+    },
+    LEVELS: [0x00, 0x60, 0xC0, 0xFF]
 };
 
 VT100Video.CLASSES["VT100Video"] = VT100Video;

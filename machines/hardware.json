@@ -964,6 +964,9 @@
             }
           ]
         },
+        "avo": {
+          "@title": "VT100 Terminal with AVO"
+        },
         "dual": {
           "@title": "Dual VT100 Terminals",
           "@redirect_from": "/devices/pc8080/machine/vt100/"
