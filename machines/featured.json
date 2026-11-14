@@ -18,6 +18,12 @@
     "@tags": "home"
   },
   {
+    "@title": "BASIC-DOS (\"1981\")",
+    "@permalink": "https://basicdos.com/demos/d40/pc/",
+    "@preview": "/software/pcx86/sys/dos/pcjs/basicdos/images/thumbnail.png",
+    "@tags": "home,pcx86"
+  },
+  {
     "@title": "Microsoft Adventure (1981)",
     "@permalink": "/software/pcx86/game/microsoft/adventure/",
     "@preview": ".png",
@@ -160,12 +166,6 @@
     "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
     "@preview": ".png",
     "@tags": "home,pcx86,sys,os2"
-  },
-  {
-    "@title": "VGA Black Book Tests (by Michael Abrash)",
-    "@permalink": "/software/pcx86/test/vga/blackbook/",
-    "@preview": "/software/pcx86/test/vga/blackbook/L23-1/images/thumbnail.png",
-    "@tags": "home,pcx86,vga"
   },
   {
     "@title": "Microsoft Windows/386 2.0 (1987)",
