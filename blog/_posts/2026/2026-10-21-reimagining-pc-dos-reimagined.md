@@ -65,31 +65,31 @@ Emboldened by my success with 80286 support, I decided to take one more CPU leap
 
 And I didn't stop there.  BASIC-DOS needed a suite of utilities, including a set of common "filters", so I added:
 
-  - FIND
-  - MORE
-  - SED
-  - SORT
-  - TEE
-  - TR
-  - UNIQ
-  - WC
+  - [FIND](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/find.asm)
+  - [MORE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/more.asm)
+  - [SED](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/sed.asm)
+  - [SORT](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/sort.asm)
+  - [TEE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/tee.asm)
+  - [TR](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/tr.asm)
+  - [UNIQ](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/uniq.asm)
+  - [WC](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/wc.asm)
 
 ### New Utilities
 
 Next, I decided that a product with BASIC in its name should fully embrace the language, so I "wrote" (by which I mean Claude wrote) a set of traditional DOS utilities *entirely* in BASIC; they include:
 
-  - ATTRIB
-  - CHKDSK
-  - COMP
-  - DISKCOPY
-  - FORMAT
-  - HEXDUMP
-  - LABEL
-  - LS
-  - MODE
-  - SYS
-  - TREE
-  - VOL
+  - [ATTRIB](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/ATTRIB.BAS)
+  - [CHKDSK](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/CHKDSK.BAS)
+  - [COMP](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/COMP.BAS)
+  - [DISKCOPY](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/DISKCOPY.BAS)
+  - [FORMAT](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/FORMAT.BAS)
+  - [HEXDUMP](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/HEXDUMP.BAS)
+  - [LABEL](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/LABEL.BAS)
+  - [LS](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/LS.BAS)
+  - [MODE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/MODE.BAS)
+  - [SYS](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/SYS.BAS)
+  - [TREE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/TREE.BAS)
+  - [VOL](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/VOL.BAS)
 
 Granted, `HEXDUMP` and `LS` are not "traditional" DOS utilities; I just decided they would be nice to have.
 
