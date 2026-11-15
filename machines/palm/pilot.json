@@ -50,6 +50,7 @@
     "class": "Input",
     "location": [0, 0, 986, 1470, 986, 1470, 986, 1470],
     "drag": true,
+    "releaseDelay": 50,
     "map": {
       "power":    {"keys": ["0"]},
       "datebook": {"keys": ["1"]},

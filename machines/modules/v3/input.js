@@ -493,12 +493,22 @@ export default class Input extends Device {
              * enough time to notice the input before releasing it.
              */
             if (this.time && this.releaseDelay) {
-                let input = this;
-                this.timerInputRelease = this.time.addTimer("timerInputRelease", function onInputRelease() {
-                    if (state.xStart < 0 && state.yStart < 0) { // auto-release ONLY if it's REALLY released
+                /**
+                 * Since addSurface() may be called more than once (eg, by a Monitor device), there is
+                 * only one timer, and it must check the state of every surface, not just the last one added.
+                 */
+                if (!this.aSurfaceStates) this.aSurfaceStates = [];
+                this.aSurfaceStates.push(state);
+                if (!this.timerInputRelease) {
+                    let input = this;
+                    this.timerInputRelease = this.time.addTimer("timerInputRelease", function onInputRelease() {
+                        for (let i = 0; i < input.aSurfaceStates.length; i++) {
+                            let s = input.aSurfaceStates[i];
+                            if (s.xStart >= 0 || s.yStart >= 0) return;     // auto-release ONLY if it's REALLY released
+                        }
                         input.setPosition(-1, -1);
-                    }
-                });
+                    });
+                }
             }
         }
 
