@@ -44,6 +44,7 @@
     "class": "Input",
     "location": [0, 0, 467, 737, 467, 737, 467, 737],
     "drag": true,
+    "releaseDelay": 50,
     "map": {
       "power":    {"keys": ["0"]},
       "datebook": {"keys": ["1"]},

@@ -43,6 +43,7 @@
     "class": "Input",
     "location": [0, 0, 464, 690, 464, 690, 464, 690],
     "drag": true,
+    "releaseDelay": 50,
     "map": {
       "power":    {"keys": ["0"]},
       "datebook": {"keys": ["1"]},
