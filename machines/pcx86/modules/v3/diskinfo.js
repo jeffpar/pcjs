@@ -306,7 +306,7 @@ export default class DiskInfo {
      * to make both HIDDENSECS and LARGESECS 4-byte values, which meant that LARGESECS had to move from 0x01E to 0x020.
      */
     static BPB = {
-        OPCODE:         0x000,      // 1 byte for an x86 JMP opcode, followed by a 1 or 2-byte offset (or CPUx86.OPCODE.CLD for BASIC-DOS boot sectors)
+        OPCODE:         0x000,      // 1 byte for an x86 JMP opcode, followed by a 1 or 2-byte offset (or CPUx86.OPCODE.CLD for older BASIC-DOS boot sectors)
         BEGIN:          0x003,      //
         OEM:            0x003,      // 8 bytes (eg, "IBM  2.0")
         SECBYTES:       0x00B,      // 2 bytes: bytes per sector (eg, 0x200 or 512)
@@ -5111,6 +5111,14 @@ export default class DiskInfo {
                      */
                     if (hasBPB) {
                         let bOpcode = db.readUInt8(0);
+                        /*
+                         * BASIC-DOS boot sectors used to start with CLD; they now start with a near JMP to a CLD
+                         * (and have our OEM signature), since modern systems expect a boot sector to start with a JMP.
+                         */
+                        if (bOpcode == CPUx86.OPCODE.JMP && db.toString("latin1", DiskInfo.BPB.OEM, DiskInfo.BPB.OEM + 8) == DiskInfo.PCJS_OEM) {
+                            let offJMP = db.readUInt16LE(1) + 3;
+                            if (offJMP < db.length) bOpcode = db.readUInt8(offJMP);
+                        }
                         if (bOpcode == CPUx86.OPCODE.CLD) {
                             /*
                              * BASIC-DOS uses all four hidden-sector bytes, including the DOS 2.x boot-drive byte.

@@ -1446,7 +1446,18 @@ export default class PC extends PCJSLib {
             if (pc.kbRAM && config['ram']) {
                 let rams = Array.isArray(config['ram'])? config['ram'] : [config['ram']];
                 let kbLow = pc.kbRAM;
-                if (kbLow > 640 && config['cpu'] && config['cpu']['model'] >= 80286) {
+                /**
+                 * The ROM BIOS sizes memory by testing only the first word of each block (16K on a PC or XT, 64K
+                 * on a PC AT or later), so a size that ends partway through a block would be reported as the whole
+                 * block, and the machine would use memory that isn't there; and a PC or XT can't have more than 640K.
+                 */
+                let model = config['cpu'] && config['cpu']['model'] || 8088;
+                let kbBlock = model >= 80286? 64 : 16;
+                if (kbLow % kbBlock || model < 80286 && kbLow > 640) {
+                    printf("error: --ram must be %s on this machine\n", kbLow % kbBlock? "a multiple of " + kbBlock + "K" : "640K or less");
+                    pc.exit(1);
+                }
+                if (kbLow > 640 && model >= 80286) {
                     rams = rams.filter((ram) => ram['id'] != "ramExt");
                     rams.push({'id': "ramExt", 'addr': 0x100000, 'size': (kbLow - 640) * 1024});
                     config['ram'] = rams;
@@ -3607,7 +3618,9 @@ export default class PC extends PCJSLib {
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 5));
         this.speed = +PC.removeArg(argv, 'speed', defaults['speed'] || this.speed) || 0;
         this.fpu = PC.removeFlag(argv, 'fpu', defaults['fpu'] || this.fpu);
-        this.kbRAM = diskLib.getTargetValue(PC.removeArg(argv, 'ram', defaults['ram'])) || 0;
+        let sRAM = PC.removeArg(argv, 'ram', defaults['ram']);
+        this.kbRAM = diskLib.getTargetValue(sRAM) || 0;
+        if (sRAM && !this.kbRAM) return "invalid RAM size: " + sRAM;
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
@@ -4105,7 +4118,7 @@ export default class PC extends PCJSLib {
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
-                "--ram=[nK]":               "\tset RAM size (eg, 640K, or 2M on a PC AT)",
+                "--ram=[nK]":               "\tset RAM size in 16K steps, or 64K on a PC AT (eg, 640K or 2M)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
