@@ -1432,6 +1432,9 @@ export default class ChipSet extends Component {
             }
             cpu.addIntNotify(Interrupts.TIMER, this.intBIOSTimer.bind(this));
         }
+        if (this.model < ChipSet.MODEL_5170) {
+            cpu.addIntNotify(Interrupts.DISK, this.intBIOSDisk.bind(this));
+        }
         this.setReady();
     }
 
@@ -6335,6 +6338,64 @@ export default class ChipSet extends Component {
             }
         }
         return true;
+    }
+
+    /**
+     * intBIOSDisk(addr)
+     *
+     * Machines without a real-time clock (ie, models before MODEL_5170) watch for INT 0x13 reads into 0:7C00h,
+     * so that setBDClock() can check for a BASIC-DOS boot sector when the read returns.
+     *
+     * @this {ChipSet}
+     * @param {number} addr
+     * @returns {boolean} true to proceed with the INT 0x13 software interrupt
+     */
+    intBIOSDisk(addr)
+    {
+        let cpu = this.cpu;
+        if (((cpu.regEAX >> 8) & 0xff) == 0x02 && (cpu.regEBX & 0xffff) == 0x7C00 && !cpu.segES.sel) {
+            cpu.addIntReturn(addr, this.setBDClock.bind(this));
+        }
+        return true;
+    }
+
+    /**
+     * setBDClock(nLevel)
+     *
+     * If an INT 0x13 read into 0:7C00h succeeded and loaded a BASIC-DOS boot sector (its system file names
+     * follow its BPB at offset 0x2B), save the current date and time in vectors 0x58-0x5B, in the format that
+     * BASIC-DOS's CLOCK$ driver uses (see INT_CLKDATA in its bios.inc), so that it needn't prompt for them:
+     *
+     *      0x160: "PCJS"
+     *      0x164: day (1-31) and month (1-12) bytes
+     *      0x166: year (word)
+     *      0x168: ticks since midnight (dword; 0x1800B0 ticks per day)
+     *      0x16C: BIOS tick count (TIMER_LOW and TIMER_HIGH)
+     *
+     * CLOCK$ adds the difference between the BIOS tick count then and when it initializes to the saved time.
+     *
+     * @this {ChipSet}
+     * @param {number} nLevel
+     */
+    setBDClock(nLevel)
+    {
+        if (this.cpu.getCF()) return;
+        let bus = this.bus;
+        let sig = "BASDEV  COMBASDOS  COM";
+        for (let i = 0; i < sig.length; i++) {
+            if (bus.getByte(0x7C2B + i) != sig.charCodeAt(i)) return;
+        }
+        let date = new Date();
+        let ticks = Math.floor((((date.getHours() * 60 + date.getMinutes()) * 60 + date.getSeconds()) * 1000 + date.getMilliseconds()) * 0x1800B0 / 86400000);
+        let addr = 0x58 * 4;
+        bus.setShort(addr, 0x4350);             // "PC"
+        bus.setShort(addr + 2, 0x534A);         // "JS"
+        bus.setShort(addr + 4, date.getDate() | ((date.getMonth() + 1) << 8));
+        bus.setShort(addr + 6, date.getFullYear());
+        bus.setShort(addr + 8, ticks & 0xffff);
+        bus.setShort(addr + 10, ticks >>> 16);
+        bus.setShort(addr + 12, bus.getShort(ROMx86.BIOS.TIMER_LOW));
+        bus.setShort(addr + 14, bus.getShort(ROMx86.BIOS.TIMER_HIGH));
     }
 
     /**
