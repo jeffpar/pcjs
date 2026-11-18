@@ -563,7 +563,7 @@ export default class FPUx86 extends Component {
      */
     checkResult(v)
     {
-        return !isFinite(v)? !this.setException(v === Infinity? X86.FPU.STATUS.OE : X86.FPU.STATUS.UE) : true;
+        return !isFinite(v)? !this.setException(isNaN(v)? X86.FPU.STATUS.IE : X86.FPU.STATUS.OE) : true;
     }
 
     /**
@@ -634,9 +634,16 @@ export default class FPUx86 extends Component {
     {
         let quotient = null;
         if (dividend != null && divisor != null) {
-            if (divisor || !this.setException(X86.FPU.STATUS.DE)) {
+            if (divisor) {
                 quotient = dividend / divisor;
                 if (!this.checkResult(quotient)) quotient = null;
+            }
+            /**
+             * A zero divisor is a zero-divide exception (ZE), or for 0 / 0, an invalid operation (IE); if the
+             * exception is masked, the result is a signed infinity (or for 0 / 0, a NaN), which isn't an overflow.
+             */
+            else if (!this.setException(dividend? X86.FPU.STATUS.ZE : X86.FPU.STATUS.IE)) {
+                quotient = dividend / divisor;
             }
         }
         return quotient;

@@ -244,8 +244,12 @@ export default class DXC {
             //
             // Also note that ARC file entries do not have an 'attr' field, so we default to 0 to avoid "NaN".
             //
-            line = dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %#04x  %T  %08x%s",
-                    name, entry.size, entry.compressedSize, nameMethod, ratio, entry.attr || 0, entry.modified, entry.crc, comment);
+            // ZIP 'attr' values are 32-bit (Unix-created archives store the mode in the upper 16 bits, e.g., 0x81a40000),
+            // so we left-justify the attr in a 10-character field to keep the remaining columns aligned.
+            //
+            let attr = dxc.format.sprintf("%#04x", entry.attr || 0);
+            line = dxc.format.sprintf("%-14s %10d  %10d   %-9s %3d%%  %-10s  %T  %08x%s",
+                    name, entry.size, entry.compressedSize, nameMethod, ratio, attr, entry.modified, entry.crc, comment);
         }
         else if (type & DXC.FORMAT.DIR) {
             if (type == DXC.FORMAT.DIRX) {
@@ -322,8 +326,8 @@ export default class DXC {
     {
         let s = "";
         if (!type) {    // DXC.FORMAT.LIST
-            s =  "Filename         External    Internal   Method   Ratio  Attr  Date       Time      CRC\n";
-            s += "--------         --------    --------   ------   -----  ----  ----       ----      ---\n";
+            s =  "Filename         External    Internal   Method   Ratio  Attr        Date       Time      CRC\n";
+            s += "--------         --------    --------   ------   -----  ----        ----       ----      ---\n";
         } else if (type == DXC.FORMAT.CSV) {
             s = "fileID,itemID,setID,hash,modified,newest,entries,attr,size,compressed,method,volume,path,name,photo,dimensions,thumb,comment,warnings\n";
         }
