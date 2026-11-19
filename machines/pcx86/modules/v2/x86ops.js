@@ -4208,7 +4208,10 @@ X86.opREPZ = function()
  */
 X86.opHLT = function()
 {
-    if (I386 && (this.regPS & X86.PS.VM)) {
+    /**
+     * HLT is a privileged instruction: in protected mode, it requires CPL 0 (and V86-mode is CPL 3).
+     */
+    if (this.nCPL) {
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }

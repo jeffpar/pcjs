@@ -15398,6 +15398,12 @@ class CPU extends Component {
         this.mhzCurrent = this.mhzTarget = this.mhzBase * this.nTargetMultiplier;
 
         /**
+         * A machine can have more than one "setSpeed" control (eg, the CPU's own button and the Debugger
+         * Panel's), so we record all of them, and setSpeed() updates every one.
+         */
+        this.aSpeedControls = [];
+
+        /**
          * We add a number of flags to those initialized by Component.
          */
         this.flags.starting = this.flags.running = this.flags.yield = false;
@@ -15898,7 +15904,7 @@ class CPU extends Component {
             break;
 
         case "setSpeed":
-            this.bindings[sBinding] = control;
+            this.aSpeedControls.push(control);
             control.onclick = function onClickSetSpeed() {
                 cpu.setSpeed(cpu.nTargetMultiplier << 1, true);
             };
@@ -16127,8 +16133,7 @@ class CPU extends Component {
             if (this.mhzTarget != mhzTarget) {
                 this.mhzTarget = mhzTarget;
                 let sSpeed = this.getSpeedTarget();
-                let controlSpeed = this.bindings["setSpeed"];
-                if (controlSpeed) controlSpeed.textContent = sSpeed;
+                for (let control of this.aSpeedControls) control.textContent = sSpeed;
                 this.printf(MESSAGE.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
@@ -39408,7 +39413,10 @@ X86.opREPZ = function()
  */
 X86.opHLT = function()
 {
-    if (I386 && (this.regPS & X86.PS.VM)) {
+    /**
+     * HLT is a privileged instruction: in protected mode, it requires CPL 0 (and V86-mode is CPL 3).
+     */
+    if (this.nCPL) {
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
