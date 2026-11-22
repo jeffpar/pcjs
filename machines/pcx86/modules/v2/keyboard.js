@@ -1459,7 +1459,8 @@ export default class Keyboardx86 extends Component {
         if (softKeys) this.enableSoftKeyboard(softKeys != "false");
 
         this.video = cmp.getMachineComponent("Video");
-        cpu.addIntNotify(Interrupts.DOS, this.intDOS.bind(this));
+        cpu.addIntNotify(Interrupts.DOS, this.intDOS.bind(this, 0x0A));
+        cpu.addIntNotify(Interrupts.DOS_UTIL, this.intDOS.bind(this, 0x25));
     }
 
     /**
@@ -1493,19 +1494,22 @@ export default class Keyboardx86 extends Component {
     }
 
     /**
-     * intDOS()
+     * intDOS(bInput, addr)
      *
-     * Monitors selected DOS interrupts for signals to initialize 'autoType' injection.
+     * Monitors selected DOS interrupts for signals to initialize 'autoType' injection: INT 0x21 function 0x0A
+     * (buffered input), and BASIC-DOS's INT 0x2B function 0x25 (DOS_UTL_EDITLN), which its COMMAND.COM uses
+     * instead.
      *
      * @this {Keyboardx86}
+     * @param {number} bInput (the interrupt's line input function)
      * @param {number} addr
-     * @returns {boolean} true to proceed with the INT 0x21 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the software interrupt, false to skip
      */
-    intDOS(addr)
+    intDOS(bInput, addr)
     {
         let AH = (this.cpu.regEAX >> 8) & 0xff;
         this.fDOSReady = false;
-        if (AH == 0x0A) {
+        if (AH == bInput) {
             this.fDOSReady = true;
             if (this.fnDOSReady) {
                 this.fnDOSReady();
