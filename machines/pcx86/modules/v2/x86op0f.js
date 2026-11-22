@@ -1652,6 +1652,12 @@ X86.aOps0F[0xA6] = X86.opInvalid;
 X86.aOps0F[0xFF] = X86.opInvalid;
 
 /**
+ * Similarly, the DOS kernel in OS/2 2.0's DOS sessions (V86-mode) calls the OS/2 kernel with undefined opcode
+ * 0x0F,0x7F, which must raise a #UD (Invalid Opcode) exception that OS/2's handler recognizes.
+ */
+X86.aOps0F[0x7F] = X86.opInvalid;
+
+/**
  * NOTE: Any other opcode slots NOT explicitly initialized above with either a dedicated function OR opInvalid()
  * will be set to opUndefined() when initProcessor() finalizes the opcode tables.  If the processor is an 80386,
  * initProcessor() will also incorporate all the handlers listed below in aOps0F386.

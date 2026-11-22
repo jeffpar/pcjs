@@ -100,6 +100,12 @@ export default class Segx86 {
             this.offIP = 0;
             this.fCall = null;
             this.fStackSwitch = false;
+            /**
+             * sizeGate is set to the size (2 or 4) of any call gate that loadProt() goes through; helpCALLF() clears
+             * it before and checks it after loading CS, because a call gate's size (not the operand size of the CALL)
+             * determines the size of the return address.
+             */
+            this.sizeGate = 0;
             this.awParms = new Array(32);
             this.aCallBreaks = [];
         }
@@ -647,12 +653,18 @@ export default class Segx86 {
         /**
          * Load the descriptor from memory.
          */
-        let limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET);
-        let limitOrig;
-        let acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
+        let cpl = cpu.nCPL;
+        let limit = 0, limitOrig, acc = 0, base = 0, ext = 0;
+        cpu.nCPL = 0;                  // descriptor reads are supervisor accesses (see accessSys())
+        try {
+            limit = cpu.getShort(addrDesc + X86.DESC.LIMIT.OFFSET);
+            acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
+            base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
+            ext = cpu.getShort(addrDesc + X86.DESC.EXT.OFFSET);
+        } finally {
+            cpu.nCPL = cpl;
+        }
         let type = (acc & X86.DESC.ACC.TYPE.MASK);
-        let base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
-        let ext = cpu.getShort(addrDesc + X86.DESC.EXT.OFFSET);
         let selMasked = sel & X86.SEL.MASK;
 
         if (I386 && cpu.model >= X86.MODEL_80386) {
@@ -724,6 +736,14 @@ export default class Segx86 {
                  */
                 if (addrDesc == cpu.addrGDT) type = 0;
             }
+
+            /**
+             * An interrupt's descriptor comes from the IDT (see loadIDTProt(), which passes nIDT * 8 as sel), and
+             * a fault on it has ERRCODE.IDT set in its error code, whatever is wrong with it: a gate that the
+             * caller can't use (see below), or an entry that isn't a gate at all (eg, an empty entry, whose type
+             * is zero), as when ring 3 code issues an INT for a vector that has no gate.
+             */
+            fIDT = (addrDesc == cpu.addrIDT + sel);
 
             if (type >= X86.DESC.ACC.TYPE.CODE_EXECONLY) {
                 /**
@@ -838,7 +858,6 @@ export default class Segx86 {
                  * set (which we assert above).
                  */
                 cplOld = this.cpl;
-                fIDT = (addrDesc == cpu.addrIDT + sel);
 
                 /**
                  * Software interrupts (where fIDT is true and cpu.nFault < 0) require an additional test:
@@ -888,7 +907,7 @@ export default class Segx86 {
                             offSP = (cplNew << 3) + X86.TSS386.CPL0_ESP;
                             lenSP = 4;
                         }
-                        selStack = cpu.getShort(addrTSS + offSP + lenSP);
+                        selStack = cpu.accessSys(cpu.getShort, addrTSS + offSP + lenSP);
 
                         /**
                          * Intel pseudo-code indicates at least FIVE discrete selStack tests that could trigger
@@ -912,7 +931,7 @@ export default class Segx86 {
                          * Both probes succeeded, so we can proceed with "normal" loads for both selCode and
                          * selStack (which should automatically use the values cached by the "probed" loads above).
                          */
-                        offStack = (lenSP == 2)? cpu.getShort(addrTSS + offSP) : cpu.getLong(addrTSS + offSP);
+                        offStack = cpu.accessSys(lenSP == 2? cpu.getShort : cpu.getLong, addrTSS + offSP);
                     }
 
                     /**
@@ -933,6 +952,15 @@ export default class Segx86 {
                     }
 
                     cpu.setDataSize(sizeGate);
+                    this.sizeGate = sizeGate;
+
+                    /**
+                     * The pushes onto the new stack (below, and the caller's pushes of the return address or interrupt
+                     * frame) are made at the new privilege level, so update the CPU's cached CPL now, instead of waiting
+                     * for setLIP(); otherwise, paging would check them as user accesses (eg, a ring 3 interrupt or call
+                     * whose ring 0 stack is on a supervisor page).
+                     */
+                    cpu.nCPL = this.cpl;
 
                     this.offIP = limit;
 
@@ -945,11 +973,16 @@ export default class Segx86 {
                             return X86.ADDR_INVALID;
                         }
 
-                        regSP = cpu.getSP();
+                        /**
+                         * A gate's parameter count is in words (80286 gates) or dwords (80386 gates), and since
+                         * setDataSize(sizeGate) above, getSOWord() and pushWord() both use that size, too.  A 16-bit
+                         * stack segment uses only SP, even if the upper half of ESP is nonzero (eg, OS/2 2.0 thunks).
+                         */
+                        regSP = cpu.getSP() & cpu.segSS.maskAddr;
                         let i = 0, nWords = (acc & 0x1f);
                         while (nWords--) {
                             this.awParms[i++] = cpu.getSOWord(cpu.segSS, regSP);
-                            regSP += 2;
+                            regSP += sizeGate;
                         }
 
                         regSSPrev = cpu.getSS();
@@ -1107,7 +1140,7 @@ export default class Segx86 {
              */
             this.addrIOPM = 0;
             if (typeTSS == X86.DESC.ACC.TYPE.TSS386) {
-                this.addrIOPM = (base + cpu.getShort(base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
+                this.addrIOPM = (base + cpu.accessSys(cpu.getShort, base + X86.TSS386.TASK_IOPM + 2)) >>> 0;
                 this.addrIOPMLimit = (base + limit) >>> 0;
             }
             break;
@@ -1204,9 +1237,13 @@ export default class Segx86 {
         let cpu = this.cpu;
         cpu.assert(this === cpu.segCS);
 
-        let cplOld = this.cpl;
+        /**
+         * All reads and writes of the old and new TSS are implicit supervisor accesses (see accessSys()); we can't
+         * simply clear nCPL for the duration, because setCSIP() updates it partway through.
+         */
         let selOld = cpu.segTSS.sel;
         let addrOld = cpu.segTSS.base;
+        let typeOld = cpu.segTSS.type;
 
         if (!fNest) {
             /**
@@ -1219,7 +1256,7 @@ export default class Segx86 {
             /**
              * TODO: Should I be more paranoid about writing our cached ACC value back into the descriptor?
              */
-            cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc &= ~X86.DESC.ACC.TYPE.TSS_BUSY);
+            cpu.accessSys(cpu.setShort, cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc &= ~X86.DESC.ACC.TYPE.TSS_BUSY);
         }
 
         if (cpu.segTSS.load(selNew) === X86.ADDR_INVALID) {
@@ -1236,7 +1273,7 @@ export default class Segx86 {
                 X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, selNew & X86.ERRCODE.SELMASK);
                 return false;
             }
-            cpu.setShort(cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc |= X86.DESC.ACC.TYPE.TSS_BUSY);
+            cpu.accessSys(cpu.setShort, cpu.segTSS.addrDesc + X86.DESC.ACC.OFFSET, cpu.segTSS.acc |= X86.DESC.ACC.TYPE.TSS_BUSY);
         }
 
         /**
@@ -1246,117 +1283,69 @@ export default class Segx86 {
         cpu.segTSS.type = (cpu.segTSS.type & ~X86.DESC.ACC.TYPE.TSS_BUSY) | (cpu.segTSS.acc & X86.DESC.ACC.TYPE.TSS_BUSY);
 
         /**
-         * Update the old TSS
+         * Save the current state in the old TSS, in the old TSS's format (a task switch can go from an 80286 TSS
+         * to an 80386 TSS, or vice versa).  Both formats store IP, PS, AX, CX, DX, BX, SP, BP, SI, DI, ES, CS, SS,
+         * and DS in that order (an 80386 TSS follows them with FS and GS), in 2-byte or 4-byte fields.  The 80386
+         * doesn't save CR3 (or LDTR) in the old TSS; it only loads them from the new TSS.
          */
-        let offSS;
-        let offSP;
-        if (cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286 || cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS286_BUSY) {
-            cpu.setShort(addrOld + X86.TSS286.TASK_IP, cpu.getIP());
-            cpu.setShort(addrOld + X86.TSS286.TASK_PS, cpu.getPS());
-            cpu.setShort(addrOld + X86.TSS286.TASK_AX, cpu.regEAX);
-            cpu.setShort(addrOld + X86.TSS286.TASK_CX, cpu.regECX);
-            cpu.setShort(addrOld + X86.TSS286.TASK_DX, cpu.regEDX);
-            cpu.setShort(addrOld + X86.TSS286.TASK_BX, cpu.regEBX);
-            cpu.setShort(addrOld + X86.TSS286.TASK_SP, cpu.getSP());
-            cpu.setShort(addrOld + X86.TSS286.TASK_BP, cpu.regEBP);
-            cpu.setShort(addrOld + X86.TSS286.TASK_SI, cpu.regESI);
-            cpu.setShort(addrOld + X86.TSS286.TASK_DI, cpu.regEDI);
-            cpu.setShort(addrOld + X86.TSS286.TASK_ES, cpu.segES.sel);
-            cpu.setShort(addrOld + X86.TSS286.TASK_CS, cpu.segCS.sel);
-            cpu.setShort(addrOld + X86.TSS286.TASK_SS, cpu.segSS.sel);
-            cpu.setShort(addrOld + X86.TSS286.TASK_DS, cpu.segDS.sel);
-            /**
-             * Reload all registers from the new TSS; it's important to reload the LDTR sooner
-             * rather than later, so that as segment registers are reloaded, any LDT selectors will
-             * will be located in the correct table.
-             */
-            cpu.segLDT.load(cpu.getShort(addrNew + X86.TSS286.TASK_LDT));
-            cpu.setPS(cpu.getShort(addrNew + X86.TSS286.TASK_PS) | (fNest? X86.PS.NT : 0));
-            cpu.assert(!fNest || !!(cpu.regPS & X86.PS.NT));
-            cpu.regEAX = cpu.getShort(addrNew + X86.TSS286.TASK_AX);
-            cpu.regECX = cpu.getShort(addrNew + X86.TSS286.TASK_CX);
-            cpu.regEDX = cpu.getShort(addrNew + X86.TSS286.TASK_DX);
-            cpu.regEBX = cpu.getShort(addrNew + X86.TSS286.TASK_BX);
-            cpu.regEBP = cpu.getShort(addrNew + X86.TSS286.TASK_BP);
-            cpu.regESI = cpu.getShort(addrNew + X86.TSS286.TASK_SI);
-            cpu.regEDI = cpu.getShort(addrNew + X86.TSS286.TASK_DI);
-            cpu.segES.load(cpu.getShort(addrNew + X86.TSS286.TASK_ES));
-            cpu.segDS.load(cpu.getShort(addrNew + X86.TSS286.TASK_DS));
-            cpu.setCSIP(cpu.getShort(addrNew + X86.TSS286.TASK_IP), cpu.getShort(addrNew + X86.TSS286.TASK_CS));
-            offSS = X86.TSS286.TASK_SS;
-            offSP = X86.TSS286.TASK_SP;
-            if (this.cpl < cplOld) {
-                offSP = (this.cpl << 2) + X86.TSS286.CPL0_SP;
-                offSS = offSP + 2;
+        let f386 = I386 && !!(typeOld & X86.DESC.ACC.TYPE.NONSEG_386);
+        let regs = [
+            cpu.getIP(), cpu.getPS(), cpu.regEAX, cpu.regECX, cpu.regEDX, cpu.regEBX, cpu.getSP(), cpu.regEBP,
+            cpu.regESI, cpu.regEDI, cpu.segES.sel, cpu.segCS.sel, cpu.segSS.sel, cpu.segDS.sel
+        ];
+        if (f386) regs.push(cpu.segFS.sel, cpu.segGS.sel);
+        cpu.accessSys(() => {
+            let addr = addrOld + (f386? X86.TSS386.TASK_EIP : X86.TSS286.TASK_IP);
+            for (let i = 0; i < regs.length; i++, addr += (f386? 4 : 2)) {
+                if (f386) cpu.setLong(addr, regs[i]); else cpu.setShort(addr, regs[i]);
             }
-            cpu.setSS(cpu.getShort(addrNew + offSS), true);
-            cpu.setSP(cpu.getShort(addrNew + offSP));
-        } else {
-            cpu.assert(cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS386 || cpu.segTSS.type == X86.DESC.ACC.TYPE.TSS386_BUSY);
-            cpu.setLong(addrOld + X86.TSS386.TASK_CR3, cpu.regCR3);
-            cpu.setLong(addrOld + X86.TSS386.TASK_EIP, cpu.getIP());
-            cpu.setLong(addrOld + X86.TSS386.TASK_PS,  cpu.getPS());
-            cpu.setLong(addrOld + X86.TSS386.TASK_EAX, cpu.regEAX);
-            cpu.setLong(addrOld + X86.TSS386.TASK_ECX, cpu.regECX);
-            cpu.setLong(addrOld + X86.TSS386.TASK_EDX, cpu.regEDX);
-            cpu.setLong(addrOld + X86.TSS386.TASK_EBX, cpu.regEBX);
-            cpu.setLong(addrOld + X86.TSS386.TASK_ESP, cpu.getSP());
-            cpu.setLong(addrOld + X86.TSS386.TASK_EBP, cpu.regEBP);
-            cpu.setLong(addrOld + X86.TSS386.TASK_ESI, cpu.regESI);
-            cpu.setLong(addrOld + X86.TSS386.TASK_EDI, cpu.regEDI);
-            cpu.setLong(addrOld + X86.TSS386.TASK_ES,  cpu.segES.sel);
-            cpu.setLong(addrOld + X86.TSS386.TASK_CS,  cpu.segCS.sel);
-            cpu.setLong(addrOld + X86.TSS386.TASK_SS,  cpu.segSS.sel);
-            cpu.setLong(addrOld + X86.TSS386.TASK_DS,  cpu.segDS.sel);
+        });
 
+        /**
+         * Read the new TSS's state, in its format, and then load the registers; it's important to load the LDTR
+         * first, so that as segment registers are loaded, any LDT selectors will be located in the correct table.
+         * SS:ESP always comes from the task's own SS and ESP fields (the TSS's CPL0-CPL2 stacks are used only for
+         * privilege changes within a task).
+         */
+        f386 = I386 && !!(cpu.segTSS.type & X86.DESC.ACC.TYPE.NONSEG_386);
+        if (f386) X86.helpLoadCR3.call(cpu, cpu.accessSys(cpu.getLong, addrNew + X86.TSS386.TASK_CR3));
+        let selLDT = 0;
+        regs = [];
+        cpu.accessSys(() => {
+            selLDT = cpu.getShort(addrNew + (f386? X86.TSS386.TASK_LDT : X86.TSS286.TASK_LDT));
+            let addr = addrNew + (f386? X86.TSS386.TASK_EIP : X86.TSS286.TASK_IP);
+            for (let i = 0; i < (f386? 16 : 14); i++, addr += (f386? 4 : 2)) {
+                regs.push(f386? cpu.getLong(addr) : cpu.getShort(addr));
+            }
+        });
+        cpu.segLDT.load(selLDT);
+        cpu.setPS(regs[1] | (fNest? X86.PS.NT : 0));
+        cpu.assert(!fNest || !!(cpu.regPS & X86.PS.NT));
+        cpu.regEAX = regs[2];
+        cpu.regECX = regs[3];
+        cpu.regEDX = regs[4];
+        cpu.regEBX = regs[5];
+        cpu.regEBP = regs[7];
+        cpu.regESI = regs[8];
+        cpu.regEDI = regs[9];
+        cpu.segES.load(regs[10] & 0xffff);
+        cpu.segDS.load(regs[13] & 0xffff);
+        if (f386) {
             /**
              * segFS and segGS exist only on 80386 machines
              */
             cpu.assert(I386 && cpu.model >= X86.MODEL_80386);
-            cpu.setLong(addrOld + X86.TSS386.TASK_FS,  cpu.segFS.sel);
-            cpu.setLong(addrOld + X86.TSS386.TASK_GS,  cpu.segGS.sel);
-
-            /**
-             * Reload all registers from the new TSS; it's important to reload the LDTR sooner
-             * rather than later, so that as segment registers are reloaded, any LDT selectors will
-             * will be located in the correct table.
-             */
-            X86.helpLoadCR3.call(cpu, cpu.getLong(addrNew + X86.TSS386.TASK_CR3));
-            cpu.segLDT.load(cpu.getShort(addrNew + X86.TSS386.TASK_LDT));
-            cpu.setPS(cpu.getLong(addrNew + X86.TSS386.TASK_PS) | (fNest? X86.PS.NT : 0));
-            cpu.assert(!fNest || !!(cpu.regPS & X86.PS.NT));
-            cpu.regEAX = cpu.getLong(addrNew + X86.TSS386.TASK_EAX);
-            cpu.regECX = cpu.getLong(addrNew + X86.TSS386.TASK_ECX);
-            cpu.regEDX = cpu.getLong(addrNew + X86.TSS386.TASK_EDX);
-            cpu.regEBX = cpu.getLong(addrNew + X86.TSS386.TASK_EBX);
-            cpu.regEBP = cpu.getLong(addrNew + X86.TSS386.TASK_EBP);
-            cpu.regESI = cpu.getLong(addrNew + X86.TSS386.TASK_ESI);
-            cpu.regEDI = cpu.getLong(addrNew + X86.TSS386.TASK_EDI);
-            cpu.segES.load(cpu.getShort(addrNew + X86.TSS386.TASK_ES));
-            cpu.segDS.load(cpu.getShort(addrNew + X86.TSS386.TASK_DS));
-
-            /**
-             * segFS and segGS exist only on 80386 machines
-             */
-            cpu.assert(I386 && cpu.model >= X86.MODEL_80386);
-            cpu.segFS.load(cpu.getShort(addrNew + X86.TSS386.TASK_FS));
-            cpu.segGS.load(cpu.getShort(addrNew + X86.TSS386.TASK_GS));
-
-            cpu.setCSIP(cpu.getLong(addrNew + X86.TSS386.TASK_EIP), cpu.getShort(addrNew + X86.TSS386.TASK_CS));
-            offSS = X86.TSS386.TASK_SS;
-            offSP = X86.TSS386.TASK_ESP;
-            if (this.cpl < cplOld) {
-                offSP = (this.cpl << 3) + X86.TSS386.CPL0_ESP;
-                offSS = offSP + 4;
-            }
-            cpu.setSS(cpu.getShort(addrNew + offSS), true);
-            cpu.setSP(cpu.getLong(addrNew + offSP));
+            cpu.segFS.load(regs[14] & 0xffff);
+            cpu.segGS.load(regs[15] & 0xffff);
         }
+        cpu.setCSIP(regs[0], regs[11] & 0xffff);
+        cpu.setSS(regs[12] & 0xffff, true);
+        cpu.setSP(regs[6]);
 
         /**
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          */
-        if (fNest) cpu.setShort(addrNew + X86.TSS286.PREV_TSS, selOld);
+        if (fNest) cpu.accessSys(cpu.setShort, addrNew + X86.TSS286.PREV_TSS, selOld);
 
         cpu.regCR0 |= X86.CR0.MSW.TS;
         return true;
@@ -1551,14 +1540,14 @@ export default class Segx86 {
                      */
                     if ((this.sel & ~X86.SEL.RPL) && this.addrDesc !== X86.ADDR_INVALID) {
                         let addrType = this.addrDesc + X86.DESC.ACC.TYPE.OFFSET;
-                        let bType = this.cpu.getByte(addrType);
+                        let bType = this.cpu.accessSys(this.cpu.getByte, addrType);
                         /**
                          * This code used to ALWAYS call setByte(), but that's a waste of time if ACCESSED is already
                          * set.  TODO: It would also be nice if we could simply use the cached type value, and eliminate
                          * the getByte() call; that seems a bit risky, but I think we should still try it someday.
                          */
                         if (!(bType & (X86.DESC.ACC.TYPE.ACCESSED >> 8))) {
-                            this.cpu.setByte(addrType, bType | (X86.DESC.ACC.TYPE.ACCESSED >> 8));
+                            this.cpu.accessSys(this.cpu.setByte, addrType, bType | (X86.DESC.ACC.TYPE.ACCESSED >> 8));
                         }
                     }
                 }
@@ -1721,7 +1710,7 @@ export default class Segx86 {
          if (addrDT !== undefined) {
              let addrDesc = (addrDT + (sel & X86.SEL.MASK))|0;
              if (((addrDTLimit - addrDesc)|0) >= 7) {
-                 return cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
+                 return cpu.accessSys(cpu.getShort, addrDesc + X86.DESC.ACC.OFFSET);
              }
          }
          X86.helpFault.call(cpu, X86.EXCEPTION.GP_FAULT, sel & X86.ERRCODE.SELMASK);

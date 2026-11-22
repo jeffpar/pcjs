@@ -3050,7 +3050,7 @@ export default class CPUx86 extends CPU {
                 let offIOPM = port >>> 3;
                 let addrIOPM = this.segTSS.addrIOPM + offIOPM;
                 while (bitsPorts && addrIOPM <= this.segTSS.addrIOPMLimit) {
-                    let bits = this.getByte(addrIOPM);
+                    let bits = this.accessSys(this.getByte, addrIOPM);  // the IOPM is part of the TSS
                     if (bits & bitsPorts) break;
                     bitsPorts >>>= 8;
                     addrIOPM++;
@@ -3353,6 +3353,32 @@ export default class CPUx86 extends CPU {
         this.aMemBlocks[iBlock++].writeByte(off, w & 0xff, addr);
         if (this.opFlags & X86.OPFLAG.FAULT) return;
         this.aMemBlocks[iBlock & this.nBlockMask].writeByte(0, (w >> 8) & 0xff, addr + 1);
+    }
+
+    /**
+     * accessSys(fn, addr, data)
+     *
+     * Descriptor tables and TSSs are always accessed as if CPL were 0 (the 80386's "implicit supervisor" accesses),
+     * so paging never faults a ring 3 selector load (eg, an OS/2 2.0 ring 3 call through a GDT call gate) because the
+     * table's page is supervisor-only, and any page fault that does occur reports a supervisor access.
+     *
+     * fn can also be a closure that performs several accesses (in which case addr and data are omitted).
+     *
+     * @this {CPUx86}
+     * @param {Function} fn (eg, this.getShort or this.setByte, which are called with this CPUx86 as "this")
+     * @param {number} [addr] is a linear address
+     * @param {number} [data] (for writes)
+     * @returns {number} (whatever fn returns; writes return nothing, so callers ignore the result)
+     */
+    accessSys(fn, addr, data)
+    {
+        let cpl = this.nCPL;
+        this.nCPL = 0;
+        try {
+            return fn.call(this, addr, data);
+        } finally {
+            this.nCPL = cpl;
+        }
     }
 
     /**

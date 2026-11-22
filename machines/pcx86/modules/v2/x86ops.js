@@ -1678,7 +1678,8 @@ X86.opINSw = function()
 /**
  * op=0x6E (OUTSB) (80186/80188 and up)
  *
- * NOTE: Segment overrides are ignored for this instruction, so we must use segDS instead of segData.
+ * NOTE: Unlike INS, whose destination is always ES, the source (DS) can be overridden, so we use segData
+ * (eg, the CS: OUTSB that OS/2 2.0 uses to load the VGA DAC from its own code segment).
  *
  * @this {CPUx86}
  */
@@ -1705,7 +1706,7 @@ X86.opOUTSb = function()
     if (nReps--) {
         let port = this.regEDX & 0xffff;
         if (!this.checkIOPM(port, 1, false)) return;
-        let b = this.getSOByte(this.segDS, this.regESI & maskAddr);
+        let b = this.getSOByte(this.segData, this.regESI & maskAddr);
         /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *
@@ -1723,7 +1724,7 @@ X86.opOUTSb = function()
 /**
  * op=0x6F (OUTSW) (80186/80188 and up)
  *
- * NOTE: Segment overrides are ignored for this instruction, so we must use segDS instead of segData.
+ * NOTE: Unlike INS, whose destination is always ES, the source (DS) can be overridden, so we use segData.
  *
  * @this {CPUx86}
  */
@@ -1748,7 +1749,7 @@ X86.opOUTSw = function()
         if (this.opPrefixes & X86.OPFLAG.REPEAT) nCycles = 4;
     }
     if (nReps--) {
-        let w = this.getSOWord(this.segDS, this.regESI & maskAddr);
+        let w = this.getSOWord(this.segData, this.regESI & maskAddr);
         /**
          * helpFault() throws exceptions now, so inline checks of X86.OPFLAG.FAULT should no longer be necessary.
          *

@@ -5666,6 +5666,14 @@ export default class ChipSet extends Component {
                 if (this.kbd) this.set8042OutBuff(this.kbd.receiveCmd(bOut));
                 break;
             }
+        } else {
+            /**
+             * A data byte that doesn't follow a command goes to the Keyboard, too; eg, the second byte of a two-byte
+             * Keyboard command (like 0xED and its LED bits), which OS/2 2.0's DOS sessions write without any command
+             * in between.
+             */
+            this.set8042CmdData(this.b8042CmdData & ~ChipSet.C8042.DATA.CMD.NO_CLOCK);
+            if (this.kbd) this.set8042OutBuff(this.kbd.receiveCmd(bOut));
         }
         this.b8042InBuff = bOut;
         this.b8042Status &= ~ChipSet.C8042.STATUS.CMD_FLAG;
@@ -5943,6 +5951,12 @@ export default class ChipSet extends Component {
             } else {
                 this.b8042Status &= ~ChipSet.C8042.STATUS.OUTBUFF_FULL;
                 this.b8042Status |= ChipSet.C8042.STATUS.OUTBUFF_DELAY;
+                /**
+                 * Any data placed in the output buffer generates an interrupt if INT_ENABLE is set, not just
+                 * keyboard scan codes (eg, OS/2 2.0's keyboard driver sends READ_INPORT and reads the response in
+                 * its interrupt handler).
+                 */
+                if (this.b8042CmdData & ChipSet.C8042.DATA.CMD.INT_ENABLE) this.setIRR(ChipSet.IRQ.KBD, 120);
             }
             if (!COMPILED) this.printf(MESSAGE.KBD + MESSAGE.PORT, "chipset.set8042OutBuff(%#04X,delay=%b)\n", b, !fNoDelay);
         }
