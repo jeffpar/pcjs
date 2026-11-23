@@ -1,4 +1,4 @@
-FROM jekyll/jekyll
+FROM jekyll/jekyll:4.2.2
 
 COPY docker-init.sh /
 
