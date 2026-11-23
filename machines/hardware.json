@@ -1066,6 +1066,9 @@
       },
       "iiic": {
         "@title": "Palm IIIc"
+      },
+      "tungsten": {
+        "@title": "Palm Tungsten E"
       }
     }
   },
