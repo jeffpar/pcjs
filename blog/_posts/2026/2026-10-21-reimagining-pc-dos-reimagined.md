@@ -122,7 +122,7 @@ I created a handy "matrix" of demos at [BASIC-DOS Demos](https://basicdos.com/de
 
 And I'm just scratching the surface of what's been done so far.  For example, I haven't mentioned the `DEBUG.COM` utility, which goes far beyond the original DEBUG.COM, not only in terms of processor support (8088, 80286, and 80386) but also in its ability to run as a device driver (`DEBUG$`) and debug the entire BASIC-DOS operating system.  There's also a built-in mouse driver (`MOUSE$`) that supports the Microsoft Serial Mouse, and a few MOUSE commands have been added to the BASIC-DOS language to enable the creation of mouse-based apps.
 
-Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 20Mb hard disk (eg, [BASIC-DOS in Protected Mode with 640K](https://basicdos.com/demos/bd/mmu/)) and you can build the entire product from scratch:
+Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 20Mb hard disk (eg, [BASIC-DOS with Extended Memory](https://basicdos.com/demos/bd/mmu/)) and you can build the entire product from scratch:
 
 ```
 CD C:\SRC
