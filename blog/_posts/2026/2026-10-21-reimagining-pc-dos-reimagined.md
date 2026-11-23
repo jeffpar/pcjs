@@ -117,12 +117,12 @@ Run the `HELP PROMPT` command and you'll see that the BASIC-DOS `PROMPT$` string
 
 I created a handy "matrix" of demos at [BASIC-DOS Demos](https://basicdos.com/demos/) to showcase not only the breadth of BASIC-DOS' hardware support, but also some hardware combinations that few people probably gave much consideration to back in the day; eg:
 
-  - [IBM PC XT with a second session on a VT100 terminal](https://basicdos.com/demos/vt100/xt/)
-  - [IBM PC AT with *no video card*, just two VT100 terminals](https://basicdos.com/demos/term/at/)
+  - [IBM PC XT with a second session on a VT100 terminal](https://basicdos.com/demos/bd/vt100/xt/)
+  - [IBM PC AT with *no video card*, just two VT100 terminals](https://basicdos.com/demos/bd/term/at/)
 
 And I'm just scratching the surface of what's been done so far.  For example, I haven't mentioned the `DEBUG.COM` utility, which goes far beyond the original DEBUG.COM, not only in terms of processor support (8088, 80286, and 80386) but also in its ability to run as a device driver (`DEBUG$`) and debug the entire BASIC-DOS operating system.  There's also a built-in mouse driver (`MOUSE$`) that supports the Microsoft Serial Mouse, and a few MOUSE commands have been added to the BASIC-DOS language to enable the creation of mouse-based apps.
 
-Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 10Mb hard disk (eg, [BASIC-DOS in Protected Mode with 640K](https://basicdos.com/demos/mmu/640k/)) and you can build the entire product from scratch:
+Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 20Mb hard disk (eg, [BASIC-DOS in Protected Mode with 640K](https://basicdos.com/demos/bd/mmu/)) and you can build the entire product from scratch:
 
 ```
 CD C:\SRC
