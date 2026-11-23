@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A simple drawing of a Palm Tungsten E, used as the machine's input surface until a photograph is available.
+
+  The drawing is 760x1120: twice the size of the 320x320 LCD, plus a border.  The LCD is at (60,70), the Graffiti
+  area is directly below it, and the buttons are along the bottom; these positions must match the 'penRegion' and
+  'buttonRegions' properties in /machines/palm/tungsten.json.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="1120" viewBox="0 0 760 1120">
+  <defs>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#b9bcc2"/>
+      <stop offset="0.5" stop-color="#e3e5e8"/>
+      <stop offset="1" stop-color="#b9bcc2"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="752" height="1112" rx="46" fill="url(#body)" stroke="#7d8087" stroke-width="4"/>
+  <!-- power button -->
+  <rect x="650" y="18" width="80" height="28" rx="12" fill="#8d9097" stroke="#6b6e75" stroke-width="2"/>
+  <!-- bezel around the LCD and the Graffiti area -->
+  <rect x="44" y="54" width="672" height="912" rx="10" fill="#2a2c30"/>
+  <rect x="60" y="70" width="640" height="640" fill="#000"/>
+  <!-- Graffiti area: 640x240, directly below the LCD -->
+  <rect x="60" y="710" width="640" height="240" fill="#c9cdbf"/>
+  <g fill="none" stroke="#5c6157" stroke-width="2">
+    <rect x="150" y="722" width="460" height="216" rx="6"/>
+    <line x1="456" y1="722" x2="456" y2="938"/>
+  </g>
+  <g fill="#5c6157" font-family="Helvetica, Arial, sans-serif" font-size="22">
+    <text x="160" y="930">abc</text>
+    <text x="560" y="930">123</text>
+  </g>
+  <!-- application buttons -->
+  <g fill="#8d9097" stroke="#6b6e75" stroke-width="3">
+    <ellipse cx="115" cy="1042" rx="42" ry="36"/>
+    <ellipse cx="225" cy="1042" rx="42" ry="36"/>
+    <ellipse cx="535" cy="1042" rx="42" ry="36"/>
+    <ellipse cx="645" cy="1042" rx="42" ry="36"/>
+  </g>
+  <!-- 5-way navigator -->
+  <ellipse cx="380" cy="1042" rx="80" ry="60" fill="#a3a6ac" stroke="#6b6e75" stroke-width="3"/>
+  <ellipse cx="380" cy="1042" rx="34" ry="24" fill="#8d9097" stroke="#6b6e75" stroke-width="3"/>
+  <g fill="#6b6e75">
+    <path d="M380 990 l10 12 h-20 z"/>
+    <path d="M380 1094 l10 -12 h-20 z"/>
+    <path d="M312 1042 l12 -10 v20 z"/>
+    <path d="M448 1042 l-12 -10 v20 z"/>
+  </g>
+</svg>

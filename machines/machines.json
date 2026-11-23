@@ -492,6 +492,12 @@
       "./machines/palm/pilot/modules/v3/ioregs.js",
       "./machines/palm/pilot/modules/v3/sed1375.js",
       "./machines/palm/pilot/modules/v3/video.js",
+      "./machines/arm/modules/v3/cpuarm.js",
+      "./machines/arm/modules/v3/dbgarm.js",
+      "./machines/arm/modules/v3/omap.js",
+      "./machines/arm/modules/v3/omapvideo.js",
+      "./machines/palm/pilot/modules/v3/tsc2102.js",
+      "./machines/palm/pilot/modules/v3/tungsten.js",
       "./machines/modules/v3/machine.js"
     ]
   },

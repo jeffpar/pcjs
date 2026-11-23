@@ -29,7 +29,7 @@ Click any of the following applications to install it on the Palm IIIc and launc
 - [Bejeweled 2.23](/machines/palm/iiic/demos/Bejeweled.prc) by [Astraware](https://web.archive.org/web/20031210092358/http://www.astraware.com/palm/bejeweled/)
 - [Pocket Aargon](/machines/palm/iiic/demos/Aargon.prc) by [DoubleBit Software](https://web.archive.org/web/20040627193028/http://www.doublebit.com/aargon/)
 
-[Pocket Aargon](https://web.archive.org/web/20040627193028/http://www.doublebit.com/aargon/) is a puzzle game of lasers and logic based on the PC game *Aargon Deluxe* developed by Twilight Games. I worked with them to develop *Pocket Aargon* for color Palm and Pocket PC devices, and it features a built-in tutorial, 30 Beginner levels, 90 Deluxe levels, and 30 new levels designed especially for handhelds, along with a level editor.  I built this particular version in June 2003.
+[Pocket Aargon](https://web.archive.org/web/20040627193028/http://www.doublebit.com/aargon/) is a puzzle game of lasers and logic based on the PC game *Aargon Deluxe* developed by Twilight Games. I worked with them to develop *Pocket Aargon* for color Palm and Pocket PC devices, and it features a built-in tutorial, 30 Beginner levels, 90 Deluxe levels, and 30 new levels designed especially for handhelds, along with a level editor.  I built this particular version in June 2003.  Use Aargon Registration Code `CQHVPVDP` to enable all features.
 
 You can also install applications using the Debugger's `load` command (eg, `load demos/Aargon.prc`).  Any of the Palm Pilot's [demos](/machines/palm/pilot/#demos) and Palm III's [demos](/machines/palm/iii/#demos) can be installed as well (eg, `load /machines/palm/iii/demos/Railroad.prc`).
 

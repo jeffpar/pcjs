@@ -37,6 +37,7 @@ const Interrupts = {
     DOS:        0x21,
     DOS_IDLE:   0x28,
     DOS_NETBIOS:0x2A,
+    DOS_UTIL:   0x2B,               // BASIC-DOS utility interface
     MOUSE:      0x33,
     ALT_DISK:   0x40,               // HDC ROM saves original FDC vector here
     HD0_PARMS:  0x41,               // vector for Fixed Disk Parameter Table (FDPT) for hard drive 0

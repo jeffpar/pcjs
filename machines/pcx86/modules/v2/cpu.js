@@ -90,6 +90,12 @@ export default class CPU extends Component {
         this.mhzCurrent = this.mhzTarget = this.mhzBase * this.nTargetMultiplier;
 
         /**
+         * A machine can have more than one "setSpeed" control (eg, the CPU's own button and the Debugger
+         * Panel's), so we record all of them, and setSpeed() updates every one.
+         */
+        this.aSpeedControls = [];
+
+        /**
          * We add a number of flags to those initialized by Component.
          */
         this.flags.starting = this.flags.running = this.flags.yield = false;
@@ -590,7 +596,7 @@ export default class CPU extends Component {
             break;
 
         case "setSpeed":
-            this.bindings[sBinding] = control;
+            this.aSpeedControls.push(control);
             control.onclick = function onClickSetSpeed() {
                 cpu.setSpeed(cpu.nTargetMultiplier << 1, true);
             };
@@ -819,8 +825,7 @@ export default class CPU extends Component {
             if (this.mhzTarget != mhzTarget) {
                 this.mhzTarget = mhzTarget;
                 let sSpeed = this.getSpeedTarget();
-                let controlSpeed = this.bindings["setSpeed"];
-                if (controlSpeed) controlSpeed.textContent = sSpeed;
+                for (let control of this.aSpeedControls) control.textContent = sSpeed;
                 this.printf(MESSAGE.NONE, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();

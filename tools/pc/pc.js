@@ -73,6 +73,7 @@ export default class PC extends PCJSLib {
     systemType = "msdos";
     systemVersion = "3.30";
     systemMBR = "pcjs.mbr";
+    systemDate = null;          // date for the system files from --sysdate (null to use each file's own)
     savedMachine = "compaq386.json";
     savedState = "state386.json";
     localMachine = "";          // current machine config file
@@ -1446,7 +1447,18 @@ export default class PC extends PCJSLib {
             if (pc.kbRAM && config['ram']) {
                 let rams = Array.isArray(config['ram'])? config['ram'] : [config['ram']];
                 let kbLow = pc.kbRAM;
-                if (kbLow > 640 && config['cpu'] && config['cpu']['model'] >= 80286) {
+                /**
+                 * The ROM BIOS sizes memory by testing only the first word of each block (16K on a PC or XT, 64K
+                 * on a PC AT or later), so a size that ends partway through a block would be reported as the whole
+                 * block, and the machine would use memory that isn't there; and a PC or XT can't have more than 640K.
+                 */
+                let model = config['cpu'] && config['cpu']['model'] || 8088;
+                let kbBlock = model >= 80286? 64 : 16;
+                if (kbLow % kbBlock || model < 80286 && kbLow > 640) {
+                    printf("error: --ram must be %s on this machine\n", kbLow % kbBlock? "a multiple of " + kbBlock + "K" : "640K or less");
+                    pc.exit(1);
+                }
+                if (kbLow > 640 && model >= 80286) {
                     rams = rams.filter((ram) => ram['id'] != "ramExt");
                     rams.push({'id': "ramExt", 'addr': 0x100000, 'size': (kbLow - 640) * 1024});
                     config['ram'] = rams;
@@ -1992,7 +2004,7 @@ export default class PC extends PCJSLib {
                     } else {
                         attr = this.systemType == "custom"? 0 : DiskInfo.ATTR.HIDDEN | DiskInfo.ATTR.SYSTEM | DiskInfo.ATTR.READONLY;
                     }
-                    date = node.fs.statSync(name).mtime;
+                    date = this.systemDate || node.fs.statSync(name).mtime;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
                     if (fText && !fConfig) {
                         aDeferred.push(desc);
@@ -2120,9 +2132,10 @@ export default class PC extends PCJSLib {
          * the user.  Ensuring that "C:\" is in the PATH ensures that the user can invoke "quit" to run
          * our hidden QUIT.COM program in the root of the drive, regardless of the current directory.
          *
-         * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command.  And since it
-         * starts every BAT file with ECHO OFF, we don't create an AUTOEXEC.BAT unless there are commands that
-         * we can't put on a SHELL line (see below).
+         * The exception is BASIC-DOS ("bd"), which doesn't currently support the PATH command, and which runs
+         * its startup commands from a SHELL line, so we don't create an AUTOEXEC.BAT unless there are commands that
+         * we can't put on a SHELL line (see below), and then it begins with @ECHO OFF, since BASIC-DOS, like DOS,
+         * starts every BAT file with ECHO ON.
          *
          * With --bare, there's no QUIT.COM to find, so we leave any AUTOEXEC.BAT alone, and we don't create
          * one unless there are commands to put in it.
@@ -2191,6 +2204,9 @@ export default class PC extends PCJSLib {
                 desc[DiskInfo.FILEDESC.CONTENTS] = db;
                 desc[DiskInfo.FILEDESC.SIZE] = db.length;
             }
+        }
+        if (this.systemType == "bd" && !text && aCommands.length) {
+            text = "@ECHO OFF\n";
         }
         for (let command of aCommands) {
             text += command + "\n";
@@ -3602,12 +3618,19 @@ export default class PC extends PCJSLib {
             this.systemVersion = PC.removeArg(argv, ['version', 'ver'], defaults['ver'] || this.systemVersion);
         }
         this.systemMBR = PC.removeArg(argv, 'mbr', defaults['mbr'] || this.systemMBR);
+        let sDate = PC.removeArg(argv, 'sysdate', defaults['sysdate']);
+        if (sDate) {
+            this.systemDate = new Date(sDate);
+            if (isNaN(this.systemDate)) return "invalid system date: " + sDate;
+        }
 
         this.kbTarget = diskLib.getTargetValue(PC.removeArg(argv, 'target', defaults['target'])) || this.kbTarget;
         this.maxFiles = +PC.removeArg(argv, 'maxfiles', defaults['maxfiles'] || Math.trunc(this.kbTarget / 5));
         this.speed = +PC.removeArg(argv, 'speed', defaults['speed'] || this.speed) || 0;
         this.fpu = PC.removeFlag(argv, 'fpu', defaults['fpu'] || this.fpu);
-        this.kbRAM = diskLib.getTargetValue(PC.removeArg(argv, 'ram', defaults['ram'])) || 0;
+        let sRAM = PC.removeArg(argv, 'ram', defaults['ram']);
+        this.kbRAM = diskLib.getTargetValue(sRAM) || 0;
+        if (sRAM && !this.kbRAM) return "invalid RAM size: " + sRAM;
 
         if ([160, 180, 320, 360, 720, 1200, 1440, 2880].indexOf(this.kbTarget) >= 0) {
             this.floppy = true;
@@ -4105,7 +4128,7 @@ export default class PC extends PCJSLib {
                 "--commands[=...]":         "execute commands, separated by semicolons",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
-                "--ram=[nK]":               "\tset RAM size (eg, 640K, or 2M on a PC AT)",
+                "--ram=[nK]":               "\tset RAM size in 16K steps, or 64K on a PC AT (eg, 640K or 2M)",
             };
             let optionsDisk = {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
@@ -4119,6 +4142,7 @@ export default class PC extends PCJSLib {
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
                 "--order=[names]":          "set root entries that come first (eg, EXT,DEMOS)",
                 "--save=[filename]":        "save drive disk image and exit",
+                "--sysdate=[date]":         "set date of system files (eg, 1986-09-09T02:10)",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",
                 "--version=[#.##]":         "set operating system version (default is " + this.systemVersion + ")"

@@ -448,7 +448,14 @@ X86.helpCALLF = function(off, sel)
     this.opLSP = this.regLSP;
     let oldIP = this.getIP();
     let oldSize = (I386? this.sizeData : 2);
+    this.segCS.sizeGate = 0;
     if (this.setCSIP(off, sel, true) != null) {
+        /**
+         * A call through a call gate pushes a return address the size of the gate, whatever the operand size
+         * of the CALL (eg, OS/2 2.0's 16-bit device drivers call DevHlp through an 80386 call gate, and DevHlp
+         * returns with a 32-bit RETF).
+         */
+        if (this.segCS.sizeGate) oldSize = this.segCS.sizeGate;
         /**
          * When the OPERAND size is 32 bits, the 80386 will decrement the stack pointer by 4, write the selector
          * into the 2 lower bytes, and leave the 2 upper bytes untouched; at least, that's the case for all other
@@ -521,7 +528,7 @@ X86.helpIRET = function()
          * Fortunately, X86.TSS286.PREV_TSS and X86.TSS386.PREV_TSS refer to the same TSS offset.
          * TODO: Update switchTS() to assess a cycle cost; currently, all we assess is what's shown above.
          */
-        let sel = this.getShort(addrNew + X86.TSS286.PREV_TSS);
+        let sel = this.accessSys(this.getShort, addrNew + X86.TSS286.PREV_TSS);
         this.segCS.switchTSS(sel, false);
     }
     else {

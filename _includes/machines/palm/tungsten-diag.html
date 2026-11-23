@@ -1,0 +1,43 @@
+<div id="{{ include.id }}" class="pcjs-chassis-clear">
+  <div class="pcjs-chassis-image">
+    <img id="imageTE" title="Palm Tungsten E" tabindex="0" src="/machines/palm/tungsten/images/tungsten-e.png" draggable="false" style="display:block; margin:0; outline:none; width:100%; height:auto; user-select:none; touch-action:none;">
+    <div id="monitorTE" class="pcjs-monitor" style="width:67.047%; height:46.657%; top:12.221%; left:16.995%; pointer-events:none;"></div>
+  </div>
+</div>
+<div class="pcjs-diagnostics">
+  <div id="diagTE" style="display:none;">
+    <label>Status (<span id="speedTE">Stopped</span>)<br>
+      <textarea id="printTE" class="pcjs-console" cols="128" rows="20"></textarea>
+    </label>
+  </div>
+  <div style="text-align:right;">
+    <button id="debugTE" aria-expanded="false" aria-controls="diagTE">Debug</button>
+    <button id="resetTE">Reset</button>
+    <button id="runTE">Run</button>
+    <button id="stepTE">Step</button>
+    <button id="clearTE">Clear</button>
+  </div>
+</div>
+<script>
+  (function() {
+    let diag = document.getElementById("diagTE");
+    let debug = document.getElementById("debugTE");
+    let showDebugger = function(show) {
+      diag.style.display = show? "" : "none";
+      debug.setAttribute("aria-expanded", show);
+      if (show) {
+        let print = document.getElementById("printTE");
+        print.scrollTop = print.scrollHeight;
+      }
+    };
+    debug.addEventListener("click", function() { showDebugger(diag.style.display == "none"); });
+    document.getElementById("resetTE").addEventListener("click", function() { showDebugger(false); });
+    //
+    // The Run button is a Run/Halt toggle, so we use a capturing listener to see its text before the machine
+    // updates it: clicking "Run" closes the debugger.  The debugger is never opened automatically (eg, when the
+    // machine stops, which also happens whenever the page is unloaded); only the Debug button opens it.
+    //
+    let run = document.getElementById("runTE");
+    run.addEventListener("click", function() { if (run.textContent == "Run") showDebugger(false); }, true);
+  })();
+</script>

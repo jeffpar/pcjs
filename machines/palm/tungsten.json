@@ -1,0 +1,148 @@
+{
+  "palm-tungsten": {
+    "class": "Machine",
+    "type": "PDA",
+    "name": "Palm Tungsten E",
+    "version": 3.00,
+    "autoSave": false,
+    "autoStart": true,
+    "bindings": {
+      "reset": "resetTE",
+      "clear": "clearTE",
+      "print": "printTE"
+    },
+    "ArrayBuffer": true,
+    "@doc": [
+      "autoSave is false because the OMAP, TSC2102, and Tungsten devices don't save or restore their state yet."
+    ]
+  },
+  "clock": {
+    "class": "Time",
+    "cyclesPerSecond": 32000000,
+    "bindings": {
+      "run": "runTE",
+      "setSpeed": "setSpeedTE",
+      "speed": "speedTE",
+      "step": "stepTE"
+    },
+    "overrides": ["cyclesPerSecond"],
+    "@doc": [
+      "The Tungsten E's OMAP310 runs at 126Mhz, but the CPUARM device counts roughly one cycle per instruction, and",
+      "all of the OMAP's timers are derived from the cycle count, so cyclesPerSecond is really the number of instructions",
+      "per second of machine time; 32 million is slow enough for most browsers to keep up with in real time."
+    ]
+  },
+  "busMemory": {
+    "class": "Bus",
+    "type": "static",
+    "addrWidth": 32,
+    "dataWidth": 8,
+    "blockSize": 4096,
+    "littleEndian": true
+  },
+  "input": {
+    "class": "Input",
+    "location": [0, 0, 965, 1391, 965, 1391, 965, 1391],
+    "drag": true,
+    "releaseDelay": 50,
+    "map": {
+      "power":    {"keys": ["0"]},
+      "datebook": {"keys": ["1"]},
+      "address":  {"keys": ["2"]},
+      "todolist": {"keys": ["3"]},
+      "memopad":  {"keys": ["4"]},
+      "select":   {"keys": ["5"]},
+      "up":       {"keys": ["Up"]},
+      "down":     {"keys": ["Down"]},
+      "left":     {"keys": ["Left"]},
+      "right":    {"keys": ["Right"]}
+    },
+    "bindings": {
+      "surface": "imageTE"
+    },
+    "@doc": [
+      "The input surface is the image of the Tungsten E, and its location array divides it into a 965x1391 grid,",
+      "so that the Tungsten device receives image coordinates."
+    ]
+  },
+  "rom": {
+    "class": "ROM",
+    "addr": 0,
+    "size": 3997696,
+    "width": 8,
+    "bus": "busMemory",
+    "values": "/machines/palm/tungsten/rom/tungsten.json",
+    "@doc": [
+      "The flash ROM (PalmOS 5.2.1) is at address 0, which is where the CPU starts"
+    ]
+  },
+  "ram": {
+    "class": "RAM",
+    "addr": 268435456,
+    "size": 33554432,
+    "bus": "busMemory",
+    "@doc": [
+      "addr of 268435456 is 0x10000000, and size of 33554432 is 32Mb of SDRAM"
+    ]
+  },
+  "cpu": {
+    "class": "CPUARM",
+    "busMemory": "busMemory",
+    "@doc": [
+      "The OMAP310's CPU is a TI ARM925T (ARMv4T)"
+    ]
+  },
+  "omap": {
+    "class": "OMAP",
+    "bus": "busMemory",
+    "model": "omap310"
+  },
+  "tsc": {
+    "class": "TSC2102",
+    "chipSelect": 0,
+    "gpioPINTDAV": 6,
+    "@doc": [
+      "The touch screen controller (and audio codec) is on uWire chip select 0, and its PINTDAV pin is on GPIO 6"
+    ]
+  },
+  "board": {
+    "class": "Tungsten",
+    "bus": "busMemory",
+    "penRegion": [164, 170, 647, 649],
+    "penHeight": 450,
+    "buttonRegions": {
+      "power":    [799, 25, 140, 60],
+      "datebook": [104, 1201, 96, 70],
+      "address":  [219, 1201, 96, 70],
+      "up":       [416, 1157, 135, 50],
+      "left":     [356, 1195, 60, 90],
+      "select":   [416, 1207, 135, 66],
+      "right":    [551, 1195, 80, 90],
+      "down":     [416, 1273, 135, 52],
+      "todolist": [654, 1201, 96, 70],
+      "memopad":  [767, 1201, 96, 70]
+    },
+    "@doc": [
+      "The pen and button regions are positions on the image of the Tungsten E (a 965x1391 scan of a real device),",
+      "where each LCD pixel is about 2 image pixels; penHeight is the height of the digitizer in LCD pixels (the LCD",
+      "plus the Graffiti area below it).  The power button is on the top edge of a real Tungsten E, so it isn't visible",
+      "in the image; its region is the top right corner of the case."
+    ]
+  },
+  "video": {
+    "class": "OMAPVideo",
+    "monitorWidth": 640,
+    "monitorHeight": 640,
+    "monitorColor": "#000000",
+    "bufferWidth": 320,
+    "bufferHeight": 320,
+    "refreshRate": 30,
+    "bindings": {
+      "monitor": "monitorTE",
+      "surface": "surfaceTE"
+    }
+  },
+  "debugger": {
+    "class": "DbgARM"
+  }
+}

@@ -7830,9 +7830,9 @@ if (DEBUGGER) {
     /* 0x67 */ [Debuggerx86.INS.AS,    Debuggerx86.TYPE_PREFIX | Debuggerx86.TYPE_80386],
 
     /* 0x68 */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
-    /* 0x69 */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_BOTH | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
+    /* 0x69 */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN],
     /* 0x6A */ [Debuggerx86.INS.PUSH,  Debuggerx86.TYPE_IMM    | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN   | Debuggerx86.TYPE_80186],
-    /* 0x6B */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_SHORT | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],
+    /* 0x6B */ [Debuggerx86.INS.IMUL,  Debuggerx86.TYPE_REG    | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_MODRM | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_IN, Debuggerx86.TYPE_IMM | Debuggerx86.TYPE_SBYTE | Debuggerx86.TYPE_IN],
     /* 0x6C */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
     /* 0x6D */ [Debuggerx86.INS.INS,   Debuggerx86.TYPE_ESDI   | Debuggerx86.TYPE_WORD  | Debuggerx86.TYPE_OUT  | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DX    | Debuggerx86.TYPE_IN],
     /* 0x6E */ [Debuggerx86.INS.OUTS,  Debuggerx86.TYPE_DX     | Debuggerx86.TYPE_IN    | Debuggerx86.TYPE_80186, Debuggerx86.TYPE_DSSI | Debuggerx86.TYPE_BYTE  | Debuggerx86.TYPE_IN],

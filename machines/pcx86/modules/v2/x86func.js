@@ -872,9 +872,11 @@ X86.fnIMUL8 = function(dst, src)
 {
     /**
      * NOTE: getIPDisp() already sign-extends the dst parameter, so fnIMULrw() needlessly sign-extends it again;
-     * a small price to pay for a common function.
+     * a small price to pay for a common function.  With a 32-bit operand size, the product must be 32 bits, not
+     * 16 (eg, OS/2 2.0's IMUL EAX,EAX,1Ch, which indexes its page frame table, fails above 9Mb of memory).
      */
-    let result = X86.fnIMULrw.call(this, this.getIPDisp(), src);
+    let disp = this.getIPDisp();
+    let result = (this.sizeData == 2? X86.fnIMULrw : X86.fnIMULrd).call(this, disp, src);
 
     /**
      * NOTE: The above function already accounted for the 80386 cycle count, so we are simply accounting for the

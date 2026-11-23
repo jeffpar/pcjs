@@ -2,6 +2,10 @@
   // Use IntelliSense to learn about possible attributes.
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  //
+  // Each browser configuration also passes its URL in runtimeArgs, so that Chrome opens the page itself; otherwise,
+  // the debugger starts Chrome on about:blank and then navigates, which can leave focus in the address bar (so typing
+  // meant for a machine goes there instead, and Enter reloads the page).
   "version": "0.2.0",
   "configurations": [
     {
@@ -9,6 +13,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/",
+      "runtimeArgs": ["http://localhost:4000/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -21,6 +26,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/arcade/invaders/",
+      "runtimeArgs": ["http://localhost:4000/machines/arcade/invaders/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -33,6 +39,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/portable/vdu/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/portable/vdu/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -45,6 +52,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/lte286/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/lte286/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -57,6 +65,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/lte286/cga/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/lte286/cga/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -69,6 +78,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/lte286/cga/debugger/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/lte286/cga/debugger/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -81,6 +91,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -93,6 +104,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -105,6 +117,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp10/ka10/test/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp10/ka10/test/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -117,6 +130,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp10/ka10/test/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp10/ka10/test/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -129,6 +143,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -141,6 +156,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v3/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v3/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -153,6 +169,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/bootstrap/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp11/1120/bootstrap/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -165,6 +182,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1170/panel/debugger/xxdp/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp11/1170/panel/debugger/xxdp/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -177,6 +195,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/pdp11/1170/vt100/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -189,6 +208,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/vt100/5170/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/vt100/5170/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -201,6 +221,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/vt100/5170/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/dec/vt100/5170/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -213,6 +234,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -225,6 +247,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -237,6 +260,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -249,6 +273,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/dual/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/dual/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -261,6 +286,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -273,6 +299,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/cga/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -285,6 +312,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/ega/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -297,6 +325,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/256kb/mono/debugger/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/ega/256kb/mono/debugger/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -309,6 +338,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -321,6 +351,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/vga/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/vga/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -333,6 +364,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/vga/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5160/vga/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -345,6 +377,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5170/cga/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -357,6 +390,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/1024kb/rev3/debugger/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5170/cga/1024kb/rev3/debugger/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -369,6 +403,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/visual/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/visual/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -381,6 +416,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx80/exerciser/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx80/exerciser/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -393,6 +429,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx80/juku/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx80/juku/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -405,6 +442,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/",
+      "runtimeArgs": ["http://localhost:4000/machines/osi/c1p/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -417,6 +455,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/debugger/",
+      "runtimeArgs": ["http://localhost:4000/machines/osi/c1p/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -429,6 +468,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/xml/c1p8k-debugger.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/osi/c1p/xml/c1p8k-debugger.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -441,6 +481,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/osi/c1p/array/",
+      "runtimeArgs": ["http://localhost:4000/machines/osi/c1p/array/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -453,6 +494,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/palm/pilot/",
+      "runtimeArgs": ["http://localhost:4000/machines/palm/pilot/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -465,6 +507,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -477,6 +520,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/debugger/machine.xml",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/progressive/pro386/ega/2048kb/debugger/machine.xml"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -489,6 +533,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/",
+      "runtimeArgs": ["http://localhost:4000/machines/ti/ti57/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -501,6 +546,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev0/",
+      "runtimeArgs": ["http://localhost:4000/machines/ti/ti57/rev0/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -513,6 +559,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/ti/ti57/rev1/",
+      "runtimeArgs": ["http://localhost:4000/machines/ti/ti57/rev1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -525,6 +572,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/led/lite-brite/",
+      "runtimeArgs": ["http://localhost:4000/machines/led/lite-brite/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -537,6 +585,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/ibm/101mazes/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/ibm/101mazes/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -549,6 +598,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1985/balance_of_power/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1985/balance_of_power/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -561,6 +611,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1992/dune2/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1992/dune2/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -573,6 +624,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1991/eob1/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1991/eob1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -585,6 +637,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1989/heros_quest/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1989/heros_quest/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -597,6 +650,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1985/kings_quest1/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1985/kings_quest1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -609,6 +663,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1990/life_and_death_ii/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1990/life_and_death_ii/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -621,6 +676,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1985/nine_princes/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1985/nine_princes/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -633,6 +689,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1989/oregon_trail/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1989/oregon_trail/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -645,6 +702,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1990/oregon_trail/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1990/oregon_trail/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -657,6 +715,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1991/oregon_trail/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1991/oregon_trail/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -669,6 +728,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/game/other/1989/populous/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/game/other/1989/populous/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -681,6 +741,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/compaq/3.10/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/dos/compaq/3.10/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -693,6 +754,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -705,6 +767,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1v/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/softlogic/doubledos/2.1v/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -717,6 +780,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22}%20}",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/mda/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22}%20}"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -729,6 +793,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22}%20}",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/?software=/pcx86/demo/ibm/exploring/1.00-MDA&autoMount={%20A:{name:%22Exploring%20the%20IBM%20PC%20(MDA)%22}%20}"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -741,6 +806,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/led/life/color/",
+      "runtimeArgs": ["http://localhost:4000/machines/led/life/color/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -753,6 +819,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/other/homebase/1.04A/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/other/homebase/1.04A/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -765,6 +832,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/ibm/masm/1.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/lang/ibm/masm/1.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -777,6 +845,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/os2/ibm/1.1/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/os2/ibm/1.1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -789,6 +858,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/demo/ibm/dealer/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/demo/ibm/dealer/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -801,6 +871,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/ibm/topview/1.01/debugger/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/ibm/topview/1.01/debugger/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -813,6 +884,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/books/inside_the_ibm_pc/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/books/inside_the_ibm_pc/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -825,6 +897,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/app/microsoft/learningdos/1.01/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/app/microsoft/learningdos/1.01/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -837,6 +910,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/microsoft/c/5.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/lang/microsoft/c/5.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -849,6 +923,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/app/microsoft/excel/2.0/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/app/microsoft/excel/2.0/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -861,6 +936,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/app/microsoft/excel/5.0a/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/app/microsoft/excel/5.0a/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -873,6 +949,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/microsoft/fortran/compiler/5.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/lang/microsoft/fortran/compiler/5.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -885,6 +962,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/microsoft/fortran/powerstation/1.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/lang/microsoft/fortran/powerstation/1.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -897,6 +975,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/5.00/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/dos/microsoft/5.00/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -909,6 +988,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -921,6 +1001,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/compressed/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/dos/microsoft/6.00/compressed/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -933,6 +1014,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/lang/microsoft/c/qcwin/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/lang/microsoft/c/qcwin/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -945,6 +1027,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/3.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -957,6 +1040,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.10/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/3.10/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -969,6 +1053,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/3.11/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/3.11/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -981,6 +1066,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -993,6 +1079,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/win95/4.00.950/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1005,6 +1092,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/windows/win95/install/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/windows/win95/install/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1017,6 +1105,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.00/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.00/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1029,6 +1118,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.00/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.00/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1041,6 +1131,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.00/enhanced/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.00/enhanced/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1053,6 +1144,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.00/enhanced/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.00/enhanced/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1065,6 +1157,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.10/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1077,6 +1170,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.10/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1089,6 +1183,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1101,6 +1196,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sdk/windows/3.10/enhanced/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1113,6 +1209,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/unix/minix/1.1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1125,6 +1222,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/unix/minix/1.1/pc-at/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/unix/minix/1.1/pc-at/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1137,6 +1235,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/util/other/pathminder/2.11/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/util/other/pathminder/2.11/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1149,6 +1248,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/magazines/pcdm/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/magazines/pcdm/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1161,6 +1261,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/magazines/pctj/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/magazines/pctj/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1173,6 +1274,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/misc/pcsig/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1185,6 +1287,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/misc/pcsig08/0001/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/misc/pcsig08/0001/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1197,6 +1300,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/2.0.3/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/2.0.3/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1209,6 +1313,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/3.0.1/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sys/ext/softlogic/carousel/3.0.1/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1221,6 +1326,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/util/other/spy/0.1/?debugger=true",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/util/other/spy/0.1/?debugger=true"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1233,6 +1339,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcx86/sw/misc/unprot/",
+      "runtimeArgs": ["http://localhost:4000/software/pcx86/sw/misc/unprot/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1245,6 +1352,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/tools/basx/",
+      "runtimeArgs": ["http://localhost:4000/tools/basx/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1257,6 +1365,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/ibm/5170/cga/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1269,6 +1378,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/test/saved/",
+      "runtimeArgs": ["http://localhost:4000/machines/pcx86/test/saved/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1281,6 +1391,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/software/pcjs/",
+      "runtimeArgs": ["http://localhost:4000/software/pcjs/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -1293,6 +1404,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000//blog/2017/09/21/",
+      "runtimeArgs": ["http://localhost:4000//blog/2017/09/21/"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -2072,6 +2184,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/tools/dx/test.html",
+      "runtimeArgs": ["http://localhost:4000/tools/dx/test.html"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -2537,6 +2650,7 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/tools/pc/#playground",
+      "runtimeArgs": ["http://localhost:4000/tools/pc/#playground"],
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
