@@ -50,7 +50,7 @@
       "product": "basic-dos",           // see https://github.com/jeffpar/basicdos
       "versions": {
         "v2": {                         // BASIC-DOS 2.x (any 2.* version, eg, --version=2)
-          "dir": "%basicdos/software/src",
+          "dir": "%basicdos/src",
           "boot": "os/boot/OBJ/BOOT1.COM",  // the boot sector, which WBOOT splits from BOOT.COM
           "files": [                    // in the order they appear in the root (ahead of AUTOEXEC.BAT)
             "configs/console/serial/fpe/CONFIG.SYS",    // NOTE: this CONFIG.SYS redirects all BASIC-DOS I/O to COM1
