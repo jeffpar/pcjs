@@ -68,11 +68,11 @@ today, and to see for ourselves what the IBM PC was really capable of from "Day 
 And that was the inspiration for BASIC-DOS, a product (well, just a proof-of-concept at this point) that
 combines the power of BASIC with a multitasking DOS.
 
-[![BASIC-DOS Demo #1](https://basicdos.com/assets/images/BASIC-DOS1.png)](https://basicdos.com/preview/)
+[![BASIC-DOS Demo #1](https://basicdos.com/assets/images/BASIC-DOS1.png)](https://basicdos.com/machines/demos/preview/)
 
-[![BASIC-DOS Demo #2](https://basicdos.com/assets/images/BASIC-DOS2.png)](https://basicdos.com/preview/part4/)
+[![BASIC-DOS Demo #2](https://basicdos.com/assets/images/BASIC-DOS2.png)](https://basicdos.com/machines/demos/preview/part4/)
 
-Read the [BASIC-DOS Blog](https://basicdos.com/blog/), check out the [BASIC-DOS Preview](https://basicdos.com/preview/),
+Read the [BASIC-DOS Blog](https://basicdos.com/blog/), check out the [BASIC-DOS Preview](https://basicdos.com/machines/demos/preview/),
 and see what you think.
 
 As a product, yes, it's completely out-dated.  But as retro-programming projects go, it's been a good one for 2020.

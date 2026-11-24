@@ -65,31 +65,31 @@ Emboldened by my success with 80286 support, I decided to take one more CPU leap
 
 And I didn't stop there.  BASIC-DOS needed a suite of utilities, including a set of common "filters", so I added:
 
-  - [FIND](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/find.asm)
-  - [MORE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/more.asm)
-  - [SED](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/sed.asm)
-  - [SORT](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/sort.asm)
-  - [TEE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/tee.asm)
-  - [TR](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/tr.asm)
-  - [UNIQ](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/uniq.asm)
-  - [WC](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/misc/wc.asm)
+  - [FIND](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/find.asm)
+  - [MORE](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/more.asm)
+  - [SED](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/sed.asm)
+  - [SORT](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/sort.asm)
+  - [TEE](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/tee.asm)
+  - [TR](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/tr.asm)
+  - [UNIQ](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/uniq.asm)
+  - [WC](https://github.com/jeffpar/basicdos/blob/main/src/os/util/misc/wc.asm)
 
 ### New Utilities
 
 Next, I decided that a product with BASIC in its name should fully embrace the language, so I "wrote" (by which I mean Claude wrote) a set of traditional DOS utilities *entirely* in BASIC; they include:
 
-  - [ATTRIB](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/ATTRIB.BAS)
-  - [CHKDSK](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/CHKDSK.BAS)
-  - [COMP](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/COMP.BAS)
-  - [DISKCOPY](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/DISKCOPY.BAS)
-  - [FORMAT](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/FORMAT.BAS)
-  - [HEXDUMP](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/HEXDUMP.BAS)
-  - [LABEL](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/LABEL.BAS)
-  - [LS](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/LS.BAS)
-  - [MODE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/MODE.BAS)
-  - [SYS](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/SYS.BAS)
-  - [TREE](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/TREE.BAS)
-  - [VOL](https://github.com/jeffpar/basicdos/blob/main/software/src/os/util/bas/VOL.BAS)
+  - [ATTRIB](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/ATTRIB.BAS)
+  - [CHKDSK](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/CHKDSK.BAS)
+  - [COMP](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/COMP.BAS)
+  - [DISKCOPY](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/DISKCOPY.BAS)
+  - [FORMAT](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/FORMAT.BAS)
+  - [HEXDUMP](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/HEXDUMP.BAS)
+  - [LABEL](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/LABEL.BAS)
+  - [LS](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/LS.BAS)
+  - [MODE](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/MODE.BAS)
+  - [SYS](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/SYS.BAS)
+  - [TREE](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/TREE.BAS)
+  - [VOL](https://github.com/jeffpar/basicdos/blob/main/src/os/util/bas/VOL.BAS)
 
 Granted, `HEXDUMP` and `LS` are not "traditional" DOS utilities; I just decided they would be nice to have.
 
@@ -115,14 +115,14 @@ Run the `HELP PROMPT` command and you'll see that the BASIC-DOS `PROMPT$` string
 
 ## BASIC-DOS Demos
 
-I created a handy "matrix" of demos at [BASIC-DOS Demos](https://basicdos.com/demos/) to showcase not only the breadth of BASIC-DOS' hardware support, but also some hardware combinations that few people probably gave much consideration to back in the day; eg:
+I created a handy "matrix" of demos at [BASIC-DOS Demos](https://basicdos.com/machines/demos/) to showcase not only the breadth of BASIC-DOS' hardware support, but also some hardware combinations that few people probably gave much consideration to back in the day; eg:
 
-  - [IBM PC XT with a second session on a VT100 terminal](https://basicdos.com/demos/bd/vt100/xt/)
-  - [IBM PC AT with *no video card*, just two VT100 terminals](https://basicdos.com/demos/bd/term/at/)
+  - [IBM PC XT with a second session on a VT100 terminal](https://basicdos.com/machines/demos/bd/vt100/xt/)
+  - [IBM PC AT with *no video card*, just two VT100 terminals](https://basicdos.com/machines/demos/bd/term/at/)
 
 And I'm just scratching the surface of what's been done so far.  For example, I haven't mentioned the `DEBUG.COM` utility, which goes far beyond the original DEBUG.COM, not only in terms of processor support (8088, 80286, and 80386) but also in its ability to run as a device driver (`DEBUG$`) and debug the entire BASIC-DOS operating system.  There's also a built-in mouse driver (`MOUSE$`) that supports the Microsoft Serial Mouse, and a few MOUSE commands have been added to the BASIC-DOS language to enable the creation of mouse-based apps.
 
-Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 20Mb hard disk (eg, [BASIC-DOS with Extended Memory](https://basicdos.com/demos/bd/mmu/)) and you can build the entire product from scratch:
+Also, while traditional DOS compatibility was never a goal of this project, I always wanted it to be compatible *enough* to run common applications, including all the build tools required for BASIC-DOS to build itself -- and it does.  Go to any Demo machine featuring the BASIC-DOS 20Mb hard disk (eg, [BASIC-DOS with Extended Memory](https://basicdos.com/machines/demos/bd/mmu/)) and you can build the entire product from scratch:
 
 ```
 CD C:\SRC

@@ -2421,7 +2421,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "--disk=tools.json",
-        "--dir=%basicdos/software/src",
+        "--dir=%basicdos/src",
         "--normalize"
       ],
       "cwd": "${workspaceFolder}/tools/pc",
@@ -2443,7 +2443,7 @@
       "program": "${workspaceFolder}/tools/pc/pc.js",
       "args": [
         "ibm5160",
-        "%basicdos/software/src/configs/200A",
+        "%basicdos/src/configs/200A",
         "--system=bd",
         "--version=2.00A",
         "--floppy",
