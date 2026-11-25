@@ -21,6 +21,8 @@
  *      --trace=N           when done, trace the next N instructions
  *      --profile=N         when done, execute N more instructions and report where they were, and what I/O they did
  *      --dasm=ADDR[,N]     when done, disassemble N instructions at ADDR (hex)
+ *      --load=FILE         restore the machine's state from a JSON file (saved with --save) before running
+ *      --save=FILE         save the machine's state (as a browser would in localStorage) to a JSON file when done
  *
  * This is a bring-up tool: it reports the first access to every unimplemented OMAP register and to every page of
  * unmapped memory, along with every exception other than IRQs and SWIs.
@@ -55,7 +57,7 @@ let hex = (n, cch = 8) => (n >>> 0).toString(16).padStart(cch, "0");
 let id = "te";
 let romData = fs.readFileSync(getArg("rom", path.join(dirMachines, "palm/pilot/roms/Palm-Tungsten-E-nor.bin")));
 
-new Device(id, id, {"class": "Machine"});
+let machine = new Device(id, id, {"class": "Machine"});
 let nCyclesPerSecond = +getArg("cps", 126) * MILLION;
 let time = new Time(id, "clock", {"class": "Time", "cyclesPerSecond": nCyclesPerSecond});
 let bus = new Bus(id, "bus", {"class": "Bus", "type": "static", "addrWidth": 32, "dataWidth": 8, "blockSize": 4096, "littleEndian": true});
@@ -254,6 +256,18 @@ function runBurst()
 }
 
 /**
+ * Restore the machine's state, if requested, the same way the Machine device would (by calling every device's
+ * onLoad() handler, in the same order that the devices were created).
+ */
+let fileLoad = getArg("load");
+if (fileLoad) {
+    let state = JSON.parse(fs.readFileSync(fileLoad, "utf8"));
+    let fLoaded = machine.enumDevices((device) => !device.onLoad || device.onLoad(state));
+    console.log("%s %s", fLoaded? "restored" : "unable to restore", fileLoad);
+    if (!fLoaded) process.exit(1);
+}
+
+/**
  * Run the machine.
  */
 let nCyclesTotal = +getArg("cycles", 1000) * MILLION, nCyclesTimeline = +getArg("timeline", 0) * MILLION;
@@ -293,6 +307,15 @@ if (file) {
     } else {
         console.log("the LCD is off");
     }
+}
+
+let fileSave = getArg("save");
+if (fileSave) {
+    let state = [];
+    machine.enumDevices((device) => (device.onSave && device.onSave(state), true));
+    let sState = JSON.stringify(state);
+    fs.writeFileSync(fileSave, sState);
+    console.log("saved %s (%d bytes)", fileSave, sState.length);
 }
 
 let dasm = getArg("dasm");

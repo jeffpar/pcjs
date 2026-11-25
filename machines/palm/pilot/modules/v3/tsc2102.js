@@ -459,6 +459,83 @@ export default class TSC2102 extends Device
     {
         this.reset();
     }
+
+    /**
+     * onLoad(state)
+     *
+     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    onLoad(state)
+    {
+        if (state && this.loadState(state[0])) {
+            state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * onSave(state)
+     *
+     * Automatically called by the Machine device before all other devices have been powered down (eg, during
+     * a page unload event).
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     */
+    onSave(state)
+    {
+        state.push(this.saveState());
+    }
+
+    /**
+     * saveState()
+     *
+     * The pen is always saved as "up", since whatever was holding it down (eg, the mouse) is gone when the state
+     * is restored; any conversion in progress (ie, the countdown of our timer) is saved, too.
+     *
+     * @this {TSC2102}
+     * @returns {Array}
+     */
+    saveState()
+    {
+        return [
+            this.idDevice, TSC2102.STATE_VERSION,
+            this.x, this.y, this.fData, this.fRead, this.page, this.offset, this.pinFunc,
+            this.fEnabled, this.fBusy, this.fHostMode, this.fPin, this.function, this.nextFunction,
+            this.precision, this.nextPrecision, this.filter, this.ref, this.timing, this.noise, this.dav,
+            this.audioCtrl1, this.audioCtrl2, this.audioCtrl3, this.pll, this.volume, this.dacPower, this.fSoftStep,
+            this.filterData, this.time.aTimers[this.timer - 1].nCyclesLeft
+        ];
+    }
+
+    /**
+     * loadState(state)
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        if (!state || state[0] != this.idDevice || state[1] != TSC2102.STATE_VERSION) {
+            this.printf("TSC2102 state mismatch\n");
+            return false;
+        }
+        [
+            , , this.x, this.y, this.fData, this.fRead, this.page, this.offset, this.pinFunc,
+            this.fEnabled, this.fBusy, this.fHostMode, this.fPin, this.function, this.nextFunction,
+            this.precision, this.nextPrecision, this.filter, this.ref, this.timing, this.noise, this.dav,
+            this.audioCtrl1, this.audioCtrl2, this.audioCtrl3, this.pll, this.volume, this.dacPower, this.fSoftStep,
+            this.filterData, this.time.aTimers[this.timer - 1].nCyclesLeft
+        ] = state;
+        this.fPenDown = false;
+        return true;
+    }
 }
 
 TSC2102.PAGE = {
@@ -489,5 +566,7 @@ TSC2102.FUNCTION = {
 TSC2102.FUNCTION_DAV = [0x0000, 0x0600, 0x0780, 0x0400, 0x0200, 0x0180, 0x0040, 0x0030, 0x0010, 0x0010, 0x0004, 0x0070, 0x0002, 0x0000, 0x0000, 0x0000];
 
 TSC2102.RESOLUTIONS = [12, 8, 10, 12];
+
+TSC2102.STATE_VERSION = 1;              // the format of our saved state (see saveState())
 
 TSC2102.CLASSES["TSC2102"] = TSC2102;

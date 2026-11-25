@@ -35,7 +35,7 @@ The state of the machine (including all your changes/progress) is automatically 
 
 Click any of the following applications to install it on the Pilot and launch it.  Like the original PIMulator, this "injects" a series of PalmOS API calls (DmCreateDatabaseFromImage, SysUIAppSwitch, etc) while the Pilot is idle, so make sure the Pilot is on and has been calibrated first.  Once installed, an application remains on the Pilot (until the Pilot is reset), and it can be launched again using the Pilot's Applications button.
 
-- [Ataxx](/machines/palm/pilot/demos/Ataxx.PRC) by [Valavan Manohararajah](https://web.archive.org/web/20040907014821/http://www.doublebit.com/archives/software/sucks/) (July 1997)
+- [Ataxx](/machines/palm/pilot/demos/Ataxx.PRC) by [Valavan Manohararajah](https://web.archive.org/web/20040907014821/http://www.doublebit.com/archives/software/sucks/)
 - [CODE5](/machines/palm/pilot/demos/CODE5.prc) by [DoubleBit Software](https://web.archive.org/web/20040823231821/http://www.doublebit.com/code5/)
 - [Daleks](/machines/palm/pilot/demos/Daleks.prc) by [IndiVideo](https://web.archive.org/web/19991123230030/http://www.individeo.net/Daleks.html) ([ReadMe](/machines/palm/pilot/demos/Daleks.txt))
 - [Invaders 1.0](/machines/palm/pilot/demos/Invaders.prc) by [Scott Ludwig](https://web.archive.org/web/19990220084804/http://www.eskimo.com/~scottlu/pilot/index.html) ([ReadMe](/machines/palm/pilot/demos/Invaders.txt))

@@ -8373,6 +8373,13 @@ class Bus extends Device {
             if (this.type == Bus.TYPE.DYNAMIC || (block.type & Memory.TYPE.READWRITE)) {
                 if (block.loadState) {
                     let stateBlock = state.shift();
+                    /**
+                     * A number is a block whose values were all the same (see saveState()); it's restored as dirty,
+                     * since whether it was dirty wasn't saved, and dirty is always the safer assumption.
+                     */
+                    if (typeof stateBlock == "number") {
+                        stateBlock = [block.idDevice, true, false, [block.size, stateBlock]];
+                    }
                     if (!block.loadState(stateBlock)) return false;
                 }
             }
@@ -8394,6 +8401,16 @@ class Bus extends Device {
                 if (block.saveState) {
                     let stateBlock = [];
                     block.saveState(stateBlock);
+                    /**
+                     * If every value in the block is the same (ie, its values compressed to a single "count, value"
+                     * pair), then we save only that value, because the rest of the block's state (its ID and flags)
+                     * would be many times larger.  Large machines (eg, the Palm Tungsten|E) have thousands of blocks
+                     * like that.
+                     */
+                    let values = stateBlock[3];
+                    if (stateBlock.length == 4 && Array.isArray(values) && values.length == 2 && values[0] == block.size && block.size > 2) {
+                        stateBlock = values[1];
+                    }
                     state.push(stateBlock);
                 }
             }
@@ -26404,6 +26421,12 @@ class CPUARM extends CPU
             this.cp15PID = stateCPU.shift();
             this.cp15Misc = stateCPU.shift();
             this.fHalted = stateCPU.shift();
+            /**
+             * The interrupt inputs are driven by other devices (eg, an interrupt controller), which don't
+             * necessarily drive them again after they restore their own state.
+             */
+            this.intLines = stateCPU.shift() || 0;
+            this.intPending = this.intLines & ~this.cpsrIF;
             this.fMMU = !!(this.cp15Control & CPUARM.CP15.CTL_M);
             this.flushTLB();
             this.fRestored = true;
@@ -26440,6 +26463,7 @@ class CPUARM extends CPU
         stateCPU.push(this.cp15PID);
         stateCPU.push(this.cp15Misc);
         stateCPU.push(this.fHalted);
+        stateCPU.push(this.intLines);
     }
 
     /**
@@ -27447,13 +27471,15 @@ class OMAPTimer
     /**
      * saveState()
      *
+     * The countdown of the timer's Time timer (if any) is saved separately, by the OMAP device.
+     *
      * @this {OMAPTimer}
      * @returns {Array}
      */
     saveState()
     {
         this.sync();
-        return [this.enable, this.st, this.ar, this.ptv, this.itEna, this.val, this.resetVal, this.fArmed];
+        return [this.enable, this.st, this.ar, this.ptv, this.itEna, this.val, this.resetVal, this.fArmed, this.rate];
     }
 
     /**
@@ -27472,10 +27498,8 @@ class OMAPTimer
         this.val = state[5];
         this.resetVal = state[6];
         this.fArmed = state[7];
+        this.rate = state[8];
         this.nCyclesBase = this.omap.time.getCycles();
-        if (this.fArmed && this.isCounting()) {
-            this.omap.armTimer(this.iTimer, Math.max(Math.ceil(this.val * this.getCyclesPerTick()), 1));
-        }
     }
 }
 
@@ -27629,6 +27653,11 @@ class OMAP extends Device
          */
         block.readDirect = (offset) => omap.readIO(base + offset, 1, true);
         block.writeDirect = (offset, value) => {};
+        /**
+         * These blocks contain no memory, so the Bus must not save or restore them (the state of the registers
+         * is saved by our own saveState() function).
+         */
+        block.saveState = block.loadState = /** @type {?} */ (null);
         this.bus.addBlocks(addr, OMAP.IO_BLOCK, Memory.TYPE.READWRITE, block);
     }
 
@@ -29959,6 +29988,163 @@ class OMAP extends Device
     {
         this.reset();
     }
+
+    /**
+     * onLoad(state)
+     *
+     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
+     *
+     * @this {OMAP}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    onLoad(state)
+    {
+        if (state && this.loadState(state[0])) {
+            state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * onSave(state)
+     *
+     * Automatically called by the Machine device before all other devices have been powered down (eg, during
+     * a page unload event).
+     *
+     * @this {OMAP}
+     * @param {Array} state
+     */
+    onSave(state)
+    {
+        state.push(this.saveState());
+    }
+
+    /**
+     * saveState()
+     *
+     * Most of our state lives in objects created by reset(), which are saved as arrays of their property values
+     * (in the order that reset() defines them), so that property names don't matter (eg, in a compiled version).
+     *
+     * Anything based on the machine's cycle count is saved relative to the current cycle count, since the
+     * cycle count starts over whenever the machine is restarted, and the countdowns of all our Time timers are
+     * saved as well, so that every timer, LCD frame, and audio block resumes exactly where it left off.
+     *
+     * @this {OMAP}
+     * @returns {Array}
+     */
+    saveState()
+    {
+        let saveObject = (obj) => Object.keys(obj).map((key) => ArrayBuffer.isView(obj[key])? Array.from(obj[key]) : obj[key]);
+        let nCycles = this.time.getCycles();
+        return [
+            this.idDevice,
+            OMAP.STATE_VERSION,
+            this.ih.map(saveObject),
+            this.timers.map((timer) => timer.saveState()),
+            this.wdt.saveState(),
+            this.osTimer.saveState(),
+            [this.wdtMode, this.wdtFree, this.wdtLast],
+            Array.from(this.ulpd),
+            nCycles - this.nCyclesGauge,
+            Array.from(this.pinConfig),
+            this.mpuiCtrl,
+            this.tipb,
+            Array.from(this.tcmi),
+            saveObject(this.clkm),
+            this.dpll,
+            this.uarts.map((uart) => [Array.from(uart.regs), uart.dll, uart.dlh]),
+            saveObject(this.gpio),
+            saveObject(this.mpuio),
+            saveObject(this.uwire),
+            saveObject(this.rtc),
+            Date.now(),
+            saveObject(this.lcd),
+            this.dma.gcr,
+            this.dma.channels.map(saveObject),
+            saveObject(this.dmaLCD),
+            this.audioRate,
+            Array.from(this.regsUnknown),
+            this.getTimers().map((iTimer) => this.time.aTimers[iTimer - 1].nCyclesLeft)
+        ];
+    }
+
+    /**
+     * loadState(state)
+     *
+     * @this {OMAP}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        if (!state || state[0] != this.idDevice || state[1] != OMAP.STATE_VERSION) {
+            this.printf("OMAP state mismatch\n");
+            return false;
+        }
+        let loadObject = (obj, values) => {
+            Object.keys(obj).forEach((key, i) => {
+                if (ArrayBuffer.isView(obj[key])) obj[key].set(values[i]); else obj[key] = values[i];
+            });
+        };
+        try {
+            this.reset();
+            let i = 2, nCycles = this.time.getCycles();
+            state[i++].forEach((values, iHandler) => loadObject(this.ih[iHandler], values));
+            state[i++].forEach((values, iTimer) => this.timers[iTimer].loadState(values));
+            this.wdt.loadState(state[i++]);
+            this.osTimer.loadState(state[i++]);
+            [this.wdtMode, this.wdtFree, this.wdtLast] = state[i++];
+            this.ulpd.set(state[i++]);
+            this.nCyclesGauge = nCycles - state[i++];
+            this.pinConfig.set(state[i++]);
+            this.mpuiCtrl = state[i++];
+            this.tipb = state[i++];
+            this.tcmi.set(state[i++]);
+            loadObject(this.clkm, state[i++]);
+            this.dpll = state[i++];
+            state[i++].forEach((values, iUART) => {
+                let uart = this.uarts[iUART];
+                uart.regs.set(values[0]);
+                uart.dll = values[1];
+                uart.dlh = values[2];
+            });
+            loadObject(this.gpio, state[i++]);
+            loadObject(this.mpuio, state[i++]);
+            loadObject(this.uwire, state[i++]);
+            loadObject(this.rtc, state[i++]);
+            /**
+             * A real RTC keeps running while the device is put away, so we let it catch up with the real time
+             * that has elapsed since the state was saved.
+             */
+            let msSaved = state[i++];
+            if (this.rtc.fRunning) this.rtc.ms += Math.max(Date.now() - msSaved, 0);
+            loadObject(this.lcd, state[i++]);
+            this.dma.gcr = state[i++];
+            state[i++].forEach((values, iChannel) => loadObject(this.dma.channels[iChannel], values));
+            loadObject(this.dmaLCD, state[i++]);
+            this.audioRate = state[i++];
+            this.regsUnknown = new Map(state[i++]);
+            let aCycles = state[i++];
+            this.getTimers().forEach((iTimer, j) => this.time.aTimers[iTimer - 1].nCyclesLeft = aCycles[j]);
+        } catch(err) {
+            this.printf("OMAP state error: %s\n", err.message);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * getTimers()
+     *
+     * @this {OMAP}
+     * @returns {Array.<number>} (all the Time timers that we use)
+     */
+    getTimers()
+    {
+        return [this.timers[0].iTimer, this.timers[1].iTimer, this.timers[2].iTimer, this.wdt.iTimer, this.osTimer.iTimer, this.timerRTC, this.timerLCD, this.timerAudio];
+    }
 }
 
 OMAP.SRAM_BASE  = 0x20000000;
@@ -29970,6 +30156,7 @@ OMAP.IO_LIMIT   = 0xffff0000;
 OMAP.IO_BLOCK   = 4096;
 OMAP.CLK_REF    = 12000000;             // the 12Mhz reference clock
 OMAP.LCD_REFRESH = 60;                  // LCD frames per second
+OMAP.STATE_VERSION = 1;                 // the format of our saved state (see saveState())
 
 /**
  * Interrupt lines: 0-31 are inputs to the first-level interrupt handler, 32-63 to the second-level handler.
@@ -30678,6 +30865,83 @@ class TSC2102 extends Device
     {
         this.reset();
     }
+
+    /**
+     * onLoad(state)
+     *
+     * Automatically called by the Machine device if the machine's 'autoSave' property is true.
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    onLoad(state)
+    {
+        if (state && this.loadState(state[0])) {
+            state.shift();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * onSave(state)
+     *
+     * Automatically called by the Machine device before all other devices have been powered down (eg, during
+     * a page unload event).
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     */
+    onSave(state)
+    {
+        state.push(this.saveState());
+    }
+
+    /**
+     * saveState()
+     *
+     * The pen is always saved as "up", since whatever was holding it down (eg, the mouse) is gone when the state
+     * is restored; any conversion in progress (ie, the countdown of our timer) is saved, too.
+     *
+     * @this {TSC2102}
+     * @returns {Array}
+     */
+    saveState()
+    {
+        return [
+            this.idDevice, TSC2102.STATE_VERSION,
+            this.x, this.y, this.fData, this.fRead, this.page, this.offset, this.pinFunc,
+            this.fEnabled, this.fBusy, this.fHostMode, this.fPin, this.function, this.nextFunction,
+            this.precision, this.nextPrecision, this.filter, this.ref, this.timing, this.noise, this.dav,
+            this.audioCtrl1, this.audioCtrl2, this.audioCtrl3, this.pll, this.volume, this.dacPower, this.fSoftStep,
+            this.filterData, this.time.aTimers[this.timer - 1].nCyclesLeft
+        ];
+    }
+
+    /**
+     * loadState(state)
+     *
+     * @this {TSC2102}
+     * @param {Array} state
+     * @returns {boolean}
+     */
+    loadState(state)
+    {
+        if (!state || state[0] != this.idDevice || state[1] != TSC2102.STATE_VERSION) {
+            this.printf("TSC2102 state mismatch\n");
+            return false;
+        }
+        [
+            , , this.x, this.y, this.fData, this.fRead, this.page, this.offset, this.pinFunc,
+            this.fEnabled, this.fBusy, this.fHostMode, this.fPin, this.function, this.nextFunction,
+            this.precision, this.nextPrecision, this.filter, this.ref, this.timing, this.noise, this.dav,
+            this.audioCtrl1, this.audioCtrl2, this.audioCtrl3, this.pll, this.volume, this.dacPower, this.fSoftStep,
+            this.filterData, this.time.aTimers[this.timer - 1].nCyclesLeft
+        ] = state;
+        this.fPenDown = false;
+        return true;
+    }
 }
 
 TSC2102.PAGE = {
@@ -30708,6 +30972,8 @@ TSC2102.FUNCTION = {
 TSC2102.FUNCTION_DAV = [0x0000, 0x0600, 0x0780, 0x0400, 0x0200, 0x0180, 0x0040, 0x0030, 0x0010, 0x0010, 0x0004, 0x0070, 0x0002, 0x0000, 0x0000, 0x0000];
 
 TSC2102.RESOLUTIONS = [12, 8, 10, 12];
+
+TSC2102.STATE_VERSION = 1;              // the format of our saved state (see saveState())
 
 TSC2102.CLASSES["TSC2102"] = TSC2102;
 
@@ -31654,11 +31920,20 @@ class Machine extends Device {
                 state = /** @type {Array} */ (JSON.parse(this.sStateInit));
                 this.printf("Initial state: %s\n", this.config['state']);
             }
-            if (state) {
-                this.loadState(state);
+            /**
+             * If the state can't be restored, some devices may have already restored theirs, so the machine must
+             * be reset before it's powered (which can't happen until all devices are ready).
+             */
+            let fReset = false;
+            if (state && !this.loadState(state)) {
+                this.printf("unable to restore machine state, resetting\n");
+                fReset = true;
             }
             this.setReady(true);
-            if (!this.whenReady(this.onPower.bind(this, power))) {
+            if (!this.whenReady(() => {
+                if (fReset) this.onReset();
+                this.onPower(power);
+            })) {
                 this.printf("machine %s not ready to power, waiting for device(s)\n", this.idMachine);
             }
         }
