@@ -60,6 +60,7 @@ export default class PC extends PCJSLib {
     bootSector = "";
     bootSelect = "";
     serial = false;             // true if --serial specified
+    com2 = "";                  // host program to connect to COM2 (from --com2)
     speed = 0;                  // CPU speed multiplier from --speed (0 to use the machine's own setting)
     fpu = false;                // true if --fpu specified (install an 8087)
     kbRAM = 0;                  // RAM size (in Kb) from --ram (0 to use the machine's own setting)
@@ -80,6 +81,7 @@ export default class PC extends PCJSLib {
     localDir = ".";             // local directory used to build localDisk
     localDisk = "harddisk.json";
     localDiskette = "floppy.json";
+    configFile = "";            // file to use as the drive's CONFIG.SYS (from --config)
     diskLabel = "default";
     diskOrder = "";             // root entries that come first, from --order (eg, "EXT,DEMOS")
     machineDrive = "";          // current drive *inside* the machine
@@ -544,6 +546,13 @@ export default class PC extends PCJSLib {
                         }
                     }
                 }
+            }
+
+            /**
+             * Connect COM2 to a host program if --com2 was specified.
+             */
+            if (this.com2) {
+                this.connectPort(Component, 2, this.com2);
             }
 
             /**
@@ -1047,6 +1056,50 @@ export default class PC extends PCJSLib {
         }
         printf(s);
         this.useSerial = true;
+    }
+
+    /**
+     * connectPort(Component, adapter, command)
+     *
+     * Connects a serial port (eg, adapter 2 for COM2) to a host program (eg, --com2="node tools/claude/gateway.js"):
+     * bytes the machine sends to the port go to the program's standard input, and the program's standard output
+     * goes to the port.  The program is started only once, so if the machine is reloaded, the new machine's port
+     * is connected to the same program.
+     *
+     * @this {PC}
+     * @param {Object} Component
+     * @param {number} adapter
+     * @param {string} command
+     */
+    connectPort(Component, adapter, command)
+    {
+        let port = null;
+        while ((port = Component.getComponentByType("SerialPort", undefined, port)) && port.iAdapter != adapter);
+        if (!port) {
+            printf("COM%d not found\n", adapter);
+            return;
+        }
+        let pc = this;
+        if (!this.portProgram) {
+            this.portProgram = node.child_process.spawn(command, {shell: true, stdio: ["pipe", "pipe", "inherit"]});
+            this.portProgram.stdin.on("error", function() {});
+            this.portProgram.stdout.on("data", function(data) {
+                if (pc.portTarget) pc.portTarget['exports']['receiveData'].call(pc.portTarget, Array.from(data));
+            });
+            this.portProgram.on("exit", function(code) {
+                printf("COM%d program ended (%d)\n", adapter, code);
+                pc.portProgram = null;
+            });
+        }
+        let fnSend = function(b) {
+            if (pc.portProgram) pc.portProgram.stdin.write(Buffer.from([b]));
+            return true;
+        };
+        if (!port['exports']['bind'].call(port, this, fnSend)) {
+            printf("COM%d is already connected\n", adapter);
+            return;
+        }
+        this.portTarget = port;
     }
 
     /**
@@ -1954,12 +2007,15 @@ export default class PC extends PCJSLib {
                 /**
                  * If CONFIG.SYS or another text file from the system's list also exists in the directory we're
                  * building, the directory's copy wins (taking the system file's place in the root), so that a directory
-                 * (eg, configs/console/serial/fpe) can provide its own CONFIG.SYS.
+                 * (eg, configs/console/serial/fpe) can provide its own CONFIG.SYS; a --config file takes precedence
+                 * over both.
                  */
                 let baseName = node.path.basename(name);
                 let fConfig = baseName.toUpperCase() == "CONFIG.SYS";
                 let fText = fConfig || diskLib.isTextFile(name);
-                if (fText && diskLib.existsFile(node.path.join(sDir, baseName))) {
+                if (fConfig && this.configFile) {
+                    name = this.configFile;
+                } else if (fText && diskLib.existsFile(node.path.join(sDir, baseName))) {
                     name = node.path.join(sDir, baseName);
                 } else {
                     name = node.path.join(sSystemDisk, name);
@@ -2006,6 +2062,7 @@ export default class PC extends PCJSLib {
                     }
                     date = this.systemDate || node.fs.statSync(name).mtime;
                     desc = diskLib.makeFileDesc(node.path.dirname(name), node.path.basename(name), dbFile, attr, date);
+                    desc[DiskInfo.FILEDESC.NAME] = baseName;    // in case a --config file has another name
                     if (fText && !fConfig) {
                         aDeferred.push(desc);
                     } else {
@@ -2113,11 +2170,21 @@ export default class PC extends PCJSLib {
         }
 
         /**
-         * Create a CONFIG.SYS as needed.
+         * Create a CONFIG.SYS as needed.  A --config file that the system's list didn't already use (eg, for
+         * BASIC-DOS) takes the place of any CONFIG.SYS in the directory, and of the machine's default.
          */
         let text;
         let configSYS = configJSON['defaults'] && configJSON['defaults']['config'];
-        if (configSYS && configSYS.length) {
+        if (this.configFile) {
+            if (!driveInfo.files.some((desc) => desc[DiskInfo.FILEDESC.NAME].toUpperCase() == "CONFIG.SYS")) {
+                text = await diskLib.readFileAsync(this.configFile, "utf8", true);
+                if (!text) return "unable to read config file: " + this.configFile;
+                if (this.normalize) text = text.replace(/\r?\n/g, "\r\n");
+                let desc = diskLib.makeFileDesc(node.path.dirname(this.configFile), node.path.basename(this.configFile), text, DiskInfo.ATTR.ARCHIVE, node.fs.statSync(this.configFile).mtime);
+                desc[DiskInfo.FILEDESC.NAME] = "CONFIG.SYS";
+                driveInfo.files.push(desc);
+            }
+        } else if (configSYS && configSYS.length) {
             text = await diskLib.readFileAsync(node.path.join(sDir, "CONFIG.SYS"), "utf8", true);
             if (!text) {
                 text = configSYS.join("\r\n") + "\r\n";
@@ -2279,6 +2346,16 @@ export default class PC extends PCJSLib {
             else if (verDOS >= 4.0) {
                 dbBoot.writeUInt8(bootDrive, DiskInfo.BPB.DRIVE);   // boot sector offset 0x0024
             }
+        }
+
+        /**
+         * The BASIC-DOS boot message names the boot media, so as SYS and FORMAT do, replace the diskette message
+         * with the hard disk message (both are 20 characters, since the diskette message starts with a CR) when
+         * building a hard disk.
+         */
+        if (this.systemType == "bd" && !this.floppy) {
+            let off = dbBoot.toString("latin1").indexOf("\rDiskette loading...");
+            if (off >= 0) dbBoot.write("Hard disk loading...", off, 20);
         }
 
         let pc = this;
@@ -3603,6 +3680,11 @@ export default class PC extends PCJSLib {
         this.noSync = PC.removeFlag(argv, 'nosync', this.noSync);
         this.floppy = PC.removeFlag(argv, 'floppy', this.floppy);
         this.diskLabel = PC.removeArg(argv, 'label', defaults['label'] || this.diskLabel);
+        let sConfig = PC.removeArg(argv, 'config');
+        if (sConfig) {
+            this.configFile = node.path.resolve(diskLib.getLocalPath(sConfig));
+            if (!diskLib.existsFile(this.configFile, false)) return "invalid config file: " + sConfig;
+        }
         this.diskOrder = PC.removeArg(argv, 'order', defaults['order'] || this.diskOrder);
         this.normalize = PC.removeFlag(argv, 'normalize', defaults['normalize'] || this.normalize);
         this.systemType = PC.removeArg(argv, ['system','sys'], defaults['sys'] || this.systemType).toLowerCase();
@@ -3708,6 +3790,7 @@ export default class PC extends PCJSLib {
             this.bootSector = boot;
         }
         this.serial = PC.removeFlag(argv, 'serial', defaults['serial'] || this.serial);
+        this.com2 = PC.removeArg(argv, 'com2', defaults['com2'] || this.com2);
         if (checkRemaining) {
             this.checkRemainingArgs(argv);
         }
@@ -4126,6 +4209,7 @@ export default class PC extends PCJSLib {
             let optionsMain = {
                 "--boot=[drive]":           "\tselect boot drive (A, C, or none)",
                 "--commands[=...]":         "execute commands, separated by semicolons",
+                "--com2=[command]":         "connect COM2 to a program's input and output",
                 "--select=[machine]":       "select machine configuration file",
                 "--speed=[multiplier]":     "set CPU speed multiplier (eg, 4 for 4x)",
                 "--ram=[nK]":               "\tset RAM size in 16K steps, or 64K on a PC AT (eg, 640K or 2M)",
@@ -4134,6 +4218,7 @@ export default class PC extends PCJSLib {
                 "--dir=[directory]":        "use drive directory (default is " + this.localDir + ")",
                 "--disk=[filename]":        "use drive disk image (instead of directory)",
                 "--diskette=[filename]":    "load diskette image into drive A",
+                "--config=[filename]":      "use file as drive's CONFIG.SYS (instead of directory's)",
                 "--controller=[id]":        "set drive controller (XT, AT, COMPAQ, or PCJS)",
                 "--drivetype=[value]":      "set drive type or C:H:S (eg, 306:4:17)",
                 "--fat=[value(s)]":         "set FAT type (12 or 16) [:cluster size[:root size]]",

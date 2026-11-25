@@ -50,6 +50,7 @@ Here is the complete help text:
 
             --dir=[directory]       use drive directory (default is .)
             --disk=[filename]       use drive disk image (instead of directory)
+            --config=[filename]     use file as drive's CONFIG.SYS (instead of directory's)
             --controller=[id]       set drive controller (XT, AT, COMPAQ, or PCJS)
             --drivetype=[value]     set drive type or C:H:S (eg, 306:4:17)
             --fat=[value(s)]        set FAT type (12 or 16), cluster size, etc
