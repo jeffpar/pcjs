@@ -275,11 +275,20 @@ export default class Machine extends Device {
                 state = /** @type {Array} */ (JSON.parse(this.sStateInit));
                 this.printf("Initial state: %s\n", this.config['state']);
             }
-            if (state) {
-                this.loadState(state);
+            /**
+             * If the state can't be restored, some devices may have already restored theirs, so the machine must
+             * be reset before it's powered (which can't happen until all devices are ready).
+             */
+            let fReset = false;
+            if (state && !this.loadState(state)) {
+                this.printf("unable to restore machine state, resetting\n");
+                fReset = true;
             }
             this.setReady(true);
-            if (!this.whenReady(this.onPower.bind(this, power))) {
+            if (!this.whenReady(() => {
+                if (fReset) this.onReset();
+                this.onPower(power);
+            })) {
                 this.printf("machine %s not ready to power, waiting for device(s)\n", this.idMachine);
             }
         }

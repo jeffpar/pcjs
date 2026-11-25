@@ -2302,6 +2302,12 @@ export default class CPUARM extends CPU
             this.cp15PID = stateCPU.shift();
             this.cp15Misc = stateCPU.shift();
             this.fHalted = stateCPU.shift();
+            /**
+             * The interrupt inputs are driven by other devices (eg, an interrupt controller), which don't
+             * necessarily drive them again after they restore their own state.
+             */
+            this.intLines = stateCPU.shift() || 0;
+            this.intPending = this.intLines & ~this.cpsrIF;
             this.fMMU = !!(this.cp15Control & CPUARM.CP15.CTL_M);
             this.flushTLB();
             this.fRestored = true;
@@ -2338,6 +2344,7 @@ export default class CPUARM extends CPU
         stateCPU.push(this.cp15PID);
         stateCPU.push(this.cp15Misc);
         stateCPU.push(this.fHalted);
+        stateCPU.push(this.intLines);
     }
 
     /**

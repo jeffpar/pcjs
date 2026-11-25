@@ -4,17 +4,14 @@
     "type": "PDA",
     "name": "Palm Tungsten E",
     "version": 3.00,
-    "autoSave": false,
+    "autoSave": true,
     "autoStart": true,
     "bindings": {
       "reset": "resetTE",
       "clear": "clearTE",
       "print": "printTE"
     },
-    "ArrayBuffer": true,
-    "@doc": [
-      "autoSave is false because the OMAP, TSC2102, and Tungsten devices don't save or restore their state yet."
-    ]
+    "ArrayBuffer": true
   },
   "clock": {
     "class": "Time",

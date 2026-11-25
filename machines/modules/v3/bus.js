@@ -413,6 +413,13 @@ export default class Bus extends Device {
             if (this.type == Bus.TYPE.DYNAMIC || (block.type & Memory.TYPE.READWRITE)) {
                 if (block.loadState) {
                     let stateBlock = state.shift();
+                    /**
+                     * A number is a block whose values were all the same (see saveState()); it's restored as dirty,
+                     * since whether it was dirty wasn't saved, and dirty is always the safer assumption.
+                     */
+                    if (typeof stateBlock == "number") {
+                        stateBlock = [block.idDevice, true, false, [block.size, stateBlock]];
+                    }
                     if (!block.loadState(stateBlock)) return false;
                 }
             }
@@ -434,6 +441,16 @@ export default class Bus extends Device {
                 if (block.saveState) {
                     let stateBlock = [];
                     block.saveState(stateBlock);
+                    /**
+                     * If every value in the block is the same (ie, its values compressed to a single "count, value"
+                     * pair), then we save only that value, because the rest of the block's state (its ID and flags)
+                     * would be many times larger.  Large machines (eg, the Palm Tungsten|E) have thousands of blocks
+                     * like that.
+                     */
+                    let values = stateBlock[3];
+                    if (stateBlock.length == 4 && Array.isArray(values) && values.length == 2 && values[0] == block.size && block.size > 2) {
+                        stateBlock = values[1];
+                    }
                     state.push(stateBlock);
                 }
             }

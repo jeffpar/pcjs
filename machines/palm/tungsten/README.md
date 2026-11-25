@@ -18,7 +18,7 @@ This PCjs machine is an early work-in-progress emulation of the Palm Tungsten E,
 - [TSC2102](/machines/palm/pilot/modules/v3/tsc2102.js): the touch screen controller, which also measures the battery and plays audio
 - [Tungsten](/machines/palm/pilot/modules/v3/tungsten.js): the buttons and other board-level details
 
-The first time the Tungsten E boots, it will walk you through its Setup screens, including digitizer alignment.
+The first time the Tungsten E boots, it will walk you through its Setup screens, including digitizer alignment.  Like the [Palm Pilot](/machines/palm/pilot/), the state of the machine (including all your changes/progress) is automatically saved in your browser whenever you leave the page and restored when you return.  Clicking the **Reset** button below the machine erases its memory (the equivalent of a "hard reset"), so any changes will be lost.
 
 {% include machine.html id="palm-tungsten" %}
 
@@ -48,8 +48,7 @@ An application is installed the same way it is on the other Palm machines: by ca
 
 The Graffiti area below the screen, the four application buttons, and the 5-way navigator all work with the mouse (or your finger).  The power button is on the top edge of a real Tungsten E, so it isn't visible in the image, but clicking the top right corner of the case will press it.  The buttons can also be pressed with the keyboard: `1` through `4` for the application buttons, `5` and the arrow keys for the navigator, and `0` for power.
 
-Things that are not emulated yet include audio output, the SD card slot, USB (HotSync), and IR.  The state of the machine is also not saved yet, so the Tungsten E starts over every time the page is loaded.
-
+Things that are not emulated yet include audio output, the SD card slot, USB (HotSync), and IR.
 The machine's clock is set to 32 million "cycles" (ARM instructions) per second, which is less than the real device was capable of, but most browsers should be able to keep up with that in real time.
 
 ### Testing
