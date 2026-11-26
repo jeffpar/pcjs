@@ -59363,6 +59363,21 @@ class Videox86 extends Component {
     }
 
     /**
+     * blankScreen()
+     *
+     * Fills the screen with black, for a VGA whose screen has been turned off (see outSEQData()).
+     *
+     * @this {Videox86}
+     */
+    blankScreen()
+    {
+        if (this.contextScreen) {
+            this.contextScreen.fillStyle = "black";
+            this.contextScreen.fillRect(0, 0, this.cxScreen, this.cyScreen);
+        }
+    }
+
+    /**
      * updateScreen(fForce)
      *
      * Propagates the video buffer to the cell cache and updates the screen with any changes.  Forced updates
@@ -59411,6 +59426,19 @@ class Videox86 extends Component {
              * better safe than sorry.
              */
             if (this.aCellCache === undefined) return false;
+        }
+
+        /**
+         * While a VGA's screen is off (see outSEQData()), nothing is drawn, not even by a forced update, which
+         * has only reset the cell cache, so that everything is redrawn once the screen is on again.  The same
+         * goes for a forced update while its video signal is disabled (INDX_PAL_ENABLE is clear), which the VGA
+         * BIOS arranges for the whole of a mode set: it writes the Sequencer's registers from its tables while
+         * the card's memory still holds the previous mode's data (or with the "don't clear" bit, whatever the
+         * caller left there), and the screen would show that data in the new mode until the BIOS (or the caller)
+         * replaced it.
+         */
+        if (card === this.cardEGA && card.nCard == Videox86.CARD.VGA) {
+            if ((card.regSEQData[Card.SEQ.CLKMODE.INDX] & Card.SEQ.CLKMODE.SCREEN_OFF) || !fEnabled) return false;
         }
 
         /**
@@ -60522,6 +60550,7 @@ class Videox86 extends Component {
      */
     outSEQData(port, bOut, addrFrom)
     {
+        let bPrev = this.cardEGA.regSEQData[this.cardEGA.regSEQIndx];
         if (Videox86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
                 this.printIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
@@ -60532,6 +60561,24 @@ class Videox86 extends Component {
         let nFontSelect;
 
         switch(this.cardEGA.regSEQIndx) {
+
+        case Card.SEQ.CLKMODE.INDX:
+            /**
+             * A VGA's SCREEN_OFF bit blanks the display (the card still generates sync signals), which software uses
+             * to hide whatever the display would otherwise show while it changes the card's state (eg, while it saves
+             * or restores all four planes with the registers set for plain 64K planes); updateScreen() draws nothing
+             * while the bit is set, and when it's cleared, the next periodic update redraws everything.  We don't
+             * redraw immediately, because the VGA BIOS also turns the screen on at the end of a mode set, and the
+             * caller may turn it off again before there's anything worth displaying.
+             */
+            if (this.cardEGA.nCard == Videox86.CARD.VGA && ((bPrev ^ bOut) & Card.SEQ.CLKMODE.SCREEN_OFF)) {
+                if (bOut & Card.SEQ.CLKMODE.SCREEN_OFF) {
+                    this.blankScreen();
+                } else {
+                    this.initCellCache();
+                }
+            }
+            break;
 
         case Card.SEQ.MAPMASK.INDX:
             this.cardEGA.nSeqMapMask = Videox86.aEGAByteToDW[bOut & Card.SEQ.MAPMASK.MAPS];
