@@ -182,6 +182,20 @@ function createDriveInfo(argv, diskette)
     }
 
     /**
+     * --labeldate=DATE (eg, "1986-09-09T02:11", local time) dates the volume label of a disk built from files,
+     * instead of the current date, so that rebuilding a disk from the same files produces the same image.
+     */
+    let labelDate = argv['labeldate'];
+    if (typeof labelDate == "string") {
+        let date = new Date(labelDate);
+        if (isNaN(date)) {
+            printf("invalid label date: %s\n", labelDate);
+        } else {
+            driveInfo.dateLabel = date;
+        }
+    }
+
+    /**
      * --attr=FILE:ATTRS[,FILE:ATTRS...] sets the attributes of files in the root of a disk built from files,
      * where ATTRS is any combination of R (read-only), H (hidden), S (system), and A (archive) (eg,
      * "--attr=IO.SYS:RHS,COMMAND.COM:R"); see readDirFiles() in disklib.js.
@@ -1305,6 +1319,7 @@ function main(argc, argv)
             "--dump=[C:H:S:N]":         "dump N sectors starting at sector C:H:S",
             "--expand (-x)\t":          "expand all archives inside disk or archive",
             "--label=[label]\t":        "set volume label of output disk image",
+            "--labeldate=[date]":       "set date of volume label (eg, 1986-09-09T02:11)",
             "--list[=option]\t":        "listing option (dir, archive, unused, sorted, metadata)",
             "--normalize\t":            "convert line endings and character encoding of text files",
             "--partitioned (-p)":       "force partitioned disk image",

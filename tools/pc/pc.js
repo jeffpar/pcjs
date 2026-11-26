@@ -2464,6 +2464,11 @@ export default class PC extends PCJSLib {
         if (log) {
             printf("reading files: %s\n", sDir);
         }
+        /**
+         * --sysdate dates the volume label, too, so that rebuilding a disk from the same files produces the
+         * same image (see readDir() in disklib.js).
+         */
+        if (this.systemDate) driveInfo.dateLabel = this.systemDate;
         diskLib.readDir(sDir, 0, 0, this.diskLabel == "."? node.path.basename(sDir) : this.diskLabel, null, this.normalize, kbCapacity, this.maxFiles, false, driveInfo, done);
 
         return driveInfo.driveManifest? "" : "unable to build drive";
@@ -4227,7 +4232,7 @@ export default class PC extends PCJSLib {
                 "--maxfiles=[number]":      "set maximum local files (default is " + this.maxFiles + ")",
                 "--order=[names]":          "set root entries that come first (eg, EXT,DEMOS)",
                 "--save=[filename]":        "save drive disk image and exit",
-                "--sysdate=[date]":         "set date of system files (eg, 1986-09-09T02:10)",
+                "--sysdate=[date]":         "set date of system files and volume label (eg, 1986-09-09T02:10)",
                 "--system=[string]":        "set operating system type (default is " + this.systemType + ")",
                 "--target=[nK|nM]":         "set target disk size (default is " + ((this.kbTarget / 1024)|0) + "M)",
                 "--version=[#.##]":         "set operating system version (default is " + this.systemVersion + ")"
