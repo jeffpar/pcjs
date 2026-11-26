@@ -21378,6 +21378,7 @@ class PilotIO extends Memory {
         this.fPenRead = false;                      // keeps track of whether the last pen position change has been read yet
         this.bPDDataEdge = 0;                       // keeps track of button interrupt transitions
         this.msRTCDelta = 0;                        // the delta between the device's time and the "real world" time
+        this.msRTCLast = 0;                         // the device's time when the RTC status bits were last updated
         this.nCyclesTimers = 0;                     // CPU cycle count when the timers were last updated
         this.nCyclesTMR1 = this.nCyclesTMR2 = 0;    // cycles not yet converted into timer ticks
 
@@ -21393,6 +21394,7 @@ class PilotIO extends Memory {
 
         this.cpu.setHWRegs(this);
         this.timerTMR = this.time.addTimer(this.idDevice + ".timer", this.onTimer.bind(this));
+        this.time.addTimer(this.idDevice + ".rtc", this.updateRTC.bind(this), 250);
 
         /**
          * Hook up the pen and the buttons.  The input surface (eg, an image of the Pilot) reports positions
@@ -21681,6 +21683,7 @@ class PilotIO extends Memory {
                     this.awTMR2 = state.shift();
                     this.bPDDataEdge = state.shift();
                     this.msRTCDelta = state.shift();
+                    this.loadRTC(state.shift());
                     this.nCyclesTimers = this.time.getCycles();
                     this.nCyclesTMR1 = this.nCyclesTMR2 = 0;
                     this.scheduleTimers();
@@ -21705,12 +21708,44 @@ class PilotIO extends Memory {
     saveState(state)
     {
         this.updateTimers();
+        this.updateRTC();
         state.push(this.idDevice);
         state.push(this.compress(this.abRegs));
         state.push(this.awTMR1);
         state.push(this.awTMR2);
         state.push(this.bPDDataEdge);
         state.push(this.msRTCDelta);
+        state.push(this.msRTCLast);
+    }
+
+    /**
+     * loadRTC(msLast)
+     *
+     * Restores the RTC's notion of when it last updated its status bits, so that any midnights that passed while
+     * the machine wasn't running are reported to PalmOS (see updateRTC()).
+     *
+     * PalmOS calculates the time by adding the RTC's hours, minutes, and seconds to a day count it keeps in RAM,
+     * which it advances whenever the RTC reports a new day.  PalmOS also never lets the time go backwards, so if
+     * we didn't report those midnights, a machine restored at an earlier time of day than when it was saved would
+     * see the time stand still until the time of day caught up (and apps that wait for time to pass would hang).
+     *
+     * Older saved states didn't record msLast, so in that case, we use the last time PalmOS read from the RTC
+     * (still shadowed in RHMSR): if the current time of day is earlier, we assume one midnight has passed.
+     *
+     * @this {PilotIO}
+     * @param {number|undefined} msLast (the device's time when the state was saved)
+     */
+    loadRTC(msLast)
+    {
+        let msNow = Date.now() + this.msRTCDelta;
+        if (msLast == undefined) {
+            let data = this.getLongEx(PilotIO.DBREG_RHMSR);
+            let date = new Date(msNow);
+            date.setHours((data & PilotIO.RHMSR_HOURS) >> PilotIO.RHMSR_HOURS_SHIFT, (data & PilotIO.RHMSR_MINUTES) >> PilotIO.RHMSR_MINUTES_SHIFT, (data & PilotIO.RHMSR_SECONDS) >> PilotIO.RHMSR_SECONDS_SHIFT, 0);
+            if (date.getTime() > msNow) date.setDate(date.getDate() - 1);
+            msLast = date.getTime();
+        }
+        this.msRTCLast = Math.min(msLast, msNow);
     }
 
     /**
@@ -21766,6 +21801,7 @@ class PilotIO extends Memory {
         this.bADCShift = this.nADCBits = this.bADCControl = 0;
         this.bPDDataEdge = this.wKeyBits = 0;
         this.msRTCDelta = 0;
+        this.msRTCLast = Date.now();
         this.resetScreen();
     }
 
@@ -22057,6 +22093,11 @@ class PilotIO extends Memory {
                 this.awTMR2[PilotIO.TSTAT_LASTREAD] |= data;
                 break;
 
+            case PilotIO.DBREG_RISR:
+                this.updateRTC();
+                data = this.getWordEx(offset);
+                break;
+
             case PilotIO.DBREG_SPIMDATA:
                 if (this.fPenUpPending) {
                     this.fPenUpPending = false;
@@ -22095,6 +22136,7 @@ class PilotIO extends Memory {
         if (!this.isLCDReg(offset)) {
             switch(offset) {
             case PilotIO.DBREG_RHMSR: {
+                this.updateRTC();
                 let date = new Date(Date.now() + this.msRTCDelta);
                 data = (date.getHours() << PilotIO.RHMSR_HOURS_SHIFT) | (date.getMinutes() << PilotIO.RHMSR_MINUTES_SHIFT) | (date.getSeconds() << PilotIO.RHMSR_SECONDS_SHIFT);
                 this.setLongEx(offset, data);       // shadow it
@@ -22215,6 +22257,16 @@ class PilotIO extends Memory {
 
         case PilotIO.DBREG_ISR+2:
             return;             // no writable bits we have to pay attention to in ISR+2
+
+        case PilotIO.DBREG_RISR:
+            this.setWordEx(offset, this.getWordEx(offset) & ~data);
+            this.updateRTCInterrupt();
+            return;             // return, memory already updated
+
+        case PilotIO.DBREG_RIENR:
+            this.setWordEx(offset, data);
+            this.updateRTCInterrupt();
+            return;             // return, memory already updated
 
         case PilotIO.DBREG_TCTL1:
         case PilotIO.DBREG_TPRER1:
@@ -22387,6 +22439,7 @@ class PilotIO extends Memory {
             let date = new Date(Date.now() + this.msRTCDelta);
             date.setHours((data & PilotIO.RHMSR_HOURS) >> PilotIO.RHMSR_HOURS_SHIFT, (data & PilotIO.RHMSR_MINUTES) >> PilotIO.RHMSR_MINUTES_SHIFT, (data & PilotIO.RHMSR_SECONDS) >> PilotIO.RHMSR_SECONDS_SHIFT);
             this.msRTCDelta = date.getTime() - Date.now();
+            this.msRTCLast = date.getTime();    // setting the time doesn't make any seconds or days pass
             break;
         }
         }
@@ -22567,6 +22620,51 @@ class PilotIO extends Memory {
             this.nCyclesTMR1 = this.updateTimer(this.awTMR1, this.nCyclesTMR1 + nCyclesAdd, this.lTMR1Bit);
             this.nCyclesTMR2 = this.updateTimer(this.awTMR2, this.nCyclesTMR2 + nCyclesAdd, PilotIO.IMR_TMR2);
         }
+    }
+
+    /**
+     * updateRTC()
+     *
+     * Update the RTC Interrupt Status Register (RISR) to reflect any seconds and midnights that have passed since
+     * the last update, and then update the RTC interrupt.  We're called periodically by our RTC timer, as well as
+     * whenever the RTC registers are accessed.
+     *
+     * The RTC's time is the real-world time plus msRTCDelta, so midnights are based on the local date.  If more than
+     * one midnight has passed (eg, the machine was restored from a state saved days ago), we still report only one,
+     * because PalmOS spends 1-2 seconds (with interrupts disabled) waiting for the RTC to tick twice after each one;
+     * that's enough to keep PalmOS's time from going backwards, but its date may lag behind by the extra days.
+     *
+     * @this {PilotIO}
+     */
+    updateRTC()
+    {
+        let msNow = Date.now() + this.msRTCDelta;
+        let wISR = this.getWordEx(PilotIO.DBREG_RISR);
+        if (this.getWordEx(PilotIO.DBREG_RCTL) & PilotIO.RCTL_ENABLE) {
+            if (Math.floor(msNow / 1000) > Math.floor(this.msRTCLast / 1000)) {
+                wISR |= PilotIO.RISR_1HZ;
+                let getDay = (ms) => Math.floor((ms - new Date(ms).getTimezoneOffset() * 60000) / 86400000);
+                if (getDay(msNow) > getDay(this.msRTCLast)) wISR |= PilotIO.RISR_DAY;
+                this.msRTCLast = msNow;
+            }
+        } else {
+            this.msRTCLast = msNow;
+        }
+        if (msNow < this.msRTCLast) this.msRTCLast = msNow;
+        this.setWordEx(PilotIO.DBREG_RISR, wISR);
+        this.updateRTCInterrupt();
+    }
+
+    /**
+     * updateRTCInterrupt()
+     *
+     * The RTC interrupt is asserted as long as any enabled RISR bit is set.
+     *
+     * @this {PilotIO}
+     */
+    updateRTCInterrupt()
+    {
+        this.updateInterrupts(PilotIO.IMR_RTC, 0, !!(this.getWordEx(PilotIO.DBREG_RISR) & this.getWordEx(PilotIO.DBREG_RIENR)));
     }
 
     /**
@@ -23312,8 +23410,11 @@ PilotIO.RHMSR_SECONDS               = 0x0000003f;
 PilotIO.RHMSR_SECONDS_SHIFT         = 0;
 PilotIO.DBREG_RALARM        = 0xB04;        // RTC Alarm Register
 PilotIO.DBREG_RCTL          = 0xB0C;        // RTC Control Register
-PilotIO.DBREG_RISR          = 0xB0E;        // RTC Interrupt Status Register
-PilotIO.DBREG_RIENR         = 0xB10;        // RTC Interrupt Enable Register
+PilotIO.RCTL_ENABLE                 = 0x0080;
+PilotIO.DBREG_RISR          = 0xB0E;        // RTC Interrupt Status Register (bits are cleared by writing ones)
+PilotIO.RISR_DAY                    = 0x0008;   // set at midnight
+PilotIO.RISR_1HZ                    = 0x0010;   // set every second
+PilotIO.DBREG_RIENR         = 0xB10;        // RTC Interrupt Enable Register (same bits as RISR)
 PilotIO.DBREG_RSTPWCH       = 0xB12;        // RTC Stopwatch Register
 
 PilotIO.regsInit = {};
