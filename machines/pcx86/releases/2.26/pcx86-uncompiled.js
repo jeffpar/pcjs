@@ -59067,6 +59067,13 @@ class Videox86 extends Component {
             this.setDimensions();
             this.invalidateCellCache();
 
+            /**
+             * Changing the video buffer above removed the cursor (iCellCursor is -1), and checkCursor() runs only
+             * when a cursor register changes, so recheck it now; otherwise, a mode set that leaves the cursor where
+             * it was (eg, at 0,0, as the BIOS does) would leave it hidden (and not blinking) until it moved.
+             */
+            this.checkCursor();
+
             if (fReset) this.updateScreen();
         }
         return true;

@@ -706,13 +706,17 @@ export default class DiskLib {
          *
          * Any other string following "--label" will be used as-is, and if no "--label" is specified at all,
          * we build a volume label from the basename of the directory.
+         *
+         * The label's date is driveInfo.dateLabel, if set (eg, by diskimage.js's --labeldate or pc.js's --sysdate),
+         * so that rebuilding a disk from the same files produces the same image; otherwise, it's the current date
+         * (or for the default label, a fixed date).
          */
-        let dateLabel;
+        let dateLabel = driveInfo.dateLabel;
         if (label == "none" || label == false) {
             label = "";
         } else if (label == "default" || label == true) {
             label = DiskInfo.PCJS_LABEL;
-            dateLabel = new Date(1989, 8, 27, 3, 0, 0);
+            dateLabel = dateLabel || new Date(1989, 8, 27, 3, 0, 0);
         }
         let diskName = node.path.basename(sDir);
         if (sDir.endsWith('/')) {
