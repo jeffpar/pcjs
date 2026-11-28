@@ -6,16 +6,21 @@ redirect_from: /disks/pcx86/os2/microsoft/1.0/
 machines:
   - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
-    autoGen: true
+    debugger: available
+    config: /machines/pcx86/ibm/5170/ega/2048kb/rev3/machine.xml
+    drives: '[{name:"20Mb Hard Disk",type:2,path:"/harddisks/pcx86/20mb/MSOS210-EGA.json"}]'
     autoMount:
-      B: "MS OS/2 1.0 (1.2M Install)"
-    autoType: $date\r$time\rB:\rDIR\r
+      A:
+        name: None
+      B:
+        name: None
 ---
 
 Microsoft OS/2 1.0 was released in December 1987.
 
 Directory listings of the three 1.2Mb distribution diskettes are provided below.
+
+MS OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, using the Install program on the "MS OS/2 1.0 (1.2M Install)" diskette to partition and format the disk, followed by the "Program" and "Supplemental" diskettes, and selecting a Microsoft serial mouse on COM1 and no printer.  This machine's 1.2Mb diskette drive is drive B:, so load any of the distribution diskettes there if you want to access them.
 
 {% include machine.html id="ibm5170" %}
 

@@ -3046,7 +3046,7 @@ export default class Videox86 extends Component {
         this.nCellCache = 0;
         this.iCellCacheValid = 0;   // 0: invalid, 1: partially valid, 2: completely valid
         this.fShifted = false;      // set to true whenever the image has been shifted by one or more pixels
-        this.nShiftLeft = this.nShiftUp = 0;
+        this.nShiftUp = 0;
 
         /**
          * Since I've not found clear documentation on a reliable way to check whether a particular DOM element
@@ -6845,7 +6845,19 @@ export default class Videox86 extends Component {
             let cxBuffer = this.cxBuffer;
             let cyBuffer = this.cyBuffer;
             if (this.fOverBuffer) {
-                let xShift = this.nShiftLeft;
+                /**
+                 * The PEL Panning register's meaning depends on the character width, which may change after the
+                 * register does (eg, when the BIOS sets a mode), so we interpret the register here: with 9-dot
+                 * characters, 8 means no shift and 0-7 mean 1-8 pixels; with 8-dot characters, 0-7 mean 0-7 pixels
+                 * (and the EGA BIOS uses 8 for no shift, too).  It's read here, rather than when it's written, since
+                 * a write before the screen was over-buffered (eg, the BIOS's first mode set) would be missed.
+                 */
+                let xShift = card.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
+                if (font.cxChar == 9) {
+                    xShift = (xShift < 8)? xShift + 1 : 0;
+                } else {
+                    xShift &= 7;
+                }
                 let yShift = this.nShiftUp;
                 if (this.fDoubleFont) {
                     xShift <<= 1;
@@ -7439,12 +7451,11 @@ export default class Videox86 extends Component {
                     card.regATCData[iReg] = bOut;
                     if (iReg == Card.ATC.HPAN.INDX) {
                         if (this.fOverBuffer) {
-                            this.fShifted = true;
                             /**
-                             * TODO: The SHIFT_LEFT value apparently has a slightly different interpretation in
-                             * monochrome mode (ie, when font.cxChar == 9, 8 means no shift and 0-7 means 1-8 shifts).
+                             * updateScreenText() interprets the register itself, since its meaning depends on the
+                             * character width (eg, with 9-dot characters, 8 means no shift and 0-7 mean 1-8 pixels).
                              */
-                            this.nShiftLeft = bOut & Card.ATC.HPAN.SHIFT_LEFT;
+                            this.fShifted = true;
                         }
                     }
                     else if (iReg != Card.ATC.OVERSCAN.INDX) {

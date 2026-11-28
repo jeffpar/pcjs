@@ -1784,10 +1784,27 @@ export default class ChipSet extends Component {
         } else {
             if (iRTC == ChipSet.CMOS.ADDR.STATUSA) {
                 /**
-                 * Make sure that the "Update-In-Progress" bit we set in updateRTCTime() doesn't stay set for
-                 * more than one read.
+                 * The "Update-In-Progress" bit is set from 244us before each once-a-second update until the
+                 * update ends (1984us later, with a 32.768Khz time base), and updateRTCTime() updates the time
+                 * all at once at the end of that period, so UIP is set during the period's last 2228us (or for
+                 * as long as the update is overdue), unless the SET bit has stopped updates.  It's never set when
+                 * the update ends, because an update-ended interrupt handler reads STATUSA to see whether it can
+                 * read the time, as OS/2 2.0's does (its clock stopped when this bit used to be set at the end of
+                 * each update until the next read); the MODEL_5170 BIOS POST just waits for UIP to go on and off.
+                 *
+                 * An overdue update (updateAllTimers() runs only between bursts of instructions) is done now, so
+                 * that UIP doesn't stay set longer than software waits for it to clear (eg, the BIOS's UPD_IPR).
                  */
-                this.abCMOSData[iRTC] &= ~ChipSet.CMOS.STATUSA.UIP;
+                b &= ~ChipSet.CMOS.STATUSA.UIP;
+                if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.SET)) {
+                    let nCyclesPerSecond = this.cpu.getBaseCyclesPerSecond();
+                    let nCyclesLeft = this.nRTCCyclesLastUpdate + nCyclesPerSecond - this.cpu.getCycles(this.fScaleTimers);
+                    if (nCyclesLeft <= 0) {
+                        this.updateRTCTime();
+                        nCyclesLeft = this.nRTCCyclesLastUpdate + nCyclesPerSecond - this.cpu.getCycles(this.fScaleTimers);
+                    }
+                    if (nCyclesLeft <= nCyclesPerSecond * 2228 / 1000000) b |= ChipSet.CMOS.STATUSA.UIP;
+                }
             }
         }
         return b;
@@ -2017,12 +2034,8 @@ export default class ChipSet extends Component {
             }
 
             /**
-             * Obviously, setting the "Update-In-Progress" bit now might seem rather pointless, since we just
-             * updated the RTC "atomically" as far as the machine is concerned; however, the bit must be set at
-             * at some point, in order to make the MODEL_5170 BIOS ("POST2_RTCUP") happy.
+             * The "Update-In-Progress" bit in STATUSA is calculated when it's read (see getRTCByte()).
              */
-            this.abCMOSData[ChipSet.CMOS.ADDR.STATUSA] |= ChipSet.CMOS.STATUSA.UIP;
-
             this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.UF;
             if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.UIE) {
                 this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;

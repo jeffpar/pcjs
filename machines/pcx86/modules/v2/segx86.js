@@ -661,9 +661,15 @@ export default class Segx86 {
             acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
             base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
             ext = cpu.getShort(addrDesc + X86.DESC.EXT.OFFSET);
-        } finally {
-            cpu.nCPL = cpl;
+        } catch (err) {
+            /**
+             * A page fault on the descriptor (eg, in a page of an OS/2 2.0 LDT that isn't present yet) has been
+             * dispatched to its handler, so the handler's CPL (which setLIP() cached) must stay (see accessSys()).
+             */
+            cpu.nCPL = cpu.segCS.cpl;
+            throw err;
         }
+        cpu.nCPL = cpl;
         let type = (acc & X86.DESC.ACC.TYPE.MASK);
         let selMasked = sel & X86.SEL.MASK;
 

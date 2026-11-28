@@ -75,6 +75,7 @@ export default class PC extends PCJSLib {
     systemVersion = "3.30";
     systemMBR = "pcjs.mbr";
     systemDate = null;          // date for the system files from --sysdate (null to use each file's own)
+    timeLoaded = 0;             // host time when the machine was loaded (see loadMachine)
     savedMachine = "compaq386.json";
     savedState = "state386.json";
     localMachine = "";          // current machine config file
@@ -1323,6 +1324,7 @@ export default class PC extends PCJSLib {
     {
         let pc = this;
         let result = "";
+        this.timeLoaded = Date.now();   // the machine's clock starts no earlier than this (see saveDisk)
 
         let getFactory = function(config) {
 
@@ -2713,6 +2715,27 @@ export default class PC extends PCJSLib {
                         let bContents = b.contents || [];
                         return aContents.length === bContents.length && aContents.every((element, i) => element === bContents[i]);
                     };
+                    /**
+                     * The machine's clock runs fast when the CPU speed multiplier is > 1 (eg, --speed=4),
+                     * so don't let files from the machine appear newer than they are (otherwise, a source file
+                     * edited shortly after a build could appear older than the build's output files).  Files
+                     * are saved in path order, not the order the machine wrote them, so clamping each future
+                     * date to the time it's saved would make a build's output (eg, BASDEV.COM) older than the
+                     * inputs saved after it; instead, if the latest date is in the future, every date since the
+                     * machine was loaded is scaled into the time between then and now, keeping their order.
+                     */
+                    let timeNow = Date.now(), timeStart = this.timeLoaded, timeMax = 0;
+                    for (let item of newManifest) {
+                        let t = device.parseDate(item.date, true).getTime();
+                        if (t > timeMax) timeMax = t;
+                    }
+                    let fixDate = function(date) {
+                        let t = date.getTime();
+                        if (timeMax > timeNow && timeStart && t > timeStart) {
+                            date = new Date(timeStart + Math.floor((t - timeStart) * (timeNow - timeStart) / (timeMax - timeStart)));
+                        }
+                        return date;
+                    };
 
                     let curMappings = {"/": sDir};
                     while (iOld < oldManifest.length || iNew < newManifest.length) {
@@ -2722,13 +2745,7 @@ export default class PC extends PCJSLib {
                         let oldAttr = +oldItem.attr || 0;
                         let newAttr = +newItem.attr || 0;
                         let oldDate = device.parseDate(oldItem.date, true);
-                        let newDate = device.parseDate(newItem.date, true);
-                        /**
-                         * The machine's clock runs fast when the CPU speed multiplier is > 1 (eg, --speed=4),
-                         * so don't let files from the machine appear newer than they are (otherwise, a source file
-                         * edited shortly after a build could appear older than the build's output files).
-                         */
-                        if (newDate.getTime() > Date.now()) newDate = new Date();
+                        let newDate = fixDate(device.parseDate(newItem.date, true));
 
                         if (oldAttr & DiskInfo.ATTR.SUBDIR) {
                             curMappings[oldItem.path] = oldItem.origin;

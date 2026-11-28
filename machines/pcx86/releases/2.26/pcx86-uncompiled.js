@@ -20169,6 +20169,12 @@ class CPUx86 extends CPU {
      *
      * fn can also be a closure that performs several accesses (in which case addr and data are omitted).
      *
+     * If an access faults, the fault has been dispatched by the time its exception reaches us, so CS (and the
+     * CPL that setLIP() cached) now belong to the fault handler, and restoring the old CPL would run the handler
+     * at the faulting code's CPL (eg, OS/2 2.0's ring 0 page fault handler at CPL 3, after ring 3 code touched a
+     * page of its LDT that wasn't present, which then faulted loading the kernel's own data selector).  CS's CPL
+     * is correct whether the fault was dispatched or the Debugger stopped the machine instead.
+     *
      * @this {CPUx86}
      * @param {Function} fn (eg, this.getShort or this.setByte, which are called with this CPUx86 as "this")
      * @param {number} [addr] is a linear address
@@ -20180,9 +20186,12 @@ class CPUx86 extends CPU {
         let cpl = this.nCPL;
         this.nCPL = 0;
         try {
-            return fn.call(this, addr, data);
-        } finally {
+            let result = fn.call(this, addr, data);
             this.nCPL = cpl;
+            return result;
+        } catch (err) {
+            this.nCPL = this.segCS.cpl;
+            throw err;
         }
     }
 
@@ -25731,9 +25740,15 @@ class Segx86 {
             acc = cpu.getShort(addrDesc + X86.DESC.ACC.OFFSET);
             base = cpu.getShort(addrDesc + X86.DESC.BASE.OFFSET) | ((acc & X86.DESC.ACC.BASE1623) << 16);
             ext = cpu.getShort(addrDesc + X86.DESC.EXT.OFFSET);
-        } finally {
-            cpu.nCPL = cpl;
+        } catch (err) {
+            /**
+             * A page fault on the descriptor (eg, in a page of an OS/2 2.0 LDT that isn't present yet) has been
+             * dispatched to its handler, so the handler's CPL (which setLIP() cached) must stay (see accessSys()).
+             */
+            cpu.nCPL = cpu.segCS.cpl;
+            throw err;
         }
+        cpu.nCPL = cpl;
         let type = (acc & X86.DESC.ACC.TYPE.MASK);
         let selMasked = sel & X86.SEL.MASK;
 
@@ -43381,10 +43396,27 @@ class ChipSet extends Component {
         } else {
             if (iRTC == ChipSet.CMOS.ADDR.STATUSA) {
                 /**
-                 * Make sure that the "Update-In-Progress" bit we set in updateRTCTime() doesn't stay set for
-                 * more than one read.
+                 * The "Update-In-Progress" bit is set from 244us before each once-a-second update until the
+                 * update ends (1984us later, with a 32.768Khz time base), and updateRTCTime() updates the time
+                 * all at once at the end of that period, so UIP is set during the period's last 2228us (or for
+                 * as long as the update is overdue), unless the SET bit has stopped updates.  It's never set when
+                 * the update ends, because an update-ended interrupt handler reads STATUSA to see whether it can
+                 * read the time, as OS/2 2.0's does (its clock stopped when this bit used to be set at the end of
+                 * each update until the next read); the MODEL_5170 BIOS POST just waits for UIP to go on and off.
+                 *
+                 * An overdue update (updateAllTimers() runs only between bursts of instructions) is done now, so
+                 * that UIP doesn't stay set longer than software waits for it to clear (eg, the BIOS's UPD_IPR).
                  */
-                this.abCMOSData[iRTC] &= ~ChipSet.CMOS.STATUSA.UIP;
+                b &= ~ChipSet.CMOS.STATUSA.UIP;
+                if (!(this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.SET)) {
+                    let nCyclesPerSecond = this.cpu.getBaseCyclesPerSecond();
+                    let nCyclesLeft = this.nRTCCyclesLastUpdate + nCyclesPerSecond - this.cpu.getCycles(this.fScaleTimers);
+                    if (nCyclesLeft <= 0) {
+                        this.updateRTCTime();
+                        nCyclesLeft = this.nRTCCyclesLastUpdate + nCyclesPerSecond - this.cpu.getCycles(this.fScaleTimers);
+                    }
+                    if (nCyclesLeft <= nCyclesPerSecond * 2228 / 1000000) b |= ChipSet.CMOS.STATUSA.UIP;
+                }
             }
         }
         return b;
@@ -43614,12 +43646,8 @@ class ChipSet extends Component {
             }
 
             /**
-             * Obviously, setting the "Update-In-Progress" bit now might seem rather pointless, since we just
-             * updated the RTC "atomically" as far as the machine is concerned; however, the bit must be set at
-             * at some point, in order to make the MODEL_5170 BIOS ("POST2_RTCUP") happy.
+             * The "Update-In-Progress" bit in STATUSA is calculated when it's read (see getRTCByte()).
              */
-            this.abCMOSData[ChipSet.CMOS.ADDR.STATUSA] |= ChipSet.CMOS.STATUSA.UIP;
-
             this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.UF;
             if (this.abCMOSData[ChipSet.CMOS.ADDR.STATUSB] & ChipSet.CMOS.STATUSB.UIE) {
                 this.abCMOSData[ChipSet.CMOS.ADDR.STATUSC] |= ChipSet.CMOS.STATUSC.IRQF;
@@ -55988,7 +56016,7 @@ class Videox86 extends Component {
         this.nCellCache = 0;
         this.iCellCacheValid = 0;   // 0: invalid, 1: partially valid, 2: completely valid
         this.fShifted = false;      // set to true whenever the image has been shifted by one or more pixels
-        this.nShiftLeft = this.nShiftUp = 0;
+        this.nShiftUp = 0;
 
         /**
          * Since I've not found clear documentation on a reliable way to check whether a particular DOM element
@@ -59787,7 +59815,19 @@ class Videox86 extends Component {
             let cxBuffer = this.cxBuffer;
             let cyBuffer = this.cyBuffer;
             if (this.fOverBuffer) {
-                let xShift = this.nShiftLeft;
+                /**
+                 * The PEL Panning register's meaning depends on the character width, which may change after the
+                 * register does (eg, when the BIOS sets a mode), so we interpret the register here: with 9-dot
+                 * characters, 8 means no shift and 0-7 mean 1-8 pixels; with 8-dot characters, 0-7 mean 0-7 pixels
+                 * (and the EGA BIOS uses 8 for no shift, too).  It's read here, rather than when it's written, since
+                 * a write before the screen was over-buffered (eg, the BIOS's first mode set) would be missed.
+                 */
+                let xShift = card.regATCData[Card.ATC.HPAN.INDX] & Card.ATC.HPAN.SHIFT_LEFT;
+                if (font.cxChar == 9) {
+                    xShift = (xShift < 8)? xShift + 1 : 0;
+                } else {
+                    xShift &= 7;
+                }
                 let yShift = this.nShiftUp;
                 if (this.fDoubleFont) {
                     xShift <<= 1;
@@ -60381,12 +60421,11 @@ class Videox86 extends Component {
                     card.regATCData[iReg] = bOut;
                     if (iReg == Card.ATC.HPAN.INDX) {
                         if (this.fOverBuffer) {
-                            this.fShifted = true;
                             /**
-                             * TODO: The SHIFT_LEFT value apparently has a slightly different interpretation in
-                             * monochrome mode (ie, when font.cxChar == 9, 8 means no shift and 0-7 means 1-8 shifts).
+                             * updateScreenText() interprets the register itself, since its meaning depends on the
+                             * character width (eg, with 9-dot characters, 8 means no shift and 0-7 mean 1-8 pixels).
                              */
-                            this.nShiftLeft = bOut & Card.ATC.HPAN.SHIFT_LEFT;
+                            this.fShifted = true;
                         }
                     }
                     else if (iReg != Card.ATC.OVERSCAN.INDX) {
