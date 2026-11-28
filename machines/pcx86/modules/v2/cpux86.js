@@ -3364,6 +3364,12 @@ export default class CPUx86 extends CPU {
      *
      * fn can also be a closure that performs several accesses (in which case addr and data are omitted).
      *
+     * If an access faults, the fault has been dispatched by the time its exception reaches us, so CS (and the
+     * CPL that setLIP() cached) now belong to the fault handler, and restoring the old CPL would run the handler
+     * at the faulting code's CPL (eg, OS/2 2.0's ring 0 page fault handler at CPL 3, after ring 3 code touched a
+     * page of its LDT that wasn't present, which then faulted loading the kernel's own data selector).  CS's CPL
+     * is correct whether the fault was dispatched or the Debugger stopped the machine instead.
+     *
      * @this {CPUx86}
      * @param {Function} fn (eg, this.getShort or this.setByte, which are called with this CPUx86 as "this")
      * @param {number} [addr] is a linear address
@@ -3375,9 +3381,12 @@ export default class CPUx86 extends CPU {
         let cpl = this.nCPL;
         this.nCPL = 0;
         try {
-            return fn.call(this, addr, data);
-        } finally {
+            let result = fn.call(this, addr, data);
             this.nCPL = cpl;
+            return result;
+        } catch (err) {
+            this.nCPL = this.segCS.cpl;
+            throw err;
         }
     }
 
